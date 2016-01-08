@@ -1,4 +1,18 @@
-CONTENIDOS TEÓRICOS (Sin ordenar ni clasificar)
+========================================================================
+== INTRODUCCIÓN Y FILOSOFÍA DEL CURSO
+========================================================================
+ - Aprender haciendo (programar desde el minuto 0)
+ - Contenidos teóricos de varios niveles, bajo demanda del alumno
+   - La teoría debe ser siempre ayuda a la solución de problemas
+   - Entender mejor para ir más allá en lo que se pretende
+
+ - Foco importante en la creatividad
+   - Intentar hacer cosas por uno mismo
+   - Mezclar, integrar, probar, experimentar: crear nuevas cosas
+
+========================================================================
+== CONTENIDOS TEÓRICOS (Sin ordenar ni clasificar)
+========================================================================
  - Representación de información 
    - Sistemas de numeración (binario, octal, hexadecimal, decimal)
    - Little Endian vs Big Endian
@@ -51,10 +65,13 @@ CONTENIDOS TEÓRICOS (Sin ordenar ni clasificar)
        - Ciclos y memoria compartida
        - DMA
        - Refrescado de memoria dinámica (el registro R)
+    - Técnicas específicas
+       - Look-up tables
+       - Alineamiento de memoria
 
-
-
-CONTENIDOS PRÁCTICOS
+========================================================================
+== CONTENIDOS PRÁCTICOS
+========================================================================
  - Programas de ejemplo sobre los que empezar a trabajar
  - Uso de un emulador de Amstrad CPC 464
    - Cómo es la máquina real (y el emulador)
@@ -83,3 +100,7 @@ CONTENIDOS PRÁCTICOS
     - Dibujar patrones en pantalla
     - Sprites básicos
     - Sprites genéricos
+ - Ejercicios de programas con errores o incompletos
+    - Corrección de programas
+    - Modificación de programas
+    - Completado
