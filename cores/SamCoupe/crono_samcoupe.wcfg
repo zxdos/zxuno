@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/rodriguj/Documents/zxspectrum/zxuno/repositorio/cores/sam_coupe_spartan6/test1/tb_samcoupe_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="mapa_es" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="t80_pack" />
+            <top_module name="tb_samcoupe" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="39" />
+   <wvobject fp_name="divider17" type="divider">
+      <obj_property name="label">CLOCKS</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/clk24" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk24</obj_property>
+      <obj_property name="ObjectShortName">clk24</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/clk12" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk12</obj_property>
+      <obj_property name="ObjectShortName">clk12</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/clk6" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk6</obj_property>
+      <obj_property name="ObjectShortName">clk6</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider18" type="divider">
+      <obj_property name="label">VIDEO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/r" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">r[1:0]</obj_property>
+      <obj_property name="ObjectShortName">r[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/g" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">g[1:0]</obj_property>
+      <obj_property name="ObjectShortName">g[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/b" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b[1:0]</obj_property>
+      <obj_property name="ObjectShortName">b[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/bright" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">bright</obj_property>
+      <obj_property name="ObjectShortName">bright</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/csync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">csync</obj_property>
+      <obj_property name="ObjectShortName">csync</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider20" type="divider">
+      <obj_property name="label">SRAM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/clk24" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk24</obj_property>
+      <obj_property name="ObjectShortName">clk24</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/whichturn" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">whichturn</obj_property>
+      <obj_property name="ObjectShortName">whichturn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/state" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">state[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/cpuramaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpuramaddr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">cpuramaddr[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/vramaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">vramaddr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">vramaddr[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/data_from_cpu" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_from_cpu[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_from_cpu[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/data_to_cpu" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_to_cpu[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_to_cpu[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/ram_512k/data_to_asic" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_to_asic[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_to_asic[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/sram_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_addr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">sram_addr[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/sram_we_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_we_n</obj_property>
+      <obj_property name="ObjectShortName">sram_we_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/sram_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sram_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider19" type="divider">
+      <obj_property name="label">CPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/el_z80/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/cpuaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpuaddr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cpuaddr[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/data_to_cpu" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_to_cpu[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_to_cpu[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/data_from_cpu" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_from_cpu[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_from_cpu[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/mreq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mreq_n</obj_property>
+      <obj_property name="ObjectShortName">mreq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/el_z80/iorq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iorq_n</obj_property>
+      <obj_property name="ObjectShortName">iorq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/el_z80/m1_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">m1_n</obj_property>
+      <obj_property name="ObjectShortName">m1_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/wait_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wait_n</obj_property>
+      <obj_property name="ObjectShortName">wait_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/el_z80/TheCPU/rd" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd</obj_property>
+      <obj_property name="ObjectShortName">rd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/el_z80/TheCPU/req_inhibit" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">req_inhibit</obj_property>
+      <obj_property name="ObjectShortName">req_inhibit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/el_z80/TheCPU/u0/tstate" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tstate[2:0]</obj_property>
+      <obj_property name="ObjectShortName">tstate[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/la_ula_del_sam/contention" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">contention</obj_property>
+      <obj_property name="ObjectShortName">contention</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider38" type="divider">
+      <obj_property name="label">ASIC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_samcoupe/uut/la_ula_del_sam/screen_mode" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">screen_mode[1:0]</obj_property>
+      <obj_property name="ObjectShortName">screen_mode[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,15 @@
+MEMORY
+{
+   ROM1:  start = $E000, size = $B20, fill = yes, fillval = $ff;
+   ROM2:  start = $EB20, size = $4AC, fill = yes, fillval = $ff;	
+   ROM4:  start = $EFCC, size = $4, fill = yes, fillval = $ff;
+   ROM5:  start = $EFD0, size = $30;
+}
+
+SEGMENTS
+{
+   CODE:    load = ROM1, type = ro;
+   BRAN:	load = ROM2, type = ro;
+   WRMSTRT: load = ROM4, type = ro;
+   VSN:     load = ROM5, type = ro;
+}

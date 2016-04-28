@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/rodriguj/Documents/zxspectrum/zxuno/cores/ula_reloaded/tb_zxuno_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="mapa_es" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="t80_pack" />
+            <top_module name="tb_zxuno" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="51" />
+   <wvobject fp_name="/tb_zxuno/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/addr_rom_16k" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">addr_rom_16k[13:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_rom_16k[13:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/sram_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_addr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">sram_addr[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/sram_we_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_we_n</obj_property>
+      <obj_property name="ObjectShortName">sram_we_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/sram_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sram_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/rom_dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rom_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rom_dout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider16" type="divider">
+      <obj_property name="label">VIDEO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/r" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">r[2:0]</obj_property>
+      <obj_property name="ObjectShortName">r[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/g" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">g[2:0]</obj_property>
+      <obj_property name="ObjectShortName">g[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/b" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b[2:0]</obj_property>
+      <obj_property name="ObjectShortName">b[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/csync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">csync</obj_property>
+      <obj_property name="ObjectShortName">csync</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider21" type="divider">
+      <obj_property name="label">ULA</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/clk7" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk7</obj_property>
+      <obj_property name="ObjectShortName">clk7</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/int_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">int_n</obj_property>
+      <obj_property name="ObjectShortName">int_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/hc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">hc[8:0]</obj_property>
+      <obj_property name="ObjectShortName">hc[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/vc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">vc[8:0]</obj_property>
+      <obj_property name="ObjectShortName">vc[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/CLKWait" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">CLKWait</obj_property>
+      <obj_property name="ObjectShortName">CLKWait</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/StopCLK" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">StopCLK</obj_property>
+      <obj_property name="ObjectShortName">StopCLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/BitmapAddr" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">BitmapAddr</obj_property>
+      <obj_property name="ObjectShortName">BitmapAddr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/BitmapDataLoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">BitmapDataLoad</obj_property>
+      <obj_property name="ObjectShortName">BitmapDataLoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/AttrAddr" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">AttrAddr</obj_property>
+      <obj_property name="ObjectShortName">AttrAddr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/AttrDataLoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">AttrDataLoad</obj_property>
+      <obj_property name="ObjectShortName">AttrDataLoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/state" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">state[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/ioreqall_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ioreqall_n</obj_property>
+      <obj_property name="ObjectShortName">ioreqall_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/Nor1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">Nor1</obj_property>
+      <obj_property name="ObjectShortName">Nor1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/Nor2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">Nor2</obj_property>
+      <obj_property name="ObjectShortName">Nor2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/la_ula/CLKContention" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">CLKContention</obj_property>
+      <obj_property name="ObjectShortName">CLKContention</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider20" type="divider">
+      <obj_property name="label">CPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/A" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">A[15:0]</obj_property>
+      <obj_property name="ObjectShortName">A[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/di" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">di[7:0]</obj_property>
+      <obj_property name="ObjectShortName">di[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/mreq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mreq_n</obj_property>
+      <obj_property name="ObjectShortName">mreq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/iorq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iorq_n</obj_property>
+      <obj_property name="ObjectShortName">iorq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/m1_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">m1_n</obj_property>
+      <obj_property name="ObjectShortName">m1_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/el_z80/rfsh_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rfsh_n</obj_property>
+      <obj_property name="ObjectShortName">rfsh_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider34" type="divider">
+      <obj_property name="label">DUAL PORT MEMORY</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/a1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">a1[18:0]</obj_property>
+      <obj_property name="ObjectShortName">a1[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/dout1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout1[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/a2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">a2[18:0]</obj_property>
+      <obj_property name="ObjectShortName">a2[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/din2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">din2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">din2[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/dout2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout2[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/a" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">a[18:0]</obj_property>
+      <obj_property name="ObjectShortName">a[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/d" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/we_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">we_n</obj_property>
+      <obj_property name="ObjectShortName">we_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/doutput1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">doutput1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">doutput1[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_zxuno/uut/dos_memorias/doutput2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">doutput2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">doutput2[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>

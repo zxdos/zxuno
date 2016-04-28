@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/rodriguj/Documents/zxspectrum/zxuno/repositorio/cores/sam_coupe_spartan6/test1/tb_asic_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_asic" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="24" />
+   <wvobject fp_name="divider12" type="divider">
+      <obj_property name="label">Internals</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/hc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">hc[9:0]</obj_property>
+      <obj_property name="ObjectShortName">hc[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/vc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">vc[8:0]</obj_property>
+      <obj_property name="ObjectShortName">vc[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/screen_mode" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">screen_mode[1:0]</obj_property>
+      <obj_property name="ObjectShortName">screen_mode[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/sregm12" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sregm12[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sregm12[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/attrreg" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">attrreg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">attrreg[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/pixel_with_flash" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">pixel_with_flash</obj_property>
+      <obj_property name="ObjectShortName">pixel_with_flash</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/pixel" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">pixel[6:0]</obj_property>
+      <obj_property name="ObjectShortName">pixel[6:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/contention" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">contention</obj_property>
+      <obj_property name="ObjectShortName">contention</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/wait_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wait_n</obj_property>
+      <obj_property name="ObjectShortName">wait_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/vramaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">vramaddr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">vramaddr[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/clut" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">clut[0:15,6:0]</obj_property>
+      <obj_property name="ObjectShortName">clut[0:15,6:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider15" type="divider">
+      <obj_property name="label">Video</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/g" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">g[1:0]</obj_property>
+      <obj_property name="ObjectShortName">g[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/r" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">r[1:0]</obj_property>
+      <obj_property name="ObjectShortName">r[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/b" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b[1:0]</obj_property>
+      <obj_property name="ObjectShortName">b[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/bright" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">bright</obj_property>
+      <obj_property name="ObjectShortName">bright</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/fetching_pixels" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fetching_pixels</obj_property>
+      <obj_property name="ObjectShortName">fetching_pixels</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/blank_time" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">blank_time</obj_property>
+      <obj_property name="ObjectShortName">blank_time</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/csync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">csync</obj_property>
+      <obj_property name="ObjectShortName">csync</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider26" type="divider">
+      <obj_property name="label">cpu</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/uut/ramaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ramaddr[18:0]</obj_property>
+      <obj_property name="ObjectShortName">ramaddr[18:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_asic/int_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">int_n</obj_property>
+      <obj_property name="ObjectShortName">int_n</obj_property>
+   </wvobject>
+</wave_config>

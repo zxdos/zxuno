@@ -1,0 +1,255 @@
+; Trivial BIOS for an Apple II+ -- just enough to show the hardware works
+;
+; Stephen A. Edwards
+;
+; Assemble with "xa -A 53248 -bt 53248 ..." to start the code at $D000
+
+gbasl = $26
+gbash = $27
+basl = $28
+bash = $29
+
+text = $400 ; start of text/lores screen memory
+bhires = $2000 ; start of hires screen memory
+line8 = $428
+line9 = $4A8
+line10 = $528
+line11 = $5A8
+
+line23 = $7D0
+
+keyboard = $C000
+key_strobe = $C010
+
+spkr = $C030
+grset = $C050
+txtset = $C051
+nomix = $C052
+mix = $C053
+page1 = $C054
+page2 = $C055
+lores = $C056
+hires = $C057
+
+nmi_vector = $FFFA
+nmi = reset
+irq = reset
+
+reset:
+	cld
+	lda txtset
+	lda page1
+
+; Clear the text screen
+
+	lda #<text
+	sta gbasl
+	lda #>text
+	sta gbash
+	ldy #0
+	ldx #4
+	lda #$A0 ; Normal space
+l0
+	sta (gbasl),y
+	dey
+	bne l0
+	inc gbash
+	dex
+	bne l0
+
+; Play three tones
+
+	ldy #0
+tone1
+	lda #15
+	jsr wait
+	sta spkr
+	dey
+	bne tone1
+
+tone2
+	lda #12
+	jsr wait
+	sta spkr
+	dey
+	bne tone2
+
+tone3
+	lda #8
+	jsr wait
+	sta spkr
+	dey
+	bne tone3
+
+; Print some messages
+	lda #<text+15
+	sta gbasl
+	lda #>text
+	sta gbash
+	lda #<hello
+	sta basl
+	lda #>hello
+	sta bash
+	jsr write_string
+
+	lda #<line8+8
+	sta gbasl
+	lda #<roms1
+	sta basl
+	lda #>roms1
+	sta bash
+	jsr write_string
+
+	lda #<line10
+	sta gbasl
+	lda #>line10
+	sta gbash
+	lda #<roms2
+	sta basl
+	lda #>roms2
+	sta bash
+	jsr write_string
+
+	lda #<line11
+	sta gbasl
+	lda #>line11
+	sta gbash
+	lda #<roms3
+	sta basl
+	lda #>roms3
+	sta bash
+	jsr write_string
+
+	lda #<line23
+	sta gbasl
+	lda #>line23
+	sta gbash
+	lda #<press
+	sta basl
+	lda #>press
+	sta bash
+	jsr write_string
+
+wait_for_key
+	bit keyboard
+	bpl wait_for_key
+	sta key_strobe
+
+; Set lores mode
+	sta lores
+	sta nomix
+	sta grset
+
+; Fill the screen with colors
+	lda #0
+fill
+	ldx #<text
+	stx gbasl
+	ldx #>text
+	stx gbash
+	ldy #0
+	ldx #4
+l2
+	sta (gbasl),y
+	adc #1
+	dey
+	bne l2
+	inc gbash
+	dex
+	bne l2
+
+	adc #1
+
+	bit keyboard
+	bpl fill
+	sta key_strobe
+
+; Wait for another keypress
+
+wait_key1
+	bit keyboard
+	bpl wait_key1
+	sta key_strobe
+
+; Set hires mode
+	sta hires
+
+; Fill the screen with colors
+	lda #0
+fillh
+	ldx #<bhires
+	stx gbasl
+	ldx #>bhires
+	stx gbash
+	ldy #0
+	ldx #$20
+l3
+	sta (gbasl),y
+	adc #1
+	dey
+	bne l3
+	inc gbash
+	dex
+	bne l3
+
+	adc #1
+
+	bit keyboard
+	bpl fillh
+	sta key_strobe
+
+; Wait for another keypress
+
+wait_key2
+	bit keyboard
+	bpl wait_key2
+	sta key_strobe
+
+	jmp reset
+	
+done
+	rts
+write_string
+	ldy #0
+l1
+	lda (basl),y
+	beq done
+	ora #$80
+	sta (gbasl),y
+	iny
+	bne l1
+	rts
+
+; A quadratic delay
+
+wait	sec
+wait2	pha
+wait3	sbc #1
+	bne wait3
+	pla
+	sbc #1
+	bne wait2
+	rts
+	
+
+hello	.asc "APPLE2FPGA"
+	.byt 0
+
+roms1	.asc "THIS IS NOT APPLE'S BIOS"
+	.byt 0
+
+roms2	.asc "TO RUN APPLE PROGRAMS, GET A COPY OF THE"
+	.byt 0
+
+roms3   .asc "ACTUAL APPLE II ROMS (D000-FFFF)"
+	.byt 0
+
+press	.asc "PRESS ANY KEY TO ADVANCE"
+	.byt 0
+
+; Pad to the start of the NMI vector
+here	.dsb (nmi_vector - here)
+
+	.word nmi
+	.word reset
+	.word irq

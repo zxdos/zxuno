@@ -1,0 +1,1 @@
+vhdtdtfi -lang verilog -prj a2601 -o C:/Users/killian/Dropbox/GadgetFactory/Papilio-Arcade/A2601_vga_attempt_2/A2601/build/VGAColorTable.vhi -lib work C:/Users/killian/Dropbox/GadgetFactory/Papilio-Arcade/A2601_vga_attempt_2/TIA/src//VGAColorTable.v -module VGAColorTable -template C:/Xilinx/13.2/ISE_DS/ISE//data/vhdlinst.tft -deleteonerror 

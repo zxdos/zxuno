@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/rodriguj/Documents/zxspectrum/zxuno/repositorio/cores/test11/tb_spi_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_spi" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="10" />
+   <wvobject fp_name="/tb_spi/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/uut/data_from_spi" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_from_spi[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_from_spi[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/oe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_n</obj_property>
+      <obj_property name="ObjectShortName">oe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/spi_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">spi_clk</obj_property>
+      <obj_property name="ObjectShortName">spi_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/spi_di" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">spi_di</obj_property>
+      <obj_property name="ObjectShortName">spi_di</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/spi_do" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">spi_do</obj_property>
+      <obj_property name="ObjectShortName">spi_do</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/enviar_dato" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">enviar_dato</obj_property>
+      <obj_property name="ObjectShortName">enviar_dato</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/recibir_dato" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">recibir_dato</obj_property>
+      <obj_property name="ObjectShortName">recibir_dato</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_spi/din" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">din[7:0]</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# A shell script for generating main_roms.vhd and disk_ii_rom.vhd
+#
+# Usage:
+#
+# ./rom2vhdl main_roms 13 12287 < apple_II.rom > main_roms.vhd
+#
+# ./rom2vhdl disk_ii_rom 7 255 < slot6.rom > disk_ii_rom.vhd
+
+echo "library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity $1 is
+ port (
+   addr : in  unsigned($2 downto 0);
+   clk  : in  std_logic;
+   dout : out unsigned(7 downto 0));
+end $1;
+
+architecture rtl of $1 is
+  type rom_array is array(0 to $3) of unsigned(7 downto 0);
+
+  constant ROM : rom_array := ("
+
+od --format x1 --address-radix=n --output-duplicates --width=8 | awk 'NR > 1 { printf(",\n") }
+  {printf "     X\"%s\", X\"%s\", X\"%s\", X\"%s\", X\"%s\", X\"%s\", X\"%s\", X\"%s\"", $1, $2, $3, $4, $5, $6, $7, $8}'
+
+echo ");
+
+begin
+
+process (clk)
+  begin
+    if rising_edge(clk) then
+      dout <= ROM(TO_INTEGER(addr));
+    end if;
+  end process;
+
+end rtl;"

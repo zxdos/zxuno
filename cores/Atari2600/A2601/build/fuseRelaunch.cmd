@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "C:/Users/killian/Dropbox/GadgetFactory/archive/kit-arcade/A2601-0.1.0/A2601/A2601/build/bench_isim_beh.exe" -prj "C:/Users/killian/Dropbox/GadgetFactory/archive/kit-arcade/A2601-0.1.0/A2601/A2601/build/bench_beh.prj" "work.bench" 

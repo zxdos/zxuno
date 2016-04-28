@@ -1,0 +1,36 @@
+SET_FLAG DEBUG FALSE
+SET_FLAG MODE INTERACTIVE
+SET_FLAG STANDALONE_MODE FALSE
+SET_PREFERENCE devicefamily spartan3e
+SET_PREFERENCE device xc3s500e
+SET_PREFERENCE speedgrade -4
+SET_PREFERENCE package vq100
+SET_PREFERENCE verilogsim true
+SET_PREFERENCE vhdlsim true
+SET_PREFERENCE simulationfiles Behavioral
+SET_PREFERENCE busformat BusFormatAngleBracketNotRipped
+SET_PREFERENCE outputdirectory C:/Users/Jack/Dropbox/GadgetFactory/archive/kit-arcade/A2601-0.1.0/A2601/A2601/build/ipcore_dir/
+SET_PREFERENCE workingdirectory C:/Users/Jack/Dropbox/GadgetFactory/archive/kit-arcade/A2601-0.1.0/A2601/A2601/build/ipcore_dir/tmp/
+SET_PREFERENCE subworkingdirectory C:/Users/Jack/Dropbox/GadgetFactory/archive/kit-arcade/A2601-0.1.0/A2601/A2601/build/ipcore_dir/tmp/_cg/
+SET_PREFERENCE transientdirectory C:/Users/Jack/Dropbox/GadgetFactory/archive/kit-arcade/A2601-0.1.0/A2601/A2601/build/ipcore_dir/tmp/_cg/_dbg/
+SET_PREFERENCE designentry Advanced
+SET_PREFERENCE flowvendor Other
+SET_PREFERENCE addpads false
+SET_PREFERENCE projectname coregen
+SET_PREFERENCE formalverification false
+SET_PREFERENCE asysymbol false
+SET_PREFERENCE implementationfiletype Ngc
+SET_PREFERENCE foundationsym false
+SET_PREFERENCE createndf false
+SET_PREFERENCE removerpms false
+SET_PARAMETER Component_Name de
+SET_CORE_NAME DDS Compiler
+SET_CORE_VERSION 4.0
+SET_CORE_VLNV xilinx.com:ip:dds_compiler:4.0
+SET_CORE_CLASS com.xilinx.ip.dds_compiler_v4_0.dds_compiler_v4_0
+SET_CORE_PATH C:/Xilinx/13.1/ISE_DS/ISE/coregen/ip/xilinx/dsp/com/xilinx/ip/dds_compiler_v4_0
+SET_CORE_GUIPATH C:/Xilinx/13.1/ISE_DS/ISE/coregen/ip/xilinx/dsp/com/xilinx/ip/dds_compiler_v4_0/gui/dds_compiler_v4_0.tcl
+SET_CORE_DATASHEET C:\Xilinx\13.1\ISE_DS\ISE\coregen\ip\xilinx\dsp\com\xilinx\ip\dds_compiler_v4_0\doc\dds_ds558.pdf
+ADD_CORE_DOCUMENT <C:\Xilinx\13.1\ISE_DS\ISE\coregen\ip\xilinx\dsp\com\xilinx\ip\dds_compiler_v4_0\doc\dds_ds558.pdf><dds_ds558.pdf>
+ADD_CORE_DOCUMENT <C:\Xilinx\13.1\ISE_DS\ISE\coregen\ip\xilinx\dsp\com\xilinx\ip\dds_compiler_v4_0\doc\dds_compiler_v4_0_vinfo.html><dds_compiler_v4_0_vinfo.html>
+ADD_CORE_DOCUMENT <C:\Xilinx\13.1\ISE_DS\ISE\coregen\ip\xilinx\dsp\com\xilinx\ip\dds_compiler_v4_0\doc\dds_compiler_v4_0_readme.txt><dds_compiler_v4_0_readme.txt>

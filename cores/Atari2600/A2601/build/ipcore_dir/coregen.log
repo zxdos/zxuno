@@ -1,0 +1,12 @@
+CoreGen has not been configured with any user repositories.
+CoreGen has been configured with the following Xilinx repositories:
+ - 'C:\Xilinx\13.1\ISE_DS\ISE\coregen\' []
+INFO:sim:927 - Generating component instance 'de' of
+   'xilinx.com:ip:dds_compiler:4.0' from
+   'C:\Xilinx\13.1\ISE_DS\ISE\coregen\ip\xilinx\dsp\com\xilinx\ip\dds_compiler_v
+   4_0\component.xml'.
+Executing Tcl generator...
+Cancelled executing Tcl generator.
+Wrote file for project
+'C:\Users\Jack\Dropbox\GadgetFactory\archive\kit-arcade\A2601-0.1.0\A2601\A2601\
+build\ipcore_dir\de.cgp'.

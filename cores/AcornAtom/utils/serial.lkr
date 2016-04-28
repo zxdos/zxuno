@@ -1,0 +1,9 @@
+MEMORY
+{
+   ROM1:  start = $3000, size=$400;
+}
+
+SEGMENTS
+{
+   CODE:    load = ROM1, type = ro;
+}

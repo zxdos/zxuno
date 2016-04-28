@@ -1,0 +1,56 @@
+// BMM LOC annotation file.
+//
+// Release 12.4 - Data2MEM M.81d, build 1.9 Aug 19, 2010
+// Copyright (c) 1995-2015 Xilinx, Inc.  All rights reserved.
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Processor 'bootrom', ID 0, memory map.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_MAP bootrom PPC405 0
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    // Processor 'bootrom' address space 'boot_code' 0x00000000:0x00003FFF (16 KBytes).
+    //
+    ///////////////////////////////////////////////////////////////////////////////
+
+    ADDRESS_SPACE boot_code RAMB16 [0x00000000:0x00003FFF]
+        BUS_BLOCK
+            system_inst/boot_rom_inst/ram_blocks[7].inst [7:7] PLACED = X1Y30;
+            system_inst/boot_rom_inst/ram_blocks[6].inst [6:6] PLACED = X1Y26;
+            system_inst/boot_rom_inst/ram_blocks[5].inst [5:5] PLACED = X1Y24;
+            system_inst/boot_rom_inst/ram_blocks[4].inst [4:4] PLACED = X1Y16;
+            system_inst/boot_rom_inst/ram_blocks[3].inst [3:3] PLACED = X1Y12;
+            system_inst/boot_rom_inst/ram_blocks[2].inst [2:2] PLACED = X1Y14;
+            system_inst/boot_rom_inst/ram_blocks[1].inst [1:1] PLACED = X1Y10;
+            system_inst/boot_rom_inst/ram_blocks[0].inst [0:0] PLACED = X0Y28;
+        END_BUS_BLOCK;
+    END_ADDRESS_SPACE;
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    // Processor 'bootrom' address space 'vram_code' 0x00008000:0x0000BFFF (16 KBytes).
+    //
+    ///////////////////////////////////////////////////////////////////////////////
+
+    ADDRESS_SPACE vram_code RAMB16 [0x00008000:0x0000BFFF]
+        BUS_BLOCK
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[7].inst [7:7] PLACED = X0Y16;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[6].inst [6:6] PLACED = X0Y24;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[5].inst [5:5] PLACED = X0Y26;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[4].inst [4:4] PLACED = X0Y22;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[3].inst [3:3] PLACED = X0Y14;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[2].inst [2:2] PLACED = X0Y12;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[1].inst [1:1] PLACED = X0Y18;
+            system_inst/vdp_inst/vdp_vram_inst/ram_blocks[0].inst [0:0] PLACED = X0Y20;
+        END_BUS_BLOCK;
+    END_ADDRESS_SPACE;
+
+END_ADDRESS_MAP;
+

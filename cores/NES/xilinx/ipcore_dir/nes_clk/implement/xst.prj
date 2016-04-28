@@ -1,0 +1,2 @@
+vhdl work ../../nes_clk.vhd
+vhdl work ../example_design/nes_clk_exdes.vhd

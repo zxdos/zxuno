@@ -1,0 +1,29 @@
+ADDRESS_MAP bootrom PPC405 0
+	// BOOT ROM
+	ADDRESS_SPACE boot_code RAMB16[0x00000000:0x00003FFF]
+		BUS_BLOCK
+			system_inst/boot_rom_inst/ram_blocks[7].inst [7:7];
+			system_inst/boot_rom_inst/ram_blocks[6].inst [6:6];
+			system_inst/boot_rom_inst/ram_blocks[5].inst [5:5];
+			system_inst/boot_rom_inst/ram_blocks[4].inst [4:4];
+			system_inst/boot_rom_inst/ram_blocks[3].inst [3:3];
+			system_inst/boot_rom_inst/ram_blocks[2].inst [2:2];
+			system_inst/boot_rom_inst/ram_blocks[1].inst [1:1];
+			system_inst/boot_rom_inst/ram_blocks[0].inst [0:0];
+		END_BUS_BLOCK;
+	END_ADDRESS_SPACE;
+
+	// VRAM
+	ADDRESS_SPACE vram_code RAMB16[0x00008000:0x0000BFFF]
+		BUS_BLOCK
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[7].inst [7:7];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[6].inst [6:6];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[5].inst [5:5];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[4].inst [4:4];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[3].inst [3:3];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[2].inst [2:2];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[1].inst [1:1];
+			system_inst/vdp_inst/vdp_vram_inst/ram_blocks[0].inst [0:0];
+		END_BUS_BLOCK;
+	END_ADDRESS_SPACE;
+END_ADDRESS_MAP;

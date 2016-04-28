@@ -1,0 +1,65 @@
+// BMM LOC annotation file.
+//
+// Release 12.4 - Data2MEM M.81d, build 1.9 Aug 19, 2010
+// Copyright (c) 1995-2015 Xilinx, Inc.  All rights reserved.
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Processor 'avrmap', ID 0, memory map.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_MAP avrmap PPC405 0
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    // Processor 'avrmap' address space 'rom_code' 0x00000000:0x00004FFF (20 KBytes).
+    //
+    ///////////////////////////////////////////////////////////////////////////////
+
+    ADDRESS_SPACE rom_code RAMB16 [0x00000000:0x00004FFF]
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word0 [15:0] PLACED = X1Y18;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word1 [15:0] PLACED = X1Y20;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word2 [15:0] PLACED = X1Y22;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word3 [15:0] PLACED = X1Y24;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word4 [15:0] PLACED = X0Y18;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word5 [15:0] PLACED = X0Y20;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word6 [15:0] PLACED = X0Y22;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word7 [15:0] PLACED = X0Y24;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word8 [15:0] PLACED = X0Y14;
+        END_BUS_BLOCK;
+
+        BUS_BLOCK
+            Inst_AVR8/PM_Inst/RAM_Word9 [15:0] PLACED = X0Y16;
+        END_BUS_BLOCK;
+    END_ADDRESS_SPACE;
+
+END_ADDRESS_MAP;
+

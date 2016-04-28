@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=/home/nestor/Projects/zxuno/git/zxuno_a2600/TCA2601/zxuno/ZXUNO_A2601.ncd
+OUTFILE=/home/nestor/Projects/zxuno/git/zxuno_a2600/TCA2601/zxuno/ZXUNO_A2601.bit
+FAMILY=Spartan6
+PART=xc6slx9-2tqg144
+WORKINGDIR=/home/nestor/Projects/zxuno/git/zxuno_a2600/TCA2601/zxuno
+LICENSE=WebPack
+USER_INFO=211086823_0_0_417

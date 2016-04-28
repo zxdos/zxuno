@@ -1,0 +1,78 @@
+TAP2WAV : CONVERT .TAP FILES TO .WAV FILES
+
+This tool produces WAV files from the Oric TAP images you use with emulators.
+
+Please read this small documentation entirely if you want to successfully
+transfer WAV files to your real Oric...
+
+Here is an example of using Tap2wav :
+
+assuming that you have both tap2wav.exe and krillys.tap in the same directory,
+type the following command at a MS-DOS prompt, or from the Execute box of
+Windows' Start menu :
+
+tap2wav -11 krillys.tap krillys.wav
+
+This will create krillys.wav in your directory, which you may then play with
+your favorite WAV player (or just double-click from Windows) in order to
+send it to your real Oric (more on this later). The '-11' option in this
+example asks tap2wav to produce a 11 kHz WAV file. Alternatively, you may
+use a -8 option instead in order to produce a 8 kHz WAV file (the resulting
+file will be smaller) or even not give any option and get a 4800 Hz WAV file
+(even smaller).
+
+WHY SHOULD YOU USE THOSE FREQUENCY OPTIONS ?
+
+You might say smaller files are better and you are right, but you will have
+to use these options if your Windows PC is not able to reliably play 4800 Hz
+wave files ! If you get an ERRORS FOUND on the Oric when playing a 4800 Hz
+file, then use either 8000 Hz (option -8) or 11025 Hz (option -11). Every
+PC should be able to play those frequencies correctly...
+
+The frequency you request is not the frequency that is used to encode Oric
+tape format, this one has to be standard otherwise a CLOAD on your Oric
+wouldn't read it. Of course, it is not possible to get a precise 2400 baud
+rate when using 8 or 11 kHz, but don't worry, the approximative rates used
+at these sampling frequencies will be perfectly accepted by the Oric (maybe
+even better than the original rate, because of a bigger separation of the
+'0' and '1' lengths).
+
+If adding this frequency option might sound like a hassle for you, tell it to
+Microsoft and its soundcard-drivers writers who don't bother producing correct
+waveplayers. It would be easier for me too if every PC were able to play 4800
+Hz files correctly : you will soon have 8 kHz or 11 kHz files on your hard
+disk, and this will soon oblige me to update Euphoric so that it reads any
+WAV file, whatever the sampling frequency is (as of version 0.99n, Euphoric
+only reads 4800 Hz files).
+
+SO, HOW DO I TRANSFER A PROGRAM TO MY TRUSTY ORIC ?
+
+Produce the WAV file as explained above (start with using the -11 option at
+first, you will check if your PC is able to play 4800 Hz files later...).
+
+Connect your Oric TAPE INPUT to the LINE OUT output of your PC soundcard.
+ALL THIS IS AT YOUR OWN RISKS ONLY, I CAN'T BE MADE RESPONSIBLE OF ANY DAMAGE
+YOU MAKE TO YOUR ORIC, YOUR PC, YOUR HOME OR ANY LIFE BEING IN THE NEARBY !!!
+I'm no electronic expert, but I recommend you don't connect to the SPEAKER OUT
+output of your PC soundcard... there has been at least one people who burnt
+the LM386 chip of his Oric. I can say that I have used this way to transfer
+files for a long time, without any damage for my Oric or PC. If this sounds
+frightening, you might try to connect a tape recorder to your soundcard
+instead, and record the program on tape before loading it on the Oric.
+
+Anyway, when the cable is connected, the only thing you have to do is to type
+CLOAD""
+on your Oric, and then start playing the WAV file on the PC (well, you would
+have guessed...)
+
+
+PROGRAM LIMITATIONS
+
+This Tap2wav program is able to encode most TAP files, including multipart
+programs. But it might fail to produce the correct signal when converting some
+protected programs (those that use invalid headers).
+
+
+Happy transfers,
+
+Fabrice

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/rodriguj/Documents/zxspectrum/zxuno/repositorio/cores/ula_reloaded/tb_ula_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_ula" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="25" />
+   <wvobject fp_name="/tb_ula/uut/clk14" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk14</obj_property>
+      <obj_property name="ObjectShortName">clk14</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/clk7" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk7</obj_property>
+      <obj_property name="ObjectShortName">clk7</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/rst_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst_n</obj_property>
+      <obj_property name="ObjectShortName">rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/hc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">hc[8:0]</obj_property>
+      <obj_property name="ObjectShortName">hc[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/vc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">vc[8:0]</obj_property>
+      <obj_property name="ObjectShortName">vc[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/int_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">int_n</obj_property>
+      <obj_property name="ObjectShortName">int_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/cpuclk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cpuclk</obj_property>
+      <obj_property name="ObjectShortName">cpuclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/tstates" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tstates[16:0]</obj_property>
+      <obj_property name="ObjectShortName">tstates[16:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/va" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">va[13:0]</obj_property>
+      <obj_property name="ObjectShortName">va[13:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/vramdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">vramdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">vramdata[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/VideoEnable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">VideoEnable</obj_property>
+      <obj_property name="ObjectShortName">VideoEnable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/BitmapAddr" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">BitmapAddr</obj_property>
+      <obj_property name="ObjectShortName">BitmapAddr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/BitmapDataLoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">BitmapDataLoad</obj_property>
+      <obj_property name="ObjectShortName">BitmapDataLoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/BitmapData" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">BitmapData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">BitmapData[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/AttrAddr" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">AttrAddr</obj_property>
+      <obj_property name="ObjectShortName">AttrAddr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/AttrDataLoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">AttrDataLoad</obj_property>
+      <obj_property name="ObjectShortName">AttrDataLoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/AttrData" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">AttrData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">AttrData[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/SerializerLoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">SerializerLoad</obj_property>
+      <obj_property name="ObjectShortName">SerializerLoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/AttrOutputLoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">AttrOutputLoad</obj_property>
+      <obj_property name="ObjectShortName">AttrOutputLoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/CALoad" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">CALoad</obj_property>
+      <obj_property name="ObjectShortName">CALoad</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/uut/CA" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">CA[4:0]</obj_property>
+      <obj_property name="ObjectShortName">CA[4:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/r" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">r[2:0]</obj_property>
+      <obj_property name="ObjectShortName">r[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/g" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">g[2:0]</obj_property>
+      <obj_property name="ObjectShortName">g[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/b" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b[2:0]</obj_property>
+      <obj_property name="ObjectShortName">b[2:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ula/csync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">csync</obj_property>
+      <obj_property name="ObjectShortName">csync</obj_property>
+   </wvobject>
+</wave_config>

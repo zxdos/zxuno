@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:design xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xilinx="http://www.xilinx.com" >
+   <spirit:vendor>xilinx.com</spirit:vendor>
+   <spirit:library>project</spirit:library>
+   <spirit:name>coregen</spirit:name>
+   <spirit:version>1.0</spirit:version>
+   <spirit:componentInstances>
+      <spirit:componentInstance>
+         <spirit:instanceName>clk_wiz_v1_8</spirit:instanceName>
+         <spirit:displayName></spirit:displayName>
+         <spirit:description></spirit:description>
+         <spirit:componentRef spirit:vendor="xilinx.com" spirit:library="ip" spirit:name="clk_wiz" spirit:version="1.8" />
+         <spirit:configurableElementValues>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout5_requested_out_freq">100.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout1_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_locked">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkin2_period">10.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out1_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout1_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout0_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout6_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_ref_jitter">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out5_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout5_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkin_period">20.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout1_requested_out_freq">32.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout1_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout1_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_min_o_jitter">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout0_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout4_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout1_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout5_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout0_divide">32</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_ref_jitter1">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_ref_jitter2">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_relative_inclk">REL_PRIMARY</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_out4_port">CLK0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clock_hold">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_secondary_source">Single_ended_clock_capable_pin</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout3_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_feedback_source">FDBK_AUTO</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_bandwidth">OPTIMIZED</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout4_used">true</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkdv_divide">2.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clkfxdv_divide">2</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_override_dcm">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_power_down">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout4_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_notes">None</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_in_jitter_units">Units_UI</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkin1_period">10.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout5_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout4_cascade">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout4_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_jitter_sel">No_Jitter</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkfbout_mult">41</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout4_requested_out_freq">64.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_in_freq_units">Units_MHz</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clkfx_multiply">4</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out2_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout7_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_divclk_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_deskew_adjust">SYSTEM_SYNCHRONOUS</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_out5_port">CLK0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out6_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_compensation">ZHOLD</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout5_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_secondary_in_freq">100.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout2_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout2_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout6_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_dyn_phase_shift">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout5_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkin1_jitter_ps">200.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout5_used">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout3_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout7_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_override_mmcm">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout5_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout2_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout2_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clk_out1_port">CLKFX</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout3_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout1_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_feedback">2X</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout4_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_divclk_divide">2</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkin2_jitter_ps">100.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout3_divide">16</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout7_requested_out_freq">100.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_spread_spectrum">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_phase_shift">0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_out6_port">CLK0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout1_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout6_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_num_out_clks">4</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_platform">nt64</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_out1_port">CLKFX</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out3_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout3_requested_out_freq">8.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout1_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out7_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout6_used">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout3_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_prim_source">Single_ended_clock_capable_pin</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_prim_in_jitter">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_secondary_in_jitter">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkfbout_mult_f">4.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout7_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_prim_in_freq">50.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout5_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkin1_ui_jitter">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_clk_valid">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clk_out2_port">CLKFX</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_freq_synth">true</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_notes">None</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_freeze">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_reset">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout3_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout6_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_startup_wait">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_inclk_stopped">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout2_divide">128</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clkfx_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clkin_period">10.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkin2_ui_jitter">0.010</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkfbout_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_jitter_options">UI</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkfx_divide">25</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkin_period">20.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout5_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout5_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_inclk_switchover">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_out2_port">CLK2X</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout6_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout3_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout6_requested_out_freq">100.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout4_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout0_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout7_used">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_max_i_jitter">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_min_power">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout3_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clk_out4_use_fine_ps_gui">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_summary_strings">empty</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkfx_multiply">16</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout2_used">true</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_bandwidth">OPTIMIZED</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout2_requested_out_freq">16.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout3_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_notes">None</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clk_out3_port">CLKFX</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clk_feedback">CLKFBOUT</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout4_requested_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_phase_alignment">true</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout6_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout2_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_spread_spectrum">NONE</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout4_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkfb_in_signaling">SINGLE</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_clkfx_md_max">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkin_divide_by_2">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout0_divide_f">4.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout2_divide">1</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout5_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout1_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout1_divide">64</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkfbout_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout4_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_notes">None</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout2_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout4_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clk_out3_port">CLK0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout0_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkfbout_use_fine_ps">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout4_drives">BUFG</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_status">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkout_phase_shift">NONE</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_clkgen_startup_wait">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_use_dyn_reconfig">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_dcm_startup_wait">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_compensation">SYSTEM_SYNCHRONOUS</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_override_dcm_clkgen">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout3_phase">0.000</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_primtype_sel">DCM_SP</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_mmcm_clkout2_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_calc_done">DONE</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout0_duty_cycle">0.500</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clock_mgr_type">AUTO</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_override_pll">false</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout3_used">true</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_clkout6_requested_duty_cycle">50.0</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="parameter_pll_clkout2_phase">0.000</spirit:configurableElementValue>
+         </spirit:configurableElementValues>
+         <spirit:vendorExtensions>
+            <xilinx:instanceProperties>
+             <xilinx:projectOptions>
+               <xilinx:projectName>coregen</xilinx:projectName>
+               <xilinx:outputDirectory>./</xilinx:outputDirectory>
+               <xilinx:workingDirectory>./tmp/</xilinx:workingDirectory>
+               <xilinx:subWorkingDirectory>./tmp/_cg</xilinx:subWorkingDirectory>
+             </xilinx:projectOptions>
+             <xilinx:part>
+               <xilinx:device>xc6slx9</xilinx:device>
+               <xilinx:deviceFamily>spartan6</xilinx:deviceFamily>
+               <xilinx:package>tqg144</xilinx:package>
+               <xilinx:speedGrade>-3</xilinx:speedGrade>
+             </xilinx:part>
+             <xilinx:flowOptions>
+               <xilinx:busFormat>BusFormatAngleBracketNotRipped</xilinx:busFormat>
+               <xilinx:designEntry>VHDL</xilinx:designEntry>
+               <xilinx:asySymbol>true</xilinx:asySymbol>
+               <xilinx:flowVendor>Foundation_ISE</xilinx:flowVendor>
+               <xilinx:addPads>false</xilinx:addPads>
+               <xilinx:removeRPMs>false</xilinx:removeRPMs>
+               <xilinx:createNDF>false</xilinx:createNDF>
+               <xilinx:implementationFileType>Ngc</xilinx:implementationFileType>
+               <xilinx:formalVerification>false</xilinx:formalVerification>
+             </xilinx:flowOptions>
+             <xilinx:simulationOptions>
+               <xilinx:simulationModel>Behavioral</xilinx:simulationModel>
+               <xilinx:simulationLanguage>VHDL_and_Verilog</xilinx:simulationLanguage>
+               <xilinx:foundationSym>false</xilinx:foundationSym>
+             </xilinx:simulationOptions>
+           </xilinx:instanceProperties>
+         </spirit:vendorExtensions>
+      </spirit:componentInstance>
+   </spirit:componentInstances>
+   <spirit:description></spirit:description>
+   <spirit:vendorExtensions>
+      <xilinx:instanceProperties>
+       <xilinx:projectOptions>
+         <xilinx:projectName>coregen</xilinx:projectName>
+         <xilinx:outputDirectory>./</xilinx:outputDirectory>
+         <xilinx:workingDirectory>./tmp/</xilinx:workingDirectory>
+         <xilinx:subWorkingDirectory>./tmp/_cg</xilinx:subWorkingDirectory>
+       </xilinx:projectOptions>
+       <xilinx:part>
+         <xilinx:device>xc6slx9</xilinx:device>
+         <xilinx:deviceFamily>spartan6</xilinx:deviceFamily>
+         <xilinx:package>tqg144</xilinx:package>
+         <xilinx:speedGrade>-3</xilinx:speedGrade>
+       </xilinx:part>
+       <xilinx:flowOptions>
+         <xilinx:busFormat>BusFormatAngleBracketNotRipped</xilinx:busFormat>
+         <xilinx:designEntry>VHDL</xilinx:designEntry>
+         <xilinx:asySymbol>true</xilinx:asySymbol>
+         <xilinx:flowVendor>Foundation_ISE</xilinx:flowVendor>
+         <xilinx:addPads>true</xilinx:addPads>
+         <xilinx:removeRPMs>false</xilinx:removeRPMs>
+         <xilinx:createNDF>false</xilinx:createNDF>
+         <xilinx:implementationFileType>Ngc</xilinx:implementationFileType>
+         <xilinx:formalVerification>false</xilinx:formalVerification>
+       </xilinx:flowOptions>
+       <xilinx:simulationOptions>
+         <xilinx:simulationModel>Behavioral</xilinx:simulationModel>
+         <xilinx:simulationLanguage>VHDL_and_Verilog</xilinx:simulationLanguage>
+         <xilinx:foundationSym>false</xilinx:foundationSym>
+       </xilinx:simulationOptions>
+     </xilinx:instanceProperties>
+   </spirit:vendorExtensions>
+</spirit:design>

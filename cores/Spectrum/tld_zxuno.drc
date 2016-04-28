@@ -1,0 +1,36 @@
+Release 12.1 Drc M.53d (nt64)
+Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
+
+Tue Dec 09 13:37:00 2014
+
+drc -z tld_zxuno.ncd tld_zxuno.pcf
+
+WARNING:PhysDesignRules:372 - Gated clock. Clock net lut3539_569 is sourced by a
+   combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net lut3541_570 is sourced by a
+   combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net lut3533_567 is sourced by a
+   combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net lut3535_568 is sourced by a
+   combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:367 - The signal
+   <la_maquina/la_ula/palette/Mram_lut12_RAMD_O> is incomplete. The signal does
+   not drive any load pins in the design.
+WARNING:PhysDesignRules:367 - The signal
+   <la_maquina/la_ula/palette/Mram_lut11_RAMD_O> is incomplete. The signal does
+   not drive any load pins in the design.
+WARNING:PhysDesignRules:367 - The signal
+   <la_maquina/el_z80/TheCPU/u0/Regs/Mram_RegsH11_RAMD_D1_O> is incomplete. The
+   signal does not drive any load pins in the design.
+WARNING:PhysDesignRules:367 - The signal
+   <la_maquina/el_z80/TheCPU/u0/Regs/Mram_RegsL11_RAMD_D1_O> is incomplete. The
+   signal does not drive any load pins in the design.
+INFO:PhysDesignRules:1861 - To achieve optimal frequency synthesis performance
+   with the CLKFX and CLKFX180 outputs of the DCM comp
+   los_relojes_del_sistema/DCM_SP_INST, consult the device Data Sheet.
+DRC detected 0 errors and 8 warnings.  Please see the previously displayed
+individual error or warning messages for more details.

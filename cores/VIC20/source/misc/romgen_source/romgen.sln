@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "romgen", "romgen.vcproj", "{CEA57B22-11B5-4A56-8159-D94834995FBB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{CEA57B22-11B5-4A56-8159-D94834995FBB}.Debug.ActiveCfg = Debug|Win32
+		{CEA57B22-11B5-4A56-8159-D94834995FBB}.Debug.Build.0 = Debug|Win32
+		{CEA57B22-11B5-4A56-8159-D94834995FBB}.Release.ActiveCfg = Release|Win32
+		{CEA57B22-11B5-4A56-8159-D94834995FBB}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
