@@ -279,21 +279,21 @@ D+3 : modificadores y señales de usuario, 0 si no hay
 #define PC_MINUS   0x4A
 
 #define MAP(pc,sp,rj,mu) {                                                    \
-                           rom[(pc)*4] = (((sp)>>8)&0xFF);                    \
-                           rom[(pc)*4+1] = (((sp))&0xFF);                     \
-                           rom[(pc)*4+2] = (rj);                              \
-                           rom[(pc)*4+3] = (mu);                              \
+                            rom[(pc)*4] = (((sp)>>8)&0xFF);                   \
+                            rom[(pc)*4+1] = (((sp))&0xFF);                    \
+                            rom[(pc)*4+2] = (rj);                             \
+                            rom[(pc)*4+3] = (mu);                             \
                          }
                          
 #define MAPANY(pc,sp,rj,mu) {                                                 \
-                               MAP(pc,sp,rj,mu);                              \
-                           	   MAP(MD1|pc,sp,rj,mu);                          \
-                               MAP(MD2|pc,sp,rj,mu);                          \
-							   MAP(MD3|pc,sp,rj,mu);                          \
-                               MAP(MD1|MD2|pc,sp,rj,mu);                      \
-                               MAP(MD1|MD3|pc,sp,rj,mu);                      \
-                               MAP(MD2|MD3|pc,sp,rj,mu);                      \
-                               MAP(MD1|MD2|MD3|pc,sp,rj,mu);                  \
+                              MAP(pc,sp,rj,mu);                               \
+                              MAP(MD1|pc,sp,rj,mu);                           \
+                              MAP(MD2|pc,sp,rj,mu);                           \
+                              MAP(MD3|pc,sp,rj,mu);                           \
+                              MAP(MD1|MD2|pc,sp,rj,mu);                       \
+                              MAP(MD1|MD3|pc,sp,rj,mu);                       \
+                              MAP(MD2|MD3|pc,sp,rj,mu);                       \
+                              MAP(MD1|MD2|MD3|pc,sp,rj,mu);                   \
                             }
                          
 #define CLEANMAP {                                                            \
@@ -301,23 +301,22 @@ D+3 : modificadores y señales de usuario, 0 si no hay
                     for (i=0;i<(sizeof(rom)/sizeof(rom[0]));i++)              \
                       rom[i] = 0;                                             \
                  }
-#define SAVEMAPHEX(name) {                                                      \
-                           FILE *f;                                             \
-                           int i;                                               \
-                           f=fopen(name,"w");                                   \
-                           for(i=0;i<(sizeof(rom)/sizeof(rom[0]));i++)          \
-                             fprintf(f,"%.2X\n",rom[i]);                        \
-                           fclose(f);                                           \
+#define SAVEMAPHEX(name) {                                                    \
+                           FILE *f;                                           \
+                           int i;                                             \
+                           f=fopen(name,"w");                                 \
+                           for(i=0;i<(sizeof(rom)/sizeof(rom[0]));i++)        \
+                             fprintf(f,"%.2X\n",rom[i]);                      \
+                           fclose(f);                                         \
                          }
 
-#define SAVEMAPBIN(name) {                                                      \
-                           FILE *f;                                             \
-                           int i;                                               \
-                           f=fopen(name,"wb");                                  \
-                           fwrite (rom, 1, sizeof(rom), f);                     \
-                           fclose(f);                                           \
+#define SAVEMAPBIN(name) {                                                    \
+                           FILE *f;                                           \
+                           int i;                                             \
+                           f=fopen(name,"wb");                                \
+                           fwrite (rom, 1, sizeof(rom), f);                   \
+                           fclose(f);                                         \
                          }
-
 
 int main()
 {
@@ -325,88 +324,54 @@ int main()
 
     CLEANMAP;
 
-    MAPANY(PC_LSHIFT,0,0,MODIFIER1);  // MD1 is SHIFT
-    MAPANY(PC_RSHIFT,0,0,MODIFIER1);  // MD1 is SHIFT
-    MAPANY(PC_LCTRL,0,0,MODIFIER2);   // MD2 is CTRL
-    MAPANY(PC_RCTRL,0,0,MODIFIER2);   // MD2 is CTRL
+    MAPANY(PC_LSHIFT,SP_CAPS,0,0);
+    MAPANY(PC_RSHIFT,SP_CAPS,0,0);
+    MAPANY(PC_LCTRL,SP_SYMBOL,0,MODIFIER2); // MD2 is CTRL
+    MAPANY(PC_RCTRL,SP_SYMBOL,0,MODIFIER2); // MD2 is CTRL
     MAPANY(PC_LALT,0,JOYFIRE,MODIFIER3);    // MD3 is ALT. Also is FIRE for keyboard joystick
     MAPANY(PC_RALT,0,JOYFIRE,MODIFIER3);    // MD3 is ALT. Also is FIRE for keyboard joystick
     
-    MAPANY(PC_LWIN,SP_CAPS,0,0); // CAPS SHIFT
-    MAPANY(PC_RWIN,SP_SYMBOL,0,0); // SYMBOL SHIFT   
-	MAPANY(PC_APPS,SP_SYMBOL,0,0); // SYMBOL SHIFT 
-
     // Basic mapping: each key from PC is mapped to a key in the Spectrum
-    MAP(PC_1,SP_1,0,0);
-    MAP(PC_2,SP_2,0,0);
-    MAP(PC_3,SP_3,0,0);
-    MAP(PC_4,SP_4,0,0);
-    MAP(PC_5,SP_5,0,0);
-    MAP(PC_6,SP_6,0,0);
-    MAP(PC_7,SP_7,0,0);
-    MAP(PC_8,SP_8,0,0);
-    MAP(PC_9,SP_9,0,0);
-    MAP(PC_0,SP_0,0,0);
+    MAPANY(PC_1,SP_1,0,0);
+    MAPANY(PC_2,SP_2,0,0);
+    MAPANY(PC_3,SP_3,0,0);
+    MAPANY(PC_4,SP_4,0,0);
+    MAPANY(PC_5,SP_5,0,0);
+    MAPANY(PC_6,SP_6,0,0);
+    MAPANY(PC_7,SP_7,0,0);
+    MAPANY(PC_8,SP_8,0,0);
+    MAPANY(PC_9,SP_9,0,0);
+    MAPANY(PC_0,SP_0,0,0);
 
-    MAP(PC_Q,SP_Q,0,0);
-    MAP(PC_W,SP_W,0,0);
-    MAP(PC_E,SP_E,0,0);
-    MAP(PC_R,SP_R,0,0);
-    MAP(PC_T,SP_T,0,0);
-    MAP(PC_Y,SP_Y,0,0);
-    MAP(PC_U,SP_U,0,0);
-    MAP(PC_I,SP_I,0,0);
-    MAP(PC_O,SP_O,0,0);
-    MAP(PC_P,SP_P,0,0);
-    MAP(PC_A,SP_A,0,0);
-    MAP(PC_S,SP_S,0,0);
-    MAP(PC_D,SP_D,0,0);
-    MAP(PC_F,SP_F,0,0);
-    MAP(PC_G,SP_G,0,0);
-    MAP(PC_H,SP_H,0,0);
-    MAP(PC_J,SP_J,0,0);
-    MAP(PC_K,SP_K,0,0);
-    MAP(PC_L,SP_L,0,0);
-    MAP(PC_Z,SP_Z,0,0);
-    MAP(PC_X,SP_X,0,0);
-    MAP(PC_C,SP_C,0,0);
-    MAP(PC_V,SP_V,0,0);
-    MAP(PC_B,SP_B,0,0);
-    MAP(PC_N,SP_N,0,0);
-    MAP(PC_M,SP_M,0,0);
-
-    MAP(MD1|PC_Q,SP_CAPS<<8|SP_Q,0,0);
-    MAP(MD1|PC_W,SP_CAPS<<8|SP_W,0,0);
-    MAP(MD1|PC_E,SP_CAPS<<8|SP_E,0,0);
-    MAP(MD1|PC_R,SP_CAPS<<8|SP_R,0,0);
-    MAP(MD1|PC_T,SP_CAPS<<8|SP_T,0,0);
-    MAP(MD1|PC_Y,SP_CAPS<<8|SP_Y,0,0);
-    MAP(MD1|PC_U,SP_CAPS<<8|SP_U,0,0);
-    MAP(MD1|PC_I,SP_CAPS<<8|SP_I,0,0);
-    MAP(MD1|PC_O,SP_CAPS<<8|SP_O,0,0);
-    MAP(MD1|PC_P,SP_CAPS<<8|SP_P,0,0);
-    MAP(MD1|PC_A,SP_CAPS<<8|SP_A,0,0);
-    MAP(MD1|PC_S,SP_CAPS<<8|SP_S,0,0);
-    MAP(MD1|PC_D,SP_CAPS<<8|SP_D,0,0);
-    MAP(MD1|PC_F,SP_CAPS<<8|SP_F,0,0);
-    MAP(MD1|PC_G,SP_CAPS<<8|SP_G,0,0);
-    MAP(MD1|PC_H,SP_CAPS<<8|SP_H,0,0);
-    MAP(MD1|PC_J,SP_CAPS<<8|SP_J,0,0);
-    MAP(MD1|PC_K,SP_CAPS<<8|SP_K,0,0);
-    MAP(MD1|PC_L,SP_CAPS<<8|SP_L,0,0);
-    MAP(MD1|PC_Z,SP_CAPS<<8|SP_Z,0,0);
-    MAP(MD1|PC_X,SP_CAPS<<8|SP_X,0,0);
-    MAP(MD1|PC_C,SP_CAPS<<8|SP_C,0,0);
-    MAP(MD1|PC_V,SP_CAPS<<8|SP_V,0,0);
-    MAP(MD1|PC_B,SP_CAPS<<8|SP_B,0,0);
-    MAP(MD1|PC_N,SP_CAPS<<8|SP_N,0,0);
-    MAP(MD1|PC_M,SP_CAPS<<8|SP_M,0,0);
+    MAPANY(PC_Q,SP_Q,0,0);
+    MAPANY(PC_W,SP_W,0,0);
+    MAPANY(PC_E,SP_E,0,0);
+    MAPANY(PC_R,SP_R,0,0);
+    MAPANY(PC_T,SP_T,0,0);
+    MAPANY(PC_Y,SP_Y,0,0);
+    MAPANY(PC_U,SP_U,0,0);
+    MAPANY(PC_I,SP_I,0,0);
+    MAPANY(PC_O,SP_O,0,0);
+    MAPANY(PC_P,SP_P,0,0);
+    MAPANY(PC_A,SP_A,0,0);
+    MAPANY(PC_S,SP_S,0,0);
+    MAPANY(PC_D,SP_D,0,0);
+    MAPANY(PC_F,SP_F,0,0);
+    MAPANY(PC_G,SP_G,0,0);
+    MAPANY(PC_H,SP_H,0,0);
+    MAPANY(PC_J,SP_J,0,0);
+    MAPANY(PC_K,SP_K,0,0);
+    MAPANY(PC_L,SP_L,0,0);
+    MAPANY(PC_Z,SP_Z,0,0);
+    MAPANY(PC_X,SP_X,0,0);
+    MAPANY(PC_C,SP_C,0,0);
+    MAPANY(PC_V,SP_V,0,0);
+    MAPANY(PC_B,SP_B,0,0);
+    MAPANY(PC_N,SP_N,0,0);
+    MAPANY(PC_M,SP_M,0,0);
 
     MAPANY(PC_SPACE,SP_SPACE,0,0);
     MAPANY(PC_ENTER,SP_ENTER,0,0);
-
-    //Complex mapping. This is for the spanish keyboard although many
-    //combos can be used with any other PC keyboard
     MAPANY(PC_ESC,SP_BREAK,0,0);
     MAPANY(PC_CPSLOCK,SP_CPSLOCK,0,0);
     MAPANY(PC_TAB,SP_EXTEND,0,0);
@@ -416,77 +381,52 @@ int main()
     MAPANY(PC_LEFT,SP_LEFT,0,0);
     MAPANY(PC_RIGHT,SP_RIGHT,0,0);
     MAPANY(PC_F2,SP_EDIT,0,0);
-
-    MAP(PC_F5|MD2|MD3,0,NMI,0); // Ctrl-Alt-F5 for NMI
-    MAP(PC_F10,SP_GRAPH,0,0);          // F10 habilita el modo gráfico. Esto es para Antonio, para la BIOS
-    MAP(PC_DELETE|MD2|MD3,0,URESET,0);     //
-    MAP(PC_KP_DOT|MD2|MD3,0,URESET,0);     // Ctrl-Alt-Del for user reset
-    MAP(PC_BKSPACE|MD2|MD3,0,MRESET,0);    // Ctrl-Alt-BkSpace for master reset
+    MAPANY(PC_F3,SP_TRUE,0,0);
+    MAPANY(PC_F4,SP_INVERSE,0,0);
+    MAP(PC_F5|MD2|MD3,0,NMI,0);           // Ctrl-Alt-F5 for NMI
+    MAPANY(PC_F10,SP_GRAPH,0,0);          // F10 habilita el modo gráfico. Esto es para Antonio, para la BIOS
+    MAP(PC_DELETE|MD2|MD3,0,URESET,0);    //
+    MAP(PC_KP_DOT|MD2|MD3,0,URESET,0);    // Ctrl-Alt-Del for user reset
+    MAP(PC_BKSPACE|MD2|MD3,0,MRESET,0);   // Ctrl-Alt-BkSpace for master reset
     
     //keypad
+    MAPANY(PC_KP_1,SP_1,0,0);
+    MAPANY(PC_KP_2,SP_2,0,0);
+    MAPANY(PC_KP_3,SP_3,0,0);
+    MAPANY(PC_KP_4,SP_4,0,0);
+    MAPANY(PC_KP_5,SP_5,0,0);
+    MAPANY(PC_KP_6,SP_6,0,0);
+    MAPANY(PC_KP_7,SP_7,0,0);
+    MAPANY(PC_KP_8,SP_8,0,0);
+    MAPANY(PC_KP_9,SP_9,0,0);
+    MAPANY(PC_KP_0,SP_0,0,0);
     MAPANY(PC_KP_DIVIS,SP_SLASH,0,0);
     MAPANY(PC_KP_MULT,SP_STAR,0,0);
     MAPANY(PC_KP_MINUS,SP_MINUS,0,0);
     MAPANY(PC_KP_PLUS,SP_PLUS,0,0);
-    MAPANY(PC_KP_ENTER,SP_ENTER,0,0);    
+    MAPANY(PC_KP_ENTER,SP_ENTER,0,0);
+    MAPANY(PC_KP_DOT,SP_DOT,0,0);
 
-    // a 8-way keyboard joystick on the keypad
-    MAPANY(PC_KP_7,0,JOYUP|JOYLEFT,0);
-    MAPANY(PC_KP_8,0,JOYUP,0);
-    MAPANY(PC_KP_9,0,JOYUP|JOYRIGHT,0);
-    MAPANY(PC_KP_4,0,JOYLEFT,0);
-    MAPANY(PC_KP_5,0,JOYDOWN,0);
-    MAPANY(PC_KP_6,0,JOYRIGHT,0);
-    MAPANY(PC_KP_1,0,JOYDOWN|JOYLEFT,0);
-    MAPANY(PC_KP_2,0,JOYDOWN,0);
-    MAPANY(PC_KP_3,0,JOYDOWN|JOYRIGHT,0);
+    MAPANY(PC_BACKSLA,SP_COLON,0,0);
+    MAPANY(PC_APOSTRO,SP_DOLLAR,0,0);
+    MAPANY(PC_OPNBANG,SP_EQUAL,0,0);
+    MAPANY(PC_GRAVEAC,SP_PAROPEN,0,0);
+    MAPANY(PC_PLUS,SP_PARCLOS,0,0);
+    MAPANY(PC_EGNE,SP_SEMICOL,0,0);
+    MAPANY(PC_ACUTEAC,SP_QUOTE,0,0);
+    MAPANY(PC_COMMA,SP_COMMA,0,0);
+    MAPANY(PC_DOT,SP_DOT,0,0);
+    MAPANY(PC_MINUS,SP_SLASH,0,0);
 
-    //Some shift+key mappings for the ES keyboard
-    MAP(MD1|PC_1,SP_BANG,0,0);
-    MAP(MD1|PC_2,SP_QUOTE,0,0);
-    MAP(MD1|PC_3,SP_HASH,0,0);
-    MAP(MD1|PC_4,SP_DOLLAR,0,0);
-    MAP(MD1|PC_5,SP_PERCEN,0,0);
-    MAP(MD1|PC_6,SP_AMP,0,0);
-    MAP(MD1|PC_7,SP_SLASH,0,0);
-    MAP(MD1|PC_8,SP_PAROPEN,0,0);
-    MAP(MD1|PC_9,SP_PARCLOS,0,0);
-    MAP(MD1|PC_0,SP_EQUAL,0,0);
-    MAP(PC_APOSTRO,SP_APOSTRO,0,0);
-    MAP(MD1|PC_APOSTRO,SP_QUEST,0,0);
-    MAP(PC_GRAVEAC,SP_POUND,0,0);
-    MAP(MD1|PC_GRAVEAC,SP_CARET,0,0);
-    MAP(PC_PLUS,SP_PLUS,0,0);
-    MAP(MD1|PC_PLUS,SP_STAR,0,0);
-    MAP(PC_ACUTEAC,SP_CUROPEN,0,0);
-    MAP(MD1|PC_ACUTEAC,SP_CUROPEN,0,0);
-    MAP(PC_ACUTEAC,SP_CUROPEN,0,0);
-    MAP(MD1|PC_ACUTEAC,SP_CUROPEN,0,0);
-    MAP(PC_CEDILLA,SP_CURCLOS,0,0);
-    MAP(MD1|PC_CEDILLA,SP_QUOTE,0,0);
-    MAP(PC_COMMA,SP_COMMA,0,0);
-    MAP(MD1|PC_COMMA,SP_SEMICOL,0,0);
-    MAP(PC_DOT,SP_DOT,0,0);
-    MAP(MD1|PC_DOT,SP_COLON,0,0);
-    MAP(PC_MINUS,SP_MINUS,0,0);
-    MAP(MD1|PC_MINUS,SP_UNDERSC,0,0);
-    MAP(PC_BACKSLA,SP_BACKSLA,0,0);
-    MAP(MD1|PC_BACKSLA,SP_BACKSLA,0,0);
-    MAP(PC_EGNE,SP_TILDE,0,0);
-    MAP(PC_LESS,SP_LESS,0,0);
-    MAP(MD1|PC_LESS,SP_GREATER,0,0);
-    MAP(MD2|PC_LESS,SP_LESSEQ,0,0);
-    MAP(MD2|MD1|PC_LESS,SP_GREATEQ,0,0);
-    MAP(MD3|PC_LESS,SP_NOTEQ,0,0);
-    MAP(MD3|MD1|PC_LESS,SP_NOTEQ,0,0);
-    MAP(MD3|MD2|PC_LESS,SP_NOTEQ,0,0);
-    MAP(MD3|MD2|MD1|PC_LESS,SP_NOTEQ,0,0);
+    MAPANY(PC_HOME,0,JOYUP,0);
+    MAPANY(PC_END,0,JOYDOWN,0);
+    MAPANY(PC_DELETE,0,JOYLEFT,0);
+    MAPANY(PC_PGDOWN,0,JOYRIGHT,0);
 
-    MAP(PC_F12,0,0,USER1); // Evento de usuario 1
-    MAP(PC_F2|MD2,0,0,USER2); // Evento de usuario 2 = Core 2 (Ctrl+F2)
+//    MAP(PC_F12,0,0,USER1); // Evento de usuario 1
 
     // End of mapping. Save .HEX file for Verilog
-    SAVEMAPHEX("keyb_es_hex.txt");
+    SAVEMAPHEX("keyb_av_hex.txt");
     // And map file for loading from ESXDOS
-    SAVEMAPBIN("keymaps\\ES");
+    SAVEMAPBIN("keymaps\\AV");
 }

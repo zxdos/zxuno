@@ -472,6 +472,9 @@ int main()
     MAP(PC_SLASH,SP_SLASH,0,0);
     MAP(MD1|PC_SLASH,SP_QUEST,0,0);
 
+ 	MAP(PC_F12,0,0,USER1); // Evento de usuario 1
+    MAP(PC_F2|MD2,0,0,USER2); // Evento de usuario 2 = Core 2 (Ctrl+F2)	
+
     // End of mapping. Save .HEX file for Verilog
     //SAVEMAPHEX("keyb_us_hex.txt");
     // And map file for loading from ESXDOS

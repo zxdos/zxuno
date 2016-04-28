@@ -22,42 +22,48 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module ula_radas (
-	 // Clocks
+    // Clocks
     input wire clk14,  // 14MHz master clock
     input wire clk7,
     input wire wssclk, // 5MHz WSS clock
+    input wire cpuclk,
+    output wire CPUContention,
     input wire rst_n,  // reset para volver al modo normal
 
-	 // CPU interface
-	 input wire [15:0] a,
-	 input wire mreq_n,
-	 input wire iorq_n,
-	 input wire rd_n,
-	 input wire wr_n,
-	 output wire cpuclk,
-	 output reg int_n,
-	 input wire [7:0] din,
+    // CPU interface
+    input wire [15:0] a,
+    input wire mreq_n,
+    input wire iorq_n,
+    input wire rd_n,
+    input wire wr_n,
+    output wire int_n,
+    input wire [7:0] din,
     output reg [7:0] dout,
-
+    input wire rasterint_enable,
+    input wire vretraceint_disable,
+    input wire [8:0] raster_line,
+    output wire raster_int_in_progress,
+    
     // VRAM interface
-	 output reg [13:0] va,  // 16KB videoram
+    output reg [13:0] va,  // 16KB videoram
     input wire [7:0] vramdata,
 
     // I/O ports
-	 input wire ear,
-	 input wire [4:0] kbd,
+    input wire ear,
+    input wire [4:0] kbd,
     output reg mic,
     output reg spk,
     input wire issue2_keyboard,
-    input wire timming,
+    input wire [1:0] mode,
     input wire disable_contention,
     input wire access_to_contmem,
 
     // Video
-	 output wire [2:0] r,
-	 output wire [2:0] g,
-	 output wire [2:0] b,
-	 output wire csync,
+    output wire [2:0] r,
+    output wire [2:0] g,
+    output wire [2:0] b,
+    output wire hsync,
+    output wire vsync,
     output wire y_n
     );
 
@@ -76,14 +82,21 @@ module ula_radas (
     // Counters from sync module
 	 wire [8:0] hc;
 	 wire [8:0] vc;
+   
+   // Signal when the vertical counter is in the line that we use to make the INT signal
+   wire in_int_line;
 
     reg clkhalf14 = 1'b0;
     always @(posedge clk14)
         clkhalf14 <= ~clkhalf14;
 
-	 pal_sync_generator_sinclair syncs (
+	 pal_sync_generator syncs (
     .clk(clk7),
-    .timming(timming),
+    .mode(mode),
+    .rasterint_enable(rasterint_enable),
+    .vretraceint_disable(vretraceint_disable),
+    .raster_line(raster_line),
+    .raster_int_in_progress(raster_int_in_progress),
     .ri(ri),
     .gi(gi),
     .bi(bi),
@@ -92,23 +105,10 @@ module ula_radas (
     .ro(r),
     .go(g),
     .bo(b),
-    .csync(csync)
+    .hsync(hsync),
+    .vsync(vsync),
+    .int_n(int_n)
     );
-
-//	 pal_sync_generator_progressive syncs (
-//    .clk(clk7),
-//    .wssclk(wssclk),
-//    .ri(ri),
-//    .gi(gi),
-//    .bi(bi),
-//    .hcnt(hc),
-//    .vcnt(vc),
-//    .ro(r),
-//    .go(g),
-//    .bo(b),
-//    .csync(csync)
-//    );
-
 
 ///////////////////////////////////////////////
 // ULA datapath
@@ -500,16 +500,7 @@ module ula_radas (
          end
       end
    end
-         
-   // INT generation
-   always @* begin
-      if (vc==BVSYNC && hc>=2 && hc<=65) // 32 T-states INT pulse width
-         int_n = 1'b0;
-      else
-         int_n = 1'b1;
-   end
-   
-
+        
 ///////////////////////////////////
 // AUXILIARY SIGNALS FOR CONTENTION CONTROL
 ///////////////////////////////////
@@ -598,6 +589,8 @@ module ula_radas (
             CancelContention <= 1'b0;
     end
     
-    assign cpuclk = (~(MayContend_n | CauseContention_n | CancelContention)) | hc[0];
+    //assign cpuclk = (~(MayContend_n | CauseContention_n | CancelContention)) | hc[0];
+    
+    assign CPUContention = (~(MayContend_n | CauseContention_n | CancelContention));
 
 endmodule

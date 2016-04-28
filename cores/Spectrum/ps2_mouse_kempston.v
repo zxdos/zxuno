@@ -67,7 +67,7 @@ module ps2_mouse_kempston (
     assign oe_n_kmouse = kmouse_x_req_n & kmouse_y_req_n & kmouse_butt_req_n;
     
     /*
-    | BSY | x | x | x | ERR | RLS | EXT | PEN |
+    | BSY | 0 | 0 | 0 | ERR | 0 | 0 | DATA_AVL |
     */
     reg reading_mousestatus = 1'b0;
     always @(posedge clk) begin

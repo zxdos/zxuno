@@ -27,7 +27,8 @@ module tld_zxuno (
    output wire [2:0] r,
    output wire [2:0] g,
    output wire [2:0] b,
-   output wire csync,
+   output wire hsync,
+   output wire vsync,
    input wire ear,
    inout wire clkps2,
    inout wire dataps2,
@@ -60,63 +61,52 @@ module tld_zxuno (
    input wire joyfire
    );
 
-   wire wssclk,sysclk,clk14,clk7,clk3d5;
-//   relojes los_relojes_del_sistema (
-//    .CLKIN_IN(clk50mhz), 
-//    .CLKDV_OUT(wssclk), //  5MHz
-//    .CLKFX_OUT(sysclk), // 28MHz 
-//    .CLKIN_IBUFG_OUT(), 
-//    .CLK0_OUT(), 
-//    .LOCKED_OUT()
-//    );
+   wire wssclk,sysclk,clk14,clk7,clk3d5,cpuclk;
+   wire CPUContention;
+   wire turbo_enable;
+   wire [2:0] pll_frequency_option;
 
-	assign wssclk = 1'b0;  // de momento, sin WSS
-	assign stdn = 1'b0;  // fijar norma PAL
-	assign stdnb = 1'b1; // y conectamos reloj PAL
+   assign wssclk = 1'b0;  // de momento, sin WSS
+   assign stdn = 1'b0;  // fijar norma PAL
+   assign stdnb = 1'b1; // y conectamos reloj PAL
 
-//   pll reloj_maestro
-//   (// Clock in ports
-//    .CLK_IN1            (clk50mhz),      // IN
-//    // Clock out ports
-//    .CLK_OUT1           (sysclk),     // OUT
-//    // Dynamic reconfiguration ports
-//    .PROGCLK            (1'b0),      // IN
-//    .PROGDATA           (1'b0),     // IN
-//    .PROGEN             (1'b0),       // IN
-//    .PROGDONE           ());    // OUT
-//
-//   reg [2:0] divclk = 3'b000;
-//   always @(posedge sysclk)
-//        divclk <= divclk + 1;
-//   assign clk14  = divclk[0];
-//   assign clk7   = divclk[1];
-//   assign clk3d5 = divclk[2];
-
-  cuatro_relojes relojes_maestros
+   clock_generator relojes_maestros
    (// Clock in ports
-    .CLK_IN1            (clk50mhz),      // IN
+    .CLK_IN1            (clk50mhz),
+    .CPUContention      (CPUContention),
+    .pll_option         (pll_frequency_option),
+    .turbo_enable       (turbo_enable),
     // Clock out ports
-    .CLK_OUT1           (sysclk) ,     // OUT
-    .CLK_OUT2           (clk14),     // OUT
-    .CLK_OUT3           (clk7),    // OUT
-    .CLK_OUT4           (clk3d5));    // OUT
-
+    .CLK_OUT1           (sysclk),
+    .CLK_OUT2           (clk14),
+    .CLK_OUT3           (clk7),
+    .CLK_OUT4           (clk3d5),
+    .cpuclk             (cpuclk)
+    );
 
    wire audio_out;
    assign audio_out_left = audio_out;
    assign audio_out_right = audio_out;
+
+   wire [2:0] ri, gi, bi;
+   wire hsync_pal, vsync_pal;   
    
+   wire vga_enable, scanlines_enable;
+
    zxuno la_maquina (
     .clk(sysclk),         // 28MHz, reloj base para la memoria de doble puerto, y de ahí, para el resto del circuito
     .wssclk(wssclk),      //  5MHz, reloj para el WSS
     .clk14(clk14),
     .clk7(clk7),
     .clk3d5(clk3d5),
+    .cpuclk(cpuclk),
+    .CPUContention(CPUContention),
     .power_on_reset_n(1'b1),  // sólo para simulación. Para implementacion, dejar a 1
-    .r(r),
-    .g(g),
-    .b(b),
-    .csync(csync),
+    .r(ri),
+    .g(gi),
+    .b(bi),
+    .hsync(hsync_pal),
+    .vsync(vsync_pal),
     .clkps2(clkps2),
     .dataps2(dataps2),
     .ear(~ear),  // negada porque el hardware tiene un transistor inversor
@@ -141,10 +131,32 @@ module tld_zxuno (
     .joyleft(joyleft),
     .joyright(joyright),
     .joyfire(joyfire),
-    
+	 
     .mouseclk(mouseclk),
-    .mousedata(mousedata)
+    .mousedata(mousedata),
+    
+    .vga_enable(vga_enable),
+    .scanlines_enable(scanlines_enable),
+    .freq_option(pll_frequency_option),
+    .turbo_enable(turbo_enable)
     );
+
+	vga_scandoubler #(.CLKVIDEO(14000)) salida_vga (
+		.clkvideo(clk14),
+		.clkvga(sysclk),
+        .enable_scandoubling(vga_enable),
+        .disable_scaneffect(~scanlines_enable),
+		.ri(ri),
+		.gi(gi),
+		.bi(bi),
+		.hsync_ext_n(hsync_pal),
+		.vsync_ext_n(vsync_pal),
+		.ro(r),
+		.go(g),
+		.bo(b),
+		.hsync(hsync),
+		.vsync(vsync)
+   );	 
        
     assign testled = (!flash_cs_n || !sd_cs_n);
 //    reg [21:0] monoestable = 22'hFFFFFF;
@@ -155,5 +167,7 @@ module tld_zxuno (
 //            monoestable <= monoestable + 1;
 //    end
 //    assign testled = ~monoestable[21];
+
+
 
 endmodule

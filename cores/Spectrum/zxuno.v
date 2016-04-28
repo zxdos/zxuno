@@ -27,13 +27,16 @@ module zxuno (
     input wire clk14,
     input wire clk7,
     input wire clk3d5,
+    input wire cpuclk,
+    output wire CPUContention,
     input wire power_on_reset_n,
     
     // E/S
     output wire [2:0] r,
     output wire [2:0] g,
     output wire [2:0] b,
-    output wire csync,
+    output wire hsync,
+    output wire vsync,
     inout wire clkps2,
     inout wire dataps2,
     input wire ear,
@@ -62,10 +65,16 @@ module zxuno (
     input wire joyleft,
     input wire joyright,
     input wire joyfire,
-    
+	 
     // MOUSE
     inout wire mouseclk,
-    inout wire mousedata
+    inout wire mousedata,
+    
+    // SCANDOUBLER CTRL
+    output wire vga_enable,
+    output wire scanlines_enable,
+    output wire [2:0] freq_option,
+    output wire turbo_enable
     );
 
    // Señales de la CPU
@@ -74,7 +83,6 @@ module zxuno (
    wire [15:0] cpuaddr;
    wire [7:0] cpudin;
    wire [7:0] cpudout;
-   wire cpuclk;
    wire [7:0] ula_dout;
 
    // Señales acceso RAM por parte de la ULA
@@ -128,7 +136,7 @@ module zxuno (
    wire [4:0] kbdcol_to_ula;
    
    // Configuración ULA
-   wire timming_ula;
+   wire [1:0] timing_mode;
    wire issue2_keyboard;
    wire disable_contention;
    wire access_to_screen;
@@ -140,6 +148,18 @@ module zxuno (
    // Scratch register
    wire oe_n_scratch;
    wire [7:0] scratch_dout;
+   
+   // Scandoubler control
+   wire [7:0] scndblctrl_dout;
+   wire oe_n_scndblctrl;
+   
+   // Raster INT control
+   wire rasterint_enable;
+   wire vretraceint_disable;
+   wire [8:0] raster_line;
+   wire raster_int_in_progress;
+   wire [7:0] rasterint_dout;
+   wire oe_n_rasterint;
 
    // NMI events
    wire [7:0] nmievents_dout;
@@ -153,6 +173,9 @@ module zxuno (
    wire [7:0] mousestatus_dout;
    wire oe_n_kmouse, oe_n_mousedata, oe_n_mousestatus;
 
+   // Multiboot
+   wire boot_second_core = user_toggles[1];  // KB triggered booting
+
    // Asignación de dato para la CPU segun la decodificación de todos los dispositivos
    // conectados a ella.
    assign cpudin = (oe_n_romyram==1'b0)?        memory_dout :
@@ -165,10 +188,12 @@ module zxuno (
                    (oe_n_coreid==1'b0)?         coreid_dout :
                    (oe_n_keymap==1'b0)?         keymap_dout :
                    (oe_n_scratch==1'b0)?        scratch_dout :
+                   (oe_n_scndblctrl==1'b0)?     scndblctrl_dout :
                    (oe_n_nmievents==1'b0)?      nmievents_dout :
                    (oe_n_kmouse==1'b0)?         kmouse_dout :
                    (oe_n_mousedata==1'b0)?      mousedata_dout :
                    (oe_n_mousestatus==1'b0)?    mousestatus_dout :
+                   (oe_n_rasterint==1'b0)?      rasterint_dout :
                                                 ula_dout;
 
    tv80n_wrapper el_z80 (
@@ -197,6 +222,8 @@ module zxuno (
      .clk14(clk14),     // 14MHz master clock
      .clk7(clk7),
      .wssclk(wssclk),   // 5MHz WSS clock
+     .cpuclk(cpuclk),
+     .CPUContention(CPUContention),
      .rst_n(mrst_n & rst_n & power_on_reset_n),
 
 	 // CPU interface
@@ -206,10 +233,13 @@ module zxuno (
 	 .iorq_n(iorq_n),
 	 .rd_n(rd_n),
 	 .wr_n(wr_n),
-	 .cpuclk(cpuclk),
 	 .int_n(int_n),
 	 .din(cpudout),
      .dout(ula_dout),
+     .rasterint_enable(rasterint_enable),
+     .vretraceint_disable(vretraceint_disable),
+     .raster_line(raster_line),
+     .raster_int_in_progress(raster_int_in_progress),
 
     // VRAM interface
 	 .va(vram_addr),  // 16KB videoram
@@ -217,18 +247,19 @@ module zxuno (
 	 
     // I/O ports
 	 .ear(ear),
-     .mic(mic),
-     .spk(spk),
+   .mic(mic),
+   .spk(spk),
 	 .kbd(kbdcol_to_ula),
-     .issue2_keyboard(issue2_keyboard),
-     .timming(timming_ula),
-     .disable_contention(disable_contention),
+   .issue2_keyboard(issue2_keyboard),
+   .mode(timing_mode),
+   .disable_contention(disable_contention),
 
     // Video
 	 .r(r),
 	 .g(g),
 	 .b(b),
-	 .csync(csync)
+	 .hsync(hsync),
+     .vsync(vsync)
     );
 
    zxunoregs addr_reg_zxuno (
@@ -248,7 +279,7 @@ module zxuno (
    );
 
    flash_and_sd cacharros_con_spi (
-      .clk(clk),
+      .clk(clk14),
       .a(cpuaddr),
       .iorq_n(iorq_n),
       .rd_n(rd_n),
@@ -297,7 +328,7 @@ module zxuno (
       .vramaddr(vram_addr),
       .vramdout(vram_dout),
       .issue2_keyboard_enabled(issue2_keyboard),
-      .timming_ula(timming_ula),
+      .timing_mode(timing_mode),
       .disable_contention(disable_contention),
       .access_to_screen(access_to_screen),
    
@@ -380,6 +411,38 @@ module zxuno (
         .oe_n(oe_n_scratch)
     );
 
+    scandoubler_ctrl control_scandoubler (
+        .clk(clk),
+        .a(cpuaddr),
+        .iorq_n(iorq_n),
+        .wr_n(wr_n),
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .zxuno_regwr(zxuno_regwr),
+        .din(cpudout),
+        .dout(scndblctrl_dout),
+        .oe_n(oe_n_scndblctrl),
+        .vga_enable(vga_enable),
+        .scanlines_enable(scanlines_enable),
+        .freq_option(freq_option),
+        .turbo_enable(turbo_enable)
+    );
+
+    rasterint_ctrl control_rasterint (
+        .clk(clk),
+        .rst_n(rst_n & mrst_n & power_on_reset_n),
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .zxuno_regwr(zxuno_regwr),
+        .din(cpudout),
+        .dout(rasterint_dout),
+        .oe_n(oe_n_rasterint),
+        .rasterint_enable(rasterint_enable),
+        .vretraceint_disable(vretraceint_disable),
+        .raster_line(raster_line),
+        .raster_int_in_progress(raster_int_in_progress)
+    );
+
     nmievents nmi_especial_de_antonio (
         .clk(clk),
         .rst_n(rst_n & mrst_n & power_on_reset_n),
@@ -420,6 +483,17 @@ module zxuno (
         .mousestatus_dout(mousestatus_dout),
         .oe_n_mousestatus(oe_n_mousestatus)
     );
+
+    multiboot el_multiboot (
+        .clk(clk),
+        .clk_icap(clk),
+        .rst_n(rst_n & mrst_n & power_on_reset_n),
+        .kb_boot_core(boot_second_core),
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regwr(zxuno_regwr),
+        .din(cpudout)
+    );
+
 
 ///////////////////////////////////
 // AY-3-8912 SOUND

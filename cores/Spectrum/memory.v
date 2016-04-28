@@ -44,7 +44,7 @@ module memory (
    input wire [13:0] vramaddr,
    output wire [7:0] vramdout,
    output wire issue2_keyboard_enabled,
-   output wire timming_ula,
+   output reg [1:0] timing_mode,
    output wire disable_contention,
    output reg access_to_screen,
 
@@ -68,20 +68,19 @@ module memory (
    reg divmmc_is_enabled = 1'b0;
    reg divmmc_nmi_is_disabled = 1'b0;
    reg issue2_keyboard = 1'b0;
-   reg timming = 1'b0;
+   initial timing_mode = 2'b00;
    reg disable_cont = 1'b0;
    reg masterconf_frozen = 1'b0;
    reg [1:0] negedge_configrom = 2'b00;
 
    assign issue2_keyboard_enabled = issue2_keyboard;
    assign in_boot_mode = ~masterconf_frozen;
-   assign timming_ula = timming;
    assign disable_contention = disable_cont;
 
    always @(posedge clk) begin
       negedge_configrom <= {negedge_configrom[0], page_configrom_active};
       if (!mrst_n) begin
-         {disable_cont,timming,issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= 6'b000001;
+         {timing_mode[1],disable_cont,timing_mode[0],issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= 7'b0000001;
          masterconf_frozen <= 1'b0;
       end
       else if (page_configrom_active == 1'b1) begin
@@ -93,7 +92,7 @@ module memory (
         initial_boot_mode <= 1'b0;
       end
       else if (addr==MASTERCONF && iow) begin
-         {disable_cont,timming,issue2_keyboard} <= din[5:3];
+         {timing_mode[1],disable_cont,timing_mode[0],issue2_keyboard} <= din[6:3];
          if (!masterconf_frozen) begin
             masterconf_frozen <= din[7];
             {divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= din[2:0];
@@ -349,7 +348,7 @@ module memory (
          oe_n = 1'b0;
       end
       else if (addr==MASTERCONF && ior) begin
-         dout = {masterconf_frozen,1'b0,disable_cont,timming,issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode};
+         dout = {masterconf_frozen,timing_mode[1],disable_cont,timing_mode[0],issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode};
          oe_n = 1'b0;
       end
       else if (addr==MASTERMAPPER && ior) begin
