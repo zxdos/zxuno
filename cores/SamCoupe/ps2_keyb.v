@@ -65,6 +65,7 @@ module ps2_keyb(
     wire extended;
     wire released;
     assign scancode_dout = kbcode;    
+    wire teclado_limpio;
     
     /*
     | BSY | x | x | x | ERR | RLS | EXT | PEN |
@@ -101,6 +102,7 @@ module ps2_keyb(
         .scan(kbcode),
         .extended(extended),
         .released(released),
+        .kbclean(teclado_limpio),
         .sam_row(rows),
         .sam_col(cols),
         .master_reset(master_reset),
@@ -113,6 +115,16 @@ module ps2_keyb(
         .cpuread(zxuno_addr == KEYMAP && zxuno_regrd == 1'b1),
         .rewind(regaddr_changed == 1'b1 && zxuno_addr == KEYMAP)
         );
+
+    keyboard_pressed_status comprueba_teclado_limpio (
+        .clk(clk),
+        .rst(1'b0),
+        .scan_received(nueva_tecla),
+        .scancode(kbcode),
+        .extended(extended),
+        .released(released),
+        .kbclean(teclado_limpio)
+    );
 
     ps2_host_to_kb escritura_a_teclado (
         .clk(clk),

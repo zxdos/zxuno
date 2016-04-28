@@ -35,59 +35,10 @@ module ram_dual_port_turnos (
     inout wire [7:0] sram_d
     );
     
-    parameter ASIC     = 2'd0,
-              CPUADDR  = 2'd1,
-              CPUWRITE = 2'd2;
-    
-//    assign sram_d = ((state == CPUADDR && cpu_we_n == 1'b0) || state == CPUWRITE)? data_from_cpu : 8'hZZ;
-//    assign sram_we_n = (cpu_we_n == 1'b0 && state == CPUWRITE)? 1'b0 : 1'b1;
-
-//    reg [1:0] state = ASIC;    
-//    always @(posedge clk) begin
-//        case (state)
-//            ASIC:
-//                begin
-//                    data_to_asic <= sram_d;
-//                    if (whichturn == 1'b0) begin
-//                        sram_a <= cpuramaddr;
-//                        state <= CPUADDR;                    
-//                    end
-//                    else
-//                        sram_a <= vramaddr;                    
-//                end
-//            CPUADDR:
-//                begin
-//                    data_to_cpu <= sram_d;
-//                    if (whichturn == 1'b1) begin
-//                        sram_a <= vramaddr;
-//                        state <= ASIC;
-//                    end
-//                    else begin
-//                        sram_a <= cpuramaddr;
-//                        if (cpu_we_n == 1'b0) begin
-//                            state <= CPUWRITE;
-//                        end
-//                    end
-//                end
-//            CPUWRITE:
-//                begin
-//                    if (whichturn == 1'b1) begin
-//                        sram_a <= vramaddr;
-//                        state <= ASIC;
-//                    end
-//                    else if (cpu_we_n == 1'b1) begin
-//                      sram_a <= cpuramaddr;
-//                      state <= CPUADDR;
-//                    end
-//                end
-//            default: state <= ASIC;
-//        endcase
-//    end                
-
     assign sram_d = (cpu_we_n == 1'b0 && whichturn == 1'b0)? data_from_cpu : 8'hZZ;    
     always @* begin
-        //data_to_cpu = 8'hFF;
-        //data_to_asic = 8'hFF;
+        data_to_cpu = 8'hFF;
+        data_to_asic = 8'hFF;
         if (whichturn == 1'b1) begin // ASIC
             sram_a = vramaddr;
             sram_we_n = 1'b1;

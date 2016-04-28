@@ -226,23 +226,29 @@ module asic (
         mem_contention = 1'b0;
         io_contention = 1'b0;
 
-        if (screen_off == 1'b0 && hc[3:0]<4'd10)
-            io_contention = 1'b1;
-        if (screen_off == 1'b1 && (hc[3:0]==4'd0 ||
-                                        hc[3:0]==4'd1 ||
-                                        hc[3:0]==4'd8 ||
-                                        hc[3:0]==4'd9) )
-            io_contention = 1'b1;
+//        if (screen_off == 1'b0 && hc[3:0]<4'd10)
+//            io_contention = 1'b1;
+//        if (screen_off == 1'b1 && (hc[3:0]==4'd0 ||
+//                                        hc[3:0]==4'd1 ||
+//                                        hc[3:0]==4'd8 ||
+//                                        hc[3:0]==4'd9) )
+//            io_contention = 1'b1;
             
-        if (fetching_pixels == 1'b1 && hc[3:0]<4'd10)
+        if (fetching_pixels == 1'b1 && hc[3:0]<4'd10) begin
            mem_contention = 1'b1;
+           //io_contention = 1'b1;
+        end
         if (fetching_pixels == 1'b0 && (hc[3:0]==4'd0 ||
                                              hc[3:0]==4'd1 ||
                                              hc[3:0]==4'd8 ||
-                                             hc[3:0]==4'd9) )
+                                             hc[3:0]==4'd9) ) begin
             mem_contention = 1'b1;
-        if (screen_mode == 2'b00 && hc[3:0]<4'd10 && (hc<10'd128 || hc>=10'd256))
+            //io_contention = 1'b1;
+        end
+        if (screen_mode == 2'b00 && hc[3:0]<4'd10 && (hc<10'd128 || hc>=10'd256)) begin
             mem_contention = 1'b1;  // extra contention for MODE 1
+            //io_contention = 1'b1;
+        end
     end
     assign asic_is_using_ram = mem_contention & fetching_pixels;
     

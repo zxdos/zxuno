@@ -536,8 +536,8 @@ module saa1099_envelope_gen (
             stereoshape <= 1'b0;
             envshape <= 3'b000;
             envclock <= 1'b0;
-            write_to_address_prev = 1'b0;
-            write_to_data_prev = 1'b0;
+            write_to_address_prev <= 1'b0;
+            write_to_data_prev <= 1'b0;
             pending_data <= 1'b0;
         end
         else begin
