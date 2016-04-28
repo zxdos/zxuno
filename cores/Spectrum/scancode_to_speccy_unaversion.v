@@ -272,6 +272,8 @@ module keyboard_pressed_status (
         UPDATING  = 2'd1,
         SCANNING  = 2'd2;
         
+    reg keybstat_ne[0:255];  // non extended keymap
+    reg keybstat_ex[0:255];  // extended keymap
     reg [7:0] addrscan = 8'h00; // keymap bit address
     reg keypressed_ne = 1'b0; // there is at least one key pressed
     reg keypressed_ex = 1'b0; // there is at least one extended key pressed
@@ -280,52 +282,12 @@ module keyboard_pressed_status (
     integer i;
     initial begin
         kbclean = 1'b1;
+        for (i=0;i<256;i=i+1) begin
+            keybstat_ne[i] = 1'b0;
+            keybstat_ex[i] = 1'b0;
+        end
     end
     
-    reg [7:0] addrkeybstat;
-    reg we_key_ne, we_key_ex;
-    reg din_key_ne, din_key_ex;
-    wire dout_key_ne, dout_key_ex;
-    
-    keystatmem vector_kb_clean (
-        .clk(clk),
-        .a(addrkeybstat),
-        .we1(we_key_ne),
-        .we2(we_key_ex),
-        .din1(din_key_ne),
-        .din2(din_key_ex),
-        .dout1(dout_key_ne),
-        .dout2(dout_key_ex)
-    );
-
-    always @* begin
-        addrkeybstat = 8'h00;
-        we_key_ne = 1'b0;
-        we_key_ex = 1'b0;
-        din_key_ne = 1'b0;
-        din_key_ex = 1'b0;
-        case (state)
-            RESETTING: 
-                begin
-                    addrkeybstat = addrscan;                
-                    we_key_ne = 1'b1;
-                    we_key_ex = 1'b1;
-                end
-            UPDATING:
-                begin
-                    addrkeybstat = scancode;
-                    we_key_ne = ~extended;
-                    we_key_ex = extended;
-                    din_key_ne = ~released;
-                    din_key_ex = ~released;
-                end
-            SCANNING:
-                begin
-                    addrkeybstat = addrscan;
-                end
-        endcase
-    end               
-
     always @(posedge clk) begin
         if (rst == 1'b1) begin
             state <= RESETTING;
@@ -341,6 +303,8 @@ module keyboard_pressed_status (
                             kbclean <= 1'b1;
                         end
                         else begin
+                            keybstat_ne[addrscan] <= 1'b0;
+                            keybstat_ex[addrscan] <= 1'b0;
                             addrscan <= addrscan + 8'd1;
                         end
                     end
@@ -351,6 +315,10 @@ module keyboard_pressed_status (
                         kbclean <= 1'b0;
                         keypressed_ne <= 1'b0;
                         keypressed_ex <= 1'b0;
+                        if (extended == 1'b0)
+                            keybstat_ne[scancode] <= ~released;
+                        else
+                            keybstat_ex[scancode] <= ~released;
                     end
                 SCANNING:
                     begin
@@ -363,40 +331,12 @@ module keyboard_pressed_status (
                             keypressed_ex <= 1'b0;
                         end
                         else begin
-                            keypressed_ne <= keypressed_ne | dout_key_ne;
-                            keypressed_ex <= keypressed_ex | dout_key_ex;
+                            keypressed_ne <= keypressed_ne | keybstat_ne[addrscan];
+                            keypressed_ex <= keypressed_ex | keybstat_ex[addrscan];
                         end
-                    end
-                default:
-                    begin
-                        state <= SCANNING;
                     end
             endcase
         end
     end
 endmodule
-
-module keystatmem (
-    input wire clk,
-    input wire [7:0] a,
-    input wire we1,
-    input wire we2,
-    input wire din1,
-    input wire din2,
-    output reg dout1,
-    output reg dout2
-    );
-    
-    reg keybstat_ne[0:255];  // non extended keymap
-    reg keybstat_ex[0:255];  // extended keymap
-    
-    always @(posedge clk) begin
-        if (we1 == 1'b1)
-            keybstat_ne[a] <= din1;
-        if (we2 == 1'b1)    
-            keybstat_ex[a] <= din2;
-        dout1 <= keybstat_ne[a];
-        dout2 <= keybstat_ex[a];
-    end
-endmodule    
-    
+        
