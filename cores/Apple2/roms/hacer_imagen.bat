@@ -1,0 +1,1 @@
+copy /B Apple33.nib + LodeRunner.nib + MarioBros.nib + MoonPatrol.nib + SpyVsSpy.nib + Zaxxon.nib + ZorkIII.nib + Choplifter.nib + Karateka.nib + Pacman.nib apple2_10disks.img

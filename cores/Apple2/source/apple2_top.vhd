@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
---
+-- 
 -- Papilio DUO with Classic computing shield  top-level module for the Apple ][
 --
 -- VLA
@@ -26,6 +26,7 @@ entity APPLE2_TOP is
     
     CLOCK50 : in std_logic;
   	 LED : out std_logic; 		 
+	 LED2 : out std_logic; 	
 	 I_RESET : in std_logic;
 	
     -- SRAM
@@ -59,8 +60,7 @@ entity APPLE2_TOP is
     O_AUDIO_L : out std_logic;                          -- ADC Data
 	 O_AUDIO_R : out std_logic;                          -- ADC Data
     
-	 SW_LEFT : in std_logic;
-	 SW_UP : in std_logic;
+	 BTN2 : in std_logic;
 	 JOYSTICK1 : in std_logic_vector(4 downto 0)
     );
   
@@ -108,17 +108,53 @@ architecture datapath of APPLE2_TOP is
   signal PDL_STROBE : std_logic;
   signal joy1_x, joy1_y : std_logic;
   signal csjudlr1 : std_logic_vector(6 downto 0);
+  signal BTN3 : std_logic;
+  
+  signal keyCode : unsigned(11 downto 0);
+  signal resetKey : std_logic;
+  signal imageCount : unsigned(7 downto 0) := (others => '0');
 
 begin
 
-  reset <=  I_RESET or power_on_reset;
+    reset <=  I_RESET or power_on_reset;
+  
+    resetKey <= '1' when keyCode = X"007" else '0'; --F12 reset
+	
+	 img_select : process (keyCode) --Disk image selection = SHIFT + Fx (F1 to F10)
+	 begin
+			if keyCode = X"105" then    --F1
+				imageCount <= X"00";
+			elsif keyCode = X"106" then
+				imageCount <= X"01";
+			elsif keyCode = X"104" then
+				imageCount <= X"02";
+			elsif keyCode = X"10C" then
+				imageCount <= X"03";
+			elsif keyCode = X"103" then
+				imageCount <= X"04";
+			elsif keyCode = X"10B" then
+				imageCount <= X"05";
+			elsif keyCode = X"183" then
+				imageCount <= X"06";
+			elsif keyCode = X"10A" then
+				imageCount <= X"07";
+			elsif keyCode = X"101" then
+				imageCount <= X"08";
+			elsif keyCode = X"109" then  --F10
+				imageCount <= X"09";
+			else
+				imageCount <= imageCount + 0;
+			end if;
+	 end process;
 
   power_on : process(CLK_14M)
   begin
     if rising_edge(CLK_14M) then
-      if flash_clk(22) = '1' then
+     if flash_clk(22) = '1' and resetKey = '0' then
         power_on_reset <= '0';
-      end if;
+		elsif resetKey = '1' then
+			power_on_reset <= '1';
+		end if;
     end if;
   end process;
 
@@ -126,7 +162,11 @@ begin
   flash_clkgen : process (CLK_14M)
   begin
     if rising_edge(CLK_14M) then
-      flash_clk <= flash_clk + 1;
+	   if resetKey = '0' then
+       flash_clk <= flash_clk + 1;
+		else
+		  flash_clk <= "00000000000000000000000";
+		end if;
     end if;     
   end process;
 
@@ -138,6 +178,8 @@ begin
 		O_CLK_28M	=> CLK_28M,
 		O_CLK_14M	=> CLK_14M
 		);
+		
+  BTN3 <= '1';
 	
   -- joystick inputs, these should probably be debounced first
   csjudlr1 <= "00" & JOYSTICK1;	
@@ -149,7 +191,7 @@ begin
   --            y    x   bt3 bt2 bt1
   
   -- Paddle buttons
-  GAMEPORT <=  "00" & joy1_y & joy1_x & SW_LEFT & SW_UP & not csjudlr1(4) & '0'; --"0000" & "0000"; -- (not KEY(2 downto 0)) & "0";
+  GAMEPORT <=  "00" & joy1_y & joy1_x & not BTN3 & not BTN2 & not csjudlr1(4) & '0'; --"0000" & "0000"; -- (not KEY(2 downto 0)) & "0";
   
   -- fake analog joystick... 
   -- PDL_STROBE starts the counter 
@@ -244,6 +286,7 @@ begin
     PS2_Data => PS2_DAT,
     CLK_14M  => CLK_14M,
     reset    => reset,
+	 key_code => keyCode, --Q
     read     => read_key,
     K        => K
     );
@@ -284,7 +327,7 @@ begin
     ram_we         => TRACK_RAM_WE
     );
 
-  image <= "0" & "000000000"; 
+  image <= "00" & imageCount; --disk image selection 
   
   SD_DAT3 <= CS_N;
   SD_CMD  <= MOSI;
@@ -309,7 +352,6 @@ begin
   SRAM_WE_N <= not ram_we;
 
   LED <= not CS_N; --Led SD
+--  LED2 <= '1' when imageCount = "0000000001" else '0'; --Led ext3
 	
-  -- Set all other unused bidirectional ports to tri-state
-
 end datapath;

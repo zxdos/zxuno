@@ -24,6 +24,7 @@ entity keyboard is
     CLK_14M  : in std_logic;
     read     : in std_logic;            -- Read strobe
     reset    : in std_logic;
+	 key_code : out unsigned(11 downto 0);
     K        : out unsigned(7 downto 0) -- Latched, decoded keyboard data
     );
 end keyboard;
@@ -69,9 +70,9 @@ begin
     Scan_DAV  => code_available,
     Scan_Code => code);
 
-  K <= key_pressed & "00" & ascii(4 downto 0) when ctrl = '1' else
-       key_pressed & ascii(6 downto 0);
-
+  K <= key_pressed & "00" & ascii(4 downto 0) when ctrl = '1' and ascii /= "00" else
+       key_pressed & ascii(6 downto 0) when ascii /= "00" else X"00"; --Q ascii
+		 
   shift_ctrl : process (CLK_14M, reset)
   begin
     if reset = '1' then
@@ -132,6 +133,7 @@ begin
         elsif code = LEFT_SHIFT or code = RIGHT_SHIFT or code = LEFT_CTRL then
           next_state <= IDLE;
         else
+
           next_state <= NORMAL_KEY;
         end if;
 
@@ -154,6 +156,8 @@ begin
   -- PS/2 scancode to ASCII translation
 
   shifted_code <= "00" & alt & shift & latched_code;
+
+  key_code <= shifted_code when state = KEY_UP else X"000";  --Q
 
   EN_us: if KEYMAP = "EN-us" generate
     with shifted_code select
