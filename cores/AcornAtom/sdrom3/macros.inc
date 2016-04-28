@@ -51,16 +51,15 @@
 	SLOWCMD
 .endmacro
 
-; Fast command, command port write followed by interwrite delay on PIC,
-; Simply an alias for SLOWCMD on AVR.
+; Fast command, command port write followed by interwrite delay on PIC, or a WaitWhileBusy on the AVR
 .macro FASTCMD
-.ifndef AVR
 	writeport		ACMD_REG
-	jsr				interwritedelay
-	lda				ACMD_REG
+.ifdef AVR
+	jsr				WaitWhileBusy	; Keep waiting until not busy
 .else
-	SLOWCMD
+	jsr				interwritedelay
 .endif
+	lda				ACMD_REG		; get status for client
 .endmacro
 
 ; Immediate version of fastcmd

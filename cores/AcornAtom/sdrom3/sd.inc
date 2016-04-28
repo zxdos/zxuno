@@ -243,14 +243,9 @@ sd_unmount:
 sd_drivestatus_r:
            and #3
            writeport ALATCH_REG      ; Send drivenr
-
-           lda #CMD_GET_IMG_STATUS   ; Command = SDDOS get file attribute
-           writeport ACMD_REG
-           jsr interwritedelay
+	   FASTCMDI CMD_GET_IMG_STATUS ; Command = SDDOS get file attribute
 .IF debug
            lda #0
-.ELSE
-           readport ACMD_REG             ; Read attribute
 .ENDIF
            rts
 

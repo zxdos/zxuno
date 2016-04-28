@@ -223,6 +223,7 @@ void at_process(void)
                // globalData[1..4 incl] = 256 byte sector number
                globalCurDrive = globalData[0] & 3;
                globalLBAOffset = LD_DWORD(&globalData[1]);
+               WriteDataPort(STATUS_OK);
             }
             if (received == CMD_GET_IMG_STATUS)
             {

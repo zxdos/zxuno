@@ -10,7 +10,7 @@ echo Building ${ROM}
 rm -f ${ROM}
 touch ${ROM}
 
-cat sddos-v3.25${AVR}.rom >> ${ROM}
+cat sddos-v3.27${AVR}.rom >> ${ROM}
 cat gags_v2.3.rom >> ${ROM}
 cat pcharme_v1.73.rom >> ${ROM}
 cat axr1.rom >> ${ROM}

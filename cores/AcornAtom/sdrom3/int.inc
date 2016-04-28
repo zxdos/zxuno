@@ -11,6 +11,7 @@
 ; v03.22 !!!!!!!!!!! Corrected stack overflow interpreter !!!!!!!!
 ; v03.24 !!!!!!!!!!! PHS - Merged in routines for AVR/AtomClone !!
 ; v03.25 !!!!!!!!!!! *RUN file and *file problem now solved !!!!!!
+; v03.26 !!!!!!!!!!! Several problems with AVR build solved !!!!!!
 ;=================================================================
 
 ;=================================================================
@@ -1714,7 +1715,7 @@ dhelp:
 				JSR chk_end_command
                 JSR OSCRLF 
                 JSR prttxt                      ; Print header
-                .byte 	"SDDOS V3.25 [TURBO]  (C)KC 2011"
+                .byte 	"SDDOS V3.27 [TURBO]  (C)KC 2015"
 .ifdef AVR
 				.byte	" AVR"
 .endif

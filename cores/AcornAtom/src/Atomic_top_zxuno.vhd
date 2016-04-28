@@ -314,4 +314,17 @@ atom_top_clocks : atom_clocks
      
     LED1       <= not LED1n;
 
+    -- This internal counter forces power up reset to happen
+    -- This is needed by the GODIL to initialize some of the registers
+    ResetProcess : process (clk_16M00)
+    begin
+        if rising_edge(clk_16M00) then
+            if (pwrup_RSTn = '0') then
+                reset_ctr <= reset_ctr + 1;
+            end if;
+        end if;
+    end process;
+    pwrup_RSTn <= reset_ctr(7);
+
+
 end behavioral;
