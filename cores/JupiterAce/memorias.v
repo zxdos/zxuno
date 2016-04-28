@@ -20,56 +20,73 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module ram1k(
+module ram1k (
 	input wire clk,
+    input wire ce,
 	input wire [9:0] a,
 	input wire [7:0] din,
-	output wire [7:0] dout,
-	input wire ce_n,
-	input wire oe_n,
-	input wire we_n
+	output reg [7:0] dout,
+	input wire we
 	);
 
-	reg [7:0] dato;
-	reg [7:0] mem[0:1023];
-    wire ce = ~ce_n;
-    wire we = ~we_n;
-	
-	assign dout = (oe_n | ce_n)? 8'bzzzzzzzz : dato;
-	
-	always @(posedge clk) begin
-        if (ce == 1'b1) begin
-            if (we == 1'b0)
-                dato <= mem[a];
-            else 
-                mem[a] <= din;	
-        end
+    reg [7:0] mem[0:1023];
+    always @(posedge clk) begin
+        dout <= mem[a];
+        if (we == 1'b1 && ce == 1'b1)
+            mem[a] <= din;
     end
 endmodule
 
-module ram16k(
+module ram1k_dualport(
 	input wire clk,
-	input wire [13:0] a,
+    input wire ce,
+	input wire [9:0] a1,
+    input wire [9:0] a2,
 	input wire [7:0] din,
-	output wire [7:0] dout,
-	input wire ce_n,
-	input wire oe_n,
-	input wire we_n
+	output reg [7:0] dout1,
+    output reg [7:0] dout2,
+	input wire we
 	);
 
-	reg [7:0] dato;
-	reg [7:0] mem[0:16383];
-    wire ce = ~ce_n;
-    wire we = ~we_n;
-	
-	assign dout = (oe_n | ce_n)? 8'bzzzzzzzz : dato;
-	
-	always @(posedge clk) begin
-        if (ce == 1'b1) begin
-            if (we == 1'b0)
-                dato <= mem[a];
-            else 
-                mem[a] <= din;	
-        end
+    reg [7:0] mem[0:1023];
+    always @(posedge clk) begin
+        dout2 <= mem[a2];
+        dout1 <= mem[a1];
+        if (we == 1'b1 && ce == 1'b1)
+            mem[a1] <= din;
+    end
+endmodule
+
+module ram16k (
+	input wire clk,
+    input wire ce,
+	input wire [13:0] a,
+	input wire [7:0] din,
+	output reg [7:0] dout,
+	input wire we
+	);
+
+    reg [7:0] mem[0:16383];
+    always @(posedge clk) begin
+        dout <= mem[a];
+        if (we == 1'b1 && ce == 1'b1)
+            mem[a] <= din;
+    end
+endmodule
+
+module ram32k (
+	input wire clk,
+    input wire ce,
+	input wire [14:0] a,
+	input wire [7:0] din,
+	output reg [7:0] dout,
+	input wire we
+	);
+
+    reg [7:0] mem[0:32767];
+    always @(posedge clk) begin
+        dout <= mem[a];
+        if (we == 1'b1 && ce == 1'b1)
+            mem[a] <= din;
     end
 endmodule

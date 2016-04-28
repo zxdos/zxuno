@@ -407,34 +407,36 @@ module keyboard_for_ace(
                 `KEY_CORCHA:
                     begin
                         matrix[0][1] <= is_released;
-                        if (!shift_pressed)
-                            matrix[6][4] <= is_released;  // ^
-                        else
+                        if (alt_pressed || shift_pressed)
                             matrix[5][4] <= is_released;  // [
+                        else
+                            matrix[6][4] <= is_released;  // ^
                     end
                 `KEY_CORCHC:
                     begin
                         matrix[0][1] <= is_released;
-                        if (!shift_pressed)
-                            matrix[6][2] <= is_released;  // +
-                        else
+                        if (shift_pressed)
+                            matrix[7][3] <= is_released;  // *
+                        else if (alt_pressed)
                             matrix[5][3] <= is_released;  // ]
+                        else
+                            matrix[6][2] <= is_released;  // +
                     end
                 `KEY_LLAVA:
                     begin
                         matrix[0][1] <= is_released;
-                        if (!shift_pressed)
-                            matrix[0][3] <= is_released; // pound
-                        else
+                        if (alt_pressed || shift_pressed)
                             matrix[1][3] <= is_released;  // {
+                        else
+                            matrix[0][3] <= is_released; // pound
                     end
                 `KEY_LLAVC:
                     begin
                         matrix[0][1] <= is_released;
-                        if (!shift_pressed)
-                            matrix[5][2] <= is_released;  // copyright
-                        else
+                        if (alt_pressed || shift_pressed)
                             matrix[1][4] <= is_released;  // }
+                        else
+                            matrix[5][2] <= is_released;  // copyright
                     end
                 `KEY_COMA:
                     begin

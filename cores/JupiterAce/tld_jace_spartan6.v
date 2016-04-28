@@ -36,6 +36,7 @@ module tld_jace_spartan6 (
     
     wire clkram; // 50MHz (maybe less if needed) to clock internal RAM/ROM
     wire clk65;  // 6.5MHz main frequency Jupiter ACE
+    wire clkcpu; // CPU CLK
     
     wire kbd_reset;
     wire [7:0] kbd_rows;
@@ -61,19 +62,20 @@ module tld_jace_spartan6 (
     always @(posedge clk65)
         poweron_reset <= {poweron_reset[6:0],1'b1};
     
-	dcmclock reloj_maestro(
-	  .CLKIN_IN(clk50mhz), 
-      .CLKDV_OUT(clk65), 
-      .CLKIN_IBUFG_OUT(clkram), 
-      .CLK0_OUT(), 
-      .LOCKED_OUT()
-	  );
+    cuatro_relojes system_clocks_pll (
+        .CLK_IN1(clk50mhz),
+        .CLK_OUT1(clkram),  // for driving synch RAM and ROM = 26.6666 MHz
+        .CLK_OUT2(clk65),   // video clock = 6.66666 MHz
+        .CLK_OUT3(clkcpu),  // CPU clock = 0.5 video clock
+        .CLK_OUT4()         // Super CPU clock (just a test)
+ );
     
     jupiter_ace the_core (
         .clkram(clkram),
         .clk65(clk65),
+        .clkcpu(clkcpu),
         .reset(kbd_reset & poweron_reset[7]),
-        .ear(!ear),
+        .ear(ear),
         .filas(kbd_rows),
         .columnas(kbd_columns),
         .video(video),
@@ -91,6 +93,5 @@ module tld_jace_spartan6 (
         .kbd_reset(kbd_reset),
         .kbd_nmi()
     );
-
 
 endmodule

@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 `default_nettype none
+
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -23,6 +24,7 @@
 module jupiter_ace (
     input wire clkram,
 	input wire clk65,
+    input wire clkcpu,
 	input wire reset,
 	input wire ear,
 	output wire [7:0] filas,
@@ -33,148 +35,127 @@ module jupiter_ace (
     output wire spk
 	);
 	
-	wire sramce;
-    wire cramce;
-	wire scramwr, scramoe;
-	wire ramce, xramce, romce, vramdec;
-	wire en254r, en254w;
-	
-	/* Los buses de memoria */
-	wire [7:0] DoutROM;
-	wire [7:0] DoutRAM;
-	wire [7:0] DoutXRAM;
-	wire [7:0] DoutSRAM;
-	wire [7:0] DoutCRAM;
-	wire [7:0] DoutIO;
+	// Los buses del Z80
 	wire [7:0] DinZ80;
 	wire [7:0] DoutZ80;
 	wire [15:0] AZ80;
-	wire [9:0] ASRAM;
-	wire [9:0] ACRAM;
-	wire [9:0] ASRAMVideo;
-	wire [2:0] ACRAMVideo;
 	
-	wire iorq, mreq, intr, cpuclk, rd, wr, cpuwait;
+	wire iorq_n, mreq_n, int_n, rd_n, wr_n, wait_n;
+    wire rom_enable, sram_enable, cram_enable, uram_enable, xram_enable, eram_enable, data_from_jace_oe;
+    wire [7:0] dout_rom, dout_sram, dout_cram, dout_uram, dout_xram, dout_eram, data_from_jace;
+    wire [7:0] sram_data, cram_data;
+    wire [9:0] sram_addr, cram_addr;
 
-	/* Copia del bus de direcciones para las filas del teclado */
+	// Copia del bus de direcciones para las filas del teclado
     assign filas = AZ80[15:8];
 
-	tri [7:0] Din; // bus de datos triestado. Todo lo que esta conectado a el...
-	assign Din = (!romce)? DoutROM : 8'bzzzzzzzz;
-	assign Din = DoutRAM;
-	assign Din = DoutXRAM;
-	assign Din[5:0] = DoutIO;
-	assign Din = (!sramce && cpuwait && !vramdec)? DoutSRAM : 8'bzzzzzzzz;
-	assign Din = (!cramce && cpuwait && !vramdec)? DoutCRAM : 8'bzzzzzzzz;
-	assign DinZ80 = Din;	
-	
-	/* Arbitrador del bus de direcciones de entrada a la SRAM */
-	assign ASRAM = (!vramdec && cpuwait)? AZ80[9:0] : ASRAMVideo;
-	
-	/* Arbitrador del bus de direccioens de entrada a la CRAM */
-	assign ACRAM = (!vramdec && cpuwait)? AZ80[9:0] : {DoutSRAM[6:0],ACRAMVideo};
+    // Multiplexor para asignar un valor al bus de datos de entrada del Z80
+    assign DinZ80 = (rom_enable == 1'b1)?        dout_rom :
+                    (sram_enable == 1'b1)?       dout_sram :
+                    (cram_enable == 1'b1)?       dout_cram :
+                    (uram_enable == 1'b1)?       dout_uram :
+                    (xram_enable == 1'b1)?       dout_xram :
+                    (eram_enable == 1'b1)?       dout_eram :
+                    (data_from_jace_oe == 1'b1)? data_from_jace :
+                                                 sram_data | cram_data;  // By default, this is what the data bus sees
 
-	/* La memoria RAM del equipo */
-	ram1k sram (
+	// Memoria del equipo
+	ram1k_dualport sram (
        .clk(clkram),
-	   .a(ASRAM),
+       .ce(sram_enable),
+       .a1(AZ80[9:0]),
+	   .a2(sram_addr),
 	   .din(DoutZ80),
-	   .dout(DoutSRAM),
-	   .ce_n(sramce),
-	   .oe_n(scramoe),
-	   .we_n(scramwr)
+	   .dout1(dout_sram),
+       .dout2(sram_data),
+	   .we(~wr_n)
 		);
 		
-	ram1k cram( 
-		.clk(clkram),
-	   .a(ACRAM),
+	ram1k_dualport cram (
+       .clk(clkram),
+       .ce(cram_enable),
+       .a1(AZ80[9:0]),
+	   .a2(cram_addr),
 	   .din(DoutZ80),
-	   .dout(DoutCRAM),
-	   .ce_n(cramce),
-	   .oe_n(scramoe),
-	   .we_n(scramwr)
+	   .dout1(dout_cram),
+       .dout2(cram_data),
+	   .we(~wr_n)
 		);
-
+		
 	ram1k uram(
 		.clk(clkram),
-	   .a(AZ80[9:0]),
-	   .din(DoutZ80),
-	   .dout(DoutRAM),
-	   .ce_n(ramce),
-	   .oe_n(rd),
-	   .we_n(wr)
+        .ce(uram_enable),
+        .a(AZ80[9:0]),
+        .din(DoutZ80),
+        .dout(dout_uram),
+        .we(~wr_n)
 		);
 		
 	ram16k xram(
 		.clk(clkram),
-	   .a(AZ80[13:0]),
-	   .din(DoutZ80),
-	   .dout(DoutXRAM),
-	   .ce_n(xramce),
-	   .oe_n(rd),
-	   .we_n(wr)
+        .ce(xram_enable),
+        .a(AZ80[13:0]),
+        .din(DoutZ80),
+        .dout(dout_xram),
+        .we(~wr_n)
 		);
-	
+
+	ram32k eram(
+		.clk(clkram),
+        .ce(eram_enable),
+        .a(AZ80[14:0]),
+        .din(DoutZ80),
+        .dout(dout_eram),
+        .we(~wr_n)
+		);
 
 	/* La ROM */
-	rom8k rom(
-		.clka(clkram),
-	   .addra(AZ80[12:0]),
-	   .douta(DoutROM),
-	   .ena(~romce)
+	rom the_rom(
+	   .clk(clkram),
+	   .a(AZ80[12:0]),
+	   .dout(dout_rom)
 		);
-	
-	/* Decodificador de acceso a memoria y E/S */
-	decodificador deco(
-		.a(AZ80),
-		.mreq(mreq),
-		.iorq(iorq),
-		.rd(rd),
-		.wr(wr),
-		.romce(romce),
-		.ramce(ramce),
-		.xramce(xramce),
-		.vramdec(vramdec),
-		.en254r(en254r),
-		.en254w(en254w)
-		);
-	
-	/* Logica de arbitración de memoria y periféricos */
-	jace glue_logic (
-	.clkm(clkram),
-	.clk(clk65),
-	.cpuclk(cpuclk),
-	.a(AZ80),  /* bus de direcciones CPU */
-	.d3(DoutZ80[3]),
-	.dout(DoutIO[5:0]),   /* bus de datos de la CPU */
-	.wr(wr),
-	.vramdec(vramdec),
-	.intr(intr),
-	.cpuwait(cpuwait),    /* Salida WAIT al procesador */
-	.en254r(en254r),
-	.en254w(en254w),
-	.sramce(sramce),     /* Habilitación de la RAM de pantalla */
-	.cramce(cramce),     /* Habilitación de la RAM de caracteres */
-	.scramoe(scramoe),    /* OE de ambas RAM's: de pantalla y de caracteres */
-	.scramwr(scramwr),    /* WE de ambas RAM's: de pantalla y de caracteres */
-	.DinShiftR(DoutCRAM),  /* Entrada paralelo al registro de desplazamiento. Viene del bus de datos de la RAM de caracteres */
-	.videoinverso(DoutSRAM[7]),      /* Bit 7 leído de la RAM de pantalla. Indica si el caracter debe invertirse o no */
-	.ASRAMVideo(ASRAMVideo),  /* Al bus de direcciones de la RAM de pantalla */
-	.ACRAMVideo(ACRAMVideo),  /* Al bus de direcciones de la RAM de caracteres */
-	.kbd(columnas),
-	.ear(ear),
-	.mic(mic),
-	.spk(spk),
-	.sync(sync),
-	.video(video)       /* Señal de video, sin sincronismos */
-	);
 	
 	/* La CPU */
 	tv80n cpu(
 		// Outputs
-		.m1_n(), .mreq_n(mreq), .iorq_n(iorq), .rd_n(rd), .wr_n(wr), .rfsh_n(), .halt_n(), .busak_n(), .A(AZ80), .do(DoutZ80),
+		.m1_n(), .mreq_n(mreq_n), .iorq_n(iorq_n), .rd_n(rd_n), .wr_n(wr_n), .rfsh_n(), .halt_n(), .busak_n(), .A(AZ80), .do(DoutZ80),
 		// Inputs
-		.di(DinZ80), .reset_n(reset), .clk(cpuclk), .wait_n(cpuwait), .int_n(intr), .nmi_n(1'b1), .busrq_n(1'b1)
-   );
+		.di(DinZ80), .reset_n(reset), .clk(clkcpu), .wait_n(wait_n), .int_n(int_n), .nmi_n(1'b1), .busrq_n(1'b1)
+        );
+        
+    jace_logic todo_lo_demas (
+        .clk(clk65),
+        // CPU interface
+        .cpu_addr(AZ80),
+        .mreq_n(mreq_n),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .wr_n(wr_n),
+        .data_from_cpu(DoutZ80),
+        .data_to_cpu(data_from_jace),
+        .data_to_cpu_oe(data_from_jace_oe),
+        .wait_n(wait_n),
+        .int_n(int_n),
+        // CPU-RAM interface
+        .rom_enable(rom_enable),
+        .sram_enable(sram_enable),
+        .cram_enable(cram_enable),
+        .uram_enable(uram_enable),
+        .xram_enable(xram_enable),
+        .eram_enable(eram_enable),
+        // Screen RAM and Char RAM interface
+        .screen_addr(sram_addr),
+        .screen_data(sram_data),
+        .char_addr(cram_addr),
+        .char_data(cram_data),
+        // Devices
+        .kbdcols(columnas),
+        .ear(ear),
+        .spk(spk),
+        .mic(mic),
+        .video(video),
+        .csync(sync)
+    );
 endmodule
 
