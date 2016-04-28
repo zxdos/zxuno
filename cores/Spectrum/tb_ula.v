@@ -55,7 +55,7 @@ module tb_ula;
 	wire y_n;
 
 	// Instantiate the Unit Under Test (UUT)
-	ula uut (
+	ula_radas uut (
 		.clk14(clk14), 
 		.wssclk(wssclk), 
 		.rst_n(rst_n), 
@@ -74,6 +74,9 @@ module tb_ula;
 		.kbd(kbd), 
 		.mic(mic), 
 		.spk(spk), 
+        .issue2_keyboard(1'b0),
+        .timming(1'b0),
+        .disable_contention(1'b0),
 		.clkay(clkay), 
 		.clkdac(clkdac), 
 		.clkkbd(clkkbd), 
@@ -94,7 +97,7 @@ module tb_ula;
 		clk14 = 0;
 		wssclk = 0;
 		rst_n = 0;
-		a = 0;
+		a = 16'h4000;
 		mreq_n = 1;
 		iorq_n = 1;
 		rd_n = 1;

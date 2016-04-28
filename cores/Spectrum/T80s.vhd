@@ -1,7 +1,9 @@
 --
--- Z80 compatible microprocessor core, asynchronous top level
+-- Z80 compatible microprocessor core, synchronous top level
+-- Different timing than the original z80
+-- Inputs needs to be synchronous and outputs may glitch
 --
--- Version : 0247
+-- Version : 0242
 --
 -- Copyright (c) 2001-2002 Daniel Wallner (jesus@opencores.org)
 --
@@ -46,9 +48,15 @@
 --
 --	0208 : First complete release
 --
+--	0210 : Fixed read with wait
+--
 --	0211 : Fixed interrupt cycle
 --
 --	0235 : Updated for T80 interface change
+--
+--	0236 : Added T2Write generic
+--
+--	0237 : Fixed T2Write with wait state
 --
 --	0238 : Updated for T80 interface change
 --
@@ -56,17 +64,17 @@
 --
 --	0242 : Updated for T80 interface change
 --
---	0247 : Fixed bus req/ack cycle
---
 
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.T80_Pack.all;
 
-entity T80a is
+entity T80s is
 	generic(
-		Mode : integer := 0	-- 0 => Z80, 1 => Fast Z80, 2 => 8080, 3 => GB
+		Mode : integer := 0;	-- 0 => Z80, 1 => Fast Z80, 2 => 8080, 3 => GB
+		T2Write : integer := 0;	-- 0 => WR_n active in T3, /=0 => WR_n active in T2
+		IOWait : integer := 1	-- 0 => Single cycle I/O, 1 => Std I/O cycle
 	);
 	port(
 		RESET_n		: in std_logic;
@@ -84,7 +92,8 @@ entity T80a is
 		HALT_n		: out std_logic;
 		BUSAK_n		: out std_logic;
 		A			: out std_logic_vector(15 downto 0);
-		D			: inout std_logic_vector(7 downto 0);
+		DI			: in std_logic_vector(7 downto 0);
+		DO			: out std_logic_vector(7 downto 0);
 
 		SavePC      : out std_logic_vector(15 downto 0);
 		SaveINT     : out std_logic_vector(7 downto 0);
@@ -92,32 +101,17 @@ entity T80a is
 		RestoreINT  : in std_logic_vector(7 downto 0);
 		
 		RestorePC_n : in std_logic
-		
 	);
-end T80a;
+end T80s;
 
-architecture rtl of T80a is
+architecture rtl of T80s is
 
 	signal CEN			: std_logic;
-	signal Reset_s		: std_logic;
 	signal IntCycle_n	: std_logic;
-	signal IORQ			: std_logic;
 	signal NoRead		: std_logic;
 	signal Write		: std_logic;
-	signal MREQ			: std_logic;
-	signal MReq_Inhibit	: std_logic;
-	signal Req_Inhibit	: std_logic;
-	signal RD			: std_logic;
-	signal MREQ_n_i		: std_logic;
-	signal IORQ_n_i		: std_logic;
-	signal RD_n_i		: std_logic;
-	signal WR_n_i		: std_logic;
-	signal RFSH_n_i		: std_logic;
-	signal BUSAK_n_i	: std_logic;
-	signal A_i			: std_logic_vector(15 downto 0);
-	signal DO			: std_logic_vector(7 downto 0);
-	signal DI_Reg		: std_logic_vector (7 downto 0);	-- Input synchroniser
-	signal Wait_s		: std_logic;
+	signal IORQ			: std_logic;
+	signal DI_Reg		: std_logic_vector(7 downto 0);
 	signal MCycle		: std_logic_vector(2 downto 0);
 	signal TState		: std_logic_vector(2 downto 0);
 
@@ -125,48 +119,27 @@ begin
 
 	CEN <= '1';
 
-	BUSAK_n <= BUSAK_n_i;
-	MREQ_n_i <= not MREQ or (Req_Inhibit and MReq_Inhibit);
-	RD_n_i <= not RD or Req_Inhibit;
-
-	MREQ_n <= MREQ_n_i when BUSAK_n_i = '1' else 'Z';
-	IORQ_n <= IORQ_n_i when BUSAK_n_i = '1' else 'Z';
-	RD_n <= RD_n_i when BUSAK_n_i = '1' else 'Z';
-	WR_n <= WR_n_i when BUSAK_n_i = '1' else 'Z';
-	RFSH_n <= RFSH_n_i when BUSAK_n_i = '1' else 'Z';
-	A <= A_i when BUSAK_n_i = '1' else (others => 'Z');
-	D <= DO when Write = '1' and BUSAK_n_i = '1' else (others => 'Z');
-
-	process (RESET_n, CLK_n)
-	begin
-		if RESET_n = '0' then
-			Reset_s <= '0';
-		elsif CLK_n'event and CLK_n = '1' then
-			Reset_s <= '1';
-		end if;
-	end process;
-
 	u0 : T80
 		generic map(
 			Mode => Mode,
-			IOWait => 1)
+			IOWait => IOWait)
 		port map(
 			CEN => CEN,
 			M1_n => M1_n,
 			IORQ => IORQ,
 			NoRead => NoRead,
 			Write => Write,
-			RFSH_n => RFSH_n_i,
+			RFSH_n => RFSH_n,
 			HALT_n => HALT_n,
-			WAIT_n => Wait_s,
+			WAIT_n => Wait_n,
 			INT_n => INT_n,
 			NMI_n => NMI_n,
-			RESET_n => Reset_s,
+			RESET_n => RESET_n,
 			BUSRQ_n => BUSRQ_n,
-			BUSAK_n => BUSAK_n_i,
+			BUSAK_n => BUSAK_n,
 			CLK_n => CLK_n,
-			A => A_i,
-			DInst => D,
+			A => A,
+			DInst => DI,
 			DI => DI_Reg,
 			DO => DO,
 			MC => MCycle,
@@ -180,107 +153,52 @@ begin
 			
 			RestorePC_n => RestorePC_n );
 
-	process (CLK_n)
+	process (RESET_n, CLK_n)
 	begin
-		if CLK_n'event and CLK_n = '0' then
-			Wait_s <= WAIT_n;
-			if TState = "011" and BUSAK_n_i = '1' then
-				DI_Reg <= to_x01(D);
-			end if;
-		end if;
-	end process;
-
-	process (Reset_s,CLK_n)
-	begin
-		if Reset_s = '0' then
-			WR_n_i <= '1';
+		if RESET_n = '0' then
+			RD_n <= '1';
+			WR_n <= '1';
+			IORQ_n <= '1';
+			MREQ_n <= '1';
+			DI_Reg <= "00000000";
 		elsif CLK_n'event and CLK_n = '1' then
-			WR_n_i <= '1';
-			if TState = "001" then	-- To short for IO writes !!!!!!!!!!!!!!!!!!!
-				WR_n_i <= not Write;
-			end if;
-		end if;
-	end process;
-
-	process (Reset_s,CLK_n)
-	begin
-		if Reset_s = '0' then
-			Req_Inhibit <= '0';
-		elsif CLK_n'event and CLK_n = '1' then
-			if MCycle = "001" and TState = "010" then
-				Req_Inhibit <= '1';
-			else
-				Req_Inhibit <= '0';
-			end if;
-		end if;
-	end process;
-
-	process (Reset_s,CLK_n)
-	begin
-		if Reset_s = '0' then
-			MReq_Inhibit <= '0';
-		elsif CLK_n'event and CLK_n = '0' then
-			if MCycle = "001" and TState = "010" then
-				MReq_Inhibit <= '1';
-			else
-				MReq_Inhibit <= '0';
-			end if;
-		end if;
-	end process;
-
-	process(Reset_s,CLK_n)
-	begin
-		if Reset_s = '0' then
-			RD <= '0';
-			MREQ <= '0';
-		elsif CLK_n'event and CLK_n = '0' then
-
+			RD_n <= '1';
+			WR_n <= '1';
+			IORQ_n <= '1';
+			MREQ_n <= '1';
 			if MCycle = "001" then
-				if TState = "001" then
-					RD <= IntCycle_n;
-					MREQ <= IntCycle_n;
+				if TState = "001" or (TState = "010" and Wait_n = '0') then
+					RD_n <= not IntCycle_n;
+					MREQ_n <= not IntCycle_n;
+					IORQ_n <= IntCycle_n;
 				end if;
 				if TState = "011" then
-					RD <= '0';
-					MREQ <= '1';
-				end if;
-				if TState = "100" then
-					MREQ <= '0';
+					MREQ_n <= '0';
 				end if;
 			else
-				if TState = "001" and NoRead = '0' then
-					RD <= not Write;
-					MREQ <= not IORQ;
+				if (TState = "001" or (TState = "010" and Wait_n = '0')) and NoRead = '0' and Write = '0' then
+					RD_n <= '0';
+					IORQ_n <= not IORQ;
+					MREQ_n <= IORQ;
 				end if;
-				if TState = "011" then
-					RD <= '0';
-					MREQ <= '0';
+				if T2Write = 0 then
+					if TState = "010" and Write = '1' then
+						WR_n <= '0';
+						IORQ_n <= not IORQ;
+						MREQ_n <= IORQ;
+					end if;
+				else
+					if (TState = "001" or (TState = "010" and Wait_n = '0')) and Write = '1' then
+						WR_n <= '0';
+						IORQ_n <= not IORQ;
+						MREQ_n <= IORQ;
+					end if;
 				end if;
+			end if;
+			if TState = "010" and Wait_n = '1' then
+				DI_Reg <= DI;
 			end if;
 		end if;
 	end process;
 
-    -- IORQ_n_i uses a different timming than MREQ.
-	process(Reset_s,CLK_n)
-	begin
-		if Reset_s = '0' then
-			IORQ_n_i <= '1';
-		elsif CLK_n'event and CLK_n = '1' then
-			if MCycle = "001" then
-				if TState = "001" then
-					IORQ_n_i <= IntCycle_n;
-				end if;
-				if TState = "011" then
-					IORQ_n_i <= '1';
-				end if;
-			else
-				if TState = "001" then
-					IORQ_n_i <= not IORQ;
-				end if;
-				if TState = "011" then
-					IORQ_n_i <= '1';
-				end if;
-			end if;
-		end if;
-	end process;
 end;

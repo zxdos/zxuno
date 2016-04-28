@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 library work;
-use work.mapa_es.all;
+use work.mapa_uk.all;
 
 entity ps2k is port (
     clk     : in  std_logic;
@@ -73,7 +73,6 @@ begin
                                        joy(4) <= pressed; -- dato entregado por el joystick
                   when KEY_CTRLI    => keys(0)(0) <= pressed; -- Ctrl izquierdo: (CAPS SHIFT)
                                        isctrl <= pressed;
-                                       joy(4) <= pressed; -- dato entregado por el joystick
                   when KEY_Z        => if isshift='1' then
                                          keys(0)(0) <= pressed;
                                        end if;
@@ -140,7 +139,7 @@ begin
                                          keys(3)(1) <= pressed; -- 2
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(5)(0) <= pressed; -- "
+                                         keys(3)(1) <= pressed; -- @
                                        end if;  
                   when KEY_3        => if isshift='0' then
                                          keys(3)(2) <= pressed; -- 3
@@ -158,37 +157,37 @@ begin
                                          keys(3)(4) <= pressed; -- 5
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(3)(4) <= pressed; -- $
+                                         keys(3)(4) <= pressed; -- %
                                        end if;
                   when KEY_0        => if isshift='0' then
                                          keys(4)(0) <= pressed; -- 0
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(6)(1) <= pressed; -- =
+                                         keys(4)(1) <= pressed; -- )
                                        end if;
                   when KEY_9        => if isshift='0' then
                                          keys(4)(1) <= pressed; -- 9
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(4)(1) <= pressed; -- )
+                                         keys(4)(2) <= pressed; -- (
                                        end if;
                   when KEY_8        => if isshift='0' then
                                          keys(4)(2) <= pressed; -- 8
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(4)(2) <= pressed; -- (
+                                         keys(7)(4) <= pressed; -- *
                                        end if;
                   when KEY_7        => if isshift='0' then
                                          keys(4)(3) <= pressed; -- 7
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(0)(4) <= pressed; -- /
+                                         keys(4)(4) <= pressed; -- &
                                        end if;
                   when KEY_6        => if isshift='0' then
                                          keys(4)(4) <= pressed; -- 6
                                        else
                                          keys(7)(1) <= pressed;
-                                         keys(4)(4) <= pressed; -- &
+                                         keys(6)(4) <= pressed; -- ^
                                        end if;
                   when KEY_P        => if isshift='1' then
                                          keys(0)(0) <= pressed;
@@ -252,63 +251,102 @@ begin
                   when KEY_F2       => keys(0)(0) <= pressed;
                                        keys(3)(0) <= pressed; -- EDIT
                   when KEY_BL       => keys(7)(1) <= pressed;
-                                       keys(1)(2) <= pressed; -- usado con EXT, da \
-                  when KEY_APOS     => keys(7)(1) <= pressed;
-                                       if isshift='0' then 
-                                         keys(4)(3) <= pressed; -- apostrofe '
+                                       if isshift='0' then
+                                         keys(1)(2) <= pressed; -- usado con EXT, da \
                                        else
-                                         keys(0)(3) <= pressed; -- tecla ?
+                                         keys(1)(1) <= pressed; -- usado con EXT, da |
+                                       end if;
+                  when KEY_GRAVEAC  => keys(7)(1) <= pressed;
+                                       if isshift='0' then
+                                         keys(0)(2) <= pressed; -- tecla POUND
+                                       else
+                                         keys(1)(0) <= pressed; -- usado con EXT, da ~
                                        end if;
                   when KEY_TAB      => keys(0)(0) <= pressed;
                                        keys(7)(1) <= pressed; -- modo extendido
                   when KEY_CORCHA   => keys(7)(1) <= pressed;
-                                       keys(6)(4) <= pressed; -- simbolo ^
+                                       if isshift='1' then
+                                         keys(1)(3) <= pressed;
+                                       else
+                                         keys(5)(4) <= pressed; -- simbolo [ con EXT
+                                       end if;
                   when KEY_CORCHC   => keys(7)(1) <= pressed;
-                                       if isshift='0' then
-                                         keys(6)(2) <= pressed; -- simbolo +
+                                       if isshift='1' then
+                                         keys(1)(4) <= pressed;
                                        else
-                                         keys(7)(4) <= pressed; -- simbolo *
+                                         keys(5)(3) <= pressed; -- simbolo ] con EXT
                                        end if;
-                  when KEY_LLAVA    => keys(7)(1) <= pressed;
-                                       keys(1)(3) <= pressed; -- llave abierta, con EXT
-                  when KEY_LLAVC    => keys(7)(1) <= pressed;
-                                       keys(5)(0) <= pressed; -- copyright
-                  when KEY_LT       => keys(7)(1) <= pressed;
+                  when KEY_EQUAL    => keys(7)(1) <= pressed;
                                        if isshift='0' then
-                                         keys(2)(3) <= pressed; -- símbolo <
+                                         keys(6)(1) <= pressed; -- símbolo =
                                        else
-                                         keys(2)(4) <= pressed; -- símbolo >
+                                         keys(6)(2) <= pressed; -- símbolo +
                                        end if;
-                  when KEY_COMA     => keys(7)(1) <= pressed;
+                  when KEY_COMMA    => keys(7)(1) <= pressed;
                                        if isshift='0' then
                                          keys(7)(3) <= pressed; -- símbolo ,
                                        else
-                                         keys(5)(1) <= pressed; -- símbolo ;
+                                         keys(2)(3) <= pressed; -- símbolo <
                                        end if;
-                  when KEY_PUNTO    => keys(7)(1) <= pressed;
+                  when KEY_DOT      => keys(7)(1) <= pressed;
                                        if isshift='0' then
                                          keys(7)(2) <= pressed; -- símbolo .
                                        else
-                                         keys(0)(1) <= pressed; -- símbolo :
+                                         keys(2)(4) <= pressed; -- símbolo >
                                        end if;
-                  when KEY_MENOS    => keys(7)(1) <= pressed;
+                  when KEY_MINUS    => keys(7)(1) <= pressed;
                                        if isshift='0' then
                                          keys(6)(3) <= pressed; -- símbolo -                
                                        else
                                          keys(4)(0) <= pressed; -- tecla _ (guion bajo)
                                        end if;
+                  when KEY_SEMICOL  => keys(7)(1) <= pressed;
+                                       if isshift='0' then
+                                         keys(5)(1) <= pressed; -- tecla ;
+                                       else
+                                         keys(0)(1) <= pressed; -- tecla :
+                                       end if;
+                  when KEY_ACUTEAC  => keys(7)(1) <= pressed;
+                                       if isshift='0' then
+                                         keys(4)(3) <= pressed; -- tecla '
+                                       else
+                                         keys(5)(0) <= pressed; -- tecla "
+                                       end if;
+                  when KEY_SLASH    => keys(7)(1) <= pressed;
+                                       if isshift='0' then
+                                         keys(0)(4) <= pressed;
+                                       else
+                                         keys(0)(3) <= pressed;
+                                       end if;                                       
                   when KEY_F5       => if isctrl='1' and isalt='1' then
                                          nmi <= '0';  -- NMI
                                        end if;
                   when KEY_F10      => keys(0)(0) <= pressed;
                                        keys(4)(1) <= pressed; -- Modo gráfico, para pulsar F10 en la BIOS
-                  when KEY_KPPUNTO  => if isctrl='1' and isalt='1' then
+                  when KEY_KPDOT    => if isctrl='1' and isalt='1' then
                                          rst <= '0'; -- reset al hacer ctrl-alt-supr
+                                       else
+                                         keys(7)(1) <= pressed;
+                                         keys(7)(2) <= pressed; -- tecla .                                       
                                        end if;
                   when KEY_KP4      => joy(1) <= pressed; -- dato entregado por el joystick: izquierda
                   when KEY_KP6      => joy(0) <= pressed; -- dato entregado por el joystick: derecha
                   when KEY_KP8      => joy(3) <= pressed; -- dato entregado por el joystick: arriba
                   when KEY_KP5      => joy(2) <= pressed; -- dato entregado por el joystick: abajo
+                  when KEY_KP7      => joy(3) <= pressed;
+                                       joy(1) <= pressed; -- dato entregado por el joystick: arriba-izquierda
+                  when KEY_KP9      => joy(3) <= pressed;
+                                       joy(0) <= pressed; -- dato entregado por el joystick: arriba-derecha
+                  when KEY_KP1      => joy(2) <= pressed;
+                                       joy(1) <= pressed; -- dato entregado por el joystick: abajo-izquierda
+                  when KEY_KP3      => joy(2) <= pressed;
+                                       joy(0) <= pressed; -- dato entregado por el joystick: abajo-derecha
+                  when KEY_KPSTAR   => keys(7)(1) <= pressed;
+                                       keys(7)(2) <= pressed; -- tecla *                                       
+                  when KEY_KPMINUS  => keys(7)(1) <= pressed;
+                                       keys(6)(3) <= pressed; -- tecla -
+                  when KEY_KPPLUS   => keys(7)(1) <= pressed;
+                                       keys(6)(2) <= pressed; -- tecla +                                       
                   when others=> null;
                 end case;
               else -- process extended keys
@@ -316,9 +354,7 @@ begin
                   when KEY_CTRLD    => keys(7)(1) <= pressed; -- Ctrl derecho -> symbol shift
                                        isctrl <= pressed;
                                        joy(4) <= pressed; -- dato entregado por el joystick
-                  when KEY_ALTGR    => keys(0)(0) <= pressed;
-                                       keys(4)(1) <= pressed; -- Modo gráfico
-                                       isalt <= '1';
+                  when KEY_ALTD     => isalt <= '1';
                                        joy(4) <= pressed; -- dato entregado por el joystick
                   when KEY_LEFT     => keys(0)(0) <= pressed; -- Left (Caps 5)
                                        keys(3)(4) <= pressed;
@@ -328,7 +364,10 @@ begin
                                        keys(4)(3) <= pressed;
                   when KEY_RIGHT    => keys(0)(0) <= pressed; -- Right (Caps 8)
                                        keys(4)(2) <= pressed;
-                  when KEY_SUP      => if isctrl='1' and isalt='1' then
+                  when KEY_KPSLASH  => keys(7)(1) <= pressed;
+                                       keys(0)(4) <= pressed; -- tecla /
+                  when KEY_KPENTER  => keys(6)(0) <= pressed; -- tecla ENTER
+                  when KEY_DEL      => if isctrl='1' and isalt='1' then
                                          rst <= '0'; -- reset al hacer ctrl-alt-supr
                                        end if;
                   when others => null;

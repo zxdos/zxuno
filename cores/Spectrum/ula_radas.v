@@ -51,6 +51,9 @@ module ula_radas (
     output wire clkdac,
     output wire clkkbd,
     input wire issue2_keyboard,
+    input wire timming,
+    input wire disable_contention,
+    input wire access_to_contmem,
 
     // Video
 	 output wire [2:0] r,
@@ -59,6 +62,13 @@ module ula_radas (
 	 output wire csync,
     output wire y_n
     );
+
+    parameter
+      BHPIXEL =  0,
+      EHPIXEL =  255,
+      BVPIXEL =  0,
+      EVPIXEL =  191,
+      BVSYNC  =  248;    
 
 	 // RGB inputs to sync module
 	 reg [2:0] ri;
@@ -77,41 +87,34 @@ module ula_radas (
     assign clkay = hc[0];
     assign clkkbd = hc[4];
 
-	 pal_sync_generator_progressive syncs (
+	 pal_sync_generator_sinclair syncs (
     .clk(clk7),
-	 .wssclk(wssclk),
-	 .ri(ri),
-	 .gi(gi),
-	 .bi(bi),
-	 .hcnt(hc),
-	 .vcnt(vc),
+    .timming(timming),
+    .ri(ri),
+    .gi(gi),
+    .bi(bi),
+    .hcnt(hc),
+    .vcnt(vc),
     .ro(r),
     .go(g),
     .bo(b),
     .csync(csync)
     );
 
-    parameter
-      BHPIXEL =  0,
-      EHPIXEL =  255,
-      BBORDER =  256,
-      EBORDER =  320,
-      BHBLANK =  320,
-      EHBLANK =  416,
-      BHSYNC  =  344,
-      EHSYNC  =  376,
-      BBORDEL =  416,
-      EBORDEL =  447,
-      BVPIXEL =  0,
-      EVPIXEL =  191,
-      BBORDED =  192,
-      EBORDED =  247,
-      BVPERIOD = 248,
-      EVPERIOD = 255,
-      BVSYNC  =  248,
-      EVSYNC  =  251,
-      BBORDEU =  256,
-      EBORDEU =  311;    
+//	 pal_sync_generator_progressive syncs (
+//    .clk(clk7),
+//    .wssclk(wssclk),
+//    .ri(ri),
+//    .gi(gi),
+//    .bi(bi),
+//    .hcnt(hc),
+//    .vcnt(vc),
+//    .ro(r),
+//    .go(g),
+//    .bo(b),
+//    .csync(csync)
+//    );
+
 
 ///////////////////////////////////////////////
 // ULA datapath
@@ -351,8 +354,7 @@ module ula_radas (
          CA <= hc[7:3];
    end
 
-   // VRAM Address generation
-   
+   // VRAM Address generation   
    wire [8:0] hcd = hc + 9'hFF8;  // hc delayed 8 ticks
    always @* begin
      if (!RadasEnabled) begin
@@ -399,8 +401,10 @@ module ula_radas (
          if (hc>=(BHPIXEL+8) && hc<=(EHPIXEL+8) && vc>=BVPIXEL && vc<=EVPIXEL) begin  // VidEN_n is low here: paper area
             VideoEnable = 1'b1;
             if (hc[2:0]==3'd4) begin
-               SerializerLoad = 1'b1;  // updated every 8 pixel clocks, if we are in paper area
+                SerializerLoad = 1'b1;  // updated every 8 pixel clocks, if we are in paper area
             end
+         end
+         if (hc>=BHPIXEL && hc<=EHPIXEL && vc>=BVPIXEL && vc<=EVPIXEL) begin
             if (hc[3:0]==4'd8 || hc[3:0]==4'd12) begin
                BitmapAddr = 1'b1;
             end
@@ -474,12 +478,20 @@ module ula_radas (
       end
    end
 
+	reg post_processed_ear;  // EAR signal after being altered by the keyboard current issue
+	always @* begin
+		if (issue2_keyboard)
+			post_processed_ear = ear ^ (spk | mic);
+		else
+			post_processed_ear = ear ^ spk;
+    end
+
    // Z80 gets values from registers (or floating bus)
    always @* begin
       dout = 8'hFF;
       if (iorq_n==1'b0 && rd_n==1'b0) begin
          if (a[0]==1'b0)
-            dout = {1'b1,issue2_keyboard^ear,1'b1,kbd};
+            dout = {1'b1,post_processed_ear,1'b1,kbd};
          else if (a==ULAPLUSADDR)
             dout = {1'b0,PaletteReg};
          else if (a==ULAPLUSDATA && PaletteReg[6]==1'b0)
@@ -487,10 +499,8 @@ module ula_radas (
          else if (a==ULAPLUSDATA && PaletteReg[6]==1'b1)
             dout = {7'b0000000,ConfigReg};
          else if (a[7:0]==TIMEXPORT) begin
-            if (BitmapAddr)
-               dout = BitmapData;
-            else if (AttrAddr)  
-               dout = AttrData;   // floating bus
+            if (BitmapAddr || AttrAddr)
+               dout = vramdata;
             else
                dout = 8'hFF;
          end
@@ -499,58 +509,101 @@ module ula_radas (
          
    // INT generation
    always @* begin
-      if (vc==BVSYNC && hc>=0 && hc<=63) // 32 T-states INT pulse width
+      if (vc==BVSYNC && hc>=2 && hc<=65) // 32 T-states INT pulse width
          int_n = 1'b0;
       else
          int_n = 1'b1;
    end
    
+
+///////////////////////////////////
+// AUXILIARY SIGNALS FOR CONTENTION CONTROL
+///////////////////////////////////
+   wire iorequla = !iorq_n && (a[0]==0);
+   wire iorequlaplus = !iorq_n && (a==ULAPLUSADDR || a==ULAPLUSDATA);
+   wire ioreqall_n = !(iorequlaplus || iorequla);
+
+   reg Border_n;
+   always @* begin
+     if (vc>=BVPIXEL && vc<=EVPIXEL && hc>=BHPIXEL && hc<=EHPIXEL)
+        Border_n = 1;
+    else
+        Border_n = 0;
+	end
+
 ///////////////////////////////////
 // CPU CLOCK GENERATION (Altwasser method)
 ///////////////////////////////////
 
-`define MASTERCPUCLK clk7
+//`define MASTERCPUCLK clk7
+//   reg ioreqtw3 = 0;
+//   reg mreqt23 = 0;
+//    wire N1y2 = ~access_to_contmem | ioreqall_n;
+//    wire N3 = hc[3:0]>=4'd4;
+//    wire N4 = ~Border_n | ~ioreqtw3 | ~mreqt23 | ~cpuclk;
+//    wire N5 = ~(N1y2 | N3 | N4);
+//    wire N6 = ~(hc[3:0]>=4'd4 | ~Border_n | ~cpuclk | ioreqall_n | ~ioreqtw3);
+//    assign cpuclk = (hc[0] | N5 | N6);
+//    
+//	always @(posedge cpuclk) begin
+//       ioreqtw3 <= ioreqall_n;
+//       mreqt23 <= mreq_n;
+//	end
 
-   reg CPUInternalClock = 0;
-	reg ioreqtw3 = 0;
-	reg mreqt23 = 0;
+//	wire Nor1 = (~access_to_contmem & ioreqall_n) | (hc[3:0]<4'd12) | 
+//                (~Border_n | ~ioreqtw3 | ~cpuclk | ~mreqt23);
+//	wire Nor2 = (hc[3:0]<4'd4) | ~Border_n | ~cpuclk | ioreqall_n | ~ioreqtw3;
+//	wire CLKContention = ~Nor1 | ~Nor2;
+//
+//	always @(posedge cpuclk) begin
+//      if (!CLKContention) begin
+//         ioreqtw3 <= ioreqall_n;
+//         mreqt23 <= mreq_n;
+//      end
+//	end
+//
+//   assign cpuclk = (!CLKContention || RadasEnabled || disable_contention)? hc[0] : 1'b1;
+//
+//  reg CPUInternalClock = 0;
+//	always @(posedge `MASTERCPUCLK) begin
+//		if (!CLKContention || RadasEnabled || disable_contention)
+//			CPUInternalClock <= ~CPUInternalClock;
+//	   else
+//		   CPUInternalClock <= 1'b1;
+//   end
+//
+//   assign cpuclk = CPUInternalClock;
 
-   wire iorequla = !iorq_n && (a[0]==0);
-	wire iorequlaplus = !iorq_n && (a==ULAPLUSADDR || a==ULAPLUSDATA);
-	wire ioreqall_n = !(iorequlaplus || iorequla);
 
-	reg Border_n;
-	always @(*) begin
-		if (vc>=BVPIXEL && vc<=EVPIXEL && hc>=BHPIXEL && hc<=EHPIXEL)
-			Border_n = 1;
-		else
-			Border_n = 0;
-	end
-	wire Nor1 = (~(a[14] | ~ioreqall_n)) | 
-	            (~(~a[15] | ~ioreqall_n)) | 
-					( hc[3:0]<4'd4 ) | 
-					(~Border_n | ~ioreqtw3 | ~cpuclk | ~mreqt23);
-	wire Nor2 = ( hc[3:0]<4'd4 ) | 
-	            ~Border_n |
-					~cpuclk |
-					ioreqall_n |
-					~ioreqtw3;
-	wire CLKContention = ~Nor1 | ~Nor2;
 
-	always @(posedge cpuclk) begin
-      if (!CLKContention) begin
-         ioreqtw3 <= ioreqall_n;
-         mreqt23 <= mreq_n;
-      end
-	end
+///////////////////////////////////
+// CPU CLOCK GENERATION (CSmith method)
+///////////////////////////////////
 
-	always @(posedge `MASTERCPUCLK) begin
-		if (!CLKContention || RadasEnabled)
-			CPUInternalClock = ~CPUInternalClock;
-	   else
-		   CPUInternalClock = 1'b1;
-   end
-
-   assign cpuclk = CPUInternalClock;
+    reg MayContend_n;
+    always @* begin  // esto era negedge clk7 en el esquemático
+       if (hc[3:0]>4'd3 && Border_n==1'b1)
+         MayContend_n <= 1'b0;
+       else
+         MayContend_n <= 1'b1;
+    end
+    
+    reg CauseContention_n;
+    always @* begin
+        if ((access_to_contmem || !ioreqall_n) && !RadasEnabled && !disable_contention)
+            CauseContention_n = 1'b0;
+        else
+            CauseContention_n = 1'b1;
+    end
+    
+    reg CancelContention = 1'b1;
+    always @(posedge cpuclk) begin
+        if (!mreq_n || !ioreqall_n)
+            CancelContention <= 1'b1;
+        else
+            CancelContention <= 1'b0;
+    end
+    
+    assign cpuclk = (~(MayContend_n | CauseContention_n | CancelContention)) | hc[0];
 
 endmodule

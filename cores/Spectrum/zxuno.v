@@ -51,7 +51,14 @@ module zxuno (
     output wire sd_cs_n,    
     output wire sd_clk,     
     output wire sd_mosi,    
-    input wire sd_miso      
+    input wire sd_miso,
+    
+    // DB9 JOYSTICK
+   input wire joyup,
+   input wire joydown,
+   input wire joyleft,
+   input wire joyright,
+   input wire joyfire
     );
 
    // Señales de la CPU
@@ -101,13 +108,19 @@ module zxuno (
    wire [4:0] kbdcol;
    wire [7:0] kbdrow;
    wire mrst_n,rst_n;  // los dos resets suministrados por el teclado
-   wire issue2_keyboard;
    wire [7:0] scancode;  // scancode original desde el teclado PC
    wire read_scancode = (zxuno_addr==8'h04 && zxuno_regrd);
    
    // Interfaz kempston
    wire [4:0] kbd_joy;
+   wire [4:0] db9_joy = {~joyfire, ~joyup, ~joydown, ~joyleft, ~joyright};
    wire oe_n_kempston = !(!iorq_n && !rd_n && cpuaddr[7:0]==8'd31);
+   
+   // Configuración ULA
+   wire timming_ula;
+   wire issue2_keyboard;
+   wire disable_contention;
+   wire access_to_screen;
    
    assign kbdrow = cpuaddr[15:8];  // las filas del teclado son A8-A15 de la CPU
 
@@ -115,7 +128,7 @@ module zxuno (
    // conectados a ella.
    assign cpudin = (oe_n_romyram==1'b0)?        memory_dout :
                    (oe_n_ay==1'b0)?             ay_dout :
-                   (oe_n_kempston==1'b0)?       {3'b000,kbd_joy} :
+                   (oe_n_kempston==1'b0)?       {3'b000,(kbd_joy/* | db9_joy*/)} :
                    (oe_n_zxunoaddr==1'b0)?      zxuno_addr_to_cpu :
                    (oe_n_spi==1'b0)?            spi_dout :
                    (read_scancode==1'b1)?       scancode :
@@ -156,6 +169,7 @@ module zxuno (
 
 	 // CPU interface
 	 .a(cpuaddr),
+     .access_to_contmem(access_to_screen),
 	 .mreq_n(mreq_n),
 	 .iorq_n(iorq_n),
 	 .rd_n(rd_n),
@@ -163,7 +177,7 @@ module zxuno (
 	 .cpuclk(cpuclk),
 	 .int_n(int_n),
 	 .din(cpudout),
-    .dout(ula_dout),
+     .dout(ula_dout),
 
     // VRAM interface
 	 .va(vram_addr),  // 16KB videoram
@@ -178,13 +192,14 @@ module zxuno (
     .clkdac(clkdac),
     .clkkbd(clkkbd),
     .issue2_keyboard(issue2_keyboard),
+    .timming(timming_ula),
+    .disable_contention(disable_contention),
 
     // Video
 	 .r(r),
 	 .g(g),
 	 .b(b),
-	 .csync(csync),
-    .y_n()
+	 .csync(csync)
     );
 
    zxunoregs addr_reg_zxuno (
@@ -252,6 +267,9 @@ module zxuno (
       .vramaddr(vram_addr),
       .vramdout(vram_dout),
       .issue2_keyboard_enabled(issue2_keyboard),
+      .timming_ula(timming_ula),
+      .disable_contention(disable_contention),
+      .access_to_screen(access_to_screen),
    
    // Interface para registros ZXUNO
       .addr(zxuno_addr),

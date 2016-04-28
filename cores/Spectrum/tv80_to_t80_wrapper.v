@@ -62,7 +62,13 @@ module tv80n_wrapper (
 		.HALT_n(halt_n),
 		.BUSAK_n(busak_n),
 		.A(A),
-		.D(d)
+		.D(d),
+		
+		.SavePC(),
+		.SaveINT(),
+		.RestorePC(16'h0000),
+		.RestoreINT(8'h00),
+		.RestorePC_n(1'b1)
 	);
 	
 	assign dout = d; 

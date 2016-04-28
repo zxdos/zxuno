@@ -69,7 +69,7 @@ module zxunoregs (
 
 Addr  |   Dir  |  Description
 ------+--------+----------------------------------------------
-$00   |   R/W  | Master configuration: LOCK 0 0 ISSUE2 DISNMI ENDIV ENBOOT  . ENDIV=1 enables DIVMMC . ENBOOT=1 boot ROM in use
+$00   |   R/W  | Master configuration: LOCK 0 0 TIMMING ISSUE2 DISNMI ENDIV ENBOOT  . ENDIV=1 enables DIVMMC . ENBOOT=1 boot ROM in use
 $01   |   R/W  | Master memory mapper: 0 0 0 B4 B2 B2 B1 B0    . B4-B0: 16K bank to map onto $C000-$FFFF. 
       |        |                                                        System RAM (128K) uses banks 0-7
       |        |                                                        System ROM (64K) is located from bank 8 to bank 11.
@@ -77,7 +77,7 @@ $01   |   R/W  | Master memory mapper: 0 0 0 B4 B2 B2 B1 B0    . B4-B0: 16K bank
       |        |                                                        DIVMMC RAM is located at banks 13-14 (32KB)
 $02   |   R/W  | Flash SPI port
 $03   |   R/W  | Flash SPI CS pin
-$04   |   R/W  | R: returbns the last scancode issued by the keyboard. W: sends command to the keyboard (not yet impl.)
+$04   |   R/W  | R: returns the last scancode issued by the keyboard. W: sends command to the keyboard (not yet impl.)
 
 */
 endmodule

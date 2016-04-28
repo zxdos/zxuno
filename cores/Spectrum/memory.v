@@ -30,7 +30,7 @@ module memory (
    input wire [15:0] a,
    input wire [7:0] din,  // proveniente del bus de datos de salida de la CPU
    output reg [7:0] dout, // hacia el bus de datos de entrada de la CPU
-   output reg oe_n,       // el dato es valido   
+   output reg oe_n,       // el dato es valido
    input wire mreq_n,
    input wire iorq_n,
    input wire rd_n,
@@ -38,24 +38,27 @@ module memory (
    input wire m1_n,
    input wire rfsh_n,
    output wire enable_nmi_n,
-   
+
    // Interface con la ULA
    input wire [13:0] vramaddr,
    output wire [7:0] vramdout,
    output wire issue2_keyboard_enabled,
-   
+   output wire timming_ula,
+   output wire disable_contention,
+   output reg access_to_screen,
+
    // Interface para registros ZXUNO
    input wire [7:0] addr,
    input wire ior,
    input wire iow,
    output wire in_boot_mode,
-   
+
    // Interface con la SRAM
    output wire [18:0] sram_addr,
    inout wire [7:0] sram_data,
    output wire sram_we_n
    );
-   
+
    parameter
       MASTERCONF = 8'h00,
       MASTERMAPPER = 8'h01;
@@ -64,22 +67,29 @@ module memory (
    reg divmmc_is_enabled = 1'b0;
    reg divmmc_nmi_is_disabled = 1'b0;
    reg issue2_keyboard = 1'b0;
+   reg timming = 1'b0;
+   reg disable_cont = 1'b0;
    reg masterconf_frozen = 1'b0;
-   
+
    assign issue2_keyboard_enabled = issue2_keyboard;
    assign in_boot_mode = ~masterconf_frozen;
+   assign timming_ula = timming;
+   assign disable_contention = disable_cont;
 
    always @(posedge clk) begin
       if (!mrst_n) begin
-         {issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= 4'b0001;
+         {disable_cont,timming,issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= 6'b000001;
          masterconf_frozen <= 1'b0;
       end
-      else if (addr==MASTERCONF && iow && !masterconf_frozen) begin
-         {issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= din[3:0];
-         masterconf_frozen <= din[7];
+      else if (addr==MASTERCONF && iow) begin
+         {disable_cont,timming,issue2_keyboard} <= din[5:3];
+         if (!masterconf_frozen) begin
+            masterconf_frozen <= din[7];
+            {divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= din[2:0];
+         end
       end
    end
-   
+
    reg [4:0] mastermapper = 5'h00;
    always @(posedge clk) begin
       if (!mrst_n)
@@ -126,7 +136,7 @@ module memory (
             divmmc_status_after_m1 <= 1'b0;
          end
       end
-      if (m1_n==1'b1 /*!rfsh_n && !mreq_n*/) begin  // tras el ciclo M1, aquí es cuando realmente se hace el mapping
+      if (m1_n==1'b1) begin  // tras el ciclo M1, aquí es cuando realmente se hace el mapping
          divmmc_is_paged <= divmmc_status_after_m1;
       end
    end
@@ -184,7 +194,6 @@ module memory (
          end
          else begin  // estamos en modo normal de ejecución
 
-            // TODO: añadir aquí el codigo para comprobar si ha de paginarse la ROM del DIVMMC!!!!!!!!!!
             if (divmmc_is_enabled && (divmmc_is_paged || conmem)) begin  // DivMMC ha entrado en modo automapper o está mapeado a la fuerza
                if (a[13]==1'b0) begin // Si estamos en los primeros 8K
                   if (conmem || !mapram_mode) begin
@@ -276,6 +285,18 @@ module memory (
       end
    end
 
+   // Hay contienda en las páginas 5 y 7 de memoria, que son las dos páginas de pantalla
+   always @* begin
+     access_to_screen = 1'b0;
+     if (!initial_boot_mode) begin
+        if (!amstrad_allram_page_mode) begin
+           if (a[15:14]==2'b01 || (a[15:14]==2'b11 && (banco_ram==3'd5 || banco_ram==3'd7))) begin
+               access_to_screen = 1'b1;
+           end
+        end
+     end
+   end
+
    // Conexiones internas
    wire [7:0] bootrom_dout;
    wire [7:0] ram_dout;
@@ -303,8 +324,6 @@ module memory (
    rom boot_rom (
       .clk(mclk),
       .a(a[13:0]),
-      .we(1'b0), // !mreq_n && !wr_n && a[15:14]==2'b00),
-      .din(),  // (din),
       .dout(bootrom_dout)
     );    
 
@@ -319,7 +338,7 @@ module memory (
          oe_n = 1'b0;
       end
       else if (addr==MASTERCONF && ior) begin
-         dout = {6'h00,divmmc_is_enabled,initial_boot_mode};
+         dout = {masterconf_frozen,1'b0,disable_cont,timming,issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode};
          oe_n = 1'b0;
       end
       else if (addr==MASTERMAPPER && ior) begin

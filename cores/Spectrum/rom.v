@@ -21,8 +21,6 @@
 module rom (
     input wire clk,
     input wire [13:0] a,
-    input wire we,
-    input wire [7:0] din,
     output reg [7:0] dout
     );
 
@@ -38,8 +36,6 @@ module rom (
    end
    
    always @(posedge clk) begin
-     if (we)
-        mem[a[5:0]] <= din;
      dout <= mem[a[5:0]];
    end
 endmodule

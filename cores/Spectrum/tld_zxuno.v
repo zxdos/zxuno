@@ -33,6 +33,8 @@ module tld_zxuno (
    input wire dataps2,
    output wire audio_out_left,
    output wire audio_out_right,
+   output wire stdn,
+   output wire stdnb,
    
    output wire [18:0] sram_addr,
    inout wire [7:0] sram_data,
@@ -47,24 +49,38 @@ module tld_zxuno (
    output wire sd_clk,     
    output wire sd_mosi,    
    input wire sd_miso,
+   output wire testled,   // nos servirá como testigo de uso de la SPI
    
-//   output wire ss,
-//   output wire sclk,
-//   output wire mosi,
-//   output wire miso,
-   
-   output wire testled   // nos servirá como testigo de uso de la SPI
+   input wire joyup,
+   input wire joydown,
+   input wire joyleft,
+   input wire joyright,
+   input wire joyfire
    );
 
    wire wssclk,sysclk;
-   relojes los_relojes_del_sistema (
-    .CLKIN_IN(clk50mhz), 
-    .CLKDV_OUT(wssclk), //  5MHz
-    .CLKFX_OUT(sysclk), // 28MHz 
-    .CLKIN_IBUFG_OUT(), 
-    .CLK0_OUT(), 
-    .LOCKED_OUT()
-    );
+//   relojes los_relojes_del_sistema (
+//    .CLKIN_IN(clk50mhz), 
+//    .CLKDV_OUT(wssclk), //  5MHz
+//    .CLKFX_OUT(sysclk), // 28MHz 
+//    .CLKIN_IBUFG_OUT(), 
+//    .CLK0_OUT(), 
+//    .LOCKED_OUT()
+//    );
+
+	assign wssclk = 1'b0;  // de momento, sin WSS
+	assign stdn = 1'b0;  // fijar norma PAL
+	assign stdnb = 1'b1; // y conectamos reloj PAL
+   pll reloj_maestro
+   (// Clock in ports
+    .CLK_IN1            (clk50mhz),      // IN
+    // Clock out ports
+    .CLK_OUT1           (sysclk),     // OUT
+    // Dynamic reconfiguration ports
+    .PROGCLK            (1'b0),      // IN
+    .PROGDATA           (1'b0),     // IN
+    .PROGEN             (1'b0),       // IN
+    .PROGDONE           ());    // OUT
 
    wire audio_out;
    assign audio_out_left = audio_out;
@@ -95,14 +111,23 @@ module tld_zxuno (
     .sd_cs_n(sd_cs_n),
     .sd_clk(sd_clk),
     .sd_mosi(sd_mosi),
-    .sd_miso(sd_miso)
+    .sd_miso(sd_miso),
+    
+    .joyup(joyup),
+    .joydown(joydown),
+    .joyleft(joyleft),
+    .joyright(joyright),
+    .joyfire(joyfire)
     );
-    
-//    assign ss = sd_cs_n;
-//    assign sclk = sd_clk;
-//    assign mosi = sd_mosi;
-//    assign miso = sd_miso;
-    
+       
     assign testled = (!flash_cs_n || !sd_cs_n);
+//    reg [21:0] monoestable = 22'hFFFFFF;
+//    always @(posedge sysclk) begin
+//        if (!flash_cs_n || !sd_cs_n)
+//            monoestable <= 0;
+//        else if (monoestable[21] == 1'b0)
+//            monoestable <= monoestable + 1;
+//    end
+//    assign testled = ~monoestable[21];
 
 endmodule
