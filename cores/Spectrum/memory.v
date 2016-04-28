@@ -38,6 +38,7 @@ module memory (
    input wire m1_n,
    input wire rfsh_n,
    output wire enable_nmi_n,
+   input wire page_configrom_active,
 
    // Interface con la ULA
    input wire [13:0] vramaddr,
@@ -70,6 +71,7 @@ module memory (
    reg timming = 1'b0;
    reg disable_cont = 1'b0;
    reg masterconf_frozen = 1'b0;
+   reg [1:0] negedge_configrom = 2'b00;
 
    assign issue2_keyboard_enabled = issue2_keyboard;
    assign in_boot_mode = ~masterconf_frozen;
@@ -77,9 +79,18 @@ module memory (
    assign disable_contention = disable_cont;
 
    always @(posedge clk) begin
+      negedge_configrom <= {negedge_configrom[0], page_configrom_active};
       if (!mrst_n) begin
          {disable_cont,timming,issue2_keyboard,divmmc_nmi_is_disabled,divmmc_is_enabled,initial_boot_mode} <= 6'b000001;
          masterconf_frozen <= 1'b0;
+      end
+      else if (page_configrom_active == 1'b1) begin
+        masterconf_frozen <= 1'b0;
+        initial_boot_mode <= 1'b1;
+      end
+      else if (negedge_configrom == 2'b10) begin
+        masterconf_frozen <= 1'b1;
+        initial_boot_mode <= 1'b0;
       end
       else if (addr==MASTERCONF && iow) begin
          {disable_cont,timming,issue2_keyboard} <= din[5:3];
@@ -123,7 +134,7 @@ module memory (
          if (!mreq_n && !rd_n && !m1_n && (a==16'h0000 || 
                                            a==16'h0008 ||
                                            a==16'h0038 ||
-                                           (a==16'h0066 && divmmc_nmi_is_disabled==1'b0) ||
+                                           (a==16'h0066 && divmmc_nmi_is_disabled==1'b0 && page_configrom_active==1'b0) ||
                                            a==16'h04C6 ||
                                            a==16'h0562)) begin  // automapper diferido (siguiente ciclo)
            divmmc_status_after_m1 <= 1'b1;
@@ -218,7 +229,7 @@ module memory (
             end
                     
             else if (!amstrad_allram_page_mode) begin   // en el modo normal de paginación, hay 4 bancos de ROMs
-               addr_port2 = {3'b010,banco_rom,a[13:0]};
+               addr_port2 = {3'b010,banco_rom,a[13:0]}; // que vienen de los bancos de SRAM del 8 al 11
                we2_n = 1'b1;
             end
             else begin   // en el modo especial de paginación, tenemos el all-RAM

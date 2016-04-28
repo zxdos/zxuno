@@ -78,42 +78,47 @@ module ps2_port (
         end
         if (ps2clkedge && enable_rcv) begin
             timeoutcnt <= 16'h0000;
-            if (state == `RCVSTART && ps2data == 1'b0) begin
-                state <= `RCVDATA;
-                key <= 8'h80;
-                //rkb_interrupt <= 1'b0;
-            end
-            else if (state == `RCVDATA) begin
-                key <= {ps2data, key[7:1]};
-                if (key[0] == 1'b1) begin
-                    state <= `RCVPARITY;
+            case (state)
+                `RCVSTART: begin
+                    if (ps2data == 1'b0) begin
+                        state <= `RCVDATA;
+                        key <= 8'h80;
+                        //rkb_interrupt <= 1'b0;
+                    end
                 end
-            end
-            else if (state == `RCVPARITY) begin
-                if (ps2data^paritycalculated == 1'b1) begin
-                    state <= `RCVSTOP;
+                `RCVDATA: begin
+                    key <= {ps2data, key[7:1]};
+                    if (key[0] == 1'b1) begin
+                        state <= `RCVPARITY;
+                    end
                 end
-                else begin
-                    state <= `RCVSTART;
+                `RCVPARITY: begin
+                    if (ps2data^paritycalculated == 1'b1) begin
+                        state <= `RCVSTOP;
+                    end
+                    else begin
+                        state <= `RCVSTART;
+                    end
                 end
-            end
-            else if (state == `RCVSTOP) begin
-                state <= `RCVSTART;                
-                if (ps2data == 1'b1) begin
-                   scancode <= key;
-                   if (key == 8'hE0) begin
-                     regextended <= 2'b01;
-                   end
-                   else if (key == 8'hF0) begin
-                     regreleased <= 2'b01;
-                   end
-                   else begin
-                     regextended <= {regextended[0], 1'b0};
-                     regreleased <= {regreleased[0], 1'b0};
-                     rkb_interrupt <= 1'b1;
-                   end
-                end
-            end       
+                `RCVSTOP: begin
+                    state <= `RCVSTART;                
+                    if (ps2data == 1'b1) begin
+                        scancode <= key;
+                        if (key == 8'hE0) begin
+                            regextended <= 2'b01;
+                        end
+                        else if (key == 8'hF0) begin
+                            regreleased <= 2'b01;
+                        end
+                        else begin
+                            regextended <= {regextended[0], 1'b0};
+                            regreleased <= {regreleased[0], 1'b0};
+                            rkb_interrupt <= 1'b1;
+                        end
+                    end
+                end    
+                default: state <= `RCVSTART;
+            endcase
         end           
         else begin
             timeoutcnt <= timeoutcnt + 1;
@@ -192,47 +197,70 @@ module ps2_host_to_kb (
             state <= `PULLCLKLOW;
         end
 
-        if (state == `PULLCLKLOW && timeoutcnt >= 16'd40000) begin  // 40000 cuentas es poco más de 10ms
-            state <= `PULLDATALOW;
-            shiftreg <= rdata;
-            cntbits <= 3'd0;
-            timeoutcnt <= 16'h0000;
-        end
-        else if (state == `PULLDATALOW && ps2clknedge) begin
-            state <= `SENDDATA;
-            timeoutcnt <= 16'h0000;
-        end
-        else if (state == `SENDDATA && ps2clknedge) begin
-            timeoutcnt <= 16'h0000;
-            shiftreg <= {1'b0, shiftreg[7:1]};
-            cntbits <= cntbits + 1;
-            if (cntbits == 3'd7)
-                state <= `SENDPARITY;
-        end
-        else if (state == `SENDPARITY && ps2clknedge) begin
-            state <= `RCVIDLE;
-            timeoutcnt <= 16'h0000;
-        end
-        else if (state == `RCVIDLE && ps2clknedge /*&& ps2data_in == 1'b1*/) begin
-            state <= `RCVACK;
-            timeoutcnt <= 16'h0000;
-        end        
-        else if (state == `RCVACK && ps2clknedge /*&& ps2data_in == 1'b0*/) begin
-            state <= `SENDFINISHED;
-            timeoutcnt <= 16'h0000;
-        end
-        else if (state == `SENDFINISHED) begin
-            busy <= 1'b0;
-            timeoutcnt <= 16'h0000;
-        end
-        else begin
+        if (!ps2clknedge) begin
             timeoutcnt <= timeoutcnt + 1;
             if (timeoutcnt == 16'hFFFF && state != `SENDFINISHED) begin
                 error <= 1'b1;
                 state <= `SENDFINISHED;
             end
         end
+
+        case (state)
+            `PULLCLKLOW: begin  // 40000 cuentas es poco más de 10ms
+                if (timeoutcnt >= 16'd40000) begin
+                    state <= `PULLDATALOW;
+                    shiftreg <= rdata;
+                    cntbits <= 3'd0;
+                    timeoutcnt <= 16'h0000;
+                end
+            end
+            `PULLDATALOW: begin
+                if (ps2clknedge) begin
+                    state <= `SENDDATA;
+                    timeoutcnt <= 16'h0000;
+                end
+            end
+            `SENDDATA: begin
+                if (ps2clknedge) begin
+                    timeoutcnt <= 16'h0000;
+                    shiftreg <= {1'b0, shiftreg[7:1]};
+                    cntbits <= cntbits + 1;
+                    if (cntbits == 3'd7)
+                        state <= `SENDPARITY;
+                end
+            end
+            `SENDPARITY: begin
+                if (ps2clknedge) begin
+                    state <= `RCVIDLE;
+                    timeoutcnt <= 16'h0000;
+                end
+            end
+            `RCVIDLE: begin
+                if (ps2clknedge) begin
+                    state <= `RCVACK;
+                    timeoutcnt <= 16'h0000;
+                end
+            end        
+            `RCVACK: begin
+                if (ps2clknedge) begin
+                    state <= `SENDFINISHED;
+                    timeoutcnt <= 16'h0000;
+                end
+            end
+            `SENDFINISHED: begin
+                busy <= 1'b0;
+                timeoutcnt <= 16'h0000;
+            end
+            default: begin
+                timeoutcnt <= timeoutcnt + 1;
+                if (timeoutcnt == 16'hFFFF && state != `SENDFINISHED) begin
+                    error <= 1'b1;
+                    state <= `SENDFINISHED;
+                end
+            end
+        endcase              
     end
+    
     assign ps2data_ext = (state == `PULLCLKLOW || state == `PULLDATALOW)    ? 1'b0 :
                          (state == `SENDDATA && shiftreg[0] == 1'b0)        ? 1'b0 :
                          (state == `SENDPARITY && paritycalculated == 1'b0) ? 1'b0 : // si lo que se va a enviar es un 1

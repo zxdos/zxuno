@@ -21,7 +21,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module turbosound (
-    input wire clk7,
+    input wire clk,
     input wire clkay,
     input wire reset_n,
     input wire bdir,
@@ -34,7 +34,7 @@ module turbosound (
     );
 
 	reg ay_select = 1'b1;
-	always @(posedge clk7 or negedge reset_n) begin
+	always @(posedge clk) begin
 		if (reset_n==1'b0)
 			ay_select <= 1'b1;
 		else if (bdir && bc1 && din[7:1]==7'b1111111)

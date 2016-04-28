@@ -130,138 +130,142 @@ module scancode_to_speccy (
             key_is_pending <= 1'b1;
         if (rst == 1'b1)
             state <= CLEANMATRIX;
-        else if (state == CLEANMATRIX) begin
-            modifiers <= 3'b000;
-            keycount <= 4'b0000;
-            row[0] <= 5'b11111;
-            row[1] <= 5'b11111;
-            row[2] <= 5'b11111;
-            row[3] <= 5'b11111;
-            row[4] <= 5'b11111;
-            row[5] <= 5'b11111;
-            row[6] <= 5'b11111;
-            row[7] <= 5'b11111;
-            state <= IDLE;
-        end
-        else if (state == IDLE) begin
-            if (key_is_pending == 1'b1) begin
-                addr <= {modifiers, extended, scan, 2'b00};  // 1 scan tiene 8 bits + 1 bit para indicar scan extendido + 3 bits para el modificador usado
-                state <= ADDR0PUT;
-                key_is_pending <= 1'b0;
-            end
-            else if (cpuread == 1'b1 || cpuwrite == 1'b1 || rewind == 1'b1)
-                state <= CPUTIME;
-        end
-        else if (state == ADDR0PUT) begin
-            {keyrow1,keycol1} <= keymap[addr];
-            addr <= {modifiers, extended, scan, 2'b01};
-            state <= ADDR1PUT;
-        end
-        else if (state == ADDR1PUT) begin
-            {keyrow2,keycol2} <= keymap[addr];
-            addr <= {modifiers, extended, scan, 2'b10};
-            state <= ADDR2PUT;
-        end
-        else if (state == ADDR2PUT) begin
-            {signalstate,joystate} <= keymap[addr];
-            addr <= {modifiers, extended, scan, 2'b11};
-            state <= ADDR3PUT;
-        end
-        else if (state == ADDR3PUT) begin
-            {keymodifiers,togglestate} <= keymap[addr];
-            state <= TRANSLATE1;
-        end
-        else if (state == TRANSLATE1) begin
-            // Actualiza las 8 semifilas del teclado con la primera tecla
-            if (~released) begin            
-              row[keyrow1] <= row[keyrow1] & ~keycol1;
-            end
-            else begin
-              row[keyrow1] <= row[keyrow1] | keycol1;
-            end
-            state <= TRANSLATE2;
-        end
-        else if (state == TRANSLATE2) begin
-            // Actualiza las 8 semifilas del teclado con la segunda tecla
-            if (~released) begin            
-              row[keyrow2] <= row[keyrow2] & ~keycol2;
-            end
-            else begin
-              row[keyrow2] <= row[keyrow2] | keycol2;
-            end
-            state <= TRANSLATE3;
-         end
-         else if (state == TRANSLATE3) begin
-            // Actualiza modificadores
-            if (~released)
-                modifiers <= modifiers | keymodifiers;
-            else
-                modifiers <= modifiers & ~keymodifiers;
-                
-            // Y de la misma forma tendria que actualizar el joystick, resets y los user_toogles
-            if (~released)
-                {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} <= {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} | joystate;
-            else
-                {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} <= {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} & ~joystate;
-                
-            if (~released)
-                {rmaster_reset,ruser_reset,ruser_nmi} <= {rmaster_reset,ruser_reset,ruser_nmi} | signalstate;
-            else
-                {rmaster_reset,ruser_reset,ruser_nmi} <= {rmaster_reset,ruser_reset,ruser_nmi} & ~signalstate;
-                
-            if (~released)
-                ruser_toggles <= ruser_toggles | togglestate;
-            else
-                ruser_toggles <= ruser_toggles & ~togglestate;
-                            
-            //state <= UPDCOUNTERS1;
-            state <= IDLE;
-        end
-        else if (state == CPUTIME) begin            
-            if (rewind == 1'b1) begin
-                cpuaddr = 14'h0000;
-                state <= IDLE;
-            end
-            else if (cpuread == 1'b1) begin
-                addr <= cpuaddr;
-                state <= CPUREAD;
-            end
-            else if (cpuwrite == 1'b1) begin
-                addr <= cpuaddr;
-                state <= CPUWRITE;
-            end
-            else
-                state <= IDLE;
-        end
-        else if (state == CPUREAD) begin   // CPU wants to read from keymap
-            dout <= keymap[addr];
-            state <= CPUINCADD;
-        end
-        else if (state == CPUWRITE) begin
-            keymap[addr] <= din;
-            state <= CPUINCADD;
-        end
-        else if (state == CPUINCADD) begin
-            if (cpuread == 1'b0 && cpuwrite == 1'b0) begin
-                cpuaddr <= cpuaddr + 1;
-                state <= IDLE;
-            end
-        end
-//        else if (state == UPDCOUNTERS1) begin            
-//            if (~released)
-//                keycount <= keycount + 4'b0001;  // suma 1 al contador de pulsaciones
-//            else if (released && keycount != 4'b0000)
-//                keycount <= keycount + 4'b1111;  // o le resta 1 al contador de pulsaciones, pero sin bajar de 0
-//            state <= UPDCOUNTERS2;
-//        end
-//        else if (state == UPDCOUNTERS2) begin
-//            if (keycount == 4'b0000)  // si es la última tecla soltada, limpia la matriz de teclado del Spectrum
-//                state <= CLEANMATRIX;
-//            else
-//                state <= IDLE;
-//        end
         else begin
-            state <= IDLE;
+            case (state)
+                CLEANMATRIX: begin
+                    modifiers <= 3'b000;
+                    keycount <= 4'b0000;
+                    row[0] <= 5'b11111;
+                    row[1] <= 5'b11111;
+                    row[2] <= 5'b11111;
+                    row[3] <= 5'b11111;
+                    row[4] <= 5'b11111;
+                    row[5] <= 5'b11111;
+                    row[6] <= 5'b11111;
+                    row[7] <= 5'b11111;
+                    state <= IDLE;
+                end
+                IDLE: begin
+                    if (key_is_pending == 1'b1) begin
+                        addr <= {modifiers, extended, scan, 2'b00};  // 1 scan tiene 8 bits + 1 bit para indicar scan extendido + 3 bits para el modificador usado
+                        state <= ADDR0PUT;
+                        key_is_pending <= 1'b0;
+                    end
+                    else if (cpuread == 1'b1 || cpuwrite == 1'b1 || rewind == 1'b1)
+                        state <= CPUTIME;
+                end
+                ADDR0PUT: begin
+                    {keyrow1,keycol1} <= keymap[addr];
+                    addr <= {modifiers, extended, scan, 2'b01};
+                    state <= ADDR1PUT;
+                end
+                ADDR1PUT: begin
+                    {keyrow2,keycol2} <= keymap[addr];
+                    addr <= {modifiers, extended, scan, 2'b10};
+                    state <= ADDR2PUT;
+                end
+                ADDR2PUT: begin
+                    {signalstate,joystate} <= keymap[addr];
+                    addr <= {modifiers, extended, scan, 2'b11};
+                    state <= ADDR3PUT;
+                end
+                ADDR3PUT: begin
+                    {keymodifiers,togglestate} <= keymap[addr];
+                    state <= TRANSLATE1;
+                end
+                TRANSLATE1: begin
+                    // Actualiza las 8 semifilas del teclado con la primera tecla
+                    if (~released) begin            
+                      row[keyrow1] <= row[keyrow1] & ~keycol1;
+                    end
+                    else begin
+                      row[keyrow1] <= row[keyrow1] | keycol1;
+                    end
+                    state <= TRANSLATE2;
+                end
+                TRANSLATE2: begin
+                    // Actualiza las 8 semifilas del teclado con la segunda tecla
+                    if (~released) begin            
+                      row[keyrow2] <= row[keyrow2] & ~keycol2;
+                    end
+                    else begin
+                      row[keyrow2] <= row[keyrow2] | keycol2;
+                    end
+                    state <= TRANSLATE3;
+                end
+                TRANSLATE3: begin
+                    // Actualiza modificadores
+                    if (~released)
+                        modifiers <= modifiers | keymodifiers;
+                    else
+                        modifiers <= modifiers & ~keymodifiers;
+                        
+                    // Y de la misma forma tendria que actualizar el joystick, resets y los user_toogles
+                    if (~released)
+                        {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} <= {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} | joystate;
+                    else
+                        {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} <= {rjoyup,rjoydown,rjoyleft,rjoyright,rjoyfire} & ~joystate;
+                        
+                    if (~released)
+                        {rmaster_reset,ruser_reset,ruser_nmi} <= {rmaster_reset,ruser_reset,ruser_nmi} | signalstate;
+                    else
+                        {rmaster_reset,ruser_reset,ruser_nmi} <= {rmaster_reset,ruser_reset,ruser_nmi} & ~signalstate;
+                        
+                    if (~released)
+                        ruser_toggles <= ruser_toggles | togglestate;
+                    else
+                        ruser_toggles <= ruser_toggles & ~togglestate;
+                                    
+                    //state <= UPDCOUNTERS1;
+                    state <= IDLE;
+                end
+                CPUTIME: begin            
+                    if (rewind == 1'b1) begin
+                        cpuaddr = 14'h0000;
+                        state <= IDLE;
+                    end
+                    else if (cpuread == 1'b1) begin
+                        addr <= cpuaddr;
+                        state <= CPUREAD;
+                    end
+                    else if (cpuwrite == 1'b1) begin
+                        addr <= cpuaddr;
+                        state <= CPUWRITE;
+                    end
+                    else
+                        state <= IDLE;
+                end
+                CPUREAD: begin   // CPU wants to read from keymap
+                    dout <= keymap[addr];
+                    state <= CPUINCADD;
+                end
+                CPUWRITE: begin
+                    keymap[addr] <= din;
+                    state <= CPUINCADD;
+                end
+                CPUINCADD: begin
+                    if (cpuread == 1'b0 && cpuwrite == 1'b0) begin
+                        cpuaddr <= cpuaddr + 1;
+                        state <= IDLE;
+                    end
+                end
+        //        else if (state == UPDCOUNTERS1) begin            
+        //            if (~released)
+        //                keycount <= keycount + 4'b0001;  // suma 1 al contador de pulsaciones
+        //            else if (released && keycount != 4'b0000)
+        //                keycount <= keycount + 4'b1111;  // o le resta 1 al contador de pulsaciones, pero sin bajar de 0
+        //            state <= UPDCOUNTERS2;
+        //        end
+        //        else if (state == UPDCOUNTERS2) begin
+        //            if (keycount == 4'b0000)  // si es la última tecla soltada, limpia la matriz de teclado del Spectrum
+        //                state <= CLEANMATRIX;
+        //            else
+        //                state <= IDLE;
+        //        end
+                default: begin
+                    state <= IDLE;
+                end
+            endcase
         end
     end
 endmodule

@@ -2,7 +2,7 @@
 NET "clk50mhz" LOC="P55" | IOSTANDARD = LVCMOS33;
 NET "testled" LOC="P10" | IOSTANDARD = LVCMOS33;
 NET "clk50mhz" PERIOD=20 ns;
-NET "sysclk" PERIOD=35 ns;
+#NET "sysclk" PERIOD=35 ns;
 
 # Video output
 NET "r<2>" LOC="P93" | IOSTANDARD = LVCMOS33;

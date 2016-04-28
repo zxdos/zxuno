@@ -24,6 +24,7 @@
 module ula_radas (
 	 // Clocks
     input wire clk14,  // 14MHz master clock
+    input wire clk7,
     input wire wssclk, // 5MHz WSS clock
     input wire rst_n,  // reset para volver al modo normal
 
@@ -47,9 +48,6 @@ module ula_radas (
 	 input wire [4:0] kbd,
     output reg mic,
     output reg spk,
-    output wire clkay,
-    output wire clkdac,
-    output wire clkkbd,
     input wire issue2_keyboard,
     input wire timming,
     input wire disable_contention,
@@ -79,13 +77,9 @@ module ula_radas (
 	 wire [8:0] hc;
 	 wire [8:0] vc;
 
-    reg clk7 = 1'b0;
+    reg clkhalf14 = 1'b0;
     always @(posedge clk14)
-      clk7 <= ~clk7;
-
-    assign clkdac = clk7;
-    assign clkay = hc[0];
-    assign clkkbd = clk7;  /* hc[4] */
+        clkhalf14 <= ~clkhalf14;
 
 	 pal_sync_generator_sinclair syncs (
     .clk(clk7),
@@ -173,7 +167,7 @@ module ula_radas (
     reg [15:0] BitmapSerializerHR = 8'h00;
     wire SerialOutputHR = BitmapSerializerHR[15];
     always @(posedge clk14) begin
-      if (SerializerLoad && clk7)  // load enable only for a single 14MHz cycle
+      if (SerializerLoad && clkhalf14)  // load enable only for a single 14MHz cycle
          BitmapSerializerHR <= {BitmapData,AttrData};
       else
          BitmapSerializerHR <= {BitmapSerializerHR[14:0],1'b0};

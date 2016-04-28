@@ -58,7 +58,7 @@ module tld_zxuno (
    input wire joyfire
    );
 
-   wire wssclk,sysclk;
+   wire wssclk,sysclk,clk14,clk7,clk3d5;
 //   relojes los_relojes_del_sistema (
 //    .CLKIN_IN(clk50mhz), 
 //    .CLKDV_OUT(wssclk), //  5MHz
@@ -71,16 +71,25 @@ module tld_zxuno (
 	assign wssclk = 1'b0;  // de momento, sin WSS
 	assign stdn = 1'b0;  // fijar norma PAL
 	assign stdnb = 1'b1; // y conectamos reloj PAL
-   pll reloj_maestro
+//   pll reloj_maestro
+//   (// Clock in ports
+//    .CLK_IN1            (clk50mhz),      // IN
+//    // Clock out ports
+//    .CLK_OUT1           (sysclk),     // OUT
+//    // Dynamic reconfiguration ports
+//    .PROGCLK            (1'b0),      // IN
+//    .PROGDATA           (1'b0),     // IN
+//    .PROGEN             (1'b0),       // IN
+//    .PROGDONE           ());    // OUT
+
+  cuatro_relojes relojes_maestros
    (// Clock in ports
     .CLK_IN1            (clk50mhz),      // IN
     // Clock out ports
     .CLK_OUT1           (sysclk),     // OUT
-    // Dynamic reconfiguration ports
-    .PROGCLK            (1'b0),      // IN
-    .PROGDATA           (1'b0),     // IN
-    .PROGEN             (1'b0),       // IN
-    .PROGDONE           ());    // OUT
+    .CLK_OUT2           (clk14),     // OUT
+    .CLK_OUT3           (clk7),    // OUT
+    .CLK_OUT4           (clk3d5));    // OUT
 
    wire audio_out;
    assign audio_out_left = audio_out;
@@ -89,6 +98,9 @@ module tld_zxuno (
    zxuno la_maquina (
     .clk(sysclk),         // 28MHz, reloj base para la memoria de doble puerto, y de ahí, para el resto del circuito
     .wssclk(wssclk),      //  5MHz, reloj para el WSS
+    .clk14(clk14),
+    .clk7(clk7),
+    .clk3d5(clk3d5),
     .power_on_reset_n(1'b1),  // sólo para simulación. Para implementacion, dejar a 1
     .r(r),
     .g(g),

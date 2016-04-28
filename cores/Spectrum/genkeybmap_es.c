@@ -149,11 +149,11 @@ D+3 : modificadores y señales de usuario, 0 si no hay
 #define JOYRIGHT   0x02
 #define JOYFIRE    0x01
 
-#define USER1      0x10
-#define USER2      0x08
+#define USER5      0x10
+#define USER4      0x08
 #define USER3      0x04
-#define USER4      0x02
-#define USER5      0x01
+#define USER2      0x02
+#define USER1      0x01
 // End of additional signals
 
 // A key can be pressed with up to three key modifiers
@@ -421,7 +421,7 @@ int main()
     MAP(PC_DELETE|MD2|MD3,0,URESET,0);     //
     MAP(PC_KP_DOT|MD2|MD3,0,URESET,0);     // Ctrl-Alt-Del for user reset
     MAP(PC_BKSPACE|MD2|MD3,0,MRESET,0);    // Ctrl-Alt-BkSpace for master reset
-
+    
     //keypad
     MAPANY(PC_KP_DIVIS,SP_SLASH,0,0);
     MAPANY(PC_KP_MULT,SP_STAR,0,0);
@@ -480,6 +480,8 @@ int main()
     MAP(MD3|MD1|PC_LESS,SP_NOTEQ,0,0);
     MAP(MD3|MD2|PC_LESS,SP_NOTEQ,0,0);
     MAP(MD3|MD2|MD1|PC_LESS,SP_NOTEQ,0,0);
+
+    MAP(PC_F12,0,0,USER1); // Evento de usuario 1
 
     // End of mapping. Save .HEX file for Verilog
     SAVEMAPHEX("keyb_es_hex.txt");
