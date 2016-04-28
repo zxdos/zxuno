@@ -140,9 +140,9 @@ module ram_dual_port (
             sram_we_n = 1'b1;            
         end
         else begin
-            sram_a = cpuramaddr;
+            sram_a = cpuramaddr;            
             data_to_cpu = sram_d;
-            if (state == CPU5 || state == CPU6)
+            if (state == CPU6 || state == CPU5)
                 sram_we_n = 1'b0;
             else
                 sram_we_n = 1'b1;

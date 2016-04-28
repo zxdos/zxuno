@@ -88,12 +88,19 @@ module asic (
                        VBPORCH + 
                        TBORDER;
     
+    // Start of vertical sync, horizontal counter (last 4 scanlines)
     parameter BEGINVSYNCH = HACTIVEREGION + RBORDER + HFPORCH + HSYNC + HBPORCH;
-    parameter BEGINVINTH  = HACTIVEREGION + RBORDER + HFPORCH;
+
+    // Start and end of vertical retrace interrupt, horizontal counter
+    parameter BEGINVINTH  = BEGINVSYNCH; //HACTIVEREGION + RBORDER + HFPORCH;
+    parameter ENDVINTH    = (BEGINVINTH + 256)%HTOTAL;
+
+    // Start and end of vertical retrace interrupt, vertical counter
     parameter BEGINVINTV  = VACTIVEREGION + BBORDER + VFPORCH - 1;
     parameter ENDVINTV    = VACTIVEREGION + BBORDER + VFPORCH;
-    parameter ENDVINTH    = (BEGINVINTH + 256)%HTOTAL;
-    parameter BEGINHINTH  = HACTIVEREGION + RBORDER + HFPORCH;
+
+    // Start and end of raster interrupt, horizontal counter
+    parameter BEGINHINTH  = HACTIVEREGION + RBORDER;
     parameter ENDHINTH    = (BEGINHINTH + 256)%HTOTAL;
 
     parameter IOADDR_VMPR     = 8'd252,
@@ -103,7 +110,8 @@ module asic (
               IOADDR_LINEINT  = 8'd249,
               IOADDR_STATUS   = 8'd249,
               IOADDR_BASECLUT = 8'd248,
-              IOADDR_ATTRIB   = 8'd255;
+              IOADDR_ATTRIB   = 8'd255,
+              IOADDR_HLPEN    = 8'd248;
     
     //////////////////////////////////////////////////////////////////////////
     // IO regs
@@ -122,7 +130,7 @@ module asic (
     wire rom_in_section_d = lmpr[6];
     wire write_protect_section_a = lmpr[7];
     
-    reg [7:0] hmpr = 8'h02;  // port 251. Bit 7 is not used for now. R/W
+    reg [7:0] hmpr = 8'h00;  // port 251. Bit 7 is not used for now. R/W
     wire [4:0] high_page = hmpr[4:0];
     wire [1:0] clut_mode_3_hi = hmpr[6:5];
     
@@ -133,6 +141,9 @@ module asic (
     wire screen_off = border[7] & screen_mode[1];
     
     reg [7:0] lineint = 8'hFF;   // port 249 write only
+    
+    reg [7:0] hpen = 8'h00;
+    reg [7:0] lpen = 8'h00;
     
     reg [6:0] clut[0:15];  // Port xF8h where x=0..F 
     initial begin
@@ -172,6 +183,23 @@ module asic (
     end
     
     //////////////////////////////////////////////////////////////////////////
+    // HPEN and LPEN counters
+    always @(posedge clk) begin
+        if (hc[0] == 1'b0) begin
+            if (hc == HACTIVEREGION) begin
+                if (vc == VTOTAL-1)
+                    hpen <= 8'h00;
+                else if (vc < VACTIVEREGION)
+                    hpen <= hpen + 1;
+            end
+            if (hc < HACTIVEREGION)
+                lpen <= lpen + 1;
+            else
+                lpen <= 8'h00;
+        end
+    end
+
+    //////////////////////////////////////////////////////////////////////////
     // Syncs and vertical retrace/raster line int generation
     reg vint_n;
     reg rint_n;
@@ -189,18 +217,29 @@ module asic (
                 csync = ~csync;
         if ( (vc == BEGINVINTV && hc >= BEGINVINTH) ||
              (vc == ENDVINTV && hc < ENDVINTH) )
-                vint_n = 1'b0;
+//        if (vc == BEGINVINTV && hc >= BEGINVINTH)
+             vint_n = 1'b0;
         if (lineint >= 8'd0 && lineint <= 8'd191) begin
+//            if (lineint == 8'd0) begin
+//                if (vc == VTOTAL-1 && hc >= BEGINHINTH ||
+//                    vc == 9'd0 && hc < ENDHINTH)
+//                        rint_n = 1'b0;
+//            end
+//            else begin
+//                if ({1'b0, lineint} == vc-1 && hc >= BEGINHINTH ||
+//                    {1'b0, lineint} == vc && hc < ENDHINTH)
+//                        rint_n = 1'b0;
+//            end
+//        end
             if (lineint == 8'd0) begin
-                if (vc == VTOTAL-1 && hc >= BEGINHINTH ||
-                    vc == 9'd0 && hc < ENDHINTH)
-                        rint_n = 1'b0;
+                if (vc == VTOTAL-1 && hc >= BEGINHINTH)
+                    rint_n = 1'b0;
             end
             else begin
-                if ({1'b0, lineint} == vc-1 && hc >= BEGINHINTH ||
-                    {1'b0, lineint} == vc && hc < ENDHINTH)
-                        rint_n = 1'b0;
+                if ({1'b0, lineint} == vc-1 && hc >= BEGINHINTH)
+                    rint_n = 1'b0;
             end
+
         end
     end
     assign int_n = vint_n & rint_n;
@@ -233,41 +272,47 @@ module asic (
     
     //////////////////////////////////////////////////////////////////////////
     // Contention signal (risk of)
-    reg contention;
+    reg mem_contention;
+    reg io_contention;
     
     always @* begin
-        contention = 1'b0;
+        mem_contention = 1'b0;
+
+        if (hc[3:0]<4'd10)
+            io_contention = 1'b1;
+        else
+            io_contention = 1'b0;
+
         if (fetching_pixels == 1'b1 && hc[3:0]<4'd10)
-            contention = 1'b1;
+           mem_contention = 1'b1;
         else if (fetching_pixels == 1'b0 && (hc[3:0]==4'd0 ||
                                             hc[3:0]==4'd1 ||
                                             hc[3:0]==4'd8 ||
                                             hc[3:0]==4'd9) )
-            contention = 1'b1;
+            mem_contention = 1'b1;
         if (screen_mode == 2'b00 && hc[3:0]<4'd10 && hc[9:4]<6'd40)
-            contention = 1'b1;
+            mem_contention = 1'b1;  // extra contention for MODE 1
     end
-    assign asic_is_using_ram = contention & fetching_pixels;
+    assign asic_is_using_ram = mem_contention & fetching_pixels;
     
     //////////////////////////////////////////////////////////////////////////
     // WAIT signal with contention applied
     always @* begin
         wait_n = 1'b1;
-        if (cpuaddr<16'h4000 && rom_in_section_a==1'b1)
+        if (mreq_n == 1'b0 && cpuaddr<16'h4000 && rom_in_section_a==1'b1)
             wait_n = 1'b1;
-        else if (cpuaddr>=16'hC000 && rom_in_section_d==1'b1)
+        else if (mreq_n == 1'b0 && cpuaddr>=16'hC000 && rom_in_section_d==1'b1)
             wait_n = 1'b1;
-        else if (contention == 1'b1) begin
-            if (mreq_n == 1'b0)
-                wait_n = 1'b0;
-            else if (iorq_n == 1'b0)
-                if (rd_n == 1'b0 || wr_n == 1'b0)
-                    wait_n = 1'b0;
-        end
+        else if (mem_contention == 1'b1 && mreq_n == 1'b0)
+            wait_n = 1'b0;
+        else if (io_contention == 1'b1 && iorq_n == 1'b0)
+            wait_n = 1'b0;
     end
     
     //////////////////////////////////////////////////////////////////////////
     // VRAM address generation    
+    reg [14:0] screen_offs = 15'h0000;
+    reg [4:0] screen_column = 5'h00;
     always @* begin
         if (screen_mode == 2'd0) begin
             if (hc[2] == 1'b0)
@@ -282,13 +327,11 @@ module asic (
                 vramaddr = {screen_page, 1'b1, screen_offs[12:0]};
         end
         else
-            vramaddr = {screen_page[4:0], 14'b00000000000000} + {3'b000, screen_offs};
+            vramaddr = {screen_page[4:1], screen_offs};
     end
 
     //////////////////////////////////////////////////////////////////////////
     // FSM for fetching pixels from RAM and shift registers
-    reg [15:0] screen_offs = 16'h0000;
-    reg [4:0] screen_column = 5'h00;
     reg [7:0] vram_byte1, vram_byte2, vram_byte3, vram_byte4;
     reg [7:0] sregm12 = 8'h00;
     reg [7:0] attrreg = 8'h00;
@@ -300,7 +343,7 @@ module asic (
     always @(posedge clk) begin
         // a good time to reset pixel address counters and advance flash counter for modes 1 and 2
         if (vc==(VTOTAL-1) && hc==(HTOTAL-1)) begin
-            screen_offs <= 16'h0000;
+            screen_offs <= 15'h0000;
             screen_column <= 5'h00;
             flash_counter <= flash_counter + 1;
         end
@@ -433,15 +476,14 @@ module asic (
     // Write to IO ports from CPU
     always @(posedge clk) begin
         if (rst_n == 1'b0) begin
-`ifdef SYNTH            
+`ifdef SYNTH        
             vmpr <= 8'h00;
 `else            
             vmpr <= 8'b01100000;
 `endif            
             lmpr <= 8'h00;
-            hmpr <= 8'h02;
+            hmpr <= 8'h00;
             border <= 8'h00;
-            lineint <= 8'hFF;
         end
         else begin
             if (iorq_n == 1'b0 && wr_n == 1'b0) begin
@@ -481,6 +523,10 @@ module asic (
                 data_to_cpu = hmpr;
             else if (cpuaddr[7:0] == IOADDR_LMPR)
                 data_to_cpu = lmpr;
+            else if (cpuaddr[8:0] == {1'b0, IOADDR_HLPEN} )
+                data_to_cpu = lpen;
+            else if (cpuaddr[8:0] == {1'b1, IOADDR_HLPEN} )
+                data_to_cpu = hpen;
             else if (cpuaddr[7:0]>=8'd224 && cpuaddr[7:0]<=8'd231) begin            
                 disc1_n = 1'b0;
                 data_enable_n = 1'b1;

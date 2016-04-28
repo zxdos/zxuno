@@ -38,13 +38,9 @@ module tld_sam (
     inout wire [7:0] sram_data,
     output wire sram_we_n,
     // PS/2 keyoard interface
-    input wire clkps2,
-    input wire dataps2
+    inout wire clkps2,
+    inout wire dataps2
     );
-
-    // Interface with ROM
-    wire [14:0] romaddr;
-    wire [7:0] data_from_rom;
 
     // Interface with RAM
     wire [18:0] ramaddr;

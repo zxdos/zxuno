@@ -36,8 +36,8 @@ module samcoupe (
     output wire audio_out_left,
     output wire audio_out_right,
     // PS/2 keyoard interface
-    input wire clkps2,
-    input wire dataps2,
+    inout wire clkps2,
+    inout wire dataps2,
     // SRAM interface
     output wire [18:0] sram_addr,
     inout wire [7:0] sram_data,
@@ -82,7 +82,7 @@ module samcoupe (
     
     // Audio signals
     wire mic, beep;
-    assign audio_out_left = mic;
+    assign audio_out_left = ear;
     assign audio_out_right = beep;
     
     // MUX from memory/devices to Z80 data bus
@@ -138,7 +138,7 @@ module samcoupe (
         .mic(mic),
         .beep(beep),
         // keyboard I/O
-        .keyboard({3'b111,kbcolumns[4:0]}),
+        .keyboard(kbcolumns),
         .rdmsel(rdmsel),
         // disk I/O
         .disc1_n(),
@@ -191,17 +191,41 @@ module samcoupe (
         .sram_d(sram_data)
     );
 
-    ps2k el_teclado (
-      .clk(clk6),
-      .ps2clk(clkps2),
-      .ps2data(dataps2),
-      .rows(kbrows[7:0]),
-      .cols(kbcolumns[4:0]),
-      .joy(), // Implementación joystick kempston en teclado numerico
-      .scancode(),  // El scancode original desde el teclado
-      .rst(kb_rst_n),   // esto son salidas, no entradas
-      .nmi(kb_nmi_n),   // Señales de reset y NMI
-      .mrst()  // generadas por pulsaciones especiales del teclado
-      );
+//    ps2k el_teclado (
+//      .clk(clk6),
+//      .ps2clk(clkps2),
+//      .ps2data(dataps2),
+//      .rows(kbrows[7:0]),
+//      .cols(kbcolumns[4:0]),
+//      .joy(), // Implementación joystick kempston en teclado numerico
+//      .scancode(),  // El scancode original desde el teclado
+//      .rst(kb_rst_n),   // esto son salidas, no entradas
+//      .nmi(kb_nmi_n),   // Señales de reset y NMI
+//      .mrst()  // generadas por pulsaciones especiales del teclado
+//      );
     
+    ps2_keyb el_teclado (
+        .clk(clk6),
+        .clkps2(clkps2),
+        .dataps2(dataps2),
+        //---------------------------------
+        .rows(kbrows),
+        .cols(kbcolumns),
+        .rst_out_n(kb_rst_n),
+        .nmi_out_n(kb_nmi_n),
+        .mrst_out_n(),
+        .user_toggles(),
+        //---------------------------------
+        .zxuno_addr(8'h00),
+        .zxuno_regrd(1'b0),
+        .zxuno_regwr(1'b0),
+        .regaddr_changed(1'b0),
+        .din(data_from_cpu),
+        .keymap_dout(),
+        .oe_n_keymap(),
+        .scancode_dout(),
+        .oe_n_scancode(),
+        .kbstatus_dout(),
+        .oe_n_kbstatus()
+    );
 endmodule
