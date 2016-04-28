@@ -23,6 +23,7 @@
 module ps2_port (
     input wire clk,  // se recomienda 1 MHz <= clk <= 600 MHz
     input wire enable_rcv,  // habilitar la maquina de estados de recepcion
+    input wire kb_or_mouse,  // 0: kb, 1: mouse
     input wire ps2clk_ext,
     input wire ps2data_ext,
     output wire kb_interrupt,  // a 1 durante 1 clk para indicar nueva tecla recibida
@@ -55,7 +56,7 @@ module ps2_port (
     always @(posedge clk) begin
         negedgedetect <= {negedgedetect[14:0], ps2clk};
     end
-    wire ps2clkedge = (negedgedetect == 16'hFF00)? 1'b1 : 1'b0;
+    wire ps2clkedge = (negedgedetect == 16'hF000)? 1'b1 : 1'b0;
     
     // Paridad instantánea de los bits recibidos
     wire paritycalculated = ^key;
@@ -83,7 +84,6 @@ module ps2_port (
                     if (ps2data == 1'b0) begin
                         state <= `RCVDATA;
                         key <= 8'h80;
-                        //rkb_interrupt <= 1'b0;
                     end
                 end
                 `RCVDATA: begin
@@ -102,18 +102,23 @@ module ps2_port (
                 end
                 `RCVSTOP: begin
                     state <= `RCVSTART;                
-                    if (ps2data == 1'b1) begin
+                    if (ps2data == 1'b1) begin                        
                         scancode <= key;
-                        if (key == 8'hE0) begin
-                            regextended <= 2'b01;
-                        end
-                        else if (key == 8'hF0) begin
-                            regreleased <= 2'b01;
+                        if (kb_or_mouse == 1'b1) begin
+                            rkb_interrupt <= 1'b1;  // no se requiere mirar E0 o F0
                         end
                         else begin
-                            regextended <= {regextended[0], 1'b0};
-                            regreleased <= {regreleased[0], 1'b0};
-                            rkb_interrupt <= 1'b1;
+                            if (key == 8'hE0) begin
+                                regextended <= 2'b01;
+                            end
+                            else if (key == 8'hF0) begin
+                                regreleased <= 2'b01;
+                            end
+                            else begin
+                                regextended <= {regextended[0], 1'b0};
+                                regreleased <= {regreleased[0], 1'b0};
+                                rkb_interrupt <= 1'b1;
+                            end
                         end
                     end
                 end    

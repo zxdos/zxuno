@@ -57,11 +57,15 @@ module zxuno (
     input wire sd_miso,
     
     // DB9 JOYSTICK
-   input wire joyup,
-   input wire joydown,
-   input wire joyleft,
-   input wire joyright,
-   input wire joyfire
+    input wire joyup,
+    input wire joydown,
+    input wire joyleft,
+    input wire joyright,
+    input wire joyfire,
+    
+    // MOUSE
+    inout wire mouseclk,
+    inout wire mousedata
     );
 
    // Señales de la CPU
@@ -142,6 +146,12 @@ module zxuno (
    wire oe_n_nmievents;
    wire nmispecial_n;
    wire page_configrom_active;
+   
+   // Kempston mouse
+   wire [7:0] kmouse_dout;
+   wire [7:0] mousedata_dout;
+   wire [7:0] mousestatus_dout;
+   wire oe_n_kmouse, oe_n_mousedata, oe_n_mousestatus;
 
    // Asignación de dato para la CPU segun la decodificación de todos los dispositivos
    // conectados a ella.
@@ -156,6 +166,9 @@ module zxuno (
                    (oe_n_keymap==1'b0)?         keymap_dout :
                    (oe_n_scratch==1'b0)?        scratch_dout :
                    (oe_n_nmievents==1'b0)?      nmievents_dout :
+                   (oe_n_kmouse==1'b0)?         kmouse_dout :
+                   (oe_n_mousedata==1'b0)?      mousedata_dout :
+                   (oe_n_mousestatus==1'b0)?    mousestatus_dout :
                                                 ula_dout;
 
    tv80n_wrapper el_z80 (
@@ -386,6 +399,27 @@ module zxuno (
         .page_configrom_active(page_configrom_active)
     );
 
+    ps2_mouse_kempston el_raton (
+        .clk(clk),
+        .rst_n(rst_n & mrst_n & power_on_reset_n),
+        .clkps2(mouseclk),
+        .dataps2(mousedata),
+        //---------------------------------
+        .a(cpuaddr),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .kmouse_dout(kmouse_dout),
+        .oe_n_kmouse(oe_n_kmouse),
+        //---------------------------------
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .zxuno_regwr(zxuno_regwr),
+        .din(cpudout),
+        .mousedata_dout(mousedata_dout),
+        .oe_n_mousedata(oe_n_mousedata),
+        .mousestatus_dout(mousestatus_dout),
+        .oe_n_mousestatus(oe_n_mousestatus)
+    );
 
 ///////////////////////////////////
 // AY-3-8912 SOUND

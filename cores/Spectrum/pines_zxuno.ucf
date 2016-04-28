@@ -24,11 +24,11 @@ NET "audio_out_left" LOC="P8" | IOSTANDARD = LVCMOS33;
 NET "audio_out_right" LOC="P9" | IOSTANDARD = LVCMOS33;
 NET "ear" LOC="P105" | IOSTANDARD = LVCMOS33;
 
-# Keyboard
-NET "clkps2" LOC="P98" | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "dataps2" LOC="P97" | IOSTANDARD = LVCMOS33 | PULLUP;
-#NET "clkmouse" LOC="P94" | IOSTANDARD = LVCMOS33 | PULLUP;  # comprobar estos pines
-#NET "datamouse" LOC="P95" | IOSTANDARD = LVCMOS33 | PULLUP; # los he asignado a voleo
+# Keyboard and mouse
+NET "clkps2" LOC="P98" | IOSTANDARD = LVCMOS33 | PULLUP;     # pin 1 DIN
+NET "dataps2" LOC="P97" | IOSTANDARD = LVCMOS33 | PULLUP;    # pin 5 DIN
+NET "mouseclk" LOC="P94" | IOSTANDARD = LVCMOS33 | PULLUP;   # pin 6 DIN
+NET "mousedata" LOC="P95" | IOSTANDARD = LVCMOS33 | PULLUP;  # pin 2 DIN
 
 # SRAM
 NET "sram_addr<0>"  LOC="P115" | IOSTANDARD = LVCMOS33;

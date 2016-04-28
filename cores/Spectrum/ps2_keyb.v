@@ -86,6 +86,7 @@ module ps2_keyb(
     ps2_port lectura_de_teclado (
         .clk(clk),
         .enable_rcv(~ps2busy),
+        .kb_or_mouse(1'b0),
         .ps2clk_ext(clkps2),
         .ps2data_ext(dataps2),
         .kb_interrupt(nueva_tecla),
