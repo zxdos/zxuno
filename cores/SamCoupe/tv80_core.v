@@ -34,7 +34,7 @@ module tv80_core (/*AUTOARG*/
   // Beginning of automatic inputs (from unused autoinst inputs)
   // End of automatics
   
-  parameter Mode = 1;   // 0 => Z80, 1 => Fast Z80, 2 => 8080, 3 => GB
+  parameter Mode = 0;   // 0 => Z80, 1 => Fast Z80, 2 => 8080, 3 => GB
   parameter IOWait = 1; // 0 => Single cycle I/O, 1 => Std I/O cycle
   parameter Flag_C = 0;
   parameter Flag_N = 1;

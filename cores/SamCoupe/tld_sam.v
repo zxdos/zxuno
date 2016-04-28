@@ -59,20 +59,22 @@ module tld_sam (
     assign stdn = 1'b0;  // fijar norma PAL
 	assign stdnb = 1'b1; // y conectamos reloj PAL
     
-    wire clk24, clk12, clk6;
+    wire clk24, clk12, clk6, clk8;
 
     relojes los_relojes (
         .CLK_IN1            (clk50mhz),      // IN
         // Clock out ports
-        .CLK_OUT1           (clk24),      // OUT
-        .CLK_OUT2           (clk12),       // OUT
-        .CLK_OUT3           (clk6)        // OUT
+        .CLK_OUT1           (clk24),  // modulo multiplexor de SRAM
+        .CLK_OUT2           (clk12),  // ASIC
+        .CLK_OUT3           (clk6),   // CPU y teclado PS/2
+        .CLK_OUT4           (clk8)    // SAA1099 y DAC
     );
 
     samcoupe maquina (
         .clk24(clk24),
         .clk12(clk12),
         .clk6(clk6),
+        .clk8(clk8),
         .master_reset_n(1'b1),  // esta señal es sólo para simulación
         // Video output
         .r(sam_r),

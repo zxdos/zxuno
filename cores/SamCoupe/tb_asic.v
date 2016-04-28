@@ -51,10 +51,13 @@ module tb_asic;
         .data_enable_n(),
         .wait_n(),
         // RAM/ROM interface
-        .ramaddr(),
+        .vramaddr(),
+        .cpuramaddr(),
         .data_from_ram(8'hAA),
         .ramwr_n(),
         .romcs_n(),
+        .ramcs_n(),
+        .asic_is_using_ram(),
         // audio I/O
         .ear(1'b0),
         .mic(),

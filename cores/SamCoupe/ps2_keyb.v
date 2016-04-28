@@ -3,14 +3,14 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Miguel Angel Rodriguez Jodar
 // 
-// Create Date:    15:18:53 06/03/2015 
-// Design Name: 
-// Module Name:    ps2_keyb 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
+// Create Date:    15:18:53 03/06/2015 
+// Design Name:    SAM Coupé clone
+// Module Name:    ps2_keyb
+// Project Name:   SAM Coupé clone
+// Target Devices: Spartan 6
+// Tool versions:  ISE 12.4
 // Description: 
 //
 // Dependencies: 

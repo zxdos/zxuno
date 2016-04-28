@@ -102,80 +102,65 @@ module tv80n (/*AUTOARG*/
      .intcycle_n (intcycle_n)
      );  
 
-  always @*
-    begin
-      nxt_mreq_n = 1;
-      nxt_rd_n   = 1;
-      nxt_iorq_n = 1;
-      nxt_wr_n   = 1;
-      
-      if (mcycle[0])
-        begin
-	  if (tstate[1] || tstate[2])
-            begin
-	      nxt_rd_n = ~ intcycle_n;
-	      nxt_mreq_n = ~ intcycle_n;
-	      nxt_iorq_n = intcycle_n;
-	    end
+    always @* begin
+        nxt_mreq_n = 1;
+        nxt_rd_n   = 1;
+        nxt_iorq_n = 1;
+        nxt_wr_n   = 1;
+          
+        if (mcycle[0]) begin
+            if (tstate[1] || tstate[2]) begin
+                nxt_rd_n = ~ intcycle_n;
+                nxt_mreq_n = ~ intcycle_n;
+                nxt_iorq_n = intcycle_n;
+            end
         end // if (mcycle[0])          
-      else
-        begin
-	  if ((tstate[1] || tstate[2]) && !no_read && !write)
-            begin
-	      nxt_rd_n = 1'b0;
-	      nxt_iorq_n = ~ iorq;
-	      nxt_mreq_n = iorq;
-	    end
-	  if (T2Write == 0)
-            begin                          
-	      if (tstate[2] && write)
-                begin
-		  nxt_wr_n = 1'b0;
-		  nxt_iorq_n = ~ iorq;
-		  nxt_mreq_n = iorq;
+        else begin
+            if ((tstate[1] || tstate[2]) && !no_read && !write) begin
+                nxt_rd_n = 1'b0;
+                nxt_iorq_n = ~ iorq;
+                nxt_mreq_n = iorq;
+            end
+            if (T2Write == 0) begin                          
+                if (tstate[2] && write) begin
+                    nxt_wr_n = 1'b0;
+                    nxt_iorq_n = ~ iorq;
+                    nxt_mreq_n = iorq;
                 end
             end
-	  else
-            begin
-	      if ((tstate[1] || (tstate[2] && !wait_n)) && write)
-                begin
-		  nxt_wr_n = 1'b0;
-		  nxt_iorq_n = ~ iorq;
-		  nxt_mreq_n = iorq;
-		end
-	    end // else: !if(T2write == 0)          
-	end // else: !if(mcycle[0])
+            else begin
+                if ((tstate[1] || (tstate[2] && !wait_n)) && write) begin
+                    nxt_wr_n = 1'b0;
+                    nxt_iorq_n = ~ iorq;
+                    nxt_mreq_n = iorq;
+                end
+            end // else: !if(T2write == 0)          
+        end // else: !if(mcycle[0])
     end // always @ *
 
-  always @(negedge clk)
-    begin
-      if (!reset_n)
-        begin
-	  rd_n   <= #1 1'b1;
-	  wr_n   <= #1 1'b1;
-	  iorq_n <= #1 1'b1;
-	  mreq_n <= #1 1'b1;
+    always @(negedge clk) begin
+        if (!reset_n) begin
+            rd_n   <= #1 1'b1;
+            wr_n   <= #1 1'b1;
+            iorq_n <= #1 1'b1;
+            mreq_n <= #1 1'b1;
         end
-      else
-        begin
-	  rd_n <= #1 nxt_rd_n;
-	  wr_n <= #1 nxt_wr_n;
-	  iorq_n <= #1 nxt_iorq_n;
-	  mreq_n <= #1 nxt_mreq_n;
-	end // else: !if(!reset_n)
+        else begin
+            rd_n <= #1 nxt_rd_n;
+            wr_n <= #1 nxt_wr_n;
+            iorq_n <= #1 nxt_iorq_n;
+            mreq_n <= #1 nxt_mreq_n;
+        end // else: !if(!reset_n)
     end // always @ (posedge clk or negedge reset_n)
 
-  always @(posedge clk)
-    begin
-      if (!reset_n)
-        begin
-	  di_reg <= #1 0;
+    always @(posedge clk) begin
+        if (!reset_n) begin
+            di_reg <= #1 0;
         end
-      else
-        begin
-	  if (tstate[2] && wait_n == 1'b1)
-	    di_reg <= #1 di;
-	end // else: !if(!reset_n)
+        else begin
+            if (tstate[2] && wait_n == 1'b1)
+                di_reg <= #1 di;
+        end // else: !if(!reset_n)
     end // always @ (posedge clk)
   
 endmodule // t80n

@@ -3,14 +3,14 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Miguel Angel Rodriguez Jodar
 // 
-// Create Date:    03:54:40 07/25/2015 
-// Design Name: 
-// Module Name:    samcoupe 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
+// Create Date:    03:54:40 13/25/2015 
+// Design Name:    SAM Coupé clone
+// Module Name:    samcoupe
+// Project Name:   SAM Coupé clone
+// Target Devices: Spartan 6
+// Tool versions:  ISE 12.4
 // Description: 
 //
 // Dependencies: 
@@ -24,6 +24,7 @@ module samcoupe (
     input wire clk24,
     input wire clk12,
     input wire clk6,
+    input wire clk8,
     input wire master_reset_n,
     // Video output
     output wire [1:0] r,
@@ -82,8 +83,7 @@ module samcoupe (
     
     // Audio signals
     wire mic, beep;
-    assign audio_out_left = ear;
-    assign audio_out_right = beep;
+    wire [7:0] saa_out_l, saa_out_r;
     
     // MUX from memory/devices to Z80 data bus
     assign data_to_cpu = (rom_oe_n == 1'b0)?  data_from_rom :
@@ -158,30 +158,12 @@ module samcoupe (
         .dout(data_from_rom)
     );
     
-//    ram_dual_port_turnos ram_512k (
-//        .clk(clk24),
-//        .whichturn(asic_is_using_ram),
-//        .vramaddr(vramaddr),
-//        .cpuramaddr(cpuramaddr),
-//        .cpu_we_n(ram_we_n),
-//        .data_from_cpu(data_from_cpu),
-//        .data_to_asic(data_to_asic),
-//        .data_to_cpu(data_from_ram),
-//        // Actual interface with SRAM
-//        .sram_a(sram_addr),
-//        .sram_we_n(sram_we_n),
-//        .sram_d(sram_data)
-//    );
-    
-    ram_dual_port ram_512k (
+    ram_dual_port_turnos ram_512k (
         .clk(clk24),
         .whichturn(asic_is_using_ram),
         .vramaddr(vramaddr),
         .cpuramaddr(cpuramaddr),
-        .mreq_n(ram_oe_n),
-        .rd_n(rd_n),
-        .wr_n(ram_we_n),
-        .rfsh_n(rfsh_n),
+        .cpu_we_n(ram_we_n),
         .data_from_cpu(data_from_cpu),
         .data_to_asic(data_to_asic),
         .data_to_cpu(data_from_ram),
@@ -190,20 +172,25 @@ module samcoupe (
         .sram_we_n(sram_we_n),
         .sram_d(sram_data)
     );
-
-//    ps2k el_teclado (
-//      .clk(clk6),
-//      .ps2clk(clkps2),
-//      .ps2data(dataps2),
-//      .rows(kbrows[7:0]),
-//      .cols(kbcolumns[4:0]),
-//      .joy(), // Implementación joystick kempston en teclado numerico
-//      .scancode(),  // El scancode original desde el teclado
-//      .rst(kb_rst_n),   // esto son salidas, no entradas
-//      .nmi(kb_nmi_n),   // Señales de reset y NMI
-//      .mrst()  // generadas por pulsaciones especiales del teclado
-//      );
     
+//    ram_dual_port ram_512k (
+//        .clk(clk24),
+//        .whichturn(asic_is_using_ram),
+//        .vramaddr(vramaddr),
+//        .cpuramaddr(cpuramaddr),
+//        .mreq_n(ram_oe_n),
+//        .rd_n(rd_n),
+//        .wr_n(ram_we_n),
+//        .rfsh_n(rfsh_n),
+//        .data_from_cpu(data_from_cpu),
+//        .data_to_asic(data_to_asic),
+//        .data_to_cpu(data_from_ram),
+//        // Actual interface with SRAM
+//        .sram_a(sram_addr),
+//        .sram_we_n(sram_we_n),
+//        .sram_d(sram_data)
+//    );
+
     ps2_keyb el_teclado (
         .clk(clk6),
         .clkps2(clkps2),
@@ -228,4 +215,28 @@ module samcoupe (
         .kbstatus_dout(),
         .oe_n_kbstatus()
     );
+    
+    saa1099 el_saa (
+        .clk(clk8),  // 8 MHz
+        .rst_n(kb_rst_n),
+        .cs_n(~(cpuaddr[7:0] == 8'hFF && iorq_n == 1'b0)),
+        .a0(cpuaddr[8]),  // 0=data, 1=address
+        .wr_n(wr_n),
+        .din(data_from_cpu),
+        .out_l(saa_out_l),
+        .out_r(saa_out_r)
+    );
+    
+    mixer sam_audio_mixer (
+        .clk(clk8),
+        .rst_n(kb_rst_n),
+        .ear(ear),
+        .mic(mic),
+        .spk(beep),
+        .saa_left(saa_out_l),
+        .saa_right(saa_out_r),
+        .audio_left(audio_out_left),
+        .audio_right(audio_out_right)
+	);
+    
 endmodule
