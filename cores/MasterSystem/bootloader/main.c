@@ -59,16 +59,15 @@ void main()
 
 		i = 0;
 		if (!sd_init()) {
-			console_puts("Could not initialize SD card\n");
+			console_puts("Error initializing SD/MMC card\n");
 		} else {
-	#ifdef DEBUG
+	#ifdef DEBUG2
 			console_puts("SD card initialized\n");
 	#endif
 			if (!fat_init()) {
-				console_puts("could not initialize FAT system\n"); 
-	
+				//console_puts("could not initialize FAT system\n"); //qq
 			} else {
-	#ifdef DEBUG
+	#ifdef DEBUG2
 				console_puts("FAT system initialized\n");
 	#endif
 				i = 1;
@@ -86,8 +85,8 @@ void choose_mode(int sd_ok)
 	console_gotoxy(9,10);
 	if (sd_ok) {
 		pick_and_load_rom();
-	} else {	
-		console_puts("retry SD card");
+	} else {
+		console_puts("retry SD/MMC card");
 	}
 
 	for (;;) {
@@ -98,6 +97,9 @@ void choose_mode(int sd_ok)
 		if (i==1) { console_puts(">"); } else { console_puts("  "); }
 		key = wait_key();
 		switch (key) {
+		case JOY_UP:
+			i = 0;
+			break;
 		case JOY_FIREA:
 		case JOY_FIREB:
 			if (i==0) {
@@ -142,7 +144,7 @@ void pick_and_load_rom()
 				}
 			}
 		cont = 0;
-		}
+		}	
 		if ((key & JOY_DOWN) && (cont%cdiv==0)) {
 			if (current[1].type!=0) {
 				current++;
@@ -247,6 +249,9 @@ void load_rom(file_descr_t *entry)
 			size += 0x200;
 			if ((size)%16384 == 0)
 			   console_puts(".");
+			//console_gotoxy(0,3);
+			//console_print_dword(size);
+			//console_puts(" bytes loaded");
 		}
 	}
 }
@@ -256,6 +261,7 @@ void start_rom()
 	*((UBYTE*)0xfffd) = 0;
 	*((UBYTE*)0xfffe) = 1;
 	*((UBYTE*)0xffff) = 2;
+	//console_puts("booting rom...\n");
 	// any write to $00 when in bootloader mode sets normal mode and reboots the CPU
 	#asm
 	out ($00),a

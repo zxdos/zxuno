@@ -17,7 +17,6 @@ const fat_t *fat 					= 0xc010;
 const UBYTE *fat_buffer				= 0xc100;
 const UBYTE *data_buffer			= 0xc300;
 const file_descr_t *directory_buffer= 0xc500;
-//const BYTE *card_type 				= 0xc700; //q
 
 void fat_init32();
 void fat_init16();
@@ -50,16 +49,17 @@ int fat_init()
 		console_puts("Wrong MBR\n");
 		return FALSE;
 	}
-
 	switch (data_buffer[0x1c2]) {
 	case 0x06:
+	case 0x04:
 		fat->fat32 = FALSE;
 		break;
 	case 0x0b:
+	case 0x0c:	
 		fat->fat32 = TRUE;
 		break;
 	default:
-		console_puts("Unknown filesystem type (FAT16/32 only)\n");
+		console_puts("Unsupported FileSystem (FAT16/32 only)\n");
 		return FALSE;
 	}
 
@@ -69,6 +69,7 @@ int fat_init()
 	debug_print_dword(sector);
 	debug_puts("\n");
 #endif
+
 
 	if (!sd_load_sector(data_buffer, sector)) {
 		console_puts("Error while loading boot sector\n");

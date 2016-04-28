@@ -11,7 +11,7 @@ end entity;
 
 architecture rtl of psg is
 
-	signal clk_divide	: unsigned(5 downto 0) := "000000";
+	signal clk_divide	: unsigned(6 downto 0) := "0000000"; --unsigned(5 downto 0) := "000000";
 	signal clk32		: std_logic;
 	signal regn			: std_logic_vector(2 downto 0);
 	signal tone0		: std_logic_vector(9 downto 0):="0000100000";
@@ -82,8 +82,7 @@ begin
 		
 	inst_dac: dac
 	port map (
---		clk		=> clk,
-		clk		=> clk32,
+		clk		=> clk, --clk32
 		input		=> outputs,
 		output	=> output );
 
@@ -93,7 +92,7 @@ begin
 			clk_divide <= clk_divide+1;
 		end if;
 	end process;
-	clk32 <= std_logic(clk_divide(5));
+	clk32 <= std_logic(clk_divide(6)); --5
 
 	process (clk, WR_n)
 	begin

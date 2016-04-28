@@ -38,14 +38,12 @@ entity system is
 		spi_do:		in		STD_LOGIC;
 		spi_sclk:	out	STD_LOGIC;
 		spi_di:		out	STD_LOGIC;
-		spi_cs_n:	out	STD_LOGIC;
-		
-		tx:			out	STD_LOGIC);
+		spi_cs_n:	out	STD_LOGIC
+	);
 end system;
 
 architecture Behavioral of system is
 	
---	component dummy_z80 is
 	component T80se is
 	generic(
 		Mode : integer := 0;	-- 0 => Z80, 1 => Fast Z80, 2 => 8080, 3 => GB
@@ -143,7 +141,6 @@ architecture Behavioral of system is
 		A:					in  STD_LOGIC_VECTOR(13 downto 0);
 		D_out:			out STD_LOGIC_VECTOR(7 downto 0));
 	end component;
-
 	
 	component spi is
 	port (
@@ -160,15 +157,6 @@ architecture Behavioral of system is
 		mosi:				out STD_LOGIC);
 	end component;
 
-	component uart_tx is
-	port (
-		clk:  			in  std_logic;
-		WR_n:				in  std_logic;
-		D_in: 			in  std_logic_vector(7 downto 0);
-		serial_out:		out std_logic;
-		ready:			out std_logic);
-	end component;
-	
 	signal RESET_n:			std_logic;
 	signal RD_n:				std_logic;
 	signal WR_n:				std_logic;
@@ -190,11 +178,9 @@ architecture Behavioral of system is
 	signal io_WR_n:			std_logic;
 	signal io_D_out:			std_logic_vector(7 downto 0);
 	
---	signal ram_RD_n:			std_logic;
 	signal ram_WR_n:			std_logic;
 	signal ram_D_out:			std_logic_vector(7 downto 0);
 	
---	signal rom_RD_n:			std_logic;
 	signal rom_WR_n:			std_logic;
 	signal rom_D_out:			std_logic_vector(7 downto 0);
 	
@@ -202,12 +188,8 @@ architecture Behavioral of system is
 	signal spi_WR_n:			std_logic;
 	signal spi_D_out:			std_logic_vector(7 downto 0);
 	
---	signal boot_rom_RD_n:	std_logic;
 	signal boot_rom_D_out:	std_logic_vector(7 downto 0);
 	
-	signal uart_WR_n:			std_logic;
-	signal uart_D_out:		std_logic_vector(7 downto 0);
-
 	signal reset_counter:	unsigned(3 downto 0) := "1111";
 	signal bootloader:		std_logic := '0';
 	signal irom_D_out:		std_logic_vector(7 downto 0);
@@ -218,7 +200,6 @@ architecture Behavioral of system is
 	signal bank2:				std_logic_vector(4 downto 0); --Q
 begin	
 	
---	z80_inst: dummy_z80
 	z80_inst: T80se
 	port map(
 
@@ -307,7 +288,6 @@ begin
 		A				=> A(13 downto 0),
 		D_out			=> boot_rom_D_out);
 	
---	spi_inst: dummy_spi
 	spi_inst: spi
 	port map (
 		clk			=> clk_cpu,
@@ -321,20 +301,6 @@ begin
 		sclk			=> spi_sclk,
 		miso			=> spi_do,
 		mosi			=> spi_di);
-
-	uart_tx_inst: uart_tx
-	port map (
-		clk			=> clk_cpu,
-		WR_n			=> uart_WR_n,
-		D_in			=> D_in,
-		serial_out	=> tx,
-		ready			=> uart_D_out(0));
-	
-	uart_D_out(7 downto 1) <= (others=>'0');
-	
-	
-	
-	
 	
 	-- glue logic
 
@@ -354,8 +320,6 @@ begin
 
 	spi_WR_n <= bootloader or WR_n when io_n='0' and A(7 downto 5)="110" else '1';
 
-	uart_WR_n<= bootloader or WR_n when io_n='0' and A(7 downto 5)="111" else '1';
-	
 	ram_WR_n <= WR_n when io_n='1' and A(15 downto 14)="11" else '1';
 	
 	rom_WR_n <= bootloader or WR_n when io_n='1' and A(15 downto 14)="10" else '1';
@@ -378,14 +342,14 @@ begin
 	
 	irom_D_out <=	boot_rom_D_out when bootloader='0' and A(15 downto 14)="00" else rom_D_out;
 	
-	process (io_n,A,spi_D_out,uart_D_out,vdp_D_out,vdp_D_out,io_D_out,irom_D_out,irom_D_out,irom_D_out,ram_D_out)
+	process (io_n,A,spi_D_out,vdp_D_out,vdp_D_out,io_D_out,irom_D_out,irom_D_out,irom_D_out,ram_D_out)
 	begin
 		if io_n='0' then
 			case A(7 downto 5) is
 			when "000" =>
 				D_out <= spi_D_out; 
 			when "001" =>
-				D_out <= uart_D_out;
+				D_out <= "00000000";
 			when "110"|"111" =>
 				D_out <= io_D_out;
 			when others =>
@@ -399,7 +363,6 @@ begin
 			end if;
 		end if;
 	end process;
-				
 				
 	-- external ram control
 	
@@ -443,4 +406,3 @@ begin
 	rom_D_out<= ram_d(7 downto 0); --Q
 
 end Behavioral;
-

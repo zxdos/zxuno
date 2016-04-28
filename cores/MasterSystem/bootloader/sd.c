@@ -79,7 +79,6 @@ UBYTE spi_receive_byte()
 }
 
 
-
 UBYTE sd_wait_r1()
 {
 	BYTE r,timeout;
@@ -139,6 +138,24 @@ UBYTE sd_cmd0()
 	return r;
 }
 
+UBYTE sd_cmd1() //MMC
+{
+	BYTE r;
+	spi_delay();
+	sd_wait_ready();
+
+	spi_send_byte(0x41);
+	spi_send_byte(0x00);
+	spi_send_byte(0x00);
+	spi_send_byte(0x00);
+	spi_send_byte(0x00);
+	spi_send_byte(0xFF);
+
+	r = sd_wait_r1();
+
+	return r;
+}
+
 UBYTE sd_cmd8()
 {
 	BYTE r;
@@ -178,6 +195,13 @@ UBYTE sd_acmd41(UBYTE byte0)
 	spi_send_byte(0xff);
 
 	r = sd_wait_r1();
+
+#ifdef DEBUG_CMD
+	console_gotoxy(0,2);
+	console_puts("A41R1 = "); //q debug
+	console_print_byte(r); //q debug
+#endif	
+	
 	if (r>1) {
 	#ifdef DEBUG_SD
 		debug_puts("cmd55 failed:");
@@ -197,6 +221,12 @@ UBYTE sd_acmd41(UBYTE byte0)
 	spi_send_byte(0xff);
 
 	r = sd_wait_r1();
+
+#ifdef DEBUG_CMD
+console_gotoxy(12,2);
+console_puts("A41R2 = "); //q debug
+console_print_byte(r); //q debug
+#endif	
 
 	spi_delay();
 	spi_delay();
@@ -224,21 +254,26 @@ UBYTE sd_cmd58()
 
 	r = sd_wait_r1();
 
+#ifdef DEBUG_CMD
+	console_gotoxy(0,3);
+	console_puts("58R1 = "); //q debug
+	console_print_byte(r); //q debug
+#endif
+
 	r58 =  spi_receive_byte();
 
-	if (r58==0xc0) 		// Distingue entre SDHC y SD
+#ifdef DEBUG_CMD	
+	console_puts(" - 58R2 = "); //q debug
+	console_print_byte(r58); //q debug
+	console_puts("\n");
+#endif
+
+	if (r58==0xc0) //Q
 		card_SDHC(1);
 	else
 		card_SDHC(0);
 
-#ifdef DEBUG_SD
-	console_print_byte(r58); //q debug
-	console_puts(" - card_type = ")
-	console_print_byte(card_type[0]); //q debug
-	console_puts("\n")
-#endif	
-
-	spi_delay(); 
+	spi_delay(); // if &0xc0==0xc0 => SDHC
 	spi_delay();
 	spi_delay();
 	spi_delay();
@@ -295,6 +330,7 @@ int sd_init()
 			timeout = timeout-1;
 		}
 
+		// read OCR   //Q MOD for SDHC
 		if (sd_cmd58()!=0) {
 			spi_deassert_cs();
 			return FALSE;
@@ -316,12 +352,15 @@ int sd_init()
 				timeout = timeout-1;
 			}
 		} else {
-			// MM Card : fail
-#ifdef DEBUG_SD
-			debug_puts("MMC\n");
-#endif
-			spi_deassert_cs();
-			return FALSE;
+			// MMC Card : probamos inicializar con CMD1
+		timeout = 0xff;
+			while (sd_cmd1()!=0) {
+				if (timeout==0) {
+					spi_deassert_cs();
+					return FALSE;
+				} 
+			}
+
 		}
 	}
 
@@ -333,6 +372,12 @@ int sd_init()
 /* loads $200 bytes from spi */
 void load_data(UBYTE *target)
 {
+/*
+	int i;
+	for (i=0; i<0x200; i++) {
+		*target++ = spi_receive_byte();
+	}
+*/
 	#asm
 	ld	hl, 2
 	add	hl, sp
@@ -363,7 +408,7 @@ int sd_load_sector(UBYTE* target, DWORD sector)
 	BYTE r;
 	BYTE timeout;
 
-	address = sector<<9; //Q SD no HC = byte address
+	address = sector<<9; //SD no HD = byte address
 	if (card_type[0] == 1)
 		address = sector; //Q SDHC = block addres 
 

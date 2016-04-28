@@ -6,6 +6,7 @@ CFLAGS = +sms #-DDEBUG #-DDEBUG_FAT
 C_FILES=main.c console.c debug.c sd.c fat.c
 OBJECT_FILES=$(C_FILES:%.c=%.o)
 
+#PATH_EMU=/home/ben/prog/JSMS
 PATH_EMU=/home/backup/workspace/JSMS
 EMU=java -cp $(PATH_EMU)/bin/ org.jsms.awt.SwingJsms
 
@@ -20,6 +21,8 @@ vram.mem: font.mem
 
 font.mem: font.bin
 	srec_cat font.bin -binary -offset 0x8400 -line_length 59 -o font.mem -vmem 8
+
+
 
 
 boot.o: $(OBJECT_FILES)
@@ -43,6 +46,8 @@ boot.sms: boot.o
 
 vram.bin: vram.mem
 	srec_cat vram.mem -vmem -offset -0x8000 -fill 0 0 0x4000 -o vram.bin -binary
+
+
 
 
 clean:

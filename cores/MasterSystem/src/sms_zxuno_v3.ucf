@@ -1,0 +1,69 @@
+#UCF para el ZX-UNO
+
+NET CLK      LOC="P55"  | IOSTANDARD=LVCMOS33 ;               # CLK
+
+NET "led"			LOC="P10" | IOSTANDARD=LVCMOS33;
+
+NET "j1_tr"			LOC="P39"  | IOSTANDARD=LVCMOS33 | PULLUP;
+NET "j1_tl"			LOC="P2"  	| IOSTANDARD=LVCMOS33 | PULLUP;
+NET "j1_right"		LOC="P7"  	| IOSTANDARD=LVCMOS33 | PULLUP;
+NET "j1_left"		LOC="P6"  	| IOSTANDARD=LVCMOS33 | PULLUP;
+NET "j1_down"		LOC="P5"  	| IOSTANDARD=LVCMOS33 | PULLUP;
+NET "j1_up"			LOC="P1"  | IOSTANDARD=LVCMOS33 | PULLUP;
+
+NET "vsync"			LOC="P85"  | IOSTANDARD=LVCMOS33;                                
+NET "hsync"			LOC="P87"  | IOSTANDARD=LVCMOS33;                                
+
+NET "green(0)"		LOC="P82"  | IOSTANDARD=LVCMOS33;                                
+NET "red(0)"		LOC="P88"  | IOSTANDARD=LVCMOS33;                               
+NET "blue(0)"		LOC="P79"  | IOSTANDARD=LVCMOS33;                               
+
+NET "green(1)"		LOC="P83"  | IOSTANDARD=LVCMOS33;                                
+NET "red(1)"		LOC="P92"  | IOSTANDARD=LVCMOS33;                                
+NET "blue(1)"		LOC="P80"  | IOSTANDARD=LVCMOS33;                                
+
+NET "green(2)"		LOC="P84"  | IOSTANDARD=LVCMOS33;                               
+NET "red(2)"		LOC="P93"  | IOSTANDARD=LVCMOS33;                              
+NET "blue(2)"		LOC="P81"  | IOSTANDARD=LVCMOS33;                                
+                               
+NET "spi_do"		LOC="P78"  | IOSTANDARD=LVCMOS33 | DRIVE=8 | SLEW=FAST;                                # B1
+NET "spi_sclk"		LOC="P75"  | IOSTANDARD=LVCMOS33 | DRIVE=8 | SLEW=FAST;                                # B2
+NET "spi_di"		LOC="P74"  | IOSTANDARD=LVCMOS33 | DRIVE=8 | SLEW=FAST;                                # B3
+NET "spi_cs_n"		LOC="P59"  | IOSTANDARD=LVCMOS33 | DRIVE=8 | SLEW=FAST;                                # B4
+
+NET "audio_l"		LOC="P8"   | IOSTANDARD=LVCMOS33;                               
+NET "audio_r"		LOC="P9"   | IOSTANDARD=LVCMOS33;                               
+
+NET ram_a(0)  LOC="P143"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR0
+NET ram_a(1)  LOC="P142"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR1
+NET ram_a(2)  LOC="P141"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR2
+NET ram_a(3)  LOC="P140"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR3
+NET ram_a(4)  LOC="P139"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR4
+NET ram_a(5)  LOC="P104"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR5
+NET ram_a(6)  LOC="P102"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR6
+NET ram_a(7)  LOC="P101"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR7
+NET ram_a(8)  LOC="P100"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR8
+NET ram_a(9)  LOC="P99"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR9
+NET ram_a(10) LOC="P112"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR10
+NET ram_a(11) LOC="P114"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR11
+NET ram_a(12) LOC="P115"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR12
+NET ram_a(13) LOC="P116"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR13
+NET ram_a(14) LOC="P117"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR14
+NET ram_a(15) LOC="P131"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR15
+NET ram_a(16) LOC="P133"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR16
+NET ram_a(17) LOC="P134"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR17
+NET ram_a(18) LOC="P137"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # ADDR18
+
+NET ram_d(0)  LOC="P132"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA0
+NET ram_d(1)  LOC="P126"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA1
+NET ram_d(2)  LOC="P123"  	| IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA2
+NET ram_d(3)  LOC="P120"    | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA3
+NET ram_d(4)  LOC="P119"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA4
+NET ram_d(5)  LOC="P121"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA5
+NET ram_d(6)  LOC="P124"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA6
+NET ram_d(7)  LOC="P127"   | IOSTANDARD=LVCMOS33 | SLEW=FAST;                                # DATA7
+
+NET ram_WE_n  LOC="P118" | IOSTANDARD=LVCMOS33 | SLEW=FAST;                    # nWE
+
+NET NTSC            LOC = "P67" | IOSTANDARD = LVCMOS33;
+NET PAL             LOC = "P66" | IOSTANDARD = LVCMOS33;

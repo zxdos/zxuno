@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity sms_vga is
+entity sms_rgb is
 	port (
 		clk:			in		STD_LOGIC;
 		
@@ -37,9 +37,9 @@ entity sms_vga is
       NTSC              : out   std_logic; --Q
       PAL               : out   std_logic --Q		
 		);
-end sms_vga;
+end sms_rgb;
 
-architecture Behavioral of sms_vga is
+architecture Behavioral of sms_rgb is
 
 	component clock is
    port (
@@ -88,24 +88,26 @@ architecture Behavioral of sms_vga is
 );
 	end component;
 	
-	component vga_video is
+	component rgb_video is
 	port (
 		clk16:			in  std_logic;
+		clk8:				in  std_logic; --Q
 		x: 				out unsigned(8 downto 0);
-		y:				out unsigned(7 downto 0);
+		y:					out unsigned(7 downto 0);
 		vblank:			out std_logic;
 		hblank:			out std_logic;
 		color:			in  std_logic_vector(5 downto 0);
 		hsync:			out std_logic;
 		vsync:			out std_logic;
-		red:			out std_logic_vector(1 downto 0);
+		red:				out std_logic_vector(1 downto 0);
 		green:			out std_logic_vector(1 downto 0);
-		blue:			out std_logic_vector(1 downto 0)
+		blue:				out std_logic_vector(1 downto 0)
 );
 	end component;
 	
 	signal clk_cpu:			std_logic;
 	signal clk16:				std_logic;
+	signal clk8:				std_logic;
 	
 	signal x:					unsigned(8 downto 0);
 	signal y:					unsigned(7 downto 0);
@@ -120,23 +122,24 @@ begin
 
 	clock_inst: clock
 	port map (
-		clk_in			=> clk,
-		clk_cpu			=> clk_cpu,
+		clk_in		=> clk,
+		clk_cpu		=> clk_cpu,
 		clk16			=> clk16,
-		clk32			=> open, 
+		clk32			=> clk8, --clk32 => open
 		clk64			=> open);
 		
-	video_inst: vga_video
+	video_inst: rgb_video
 	port map (
 		clk16			=> clk16, 
+		clk8			=> clk8, --Q
 		x	 			=> x,
 		y				=> y,
-		vblank			=> vblank,
-		hblank			=> hblank,
+		vblank		=> vblank,
+		hblank		=> hblank,
 		color			=> color,		
 		hsync			=> hsync,
 		vsync			=> vsync,
-		red				=> red(2 downto 1), --Q
+		red			=> red(2 downto 1), --Q
 		green			=> green(2 downto 1), --Q
 		blue			=> blue(2 downto 1) --Q
 	);
@@ -148,21 +151,21 @@ begin
 	system_inst: system
 	port map (
 		clk_cpu		=> clk_cpu, --clk_cpu
-		clk_vdp		=> clk16,	--clk16
+		clk_vdp		=> clk8,	--clk16
 		
 		ram_we_n		=> ram_we_n,
 		ram_a			=> ram_a,
 		ram_d			=> ram_d,
 
 		j1_up			=> j1_up,
-		j1_down			=> j1_down,
-		j1_left			=> j1_left,
+		j1_down		=> j1_down,
+		j1_left		=> j1_left,
 		j1_right		=> j1_right,
 		j1_tl			=> j1_tl,
 		j1_tr			=> j1_tr,
 		j2_up			=> '1',
-		j2_down			=> '1',
-		j2_left			=> '1',
+		j2_down		=> '1',
+		j2_left		=> '1',
 		j2_right		=> '1',
 		j2_tl			=> '1',
 		j2_tr			=> j2_tr,
@@ -171,14 +174,14 @@ begin
 
 		x				=> x,
 		y				=> y,
-		vblank			=> vblank,
-		hblank			=> hblank,
+		vblank		=> vblank,
+		hblank		=> hblank,
 		color			=> color,
 		audio			=> audio,
 
-		spi_do			=> spi_do,
+		spi_do		=> spi_do,
 		spi_sclk		=> spi_sclk,
-		spi_di			=> spi_di,
+		spi_di		=> spi_di,
 		spi_cs_n		=> spi_cs_n
 		);
 	
@@ -188,6 +191,6 @@ begin
 	audio_r <= audio;
 	
 	NTSC <= '0';
-	PAL <= '0';	
+	PAL <= '1';	
 	
 end Behavioral;
