@@ -309,6 +309,14 @@ begin
                   when KEY_KP6      => joy(0) <= pressed; -- dato entregado por el joystick: derecha
                   when KEY_KP8      => joy(3) <= pressed; -- dato entregado por el joystick: arriba
                   when KEY_KP5      => joy(2) <= pressed; -- dato entregado por el joystick: abajo
+                  when KEY_KP7      => joy(1) <= pressed; 
+                                       joy(3) <= pressed; -- dato entregado por el joystick: arriba izquierda
+                  when KEY_KP9      => joy(0) <= pressed;
+                                       joy(3) <= pressed; -- dato entregado por el joystick: arriba derecha
+                  when KEY_KP1      => joy(1) <= pressed;
+                                       joy(2) <= pressed; -- dato entregado por el joystick: abajo izquierda
+                  when KEY_KP3      => joy(0) <= pressed;
+                                       joy(2) <= pressed; -- dato entregado por el joystick: abajo derecha
                   when others=> null;
                 end case;
               else -- process extended keys

@@ -1,30 +1,6 @@
-xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.syr" 
+xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test16/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test16/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test16/tld_zxuno.syr" 
 ngdbuild -filter "iseconfig/filter.filter" -intstyle ise -dd _ngo -nt timestamp -uc pines_zxuno.ucf -p xc6slx9-tqg144-3 tld_zxuno.ngc tld_zxuno.ngd  
 map -filter "iseconfig/filter.filter" -intstyle ise -p xc6slx9-tqg144-3 -w -ol high -xe n -t 1 -xt 0 -register_duplication off -global_opt speed -equivalent_register_removal on -ir off -pr off -lc off -power off -o tld_zxuno_map.ncd tld_zxuno.ngd tld_zxuno.pcf 
-par -filter "iseconfig/filter.filter" -w -intstyle ise -ol high tld_zxuno_map.ncd tld_zxuno.ncd tld_zxuno.pcf 
-trce -filter A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml tld_zxuno.twx tld_zxuno.ncd -o tld_zxuno.twr tld_zxuno.pcf -ucf pines_zxuno.ucf 
-bitgen -filter "iseconfig/filter.filter" -intstyle ise -f tld_zxuno.ut tld_zxuno.ncd 
-xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.syr" 
+xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test16/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test16/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test16/tld_zxuno.syr" 
 ngdbuild -filter "iseconfig/filter.filter" -intstyle ise -dd _ngo -nt timestamp -uc pines_zxuno.ucf -p xc6slx9-tqg144-3 tld_zxuno.ngc tld_zxuno.ngd  
 map -filter "iseconfig/filter.filter" -intstyle ise -p xc6slx9-tqg144-3 -w -ol high -xe n -t 1 -xt 0 -register_duplication off -global_opt speed -equivalent_register_removal on -ir off -pr off -lc off -power off -o tld_zxuno_map.ncd tld_zxuno.ngd tld_zxuno.pcf 
-par -filter "iseconfig/filter.filter" -w -intstyle ise -ol high tld_zxuno_map.ncd tld_zxuno.ncd tld_zxuno.pcf 
-trce -filter A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml tld_zxuno.twx tld_zxuno.ncd -o tld_zxuno.twr tld_zxuno.pcf -ucf pines_zxuno.ucf 
-bitgen -filter "iseconfig/filter.filter" -intstyle ise -f tld_zxuno.ut tld_zxuno.ncd 
-xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.syr" 
-ngdbuild -filter "iseconfig/filter.filter" -intstyle ise -dd _ngo -nt timestamp -uc pines_zxuno.ucf -p xc6slx9-tqg144-3 tld_zxuno.ngc tld_zxuno.ngd  
-map -filter "iseconfig/filter.filter" -intstyle ise -p xc6slx9-tqg144-3 -w -ol high -xe n -t 1 -xt 0 -register_duplication off -global_opt speed -equivalent_register_removal on -ir off -pr off -lc off -power off -o tld_zxuno_map.ncd tld_zxuno.ngd tld_zxuno.pcf 
-par -filter "iseconfig/filter.filter" -w -intstyle ise -ol high tld_zxuno_map.ncd tld_zxuno.ncd tld_zxuno.pcf 
-trce -filter A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml tld_zxuno.twx tld_zxuno.ncd -o tld_zxuno.twr tld_zxuno.pcf -ucf pines_zxuno.ucf 
-bitgen -filter "iseconfig/filter.filter" -intstyle ise -f tld_zxuno.ut tld_zxuno.ncd 
-xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.syr" 
-ngdbuild -filter "iseconfig/filter.filter" -intstyle ise -dd _ngo -nt timestamp -uc pines_zxuno.ucf -p xc6slx9-tqg144-3 tld_zxuno.ngc tld_zxuno.ngd  
-map -filter "iseconfig/filter.filter" -intstyle ise -p xc6slx9-tqg144-3 -w -ol high -xe n -t 1 -xt 0 -register_duplication off -global_opt speed -equivalent_register_removal on -ir off -pr off -lc off -power off -o tld_zxuno_map.ncd tld_zxuno.ngd tld_zxuno.pcf 
-par -filter "iseconfig/filter.filter" -w -intstyle ise -ol high tld_zxuno_map.ncd tld_zxuno.ncd tld_zxuno.pcf 
-trce -filter A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml tld_zxuno.twx tld_zxuno.ncd -o tld_zxuno.twr tld_zxuno.pcf -ucf pines_zxuno.ucf 
-bitgen -filter "iseconfig/filter.filter" -intstyle ise -f tld_zxuno.ut tld_zxuno.ncd 
-xst -intstyle ise -filter "A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter" -ifn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.xst" -ofn "A:/zxuno/cores/spectrum_v2_spartan6/test14/tld_zxuno.syr" 
-ngdbuild -filter "iseconfig/filter.filter" -intstyle ise -dd _ngo -nt timestamp -uc pines_zxuno.ucf -p xc6slx9-tqg144-3 tld_zxuno.ngc tld_zxuno.ngd  
-map -filter "iseconfig/filter.filter" -intstyle ise -p xc6slx9-tqg144-3 -w -ol high -xe n -t 1 -xt 0 -register_duplication off -global_opt speed -equivalent_register_removal on -ir off -pr off -lc off -power off -o tld_zxuno_map.ncd tld_zxuno.ngd tld_zxuno.pcf 
-par -filter "iseconfig/filter.filter" -w -intstyle ise -ol high tld_zxuno_map.ncd tld_zxuno.ncd tld_zxuno.pcf 
-trce -filter A:/zxuno/cores/spectrum_v2_spartan6/test14/iseconfig/filter.filter -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml tld_zxuno.twx tld_zxuno.ncd -o tld_zxuno.twr tld_zxuno.pcf -ucf pines_zxuno.ucf 
-bitgen -filter "iseconfig/filter.filter" -intstyle ise -f tld_zxuno.ut tld_zxuno.ncd 

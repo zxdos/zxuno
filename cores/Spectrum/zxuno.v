@@ -31,8 +31,8 @@ module zxuno (
     output wire [2:0] g,
     output wire [2:0] b,
     output wire csync,
-    input wire clkps2,
-    input wire dataps2,
+    inout wire clkps2,
+    inout wire dataps2,
     input wire ear,
     output wire audio_out,
     
@@ -88,6 +88,7 @@ module zxuno (
    // Señales de acceso a registro de direcciones ZX-Uno
    wire [7:0] zxuno_addr_to_cpu;  // al bus de datos de entrada del Z80
    wire [7:0] zxuno_addr;   // direccion de registro actual
+   wire regaddr_changed;    // indica que se ha escrito un nuevo valor en el registro de direcciones
    wire oe_n_zxunoaddr;     // el dato en el bus de entrada del Z80 es válido
    wire zxuno_regrd;     // Acceso de lectura en el puerto de datos de ZX-Uno
    wire zxuno_regwr;     // Acceso de escritura en el puerto de datos del ZX-Uno
@@ -108,19 +109,32 @@ module zxuno (
    wire [4:0] kbdcol;
    wire [7:0] kbdrow;
    wire mrst_n,rst_n;  // los dos resets suministrados por el teclado
-   wire [7:0] scancode;  // scancode original desde el teclado PC
-   wire read_scancode = (zxuno_addr==8'h04 && zxuno_regrd);
+   wire [7:0] scancode_dout;  // scancode original desde el teclado PC
+   wire oe_n_scancode;
+   wire [7:0] keymap_dout;
+   wire oe_n_keymap;
+   wire [7:0] kbstatus_dout;
+   wire oe_n_kbstatus;
    
-   // Interfaz kempston
+   // Interfaz joystick configurable
+   wire oe_n_joystick;
    wire [4:0] kbd_joy;
-   wire [4:0] db9_joy = {~joyfire, ~joyup, ~joydown, ~joyleft, ~joyright};
-   wire oe_n_kempston = !(!iorq_n && !rd_n && cpuaddr[7:0]==8'd31);
+   wire [7:0] joystick_dout;   
+   wire [4:0] kbdcol_to_ula;
    
    // Configuración ULA
    wire timming_ula;
    wire issue2_keyboard;
    wire disable_contention;
    wire access_to_screen;
+
+   // CoreID
+   wire oe_n_coreid;
+   wire [7:0] coreid_dout;
+   
+   // Scratch register
+   wire oe_n_scratch;
+   wire [7:0] scratch_dout;
    
    assign kbdrow = cpuaddr[15:8];  // las filas del teclado son A8-A15 de la CPU
 
@@ -128,10 +142,14 @@ module zxuno (
    // conectados a ella.
    assign cpudin = (oe_n_romyram==1'b0)?        memory_dout :
                    (oe_n_ay==1'b0)?             ay_dout :
-                   (oe_n_kempston==1'b0)?       {3'b000,(kbd_joy/* | db9_joy*/)} :
+                   (oe_n_joystick==1'b0)?       joystick_dout :
                    (oe_n_zxunoaddr==1'b0)?      zxuno_addr_to_cpu :
                    (oe_n_spi==1'b0)?            spi_dout :
-                   (read_scancode==1'b1)?       scancode :
+                   (oe_n_scancode==1'b0)?       scancode_dout :
+                   (oe_n_kbstatus==1'b0)?       kbstatus_dout :
+                   (oe_n_coreid==1'b0)?         coreid_dout :
+                   (oe_n_keymap==1'b0)?         keymap_dout :
+                   (oe_n_scratch==1'b0)?        scratch_dout :
                                                 ula_dout;
 
    tv80n_wrapper el_z80 (
@@ -185,15 +203,15 @@ module zxuno (
 	 
     // I/O ports
 	 .ear(ear),
-    .mic(mic),
-    .spk(spk),
-	 .kbd(kbdcol),
-    .clkay(clkay),
-    .clkdac(clkdac),
-    .clkkbd(clkkbd),
-    .issue2_keyboard(issue2_keyboard),
-    .timming(timming_ula),
-    .disable_contention(disable_contention),
+     .mic(mic),
+     .spk(spk),
+	 .kbd(kbdcol_to_ula),
+     .clkay(clkay),
+     .clkdac(clkdac),
+     .clkkbd(clkkbd),
+     .issue2_keyboard(issue2_keyboard),
+     .timming(timming_ula),
+     .disable_contention(disable_contention),
 
     // Video
 	 .r(r),
@@ -204,8 +222,7 @@ module zxuno (
 
    zxunoregs addr_reg_zxuno (
       .clk(clk7),
-      .rst_n(rst_n),
-      .mrst_n(mrst_n & power_on_reset_n),
+      .rst_n(rst_n & mrst_n & power_on_reset_n),
       .a(cpuaddr),
       .iorq_n(iorq_n),
       .rd_n(rd_n),
@@ -215,7 +232,8 @@ module zxuno (
       .oe_n(oe_n_zxunoaddr),
       .addr(zxuno_addr),
       .read_from_reg(zxuno_regrd),
-      .write_to_reg(zxuno_regwr)
+      .write_to_reg(zxuno_regwr),
+      .regaddr_changed(regaddr_changed)
    );
 
    flash_and_sd cacharros_con_spi (
@@ -283,18 +301,86 @@ module zxuno (
       .sram_we_n(sram_we_n)
    );
 
-    ps2k el_teclado (
-      .clk(clkkbd),
-      .ps2clk(clkps2),
-      .ps2data(dataps2),
+//    ps2k el_teclado (
+//      .clk(clkkbd),
+//      .ps2clk(clkps2),
+//      .ps2data(dataps2),
+//      .rows(kbdrow),
+//      .cols(kbdcol),
+//      .joy(kbd_joy), // Implementación joystick kempston en teclado numerico
+//      .scancode(scancode),  // El scancode original desde el teclado
+//      .rst(rst_n),   // esto son salidas, no entradas
+//      .nmi(nmi_n),   // Señales de reset y NMI
+//      .mrst(mrst_n)  // generadas por pulsaciones especiales del teclado
+//      );
+
+    ps2_keyb el_teclado (
+      .clk(clk),
+      .clkps2(clkps2),
+      .dataps2(dataps2),
       .rows(kbdrow),
       .cols(kbdcol),
       .joy(kbd_joy), // Implementación joystick kempston en teclado numerico
-      .scancode(scancode),  // El scancode original desde el teclado
-      .rst(rst_n),   // esto son salidas, no entradas
-      .nmi(nmi_n),   // Señales de reset y NMI
-      .mrst(mrst_n)  // generadas por pulsaciones especiales del teclado
+      .rst_out_n(rst_n),   // esto son salidas, no entradas
+      .nmi_out_n(nmi_n),   // Señales de reset y NMI
+      .mrst_out_n(mrst_n),  // generadas por pulsaciones especiales del teclado
+      //----------------------------
+      .zxuno_addr(zxuno_addr),
+      .zxuno_regrd(zxuno_regrd),
+      .zxuno_regwr(zxuno_regwr),
+      .regaddr_changed(regaddr_changed),
+      .din(cpudout),
+      .keymap_dout(keymap_dout),
+      .oe_n_keymap(oe_n_keymap),
+      .scancode_dout(scancode_dout),
+      .oe_n_scancode(oe_n_scancode),
+      .kbstatus_dout(kbstatus_dout),
+      .oe_n_kbstatus(oe_n_kbstatus)
       );
+
+
+    joystick_protocols los_joysticks (
+        .clk(clk),
+        //-- cpu interface
+        .a(cpuaddr),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .din(cpudout),
+        .dout(joystick_dout),
+        .oe_n(oe_n_joystick),
+        //-- interface with ZXUNO reg bank
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .zxuno_regwr(zxuno_regwr),
+        //-- actual joystick and keyboard signals
+        .kbdjoy_in(kbd_joy),
+        .db9joy_in({joyfire, joyup, joydown, joyleft, joyright}),
+        .kbdcol_in(kbdcol),
+        .kbdcol_out(kbdcol_to_ula),
+        .vertical_retrace_int_n(int_n) // this is used as base clock for autofire
+    );
+
+    coreid identificacion_del_core (
+        .clk(clk),
+        .rst_n(rst_n & mrst_n & power_on_reset_n),
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .regaddr_changed(regaddr_changed),
+        .dout(coreid_dout),
+        .oe_n(oe_n_coreid)
+    );
+
+    scratch_register scratch (
+        .clk(clk),
+        .poweron_rst_n(power_on_reset_n),
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .zxuno_regwr(zxuno_regwr),
+        .din(cpudout),
+        .dout(scratch_dout),
+        .oe_n(oe_n_scratch)
+    );
+
 
 ///////////////////////////////////
 // AY-3-8912 SOUND

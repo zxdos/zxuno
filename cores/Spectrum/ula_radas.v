@@ -85,7 +85,7 @@ module ula_radas (
 
     assign clkdac = clk7;
     assign clkay = hc[0];
-    assign clkkbd = hc[4];
+    assign clkkbd = clk7;  /* hc[4] */
 
 	 pal_sync_generator_sinclair syncs (
     .clk(clk7),

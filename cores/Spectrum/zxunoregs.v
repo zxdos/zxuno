@@ -23,7 +23,6 @@
 module zxunoregs (
    input wire clk,
    input wire rst_n,
-   input wire mrst_n,
    input wire [15:0] a,
    input wire iorq_n,
    input wire rd_n,
@@ -33,7 +32,8 @@ module zxunoregs (
    output reg oe_n,
    output wire [7:0] addr,
    output wire read_from_reg,
-   output wire write_to_reg
+   output wire write_to_reg,
+   output wire regaddr_changed
    );
    
    parameter
@@ -43,12 +43,20 @@ module zxunoregs (
 // Manages register addr ($00 - $FF)   
    reg [7:0] raddr = 8'h00;
    assign addr = raddr;
+   reg rregaddr_changed = 1'b0;
+   assign regaddr_changed = rregaddr_changed;
    
    always @(posedge clk) begin
-      if (!rst_n)
+      if (!rst_n) begin
          raddr <= 8'h00;
-      else if (!iorq_n && a==IOADDR && !wr_n)
+         rregaddr_changed <= 1'b1;
+      end
+      else if (!iorq_n && a==IOADDR && !wr_n) begin
          raddr <= din;
+         rregaddr_changed <= 1'b1;
+      end
+      else
+         rregaddr_changed <= 1'b0;
    end
     
    always @* begin

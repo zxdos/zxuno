@@ -37,7 +37,7 @@ run
 -rom_style Auto
 -auto_bram_packing NO
 -resource_sharing NO
--async_to_sync NO
+-async_to_sync YES
 -shreg_min_size 2
 -use_dsp48 auto
 -iobuf YES
