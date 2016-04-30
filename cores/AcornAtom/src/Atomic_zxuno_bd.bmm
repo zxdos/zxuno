@@ -1,7 +1,7 @@
 // BMM LOC annotation file.
 //
 // Release 14.6 -  P.20131013, build 3.0.10 Apr 3, 2013
-// Copyright (c) 1995-2015 Xilinx, Inc.  All rights reserved.
+// Copyright (c) 1995-2016 Xilinx, Inc.  All rights reserved.
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,43 +20,43 @@ ADDRESS_MAP avrmap PPC405 0
 
     ADDRESS_SPACE rom_code RAMB16 [0x00000000:0x00004FFF]
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word0 RAMB16 [15:0] [0:1023] PLACED = X1Y28;
+            Inst_AVR8/PM_Inst/RAM_Word0 RAMB16 [15:0] [0:1023] PLACED = X0Y26;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word1 RAMB16 [15:0] [1024:2047] PLACED = X1Y24;
+            Inst_AVR8/PM_Inst/RAM_Word1 RAMB16 [15:0] [1024:2047] PLACED = X0Y24;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word2 RAMB16 [15:0] [2048:3071] PLACED = X1Y30;
+            Inst_AVR8/PM_Inst/RAM_Word2 RAMB16 [15:0] [2048:3071] PLACED = X0Y30;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word3 RAMB16 [15:0] [3072:4095] PLACED = X1Y26;
+            Inst_AVR8/PM_Inst/RAM_Word3 RAMB16 [15:0] [3072:4095] PLACED = X0Y28;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word4 RAMB16 [15:0] [4096:5119] PLACED = X0Y28;
+            Inst_AVR8/PM_Inst/RAM_Word4 RAMB16 [15:0] [4096:5119] PLACED = X0Y22;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word5 RAMB16 [15:0] [5120:6143] PLACED = X0Y30;
+            Inst_AVR8/PM_Inst/RAM_Word5 RAMB16 [15:0] [5120:6143] PLACED = X0Y20;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word6 RAMB16 [15:0] [6144:7167] PLACED = X1Y22;
+            Inst_AVR8/PM_Inst/RAM_Word6 RAMB16 [15:0] [6144:7167] PLACED = X1Y24;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word7 RAMB16 [15:0] [7168:8191] PLACED = X0Y26;
+            Inst_AVR8/PM_Inst/RAM_Word7 RAMB16 [15:0] [7168:8191] PLACED = X0Y18;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word8 RAMB16 [15:0] [8192:9215] PLACED = X0Y24;
+            Inst_AVR8/PM_Inst/RAM_Word8 RAMB16 [15:0] [8192:9215] PLACED = X1Y22;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            Inst_AVR8/PM_Inst/RAM_Word9 RAMB16 [15:0] [9216:10239] PLACED = X0Y22;
+            Inst_AVR8/PM_Inst/RAM_Word9 RAMB16 [15:0] [9216:10239] PLACED = X1Y20;
         END_BUS_BLOCK;
     END_ADDRESS_SPACE;
 
