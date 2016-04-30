@@ -2,8 +2,8 @@ if not exist projnav.tmp mkdir projnav.tmp
 call xst      -intstyle ise -ifn working/Atomic_top_zxuno.xst -ofn working/Atomic_top_zxuno.syr
 call :generar v2
 call :generar v3
-rem  call :generar v4
-rem  call :generar Ap
+call :generar v4
+call :generar Ap
 goto :eof
 
 :generar
