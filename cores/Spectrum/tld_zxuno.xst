@@ -1,19 +1,18 @@
-set -tmpdir "xst/projnav.tmp"
+set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn tld_zxuno.prj
--ifmt mixed
+-infer_ramb8 No
 -ofn tld_zxuno
 -ofmt NGC
--p xc6slx9-3-tqg144
+-p xc6slx9-2-tqg144
 -top tld_zxuno
 -opt_mode Speed
--opt_level 2
+-opt_level 1
 -power NO
 -iuc NO
--lso tld_zxuno.lso
--keep_hierarchy NO
--netlist_hierarchy as_optimized
+-keep_hierarchy No
+-netlist_hierarchy As_Optimized
 -rtlview Yes
 -glob_opt AllClockNets
 -read_cores YES
@@ -21,25 +20,24 @@ run
 -cross_clock_analysis NO
 -hierarchy_separator /
 -bus_delimiter <>
--case maintain
+-case Maintain
 -slice_utilization_ratio 100
 -bram_utilization_ratio 100
 -dsp_utilization_ratio 100
--lc auto
--reduce_control_sets auto
--fsm_extract YES -fsm_encoding Auto
--safe_implementation No
--fsm_style lut
+-lc Auto
+-reduce_control_sets Auto
+-fsm_extract NO
+-fsm_style LUT
 -ram_extract Yes
 -ram_style Auto
 -rom_extract Yes
 -shreg_extract YES
 -rom_style Auto
 -auto_bram_packing NO
--resource_sharing NO
+-resource_sharing YES
 -async_to_sync YES
 -shreg_min_size 2
--use_dsp48 auto
+-use_dsp48 Auto
 -iobuf YES
 -max_fanout 100000
 -bufg 16
@@ -49,6 +47,6 @@ run
 -use_clock_enable Auto
 -use_sync_set Auto
 -use_sync_reset Auto
--iob auto
+-iob Auto
 -equivalent_register_removal YES
 -slice_utilization_ratio_maxmargin 5
