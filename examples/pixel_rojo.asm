@@ -5,7 +5,7 @@
 ;; modificando directamente la memoria de vídeo.
 ;;
 ;; * Código para cargar y ejecutar en WinAPE
-;; * Detalles de implementación y retos al final del código
+;; * Explicación del ejemplo y retos al final del código
 ;;===================================================================================
 
 org &4000         ;; Direccion de memoria &4000 (16384)
