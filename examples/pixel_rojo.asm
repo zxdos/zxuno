@@ -5,32 +5,81 @@
 ;; modificando directamente la memoria de vídeo.
 ;;
 ;; * Código para cargar y ejecutar en WinAPE
-;; * Explicación del ejemplo y retos al final del código
+;; * Explicación del ejemplo, uso, ejercicios y retos después del código.
 ;;===================================================================================
 
 org &4000         ;; Direccion de memoria &4000 (16384)
                   ;; Todo el codigo se pondra a partir de ahi
 
-ld a, %10001000   ;; Cargar %10001000 en el registro A
-                  ;; %10001000 en binario, &88 en hexadecimal, 132 en decimal
-                  ;; Los dos bits del primer pixel a 1, el resto a 0. Eso
-                  ;; pone el valor binario %11 (3 en decimal) en el primer pixel.
-                  ;; Por tanto, el primer pixel tendra el color 3 (Rojo)
+ld a, %10001000   ;; Poner el valor %10001000 en el registro A (A = %10001000)
+                  ;; %10001000 es un número binario equivalente al número 132 decimal
 
-ld (&C000), a     ;; Poner contenido del registro A en la direccion 
-                  ;; &C000 de memoria (decimal 49152, binario %1100000000000000)
-
+ld (&C000), a     ;; Guardar el valor del registro A en la direccion &C000 de memoria
+                  ;; Después de esta instrucción, la posición &C000 tendrá almacenado
+                  ;; el valor %10001000, que es lo que hay ahora almacenado en A.
 
 ret               ;; Devolver el control a quien nos haya llamado
 
 ;;===================================================================================
 ;;
-;; DIRECTIVAS USADAS
+;;;;;;INSTRUCCIONES DE USO
+;;
+;;    * Ejecuta el emulador WinAPE (http://www.winape.net)
+;;    * Pulsa F3 para abrir el editor de código fuente
+;;    * Crea un nuevo fichero con File/New y copia el código de este ejemplo
+;;       - (Alternativamente, abre este fichero con File/Open)
+;;    * Pulsa F9 para ensamblar el código en la dirección &4000 de memoria
+;;    * Cierra el editor y teclea CALL &4000 en el Amstrad CPC para ejecutar
+;;
+;;    NOTAS IMPORTANTES: 
+;;
+;;       1. Cada vez que modifiques el código en el editor, deberás pulsar F9 
+;;       para ensamblar. Si no lo haces, tus cambios no se introducirán en 
+;;       la memoria del Amstrad CPC. Presta atención cuando lo hagas porque
+;;       si has cometido algún error, aparecerá indicado.
+;;
+;;       2. Cuando llenes la pantalla poniendo CALL &4000 varias veces, las
+;;       letras se desplazarán hacia arriba. En ese momento, escribe MODE 1
+;;       para limpiar la pantalla. De lo contrario, la posición de memoria 
+;;       &C000 ya no se referirá a los 4 primeros píxeles de pantalla.
+;;
+;;;;;;EJERCICIOS
+;;
+;;    1. Cambia la instrucción "ld a, %10001000" por las siguientes variates y
+;; comprueba lo que sucede con el píxel 0 de pantalla en cada caso.
+;;
+;;       * ld a, %00000000
+;;       * ld a, %00001000
+;;       * ld a, %10000000
+;;       * ld a, %10001000
+;;
+;;       - Presta atención a los 2 únicos bits que se han modificado en el 
+;;       ejercicio anterior. Esos dos bits (el bit 7 y el bit 3) son los que 
+;;       almacenan el color del píxel 0. Sólo hay 4 combinaciones para estos
+;;       2 bits: 00, 01, 10, 11. Por tanto, sólo hay 4 colores distintos.
+;;
+;;    2. Siguiendo la lógica del ejercicio 1, los bits 6 y 4 almacenan el 
+;; color del píxel 1. Modifica 4 veces el código para conseguir pintar el 
+;; píxel 1 de los 4 colores posibles, uno cada vez.
+;;
+;;    3. Haz pruebas y descubre qué 2 bits guardan el color del píxel 2,
+;; y qué otros dos guardan el color del píxel 3.
+;;
+;;;;;;RETOS
+;;
+;;    1. Pinta 2 píxeles, el 0 y el 3, de distinto color. Los píxeles
+;;       1 y 2 deben quedar del color del fondo.
+;;    2. Pinta una línea de color amarillo con los 4 primeros píxeles
+;;       de pantalla.
+;;    3. Pinta los 4 primeros píxeles de pantalla, uno de cada color.
+;;
+;;
+;;;;;;DIRECTIVAS USADAS
 ;;
 ;;    - org :DIRECCIÓN:       >> Establece el ORiGen: posición de memoria donde
 ;;                            el código de este programa se empezará a escribir
 ;;
-;; INSTRUCCIONES USADAS
+;;;;;;INSTRUCCIONES USADAS
 ;;
 ;;    - LD  A, :NÚMERO:       >> Introduce un número en el registro A (Acumulador)
 ;;                            del procesador.
@@ -41,43 +90,47 @@ ret               ;; Devolver el control a quien nos haya llamado
 ;;    - RET                   >> Devolver el control al código que nos llamó 
 ;;                            inicialmente
 ;;
-;; RETOS
+;;;;;;EXPLICACIÓN
 ;;
-;;    1. Pon el color del primer píxel de pantalla en amarillo y azul
-;;    2. Pinta 2 píxeles, el primero y el cuarto, de distinto color
-;;    3. Pinta los 4 primeros píxeles de pantalla, uno de cada color
+;;    Los monitores de Amstrad CPC se refrescan (cambian su contenido)
+;; 50 veces por segundo. Cada vez que lo hacen, leen de la memoria del
+;; ordenador qué colores deben ser pintados en cada píxel. 
 ;;
-;; USO
-;;    * Ejecuta el emulador WinAPE (http://www.winape.net)
-;;    * Pulsa F3 para abrir el editor de código fuente
-;;    * Crea un nuevo fichero con File/New y copia el código de este ejemplo
-;;       - (Alternativamente, abre este fichero con File/Open)
-;;    * Pulsa F9 para ensamblar el código en la dirección &4000 de memoria
-;;    * Cierra el editor y teclea CALL &4000 en el Amstrad CPC para ejecutar
+;;    Pintar un píxel es tan sencillo como modificar la zona de memoria
+;; donde se guarda el color que debe tener ese píxel. Esta zona depende
+;; del MODO de vídeo en que se encuentre el Amstrad CPC. En MODO 1 (el 
+;; modo por defecto) hay 320x200 píxeles y cada píxel utiliza 2 bits
+;; de memoria para almacenarse.
 ;;
-;; EXPLICACIÓN
+;;    La zona de memoria donde se almacenan todos esos colores empieza
+;; en la dirección &C000 (49152), y termina en la dirección &FFFF (66535). 
+;; Cada posición de memoria tiene 8 bits (1 byte) por lo que guarda 
+;; 4 píxeles (2 bits para cada uno). 
 ;;
-;;    Para pintar un píxel en un Amstrad CPC hay que modificar la zona de memoria 
-;; donde se guarda el color que ese píxel tiene. En MODO 1 de pantalla (el modo 
-;; por defecto del Amstrad CPC), la pantalla tiene 320x200 píxeles y cada píxel 
-;; se almacena en memoria como 2 bits. 
+;;    Por ejemplo, como hemos visto en el ejercicio, el byte de la 
+;; dirección &C000 guarda los 4 primeros píxeles de pantalla. El byte
+;; siguiente (dirección &C001) guardará los 4 siguientes, etcétera.
 ;;
-;;    La zona de memoria donde se almacenan los píxeles es la que va de la 
-;; dirección &C000 en hexadecimal (49152 en decimal) hasta &FFFF (65535). Cada 
-;; posición de memoria tiene 8 bits (1 byte) y almacena los colores para 4 píxeles.
-;; Los 8 bits tienen este aspecto:
+;;    Los bits que corresponden a cada píxel tienen un órden particular,
+;; como puede verse en el siguiente diagrama:
 ;;
-;;    8 bits, 1 Byte: [ a b c d A B C D ]   Píxel 0: %Aa   Pixel 1: %Bb
-;;                                          Píxel 2: %Cc   Píxel 3: %Dd
+;;    1 Byte, 8 bits, 4 píxeles: [########], cada # puede ser un 0 o un 1.
+;;                                76543210  <- número de bit
 ;;
-;;    Un ejemplo para entender el diagrama de arriba:
+;;       * Píxel 0, bits 3 y 7: [_###_###]
+;;       * Píxel 1, bits 2 y 6: [#_###_##]
+;;       * Píxel 2, bits 1 y 5: [##_###_#]
+;;       * Píxel 3, bits 0 y 4: [###_###_]
 ;;
-;;       La posición &C000 de memoria contiene el byte [01011011]. Así pues,
-;;       los valores de los 4 primeros píxeles son
-;;          * Píxel 0 = [0___1___] = %10 en binario (Color 2)
-;;          * Píxel 1 = [_1___0__] = %01 en binario (Color 1)
-;;          * Píxel 2 = [__0___1_] = %10 en binario (Color 2)
-;;          * Píxel 3 = [___1___1] = %11 en binario (Color 3)
-;;       Por tanto, los primeros 4 píxeles de pantalla tienen colores 2, 1, 2 y 3
+;;    Supongamos que guardamos el valor %01011011 en la posición &C000. 
+;; ¿Qué color tendrá cada píxel?
+;;
+;;       * Píxel 0, bits 3 y 7: [0###1###] = %10 = Color 2
+;;       * Píxel 1, bits 2 y 6: [#1###0##] = %01 = Color 1
+;;       * Píxel 2, bits 1 y 5: [##0###1#] = %10 = Color 2
+;;       * Píxel 3, bits 0 y 4: [###1###1] = %11 = Color 3
+;;
+;;    Es importante indicar que los bits se leen de derecha a izquierda, 
+;; y por eso [0###1###] corresponde al valor %10 en binario (2 en decimal).
 ;;       
 ;;===================================================================================
