@@ -9,7 +9,7 @@
 ;;===================================================================================
 
 org &4000         ;; Direccion de memoria &4000 (16384)
-                  ;; Todo el codigo se pondra a partir de ahi
+                  ;; Todo el codigo se guardará a partir de ahi
 
 ld a, %10001000   ;; Poner el valor %10001000 en el registro A (A = %10001000)
                   ;; %10001000 es un número binario equivalente al número 132 decimal
@@ -18,7 +18,7 @@ ld (&C000), a     ;; Guardar el valor del registro A en la direccion &C000 de me
                   ;; Después de esta instrucción, la posición &C000 tendrá almacenado
                   ;; el valor %10001000, que es lo que hay ahora almacenado en A.
 
-ret               ;; Devolver el control a quien nos haya llamado
+ret               ;; Devolver el control a quien nos haya invocado
 
 ;;===================================================================================
 ;;
@@ -45,8 +45,8 @@ ret               ;; Devolver el control a quien nos haya llamado
 ;;
 ;;;;;;EJERCICIOS
 ;;
-;;    1. Cambia la instrucción "ld a, %10001000" por las siguientes variates y
-;; comprueba lo que sucede con el píxel 0 de pantalla en cada caso.
+;;    1. Cambia la instrucción "ld a, %10001000" por las siguientes variantes
+;; y comprueba lo que sucede con el píxel 0 de pantalla en cada caso.
 ;;
 ;;       * ld a, %00000000
 ;;       * ld a, %00001000
@@ -65,14 +65,13 @@ ret               ;; Devolver el control a quien nos haya llamado
 ;;    3. Haz pruebas y descubre qué 2 bits guardan el color del píxel 2,
 ;; y qué otros dos guardan el color del píxel 3.
 ;;
-;;;;;;RETOS
+;;;;;;RETOS INICIALES
 ;;
 ;;    1. Pinta 2 píxeles, el 0 y el 3, de distinto color. Los píxeles
 ;;       1 y 2 deben quedar del color del fondo.
 ;;    2. Pinta una línea de color amarillo con los 4 primeros píxeles
 ;;       de pantalla.
 ;;    3. Pinta los 4 primeros píxeles de pantalla, uno de cada color.
-;;
 ;;
 ;;;;;;DIRECTIVAS USADAS
 ;;
@@ -84,8 +83,8 @@ ret               ;; Devolver el control a quien nos haya llamado
 ;;    - LD  A, :NÚMERO:       >> Introduce un número en el registro A (Acumulador)
 ;;                            del procesador.
 ;;
-;;    - LD (:DIRECCIÓN:), A   >> Guarda el valor del registro A en la :DIRECCIÓN: de
-;;                            memoria indicada.
+;;    - LD (:DIRECCIÓN:), A   >> Guarda el valor del registro A en la :DIRECCIÓN:
+;;                            de memoria indicada.
 ;;
 ;;    - RET                   >> Devolver el control al código que nos llamó 
 ;;                            inicialmente
@@ -133,4 +132,26 @@ ret               ;; Devolver el control a quien nos haya llamado
 ;;    Es importante indicar que los bits se leen de derecha a izquierda, 
 ;; y por eso [0###1###] corresponde al valor %10 en binario (2 en decimal).
 ;;       
+;;;;;;RETOS CREATIVOS
+;;
+;;    1. Prueba a colorear a tu gusto la primera línea de la pantalla.
+;;       Necesitarás añadir más código para ir pintando los 160 píxeles
+;;       que tiene.
+;;
+;;    2. Prueba a colorear los píxeles siguientes a la primera línea
+;;       de pantalla y observa en qué línea aparecen. 
+;;
+;;    3. Rellena toda la pantalla de un mismo color (o de varios, a tu
+;;       gusto). Recuerda que debes rellenar desde &C000 hasta &FFFF.
+;;       Observa cómo se rellena la memoria cuando ejecutes.
+;;
+;;    4. Ve rellenando las líneas de pantalla una por una y fíjate
+;;       en qué posición ocupan. Intenta hacerte un mapa o una tabla
+;;       para saber qué direcciones usar cuando quieras pintar en una
+;;       línea concreta de la pantalla.
+;;
+;;    5. Intenta hacer un pequeño dibujo (de 4x4 píxeles o de 8x8, por
+;;       ejemplo). Con esto puedes poner a prueba el mapa o tabla que 
+;;       has elaborado en el anterior reto.
+;;
 ;;===================================================================================
