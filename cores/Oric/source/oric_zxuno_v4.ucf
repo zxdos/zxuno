@@ -1,30 +1,30 @@
-# Clocks & debug
-NET "clk50mhz"        LOC="P55"  | IOSTANDARD = LVCMOS33 | PERIOD=20.0ns;
+#UCF for ZX-UNO
+NET "CLK_50"          LOC="P55"  | IOSTANDARD = LVCMOS33 | PERIOD=20.0ns;
 #NET "testled"         LOC="P10"  | IOSTANDARD = LVCMOS33;
 
 # Video output
-NET "r<2>"            LOC="P81"  | IOSTANDARD = LVCMOS33;
-NET "r<1>"            LOC="P80"  | IOSTANDARD = LVCMOS33;
-NET "r<0>"            LOC="P79"  | IOSTANDARD = LVCMOS33;
-NET "g<2>"            LOC="P84"  | IOSTANDARD = LVCMOS33;
-NET "g<1>"            LOC="P83"  | IOSTANDARD = LVCMOS33;
-NET "g<0>"            LOC="P82"  | IOSTANDARD = LVCMOS33;
-NET "b<2>"            LOC="P93"  | IOSTANDARD = LVCMOS33;
-NET "b<1>"            LOC="P92"  | IOSTANDARD = LVCMOS33;
-NET "b<0>"            LOC="P88"  | IOSTANDARD = LVCMOS33;
-NET "csync"           LOC="P87"  | IOSTANDARD = LVCMOS33;
-#NET "vsync"           LOC="P85"  | IOSTANDARD = LVCMOS33;
-NET "stdn"            LOC="P66"  | IOSTANDARD = LVCMOS33;
-NET "stdnb"           LOC="P67"  | IOSTANDARD = LVCMOS33;
+NET O_VIDEO_R(2)      LOC="P81"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_R(1)      LOC="P80"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_R(0)      LOC="P79"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_G(2)      LOC="P84"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_G(1)      LOC="P83"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_G(0)      LOC="P82"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_B(2)      LOC="P93"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_B(1)      LOC="P92"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VIDEO_B(0)      LOC="P88"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_HSYNC           LOC="P87"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_VSYNC           LOC="P85"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET O_NTSC            LOC="P66"  | IOSTANDARD = LVCMOS33;
+NET O_PAL             LOC="P67"  | IOSTANDARD = LVCMOS33;
 
-# Sound input/output
-NET "audio_out_left"  LOC="P10"  | IOSTANDARD = LVCMOS33;
-NET "audio_out_right" LOC="P9"   | IOSTANDARD = LVCMOS33;
-NET "ear"             LOC="P94"  | IOSTANDARD = LVCMOS33;
+# Audio
+NET "AUDIO_OUT"       LOC="P10"  | IOSTANDARD = LVCMOS33;
+NET "K7_TAPEOUT"      LOC="P9"   | IOSTANDARD = LVCMOS33;
+NET "K7_TAPEIN"       LOC="P94"  | IOSTANDARD = LVCMOS33; 
 
 # Keyboard and mouse
-NET "clkps2"          LOC="P99"  | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "dataps2"         LOC="P98"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "PS2CLK1"         LOC="P99"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
+NET "PS2DAT1"         LOC="P98"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
 #NET "mouseclk"        LOC="P95"  | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "mousedata"       LOC="P97"  | IOSTANDARD = LVCMOS33 | PULLUP;
 
@@ -54,7 +54,7 @@ NET "dataps2"         LOC="P98"  | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "sram_data<0>"    LOC="P132" | IOSTANDARD = LVCMOS33;
 #NET "sram_data<1>"    LOC="P127" | IOSTANDARD = LVCMOS33;
 #NET "sram_data<2>"    LOC="P124" | IOSTANDARD = LVCMOS33;
-#NET "sram_data<3>"    LOC="P123" | IOSTANDARD = LVCMOS33;
+#NET "sram_data<3>"    LOC="P123  | IOSTANDARD = LVCMOS33;
 #NET "sram_data<4>"    LOC="P115" | IOSTANDARD = LVCMOS33;
 #NET "sram_data<5>"    LOC="P117" | IOSTANDARD = LVCMOS33;
 #NET "sram_data<6>"    LOC="P119" | IOSTANDARD = LVCMOS33;
@@ -63,10 +63,10 @@ NET "dataps2"         LOC="P98"  | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "sram_we_n"       LOC="P121" | IOSTANDARD = LVCMOS33;
 
 # SPI Flash
-NET "flash_cs_n"      LOC="P38"  | IOSTANDARD = LVCMOS33;
-NET "flash_clk"       LOC="P70"  | IOSTANDARD = LVCMOS33;
-NET "flash_mosi"      LOC="P64"  | IOSTANDARD = LVCMOS33;
-NET "flash_miso"      LOC="P65"  | IOSTANDARD = LVCMOS33;
+#NET "flash_cs_n"      LOC="P38"  | IOSTANDARD = LVCMOS33;
+#NET "flash_clk"       LOC="P70"  | IOSTANDARD = LVCMOS33;
+#NET "flash_mosi"      LOC="P64"  | IOSTANDARD = LVCMOS33;
+#NET "flash_miso"      LOC="P65"  | IOSTANDARD = LVCMOS33;
 #NET "flash_ext1"      LOC="P62"  | IOSTANDARD = LVCMOS33;
 #NET "flash_ext2"      LOC="P61"  | IOSTANDARD = LVCMOS33;
 
@@ -87,5 +87,7 @@ NET "flash_miso"      LOC="P65"  | IOSTANDARD = LVCMOS33;
 
 
 
-
-
+# Switch
+NET "I_RESET"         LOC="P51"  | IOSTANDARD = LVCMOS33 | PULLDOWN;
+NET "CLK_50" TNM_NET = "CLK_50";
+TIMESPEC "TS_CLK_50" = PERIOD "CLK_50" 20 ns HIGH 50 %;
