@@ -21,7 +21,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module jupiter_ace (
+module fpga_ace (
     input wire clkram,
 	input wire clk65,
     input wire clkcpu,

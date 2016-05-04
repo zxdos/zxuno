@@ -19,7 +19,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module tld_jace_spartan6 (
+module jupiter_ace (
     input wire clk50mhz,
     input wire clkps2,
     input wire dataps2,
@@ -70,7 +70,7 @@ module tld_jace_spartan6 (
         .CLK_OUT4()         // Super CPU clock (just a test)
  );
     
-    jupiter_ace the_core (
+    fpga_ace the_core (
         .clkram(clkram),
         .clk65(clk65),
         .clkcpu(clkcpu),
