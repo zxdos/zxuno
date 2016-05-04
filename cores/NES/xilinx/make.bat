@@ -1,6 +1,6 @@
-SET machine=sms_rgb
-SET ruta_ucf=src\sms_rgb
-SET ruta_bat=..\
+SET machine=NES_ZXUNO
+SET ruta_ucf=..\src\nes
+SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat
 call %ruta_bat%generar.bat v2
 call %ruta_bat%generar.bat v3

@@ -1,6 +1,6 @@
 # Clocks & debug
 NET "clk50mhz"        LOC="P55"  | IOSTANDARD = LVCMOS33 | PERIOD=20.0ns;
-NET "testled"         LOC="P11"  | IOSTANDARD = LVCMOS33;
+#NET "testled"         LOC="P11"  | IOSTANDARD = LVCMOS33;
 
 # Video output
 NET "r<2>"            LOC="P81"  | IOSTANDARD = LVCMOS33;
