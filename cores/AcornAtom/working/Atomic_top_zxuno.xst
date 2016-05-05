@@ -1,10 +1,10 @@
-set -tmpdir "projnav.tmp"
+set -tmpdir "xst/projnav.tmp"
 set -xsthdpdir "xst"
 run
--ifn working/Atomic_top_zxuno.prj
+-ifn Atomic_top_zxuno.prj
 -ofn Atomic_top_zxuno
 -ofmt NGC
--p xc6slx9-2-tqg144
+-p xc6slx9-3-tqg144
 -top Atomic_top_zxuno
 -opt_mode Speed
 -opt_level 1

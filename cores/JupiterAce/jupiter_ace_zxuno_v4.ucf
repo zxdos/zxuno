@@ -63,10 +63,10 @@ NET "dataps2"         LOC="P98"  | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "sram_we_n"       LOC="P121" | IOSTANDARD = LVCMOS33;
 
 # SPI Flash
-NET "flash_cs_n"      LOC="P38"  | IOSTANDARD = LVCMOS33;
-NET "flash_clk"       LOC="P70"  | IOSTANDARD = LVCMOS33;
-NET "flash_mosi"      LOC="P64"  | IOSTANDARD = LVCMOS33;
-NET "flash_miso"      LOC="P65"  | IOSTANDARD = LVCMOS33;
+#NET "flash_cs_n"      LOC="P38"  | IOSTANDARD = LVCMOS33;
+#NET "flash_clk"       LOC="P70"  | IOSTANDARD = LVCMOS33;
+#NET "flash_mosi"      LOC="P64"  | IOSTANDARD = LVCMOS33;
+#NET "flash_miso"      LOC="P65"  | IOSTANDARD = LVCMOS33;
 #NET "flash_ext1"      LOC="P62"  | IOSTANDARD = LVCMOS33;
 #NET "flash_ext2"      LOC="P61"  | IOSTANDARD = LVCMOS33;
 

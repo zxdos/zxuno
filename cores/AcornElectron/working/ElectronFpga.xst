@@ -1,7 +1,7 @@
 set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
--ifn working/ElectronFpga.prj
+-ifn ElectronFpga.prj
 -ofn ElectronFpga
 -ofmt NGC
 -p xc6slx9-2-tqg144

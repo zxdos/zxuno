@@ -13,7 +13,7 @@ NET "b<2>"            LOC="P81"  | IOSTANDARD = LVCMOS33;
 NET "b<1>"            LOC="P80"  | IOSTANDARD = LVCMOS33;
 NET "b<0>"            LOC="P79"  | IOSTANDARD = LVCMOS33;
 NET "csync"           LOC="P87"  | IOSTANDARD = LVCMOS33;
-#NET "vsync"          LOC="P85"  | IOSTANDARD = LVCMOS33;
+#NET "vsync"           LOC="P85"  | IOSTANDARD = LVCMOS33;
 NET "stdn"            LOC="P67"  | IOSTANDARD = LVCMOS33;
 NET "stdnb"           LOC="P66"  | IOSTANDARD = LVCMOS33;
 
