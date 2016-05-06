@@ -58,7 +58,7 @@ ret               ;; Devolver el control a quien nos haya invocado
 ;;       almacenan el color del píxel 0. Sólo hay 4 combinaciones para estos
 ;;       2 bits: 00, 01, 10, 11. Por tanto, sólo hay 4 colores distintos.
 ;;
-;;    2. Siguiendo la lógica del ejercicio 1, los bits 6 y 4 almacenan el 
+;;    2. Siguiendo la lógica del ejercicio 1, los bits 6 y 2 almacenan el 
 ;; color del píxel 1. Modifica 4 veces el código para conseguir pintar el 
 ;; píxel 1 de los 4 colores posibles, uno cada vez.
 ;;
