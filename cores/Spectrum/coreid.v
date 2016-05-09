@@ -37,16 +37,16 @@ module coreid (
         text[i] = 8'h00;              
       text[ 0] = "T";
       text[ 1] = "2";
-      text[ 2] = "0";
+      text[ 2] = "1";
       text[ 3] = "-";
       text[ 4] = "0";
-      text[ 5] = "7";
-      text[ 6] = "1";
-      text[ 7] = "2";
+      text[ 5] = "5";
+      text[ 6] = "0";
+      text[ 7] = "5";
       text[ 8] = "2";
       text[ 9] = "0";
       text[10] = "1";
-      text[11] = "5";
+      text[11] = "6";
     end      
     
     reg [3:0] textindx = 4'h0;

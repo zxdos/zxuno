@@ -65,7 +65,7 @@ module zxuno (
     input wire joyleft,
     input wire joyright,
     input wire joyfire,
-	 
+     
     // MOUSE
     inout wire mouseclk,
     inout wire mousedata,
@@ -140,6 +140,7 @@ module zxuno (
    wire issue2_keyboard;
    wire disable_contention;
    wire access_to_screen;
+   wire doc_ext_option; // bit 7 del puerto $FF del Timex
 
    // CoreID
    wire oe_n_coreid;
@@ -218,7 +219,7 @@ module zxuno (
   );
 
    ula_radas la_ula (
-	  // Clocks
+      // Clocks
      .clk14(clk14),     // 14MHz master clock
      .clk7(clk7),
      .wssclk(wssclk),   // 5MHz WSS clock
@@ -226,15 +227,15 @@ module zxuno (
      .CPUContention(CPUContention),
      .rst_n(mrst_n & rst_n & power_on_reset_n),
 
-	 // CPU interface
-	 .a(cpuaddr),
+     // CPU interface
+     .a(cpuaddr),
      .access_to_contmem(access_to_screen),
-	 .mreq_n(mreq_n),
-	 .iorq_n(iorq_n),
-	 .rd_n(rd_n),
-	 .wr_n(wr_n),
-	 .int_n(int_n),
-	 .din(cpudout),
+     .mreq_n(mreq_n),
+     .iorq_n(iorq_n),
+     .rd_n(rd_n),
+     .wr_n(wr_n),
+     .int_n(int_n),
+     .din(cpudout),
      .dout(ula_dout),
      .rasterint_enable(rasterint_enable),
      .vretraceint_disable(vretraceint_disable),
@@ -242,23 +243,24 @@ module zxuno (
      .raster_int_in_progress(raster_int_in_progress),
 
     // VRAM interface
-	 .va(vram_addr),  // 16KB videoram
-    .vramdata(vram_dout),
-	 
+     .va(vram_addr),  // 16KB videoram, 2 pages
+     .vramdata(vram_dout),
+     
     // I/O ports
-	 .ear(ear),
-   .mic(mic),
-   .spk(spk),
-	 .kbd(kbdcol_to_ula),
-   .issue2_keyboard(issue2_keyboard),
-   .mode(timing_mode),
-   .disable_contention(disable_contention),
+     .ear(ear),
+     .mic(mic),
+     .spk(spk),
+     .kbd(kbdcol_to_ula),
+     .issue2_keyboard(issue2_keyboard),
+     .mode(timing_mode),
+     .disable_contention(disable_contention),
+     .doc_ext_option(doc_ext_option),
 
     // Video
-	 .r(r),
-	 .g(g),
-	 .b(b),
-	 .hsync(hsync),
+     .r(r),
+     .g(g),
+     .b(b),
+     .hsync(hsync),
      .vsync(vsync)
     );
 
@@ -303,7 +305,7 @@ module zxuno (
       .sd_miso(sd_miso)
    );
 
-   memory bootrom_rom_y_ram (
+   new_memory bootrom_rom_y_ram (
    // Relojes y reset
       .clk(clk),        // Reloj del sistema CLK7
       .mclk(clk),        // Reloj para el modulo de memoria de doble puerto
@@ -327,11 +329,16 @@ module zxuno (
    // Interface con la ULA
       .vramaddr(vram_addr),
       .vramdout(vram_dout),
+      .doc_ext_option(doc_ext_option),
       .issue2_keyboard_enabled(issue2_keyboard),
       .timing_mode(timing_mode),
       .disable_contention(disable_contention),
       .access_to_screen(access_to_screen),
    
+   // Interface con el bus externo (TO-DO)
+      .inhibit_rom(1'b0),
+      .din_external(8'h00),
+
    // Interface para registros ZXUNO
       .addr(zxuno_addr),
       .ior(zxuno_regrd),
@@ -518,21 +525,21 @@ module zxuno (
     .oe_n(oe_n_ay),
     .audio_out_ay1(ay1_audio),
     .audio_out_ay2(ay2_audio)
-	 );
+     );
   
 ///////////////////////////////////
 // SOUND MIXER
 ///////////////////////////////////
    // 8-bit mixer to generate different audio levels according to input sources
-	mixer audio_mix(
-		.clkdac(clk),
-		.reset(1'b0),
-		.mic(mic),
-		.spk(spk),
+    mixer audio_mix(
+        .clkdac(clk),
+        .reset(1'b0),
+        .mic(mic),
+        .spk(spk),
         .ear(ear),
         .ay1(ay1_audio),
-		.ay2(ay2_audio),
-		.audio(audio_out)
-	);
+        .ay2(ay2_audio),
+        .audio(audio_out)
+    );
 
 endmodule

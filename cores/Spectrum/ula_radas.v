@@ -57,6 +57,7 @@ module ula_radas (
     input wire [1:0] mode,
     input wire disable_contention,
     input wire access_to_contmem,
+    output wire doc_ext_option,
 
     // Video
     output wire [2:0] r,
@@ -174,16 +175,17 @@ module ula_radas (
     end
     
     // Timex config register
-    reg [5:0] TimexConfigReg = 6'h00;
+    reg [7:0] TimexConfigReg = 8'h00;
     wire PG  = TimexConfigReg[0];
     wire HCL = TimexConfigReg[1];
     wire HR  = TimexConfigReg[2];
+    assign doc_ext_option = TimexConfigReg[7];
     wire [2:0] HRInk = TimexConfigReg[5:3];
     always @(posedge clk7) begin
       if (rst_n == 1'b0)
-         TimexConfigReg <= 6'h00;
+         TimexConfigReg <= 8'h00;
       else if (TimexConfigLoad)
-         TimexConfigReg <= din[5:0];
+         TimexConfigReg <= din;
     end
     
     // Combinational logic between AttrData and AttrOutput
@@ -443,7 +445,7 @@ module ula_radas (
    // Port 0xFE
    always @(posedge clk7) begin
       if (iorq_n==1'b0 && wr_n==1'b0) begin
-         if (a[0]==1'b0) begin
+         if (a[0]==1'b0 && a[7:0]!=8'hF4) begin
             {spk,mic} <= din[4:3];
          end
       end
@@ -457,7 +459,7 @@ module ula_radas (
       PaletteLoad = 1'b0;
       WriteToPortFE = 1'b0;
       if (iorq_n==1'b0 && wr_n==1'b0) begin
-         if (a[0]==1'b0)
+         if (a[0]==1'b0 && a[7:0]!=8'hF4)
             WriteToPortFE = 1'b1;
          else if (a[7:0]==TIMEXPORT)
             TimexConfigLoad = 1'b1;
@@ -484,7 +486,7 @@ module ula_radas (
    always @* begin
       dout = 8'hFF;
       if (iorq_n==1'b0 && rd_n==1'b0) begin
-         if (a[0]==1'b0)
+         if (a[0]==1'b0 && a[7:0]!=8'hF4)
             dout = {1'b1,post_processed_ear,1'b1,kbd};
          else if (a==ULAPLUSADDR)
             dout = {1'b0,PaletteReg};

@@ -22,6 +22,7 @@
         define  scandbl_ctrl    11
         define  raster_line     12
         define  raster_ctrl     13
+        define  dev_control     14
         define  core_addr       $fc
         define  core_boot       $fd
         define  cold_boot       $fe
@@ -910,7 +911,37 @@ romsb   sub     $1e-$16
         jp      z, roms27
         sub     $6e-$1f         ; n= New Entry
         jp      nz, roms144
-        call    loadta
+        call    qloadt
+        ld      ix, cad54
+        call_prnstr
+        dec     c
+        ld      a, %01000111    ; fondo blanco tinta azul
+        ld      h, $12
+        ld      l, c
+        ld      de, $0201
+        call    window
+        ld      c, l
+        ld      hl, $0200
+        ld      b, $18
+        call    inputv
+;    push  bc
+;    push  hl
+        ld      a, (codcnt)
+        rrca
+        ret     nc
+        call    atoi
+
+        call    isbusy
+        ld      bc, $090a
+;    pop hl
+;    pop bc
+        jr      nc, romsb5
+        ld      ix, cad113
+        call_prnstr
+        call_prnstr
+        call_prnstr
+        jp      waitky
+romsb5  call    loadta
         jp      nc, roms12
         ld      hl, %00001010
 romsc   ld      (offsel), hl
@@ -937,21 +968,8 @@ romsd   dec     iyh
         jr      nz, romsc
         ei
         call    romcyb
-        ld      ix, cad54
-        call_prnstr
-        dec     c
-        ld      a, %01000111    ; fondo blanco tinta azul
-        ld      h, $12
-        ld      l, c
-        ld      de, $0201
-        call    window
-        ld      c, l
-        ld      hl, $0200
-        ld      b, $18
-        call    inputv
-        ld      a, (codcnt)
-        rrca
-        ret     nc
+
+
         call    newent
         call    atoi
         ld      (items), a
@@ -1236,6 +1254,18 @@ roms27  ld      hl, $0104
         call    window
         ld      a, (codcnt)
         jp      main13
+
+isbusy  ld      hl, indexe
+        ld      b, a
+isbus1  ld      a, (hl)         ; calculo en L el número de entradas
+        inc     l
+        inc     a
+        jr      nz, isbus1
+        ld      a, l
+        ret
+
+
+ret
 
 ;*** Upgrade Menu ***
 ;*********************
@@ -1627,8 +1657,10 @@ buub    ld      a, (de)
         inc     de
         jr      nz, beeb
         djnz    buub
-beeb    jr      z, bien
-        pop     hl
+        pop     ix
+sali    pop     bc
+        jr      desc
+beeb    pop     hl
         pop     bc
         ld      de, $0020
         add     hl, de
@@ -1639,9 +1671,6 @@ desc    pop     hl
         pop     de
         pop     bc
         ret
-bien    pop     ix
-sali    pop     bc
-        jr      desc
 
 trans   push    bc
         ld      a, (tmpbu2+$d)
@@ -2145,6 +2174,23 @@ addbl1  inc     iyl
         sub     iyl
         ret
 
+;first part of loadta
+qloadt  ld      ix, cad49
+        call    prnhel
+        call    bloq1
+        dec     c
+        dec     c
+        ld      iyl, 5
+loadt1  ld      ix, cad42
+        call_prnstr
+        dec     iyl
+        jr      nz, loadt1
+        ld      ixl, cad43 & $ff
+        call_prnstr
+        ld      ixl, cad44 & $ff
+        ld      c, b
+        call_prnstr
+
 ; -------------------------------------
 ; Prits a blank line in the actual line
 ; -------------------------------------
@@ -2199,22 +2245,7 @@ shaon   ld      a, $0f
 ; -------------------------------------
 ; Shows the window of Load from Tape
 ; -------------------------------------
-loadta  ld      ix, cad49
-        call    prnhel
-        call    bloq1
-        dec     c
-        dec     c
-        ld      iyl, 5
-loadt1  ld      ix, cad42
-        call_prnstr
-        dec     iyl
-        jr      nz, loadt1
-        ld      ixl, cad43 & $ff
-        call_prnstr
-        ld      ixl, cad44 & $ff
-        ld      c, b
-        call_prnstr
-        call    romcyb
+loadta  call    qloadt
         ld      ix, cad45
         call_prnstr
         ld      ix, tmpbuf
@@ -3204,7 +3235,7 @@ conti   di
         call    calcu
         push    hl
         pop     ix
-        ld      d, (ix+6)
+        ld      d, (ix+2)
         ld      hl, timing
         ld      a, 3
         cp      (hl)            ; timing
@@ -3269,22 +3300,16 @@ conti3  ld      de, $c000 | master_mapper
         inc     a
         cp      24
         jr      nz, conti3
-        defb    $c2
-conti35 dec     iyl
-        jr      nz, conti5
-conti4  ld      a, (ix+1)
-        ld      iyl, a
-        ld      a, (ix)
-        ld      iyh, a
-conti5  ld      a, iyh
-        inc     iyh
+conti4  ld      iyl, 8
+conti5  ld      a, (ix)
+        inc     (ix)
         call    alto slot2a
         ld      a, master_mapper
         dec     b
         out     (c), a
         inc     b
-        ld      a, (ix+2)
-        inc     (ix+2)
+        ld      a, iyl
+        inc     iyl
         out     (c), a
         ld      de, $c000
         ld      a, $40
@@ -3321,18 +3346,18 @@ conti6  in      a, (c)
         jr      z, conti6
 conti7  pop     bc
         pop     ix
-conti8  dec     (ix+3)
-        jr      nz, conti35
+conti8  dec     (ix+1)
+        jr      nz, conti5
 conti9  ld      a, 0
         dec     b
         out     (c), 0;d
         inc     b
         out     (c), a
-        ld      bc, $1ffd
-        ld      a, (ix+4)
+        dec     b
+        ld      a, dev_control
         out     (c), a
-        ld      b, $7f
-        ld      a, (ix+5)
+        inc     b
+        ld      a, (ix+3)
         out     (c), a
         rst     0
 
@@ -4455,6 +4480,9 @@ cad109  defb    '63.8', 0
 cad110  defb    '1X', 0
 cad111  defb    '2X', 0
 cad112  defb    'Break to exit', 0
+cad113  defb    'Slot occupied, select', 0
+        defb    'another or delete a', 0
+        defb    'ROM to free it', 0
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 
 fincad
