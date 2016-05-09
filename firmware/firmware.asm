@@ -364,9 +364,11 @@ star54  inc     b
         ld      a, (cpuspd)
         rrca
         ld      hl, (scanli)
-        ld      a, (outvid)
         rr      l
         rl      h
+        rrca
+        rr      l
+        ld      a, (outvid)
         rrca
         rrca
         ld      a, h
@@ -600,7 +602,7 @@ main8   and     a
         dec     a
         jr      nz, main17
         call    bomain
-        ld      ix, cad112
+        ld      ix, cad114
         call_prnstr
         ld      a, $08
         ld      bc, $7ffe
@@ -924,25 +926,25 @@ romsb   sub     $1e-$16
         ld      hl, $0200
         ld      b, $18
         call    inputv
-;    push  bc
-;    push  hl
         ld      a, (codcnt)
         rrca
         ret     nc
+        call    loadta
+        ei
+        jp      nc, roms12
         call    atoi
-
+        ld      b, (ix-$3f)
+romsb6  ld      e, 0
         call    isbusy
+        jr      nz, romsb7
         ld      bc, $090a
-;    pop hl
-;    pop bc
-        jr      nc, romsb5
-        ld      ix, cad113
+        ld      ix, cad115
         call_prnstr
         call_prnstr
         call_prnstr
         jp      waitky
-romsb5  call    loadta
-        jp      nc, roms12
+romsb7  inc     a
+        djnz    romsb6
         ld      hl, %00001010
 romsc   ld      (offsel), hl
         ld      bc, $7ffd
@@ -1255,14 +1257,27 @@ roms27  ld      hl, $0104
         ld      a, (codcnt)
         jp      main13
 
-isbusy  ld      hl, indexe
-        ld      b, a
-isbus1  ld      a, (hl)         ; calculo en L el número de entradas
+; input E=0, A=slot to test
+; output flagZ=found
+isbusy  ld      h, indexe>>8
+        ld      l, e
+        inc     e
+        ld      l, (hl)
         inc     l
-        inc     a
+        dec     l
+        ret     m
+        call    calcu
+        inc     l
+        ld      c, (hl)
+        dec     l
+isbus1  cp      (hl)
+        ret     z
+        dec     a
+        dec     c
         jr      nz, isbus1
-        ld      a, l
-        ret
+        inc     l
+        add     a, (hl)
+        jr      isbusy
 
 ;*** Upgrade Menu ***
 ;*********************
@@ -1903,6 +1918,8 @@ advan1  call    showop
         call    showop
         defw    cad110
         defw    cad111
+        defw    cad112
+        defw    cad113
         defw    $ffff
         ld      de, $1201
         call    listas
@@ -1966,6 +1983,8 @@ advan5  djnz    advan6
         call    popupw
         defw    cad110
         defw    cad111
+        defw    cad112
+        defw    cad113
         defw    $ffff
         ret
 advan6  call    popupw
@@ -4476,8 +4495,10 @@ cad108  defb    '61.8', 0
 cad109  defb    '63.8', 0
 cad110  defb    '1X', 0
 cad111  defb    '2X', 0
-cad112  defb    'Break to exit', 0
-cad113  defb    'Slot occupied, select', 0
+cad112  defb    '4X', 0
+cad113  defb    '8X', 0
+cad114  defb    'Break to exit', 0
+cad115  defb    'Slot occupied, select', 0
         defb    'another or delete a', 0
         defb    'ROM to free it', 0
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
