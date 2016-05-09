@@ -1,13 +1,13 @@
 echo  define version %1 > version.asm
 call  make.bat
-Bit2Bin ..\cores\Spectrum\zxuno.%2.bit tmp.bin
+Bit2Bin ..\cores\Spectrum\tld_zxuno.%2.bit tmp.bin
 fpad 2000 00 tmp0.bin
 fpad 4c000 00 tmp1.bin
 fpad 354000 00 tmp2.bin
 copy /b /y header.bin+rom_binaries\esxdos.rom+tmp0.bin+firmware.rom+tmp1.bin+tmp.bin+tmp2.bin FLASH.ZX1
 fpoke FLASH.ZX1 007000 000040xFF 007044 g0203020202
 fcut tmp.bin 0 53f00 sd_binaries\SPECTRUM.%3
-GenRom 0 203 0 0 0 Machine tmp.bin core_taps\SPECTRUM.TAP
+GenRom 0 sf1ta Machine tmp.bin core_taps\SPECTRUM.TAP
 rem CgLeches core_taps\SPECTRUM.TAP core_wavs\SPECTRUM.WAV 4
 call :CreateMachine CORE2 "Sam Coupe"        SamCoupe\tld_sam.%2.bit 0 %3
 call :CreateMachine CORE3 "Jupiter ACE"      JupiterAce\jupiter_ace.%2.bit JupiterAce\jupiter_ace.v2_v3.bit %3

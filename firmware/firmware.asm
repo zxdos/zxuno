@@ -1264,9 +1264,6 @@ isbus1  ld      a, (hl)         ; calculo en L el número de entradas
         ld      a, l
         ret
 
-
-ret
-
 ;*** Upgrade Menu ***
 ;*********************
 upgra   ld      bc, (menuop)
