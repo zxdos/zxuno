@@ -935,9 +935,26 @@ romsb   sub     $1e-$16
         call    atoi
         ld      b, (ix-$3f)
 romsb6  ld      e, 0
-        call    isbusy
-        jr      nz, romsb7
-        ld      bc, $090a
+isbusy  ld      h, indexe>>8
+        ld      l, e
+        inc     e
+        ld      l, (hl)
+        inc     l
+        jr      z, romsb7
+        dec     l
+        call    calcu
+        inc     l
+        ld      c, (hl)
+        dec     l
+isbus1  cp      (hl)
+        jr      z, isbus2
+        dec     a
+        dec     c
+        jr      nz, isbus1
+        inc     l
+        add     a, (hl)
+        jr      isbusy
+isbus2  ld      bc, $090a
         ld      ix, cad115
         call_prnstr
         call_prnstr
@@ -970,8 +987,6 @@ romsd   dec     iyh
         jr      nz, romsc
         ei
         call    romcyb
-
-
         call    newent
         call    atoi
         ld      (items), a
@@ -1256,28 +1271,6 @@ roms27  ld      hl, $0104
         call    window
         ld      a, (codcnt)
         jp      main13
-
-; input E=0, A=slot to test
-; output flagZ=found
-isbusy  ld      h, indexe>>8
-        ld      l, e
-        inc     e
-        ld      l, (hl)
-        inc     l
-        dec     l
-        ret     m
-        call    calcu
-        inc     l
-        ld      c, (hl)
-        dec     l
-isbus1  cp      (hl)
-        ret     z
-        dec     a
-        dec     c
-        jr      nz, isbus1
-        inc     l
-        add     a, (hl)
-        jr      isbusy
 
 ;*** Upgrade Menu ***
 ;*********************
