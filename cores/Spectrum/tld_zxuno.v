@@ -63,7 +63,7 @@ module tld_zxuno (
 
    wire wssclk,sysclk,clk14,clk7,clk3d5,cpuclk;
    wire CPUContention;
-   wire turbo_enable;
+   wire [1:0] turbo_enable;
    wire [2:0] pll_frequency_option;
 
    assign wssclk = 1'b0;  // de momento, sin WSS

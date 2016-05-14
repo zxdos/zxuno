@@ -34,7 +34,7 @@ module scandoubler_ctrl (
     output wire vga_enable,
     output wire scanlines_enable,
     output wire [2:0] freq_option,
-    output wire turbo_enable
+    output wire [1:0] turbo_enable
     );
 
     parameter SCANDBLCTRL = 8'h0B;
@@ -45,14 +45,14 @@ module scandoubler_ctrl (
     assign vga_enable = scandblctrl[0];
     assign scanlines_enable = scandblctrl[1];
     assign freq_option = scandblctrl[4:2];
-    assign turbo_enable = scandblctrl[7];
+    assign turbo_enable = scandblctrl[7:6];
     
     reg [7:0] scandblctrl = 8'h00;  // initial value
     always @(posedge clk) begin
         if (zxuno_addr == SCANDBLCTRL && zxuno_regwr == 1'b1)
             scandblctrl <= din;
         else if (iorq_n == 1'b0 && wr_n == 1'b0 && a == PRISMSPEEDCTRL)
-            scandblctrl[7] <= (din[3:0] == 4'b0000)? 1'b0 : 1'b1;
+            scandblctrl[7:6] <= din[1:0];
         dout <= scandblctrl;
     end
 endmodule

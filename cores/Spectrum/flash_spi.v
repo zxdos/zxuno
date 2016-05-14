@@ -22,7 +22,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module flash_and_sd (
-   input wire clk,         // 7MHz
+   input wire clk,         //
    input wire [15:0] a,    //
    input wire iorq_n,      // Señales de control de E/S estándar
    input wire rd_n,        // para manejar los puertos ZXMMC y DIVMMC
@@ -40,6 +40,7 @@ module flash_and_sd (
    output wire flash_di,   //
    input wire flash_do,    //
    
+   input wire disable_spisd,
    output wire sd_cs_n,    //
    output wire sd_clk,     // Interface SPI con la SD/MMC
    output wire sd_mosi,    // (de momento, solo puertos ZXMMC)
@@ -74,7 +75,7 @@ module flash_and_sd (
          flashpincs <= din[0];
          sdpincs <= 1'b1;   // si accedemos a la flash para cambiar su estado CS, automaticamente deshabilitamos la SD
       end
-      else if (!iorq_n && (a[7:0]==SDCS || a[7:0]==DIVCS) && !wr_n) begin
+      else if (!disable_spisd && !iorq_n && (a[7:0]==SDCS || a[7:0]==DIVCS) && !wr_n) begin
          sdpincs <= din[0];
          flashpincs <= 1'b1; // y lo mismo hacemos si es la SD a la que estamos accediendo
       end
@@ -84,11 +85,11 @@ module flash_and_sd (
    reg enviar_dato;
    reg recibir_dato;
    always @* begin
-      if ((addr==SPIPORT && ior && in_boot_mode) || (!iorq_n && (a[7:0]==SDSPI || a[7:0]==DIVSPI) && !rd_n))
+      if ((addr==SPIPORT && ior && in_boot_mode) || (!disable_spisd && !iorq_n && (a[7:0]==SDSPI || a[7:0]==DIVSPI) && !rd_n))
          recibir_dato = 1'b1;
       else
          recibir_dato = 1'b0;
-      if ((addr==SPIPORT && iow && in_boot_mode) || (!iorq_n && (a[7:0]==SDSPI || a[7:0]==DIVSPI) && !wr_n))
+      if ((addr==SPIPORT && iow && in_boot_mode) || (!disable_spisd && !iorq_n && (a[7:0]==SDSPI || a[7:0]==DIVSPI) && !wr_n))
          enviar_dato = 1'b1;
       else
          enviar_dato = 1'b0;

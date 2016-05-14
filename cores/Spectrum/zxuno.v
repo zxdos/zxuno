@@ -65,7 +65,7 @@ module zxuno (
     input wire joyleft,
     input wire joyright,
     input wire joyfire,
-     
+   
     // MOUSE
     inout wire mouseclk,
     inout wire mousedata,
@@ -74,7 +74,7 @@ module zxuno (
     output wire vga_enable,
     output wire scanlines_enable,
     output wire [2:0] freq_option,
-    output wire turbo_enable
+    output wire [1:0] turbo_enable
     );
 
    // Señales de la CPU
@@ -162,6 +162,18 @@ module zxuno (
    wire [7:0] rasterint_dout;
    wire oe_n_rasterint;
 
+   // Device enable options
+   wire disable_ay;
+   wire disable_turboay;
+   wire disable_7ffd;
+   wire disable_1ffd;
+   wire disable_romsel7f;
+   wire disable_romsel1f;
+   wire enable_timexmmu;
+   wire disable_spisd;
+   wire [7:0] devoptions_dout;
+   wire oe_n_devoptions;
+ 
    // NMI events
    wire [7:0] nmievents_dout;
    wire oe_n_nmievents;
@@ -195,6 +207,7 @@ module zxuno (
                    (oe_n_mousedata==1'b0)?      mousedata_dout :
                    (oe_n_mousestatus==1'b0)?    mousestatus_dout :
                    (oe_n_rasterint==1'b0)?      rasterint_dout :
+                   (oe_n_devoptions==1'b0)?     devoptions_dout :
                                                 ula_dout;
 
    tv80n_wrapper el_z80 (
@@ -219,7 +232,7 @@ module zxuno (
   );
 
    ula_radas la_ula (
-      // Clocks
+    // Clocks
      .clk14(clk14),     // 14MHz master clock
      .clk7(clk7),
      .wssclk(wssclk),   // 5MHz WSS clock
@@ -227,15 +240,15 @@ module zxuno (
      .CPUContention(CPUContention),
      .rst_n(mrst_n & rst_n & power_on_reset_n),
 
-     // CPU interface
-     .a(cpuaddr),
+   // CPU interface
+   .a(cpuaddr),
      .access_to_contmem(access_to_screen),
-     .mreq_n(mreq_n),
-     .iorq_n(iorq_n),
-     .rd_n(rd_n),
-     .wr_n(wr_n),
-     .int_n(int_n),
-     .din(cpudout),
+   .mreq_n(mreq_n),
+   .iorq_n(iorq_n),
+   .rd_n(rd_n),
+   .wr_n(wr_n),
+   .int_n(int_n),
+   .din(cpudout),
      .dout(ula_dout),
      .rasterint_enable(rasterint_enable),
      .vretraceint_disable(vretraceint_disable),
@@ -245,7 +258,7 @@ module zxuno (
     // VRAM interface
      .va(vram_addr),  // 16KB videoram, 2 pages
      .vramdata(vram_dout),
-     
+   
     // I/O ports
      .ear(ear),
      .mic(mic),
@@ -255,12 +268,13 @@ module zxuno (
      .mode(timing_mode),
      .disable_contention(disable_contention),
      .doc_ext_option(doc_ext_option),
+     .enable_timexmmu(enable_timexmmu),
 
     // Video
-     .r(r),
-     .g(g),
-     .b(b),
-     .hsync(hsync),
+   .r(r),
+   .g(g),
+   .b(b),
+   .hsync(hsync),
      .vsync(vsync)
     );
 
@@ -281,7 +295,7 @@ module zxuno (
    );
 
    flash_and_sd cacharros_con_spi (
-      .clk(clk14),
+      .clk(clk),
       .a(cpuaddr),
       .iorq_n(iorq_n),
       .rd_n(rd_n),
@@ -298,7 +312,7 @@ module zxuno (
       .flash_clk(flash_clk),
       .flash_di(flash_di),
       .flash_do(flash_do),
-      
+      .disable_spisd(disable_spisd),
       .sd_cs_n(sd_cs_n),
       .sd_clk(sd_clk),
       .sd_mosi(sd_mosi),
@@ -344,6 +358,13 @@ module zxuno (
       .ior(zxuno_regrd),
       .iow(zxuno_regwr),
       .in_boot_mode(in_boot_mode),
+      
+   // Interface con modulo de habilitacion de opciones
+      .disable_7ffd(disable_7ffd),
+      .disable_1ffd(disable_1ffd),
+      .disable_romsel7f(disable_romsel7f),
+      .disable_romsel1f(disable_romsel1f),
+      .enable_timexmmu(enable_timexmmu),
    
    // Interface con la SRAM
       .sram_addr(sram_addr),
@@ -416,6 +437,25 @@ module zxuno (
         .din(cpudout),
         .dout(scratch_dout),
         .oe_n(oe_n_scratch)
+    );
+
+    control_enable_options device_enables (
+        .clk(clk),
+        .rst_n(mrst_n & power_on_reset_n),
+        .zxuno_addr(zxuno_addr),
+        .zxuno_regrd(zxuno_regrd),
+        .zxuno_regwr(zxuno_regwr),
+        .din(cpudout),
+        .dout(devoptions_dout),
+        .oe_n(oe_n_devoptions),
+        .disable_ay(disable_ay),
+        .disable_turboay(disable_turboay),
+        .disable_7ffd(disable_7ffd),
+        .disable_1ffd(disable_1ffd),
+        .disable_romsel7f(disable_romsel7f),
+        .disable_romsel1f(disable_romsel1f),
+        .enable_timexmmu(enable_timexmmu),
+        .disable_spisd(disable_spisd)
     );
 
     scandoubler_ctrl control_scandoubler (
@@ -517,6 +557,8 @@ module zxuno (
   turbosound dos_ays (
     .clk(clk),
     .clkay(clk3d5),
+    .disable_ay(disable_ay),
+    .disable_turboay(disable_turboay),
     .reset_n(rst_n & mrst_n & power_on_reset_n),
     .bdir(bdir),
     .bc1(bc1),
@@ -525,21 +567,21 @@ module zxuno (
     .oe_n(oe_n_ay),
     .audio_out_ay1(ay1_audio),
     .audio_out_ay2(ay2_audio)
-     );
+   );
   
 ///////////////////////////////////
 // SOUND MIXER
 ///////////////////////////////////
    // 8-bit mixer to generate different audio levels according to input sources
-    mixer audio_mix(
-        .clkdac(clk),
-        .reset(1'b0),
-        .mic(mic),
-        .spk(spk),
+  mixer audio_mix(
+    .clkdac(clk),
+    .reset(1'b0),
+    .mic(mic),
+    .spk(spk),
         .ear(ear),
         .ay1(ay1_audio),
-        .ay2(ay2_audio),
-        .audio(audio_out)
-    );
+    .ay2(ay2_audio),
+    .audio(audio_out)
+  );
 
 endmodule

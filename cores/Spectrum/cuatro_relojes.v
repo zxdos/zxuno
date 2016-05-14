@@ -8,7 +8,7 @@ module clock_generator
   input wire        CLK_IN1,
   input wire        CPUContention,
   input wire [2:0]  pll_option,
-  input wire        turbo_enable,
+  input wire [1:0]  turbo_enable,
   // Clock out ports
   output wire       CLK_OUT1,
   output wire       CLK_OUT2,
@@ -16,8 +16,6 @@ module clock_generator
   output wire       CLK_OUT4,
   output wire       cpuclk
   );
-  
-  wire cpuclk_selected;
   
   reg [2:0] pll_option_stored = 3'b000;
   reg [7:0] pulso_reconf = 8'h01; // force initial reset at boot
@@ -56,19 +54,87 @@ module clock_generator
       .CLK3OUT(CLK_OUT4)
    );
 
-  BUFGMUX cpuclk_selector (
-    .O(cpuclk_selected),
+//    wire clk28, clk14, clk7, clk3d5, cpuclk_3_2, cpuclk_1_0;
+//
+//    BUFGMUX reloj28_contenido (
+//        .O(clk28),
+//        .I0(CLK_OUT1),
+//        .I1(1'b1),
+//        .S(CPUContention)
+//    );
+//
+//    BUFGMUX reloj14_contenido (
+//        .O(clk14),
+//        .I0(CLK_OUT2),
+//        .I1(1'b1),
+//        .S(CPUContention)
+//    );
+//
+//    BUFGMUX reloj7_contenido (
+//        .O(clk7),
+//        .I0(CLK_OUT3),
+//        .I1(1'b1),
+//        .S(CPUContention)
+//    );
+//
+//    BUFGMUX reloj3d5_contenido (
+//        .O(clk3d5),
+//        .I0(CLK_OUT4),
+//        .I1(1'b1),
+//        .S(CPUContention)
+//    );
+//
+//    BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
+//      .O(cpuclk_3_2),
+//      .I0(clk14),
+//      .I1(clk28),
+//      .S(turbo_enable[0])
+//    );
+//  
+//    BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
+//      .O(cpuclk_1_0),
+//      .I0(clk3d5),
+//      .I1(clk7),
+//      .S(turbo_enable[0])
+//    );
+//  
+//    BUFGMUX cpuclk_selector (
+//      .O(cpuclk),
+//      .I0(cpuclk_1_0),
+//      .I1(cpuclk_3_2),
+//      .S(turbo_enable[1])
+//    );
+    
+
+  wire cpuclk_selected, cpuclk_3_2, cpuclk_1_0;
+  
+//  BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
+//    .O(cpuclk_3_2),
+//    .I0(CLK_OUT2),
+//    .I1(CLK_OUT1),
+//    .S(turbo_enable[0])
+//    );
+  
+  BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
+    .O(cpuclk_1_0),
     .I0(CLK_OUT4),
     .I1(CLK_OUT3),
-    .S(turbo_enable)
+    .S(turbo_enable[0])
     );
   
-  BUFGMUX selector_reloj_cpu (
+  BUFGMUX cpuclk_selector (
+    .O(cpuclk_selected),
+    .I0(cpuclk_1_0),
+    .I1(CLK_OUT2),
+    .S(turbo_enable[1])
+    );
+  
+  BUFGMUX aplicar_contienda (
         .O(cpuclk),
         .I0(cpuclk_selected),     // when no contention, clock is this one
         .I1(1'b1),       // during contention, clock is pulled up
         .S(CPUContention)  // contention signal
         );
-    
+
 
 endmodule

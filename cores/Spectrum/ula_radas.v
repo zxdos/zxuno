@@ -58,6 +58,7 @@ module ula_radas (
     input wire disable_contention,
     input wire access_to_contmem,
     output wire doc_ext_option,
+    input wire enable_timexmmu,
 
     // Video
     output wire [2:0] r,
@@ -179,7 +180,7 @@ module ula_radas (
     wire PG  = TimexConfigReg[0];
     wire HCL = TimexConfigReg[1];
     wire HR  = TimexConfigReg[2];
-    assign doc_ext_option = TimexConfigReg[7];
+    assign doc_ext_option = enable_timexmmu & TimexConfigReg[7];
     wire [2:0] HRInk = TimexConfigReg[5:3];
     always @(posedge clk7) begin
       if (rst_n == 1'b0)
@@ -444,10 +445,8 @@ module ula_radas (
    // Z80 writes values into registers
    // Port 0xFE
    always @(posedge clk7) begin
-      if (iorq_n==1'b0 && wr_n==1'b0) begin
-         if (a[0]==1'b0 && a[7:0]!=8'hF4) begin
-            {spk,mic} <= din[4:3];
-         end
+      if (WriteToPortFE) begin
+         {spk,mic} <= din[4:3];
       end
    end
   
@@ -494,11 +493,13 @@ module ula_radas (
             dout = PaletteEntryToCPU;
          else if (a==ULAPLUSDATA && PaletteReg[6]==1'b1)
             dout = {7'b0000000,ConfigReg};
-         else if (a[7:0]==TIMEXPORT) begin
+         else if (a[7:0]==TIMEXPORT && enable_timexmmu)
+            dout = TimexConfigReg;
+         else begin
             if (BitmapAddr || AttrAddr)
-               dout = vramdata;
+                dout = vramdata;
             else
-               dout = 8'hFF;
+                dout = 8'hFF;
          end
       end
    end

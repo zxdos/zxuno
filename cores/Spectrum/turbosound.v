@@ -24,6 +24,8 @@ module turbosound (
     input wire clk,
     input wire clkay,
     input wire reset_n,
+    input wire disable_ay,
+    input wire disable_turboay,
     input wire bdir,
     input wire bc1,
     input wire [7:0] din,
@@ -37,7 +39,7 @@ module turbosound (
 	always @(posedge clk) begin
 		if (reset_n==1'b0)
 			ay_select <= 1'b1;
-		else if (bdir && bc1 && din[7:1]==7'b1111111)
+		else if (disable_ay == 1'b0 && disable_turboay == 1'b0 && bdir && bc1 && din[7:1]==7'b1111111)
 			ay_select <= din[0];
 	end
 
@@ -63,7 +65,7 @@ YM2149 ay1 (
   .I_IOB(8'h00),
   .O_IOB(),
   .O_IOB_OE_L(),
-  .ENA(1'b1),
+  .ENA(~disable_ay),
   .RESET_L(reset_n),
   .CLK(clkay)
   );
@@ -85,7 +87,7 @@ YM2149 ay2 (
   .I_IOB(8'h00),
   .O_IOB(),
   .O_IOB_OE_L(),
-  .ENA(1'b1),
+  .ENA(~disable_ay & ~disable_turboay),
   .RESET_L(reset_n),
   .CLK(clkay)
   );
