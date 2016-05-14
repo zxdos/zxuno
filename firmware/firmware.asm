@@ -4156,7 +4156,7 @@ decbhl  dec     hl
         block   $7e00-$
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.326', 0
+        defm    'ZX-Uno BIOS v0.327', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -4191,7 +4191,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.326   ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.327   ', $7f, '2016 ZX-Uno Team', 0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0

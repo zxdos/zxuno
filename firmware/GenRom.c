@@ -43,7 +43,7 @@ unsigned short j, k, crc, tab[]= {
 int main(int argc, char *argv[]) {
   if( argc==1 )
     printf("\n"
-    "GenRom v0.04, generates a TAP for loading a ROM in the ZX-Uno, 2016-05-09\n\n"
+    "GenRom v0.05, generates a TAP for loading a ROM in the ZX-Uno, 2016-05-14\n\n"
     "  GenRom         <params1> <params2> <name> <input_file> <output_file>\n\n"
     "  <params1>      Set 5 flags parameters, combinable\n"
     "     0           Default values Issue3, Tim48K, Contended, Disabled Div & NMI\n"
@@ -57,9 +57,9 @@ int main(int argc, char *argv[]) {
     "     0           Default values DISD, DIFUL, DIKEMP, ENMMU, DI1FFD, DI7FFD,"
     "                                                             DITAY and DIAY\n"
     "     s           Disable SD ports (DivMMC and ZXMMC)\n"
-    "     f           Disable Fuller joystick port\n"
-    "     k           Disable Kempston joystick port\n"
     "     m           Enable horizontal MMU in Timex Sinclair\n"
+    "     h           Disable high bit ROM (1FFD bit 2)\n"
+    "     l           Disable low bit ROM (7FFD bit 4)\n"
     "     1           Disable 1FFD port (+2A/+3 memory paging)\n"
     "     7           Disable 7FFD port (128K memory paging)\n"
     "     t           Disable second AY chip\n"
@@ -147,9 +147,9 @@ int main(int argc, char *argv[]) {
   for ( i= 0; i<strlen(argv[2]); i++ )
     switch( argv[2][i] ){
       case 's': mem[0x4009]^= 0b10000000; break;
-      case 'f': mem[0x4009]^= 0b01000000; break;
-      case 'k': mem[0x4009]^= 0b00100000; break;
-      case 'm': mem[0x4009]^= 0b00010000; break;
+      case 'm': mem[0x4009]^= 0b01000000; break;
+      case 'h': mem[0x4009]^= 0b00100000; break;
+      case 'l': mem[0x4009]^= 0b00010000; break;
       case '1': mem[0x4009]^= 0b00001000; break;
       case '7': mem[0x4009]^= 0b00000100; break;
       case 't': mem[0x4009]^= 0b00000010; break;

@@ -2,7 +2,7 @@ set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn tld_zxuno.prj
--infer_ramb8 No
+-infer_ramb8 No -loop_iteration_limit 32768
 -ofn tld_zxuno
 -ofmt NGC
 -p xc6slx9-2-tqg144
