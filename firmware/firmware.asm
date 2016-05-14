@@ -214,6 +214,7 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
 
 start   ld      bc, chrend-runbit
         ldir
+        wreg    scandbl_ctrl, $80
         call    loadch
         im      1
         ld      de, fincad-1    ; descomprimo cadenas
@@ -312,10 +313,10 @@ star38  ld      de, tmpbuf
         ld      (de), a
         pop     bc
         call_prnstr             ; Imprime máquina (ROM o core)
-start4  ld      d, a
+start4  ld      d, 4
         pop     af
         jr      nz, start5
-        ld      d, a
+        ld      d, 16
 start5  djnz    start6
         dec     de
         ld      a, d
@@ -1379,7 +1380,6 @@ tosd    ld      ix, cad75
 ;        out     (c), l
 ;        call    send1z
 
-        wreg    scandbl_ctrl, $80
         sbc     hl, hl                ; read MBR
         ld      ix, tmpbu2
         call    inirea
@@ -1442,7 +1442,6 @@ tosd5   ld      c, SPI_PORT
         jr      z, fatxx        ; 04,06,0b,0c,0e -> FAT32
 errsd   ld      ix, cad77
 ferror  ;wreg    master_conf, 0
-        wreg    scandbl_ctrl, 0
         ld      bc, $090d
         call_prnstr
         ld      a, cad80 & $ff

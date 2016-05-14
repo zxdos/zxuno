@@ -224,11 +224,30 @@ always @*
 
         GEN2_L:
             begin
+               next_state  = MOD_H;
+               icap_ce     = 0;
+               icap_wr     = 0;
+               icap_din    = {8'h6B, spi_addr[23:16]}; // 16'h030A;   //  03 lectura SPI opcode + direccion SPI ALTA (03 = 1x, 6B = 4x)
+            end
+	
+///////	Registro MODE (para carga a 4x tras reboot)
+
+        MOD_H:
+            begin
+               next_state  = MOD_L;
+               icap_ce     = 0;
+               icap_wr     = 0;
+               icap_din    = 16'h3301;   //  Escritura a reg MODE
+            end
+
+        MOD_L:
+            begin
                next_state  = NUL_L;
                icap_ce     = 0;
                icap_wr     = 0;
-               icap_din    = {8'h03, spi_addr[23:16]}; // 16'h030A;   //  03 lectura SPI opcode + direccion SPI ALTA
-            end
+               icap_din    = 16'h3100; // Activamos bit de lectura a modo 4x en el proceso de Config
+            end				
+/////
 
         NUL_L:
             begin
