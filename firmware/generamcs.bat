@@ -24,7 +24,7 @@ copy /y firmware.rom sd_binaries\FIRMWARE.%3
 GenRom 0 sm1t BIOS firmware.rom core_taps\FIRMWARE.TAP
 GenRom 0 0    ESXDOS rom_binaries\esxdos.rom core_taps\ESXDOS.TAP
 call :CreateRom 0  "ZX Spectrum 48K Cargando Leches" leches         dn   lh
-call :CreateRom 1  "ZX +3e DivMMC"                 plus3en40divmmc  t    0
+call :CreateRom 1  "ZX +2A 4.1"                    plus3en41        t    0
 call :CreateRom 5  "SE Basic IV 4.0 Anya"          se               d    h
 call :CreateRom 7  "ZX Spectrum 48K"               48               dn   lh17
 AddItem ROM     8   rom_taps\rooted.tap

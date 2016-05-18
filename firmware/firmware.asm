@@ -1767,7 +1767,7 @@ upgra8  jp      nc, roms12
 ;upgrade BIOS
 upgra9  cp      $31
 upgraa  jp      nz, roms12
-        ld      a, (tmpbuf+1)
+        ld      a, (tmpbuf+2)
         cp      $ca
         jr      nz, upgraa
         call    prsta1
@@ -1808,7 +1808,7 @@ upgrac  cp      $43
         ld      b, l
         dec     b
         djnz    upgrae
-        ld      a, (tmpbuf+1)
+        ld      a, (tmpbuf+2)
         cp      $cb
 upgrad  jr      nz, upgraa
 upgrae  call    calbit
