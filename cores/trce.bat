@@ -1,2 +1,2 @@
-call mypath
-%mypath%\trce.exe %*
+call %ruta_bat%mypath
+%mypath%trce.exe %*

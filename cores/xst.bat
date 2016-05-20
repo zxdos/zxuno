@@ -1,2 +1,2 @@
-call mypath
-%mypath%\xst.exe %*
+call %ruta_bat%mypath
+%mypath%xst.exe %*

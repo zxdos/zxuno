@@ -1,2 +1,2 @@
 rem put the correct path and rename this file to .bat
-set mypath=C:\path_to\Xilinx\14.7\ISE_DS\ISE\bin\nt64
+set mypath=C:\path_to\Xilinx\14.7\ISE_DS\ISE\bin\nt64\

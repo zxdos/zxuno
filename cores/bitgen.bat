@@ -1,2 +1,2 @@
-call mypath
-%mypath%\bitgen.exe %*
+call %ruta_bat%mypath
+%mypath%bitgen.exe %*

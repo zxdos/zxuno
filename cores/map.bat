@@ -1,2 +1,2 @@
-call mypath
-%mypath%\map.exe %*
+call %ruta_bat%mypath
+%mypath%map.exe %*
