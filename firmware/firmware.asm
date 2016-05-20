@@ -223,7 +223,8 @@ start   ld      bc, chrend-runbit
         ld      a, (outvid)
         scf
         rra
-        ld      (scnbak), a
+        or      $40
+        ld      (scnbak), a       ; lo pongo a 28Mhz
         out     (c), a
         im      1
         ld      de, fincad-1    ; descomprimo cadenas
