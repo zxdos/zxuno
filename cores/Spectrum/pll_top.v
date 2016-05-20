@@ -79,8 +79,6 @@ module pll_top
    wire           locked;
    
    // These signals are used for the BUFG's necessary for the design.
-   wire           clkin_bufgout;
-   
    wire           clkfb_bufgout;
    wire           clkfb_bufgin;
    
@@ -103,11 +101,6 @@ module pll_top
    wire           clk5_bufgout;
 
    // Global buffers used in design
-//   BUFG BUFG_IN (
-//      .O(clkin_bufgout),
-//      .I(CLKIN) 
-//   );
-   assign clkin_bufgout = CLKIN;
    
    BUFG BUFG_FB (
       .O(clkfb_bufgout),
@@ -337,7 +330,7 @@ module pll_top
       .SRDY(SRDY),
       
       // Input from IBUFG
-      .SCLK(clkin_bufgout),
+      .SCLK(CLKIN),
       
       // Direct connections to the PLL_ADV
       .DO(dout),

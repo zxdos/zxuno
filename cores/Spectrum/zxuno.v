@@ -65,7 +65,7 @@ module zxuno (
     input wire joyleft,
     input wire joyright,
     input wire joyfire,
-   
+	 
     // MOUSE
     inout wire mouseclk,
     inout wire mousedata,
@@ -81,7 +81,7 @@ module zxuno (
    wire mreq_n,iorq_n,rd_n,wr_n,int_n,m1_n,nmi_n,rfsh_n;
    wire enable_nmi_n;
    wire [15:0] cpuaddr;
-   wire [7:0] cpudin;
+   reg [7:0] cpudin;
    wire [7:0] cpudout;
    wire [7:0] ula_dout;
 
@@ -191,24 +191,46 @@ module zxuno (
 
    // Asignación de dato para la CPU segun la decodificación de todos los dispositivos
    // conectados a ella.
-   assign cpudin = (oe_n_romyram==1'b0)?        memory_dout :
-                   (oe_n_ay==1'b0)?             ay_dout :
-                   (oe_n_joystick==1'b0)?       joystick_dout :
-                   (oe_n_zxunoaddr==1'b0)?      zxuno_addr_to_cpu :
-                   (oe_n_spi==1'b0)?            spi_dout :
-                   (oe_n_scancode==1'b0)?       scancode_dout :
-                   (oe_n_kbstatus==1'b0)?       kbstatus_dout :
-                   (oe_n_coreid==1'b0)?         coreid_dout :
-                   (oe_n_keymap==1'b0)?         keymap_dout :
-                   (oe_n_scratch==1'b0)?        scratch_dout :
-                   (oe_n_scndblctrl==1'b0)?     scndblctrl_dout :
-                   (oe_n_nmievents==1'b0)?      nmievents_dout :
-                   (oe_n_kmouse==1'b0)?         kmouse_dout :
-                   (oe_n_mousedata==1'b0)?      mousedata_dout :
-                   (oe_n_mousestatus==1'b0)?    mousestatus_dout :
-                   (oe_n_rasterint==1'b0)?      rasterint_dout :
-                   (oe_n_devoptions==1'b0)?     devoptions_dout :
-                                                ula_dout;
+//   assign cpudin = (oe_n_romyram==1'b0)?        memory_dout :
+//                   (oe_n_ay==1'b0)?             ay_dout :
+//                   (oe_n_joystick==1'b0)?       joystick_dout :
+//                   (oe_n_zxunoaddr==1'b0)?      zxuno_addr_to_cpu :
+//                   (oe_n_spi==1'b0)?            spi_dout :
+//                   (oe_n_scancode==1'b0)?       scancode_dout :
+//                   (oe_n_kbstatus==1'b0)?       kbstatus_dout :
+//                   (oe_n_coreid==1'b0)?         coreid_dout :
+//                   (oe_n_keymap==1'b0)?         keymap_dout :
+//                   (oe_n_scratch==1'b0)?        scratch_dout :
+//                   (oe_n_scndblctrl==1'b0)?     scndblctrl_dout :
+//                   (oe_n_nmievents==1'b0)?      nmievents_dout :
+//                   (oe_n_kmouse==1'b0)?         kmouse_dout :
+//                   (oe_n_mousedata==1'b0)?      mousedata_dout :
+//                   (oe_n_mousestatus==1'b0)?    mousestatus_dout :
+//                   (oe_n_rasterint==1'b0)?      rasterint_dout :
+//                   (oe_n_devoptions==1'b0)?     devoptions_dout :
+//                                                ula_dout;
+   always @* begin
+        case (1'b0)
+            oe_n_ay          : cpudin = ay_dout;
+            oe_n_joystick    : cpudin = joystick_dout;
+            oe_n_zxunoaddr   : cpudin = zxuno_addr_to_cpu;
+            oe_n_spi         : cpudin = spi_dout;
+            oe_n_scancode    : cpudin = scancode_dout;
+            oe_n_kbstatus    : cpudin = kbstatus_dout;
+            oe_n_coreid      : cpudin = coreid_dout;
+            oe_n_keymap      : cpudin = keymap_dout;
+            oe_n_scratch     : cpudin = scratch_dout;
+            oe_n_scndblctrl  : cpudin = scndblctrl_dout;
+            oe_n_nmievents   : cpudin = nmievents_dout;
+            oe_n_kmouse      : cpudin = kmouse_dout;
+            oe_n_mousedata   : cpudin = mousedata_dout;
+            oe_n_mousestatus : cpudin = mousestatus_dout;
+            oe_n_rasterint   : cpudin = rasterint_dout;
+            oe_n_devoptions  : cpudin = devoptions_dout;
+            oe_n_romyram     : cpudin = memory_dout;
+            default          : cpudin = ula_dout;
+        endcase
+   end        
 
    tv80n_wrapper el_z80 (
       .m1_n(m1_n),
@@ -232,7 +254,7 @@ module zxuno (
   );
 
    ula_radas la_ula (
-    // Clocks
+	  // Clocks
      .clk14(clk14),     // 14MHz master clock
      .clk7(clk7),
      .wssclk(wssclk),   // 5MHz WSS clock
@@ -240,15 +262,15 @@ module zxuno (
      .CPUContention(CPUContention),
      .rst_n(mrst_n & rst_n & power_on_reset_n),
 
-   // CPU interface
-   .a(cpuaddr),
+	 // CPU interface
+	 .a(cpuaddr),
      .access_to_contmem(access_to_screen),
-   .mreq_n(mreq_n),
-   .iorq_n(iorq_n),
-   .rd_n(rd_n),
-   .wr_n(wr_n),
-   .int_n(int_n),
-   .din(cpudout),
+	 .mreq_n(mreq_n),
+	 .iorq_n(iorq_n),
+	 .rd_n(rd_n),
+	 .wr_n(wr_n),
+	 .int_n(int_n),
+	 .din(cpudout),
      .dout(ula_dout),
      .rasterint_enable(rasterint_enable),
      .vretraceint_disable(vretraceint_disable),
@@ -258,7 +280,7 @@ module zxuno (
     // VRAM interface
      .va(vram_addr),  // 16KB videoram, 2 pages
      .vramdata(vram_dout),
-   
+	 
     // I/O ports
      .ear(ear),
      .mic(mic),
@@ -271,10 +293,10 @@ module zxuno (
      .enable_timexmmu(enable_timexmmu),
 
     // Video
-   .r(r),
-   .g(g),
-   .b(b),
-   .hsync(hsync),
+	 .r(r),
+	 .g(g),
+	 .b(b),
+	 .hsync(hsync),
      .vsync(vsync)
     );
 
@@ -533,7 +555,7 @@ module zxuno (
 
     multiboot el_multiboot (
         .clk(clk),
-        .clk_icap(clk),
+        .clk_icap(clk14),
         .rst_n(rst_n & mrst_n & power_on_reset_n),
         .kb_boot_core(boot_second_core),
         .zxuno_addr(zxuno_addr),
@@ -567,21 +589,21 @@ module zxuno (
     .oe_n(oe_n_ay),
     .audio_out_ay1(ay1_audio),
     .audio_out_ay2(ay2_audio)
-   );
+	 );
   
 ///////////////////////////////////
 // SOUND MIXER
 ///////////////////////////////////
    // 8-bit mixer to generate different audio levels according to input sources
-  mixer audio_mix(
-    .clkdac(clk),
-    .reset(1'b0),
-    .mic(mic),
-    .spk(spk),
+	mixer audio_mix(
+		.clkdac(clk),
+		.reset(1'b0),
+		.mic(mic),
+		.spk(spk),
         .ear(ear),
         .ay1(ay1_audio),
-    .ay2(ay2_audio),
-    .audio(audio_out)
-  );
+		.ay2(ay2_audio),
+		.audio(audio_out)
+	);
 
 endmodule

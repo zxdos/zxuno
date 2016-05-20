@@ -51,7 +51,8 @@
                       ; inputs   lo: cursor position  hi: max length
                       ; otro     lo: pagina actual    hi: mascara paginas
         define  sdhc    $8fd4
-        define  empstr  $8fd5
+        define  scnbak  $8fd5
+        define  empstr  $8fd6
         define  config  $9000
         define  indexe  $a000
         define  active  $a040
@@ -214,8 +215,16 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
 
 start   ld      bc, chrend-runbit
         ldir
-        wreg    scandbl_ctrl, $80
         call    loadch
+        ld      a, scandbl_ctrl
+        ld      bc, zxuno_port
+        out     (c), a
+        inc     b
+        ld      a, (outvid)
+        scf
+        rra
+        ld      (scnbak), a
+        out     (c), a
         im      1
         ld      de, fincad-1    ; descomprimo cadenas
         ld      hl, finstr-1
@@ -262,7 +271,7 @@ start3  ld      a, b
         jr      z, start3
         ld      b, $13
         ldir
-        ld      bc, zxuno_port  ; print ID
+        ld      bc, zxuno_port
         out     (c), a          ; a = $ff = core_id
         inc     b
         ld      hl, cad0+6      ; Load address of coreID string
@@ -1284,9 +1293,13 @@ upgra   ld      bc, (menuop)
         ld      d, 7
 upgra1  push    af
         call    help
-        ld      de, $0200 | cad60>>8
-        ld      hl, cmbpnt
         pop     af
+        jr      nz, upgra15
+        ld      bc, $1806
+        ld      ix, cad116
+        call    prnmul
+upgra15 ld      de, $0200 | cad60>>8
+        ld      hl, cmbpnt
         jr      nz, upgra2
         ld      (hl), cad60 & $ff
         inc     l
@@ -1311,7 +1324,7 @@ upgra3  ld      a, ixl
         inc     l
         ld      (hl), bnames>>8
         inc     l
-        ld      (ix+23), b
+        ld      (ix+22), b
         add     ix, bc
         ld      a, (ix+31)
         cp      ' '
@@ -3985,12 +3998,24 @@ l3ec3   ld      a, ixl
         in      l, (c)
         jp      (hl)
 
-        block   $3eff-$         ; 50 bytes
+        block   $3ee6-$         ; 25 bytes
+
+lbytes  ld      a, (scnbak)
+        and     %01111111
+        call    setvid
+        call    lbytes2
+        ld      a, (scnbak)
+setvid  ld      l, scandbl_ctrl
+        ld      bc, zxuno_port
+        out     (c), l
+        inc     b
+        out     (c), a
+        ret
 
 l3eff   in      l,(c)
         jp      (hl)
 
-lbytes  di                      ; disable interrupts
+lbytes2 di                      ; disable interrupts
         ld      a, $0f          ; make the border white and mic off.
         out     ($fe), a        ; output to port.
         push    ix
@@ -4158,7 +4183,7 @@ decbhl  dec     hl
         block   $7e00-$
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.328', 0
+        defm    'ZX-Uno BIOS v0.40', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -4193,7 +4218,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.328   ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.40    ', $7f, '2016 ZX-Uno Team', 0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0
@@ -4496,6 +4521,15 @@ cad114  defb    'Break to exit', 0
 cad115  defb    'Slot occupied, select', 0
         defb    'another or delete a', 0
         defb    'ROM to free it', 0
+cad116  defb    '2', 0
+        defb    '3', 0
+        defb    '4', 0
+        defb    '5', 0
+        defb    '6', 0
+        defb    '7', 0
+        defb    '8', 0
+        defb    '9', 0, 0
+
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 
 fincad

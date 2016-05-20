@@ -1,4 +1,6 @@
 `timescale 1ns / 1ps
+`default_nettype none
+
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -163,9 +165,9 @@ module new_memory (
       end
    end
     
-`define ADDR_7FFD_PLUS2A (a[0] && !a[1] && a[14] && !a[15])  // TO-DO repasar esta codificacion!!!!
-`define ADDR_7FFD_SP128 (a[0] && !a[1] && !a[15])
-`define ADDR_1FFD (a[0] && !a[1] && a[12] && a[15:13]==3'b000)
+`define ADDR_7FFD_PLUS2A (!a[1] && a[15:14]==2'b01)
+`define ADDR_7FFD_SP128 (!a[1] && !a[15])
+`define ADDR_1FFD (!a[1] && a[15:12]==4'b0001)
 `define ADDR_TIMEX_MMU (a[7:0] == 8'hF4)
 
 `define PAGE0 3'b000
@@ -184,7 +186,7 @@ module new_memory (
    wire puerto_bloqueado = bank128[5];
    wire [2:0] banco_ram = bank128[2:0];
    wire vrampage = bank128[3];
-   wire [1:0] banco_rom = {bankplus3[2] & ~disable_romsel1f, bank128[4] & ~disable_romsel7f};
+   wire [1:0] banco_rom = {bankplus3[2] & (~disable_romsel1f), bank128[4] & (~disable_romsel7f)};
    wire amstrad_allram_page_mode = bankplus3[0];
    wire [1:0] plus3_memory_arrangement = bankplus3[2:1];
    
@@ -194,14 +196,18 @@ module new_memory (
          bankplus3 <= 8'h00;
          timex_mmu <= 8'h00;
       end
-      else if (!disable_1ffd && !iorq_n && !wr_n && `ADDR_1FFD && !puerto_bloqueado)
-         bankplus3 <= din;
-      else if (!disable_7ffd && disable_1ffd && !iorq_n && !wr_n && `ADDR_7FFD_SP128 && !puerto_bloqueado)
-         bank128 <= din;
-      else if (!disable_7ffd && !disable_1ffd && !iorq_n && !wr_n && `ADDR_7FFD_PLUS2A && !puerto_bloqueado)
-         bank128 <= din;
-      else if (enable_timexmmu && !iorq_n && !wr_n && `ADDR_TIMEX_MMU)
-         timex_mmu <= din;
+      else begin
+        if (!disable_1ffd && !disable_7ffd) begin
+            if (!iorq_n && !wr_n && `ADDR_1FFD && !puerto_bloqueado)
+                bankplus3 <= din;
+            if (!iorq_n && !wr_n && `ADDR_7FFD_PLUS2A && !puerto_bloqueado)
+                bank128 <= din;
+        end
+        if (!disable_7ffd && disable_1ffd && !iorq_n && !wr_n && `ADDR_7FFD_SP128 && !puerto_bloqueado)
+            bank128 <= din;
+        if (enable_timexmmu && !iorq_n && !wr_n && `ADDR_TIMEX_MMU)
+            timex_mmu <= din;
+      end
    end
    
    reg [18:0] addr_port2;
@@ -444,7 +450,7 @@ module new_memory (
 endmodule
 
 module sram_and_mirror (
-    input wire clk,          // 28MHz or higher if possible
+    input wire clk,          // 28MHz
     input wire [14:0] a1,    // to BRAM addr bus
     input wire [18:0] a2,    // to SRAM addr bus
     input wire we2_n,        // to SRAM WE enable
@@ -478,6 +484,6 @@ module sram_and_mirror (
     assign a = a2;
     assign we_n = we2_n;
     assign dout2 = d;
-    assign d = (we2_n == 1'b0)? din2 : 8'hZZ;
+    assign d = (we_n == 1'b0)? din2 : 8'hZZ;
 
 endmodule

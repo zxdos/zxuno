@@ -24,7 +24,7 @@ module rom (
     output reg [7:0] dout
     );
 
-   reg [7:0] mem[0:255];
+   reg [7:0] mem[0:255]; //127
    integer i;
    initial begin  // usa $readmemb/$readmemh dependiendo del formato del fichero que contenga la ROM
       for (i=0;i<256;i=i+1) begin
@@ -34,6 +34,6 @@ module rom (
    end
    
    always @(posedge clk) begin
-     dout <= mem[a[7:0]];
+     dout <= mem[a[7:0]]; //6:0
    end
 endmodule

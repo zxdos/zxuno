@@ -16,10 +16,16 @@ module clock_generator
   output wire       CLK_OUT4,
   output wire       cpuclk
   );
+
+  wire clkin1_buffered;
+  IBUFG BUFG_IN (
+      .O(clkin1_buffered),
+      .I(CLK_IN1) 
+  );
   
   reg [2:0] pll_option_stored = 3'b000;
   reg [7:0] pulso_reconf = 8'h01; // force initial reset at boot
-  always @(posedge CLK_IN1) begin
+  always @(posedge clkin1_buffered) begin
     if (pll_option != pll_option_stored) begin
         pll_option_stored <= pll_option;
         pulso_reconf <= 8'b00000001;
@@ -42,7 +48,7 @@ module clock_generator
       .RST(1'b0),
       // CLKIN is the input clock that feeds the PLL_ADV CLKIN as well as the
       // clock for the PLL_DRP module
-      .CLKIN(CLK_IN1),
+      .CLKIN(clkin1_buffered),
       // SRDY pulses for one clock cycle after the PLL_ADV is locked and the 
       // PLL_DRP module is ready to start another re-configuration
       .SRDY(),
@@ -54,58 +60,6 @@ module clock_generator
       .CLK3OUT(CLK_OUT4)
    );
 
-//    wire clk28, clk14, clk7, clk3d5, cpuclk_3_2, cpuclk_1_0;
-//
-//    BUFGMUX reloj28_contenido (
-//        .O(clk28),
-//        .I0(CLK_OUT1),
-//        .I1(1'b1),
-//        .S(CPUContention)
-//    );
-//
-//    BUFGMUX reloj14_contenido (
-//        .O(clk14),
-//        .I0(CLK_OUT2),
-//        .I1(1'b1),
-//        .S(CPUContention)
-//    );
-//
-//    BUFGMUX reloj7_contenido (
-//        .O(clk7),
-//        .I0(CLK_OUT3),
-//        .I1(1'b1),
-//        .S(CPUContention)
-//    );
-//
-//    BUFGMUX reloj3d5_contenido (
-//        .O(clk3d5),
-//        .I0(CLK_OUT4),
-//        .I1(1'b1),
-//        .S(CPUContention)
-//    );
-//
-//    BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
-//      .O(cpuclk_3_2),
-//      .I0(clk14),
-//      .I1(clk28),
-//      .S(turbo_enable[0])
-//    );
-//  
-//    BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
-//      .O(cpuclk_1_0),
-//      .I0(clk3d5),
-//      .I1(clk7),
-//      .S(turbo_enable[0])
-//    );
-//  
-//    BUFGMUX cpuclk_selector (
-//      .O(cpuclk),
-//      .I0(cpuclk_1_0),
-//      .I1(cpuclk_3_2),
-//      .S(turbo_enable[1])
-//    );
-    
-
   wire cpuclk_selected, cpuclk_3_2, cpuclk_1_0;
   
 //  BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
@@ -115,17 +69,43 @@ module clock_generator
 //    .S(turbo_enable[0])
 //    );
   
+//  BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
+//    .O(cpuclk_1_0),
+//    .I0(CLK_OUT4),
+//    .I1(CLK_OUT3),
+//    .S(turbo_enable[0])
+//    );
+//  
+//  BUFGMUX cpuclk_selector (
+//    .O(cpuclk_selected),
+//    .I0(cpuclk_1_0),
+//    .I1(CLK_OUT2),
+//    .S(turbo_enable[1])
+//    );
+//  
+//  BUFGMUX aplicar_contienda (
+//        .O(cpuclk),
+//        .I0(cpuclk_selected),     // when no contention, clock is this one
+//        .I1(1'b1),       // during contention, clock is pulled up
+//        .S(CPUContention)  // contention signal
+//        );
+
+
+  reg [2:0] clkdivider = 3'b000;
+  always @(posedge CLK_OUT1)
+    clkdivider <= clkdivider + 3'd1;
+    
   BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
     .O(cpuclk_1_0),
-    .I0(CLK_OUT4),
-    .I1(CLK_OUT3),
+    .I0(clkdivider[2]),
+    .I1(clkdivider[1]),
     .S(turbo_enable[0])
     );
   
   BUFGMUX cpuclk_selector (
     .O(cpuclk_selected),
     .I0(cpuclk_1_0),
-    .I1(CLK_OUT2),
+    .I1(clkdivider[0]),
     .S(turbo_enable[1])
     );
   

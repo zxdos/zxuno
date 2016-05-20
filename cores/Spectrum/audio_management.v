@@ -77,19 +77,15 @@ module mixer (
 					    ({ear,spk,mic}==3'b110)? 8'd244 : 8'd255;
 	
     reg [7:0] mezcla;
-    reg [3:0] cntsamples = 4'd0;
     reg [1:0] sndsource = 2'd0;
 	
 	always @(posedge clkdac) begin
-        if (cntsamples == 4'd0) begin  // cada 256 cuentas de reloj, cambiamos de fuente de sonido
-            case (sndsource)
-                SRC_BEEPER: mezcla <= beeper;
-                SRC_AY1   : mezcla <= ay1;
-                SRC_AY2   : mezcla <= ay2;
-            endcase
-            sndsource <= (sndsource == 2'd2)? 2'd0 : sndsource + 2'd1;  // en lugar de sumar, multiplexamos en el tiempo las fuentes de sonido
-        end
-        cntsamples <= cntsamples + 4'd1;
+        case (sndsource)
+            SRC_BEEPER: mezcla <= beeper;
+            SRC_AY1   : mezcla <= ay1;
+            SRC_AY2   : mezcla <= ay2;
+        endcase
+        sndsource <= (sndsource == 2'd2)? 2'd0 : sndsource + 2'd1;  // en lugar de sumar, multiplexamos en el tiempo las fuentes de sonido
     end
 
 	dac audio_dac (
