@@ -27,6 +27,7 @@ module spi (
    input wire [7:0] din,   // del bus de datos de salida de la CPU
    output reg [7:0] dout,  // al bus de datos de entrada de la CPU
    output reg oe_n,        // el dato en dout es válido
+   output reg wait_n,
    
    output wire spi_clk,    // Interface SPI
    output wire spi_di,     //
@@ -44,12 +45,15 @@ module spi (
    assign spi_clk = contador[0];   // spi_CLK es la mitad que el reloj del módulo
    assign spi_di = data_to_spi[7]; // la transmisión es del bit 7 al 0
    
+   initial wait_n = 1'b1;
+   
    always @(posedge clk) begin
       if (enviar_dato && !ciclo_escritura) begin  // si ha sido señalizado, iniciar ciclo de escritura
          ciclo_escritura <= 1'b1;
          ciclo_lectura <= 1'b0;
          contador <= 5'b00000;
          data_to_spi <= din;
+         wait_n <= 1'b0;         
       end
       else if (recibir_dato && !ciclo_lectura) begin // si no, si mirar si hay que iniciar ciclo de lectura
          ciclo_lectura <= 1'b1;
@@ -57,12 +61,15 @@ module spi (
          contador <= 5'b00000;
          data_to_cpu <= data_from_spi;
          data_from_spi <= 8'h00;
-         data_to_spi <= 8'hFF;  // mientras leemos, MOSI debe estar a nivel alto!
+         data_to_spi <= 8'hFF;  // mientras leemos, MOSI debe estar a nivel alto!       
+         wait_n <= 1'b0;         
       end
       
       // FSM para enviar un dato a la spi
       else if (ciclo_escritura==1'b1) begin
          if (contador!=5'b10000) begin
+            if (contador == 5'b01000)
+                wait_n <= 1'b1;            
             if (spi_clk==1'b1) begin
                data_to_spi <= {data_to_spi[6:0],1'b0};
                data_from_spi <= {data_from_spi[6:0],spi_do};
@@ -78,6 +85,8 @@ module spi (
       // FSM para leer un dato de la spi
       else if (ciclo_lectura==1'b1) begin
          if (contador!=5'b10000) begin
+            if (contador == 5'b01000)
+                wait_n <= 1'b1;            
             if (spi_clk==1'b1)
                data_from_spi <= {data_from_spi[6:0],spi_do};
             contador <= contador + 1;

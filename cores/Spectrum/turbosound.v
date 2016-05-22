@@ -67,7 +67,8 @@ YM2149 ay1 (
   .O_IOB_OE_L(),
   .ENA(~disable_ay),
   .RESET_L(reset_n),
-  .CLK(clkay)
+  .CLK(clkay),
+  .CLK28(clk)
   );
 
 YM2149 ay2 (
@@ -89,7 +90,8 @@ YM2149 ay2 (
   .O_IOB_OE_L(),
   .ENA(~disable_ay & ~disable_turboay),
   .RESET_L(reset_n),
-  .CLK(clkay)
+  .CLK(clkay),
+  .CLK28(clk)
   );
 
 endmodule

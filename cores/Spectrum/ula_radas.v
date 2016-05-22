@@ -23,9 +23,10 @@
 
 module ula_radas (
     // Clocks
-    input wire clk14,  // 14MHz master clock
+    input wire clk28,
+    input wire clkregs,  // clock to load registers
+    input wire clk14,    // 14MHz master clock
     input wire clk7,
-    input wire wssclk, // 5MHz WSS clock
     input wire cpuclk,
     output wire CPUContention,
     input wire rst_n,  // reset para volver al modo normal
@@ -150,7 +151,7 @@ module ula_radas (
     
     // Border register
     reg [2:0] Border = 3'b010;  // initial border colour is red
-    always @(posedge clk7) begin
+    always @(posedge clkregs) begin
       if (WriteToPortFE)
          Border <= din[2:0];
     end
@@ -182,7 +183,7 @@ module ula_radas (
     wire HR  = TimexConfigReg[2];
     assign doc_ext_option = enable_timexmmu & TimexConfigReg[7];
     wire [2:0] HRInk = TimexConfigReg[5:3];
-    always @(posedge clk7) begin
+    always @(posedge clkregs) begin
       if (rst_n == 1'b0)
          TimexConfigReg <= 8'h00;
       else if (TimexConfigLoad)
@@ -245,8 +246,8 @@ module ula_radas (
    `define full 3'b111
    reg [8:0] Std9bitColour;
 	always @* begin
-     Std9bitColour = {`none,`none,`none};
- 	  case (StdPixelColour)  // speccy colour to GGGRRRBBB colour. If you want to alter the standard palette, this is what you need to touch ;)
+ 	  case (StdPixelColour)  // speccy colour to GGGRRRBBB colour. If you want to alter the standard palette, 
+	                         // this is what you need to touch ;)
 				0,8: Std9bitColour = {`none,`none,`none};
 				1:   Std9bitColour = {`none,`none,`half};
 				2:   Std9bitColour = {`none,`half,`none};
@@ -262,12 +263,13 @@ module ula_radas (
 				13:  Std9bitColour = {`full,`none,`full};
 				14:  Std9bitColour = {`full,`full,`none};
 				15:  Std9bitColour = {`full,`full,`full};
+				default: Std9bitColour = {`none,`none,`none};
 	  endcase
 	end
    
    // PaletteReg register (ULAplus)
    reg [6:0] PaletteReg = 7'h00;
-   always @(posedge clk7) begin
+   always @(posedge clkregs) begin
       if (PaletteRegLoad)
         PaletteReg <= din[6:0];
    end
@@ -276,7 +278,7 @@ module ula_radas (
    reg [1:0] ConfigReg = 2'b00;
    wire ULAplusEnabled = ConfigReg[0];
    assign RadasEnabled = ConfigReg[1];
-   always @(posedge clk7) begin
+   always @(posedge clkregs) begin
       if (rst_n == 1'b0)
          ConfigReg <= 2'b00;
       else if (ConfigRegLoad)
@@ -293,7 +295,7 @@ module ula_radas (
    wire [5:0] AddressA2 = (RadasEnabled)? {2'b00,InputToAttrOutput[3:0]} :
                                           {InputToAttrOutput[7:6],1'b0,InputToAttrOutput[2:0]};
    lut palette (
-      .clk(clk7),
+      .clk(clk28),
       .load(PaletteLoad),
       .din(din),
       .a1(AddressA1),
@@ -444,7 +446,7 @@ module ula_radas (
          
    // Z80 writes values into registers
    // Port 0xFE
-   always @(posedge clk7) begin
+   always @(posedge clkregs) begin
       if (WriteToPortFE) begin
          {spk,mic} <= din[4:3];
       end

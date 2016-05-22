@@ -442,7 +442,7 @@ module new_memory (
          oe_n = 1'b0;
       end
       else begin
-         dout = 8'hFF;
+         dout = 8'hZZ;
          oe_n = 1'b1;
       end
    end

@@ -14,15 +14,16 @@ module clock_generator
   output wire       CLK_OUT2,
   output wire       CLK_OUT3,
   output wire       CLK_OUT4,
-  output wire       cpuclk
+  output wire       cpuclk,
+  output wire       cpuclkplain
   );
 
   wire clkin1_buffered;
   IBUFG BUFG_IN (
       .O(clkin1_buffered),
-      .I(CLK_IN1) 
+      .I(CLK_IN1)
   );
-  
+
   reg [2:0] pll_option_stored = 3'b000;
   reg [7:0] pulso_reconf = 8'h01; // force initial reset at boot
   always @(posedge clkin1_buffered) begin
@@ -40,8 +41,8 @@ module clock_generator
       // SSTEP is the input to start a reconfiguration.  It should only be
       // pulsed for one clock cycle.
       .SSTEP(pulso_reconf[7]),
-      // STATE determines which state the PLL_ADV will be reconfigured to.  A 
-      // value of 0 correlates to state 1, and a value of 1 correlates to state 
+      // STATE determines which state the PLL_ADV will be reconfigured to.  A
+      // value of 0 correlates to state 1, and a value of 1 correlates to state
       // 2.
       .STATE(pll_option_stored),
       // RST will reset the entire reference design including the PLL_ADV
@@ -49,10 +50,10 @@ module clock_generator
       // CLKIN is the input clock that feeds the PLL_ADV CLKIN as well as the
       // clock for the PLL_DRP module
       .CLKIN(clkin1_buffered),
-      // SRDY pulses for one clock cycle after the PLL_ADV is locked and the 
+      // SRDY pulses for one clock cycle after the PLL_ADV is locked and the
       // PLL_DRP module is ready to start another re-configuration
       .SRDY(),
-      
+
       // These are the clock outputs from the PLL_ADV.
       .CLK0OUT(CLK_OUT1),
       .CLK1OUT(CLK_OUT2),
@@ -61,54 +62,28 @@ module clock_generator
    );
 
   wire cpuclk_selected, cpuclk_3_2, cpuclk_1_0;
-  
-//  BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
-//    .O(cpuclk_3_2),
-//    .I0(CLK_OUT2),
-//    .I1(CLK_OUT1),
-//    .S(turbo_enable[0])
-//    );
-  
-//  BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
-//    .O(cpuclk_1_0),
-//    .I0(CLK_OUT4),
-//    .I1(CLK_OUT3),
-//    .S(turbo_enable[0])
-//    );
-//  
-//  BUFGMUX cpuclk_selector (
-//    .O(cpuclk_selected),
-//    .I0(cpuclk_1_0),
-//    .I1(CLK_OUT2),
-//    .S(turbo_enable[1])
-//    );
-//  
-//  BUFGMUX aplicar_contienda (
-//        .O(cpuclk),
-//        .I0(cpuclk_selected),     // when no contention, clock is this one
-//        .I1(1'b1),       // during contention, clock is pulled up
-//        .S(CPUContention)  // contention signal
-//        );
 
-
-  reg [2:0] clkdivider = 3'b000;
-  always @(posedge CLK_OUT1)
-    clkdivider <= clkdivider + 3'd1;
-    
-  BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
-    .O(cpuclk_1_0),
-    .I0(clkdivider[2]),
-    .I1(clkdivider[1]),
+  BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
+    .O(cpuclk_3_2),
+    .I0(CLK_OUT2),
+    .I1(CLK_OUT1),
     .S(turbo_enable[0])
     );
-  
+
+  BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
+    .O(cpuclk_1_0),
+    .I0(CLK_OUT4),
+    .I1(CLK_OUT3),
+    .S(turbo_enable[0])
+    );
+
   BUFGMUX cpuclk_selector (
     .O(cpuclk_selected),
     .I0(cpuclk_1_0),
-    .I1(clkdivider[0]),
+    .I1(CLK_OUT2),
     .S(turbo_enable[1])
     );
-  
+
   BUFGMUX aplicar_contienda (
         .O(cpuclk),
         .I0(cpuclk_selected),     // when no contention, clock is this one
@@ -117,4 +92,37 @@ module clock_generator
         );
 
 
+//  reg [2:0] clkdivider = 3'b000;
+//  always @(posedge CLK_OUT1)
+//    clkdivider <= clkdivider + 3'd1;
+//
+//  BUFGMUX speed_3_and_2 (  // 28MHz and 14MHz for CPU
+//    .O(cpuclk_3_2),
+//    .I0(clkdivider[0]),
+//    .I1(CLK_OUT1),
+//    .S(turbo_enable[0])
+//    );
+//
+//  BUFGMUX speed_1_and_0 (  // 7MHz and 3.5MHz for CPU
+//    .O(cpuclk_1_0),
+//    .I0(clkdivider[2]),
+//    .I1(clkdivider[1]),
+//    .S(turbo_enable[0])
+//    );
+//
+//  BUFGMUX cpuclk_selector (
+//    .O(cpuclk_selected),
+//    .I0(cpuclk_1_0),
+//    .I1(cpuclk_3_2/*clkdivider[0]*/),
+//    .S(turbo_enable[1])
+//    );
+//
+//  BUFGMUX aplicar_contienda (
+//        .O(cpuclk),
+//        .I0(cpuclk_selected),     // when no contention, clock is this one
+//        .I1(1'b1),       // during contention, clock is pulled up
+//        .S(CPUContention)  // contention signal
+//        );
+
+  assign cpuclkplain = cpuclk_selected;
 endmodule

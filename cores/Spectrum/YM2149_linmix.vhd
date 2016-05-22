@@ -85,7 +85,8 @@ entity YM2149 is
 
   ENA                 : in  std_logic; -- clock enable for higher speed operation
   RESET_L             : in  std_logic;
-  CLK                 : in  std_logic  -- note 6 Mhz
+  CLK                 : in  std_logic;  -- note 6 Mhz
+  CLK28               : in  std_logic
   );
 end;
 
@@ -193,7 +194,7 @@ begin
   p_wdata                : process
   begin
     -- looks like registers are latches in real chip, but the address is caught at the end of the address state.
-    wait until rising_edge(CLK);
+    wait until rising_edge(CLK28);
     env_reset <= '0';
 
     if (RESET_L = '0') then

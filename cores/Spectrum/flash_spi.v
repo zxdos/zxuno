@@ -33,6 +33,7 @@ module flash_and_sd (
    input wire [7:0] din,   // del bus de datos de salida de la CPU
    output wire [7:0] dout, // al bus de datos de entrada de la CPU
    output wire oe_n,       // el dato en dout es válido
+   output wire wait_n,     // pausa para la CPU. Mejora estabilidad
    
    input wire in_boot_mode,// Esta interfaz sólo es válida en modo boot
    output wire flash_cs_n, //
@@ -103,6 +104,7 @@ module flash_and_sd (
       .din(din),
       .dout(dout),
       .oe_n(oe_n),
+      .wait_n(wait_n),
    
       .spi_clk(sclk),
       .spi_di(mosi),
