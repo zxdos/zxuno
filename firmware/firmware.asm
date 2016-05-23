@@ -220,10 +220,15 @@ start   ld      bc, chrend-runbit
         ld      bc, zxuno_port
         out     (c), a
         inc     b
+        ld      hl, (scanli)
+        rrc     l
+        add     hl, hl
         ld      a, (outvid)
-        scf
-        rra
-        or      $40
+        rrca
+        rrca
+        ld      a, h
+        adc     a, a
+        or      $c0
         ld      (scnbak), a       ; lo pongo a 28Mhz
         out     (c), a
         im      1
@@ -374,17 +379,10 @@ star54  inc     b
         out     (c), a
         ld      a, (cpuspd)
         rrca
-        ld      hl, (scanli)
-        rr      l
-        rl      h
         rrca
-        rr      l
-        ld      a, (outvid)
-        rrca
-        rrca
-        ld      a, h
-        adc     a, a
-        or      l
+        or      $3f
+        ld      hl, scnbak
+        and     (hl)
         dec     b
         out     (c), e
         inc     b
@@ -4002,7 +4000,7 @@ l3ec3   ld      a, ixl
         block   $3ee6-$         ; 25 bytes
 
 lbytes  ld      a, (scnbak)
-        and     %01111111
+        and     %00111111
         call    setvid
         call    lbytes2
         ld      a, (scnbak)
@@ -4184,7 +4182,7 @@ decbhl  dec     hl
         block   $7e00-$
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.40', 0
+        defm    'ZX-Uno BIOS v0.41', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -4219,7 +4217,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.40    ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.41    ', $7f, '2016 ZX-Uno Team', 0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0
