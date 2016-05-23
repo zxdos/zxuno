@@ -46,11 +46,15 @@ call :CreateRom 25 "Manic Miner (1983)"            ManicMiner       0    lh17
 call :CreateRom 26 "Misco Jones (2013)"            MiscoJones       0    lh17
 call :CreateRom 27 "Jet Set Willy (1984)"          JetSetWilly      0    lh17
 call :CreateRom 28 "Lala Prologue (2010)"          LalaPrologue     0    lh17
+fcut FLASH.ZX1 006000 001041 tmp.bin
+fcut FLASH.ZX1 00c000 04c000 tmp1.bin
+fcut FLASH.ZX1 34c000 0b4000 tmp2.bin
+copy /by tmp.bin+tmp1.bin+tmp2.bin sd_binaries\ROMS.%3
 srec_cat  FLASH.ZX1 -binary     ^
           -o prom.%2.mcs -Intel ^
           -line-length=44       ^
           -line-termination=nl
-del tmp.bin
+del tmp.bin tmp1.bin tmp2.bin
 move /y FLASH.ZX1 sd_binaries\FLASH.%3
 goto :eof
 
