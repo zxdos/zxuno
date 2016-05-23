@@ -441,6 +441,7 @@ module ula_radas (
 
    parameter
       TIMEXPORT =    8'hFF,
+      TIMEXMMU  =    8'hF4,
       ULAPLUSADDR = 16'hBF3B,
       ULAPLUSDATA = 16'hFF3B;      
          
@@ -460,7 +461,7 @@ module ula_radas (
       PaletteLoad = 1'b0;
       WriteToPortFE = 1'b0;
       if (iorq_n==1'b0 && wr_n==1'b0) begin
-         if (a[0]==1'b0 && a[7:0]!=8'hF4)
+         if (a[0]==1'b0 && a[7:0]!=TIMEXMMU)
             WriteToPortFE = 1'b1;
          else if (a[7:0]==TIMEXPORT)
             TimexConfigLoad = 1'b1;

@@ -237,7 +237,7 @@ module zxuno (
 
    ula_radas la_ula (
 	  // Clocks
-	  .clk28(clk28),
+     .clk28(clk28),
      .clkregs(cpuclkplain),
      .clk14(clk14),     // 14MHz master clock
      .clk7(clk7),
@@ -379,7 +379,7 @@ module zxuno (
    );
 
     ps2_keyb el_teclado (
-      .clk(cpuclkplain),
+      .clk(clk28),
       .clkps2(clkps2),
       .dataps2(dataps2),
       .rows(kbdrow),
@@ -516,7 +516,7 @@ module zxuno (
     );
 
     ps2_mouse_kempston el_raton (
-        .clk(cpuclkplain),
+        .clk(clk28),
         .rst_n(rst_n & mrst_n & power_on_reset_n),
         .clkps2(mouseclk),
         .dataps2(mousedata),

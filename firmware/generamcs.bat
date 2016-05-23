@@ -25,24 +25,27 @@ GenRom 0 sm1t BIOS firmware.rom core_taps\FIRMWARE.TAP
 GenRom 0 0    ESXDOS rom_binaries\esxdos.rom core_taps\ESXDOS.TAP
 call :CreateRom 0  "ZX Spectrum 48K Cargando Leches" leches         dn   lh
 call :CreateRom 1  "ZX +2A 4.1"                    plus3en41        t    0
-call :CreateRom 5  "SE Basic IV 4.0 Anya"          se               d    h
+call :CreateRom 5  "SE Basic IV 4.0 Anya"          se               d    h1
 call :CreateRom 7  "ZX Spectrum 48K"               48               dn   lh17
 AddItem ROM     8   rom_taps\rooted.tap
-call :CreateRom 9  "Jet Pac (1983)"                JetPac           0    lh17
-call :CreateRom 10 "Pssst (1983)"                  Pssst            0    lh17
-call :CreateRom 11 "Cookie (1983)"                 Cookie           0    lh17
-call :CreateRom 12 "Tranz Am (1983)"               TranzAm          0    lh17
-call :CreateRom 13 "Master Chess (1983)"           MasterChess      0    lh17
-call :CreateRom 14 "Backgammon (1983)"             Backgammon       0    lh17
-call :CreateRom 15 "Hungry Horace (1983)"          HungryHorace     0    lh17
-call :CreateRom 16 "Horace & the Spiders (1983)"   HoraceSpiders    0    lh17
-call :CreateRom 17 "Planetoids (1983)"             Planetoids       0    lh17
-call :CreateRom 18 "Space Raiders (1983)"          SpaceRaiders     0    lh17
-call :CreateRom 19 "Deathchase (1983)"             Deathchase       0    lh17
-call :CreateRom 20 "Manic Miner (1983)"            ManicMiner       0    lh17
-call :CreateRom 21 "Misco Jones (2013)"            MiscoJones       0    lh17
-call :CreateRom 22 "Jet Set Willy (1984)"          JetSetWilly      0    lh17
-call :CreateRom 23 "Lala Prologue (2010)"          LalaPrologue     0    lh17
+call :CreateRom 9  "Inves Spectrum+"               inves            0    lh17
+call :CreateRom 10 "Zx Spectrum +2"                plus2en          t    h1
+call :CreateRom 12 "Pentagon 128"                  pentagon         pc   h1
+call :CreateRom 14 "Jet Pac (1983)"                JetPac           0    lh17
+call :CreateRom 15 "Pssst (1983)"                  Pssst            0    lh17
+call :CreateRom 16 "Cookie (1983)"                 Cookie           0    lh17
+call :CreateRom 17 "Tranz Am (1983)"               TranzAm          0    lh17
+call :CreateRom 18 "Master Chess (1983)"           MasterChess      0    lh17
+call :CreateRom 19 "Backgammon (1983)"             Backgammon       0    lh17
+call :CreateRom 20 "Hungry Horace (1983)"          HungryHorace     0    lh17
+call :CreateRom 21 "Horace & the Spiders (1983)"   HoraceSpiders    0    lh17
+call :CreateRom 22 "Planetoids (1983)"             Planetoids       0    lh17
+call :CreateRom 23 "Space Raiders (1983)"          SpaceRaiders     0    lh17
+call :CreateRom 24 "Deathchase (1983)"             Deathchase       0    lh17
+call :CreateRom 25 "Manic Miner (1983)"            ManicMiner       0    lh17
+call :CreateRom 26 "Misco Jones (2013)"            MiscoJones       0    lh17
+call :CreateRom 27 "Jet Set Willy (1984)"          JetSetWilly      0    lh17
+call :CreateRom 28 "Lala Prologue (2010)"          LalaPrologue     0    lh17
 srec_cat  FLASH.ZX1 -binary     ^
           -o prom.%2.mcs -Intel ^
           -line-length=44       ^
