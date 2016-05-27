@@ -13,23 +13,30 @@
         define  scandbl_ctrl    11
 
         di
-        wreg    joyconf, %00010000
-        wreg    scandbl_ctrl, $c0 ; lo pongo a 28MHz
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 0
-        ld      sp, $bfff-19
-        xor     a               ; byte mas significativo de direccion
-        wreg    master_mapper, 8  ; paginamos la ROM en $c000
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
-        out     (c), a          ; envia direccion 008000, a=00,e=80,a=00
+        ld      sp, $bfff-68
         ld      de, $c761       ; tras el out (c), h de bffc se ejecuta
         push    de              ; un rst 0 para iniciar la nueva ROM
         ld      de, $ed80       ; en $bffc para evitar que el cambio de ROM
-        push    de              ; colisione con la siguiente instruccion
-        add     hl, sp
-        out     (c), e
-        out     (c), a
-        jr      boot
+        wreg    joyconf, %00010000
+        jr      lspi
+
+ldedg2  rst     $18             ; call routine ld-edge-1 below.
+        jr      nz, ldedg1
+        ret
+
+lspi    in      a, ($1f)
+        jr      lspi2
+
+ldedg1  ld      a, $16          ; a delay value of twenty two.
+ldelay  dec     a               ; decrement counter
+        jr      nz, ldelay      ; loop back to ld-delay 22 times.
+lsampl  inc     b               ; increment the time-out counter.
+        ret     z               ; return with failure when $ff passed.
+        in      a, ($fe)        ; row $7ffe. bit 6 is ear, bit 0 is space key.
+        xor     c               ; compare with initial long-term state.
+        and     $40             ; isolate bit 5
+        jr      z, lsampl       ; back to ld-sample if no edge.
+        jr      lcont
 
 rst28   ld      bc, zxuno_port + $100
         pop     hl
@@ -38,49 +45,45 @@ rst28   ld      bc, zxuno_port + $100
         outi
         jp      (hl)
 
-lspi2   dec     b
-lspi3   out     (c), h          ; a master_conf quiero enviar un 0 para pasar
-        inc     b
-        ret
+lspi2   wreg    scandbl_ctrl, $c0 ; lo pongo a 28MHz
+        jr      lspi3
 
 rst38   jp      $c043
 
+lspi3   push    de              ; colisione con la siguiente instruccion
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 0
+        wreg    master_mapper, 8  ; paginamos la ROM en $c000
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
+        and     c
+        out     (c), h          ; envia direccion 008000, a=00,e=80,a=00
+        out     (c), e
+        out     (c), h
+        add     hl, sp
 boot    ini
         inc     b
         cp      h               ; compruebo si la direccion es 0000 (final)
         jr      c, boot         ; repito si no lo es
+        wreg    scandbl_ctrl, 0 ; lo pongo a 3.5MHz
         dec     b
         out     (c), h          ; a master_conf quiero enviar un 0 para pasar
-        in      a, ($1f)
-        and     c
+        inc     b
         cp      %00011000       ; arriba y disparo a la vez
-        ld      de, $bffc-19
+        ld      de, $bffc-68
+        push    de
+        ret     nz
         jr      nbreak
-
-ldedg2  rst     $18             ; call routine ld-edge-1 below.
-        ret     z               ; return if space pressed or time-out.
-ldedg1  ld      a, $16          ; a delay value of twenty two.
-ldelay  dec     a               ; decrement counter
-        jr      nz, ldelay      ; loop back to ld-delay 22 times.
-lsampl  inc     b               ; increment the time-out counter.
-        ret     z               ; return with failure when $ff passed.
-        in      a, ($fe)        ; row $7ffe. bit 6 is ear, bit 0 is space key.
-        rra
-        xor     c               ; compare with initial long-term state.
-        and     $20             ; isolate bit 5
-        jr      z, lsampl       ; back to ld-sample if no edge.
-        ld      a, c            ; fetch comparison value.
-        xor     $27             ; switch the bits
-        ld      c, a            ; and put back in c for long-term.
-        out     ($fe), a        ; send to port to effect the change of colour. 
-        ret                     ; return.
 
 nmi66   jp      $c040
         retn
 
-nbreak  push    de
-        ret     nz
-        ld      de, $0051+2
+lcont   ld      a, c            ; fetch comparison value.
+        xor     $47             ; switch the bits
+        ld      c, a            ; and put back in c for long-term.
+        out     ($fe), a        ; send to port to effect the change of colour. 
+        ret                     ; return.
+
+nbreak  ld      de, $0051+2
         ld      ixh, e
         call    lbytes
         ld      ix, $c000

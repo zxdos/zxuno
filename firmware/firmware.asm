@@ -1,5 +1,5 @@
         include version.asm
-
+        define  recovery        0
         output  firmware_strings.rom
       macro wreg  dir, dato
         rst     $28
@@ -215,6 +215,7 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
 
 start   ld      bc, chrend-runbit
         ldir
+      IF  recovery=0
         call    loadch
         ld      a, scandbl_ctrl
         ld      bc, zxuno_port
@@ -231,6 +232,9 @@ start   ld      bc, chrend-runbit
         or      $c0
         ld      (scnbak), a       ; lo pongo a 28Mhz
         out     (c), a
+      ELSE
+        wreg    scandbl_ctrl, $c0
+      ENDIF
         im      1
         ld      de, fincad-1    ; descomprimo cadenas
         ld      hl, finstr-1
@@ -247,6 +251,7 @@ start2  ld      a, (hl)
         jp      pe, start2
         jr      nc, start1
         dec     e
+      IF  recovery=0
         ld      a, (quietb)
         out     ($fe), a
         dec     a
@@ -398,6 +403,27 @@ tstart5 sub     $80
 start7  jp      z, blst
         cp      $17
         jr      nz, tstart5
+      ELSE
+        pop     af
+repe    wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 1    ; envío write register status
+        ld      hl, $0202
+        ld      (menuop), hl
+        out     (c), 0
+        out     (c), l
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $35  ; envío write register status
+        in      a, (c)
+        in      a, (c)
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        and     2
+        jr      z, repe
+        xor     a
+      ENDIF
 
 ;++++++++++++++++++++++++++++++++++
 ;++++++++    Enter Setup   ++++++++
@@ -411,7 +437,9 @@ bios    out     ($fe), a
         ld      l, h
         ld      e, $17
         call    window
+      IF  recovery=0
         ld      (menuop), hl
+      ENDIF
         call    clrscr          ; borro pantalla
         ld      ix, cad7
         call_prnstr             ; menu superior
@@ -2043,7 +2071,10 @@ exit4   djnz    exit5
 exit5   djnz    exit6
         jp      loadch
 exit6   call    savech
-exit7   jp      star51
+exit7 
+      IF  recovery=0
+        jp      star51
+      ENDIF
 
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
@@ -2155,7 +2186,10 @@ blst4   call    combol
         ld      (active), a
         jr      nc, blst5
         ld      (bitstr), a
-blst5   jp      start50
+blst5
+      IF  recovery=0
+        jp      start50
+      ENDIF
 
 imyesn  call    bloq1
         ld      ix, cad42
