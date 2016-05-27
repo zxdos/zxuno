@@ -13,7 +13,7 @@
         define  scandbl_ctrl    11
 
         di
-        ld      sp, $bfff-68
+        ld      sp, $bfff-67
         ld      de, $c761       ; tras el out (c), h de bffc se ejecuta
         push    de              ; un rst 0 para iniciar la nueva ROM
         ld      de, $ed80       ; en $bffc para evitar que el cambio de ROM
@@ -46,12 +46,12 @@ rst28   ld      bc, zxuno_port + $100
         jp      (hl)
 
 lspi2   wreg    scandbl_ctrl, $c0 ; lo pongo a 28MHz
-        jr      lspi3
+        push    de              ; colisione con la siguiente instruccion
+        defb    $fe
 
-rst38   jp      $c043
+rst38   jp      $c006
 
-lspi3   push    de              ; colisione con la siguiente instruccion
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 0
+lspi3   wreg    flash_cs, 1     ; desactivamos spi, enviando un 0
         wreg    master_mapper, 8  ; paginamos la ROM en $c000
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
@@ -69,12 +69,12 @@ boot    ini
         out     (c), h          ; a master_conf quiero enviar un 0 para pasar
         inc     b
         cp      %00011000       ; arriba y disparo a la vez
-        ld      de, $bffc-68
+        ld      de, $bffc-67
         push    de
-        ret     nz
+        ld      ixh, e
         jr      nbreak
 
-nmi66   jp      $c040
+nmi66   jp      $c003
         retn
 
 lcont   ld      a, c            ; fetch comparison value.
@@ -83,8 +83,8 @@ lcont   ld      a, c            ; fetch comparison value.
         out     ($fe), a        ; send to port to effect the change of colour. 
         ret                     ; return.
 
-nbreak  ld      de, $0051+2
-        ld      ixh, e
+nbreak  ret     nz
+        ld      de, $0051+2
         call    lbytes
         ld      ix, $c000
         ld      de, $4000+2
