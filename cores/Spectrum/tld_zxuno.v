@@ -38,6 +38,8 @@ module tld_zxuno (
    output wire audio_out_right,
    output wire stdn,
    output wire stdnb,
+   output wire flash_ext1,
+   output wire flash_ext2,
    
    output wire [20:0] sram_addr,
    inout wire [7:0] sram_data,
@@ -68,7 +70,9 @@ module tld_zxuno (
 
    assign stdn = 1'b0;  // fijar norma PAL
    assign stdnb = 1'b1; // y conectamos reloj PAL
-   
+   assign flash_ext1 = 1'b1;
+   assign flash_ext2 = 1'b1;
+
    assign sram_addr[19] = 1'b0;
    assign sram_addr[20] = 1'b0;
 
