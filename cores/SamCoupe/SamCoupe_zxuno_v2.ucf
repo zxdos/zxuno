@@ -38,7 +38,7 @@ NET "sram_addr<5>"    LOC="P123" | IOSTANDARD = LVCMOS33;
 NET "sram_addr<6>"    LOC="P126" | IOSTANDARD = LVCMOS33;
 NET "sram_addr<7>"    LOC="P131" | IOSTANDARD = LVCMOS33;
 NET "sram_addr<8>"    LOC="P127" | IOSTANDARD = LVCMOS33;
-NET "sram_addr<9>"    LOC="P124  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<9>"    LOC="P124" | IOSTANDARD = LVCMOS33;
 NET "sram_addr<10>"   LOC="P118" | IOSTANDARD = LVCMOS33;
 NET "sram_addr<11>"   LOC="P121" | IOSTANDARD = LVCMOS33;
 NET "sram_addr<12>"   LOC="P133" | IOSTANDARD = LVCMOS33;
