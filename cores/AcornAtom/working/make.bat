@@ -1,5 +1,5 @@
-SET machine=apple2_top
-SET ruta_ucf=source\apple2
+SET machine=Atomic_top_zxuno
+SET ruta_ucf=..\src\Atomic
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat
 rem call %ruta_bat%generar.bat v2

@@ -13,11 +13,11 @@ GenRom 0 sm1ta Machine tmp.bin core_taps\SPECTRUM.TAP
 rem CgLeches core_taps\SPECTRUM.TAP core_wavs\SPECTRUM.WAV 4
 call :CreateMachine CORE2 "Sam Coupe"        SamCoupe\tld_sam.%2.bit 0 %3
 call :CreateMachine CORE3 "Jupiter ACE"      JupiterAce\jupiter_ace.%2.bit JupiterAce\jupiter_ace.v2_v3.bit %3
-call :CreateMachine CORE4 "Master System"    MasterSystem\sms_rgb.%2.bit 0 %3
-call :CreateMachine CORE5 "Oric Atmos"       Oric\build\oric.%3.bit Oric\build\oric.v2_v3.bit %3
-call :CreateMachine CORE6 "BBC Micro"        BBCMicro\working\bbc_micro.%2.bit 0 %3
-call :CreateMachine CORE7 "Apple 2 (VGA)"    Apple2\build\Apple2.%2.bit 0 %3
-call :CreateMachine CORE8 "Acorn Atom (VGA)" AcornAtom\AcornAtom.%2.bit 0 %3
+call :CreateMachine CORE4 "Master System"    ..\..\zxuno\cores\sms_v2_spartan6\test4\sms_final_v4.bit 0 %3
+call :CreateMachine CORE5 "Oric Atmos"       ..\..\zxuno\cores\oric_spartan6\test1\build\oric_v4.bit \zxuno\cores\oric_spartan6\test1\build\oric.bit %3
+call :CreateMachine CORE6 "BBC Micro"        ..\..\zxuno\cores\BBCMicro\test3\working\bbc_micro_%2.bit 0 %3
+call :CreateMachine CORE7 "Apple 2 (VGA)"    ..\..\zxuno\cores\Apple2_spartan6\test2\build\apple2_top_%2.bit 0 %3
+call :CreateMachine CORE8 "Acorn Atom (VGA)" ..\..\zxuno\cores\acorn_atom_spartan6\test2\working\atomic_top_zxuno_%2.bit 0 %3
 call :CreateMachine CORE9 "NES (VGA)"        NES\xilinx\nes_zxuno.%2.bit 0 %3
 copy /y rom_binaries\esxdos.rom sd_binaries\ESXDOS.%3
 copy /y firmware.rom sd_binaries\FIRMWARE.%3
@@ -50,10 +50,6 @@ fcut FLASH.ZX1 006000 001041 tmp.bin
 fcut FLASH.ZX1 00c000 04c000 tmp1.bin
 fcut FLASH.ZX1 34c000 0b4000 tmp2.bin
 copy /by tmp.bin+tmp1.bin+tmp2.bin sd_binaries\ROMS.%3
-srec_cat  FLASH.ZX1 -binary     ^
-          -o prom.%2.mcs -Intel ^
-          -line-length=44       ^
-          -line-termination=nl
 del tmp.bin tmp1.bin tmp2.bin
 move /y FLASH.ZX1 sd_binaries\FLASH.%3
 goto :eof
