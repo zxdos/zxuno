@@ -23,10 +23,10 @@ copy /y rom_binaries\esxdos.rom sd_binaries\ESXDOS.%3
 copy /y firmware.rom sd_binaries\FIRMWARE.%3
 GenRom 0 sm1t BIOS firmware.rom core_taps\FIRMWARE.TAP
 GenRom 0 0    ESXDOS rom_binaries\esxdos.rom core_taps\ESXDOS.TAP
-call :CreateRom 0  "ZX Spectrum 48K Cargando Leches" leches         dn   lh
+call :CreateRom 0  "ZX Spectrum 48K"               48               dn   lh17
 call :CreateRom 1  "ZX +2A 4.1"                    plus3en41        t    0
 call :CreateRom 5  "SE Basic IV 4.0 Anya"          se               d    h1
-call :CreateRom 7  "ZX Spectrum 48K"               48               dn   lh17
+call :CreateRom 7  "ZX Spectrum 48K Cargando Leches" leches         dn   lh
 AddItem ROM     8   rom_taps\rooted.tap
 call :CreateRom 9  "Inves Spectrum+"               inves            0    lh17
 call :CreateRom 10 "Zx Spectrum +2"                plus2en          t    h1
@@ -50,8 +50,14 @@ fcut FLASH.ZX1 006000 001041 tmp.bin
 fcut FLASH.ZX1 00c000 04c000 tmp1.bin
 fcut FLASH.ZX1 34c000 0b4000 tmp2.bin
 copy /by tmp.bin+tmp1.bin+tmp2.bin sd_binaries\ROMS.%3
-del tmp.bin tmp1.bin tmp2.bin
-move /y FLASH.ZX1 sd_binaries\FLASH.%3
+rem cambiar el 400000 siguiente línea por 100000 si 25Q80
+fcut FLASH.ZX1 0 400000 tmp.bin
+srec_cat  tmp.bin -binary       ^
+          -o prom.%2.mcs -Intel ^
+          -line-length=44       ^
+          -line-termination=nl
+del tmp1.bin tmp2.bin
+move /y tmp.bin sd_binaries\FLASH.%3
 goto :eof
 
 :CreateMachine
