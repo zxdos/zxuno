@@ -1556,7 +1556,22 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
         djnz    rotp
 erfnf   ld      ix, cad78
 terror jp      ferror
-saba    sub     $31
+saba
+      IF version=4
+        sub     $31
+      ELSE
+      IF version=3
+        sub     $33
+      ELSE
+      IF version=2
+        sub     $32
+      ELSE
+      IF version=1
+        sub     $41
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
         jr      nz, erfnf
         call    testl
         jr      nz, erfnf             ; wrong length
@@ -1632,7 +1647,21 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
+      IF version=4
         sub     $31
+      ELSE
+      IF version=3
+        sub     $33
+      ELSE
+      IF version=2
+        sub     $32
+      ELSE
+      IF version=1
+        sub     $41
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
         jr      nz, erfnf2
         call    testl
         jr      nz, erfnf2
