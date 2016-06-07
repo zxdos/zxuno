@@ -1,4 +1,5 @@
         include version.asm
+        define  w25q80          0
         define  recovery        0
         output  firmware_strings.rom
       macro wreg  dir, dato
@@ -1797,8 +1798,12 @@ putc0   inc     hl
 
 sdtab   defw    $0020, $0040
         defw    $0040, $0080
-        defw    $4000, $0000
-        defw    $0540;, $0580
+      IF  w25q80=0
+        defw    $4000
+      ELSE
+        defw    $1000
+      ENDIF
+        defw    $0000, $0540
 
         include sd.asm
 

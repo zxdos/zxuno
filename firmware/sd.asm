@@ -3,6 +3,17 @@
 inirea  push    hl
         push    bc
 reinit  call    mmcinit
+;        push    af
+;        ld      a, SET_BLOCKLEN
+;        call    cs_low
+;        out     (c), a
+;        out     (c), 0
+;        out     (c), 0
+;        ld      a, 2
+;        out     (c), a
+;        call    send1z
+;        call    cs_high
+;        pop     af
         pop     bc
         pop     hl
         ret     nz
