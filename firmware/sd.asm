@@ -1,23 +1,5 @@
         define  debug   0
 
-inirea  push    hl
-        push    bc
-reinit  call    mmcinit
-;        push    af
-;        ld      a, SET_BLOCKLEN
-;        call    cs_low
-;        out     (c), a
-;        out     (c), 0
-;        out     (c), 0
-;        ld      a, 2
-;        out     (c), a
-;        call    send1z
-;        call    cs_high
-;        pop     af
-        pop     bc
-        pop     hl
-        ret     nz
-;        defb    $32
 readat0 ld      e, 0
 readata push    hl
         push    bc
@@ -42,7 +24,7 @@ mul2    ld      a, e
         out     (c), l
         call    send1z
 mul3    or      a
-        jr      nz, reinit
+        jr      nz, waitq
 waitl   call    waitr
         sub     $fe             ; waits for the MMC to reply $FE (DATA TOKEN)
         jr      z, waitm
@@ -52,6 +34,10 @@ waitm   push    ix
         ld      b, a
         inir
         inir
+waitq   ;push    af
+        ;in      f, (c)
+        ;in      f, (c)
+        ;pop     af
         pop     bc
         pop     hl
         ret

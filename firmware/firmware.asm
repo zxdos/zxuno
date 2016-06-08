@@ -1437,9 +1437,10 @@ tosd    ld      ix, cad75
 ;        out     (c), l
 ;        call    send1z
 
+        call    mmcinit
         sbc     hl, hl                ; read MBR
         ld      ix, tmpbu2
-        call    inirea
+        call    readat0
         jr      nz, errsd
         ld      a, (tmpbu2)           ; read first type
         sub     $e0
