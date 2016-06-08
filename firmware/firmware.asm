@@ -4122,7 +4122,7 @@ lbytes2 di                      ; disable interrupts
         ld      c, 2
         exx                     ; salvo de, en caso de volver al cargador estandar y para hacer luego el checksum
         ld      c, a
-ultr0   defb    $11             ; en 1120 bit bajo de h=1 alto de l=0
+ultr0   defb    $21             ; en 1120 bit bajo de h=1 alto de l=0
 ultr1   jr      nz, ultr3       ; return if at any time space is pressed.
 ultr2   ld      b, 0
         call    lsampl          ; leo la duracion de un pulso (positivo o negativo)

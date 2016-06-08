@@ -10,7 +10,7 @@ fpoke FLASH.ZX1 00000 file:header.bin               ^
                 58000 file:tmp.bin
 fcut tmp.bin 0 53f00 sd_binaries\SPECTRUM.%3
 GenRom 0 sm1ta Machine tmp.bin core_taps\SPECTRUM.TAP
-rem CgLeches core_taps\SPECTRUM.TAP core_wavs\SPECTRUM.WAV 4
+rem CgLeches core_taps\SPECTRUM.TAP core_wavs\SPECTRUM.WAV 3
 call :CreateMachine CORE2 "Sam Coupe"        SamCoupe\tld_sam.%2.bit 0 %3
 call :CreateMachine CORE3 "Jupiter ACE"      JupiterAce\jupiter_ace.%2.bit JupiterAce\jupiter_ace.v2_v3.bit %3
 call :CreateMachine CORE4 "Master System"    ..\..\zxuno\cores\sms_v2_spartan6\test4\sms_final_v4.bit 0 %3
@@ -22,7 +22,7 @@ call :CreateMachine CORE9 "NES (VGA)"        NES\xilinx\nes_zxuno.%2.bit 0 %3
 copy /y rom_binaries\esxdos.rom sd_binaries\ESXDOS.%3
 copy /y firmware.rom sd_binaries\FIRMWARE.%3
 GenRom 0 sm1t BIOS firmware.rom core_taps\FIRMWARE.TAP
-rem CgLeches core_taps\FIRMWARE.TAP core_wavs\FIRMWARE.WAV 4
+rem CgLeches core_taps\FIRMWARE.TAP core_wavs\FIRMWARE.WAV 3
 GenRom 0 0    ESXDOS rom_binaries\esxdos.rom core_taps\ESXDOS.TAP
 call :CreateRom 0  "ZX Spectrum 48K"               48               dn   lh17
 call :CreateRom 1  "ZX +2A 4.1"                    plus3en41        t    0
@@ -69,11 +69,11 @@ IF EXIST ..\cores\%3 (
 )
 GenRom 0 0 %2 sd_binaries\%1.%5 core_taps\%1.TAP
 AddItem %1 core_taps\%1.tap
-rem CgLeches core_taps\%1.TAP core_wavs\%1.WAV 4
+rem CgLeches core_taps\%1.TAP core_wavs\%1.WAV 3
 goto :eof
 
 :CreateRom
 GenRom %4 %5 %2 rom_binaries\%3.rom rom_taps\%3.tap
 AddItem ROM %1 rom_taps\%3.tap
-rem CgLeches rom_taps\%3.tap rom_wavs\%3.wav 4
+rem CgLeches rom_taps\%3.tap rom_wavs\%3.wav 3
 :eof
