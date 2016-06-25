@@ -35,12 +35,37 @@
         push    hl
       endm
 
-bucle   ld      hl, 0
-        ld      de, $4000
-        ld      bc, $1800
+bucle   ;ld      hl, 0
+        ;ld      de, $4000
+        ;ld      bc, $1800
+        ;ldir
+        ld      a, 1
+        ex      af, af'
+
+
+        ld      hl, chr
+        ld      de, $b400-chrend+chr
+        ld      bc, chrend-chr
         ldir
-        
-bucl2   di
+        ld      hl, $b000
+;        ld      de, $b400
+start1  ld      b, $04
+start2  ld      a, (hl)
+        rrca
+        rrca
+        ld      (de), a
+        inc     de
+        cpi
+        jp      pe, start2
+        jr      nc, start1
+
+
+bucl2   halt
+        di
+        ld      c, 4
+bucl3   djnz    bucl3
+        dec     c
+        jr      nz, bucl3
         linea   0, 0, 1,    0, 0, 0
         linea   0, 0, 2,    0, 0, 1
         linea   0, 0, 3,    0, 0, 2
@@ -232,13 +257,216 @@ bucl2   di
         linea   2, 7, 5,    2, 7, 4
         linea   2, 7, 6,    2, 7, 5
         linea   2, 7, 7,    2, 7, 6
+        ld      sp, 0
+        
+        ex      af, af'
+        rlca
+        jr      c, nprn
+        ex      af, af'
 
+;        ld      hl, 
+        ld      ix, string
+        ld      bc, $0014
+        call    prnstr
+        ld      ix, string
+        ld      bc, $8015
+        call    prnstr
+        ld      ix, string
+        ld      bc, $0116
+        call    prnstr
+        ld      ix, string
+        ld      bc, $8117
+        call    prnstr
+ jr $
+        ex      af, af'
 
-        ld      b, 3
-bucl3   ld      sp, 0
+nprn    ex      af, af'
         ei
         halt
-        djnz    bucl3
+        halt
         jp      bucl2
 
-        ;linea   2, 7, 7,    2, 7, 6
+; 01234567 01234567 01234567 01234567
+; abcdef
+;       ab cdef
+;              abcd ef
+;                     abcdef          0642
+;    abcde f
+;           abcdef
+;                 a bcdef
+;                        abc def      3175
+
+        block   256 - ($ & $ff)
+
+prntab  defb    pos0 & $ff
+        defb    pos1 & $ff
+        defb    pos2 & $ff
+        defb    pos3 & $ff
+
+; -----------------------------------------------------------------------------
+; Print string routine
+; Parameters:
+;  BC: X coord (B) and Y coord (C)
+;  IX: null terminated string
+; -----------------------------------------------------------------------------
+
+prnstr  push    bc
+        ld      a, b
+        and     %11111100
+        ld      d, a
+        res     7, d
+        xor     b
+        ld      e, a
+        jr      z, prnch1
+        dec     e
+prnch1  rl      b
+        jr      nc, prnch2
+        add     a, 3
+prnch2  and     %00000011
+        ld      l, a
+        ld      h, prnstr>>8
+        ld      l, (hl)
+        push    hl
+        ld      a, d
+        rrca
+        ld      d, a
+        rrca
+        add     a, d
+        add     a, e
+        ld      e, a
+        ld      a, c
+        and     %00011000
+        or      %01000000
+        ld      d, a
+        ld      a, c
+        and     %00000111
+        rrca
+        rrca
+        rrca
+        add     a, e
+        ld      e, a
+        defb    $3e             ; salta la siguiente instruccion
+posf    pop     bc
+        inc     c
+        ret
+
+pos0    ld      a, (ix)
+        inc     ix
+        add     a, a
+        jr      z, posf
+        ld      l, a
+        ld      h, $2c
+        add     hl, hl
+        add     hl, hl
+        ld      b, 4
+pos00   ld      a, (hl)
+        ld      (de), a
+        inc     l
+        inc     d
+        ld      a, (hl)
+        ld      (de), a
+        inc     l
+        inc     d
+        djnz    pos00
+        ld      hl, $f800
+        add     hl, de
+        ex      de, hl
+pos1    ld      a, (ix)
+        inc     ix
+        add     a, a
+        jr      z, posf
+        ld      l, a
+        ld      h, $2f
+        add     hl, hl
+        add     hl, hl
+        ld      bc, $04fc
+pos10   ld      a, (de)
+        xor     (hl)
+        and     c
+        xor     (hl)
+        ld      (de), a
+        inc     e
+        ld      a, (hl)
+        and     c
+        ld      (de), a
+        inc     d
+        inc     l
+        ld      a, (hl)
+        and     c
+        ld      (de), a
+        dec     e
+        ld      a, (de)
+        xor     (hl)
+        and     c
+        xor     (hl)
+        ld      (de), a
+        inc     d
+        inc     l
+        djnz    pos10
+        ld      hl, $f801
+        add     hl, de
+        ex      de, hl
+pos2    ld      a, (ix)
+        inc     ix
+        add     a, a
+tposf   jr      z, posf
+        ld      l, a
+        ld      h, $2e
+        add     hl, hl
+        add     hl, hl
+        ld      bc, $04f0
+pos20   ld      a, (de)
+        xor     (hl)
+        and     c
+        xor     (hl)
+        ld      (de), a
+        inc     e
+        ld      a, (hl)
+        and     c
+        ld      (de), a
+        inc     d
+        inc     l
+        ld      a, (hl)
+        and     c
+        ld      (de), a
+        dec     e
+        ld      a, (de)
+        xor     (hl)
+        and     c
+        xor     (hl)
+        ld      (de), a
+        inc     d
+        inc     l
+        djnz    pos20
+        ld      hl, $f801
+        add     hl, de
+        ex      de, hl
+pos3    ld      a, (ix)
+        inc     ix
+        add     a, a
+        jr      z, tposf
+        ld      l, a
+        ld      h, $2d
+        add     hl, hl
+        add     hl, hl
+        ld      b, 4
+pos30   ld      a, (de)
+        xor     (hl)
+        ld      (de), a
+        inc     d
+        inc     l
+        ld      a, (de)
+        xor     (hl)
+        ld      (de), a
+        inc     d
+        inc     l
+        djnz    pos30
+        ld      hl, $f801
+        add     hl, de
+        ex      de, hl
+        jp      pos0
+
+
+string  include string.asm
+chr     incbin  fuente6x8.bin
+chrend
