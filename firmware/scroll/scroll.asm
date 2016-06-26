@@ -24,13 +24,15 @@ start   ld      a, b
         out     ($fe), a
         inc     a
         ex      af, af'
-        ld      hl, chr
-        push    hl
-        pop     ix
-        ld      de, $b400-fondo+chr
-        ld      bc, fondo-chr
-        ldir
+;        ld      ix, string
+;        ld      hl, chr
+;        push    hl
+;        pop     ix
+;        ld      de, $b400-fondo+chr
+;        ld      bc, fondo-chr
+;        ldir
         ld      hl, $b000
+        ld      de, $b400
 start1  ld      b, $08
 start2  ld      a, (hl)
         rrca
@@ -39,6 +41,9 @@ start2  ld      a, (hl)
         cpi
         jp      pe, start2
         jr      nc, start1
+
+        xor     a
+        call    cancio
 
 start3  ei
         halt
@@ -62,7 +67,10 @@ start4  djnz    start4
         push    hl
         push    hl
         ld      sp, hl
+vari    ld      ix, string
         ld      hl, start3
+        push    hl
+        ld      hl, inicio
         push    hl
         ex      af, af'
         rrca
@@ -263,6 +271,9 @@ doble2  ld      a, (de)
         ret
 
 string  include string.asm
-chr     incbin  fuente6x8.bin
 fondo   incbin  fondo.rcs
-fin
+fin     include player.asm
+        block   $b080-$
+        incbin  fuente6x8.bin
+        display $
+
