@@ -1,23 +1,36 @@
 
         output  scroll.bin
-        org     $5ccb
-        defb    0, 0, 0, 0
-        defb    $de, $c0, $37, $0e, $8f, $39, $ac ;OVER USR 7 ($5cd6)
-
-bucle   ;ld      hl, 0
-        ;ld      de, $4000
-        ;ld      bc, $1800
-        ;ldir
-        ld      a, 1
+        org     $5d27
+        ld      hl, fondo
+        ld      b, $40          ; filtro RCS inverso
+start   ld      a, b
+        xor     c
+        and     $f8
+        xor     c
+        ld      d, a
+        xor     b
+        xor     c
+        rlca
+        rlca
+        ld      e, a
+        inc     bc
+        ldi
+        inc     bc
+        ld      a, b
+        sub     $58
+        jr      nz, start
+        ld      b, 3
+        ldir
+        out     ($fe), a
+        inc     a
         ex      af, af'
-
-
         ld      hl, chr
-        ld      de, $b400-chrend+chr
-        ld      bc, chrend-chr
+        push    hl
+        pop     ix
+        ld      de, $b400-fondo+chr
+        ld      bc, fondo-chr
         ldir
         ld      hl, $b000
-;        ld      de, $b400
 start1  ld      b, $08
 start2  ld      a, (hl)
         rrca
@@ -27,83 +40,59 @@ start2  ld      a, (hl)
         jp      pe, start2
         jr      nc, start1
 
-
-bucl2   halt
+start3  ei
+        halt
         di
         ld      c, 4
-bucl3   djnz    bucl3
+start4  djnz    start4
         dec     c
-        jr      nz, bucl3
+        jr      nz, start4
         include lineas.asm
-        ld      sp, 0
-        
+        ld      sp, $401b+$800*2+$100*7+$20*7
+        sbc     hl, hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        push    hl
+        ld      sp, hl
+        ld      hl, start3
+        push    hl
         ex      af, af'
-        rlca
-        jr      c, nprn
+        rrca
+        jr      c, start5
         ex      af, af'
+        ret
+start5  ex      af, af'
+        xor     a
+        cp      (ix)
+        jr      nz, start6
+        ld      ix, string
+start6  push    ix
+        pop     hl
+        ld      c, $2b
+        cpir
+        ld      b, c
+        ld      c, $17
 
-        ld      ix, string
-        ld      bc, $0010
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0111
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0212
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0313
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0414
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0515
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0616
-        call    prnstr
-        ld      ix, string
-        ld      bc, $0717
-        call    prnstr
- jr $
-        ex      af, af'
-
-nprn    ex      af, af'
-        ei
-        halt
-        halt
-        jp      bucl2
-
-; 01234567 01234567 01234567 01234567
-; abcdef
-;       ab cdef
-;              abcd ef
-;                     abcdef          0642
-;    abcde f
-;           abcdef
-;                 a bcdef
-;                        abc def      3175
-
-
-; -----------------------------------------------------------------------------
-; Print string routine
-; Parameters:
-;  BC: X coord (B) and Y coord (C)
-;  IX: null terminated string
-; -----------------------------------------------------------------------------
-
-prnstr  push    bc
-        rr      b
+        push    bc
+        srl     b
         ld      a, b
-        jr      c, prnimp
-        and     %1111100
+        jr      c, prn2
+        and     %11111100
         ld      d, a
         xor     b
+        ld      b, a
         ld      e, a
-        jr      z, prnch1
+        jr      z, prn1
         dec     e
-prnch1  ld      a, d
+prn1    ld      a, d
         rrca
         ld      d, a
         rrca
@@ -131,7 +120,6 @@ pos0    ld      a, (ix)
         jr      z, posf
         ld      h, $2c
         call    simple
-        dec     de
 pos2    ld      a, (ix)
         inc     ix
         add     a, a
@@ -152,6 +140,7 @@ pos6    ld      a, (ix)
         jr      z, posf
         ld      h, $2e
         call    simple
+        inc     de
         jr      pos0
 pos26   rr      b
         jr      c, pos6
@@ -161,10 +150,11 @@ posf    pop     bc
         inc     c
         ret
 
-prnimp  and     %1111100
+prn2    and     %11111100
         ld      d, a
         xor     b
-        cp      3
+        ld      b, a
+        cp      2
         adc     a, -1
         ld      e, a
         ld      a, d
@@ -207,9 +197,8 @@ pos5    ld      a, (ix)
         add     a, a
         jr      z, posf
         ld      h, $33
-        ld      bc, $0401
+        ld      bc, $04fe
         call    doble
-        dec     de
 pos7    ld      a, (ix)
         inc     ix
         add     a, a
@@ -237,7 +226,7 @@ simple2 ld      a, (de)
         inc     d
         inc     l
         djnz    simple2
-        ld      hl, $f801
+        ld      hl, $f800
         add     hl, de
         ex      de, hl
         ret
@@ -275,4 +264,5 @@ doble2  ld      a, (de)
 
 string  include string.asm
 chr     incbin  fuente6x8.bin
-chrend
+fondo   incbin  fondo.rcs
+fin
