@@ -1,9 +1,10 @@
+FuenteABin
 Png2Rcs fondo.png fondo.rcs -a fondo.atr
-..\sjasmplus scroll.asm
+sjasmplus scroll.asm
 call :getfilesize scroll.bin
 echo  define  filesize %_filesize% > define.asm
-..\zx7b scroll.bin scroll.bin.zx7b
-..\sjasmplus scrolldesc.asm
+zx7b scroll.bin scroll.bin.zx7b
+sjasmplus scrolldesc.asm
 GenTape scroll.tap basic "SCROLL" 0 scrolldesc.bin
 goto :eof
 

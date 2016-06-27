@@ -1,14 +1,5 @@
-
-;        output  player.bin
-;        org     $c004
-;        jp      inicia_efecto
-;        jp      poff
-;        jp      cancio
-
 ; SPECTRUM PSG proPLAYER V 0.2 - WYZ 07.09.2011
 ; VER AL FINAL PARA DATOS PROPIOS:
-
-
 
 ; ISR LLAMA A:
 inicio: ld      (vari+2), ix
@@ -189,26 +180,11 @@ pcajp5: pop     hl
 ;in:(a)=nº de cancion
 cancio: ld      hl, interr      ;carga cancion
         set     1, (hl)         ;reproduce cancion
-        ld      hl, song
-        ld      (hl), a         ;nº (a)
-;decodificar
-;in-> interr 0 on
-;     song
-;carga cancion si/no
-;decode_song:
-
-;        ld      a, (song)
-
-;lee cabecera de la cancion
-;byte 0=tempo
-
-;        ld      hl, tabla_song
-;        call    ext_word
         ld      hl, song_1
         ld      a, (hl)
         ld      (tempo), a
-        xor     a
-        ld      (ttempo), a
+;        xor     a
+;        ld      (ttempo), a
             
 ;header byte 1
 ;(-|-|-|-|-|-|-|loop)
@@ -691,7 +667,6 @@ interr:         defb   00               ;INTERRUPTORES 1=ON 0=OFF
                                         ;BIT 3=EFECTOS ON/OFF
 ttempo:         defb   00               ;DB CONTADOR TEMPO
 tempo:          defb   00               ;DB TEMPO
-song:           defb   00               ;DBNº DE CANCION
 puntero_a:      defw   00               ;DW PUNTERO DEL CANAL A
 puntero_b:      defw   00               ;DW PUNTERO DEL CANAL B
 puntero_c:      defw   00               ;DW PUNTERO DEL CANAL C

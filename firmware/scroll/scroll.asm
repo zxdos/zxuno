@@ -1,6 +1,6 @@
 
         output  scroll.bin
-        org     $5d27
+        org     $5d28
         ld      hl, fondo
         ld      b, $40          ; filtro RCS inverso
 start   ld      a, b
@@ -24,13 +24,6 @@ start   ld      a, b
         out     ($fe), a
         inc     a
         ex      af, af'
-;        ld      ix, string
-;        ld      hl, chr
-;        push    hl
-;        pop     ix
-;        ld      de, $b400-fondo+chr
-;        ld      bc, fondo-chr
-;        ldir
         ld      hl, $b000
         ld      de, $b400
 start1  ld      b, $08
@@ -42,13 +35,12 @@ start2  ld      a, (hl)
         jp      pe, start2
         jr      nc, start1
 
-        xor     a
         call    cancio
 
 start3  ei
         halt
         di
-        ld      c, 4
+        ld      bc, 4
 start4  djnz    start4
         dec     c
         jr      nz, start4
@@ -89,7 +81,6 @@ start6  push    ix
         ld      b, c
         ld      c, $17
 
-        push    bc
         srl     b
         ld      a, b
         jr      c, prn2
@@ -125,27 +116,27 @@ prn1    ld      a, d
 pos0    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $2c
         call    simple
 pos2    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $32
         ld      bc, $04fc
         call    doble
 pos4    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $30
         ld      bc, $04f0
         call    doble
 pos6    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $2e
         call    simple
         inc     de
@@ -153,10 +144,6 @@ pos6    ld      a, (ix)
 pos26   rr      b
         jr      c, pos6
         jr      pos2
-
-posf    pop     bc
-        inc     c
-        ret
 
 prn2    and     %11111100
         ld      d, a
@@ -190,27 +177,27 @@ prn2    and     %11111100
 pos1    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $2f
         ld      bc, $04e0
         call    doble
 pos3    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $2d
         call    simple
 pos5    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $33
         ld      bc, $04fe
         call    doble
 pos7    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
         ld      h, $31
         ld      bc, $04f8
         call    doble
@@ -272,8 +259,6 @@ doble2  ld      a, (de)
 
 string  include string.asm
 fondo   incbin  fondo.rcs
-fin     include player.asm
+        include player.asm
         block   $b080-$
         incbin  fuente6x8.bin
-        display $
-

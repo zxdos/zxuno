@@ -1,7 +1,7 @@
         include define.asm
         output  scrolldesc.bin
         org     $5ccb
-        ld      de, $5d27+filesize-1
+        ld      de, $5d28+filesize-1
         di
         defb    $de, $c0, $37, $0e, $8f, $39, $96
         jr      aqui
