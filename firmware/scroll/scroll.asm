@@ -70,24 +70,50 @@ vari    ld      ix, string
         ex      af, af'
         ret
 start5  ex      af, af'
-        xor     a
-        cp      (ix)
-        jr      nz, start6
+        linea   3, 1, 0,    3, 0, 0
+        linea   3, 2, 0,    3, 1, 0
+        linea   3, 3, 0,    3, 2, 0
+        linea   3, 4, 0,    3, 3, 0
+        linea   3, 5, 0,    3, 4, 0
+        linea   3, 6, 0,    3, 5, 0
+        linea   3, 7, 0,    3, 6, 0
+        linea   3, 0, 1,    3, 7, 0
+        linea   3, 1, 1,    3, 0, 1
+        linea   3, 2, 1,    3, 1, 1
+        linea   3, 3, 1,    3, 2, 1
+        linea   3, 4, 1,    3, 3, 1
+        linea   3, 5, 1,    3, 4, 1
+        linea   3, 6, 1,    3, 5, 1
+        linea   3, 7, 1,    3, 6, 1
+        linea   3, 0, 2,    3, 7, 1
+        linea   3, 1, 2,    3, 0, 2
+        linea   3, 2, 2,    3, 1, 2
+        linea   3, 3, 2,    3, 2, 2
+        linea   3, 4, 2,    3, 3, 2
+        linea   3, 5, 2,    3, 4, 2
+        linea   3, 6, 2,    3, 5, 2
+        ld      sp, $fffc
+        ld      b, (ix)
+        djnz    start6
         ld      ix, string
-start6  push    ix
+start6  inc     ix
+        ld      hl, $5ac5
+        ld      (hl), b
+        ld      de, $5ac6
+        ld      bc, 21
+        ldir
+        xor     a
+        push    ix
         pop     hl
-        ld      c, $2b
+        ld      bc, $172b
         cpir
-        ld      b, c
-        ld      c, $17
-
-        srl     b
-        ld      a, b
+        srl     c
+        ld      a, c
         jr      c, prn2
         and     %11111100
         ld      d, a
-        xor     b
-        ld      b, a
+        xor     c
+        ld      c, a
         ld      e, a
         jr      z, prn1
         dec     e
@@ -98,19 +124,18 @@ prn1    ld      a, d
         add     a, d
         add     a, e
         ld      e, a
-        ld      a, c
+        ld      a, b
         and     %00011000
         or      %01000000
         ld      d, a
-        ld      a, c
+        ld      a, b
         and     %00000111
         rrca
         rrca
         rrca
         add     a, e
         ld      e, a
-        inc     c
-        rr      b
+        rr      c
         jr      c, pos26
         jr      nz, pos4
 pos0    ld      a, (ix)
@@ -141,14 +166,13 @@ pos6    ld      a, (ix)
         call    simple
         inc     de
         jr      pos0
-pos26   rr      b
+pos26   rr      c
         jr      c, pos6
         jr      pos2
-
 prn2    and     %11111100
         ld      d, a
-        xor     b
-        ld      b, a
+        xor     c
+        ld      c, a
         cp      2
         adc     a, -1
         ld      e, a
@@ -159,19 +183,18 @@ prn2    and     %11111100
         add     a, d
         add     a, e
         ld      e, a
-        ld      a, c
+        ld      a, b
         and     %00011000
         or      %01000000
         ld      d, a
-        ld      a, c
+        ld      a, b
         and     %00000111
         rrca
         rrca
         rrca
         add     a, e
         ld      e, a
-        inc     c
-        rr      b
+        rr      c
         jr      c, pos37
         jr      nz, pos5
 pos1    ld      a, (ix)
@@ -202,7 +225,7 @@ pos7    ld      a, (ix)
         ld      bc, $04f8
         call    doble
         jr      pos1
-pos37   rr      b
+pos37   rr      c
         jr      c, pos7
         jr      pos3
 
@@ -260,5 +283,5 @@ doble2  ld      a, (de)
 string  include string.asm
 fondo   incbin  fondo.rcs
         include player.asm
-        block   $b080-$
+        block   $b100-$
         incbin  fuente6x8.bin
