@@ -171,6 +171,9 @@ module zxuno (
    wire disable_romsel1f;
    wire enable_timexmmu;
    wire disable_spisd;
+   wire disable_timexscr;
+   wire disable_ulaplus;
+   wire disable_radas;
    wire [7:0] devoptions_dout;
    wire oe_n_devoptions;
  
@@ -264,6 +267,11 @@ module zxuno (
      .va(vram_addr),  // 16KB videoram, 2 pages
      .vramdata(vram_dout),
 	 
+    // ZX-UNO register interface
+     .zxuno_addr(zxuno_addr),
+     .zxuno_regrd(zxuno_regrd),
+     .zxuno_regwr(zxuno_regwr),
+    
     // I/O ports
      .ear(ear),
      .mic(mic),
@@ -274,6 +282,9 @@ module zxuno (
      .disable_contention(disable_contention),
      .doc_ext_option(doc_ext_option),
      .enable_timexmmu(enable_timexmmu),
+     .disable_timexscr(disable_timexscr),
+     .disable_ulaplus(disable_ulaplus),
+     .disable_radas(disable_radas),
 
     // Video
      .r(r),
@@ -300,7 +311,7 @@ module zxuno (
    );
 
    flash_and_sd cacharros_con_spi (
-      .clk(clk28),
+      .clk(clk14),
       .a(cpuaddr),
       .iorq_n(iorq_n),
       .rd_n(rd_n),
@@ -461,7 +472,10 @@ module zxuno (
         .disable_romsel7f(disable_romsel7f),
         .disable_romsel1f(disable_romsel1f),
         .enable_timexmmu(enable_timexmmu),
-        .disable_spisd(disable_spisd)
+        .disable_spisd(disable_spisd),
+        .disable_timexscr(disable_timexscr),
+        .disable_ulaplus(disable_ulaplus),
+        .disable_radas(disable_radas)
     );
 
     scandoubler_ctrl control_scandoubler (

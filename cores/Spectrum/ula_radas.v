@@ -49,6 +49,11 @@ module ula_radas (
     output reg [13:0] va,  // 16KB videoram
     input wire [7:0] vramdata,
 
+    // ZX-UNO register interface
+    input wire [7:0] zxuno_addr,
+    input wire zxuno_regrd,
+    input wire zxuno_regwr,
+
     // I/O ports
     input wire ear,
     input wire [4:0] kbd,
@@ -60,6 +65,9 @@ module ula_radas (
     input wire access_to_contmem,
     output wire doc_ext_option,
     input wire enable_timexmmu,
+    input wire disable_timexscr,
+    input wire disable_ulaplus,    
+    input wire disable_radas,
 
     // Video
     output wire [2:0] r,
@@ -275,15 +283,25 @@ module ula_radas (
    end
    
    // ConfigReg register (ULAplus)
-   reg [1:0] ConfigReg = 2'b00;
-   wire ULAplusEnabled = ConfigReg[0];
-   assign RadasEnabled = ConfigReg[1];
+   reg ConfigReg = 1'b0;
    always @(posedge clkregs) begin
       if (rst_n == 1'b0)
-         ConfigReg <= 2'b00;
+         ConfigReg <= 1'b0;
       else if (ConfigRegLoad)
-         ConfigReg <= din[1:0];
+         ConfigReg <= din[0];
    end
+
+   // RadasCtrl register
+   reg [1:0] RadasCtrl = 2'b00;
+   always @(posedge clkregs) begin
+      if (rst_n == 1'b0)
+         RadasCtrl <= 2'b00;
+      else if (zxuno_addr == RADASCTRL && zxuno_regwr == 1'b1 && disable_radas == 1'b0)
+         RadasCtrl <= din[1:0];
+   end
+   assign RadasEnabled = &RadasCtrl[1:0];
+
+   wire ULAplusEnabled = ConfigReg | RadasEnabled;
    
    // Palette LUT
    wire [7:0] PaletteEntryToCPU;
@@ -440,10 +458,11 @@ module ula_radas (
 ///////////////////////////////////////////////
 
    parameter
-      TIMEXPORT =    8'hFF,
-      TIMEXMMU  =    8'hF4,
-      ULAPLUSADDR = 16'hBF3B,
-      ULAPLUSDATA = 16'hFF3B;      
+      TIMEXPORT    = 8'hFF,
+      TIMEXMMU     = 8'hF4,
+      ULAPLUSADDR  = 16'hBF3B,
+      ULAPLUSDATA  = 16'hFF3B,
+      RADASCTRL    = 8'h40;
          
    // Z80 writes values into registers
    // Port 0xFE
@@ -463,11 +482,11 @@ module ula_radas (
       if (iorq_n==1'b0 && wr_n==1'b0) begin
          if (a[0]==1'b0 && a[7:0]!=TIMEXMMU)
             WriteToPortFE = 1'b1;
-         else if (a[7:0]==TIMEXPORT)
+         else if (a[7:0]==TIMEXPORT && !disable_timexscr)
             TimexConfigLoad = 1'b1;
-         else if (a==ULAPLUSADDR)
+         else if (a==ULAPLUSADDR && !disable_ulaplus)
             PaletteRegLoad = 1'b1;
-         else if (a==ULAPLUSDATA) begin
+         else if (a==ULAPLUSDATA && !disable_ulaplus) begin
             if (PaletteReg[6]==1'b0)  // writting a new value into palette LUT
                PaletteLoad = 1'b1;
             else
@@ -490,13 +509,15 @@ module ula_radas (
       if (iorq_n==1'b0 && rd_n==1'b0) begin
          if (a[0]==1'b0 && a[7:0]!=8'hF4)
             dout = {1'b1,post_processed_ear,1'b1,kbd};
-         else if (a==ULAPLUSADDR)
+         else if (zxuno_addr == RADASCTRL && zxuno_regrd == 1'b1 && !disable_radas)
+            dout = {6'b000000,RadasCtrl};
+         else if (a==ULAPLUSADDR && !disable_ulaplus)
             dout = {1'b0,PaletteReg};
-         else if (a==ULAPLUSDATA && PaletteReg[6]==1'b0)
+         else if (a==ULAPLUSDATA && PaletteReg[6]==1'b0 && !disable_ulaplus)
             dout = PaletteEntryToCPU;
-         else if (a==ULAPLUSDATA && PaletteReg[6]==1'b1)
+         else if (a==ULAPLUSDATA && PaletteReg[6]==1'b1 && !disable_ulaplus)
             dout = {7'b0000000,ConfigReg};
-         else if (a[7:0]==TIMEXPORT && enable_timexmmu)
+         else if (a[7:0]==TIMEXPORT && enable_timexmmu && !disable_timexscr)
             dout = TimexConfigReg;
          else begin
             if (BitmapAddr || AttrAddr)

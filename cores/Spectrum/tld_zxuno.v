@@ -119,7 +119,7 @@ module tld_zxuno (
     .ear(~ear),  // negada porque el hardware tiene un transistor inversor
     .audio_out(audio_out),
 
-    .sram_addr(sram_addr),
+    .sram_addr(sram_addr[18:0]),
     .sram_data(sram_data),
     .sram_we_n(sram_we_n),
     

@@ -24,16 +24,16 @@ module rom (
     output reg [7:0] dout
     );
 
-   reg [7:0] mem[0:255];
+   reg [7:0] mem[0:8191];
    integer i;
    initial begin  // usa $readmemb/$readmemh dependiendo del formato del fichero que contenga la ROM
-      for (i=0;i<256;i=i+1) begin
+      for (i=0;i<8192;i=i+1) begin
         mem[i] = 8'h00;
       end
       $readmemh ("bootloader_hex.txt", mem, 0);
    end
 
    always @(posedge clk) begin
-     dout <= mem[a[7:0]];
+     dout <= mem[a[12:0]];
    end
 endmodule
