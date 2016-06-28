@@ -15,7 +15,7 @@ entity vdp_main is
 			
 		color:				out std_logic_vector (5 downto 0);
 					
-		display_on:			in  std_logic;
+--		display_on:			in  std_logic;
 		mask_column0:		in  std_logic;
 		overscan:			in  std_logic_vector (3 downto 0);
 
@@ -26,7 +26,7 @@ entity vdp_main is
 			
 		spr_address:		in  std_logic_vector (5 downto 0);
 		spr_high_bit:		in  std_logic;
-		spr_shift:			in  std_logic;	
+--		spr_shift:			in  std_logic;	
 		spr_tall:			in  std_logic);	
 end vdp_main;
 

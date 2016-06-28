@@ -74,7 +74,8 @@ begin
 						D_out(6) <= '0'; 
 					end if;
 					D_out(5) <= '1';
-					D_out(4) <= RESET;
+					D_out(4) <= RESET; --Q
+--					D_out(4) <= '1';
 					-- 4=j2_tr
 					if ctrl(2)='0' then
 						D_out(3) <= ctrl(6);

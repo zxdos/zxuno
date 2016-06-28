@@ -11,7 +11,7 @@ entity spi is
 		D_in	: in  STD_LOGIC_VECTOR (7 downto 0);
 		D_out	: out STD_LOGIC_VECTOR (7 downto 0);
 		
-		cs_n	: out STD_LOGIC;
+		cs_n	: buffer STD_LOGIC;
 		sclk	: out STD_LOGIC;
 		miso	: in  STD_LOGIC;
 		mosi	: out STD_LOGIC);

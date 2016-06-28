@@ -14,8 +14,9 @@ entity vdp is
 		D_out:			out STD_LOGIC_VECTOR (7 downto 0);
 		x:					unsigned(8 downto 0);
 		y:					unsigned(7 downto 0);
-		vblank:			std_logic;
-		hblank:			std_logic;
+--		vblank:			std_logic;
+--		hblank:			std_logic;
+		RST_vram:		in std_logic;
 		color:			out std_logic_vector (5 downto 0));
 end vdp;
 
@@ -34,7 +35,7 @@ architecture Behavioral of vdp is
 			
 		color:				out std_logic_vector (5 downto 0);
 					
-		display_on:			in  std_logic;
+--		display_on:			in  std_logic;
 		mask_column0:		in  std_logic;
 		overscan:			in  std_logic_vector (3 downto 0);
 
@@ -45,7 +46,7 @@ architecture Behavioral of vdp is
 			
 		spr_address:		in  std_logic_vector (5 downto 0);
 		spr_high_bit:		in  std_logic;
-		spr_shift:			in  std_logic;	
+--		spr_shift:			in  std_logic;	
 		spr_tall:			in  std_logic);	
 	end component;
 
@@ -58,7 +59,9 @@ architecture Behavioral of vdp is
 		cpu_D_out:		out STD_LOGIC_VECTOR (7 downto 0);
 		vdp_clk:			in  STD_LOGIC;
 		vdp_A:			in  STD_LOGIC_VECTOR (13 downto 0);
-		vdp_D_out:		out STD_LOGIC_VECTOR (7 downto 0));
+		vdp_D_out:		out STD_LOGIC_VECTOR (7 downto 0)
+		; RST_vram:		in	 std_logic
+		);
 	end component;
 	
 	component vdp_cram is
@@ -114,6 +117,7 @@ architecture Behavioral of vdp is
 	signal hbl_counter:		unsigned(7 downto 0) := (others=>'0');
 	signal vbl_irq:			std_logic;
 	signal hbl_irq:			std_logic;
+	signal vbi_done: 			std_logic := '0';
 	
 begin
 		
@@ -129,7 +133,7 @@ begin
 		y					=> y,
 		color				=> color,
 						
-		display_on		=> display_on,
+--		display_on		=> display_on,
 		mask_column0	=> mask_column0,
 		overscan			=> overscan,
 
@@ -140,7 +144,7 @@ begin
 				
 		spr_address		=> spr_address,
 		spr_high_bit	=> spr_high_bit,
-		spr_shift		=> spr_shift,
+--		spr_shift		=> spr_shift,
 		spr_tall			=> spr_tall);
 
 	vdp_vram_inst: vdp_vram
@@ -152,7 +156,9 @@ begin
 		cpu_D_out		=> vram_cpu_D_out,
 		vdp_clk			=> vdp_clk,
 		vdp_A				=> vram_vdp_A,
-		vdp_D_out		=> vram_vdp_D);
+		vdp_D_out		=> vram_vdp_D
+		,RST_vram		=> RST_vram
+		);
 
 	vdp_cram_inst: vdp_cram
 	port map (
@@ -218,9 +224,9 @@ begin
 --					D_out <= (others=>'0');
 --				when "011" =>
 --					D_out <= std_logic_vector(y);
-D_out <= std_logic_vector(y);
-when "011" =>
-D_out <= std_logic_vector(x(7 downto 0));
+				D_out <= std_logic_vector(y);
+				when "011" =>
+				D_out <= std_logic_vector(x(7 downto 0));
 				when "100" =>
 					D_out <= vram_cpu_D_out;
 					xram_cpu_A_incr <= '1';
@@ -242,16 +248,36 @@ D_out <= std_logic_vector(x(7 downto 0));
 	end process;
 		
 	
-	process (vdp_clk)
+--	process (vdp_clk)
+--	begin
+--		if rising_edge(vdp_clk) then
+--			if vblank='1' then
+--				vbl_irq <= irq_frame_en;
+--			else
+--				vbl_irq <= '0';
+--			end if;
+--		end if;
+--	end process;
+
+   process (vdp_clk)  --q
 	begin
 		if rising_edge(vdp_clk) then
-			if vblank='1' then
-				vbl_irq <= irq_frame_en;
+			if y=0 then
+				vbi_done <= '0';
+			end if;
+			
+			if x=256 and y=192 and not (last_y0=std_logic(y(0))) then
+				if(vbi_done='0') then
+					vbl_irq <= irq_frame_en;
+					vbi_done <= '1';
+				end if;
 			else
 				vbl_irq <= '0';
 			end if;
 		end if;
 	end process;
+	
+	--
 	
 	process (vdp_clk)
 	begin

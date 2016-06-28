@@ -1,15 +1,15 @@
 set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
--ifn sms_rgb.prj
--ofn sms_rgb
+-ifn sms.prj
+-ofn sms
 -ofmt NGC
 -p xc6slx9-3-tqg144
--top sms_rgb
+-top sms
 -opt_mode Speed
 -opt_level 1
 -power NO
--iuc NO
+-iuc YES
 -keep_hierarchy No
 -netlist_hierarchy As_Optimized
 -rtlview Yes

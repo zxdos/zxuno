@@ -26,19 +26,24 @@ entity system is
 		j2_tl:		in		STD_LOGIC;
 		j2_tr:		inout	STD_LOGIC;
 		reset:		in		STD_LOGIC;
-		pause:		in		STD_LOGIC;
+--		pause:		in		STD_LOGIC;
 
 		x:				in		UNSIGNED(8 downto 0);
 		y:				in		UNSIGNED(7 downto 0);
-		vblank:		in		STD_LOGIC;
-		hblank:		in		STD_LOGIC;
+--		vblank:		in		STD_LOGIC;
+--		hblank:		in		STD_LOGIC;
 		color:		out	STD_LOGIC_VECTOR(5 downto 0);
 		audio:		out	STD_LOGIC;
+		
+      ps2_clk: 	in    std_logic;
+      ps2_data: 	in    std_logic;	
+
+		scanSW:		out	std_logic;
 
 		spi_do:		in		STD_LOGIC;
 		spi_sclk:	out	STD_LOGIC;
 		spi_di:		out	STD_LOGIC;
-		spi_cs_n:	out	STD_LOGIC
+		spi_cs_n:	buffer	STD_LOGIC
 	);
 end system;
 
@@ -88,8 +93,9 @@ architecture Behavioral of system is
 		D_out:			out STD_LOGIC_VECTOR(7 downto 0);			
 		x:					in  unsigned(8 downto 0);
 		y:					in  unsigned(7 downto 0);
-		vblank:			in  std_logic;
-		hblank:			in  std_logic;
+--		vblank:			in  std_logic;
+--		hblank:			in  std_logic;
+		RST_vram:		in std_logic;
 		color: 			out std_logic_vector (5 downto 0));
 	end component;
 	
@@ -158,6 +164,20 @@ architecture Behavioral of system is
 	end component;
 
 	signal RESET_n:			std_logic;
+	signal resetKey:			std_logic;
+	signal MRESET:				std_logic;
+--	signal scanFlag:			unsigned := "0";
+	
+	-- controles
+	signal p1_up:				STD_LOGIC; --0
+	signal p1_down:			STD_LOGIC; --1
+	signal p1_left:			STD_LOGIC; --2
+	signal p1_right:		 	STD_LOGIC; --3
+	signal p1_tl:			 	STD_LOGIC; --4
+	signal p1_tr:				STD_LOGIC; --5
+	signal ctrl_keys:			std_logic_vector(7 downto 0);
+	signal Kpause:				std_logic := '1';
+	
 	signal RD_n:				std_logic;
 	signal WR_n:				std_logic;
 	signal IRQ_n:				std_logic;
@@ -195,9 +215,14 @@ architecture Behavioral of system is
 	signal irom_D_out:		std_logic_vector(7 downto 0);
 	signal irom_RD_n:			std_logic := '1';
 
-	signal bank0:				std_logic_vector(4 downto 0); --Q
-	signal bank1:				std_logic_vector(4 downto 0); --Q
-	signal bank2:				std_logic_vector(4 downto 0); --Q
+	--reset vram
+	signal RST_vram:			std_logic;
+
+	signal bank0:				std_logic_vector(4 downto 0);
+	signal bank1:				std_logic_vector(4 downto 0); 
+	signal bank2:				std_logic_vector(4 downto 0); 
+	
+	
 begin	
 	
 	z80_inst: T80se
@@ -208,7 +233,7 @@ begin
 		CLKEN			=> '1',
 		WAIT_n		=> '1',
 		INT_n			=> IRQ_n,
-		NMI_n			=> pause,
+		NMI_n			=> Kpause,
 		BUSRQ_n		=> '1',
 		M1_n			=> open,
 		MREQ_n		=> open,
@@ -239,8 +264,9 @@ begin
 		D_out			=> vdp_D_out,
 		x				=> x,
 		y				=> y,
-		vblank		=> vblank,
-		hblank		=> hblank,
+--		vblank		=> vblank,
+--		hblank		=> hblank,
+		RST_vram		=> RST_vram,
 		color			=> color);
 		
 	psg_inst: psg
@@ -258,12 +284,12 @@ begin
 		A				=> A(7 downto 0),
 		D_in			=> D_in,
 		D_out			=> io_D_out,
-		J1_up			=> j1_up,
-		J1_down		=> j1_down,
-		J1_left		=> j1_left,
-		J1_right		=> j1_right,
-		J1_tl			=> j1_tl,
-		J1_tr			=> j1_tr,
+		J1_up			=> p1_up,
+		J1_down		=> p1_down,
+		J1_left		=> p1_left,
+		J1_right		=> p1_right,
+		J1_tl			=> p1_tl,
+		J1_tr			=> p1_tr, 
 		J2_up			=> j2_up,
 		J2_down		=> j2_down,
 		J2_left		=> j2_left,
@@ -301,6 +327,17 @@ begin
 		sclk			=> spi_sclk,
 		miso			=> spi_do,
 		mosi			=> spi_di);
+		
+ -- Modulo teclado
+    keyb : entity work.keyboard port map (
+        clk_cpu, 
+        ps2_clk, 
+		  ps2_data,
+        resetKey,
+		  MRESET,
+		  ctrl_keys 
+        );		
+		   
 	
 	-- glue logic
 
@@ -320,29 +357,38 @@ begin
 
 	spi_WR_n <= bootloader or WR_n when io_n='0' and A(7 downto 5)="110" else '1';
 
-	ram_WR_n <= WR_n when io_n='1' and A(15 downto 14)="11" else '1';
+	ram_WR_n <= WR_n when io_n='1' and A(15 downto 14)="11" else '1'; 
 	
 	rom_WR_n <= bootloader or WR_n when io_n='1' and A(15 downto 14)="10" else '1';
 	
 	process (clk_cpu)
 	begin
 		if rising_edge(clk_cpu) then
+			if resetKey = '1' then --q
+					bootloader <= '0';
+					reset_counter <= (others=>'1');
+					--RST_vram <= '1';
+			end if;
 			-- memory control
 			if reset_counter>0 then
 				reset_counter <= reset_counter - 1;
-			elsif ctl_WR_n='0' then
+			elsif ctl_WR_n='0' then --Q
 				if bootloader='0' then
 					bootloader <= '1';
 					reset_counter <= (others=>'1');
+					--RST_vram <= '0';
 				end if;
 			end if;
 		end if;
 	end process;
-	reset_n <= '0' when reset_counter>0 else '1';
+	
+	reset_n <= '0' when reset_counter>0 else '1'; --Q
 	
 	irom_D_out <=	boot_rom_D_out when bootloader='0' and A(15 downto 14)="00" else rom_D_out;
 	
-	process (io_n,A,spi_D_out,vdp_D_out,vdp_D_out,io_D_out,irom_D_out,irom_D_out,irom_D_out,ram_D_out)
+	RST_vram <= '1' when bootloader='0' else '0'; --Q -vram fill
+	
+   process (io_n,A,spi_D_out,vdp_D_out,io_D_out,irom_D_out,ram_D_out)
 	begin
 		if io_n='0' then
 			case A(7 downto 5) is
@@ -404,5 +450,47 @@ begin
 	ram_d(7 downto 0) <= (others=>'Z') when RD_n='0' else D_in; --Q
 
 	rom_D_out<= ram_d(7 downto 0); --Q
+	
+	-----------
+	-- Control tanto por joystick como por teclado
+	-- 0,1,2,3,4,5 = up,dn,l,r,bl,br
+	-- 6 = rgb / vga
+	-- 7 = pause
+	
+	p1_up <= ctrl_keys(0) xnor not j1_up;
+	p1_down <= ctrl_keys(1) xnor not j1_down;
+	p1_left <= ctrl_keys(2) xnor not j1_left;
+	p1_right <= ctrl_keys(3) xnor not j1_right;
+	p1_tl <= ctrl_keys(4) xnor not j1_tl;
+	p1_tr <= '0' when ctrl_keys(5)='1' or j1_tr='0' else 'Z';
+	
 
+	process (ctrl_keys(7))
+	begin
+		if ctrl_keys(7) = '1' then
+			Kpause <= '0';
+		else
+			Kpause <= '1';
+		end if;
+	end process;
+
+	process (ctrl_keys(6))
+	begin
+		if ctrl_keys(6) = '0' then
+			scanSW <= '0';
+		else
+			scanSW <= '1';
+		end if;
+	end process;
+
+	
+------------multiboot---------------
+
+	multiboot: entity work.multiboot
+	port map(
+		clk_icap		      => clk_vdp,
+		REBOOT				=> MRESET
+	);
+	
+			
 end Behavioral;

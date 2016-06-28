@@ -48,6 +48,12 @@ void main()
 	vdp_set_address(0x3f00);
 	vdp_write(0xd0);
 
+	//Sound off - if resetted from a prior game
+	set_sound_volume(0,0);
+	set_sound_volume(1,0);
+	set_sound_volume(2,0);
+	set_sound_volume(3,0);
+
 	while (1) {
 		console_init();
 		console_clear();
@@ -56,6 +62,7 @@ void main()
 		console_puts("MASTER SYSTEM ROM LOADER\n");
 		console_gotoxy(3,1);
 		console_puts("------------------------\n");
+		//console_gotoxy(3,3);
 
 		i = 0;
 		if (!sd_init()) {
@@ -66,6 +73,7 @@ void main()
 	#endif
 			if (!fat_init()) {
 				//console_puts("could not initialize FAT system\n"); //qq
+	
 			} else {
 	#ifdef DEBUG2
 				console_puts("FAT system initialized\n");
@@ -84,10 +92,13 @@ void choose_mode(int sd_ok)
 	int i = 0;
 	console_gotoxy(9,10);
 	if (sd_ok) {
+		//console_puts("load from SD card");
 		pick_and_load_rom();
 	} else {
 		console_puts("retry SD/MMC card");
 	}
+	//console_gotoxy(9,12);
+	//console_puts("boot SRAM");
 
 	for (;;) {
 		int key;
@@ -100,6 +111,9 @@ void choose_mode(int sd_ok)
 		case JOY_UP:
 			i = 0;
 			break;
+	//	case JOY_DOWN:
+	//		i = 1;
+	//		break;
 		case JOY_FIREA:
 		case JOY_FIREB:
 			if (i==0) {
@@ -131,7 +145,10 @@ void pick_and_load_rom()
 	for (;;) {
 		int key;
 		print_dir(top_of_screen,current);
+		//key = wait_key();
 		key = read_joypad1();
+		//switch (key) {
+		//case JOY_UP:
 		cont++;
 		if (cont>20)
 		   cdiv= 3;
@@ -144,8 +161,9 @@ void pick_and_load_rom()
 				}
 			}
 		cont = 0;
-		}	
+		}	//break;
 		if ((key & JOY_DOWN) && (cont%cdiv==0)) {
+		//case JOY_DOWN:
 			if (current[1].type!=0) {
 				current++;
 				cdiv = 8;
@@ -154,7 +172,8 @@ void pick_and_load_rom()
 				}
 			}
 		cont = 0;
-		}	
+		}	//break;
+		//case JOY_LEFT:
 		if ((key & JOY_LEFT) && (cont%(cdiv)==0)) {
 			if ((current!=entries) && current>(entries+4)) {
 				current = current-5;
@@ -167,7 +186,8 @@ void pick_and_load_rom()
 			   top_of_screen = current;
 			}
 		cont = 0;
-		}	
+		}	//break;
+		//case JOY_RIGHT:
 		if ((key & JOY_RIGHT) && (cont%(cdiv)==0)) {
 			if (current[5].type!=0 && current[4].type!=0 && current[3].type!=0 && current[2].type!=0 && current[1].type!=0) {
 				current = current + 5;
@@ -187,10 +207,13 @@ void pick_and_load_rom()
 					current = current+3;
 				else if (current[5].type == 0)			
 					current = current+4;
+				//top_of_screen = current;
 			cdiv = 8;
 			     }
 		cont = 0;
-		}	
+		}	//break;
+		//case JOY_FIREA:
+		//case JOY_FIREB:
 		if ((key & (JOY_FIREA | JOY_FIREB)) && (cont%cdiv==0)) {
 			if ((current->type&0x10)==0) {
 				entries = fat_open_directory(current->cluster);
@@ -207,7 +230,8 @@ void pick_and_load_rom()
 				return;
 			}
 		cont = 0;
-		}	
+		}	//break;
+		//}
 	}
 }
 

@@ -17,6 +17,7 @@ const fat_t *fat 					= 0xc010;
 const UBYTE *fat_buffer				= 0xc100;
 const UBYTE *data_buffer			= 0xc300;
 const file_descr_t *directory_buffer= 0xc500;
+//const BYTE *card_type 				= 0xc700; //q
 
 void fat_init32();
 void fat_init16();
@@ -38,38 +39,57 @@ WORD load_word(UBYTE *ptr)
 int fat_init()
 {
 	DWORD sector;
+	UBYTE hasMBR;
 
 	sector = 0;
 	if (!sd_load_sector(data_buffer, sector)) {
-		console_puts("Error loading MBR\n");
+		console_puts("Error loading Sector 0\n");
 		return FALSE;
 	}
 
 	if ((data_buffer[0x1fe]!=0x55) || (data_buffer[0x1ff]!=0xaa)) {
-		console_puts("Wrong MBR\n");
+		console_puts("Wrong Sector 0\n");
 		return FALSE;
 	}
+		//console_print_byte(data_buffer[0x1fe]); //q
+		//console_print_byte(data_buffer[0x1ff]); //q
 	switch (data_buffer[0x1c2]) {
 	case 0x06:
 	case 0x04:
 		fat->fat32 = FALSE;
+		hasMBR = TRUE;
 		break;
 	case 0x0b:
 	case 0x0c:	
 		fat->fat32 = TRUE;
+		hasMBR = TRUE;
 		break;
 	default:
-		console_puts("Unsupported FileSystem (FAT16/32 only)\n");
-		return FALSE;
+		if (data_buffer[0x55]==0x33) { //check possible FAT type when NO MBR found (32)
+			fat->fat32 = TRUE;
+			hasMBR = FALSE;
+		} else if (data_buffer[0x39]==0x31) { //check possible FAT type when NO MBR found (16)
+			fat->fat32 = FALSE;
+			hasMBR = FALSE;
+		} else {
+			console_puts("Unsupported FileSystem (FAT16/32 only)\n");
+			return FALSE;
+		}
 	}
 
-	sector = load_dword(&data_buffer[0x1c6]); 
+	if (hasMBR)
+		sector = load_dword(&data_buffer[0x1c6]); 
+	else
+		sector = 0; 
+
+	//sector = 0x800;
 #ifdef DEBUG_FAT
 	debug_puts("first sector: ");
 	debug_print_dword(sector);
 	debug_puts("\n");
 #endif
 
+	//console_print_dword(sector); //q
 
 	if (!sd_load_sector(data_buffer, sector)) {
 		console_puts("Error while loading boot sector\n");
@@ -78,6 +98,14 @@ int fat_init()
 
 	if ((data_buffer[0x1fe]!=0x55) || (data_buffer[0x1ff]!=0xaa)) {
 		console_puts("Wrong boot record\n");
+		//console_print_byte(data_buffer[0x1fe]); //q
+		//console_print_byte(data_buffer[0x1ff]); //q
+		//console_print_byte(data_buffer[0]);
+		//console_print_byte(data_buffer[1]);
+		//console_print_byte(data_buffer[2]);
+		//console_print_byte(data_buffer[3]);
+		//console_print_byte(data_buffer[4]);
+		//console_print_byte(data_buffer[5]);
 		return FALSE;
 	}
 

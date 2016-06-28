@@ -1,22 +1,3 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    11:59:35 01/22/2012 
--- Design Name: 
--- Module Name:    vdp_timing - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -32,9 +13,11 @@ entity rgb_video is
 		color:			in  std_logic_vector(5 downto 0);
 		hsync:			out std_logic;
 		vsync:			out std_logic;
-		red:				out std_logic_vector(1 downto 0);
-		green:			out std_logic_vector(1 downto 0);
-		blue:				out std_logic_vector(1 downto 0));
+		red:				out std_logic_vector(2 downto 0);
+		green:			out std_logic_vector(2 downto 0);
+		blue:				out std_logic_vector(2 downto 0)
+--		; blank:			out std_logic
+		);
 end rgb_video;
 
 architecture Behavioral of rgb_video is
@@ -121,13 +104,15 @@ vsync <= '1';
 	begin
 		if rising_edge(clk16) then
 			if visible then
-				red	<= color(1 downto 0);
-				green	<= color(3 downto 2);
-				blue	<= color(5 downto 4);
+				red	<= color(1 downto 0) & color(1);  --Q & color;
+				green	<= color(3 downto 2) & color(3);  --Q & color;
+				blue	<= color(5 downto 4) & color(4);  --Q & color;
+--				blank <= '0';
 			else
 				red	<= (others=>'0');
 				green	<= (others=>'0');
 				blue	<= (others=>'0');
+--				blank <= '1';
 			end if;
 		end if;
 	end process;
