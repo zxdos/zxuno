@@ -39,6 +39,7 @@ start2  ld      a, (hl)
 
 start3  ei
         halt
+        halt
         di
         ld      bc, 4
 start4  djnz    start4

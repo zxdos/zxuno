@@ -43,47 +43,45 @@ unsigned short j, k, crc, tab[]= {
 int main(int argc, char *argv[]) {
   if( argc==1 )
     printf("\n"
-    "GenRom v0.05, generates a TAP for loading a ROM in the ZX-Uno, 2016-05-14\n\n"
-    "  GenRom         <params1> <params2> <name> <input_file> <output_file>\n\n"
-    "  <params1>      Set 5 flags parameters, combinable\n"
-    "     0           Default values Issue3, Tim48K, Contended, Disabled Div & NMI\n"
+    "GenRom v0.06, generates a TAP for loading a ROM in the ZX-Uno, 2016-07-04\n\n"
+    "  GenRom         <params> <name> <input_file> <output_file>\n\n"
+    "  <params>       Set 13 flags parameters, combinable\n"
+    "     0           MODE=00, I2KB=DISCONT=DIVEN=DISNMI=0\n"
+    "                 DISD=ENMMU=DIROM1F=DIROM7F=DI1FFD=DI7FFD=DITAY=DIAY=0\n"
     "     i           Change Issue2\n"
     "     t           Force Timing to 128\n"
     "     p           Force Timing to Pentagon\n"
     "     c           Disable Contention\n"
     "     d           Enable DivMMC paging\n"
     "     n           Enable NMI-DivMMC\n"
-    "  <params2>      Set 8 flags parameters, combinable\n"
-    "     0           Default values DISD, DIFUL, DIKEMP, ENMMU, DI1FFD, DI7FFD,"
-    "                                                             DITAY and DIAY\n"
     "     s           Disable SD ports (DivMMC and ZXMMC)\n"
     "     m           Enable horizontal MMU in Timex Sinclair\n"
     "     h           Disable high bit ROM (1FFD bit 2)\n"
     "     l           Disable low bit ROM (7FFD bit 4)\n"
     "     1           Disable 1FFD port (+2A/+3 memory paging)\n"
     "     7           Disable 7FFD port (128K memory paging)\n"
-    "     t           Disable second AY chip\n"
+    "     2           Disable 2nd AY chip\n"
     "     a           Disable main AY chip\n"
     "  <name>         Name between single quotes up to 32 chars\n"
     "  <input_file>   Input ROM file\n"
     "  <output_file>  Output TAP file\n\n"
     "All params are mandatory\n\n"),
     exit(0);
-  if( argc!=6 )
+  if( argc!=5 )
     printf("\nInvalid number of parameters\n"),
     exit(-1);
-  fi= fopen(argv[4], "rb");
+  fi= fopen(argv[3], "rb");
   if( !fi )
-    printf("\nInput file not found: %s\n", argv[4]),
+    printf("\nInput file not found: %s\n", argv[3]),
     exit(-1);
   fseek(fi, 0, SEEK_END);
   i= ftell(fi);
   if( i&0x3fff && i!=8192 )
-    printf("\nInput file size must be multiple of 16384: %s\n", argv[4]),
+    printf("\nInput file size must be multiple of 16384: %s\n", argv[3]),
     exit(-1);
-  fo= fopen(argv[5], "wb+");
+  fo= fopen(argv[4], "wb+");
   if( !fo )
-    printf("\nCannot create output file: %s\n", argv[5]),
+    printf("\nCannot create output file: %s\n", argv[4]),
     exit(-1);
   fwrite(mem, 1, 0x55, fo);
   j= i>>14;
@@ -134,6 +132,7 @@ int main(int argc, char *argv[]) {
   fseek(fo, 0, SEEK_SET);
   mem[0x4007]= j;
   mem[0x4008]= 0b00110000;
+  mem[0x4009]= 0b00000000;
   for ( i= 0; i<strlen(argv[1]); i++ )
     switch( argv[1][i] ){
       case 'i': mem[0x4008]^= 0b00100000; break;
@@ -141,22 +140,18 @@ int main(int argc, char *argv[]) {
       case 'd': mem[0x4008]^= 0b00001000; break;
       case 'n': mem[0x4008]^= 0b00000100; break;
       case 'p': mem[0x4008]^= 0b00000010; break;
-      case 't': mem[0x4008]^= 0b00000001;
-    }
-  mem[0x4009]= 0b00000000;
-  for ( i= 0; i<strlen(argv[2]); i++ )
-    switch( argv[2][i] ){
+      case 't': mem[0x4008]^= 0b00000001; break;
       case 's': mem[0x4009]^= 0b10000000; break;
       case 'm': mem[0x4009]^= 0b01000000; break;
       case 'h': mem[0x4009]^= 0b00100000; break;
       case 'l': mem[0x4009]^= 0b00010000; break;
       case '1': mem[0x4009]^= 0b00001000; break;
       case '7': mem[0x4009]^= 0b00000100; break;
-      case 't': mem[0x4009]^= 0b00000010; break;
+      case '2': mem[0x4009]^= 0b00000010; break;
       case 'a': mem[0x4009]^= 0b00000001;
     }
-  for ( i= 0; i<32 && i<strlen(argv[3]); i++ )
-    mem[i+0x4006+0x32]= argv[3][i];
+  for ( i= 0; i<32 && i<strlen(argv[2]); i++ )
+    mem[i+0x4006+0x32]= argv[2][i];
   while( ++i<33 )
     mem[i+0x4006+0x31]= ' ';
   for ( checksum= 0xff, k= 0x4007; k<0x4058; ++k )
