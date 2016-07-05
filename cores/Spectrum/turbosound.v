@@ -40,13 +40,15 @@ module turbosound (
 		if (reset_n==1'b0)
 			ay_select <= 1'b1;
 		else if (disable_ay == 1'b0 && disable_turboay == 1'b0 && bdir && bc1 && din[7:1]==7'b1111111)
-			ay_select <= din[0];
+			ay_select <= din[0];  // 1: select first AY, 0: select second AY
 	end
 
 	wire oe_n_ay1, oe_n_ay2;
 	wire [7:0] dout_ay1, dout_ay2;
 	assign dout = (ay_select)? dout_ay1 : dout_ay2;
-	assign oe_n = (ay_select)? oe_n_ay1 : oe_n_ay2;
+	assign oe_n = (ay_select && !disable_ay)? oe_n_ay1 : 
+                 (!ay_select && !disable_ay && !disable_turboay)? oe_n_ay2 :
+                 1'b1;
 
 YM2149 ay1 (
   .I_DA(din),
