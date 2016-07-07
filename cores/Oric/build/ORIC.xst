@@ -4,7 +4,7 @@ run
 -ifn ORIC.prj
 -ofn ORIC
 -ofmt NGC
--p xc6slx9-2-tqg144
+-p xc6slx9-3-tqg144
 -top ORIC
 -opt_mode Speed
 -opt_level 1

@@ -1,4 +1,5 @@
 SET machine=jupiter_ace
+SET speed=2
 SET ruta_ucf=jupiter_ace
 SET ruta_bat=..\
 call %ruta_bat%genxst.bat

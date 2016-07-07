@@ -1,4 +1,5 @@
 SET machine=VIC20
+SET speed=3
 SET ruta_ucf=..\source\vic20
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat

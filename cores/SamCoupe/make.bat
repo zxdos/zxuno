@@ -1,4 +1,5 @@
 SET machine=tld_sam
+SET speed=2
 SET ruta_ucf=SamCoupe
 SET ruta_bat=..\
 call %ruta_bat%genxst.bat

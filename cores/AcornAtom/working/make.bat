@@ -1,4 +1,5 @@
 SET machine=Atomic_top_zxuno
+SET speed=3
 SET ruta_ucf=..\src\Atomic
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat

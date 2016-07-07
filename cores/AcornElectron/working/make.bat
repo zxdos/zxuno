@@ -1,4 +1,5 @@
 SET machine=ElectronFpga
+SET speed=3
 SET ruta_ucf=..\src\AcornElectron
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat

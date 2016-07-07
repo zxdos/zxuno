@@ -1,4 +1,5 @@
 SET machine=tld_zxuno
+SET speed=2
 SET ruta_ucf=pines
 SET ruta_bat=..\
 call %ruta_bat%genxst.bat

@@ -1,4 +1,5 @@
 SET machine=sms
+SET speed=3
 SET ruta_ucf=src\sms
 SET ruta_bat=..\
 call %ruta_bat%genxst.bat

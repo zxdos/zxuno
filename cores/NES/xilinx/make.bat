@@ -1,4 +1,5 @@
 SET machine=NES_ZXUNO
+SET speed=2
 SET ruta_ucf=..\src\nes
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat

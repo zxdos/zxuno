@@ -1,4 +1,5 @@
 SET machine=zxuno_a2601
+SET speed=3
 SET ruta_ucf=a2601
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat

@@ -77,12 +77,12 @@ NET "sd_mosi"         LOC="P79"  | IOSTANDARD = LVCMOS33;
 NET "sd_miso"         LOC="P81"  | IOSTANDARD = LVCMOS33;
 
 # JOYSTICK
-NET "joyup"           LOC="P74"  | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "joydown"         LOC="P67"  | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "joyleft"         LOC="P59"  | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "joyright"        LOC="P58"  | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "joyfire"         LOC="P75"  | IOSTANDARD = LVCMOS33 | PULLUP;
-#NET "joyfire2"        LOC="P8"   | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joyup"           LOC="P58"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joydown"         LOC="P59"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joyleft"         LOC="P67"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joyright"        LOC="P74"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joyfire"         LOC="P66"  | IOSTANDARD = LVCMOS33 | PULLUP;
+#NET "joyfire2"        LOC="P75"  | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "joyfire3"        LOC="P39"  | IOSTANDARD = LVCMOS33 | PULLUP;
 
 
