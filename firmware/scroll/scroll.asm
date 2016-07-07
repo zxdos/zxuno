@@ -1,26 +1,30 @@
 
         output  scroll.bin
         org     $5d28
-        ld      hl, fondo
-        ld      b, $40          ; filtro RCS inverso
-start   ld      a, b
-        xor     c
-        and     $f8
-        xor     c
-        ld      d, a
-        xor     b
-        xor     c
-        rlca
-        rlca
-        ld      e, a
-        inc     bc
-        ldi
-        inc     bc
-        ld      a, b
-        sub     $58
-        jr      nz, start
+;        ld      hl, fondo
+;        ld      b, $40          ; filtro RCS inverso
+;start   ld      a, b
+;        xor     c
+;        and     $f8
+;        xor     c
+;        ld      d, a
+;        xor     b
+;        xor     c
+;        rlca
+;        rlca
+;        ld      e, a
+;        inc     bc
+;        ldi
+;        inc     bc
+;        ld      a, b
+;        sub     $58
+;        jr      nz, start
+        ld      hl, $5800
+        ld      de, $5801
         ld      b, 3
+        ld      (hl), l
         ldir
+        xor     a
         out     ($fe), a
         inc     a
         ex      af, af'
@@ -38,7 +42,6 @@ start2  ld      a, (hl)
         call    cancio
 
 start3  ei
-        halt
         halt
         di
         ld      bc, 4
@@ -282,7 +285,7 @@ doble2  ld      a, (de)
         ret
 
 string  include string.asm
-fondo   incbin  fondo.rcs
+;fondo   incbin  fondo.rcs
         include player.asm
         block   $b100-$
         incbin  fuente6x8.bin
