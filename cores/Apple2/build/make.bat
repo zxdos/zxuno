@@ -1,6 +1,6 @@
 SET machine=apple2_top
-SET speed=3
-SET ruta_ucf=source\apple2
+SET speed=2
+SET ruta_ucf=..\source\apple2
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat
 rem call %ruta_bat%generar.bat v2
