@@ -1,35 +1,45 @@
 
         output  scroll.bin
-        org     $5d28
-;        ld      hl, fondo
-;        ld      b, $40          ; filtro RCS inverso
-;start   ld      a, b
-;        xor     c
-;        and     $f8
-;        xor     c
-;        ld      d, a
-;        xor     b
-;        xor     c
-;        rlca
-;        rlca
-;        ld      e, a
-;        inc     bc
-;        ldi
-;        inc     bc
-;        ld      a, b
-;        sub     $58
-;        jr      nz, start
-        ld      hl, $5800
-        ld      de, $5801
+        org     $5d29
+        ld      hl, fuente
         ld      b, 3
-        ld      (hl), l
+        ld      de, $c100
         ldir
-        xor     a
+        jp      start
+fuente  incbin  fuente6x8.bin
+string  include string.asm
+        block   $6d35-$
+        ld      (vari+2), ix
+        incbin  music.bin
+start   ld      hl, fondo
+        ld      b, $40          ; filtro RCS inverso
+start0  ld      a, b
+        xor     c
+        and     $f8
+        xor     c
+        ld      d, a
+        xor     b
+        xor     c
+        rlca
+        rlca
+        ld      e, a
+        inc     bc
+        ldi
+        inc     bc
+        ld      a, b
+        sub     $58
+        jr      nz, start0
+;        ld      hl, $5800
+;        ld      de, $5801
+        ld      b, 3
+;        ld      (hl), l
+        ldir
+;        xor     a
         out     ($fe), a
         inc     a
         ex      af, af'
-        ld      hl, $b000
-        ld      de, $b400
+        ld      hl, $c000
+        ld      de, $c400
 start1  ld      b, $08
 start2  ld      a, (hl)
         rrca
@@ -39,9 +49,11 @@ start2  ld      a, (hl)
         jp      pe, start2
         jr      nc, start1
 
-        call    cancio
+        ld      hl, $716f
+        call    $6d3c
 
 start3  ei
+        call    $6e77
         halt
         di
         ld      bc, 4
@@ -66,7 +78,7 @@ start4  djnz    start4
 vari    ld      ix, string
         ld      hl, start3
         push    hl
-        ld      hl, inicio
+        ld      hl, $6d35
         push    hl
         ex      af, af'
         rrca
@@ -146,27 +158,27 @@ pos0    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $2c
+        ld      h, $c0 >> 2
         call    simple
 pos2    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $32
+        ld      h, $d8 >> 2
         ld      bc, $04fc
         call    doble
 pos4    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $30
+        ld      h, $d0 >> 2
         ld      bc, $04f0
         call    doble
 pos6    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $2e
+        ld      h, $c8 >> 2
         call    simple
         inc     de
         jr      pos0
@@ -205,27 +217,27 @@ pos1    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $2f
+        ld      h, $cc >> 2
         ld      bc, $04e0
         call    doble
 pos3    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $2d
+        ld      h, $c4 >> 2
         call    simple
 pos5    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $33
+        ld      h, $dc >> 2
         ld      bc, $04fe
         call    doble
 pos7    ld      a, (ix)
         inc     ix
         add     a, a
         ret     z
-        ld      h, $31
+        ld      h, $d4 >> 2
         ld      bc, $04f8
         call    doble
         jr      pos1
@@ -283,9 +295,4 @@ doble2  ld      a, (de)
         add     hl, de
         ex      de, hl
         ret
-
-string  include string.asm
-;fondo   incbin  fondo.rcs
-        include player.asm
-        block   $b100-$
-        incbin  fuente6x8.bin
+fondo   incbin  fondo.rcs
