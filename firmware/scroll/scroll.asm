@@ -1,14 +1,16 @@
         output  scroll.bin
         org     $5ee2
 string  include string.asm
-  display $
 music   ld      (vari+2), ix
         incbin  music.bin
 fuente  incbin  fuente6x8.bin
-  display $
-start   ld      hl, fuente
+start   ld      hl, $c000
+        ld      de, $c001
+        ld      bc, $017f
+        ld      (hl), l
+        ldir
+        ld      hl, fuente
         ld      b, 3
-        ld      de, $c180
         ldir
         ld      hl, fondo
         ld      b, $40          ; filtro RCS inverso

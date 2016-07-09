@@ -412,6 +412,8 @@ tstart5 sub     $80
         jr      z, start7
         cp      $0c
 start7  jp      z, blst
+        cp      $3a
+        jp      z, alto easter
         cp      $17
         jr      nz, tstart5
       ELSE
@@ -3527,6 +3529,13 @@ saveme  wreg    master_conf, 1
         pop     bc
         wreg    master_conf, 0
         ret
+
+easter  di
+        ld      a, (scnbak)
+        and     %00111111
+        call    setvid
+        wreg    master_conf, 1
+        jp      $0100
 
 readna  ld      de, bnames
         ld      hl, $0071

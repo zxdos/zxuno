@@ -139,3 +139,62 @@ binf    jr      z, binf         ; return with time-out.
 bin2    jr      nz, bin2
         ld      bc, zxuno_port + $100
         ret                     ; return
+
+        block   $0100 - $
+        include scroll/define.asm
+        ld      sp, 0
+        ld      de, $5ee2+filesize-1
+        ld      hl, fin-1
+
+; -----------------------------------------------------------------------------
+; ZX7 Backwards by Einar Saukas, Antonio Villena
+; Parameters:
+;   HL: source address (compressed data)
+;   DE: destination address (decompressing)
+; -----------------------------------------------------------------------------
+dzx7b   ld      bc, $8000
+        ld      a, b
+copyby  inc     c
+        ldd
+mainlo  add     a, a
+        call    z, getbit
+        jr      nc, copyby
+        push    de
+        ld      d, c
+        defb    $30
+lenval  add     a, a
+        call    z, getbit
+        rl      c
+        rl      b
+        add     a, a
+        call    z, getbit
+        jr      nc, lenval
+        inc     c
+        jr      z, exitdz
+        ld      e, (hl)
+        dec     hl
+        sll     e
+        jr      nc, offend
+        ld      d, $10
+nexbit  add     a, a
+        call    z, getbit
+        rl      d
+        jr      nc, nexbit
+        inc     d
+        srl     d
+offend  rr      e
+        ex      (sp), hl
+        ex      de, hl
+        adc     hl, de
+        lddr
+exitdz  pop     hl
+        jr      nc, mainlo
+        jp      $7be4
+
+getbit  ld      a, (hl)
+        dec     hl
+        adc     a, a
+        ret
+
+        incbin  scroll/scroll.bin.zx7b
+fin     ;block   $4000 - $
