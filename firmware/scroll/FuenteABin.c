@@ -1,7 +1,7 @@
 #include "lodepng.c"
 #include <stdio.h>
 #include <stdlib.h>
-unsigned char *image, *pixel, output[0x300];
+unsigned char *image, *pixel, output[0x280];
 unsigned error, i, j, k, l, celda, fondo, tinta, outpos= 0;
 FILE *fo;
 
@@ -18,14 +18,14 @@ int main(int argc, char *argv[]){
   if( error )
     printf("\nError %u: %s\n", error, lodepng_error_text(error)),
     exit(-1);
-  if( i!= 96 || j!= 48 )
-    printf("\nError. Incorrect size, must be 96x48\n"),
+  if( i!= 96 || j!= 40 )
+    printf("\nError. Incorrect size, must be 96x40\n"),
     exit(-1);
   fo= fopen("fuente6x8.bin", "wb+");
   if( !fo )
     printf("\nCannot create output file\n"),
     exit(-1);
-  for ( i= 0; i < 6; i++ )
+  for ( i= 0; i < 5; i++ )
     for ( j= 0; j < 16; j++ ){
       pixel= &image[((j|i<<7)*6)<<2];
       fondo= tinta= tospec(pixel[0], pixel[1], pixel[2]);

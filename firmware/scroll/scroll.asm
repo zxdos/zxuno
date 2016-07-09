@@ -1,17 +1,16 @@
-
         output  scroll.bin
-        org     $5d29
-        ld      hl, fuente
-        ld      b, 3
-        ld      de, $c100
-        ldir
-        jp      start
-fuente  incbin  fuente6x8.bin
+        org     $5ee2
 string  include string.asm
-        block   $6d35-$
-        ld      (vari+2), ix
+  display $
+music   ld      (vari+2), ix
         incbin  music.bin
-start   ld      hl, fondo
+fuente  incbin  fuente6x8.bin
+  display $
+start   ld      hl, fuente
+        ld      b, 3
+        ld      de, $c180
+        ldir
+        ld      hl, fondo
         ld      b, $40          ; filtro RCS inverso
 start0  ld      a, b
         xor     c
@@ -29,15 +28,51 @@ start0  ld      a, b
         ld      a, b
         sub     $58
         jr      nz, start0
-;        ld      hl, $5800
-;        ld      de, $5801
         ld      b, 3
-;        ld      (hl), l
         ldir
-;        xor     a
         out     ($fe), a
         inc     a
         ex      af, af'
+        ld      de, $401f
+rever   ld      hl, $ffe1
+        add     hl, de
+        ld      c, (hl)
+        ld      a, $80
+revl1   rl      c
+        rra
+        jr      nc, revl1
+        ld      (de), a
+        inc     hl
+        dec     de
+        ld      c, (hl)
+        ld      a, $80
+revl2   rl      c
+        rra
+        jr      nc, revl2
+        ld      (de), a
+        inc     hl
+        dec     de
+        ld      c, (hl)
+        ld      a, $80
+revl3   rl      c
+        rra
+        jr      nc, revl3
+        ld      (de), a
+        inc     hl
+        dec     de
+        ld      c, (hl)
+        ld      a, $80
+revl4   rl      c
+        rra
+        jr      nc, revl4
+        ld      (de), a
+        ld      hl, $23
+        add     hl, de
+        ex      de, hl
+        ld      a, d
+        cp      $58
+        jr      nz, rever
+
         ld      hl, $c000
         ld      de, $c400
 start1  ld      b, $08
@@ -48,15 +83,15 @@ start2  ld      a, (hl)
         cpi
         jp      pe, start2
         jr      nc, start1
-
+        ld      a, $c9
+        ld      ($c006), a
         ld      hl, $716f
-        call    $6d3c
-
-start3  ei
-        call    $6e77
+        call    music+7
+start3  call    $6e77
+        ei
         halt
         di
-        ld      bc, 4
+        ld      bc, 5
 start4  djnz    start4
         dec     c
         jr      nz, start4
@@ -78,7 +113,7 @@ start4  djnz    start4
 vari    ld      ix, string
         ld      hl, start3
         push    hl
-        ld      hl, $6d35
+        ld      hl, music
         push    hl
         ex      af, af'
         rrca
