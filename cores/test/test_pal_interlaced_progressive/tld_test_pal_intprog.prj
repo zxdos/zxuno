@@ -1,0 +1,4 @@
+verilog work "ps2_port.v"
+verilog work "master_clk.v"
+verilog work "genframe.v"
+verilog work "tld_test_pal_intprog.v"
