@@ -1,0 +1,5 @@
+verilog work "pal_sync_generator_progressive.v"
+verilog work "dp_memory.v"
+verilog work "zxuno.v"
+verilog work "tld_zxuno.v"
+verilog work "relojes.v"
