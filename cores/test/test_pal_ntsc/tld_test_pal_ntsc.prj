@@ -1,0 +1,5 @@
+verilog work "sync_generator_pal_ntsc.v"
+verilog work "ps2_port.v"
+verilog work "master_clk.v"
+verilog work "dummy_ula.v"
+verilog work "tld_test_pal_ntsc.v"
