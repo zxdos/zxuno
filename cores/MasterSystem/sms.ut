@@ -1,6 +1,5 @@
 -w
 -g DebugBitstream:No
--g Compress
 -g Binary:no
 -g CRC:Enable
 -g Reset_on_err:No

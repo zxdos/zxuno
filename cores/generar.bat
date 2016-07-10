@@ -3,4 +3,9 @@ call %ruta_bat%map      -intstyle ise -w -ol high -mt 2 -p xc6slx9-tqg144-%speed
 call %ruta_bat%par      -intstyle ise -w -ol high -mt 4 %machine%_map.ncd %machine%.ncd %machine%.pcf
 call %ruta_bat%trce     -intstyle ise -v 3 -s %speed% -n 3 -fastpaths -xml %machine%.twx %machine%.ncd -o %machine%.twr %machine%.pcf
 call %ruta_bat%bitgen   -intstyle ise -f %machine%.ut %machine%.ncd
-copy /y %machine%.bit %machine%.%1.bit
+if "%2" == "" (
+  copy /y %machine%.bit %machine%.%1.bit
+) ELSE (
+  %mypath%data2mem -bm %2 -bt %machine%.bit -bd %3 -o b %machine%_final.bit
+  copy /y %machine%_final.bit %machine%.%1.bit
+)
