@@ -11,14 +11,14 @@ fpoke FLASH.ZX1 00000 file:header.bin               ^
 fcut tmp.bin 0 53f00 sd_binaries\SPECTRUM.%3
 GenRom sm1ta Machine tmp.bin core_taps\SPECTRUM.TAP
 rem CgLeches core_taps\SPECTRUM.TAP core_wavs\SPECTRUM.WAV 3
-call :CreateMachine CORE2 "Sam Coupe"        SamCoupe\tld_sam.%2.bit 0 %3
-call :CreateMachine CORE3 "Jupiter ACE"      JupiterAce\jupiter_ace.%2.bit JupiterAce\jupiter_ace.v2_v3.bit %3
-call :CreateMachine CORE4 "Master System"    MasterSystem\sms.%2.bit 0 %3
-call :CreateMachine CORE5 "Oric Atmos"       Oric\build\oric.%2.bit Oric\build\oric.v2_v3.bit %3
-call :CreateMachine CORE6 "BBC Micro"        BBCMicro\working\bbc_micro.%2.bit BBCMicro\working\bbc_micro.v2_v3.bit %3
-call :CreateMachine CORE7 "Apple 2 (VGA)"    Apple2\build\apple2_top.%2.bit 0 %3
-call :CreateMachine CORE8 "Acorn Atom (VGA)" AcornAtom\working\Atomic_top_zxuno.%2.bit 0 %3
-call :CreateMachine CORE9 "NES (VGA)"        NES\xilinx\NES_ZXUNO.%2.bit 0 %3
+call :CreateMachine set1 CORE2 "Sam Coupe"        SamCoupe\tld_sam.%2.bit 0 %3
+call :CreateMachine set1 CORE3 "Jupiter ACE"      JupiterAce\jupiter_ace.%2.bit JupiterAce\jupiter_ace.v2_v3.bit %3
+call :CreateMachine set1 CORE4 "Master System"    MasterSystem\sms.%2.bit 0 %3
+call :CreateMachine set1 CORE5 "BBC Micro"        BBCMicro\working\bbc_micro.%2.bit BBCMicro\working\bbc_micro.v2_v3.bit %3
+call :CreateMachine set1 CORE6 "Oric Atmos"       Oric\build\oric.%2.bit Oric\build\oric.v2_v3.bit %3
+call :CreateMachine set1 CORE7 "VIC-20"           VIC20\ise\VIC20.%2.bit VIC20\ise\VIC20.v2_v3.bit %3
+call :CreateMachine set1 CORE8 "Test PAL/NTSC"    test\test_pal_ntsc\tld_test_pal_ntsc.%2.bit test\test_pal_ntsc\tld_test_pal_ntsc.v2_v3.bit %3
+call :CreateMachine set1 CORE9 "Test Color Bars"  test\barras_de_color\tld_zxuno.%2.bit test\barras_de_color\tld_zxuno.v2_v3.bit %3
 copy /y rom_binaries\esxdos.rom sd_binaries\ESXDOS.%3
 copy /y firmware.rom sd_binaries\FIRMWARE.%3
 GenRom sm1t BIOS firmware.rom core_taps\FIRMWARE.TAP
@@ -53,22 +53,38 @@ fcut FLASH.ZX1 34c000 0b4000 tmp2.bin
 copy /by tmp.bin+tmp1.bin+tmp2.bin sd_binaries\ROMS.%3
 rem cambiar el 400000 siguiente línea por 100000 si 25Q80
 fcut FLASH.ZX1 0 400000 tmp.bin
-srec_cat  tmp.bin -binary       ^
-          -o prom.%2.mcs -Intel ^
-          -line-length=44       ^
+srec_cat  tmp.bin -binary             ^
+          -o flash_set1.%2.mcs -Intel ^
+          -line-length=44             ^
           -line-termination=nl
 del tmp1.bin tmp2.bin
-move /y tmp.bin sd_binaries\FLASH.%3
+copy /y tmp.bin sd_binaries\set1\FLASH.%3
+call :CreateMachine set2 CORE2 "NES (VGA)"        NES\xilinx\NES_ZXUNO.%2.bit 0 %3
+call :CreateMachine set2 CORE3 "Atari 2600 (VGA)" SamCoupe\tld_sam.%2.bit 0 %3
+call :CreateMachine set2 CORE4 "Acorn Atom (VGA)" AcornAtom\working\Atomic_top_zxuno.%2.bit 0 %3
+call :CreateMachine set2 CORE5 "Apple 2 (VGA)"    Apple2\build\apple2_top.%2.bit 0 %3
+call :CreateMachine set2 CORE6 "Acorn Electron (VGA)" AcornAtom\working\Atomic_top_zxuno.%2.bit 0 %3
+call :CreateMachine set2 CORE7 "Master System"    MasterSystem\sms.%2.bit 0 %3
+call :CreateMachine set2 CORE8 "Test Interlaced"  test\test_pal_interlaced_progressive\tld_test_pal_intprog.%2.bit test\test_pal_interlaced_progressive\tld_test_pal_intprog.v2_v3.bit %3
+call :CreateMachine set2 CORE9 "Test SRAM-Video"  test\test_sram_y_video\tld_zxuno.%2.bit test\test_sram_y_video\tld_zxuno.v2_v3.bit %3
+fpoke FLASH.ZX1 07044 g020302020200000002
+rem cambiar el 400000 siguiente línea por 100000 si 25Q80
+fcut FLASH.ZX1 0 400000 tmp.bin
+srec_cat  tmp.bin -binary             ^
+          -o flash_set2.%2.mcs -Intel ^
+          -line-length=44             ^
+          -line-termination=nl
+copy /y tmp.bin sd_binaries\set2\FLASH.%3
 goto :eof
 
 :CreateMachine
-IF EXIST ..\cores\%3 (
-  Bit2Bin ..\cores\%3 sd_binaries\%1.%5
+IF EXIST ..\cores\%4 (
+  Bit2Bin ..\cores\%4 sd_binaries\%1\%2.%6
 ) ELSE ( 
-  Bit2Bin ..\cores\%4 sd_binaries\%1.%5
+  Bit2Bin ..\cores\%5 sd_binaries\%1\%2.%6
 )
-GenRom 0 %2 sd_binaries\%1.%5 core_taps\%1.TAP
-AddItem %1 core_taps\%1.tap
+GenRom 0 %3 sd_binaries\%1\%2.%6 core_taps\%1\%2.TAP
+AddItem %2 core_taps\%1\%2.tap
 rem CgLeches core_taps\%1.TAP core_wavs\%1.WAV 3
 goto :eof
 
