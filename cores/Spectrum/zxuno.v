@@ -128,6 +128,7 @@ module zxuno (
    wire [7:0] kbstatus_dout;
    wire oe_n_kbstatus;
    wire [4:0] user_toggles;
+   wire video_output_change; // señal que da la tecla Scroll Lock para cambiar de modo de video
    
    // Interfaz joystick configurable
    wire oe_n_joystick;
@@ -188,9 +189,6 @@ module zxuno (
    wire [7:0] mousedata_dout;
    wire [7:0] mousestatus_dout;
    wire oe_n_kmouse, oe_n_mousedata, oe_n_mousestatus;
-
-   // Multiboot
-   wire boot_second_core = user_toggles[1];  // KB triggered booting
 
    // Asignación de dato para la CPU segun la decodificación de todos los dispositivos
    // conectados a ella.
@@ -400,6 +398,7 @@ module zxuno (
       .nmi_out_n(nmi_n),   // Señales de reset y NMI
       .mrst_out_n(mrst_n),  // generadas por pulsaciones especiales del teclado
       .user_toggles(user_toggles),  // funciones de usuario
+      .video_output_change(video_output_change),
       //----------------------------
       .zxuno_addr(zxuno_addr),
       .zxuno_regrd(zxuno_regrd),
@@ -479,8 +478,9 @@ module zxuno (
     );
 
     scandoubler_ctrl control_scandoubler (
-        .clk(cpuclkplain),
+        .clk(clk28),
         .a(cpuaddr),
+        .kbd_change_video_output(video_output_change),
         .iorq_n(iorq_n),
         .wr_n(wr_n),
         .zxuno_addr(zxuno_addr),
@@ -555,7 +555,6 @@ module zxuno (
         .clk(cpuclkplain),
         .clk_icap(clk14),
         .rst_n(rst_n & mrst_n & power_on_reset_n),
-        .kb_boot_core(boot_second_core),
         .zxuno_addr(zxuno_addr),
         .zxuno_regwr(zxuno_regwr),
         .din(cpudout)

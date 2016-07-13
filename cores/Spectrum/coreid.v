@@ -37,10 +37,10 @@ module coreid (
         text[i] = 8'h00;              
       text[ 0] = "T";
       text[ 1] = "2";
-      text[ 2] = "1";
+      text[ 2] = "2";
       text[ 3] = "-";
-      text[ 4] = "0";
-      text[ 5] = "5";
+      text[ 4] = "1";
+      text[ 5] = "3";
       text[ 6] = "0";
       text[ 7] = "7";
       text[ 8] = "2";

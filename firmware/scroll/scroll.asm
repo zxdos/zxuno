@@ -1,5 +1,6 @@
         output  scroll.bin
-        org     $5ee2
+        org     $5e7c
+  display $6d35+string-music
 string  include string.asm
 music   ld      (vari+2), ix
         incbin  music.bin

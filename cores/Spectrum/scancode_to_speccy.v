@@ -65,7 +65,7 @@ module scancode_to_speccy (
     reg [13:0] addr = 14'h0000;
     reg [13:0] cpuaddr = 14'h0000;  // Dirección E/S desde la CPU. Se autoincrementa en cada acceso
     initial begin
-        $readmemh ("keyb_es_hex.txt", keymap);
+        $readmemh ("../keymaps/keyb_es_hex.txt", keymap);
     end
     
     reg [2:0] keyrow1 = 3'h0;

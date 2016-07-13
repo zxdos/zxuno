@@ -23,6 +23,7 @@
 module scandoubler_ctrl (
     input wire clk,
     input wire [15:0] a,
+    input wire kbd_change_video_output,
     input wire iorq_n,
     input wire wr_n,
     input wire [7:0] zxuno_addr,
@@ -53,6 +54,10 @@ module scandoubler_ctrl (
             scandblctrl <= din;
         else if (iorq_n == 1'b0 && wr_n == 1'b0 && a == PRISMSPEEDCTRL)
             scandblctrl[7:6] <= din[1:0];
+        else if (kbd_change_video_output == 1'b1) begin
+            scandblctrl[0] <= ~scandblctrl[0];
+            scandblctrl[4:2] <= (scandblctrl[0] == 1'b0)? 3'b111 : 3'b000;
+        end
         dout <= scandblctrl;
     end
 endmodule

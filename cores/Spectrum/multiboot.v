@@ -2,7 +2,6 @@ module multiboot (
     input wire clk,
     input wire clk_icap,   // WARNING: this clock must not be greater than 20MHz (50ns period)
     input wire rst_n,
-    input wire kb_boot_core,
     input wire [7:0] zxuno_addr,
     input wire zxuno_regwr,
     input wire [7:0] din
@@ -58,7 +57,7 @@ module multiboot (
     reg [4:0] q = 5'b00000;
     reg reboot_ff = 1'b0;
     always @(posedge clk_icap) begin
-      q[0] <= boot_core | kb_boot_core;
+      q[0] <= boot_core;
       q[1] <= q[0];
       q[2] <= q[1];
       q[3] <= q[2];

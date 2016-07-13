@@ -32,6 +32,7 @@ module ps2_keyb(
     output wire nmi_out_n,
     output wire mrst_out_n,
     output wire [4:0] user_toggles,
+    output reg video_output_change,    
     //---------------------------------
     input wire [7:0] zxuno_addr,
     input wire zxuno_regrd,
@@ -72,16 +73,23 @@ module ps2_keyb(
     | BSY | x | x | x | ERR | RLS | EXT | PEN |
     */
     reg reading_kbstatus = 1'b0;
+    initial video_output_change = 1'b0;
     always @(posedge clk) begin
         kbstatus_dout[7:1] <= {ps2busy, 3'b000, kberror, released, extended};
-        if (nueva_tecla == 1'b1)
+        if (nueva_tecla == 1'b1) begin
             kbstatus_dout[0] <= 1'b1;
+            if (kbcode == 8'h7E && released == 1'b0 && extended == 1'b0) begin  // SCRLock to change between RGB and VGA 60Hz
+               video_output_change <= 1'b1;
+            end
+        end
         if (oe_n_kbstatus == 1'b0)
             reading_kbstatus <= 1'b1;
         else if (reading_kbstatus == 1'b1) begin
             kbstatus_dout[0] <= 1'b0;
             reading_kbstatus <= 1'b0;
         end
+        if (video_output_change == 1'b1)
+            video_output_change <= 1'b0;
     end        
 
     ps2_port lectura_de_teclado (
