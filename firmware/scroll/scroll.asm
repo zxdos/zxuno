@@ -1,5 +1,5 @@
         output  scroll.bin
-        org     $5e7c
+        org     $5e82
   display $6d35+string-music
 string  include string.asm
 music   ld      (vari+2), ix
@@ -36,45 +36,45 @@ start0  ld      a, b
         out     ($fe), a
         inc     a
         ex      af, af'
-        ld      de, $401f
-rever   ld      hl, $ffe1
-        add     hl, de
-        ld      c, (hl)
-        ld      a, $80
-revl1   rl      c
-        rra
-        jr      nc, revl1
-        ld      (de), a
-        inc     hl
-        dec     de
-        ld      c, (hl)
-        ld      a, $80
-revl2   rl      c
-        rra
-        jr      nc, revl2
-        ld      (de), a
-        inc     hl
-        dec     de
-        ld      c, (hl)
-        ld      a, $80
-revl3   rl      c
-        rra
-        jr      nc, revl3
-        ld      (de), a
-        inc     hl
-        dec     de
-        ld      c, (hl)
-        ld      a, $80
-revl4   rl      c
-        rra
-        jr      nc, revl4
-        ld      (de), a
-        ld      hl, $23
-        add     hl, de
-        ex      de, hl
-        ld      a, d
-        cp      $58
-        jr      nz, rever
+;        ld      de, $401f
+;rever   ld      hl, $ffe1
+;        add     hl, de
+;        ld      c, (hl)
+;        ld      a, $80
+;revl1   rl      c
+;        rra
+;        jr      nc, revl1
+;        ld      (de), a
+;        inc     hl
+;        dec     de
+;        ld      c, (hl)
+;        ld      a, $80
+;revl2   rl      c
+;        rra
+;        jr      nc, revl2
+;        ld      (de), a
+;        inc     hl
+;        dec     de
+;        ld      c, (hl)
+;        ld      a, $80
+;revl3   rl      c
+;        rra
+;        jr      nc, revl3
+;        ld      (de), a
+;        inc     hl
+;        dec     de
+;        ld      c, (hl)
+;        ld      a, $80
+;revl4   rl      c
+;        rra
+;        jr      nc, revl4
+;        ld      (de), a
+;        ld      hl, $23
+;        add     hl, de
+;        ex      de, hl
+;        ld      a, d
+;        cp      $58
+;        jr      nz, rever
 
         ld      hl, $c000
         ld      de, $c400
