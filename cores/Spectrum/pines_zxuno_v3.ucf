@@ -1,5 +1,5 @@
 # Clocks & debug
-NET "clk50mhz"        LOC="P55"  | IOSTANDARD = LVCMOS33 | PERIOD=20.0ns;
+NET "clk50mhz"        LOC="P55"  | IOSTANDARD = LVCMOS33;
 NET "testled"         LOC="P10"  | IOSTANDARD = LVCMOS33;
 
 # Video output
@@ -87,5 +87,3 @@ NET "joyfire"         LOC="P2"   | IOSTANDARD = LVCMOS33 | PULLUP;
 
 
 # Otros
-NET "sysclk"          PERIOD=35 ns;
-

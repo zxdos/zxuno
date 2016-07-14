@@ -78,9 +78,10 @@ module ps2_keyb(
         kbstatus_dout[7:1] <= {ps2busy, 3'b000, kberror, released, extended};
         if (nueva_tecla == 1'b1) begin
             kbstatus_dout[0] <= 1'b1;
-            if (kbcode == 8'h7E && released == 1'b0 && extended == 1'b0) begin  // SCRLock to change between RGB and VGA 60Hz
+            if (kbcode == 8'h7E && released == 1'b0 && extended == 1'b0)  // SCRLock to change between RGB and VGA 60Hz
                video_output_change <= 1'b1;
-            end
+            else
+               video_output_change <= 1'b0;
         end
         if (oe_n_kbstatus == 1'b0)
             reading_kbstatus <= 1'b1;

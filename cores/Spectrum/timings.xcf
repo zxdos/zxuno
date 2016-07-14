@@ -1,0 +1,9 @@
+# Timing constraints
+NET "clk50mhz" PERIOD=20 ns;
+NET "cpuclk" KEEP | S | PERIOD=54 ns; #71.111 ns; #35.555 ns;  # 28.125 MHz max
+NET "cpuclkplain" KEEP | S | PERIOD=54 ns; #71.111 ns; #35.555 ns;  # 28.125 MHz max
+
+NET "sysclk" KEEP | S | PERIOD=27 ns; #35.555 ns;  # 28.125 MHz actual frequency for 50Hz vertical refresh
+NET "clk14" KEEP | S | PERIOD=54 ns; #71.111 ns;
+NET "clk7" KEEP | S | PERIOD=108 ns; #142.222 ns;
+NET "clk3d5" KEEP | S | PERIOD=216 ns; #284.444 ns;

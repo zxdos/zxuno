@@ -49,14 +49,16 @@ module scandoubler_ctrl (
     assign turbo_enable = scandblctrl[7:6];
     
     reg [7:0] scandblctrl = 8'h00;  // initial value
+    reg [1:0] kbd_change_video_edge_detect = 2'b00;
+
     always @(posedge clk) begin
+        kbd_change_video_edge_detect <= {kbd_change_video_edge_detect[0], kbd_change_video_output};
         if (zxuno_addr == SCANDBLCTRL && zxuno_regwr == 1'b1)
             scandblctrl <= din;
         else if (iorq_n == 1'b0 && wr_n == 1'b0 && a == PRISMSPEEDCTRL)
-            scandblctrl[7:6] <= din[1:0];
-        else if (kbd_change_video_output == 1'b1) begin
-            scandblctrl[0] <= ~scandblctrl[0];
-            scandblctrl[4:2] <= (scandblctrl[0] == 1'b0)? 3'b111 : 3'b000;
+            scandblctrl <= {din[1:0], scandblctrl[5:0]};
+        else if (kbd_change_video_edge_detect == 2'b01) begin
+            scandblctrl <= {scandblctrl[7:5], ((scandblctrl[0] == 1'b0)? 3'b101 : 3'b000), scandblctrl[1], ~scandblctrl[0]};
         end
         dout <= scandblctrl;
     end
