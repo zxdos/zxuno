@@ -6,8 +6,8 @@ entity sms is
 	port (
 		clk:			in			STD_LOGIC;
 		
-		ram_we_n:	out		STD_LOGIC;
-		ram_a:		out		STD_LOGIC_VECTOR(18 downto 0);
+		sram_we_n:	out		STD_LOGIC;
+		sram_a:		out		STD_LOGIC_VECTOR(18 downto 0);
 		ram_d:		inout		STD_LOGIC_VECTOR(7 downto 0); --Q
 
 --		j1_MDsel:	out		STD_LOGIC; --Q
@@ -171,12 +171,17 @@ architecture Behavioral of sms is
 	
 	signal rgb_clk:		std_logic;
 	
---	signal scanDB:			std_logic;
+	signal scanSWk:		std_logic;
 	signal scanSW:			std_logic;
 	
 	signal j2_tr:			std_logic;
 	
 	signal c0, c1, c2 : 	std_logic_vector(9 downto 0);	--hdmi
+	
+	signal poweron_reset:	unsigned(7 downto 0) := "00000000";
+	signal scandoubler_ctrl: std_logic_vector(1 downto 0);
+	signal ram_we_n: std_logic;
+	signal ram_a:	std_logic_vector(18 downto 0);
 	
 begin
 
@@ -257,7 +262,7 @@ begin
 		ps2_clk		=> ps2_clk,
 		ps2_data		=> ps2_data,
 		
-		scanSW		=> scanSW,
+		scanSW		=> scanSWk,
 
 		spi_do		=> spi_do,
 		spi_sclk		=> spi_sclk,
@@ -266,6 +271,7 @@ begin
 		);
 	
 	led <= not spi_cs_n; --Q
+--	led <= scandoubler_ctrl(0); --debug scandblctrl reg.
 
 	audio_l <= audio;
 	audio_r <= audio;
@@ -273,6 +279,25 @@ begin
 	NTSC <= '0';
 	PAL <= '1';	
 	
+	---- scandlbctrl register detection for video mode initialization at start ----
+	
+	process (clk_cpu)
+	begin
+		if rising_edge(clk_cpu) then
+        if (poweron_reset < 126) then
+            scandoubler_ctrl <= ram_d(1 downto 0);
+		  end if;
+		  if poweron_reset < 254 then
+				poweron_reset <= poweron_reset + 1;
+		  end if;
+		end if;
+	end process;
+	
+
+	sram_a <= "0001000111111010101" when poweron_reset < 254 else ram_a; --0x8FD5 SRAM (SCANDBLCTRL REG)
+	sram_we_n <= '1' when poweron_reset < 254 else ram_we_n;
+	
+	-------------------------------------------------------------------------------
 	
 	vsync <= vga_vsync when scanSW='1'	else '1';
 	hsync <= vga_hsync when scanSW='1' 	else rgb_hsync;
@@ -286,8 +311,10 @@ begin
 	x <= vga_x when scanSW='1'	else rgb_x;
 	y <= vga_y when scanSW='1'	else rgb_y;	
 	
---	sel_pclock <= '1' when scanDB='1' else '0';
 	sel_pclock <= '1' when scanSW='1' else '0';
+	
+--	scanSW <= '1' when scanSWk = '1' else '0';
+	scanSW <= scandoubler_ctrl(0) xor scanSWk; -- Video mode change via ScrollLock / SCANDBLCTRL reg.
 
 
 --HDMI

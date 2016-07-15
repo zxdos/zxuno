@@ -50,7 +50,8 @@ module jace_logic (
     output reg spk,
     output reg mic,
     output wire video,
-    output wire csync
+    output wire hsync_pal,
+	 output wire vsync_pal
     );
     
     initial begin
@@ -62,6 +63,7 @@ module jace_logic (
     reg [8:0] cntpix = 9'd0;
     reg [8:0] cntscn = 9'd0;
     wire [17:0] cnt = {cntscn, cntpix};
+	 
     always @(posedge clk) begin
         if (cntpix != 9'd415)
             cntpix <= cntpix + 9'd1;
@@ -91,7 +93,9 @@ module jace_logic (
             hsync = 1'b1;
     end
     
-    assign csync = hsync & vsync;
+    //assign csync = hsync & vsync;
+	 assign hsync_pal = hsync;
+	 assign vsync_pal = vsync;
     
     reg viden; // VIDEN signal in schematic
     always @* begin

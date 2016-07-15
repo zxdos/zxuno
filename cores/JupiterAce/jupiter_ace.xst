@@ -2,20 +2,22 @@ set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn jupiter_ace.prj
+-infer_ramb8 No
 -ofn jupiter_ace
 -ofmt NGC
 -p xc6slx9-2-tqg144
 -top jupiter_ace
--opt_mode Area
--opt_level 1
+-opt_mode Speed
+-opt_level 2
 -power NO
+-uc "timings.xcf"
 -iuc NO
 -keep_hierarchy No
 -netlist_hierarchy As_Optimized
 -rtlview Yes
 -glob_opt AllClockNets
 -read_cores YES
--write_timing_constraints NO
+-write_timing_constraints YES
 -cross_clock_analysis NO
 -hierarchy_separator /
 -bus_delimiter <>
@@ -25,8 +27,7 @@ run
 -dsp_utilization_ratio 100
 -lc Auto
 -reduce_control_sets Auto
--fsm_extract YES -fsm_encoding Auto
--safe_implementation No
+-fsm_extract NO
 -fsm_style LUT
 -ram_extract Yes
 -ram_style Auto

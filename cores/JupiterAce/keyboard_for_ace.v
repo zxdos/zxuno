@@ -25,12 +25,14 @@ module keyboard_for_ace(
     input wire [7:0] rows,
     output wire [4:0] columns,
     output reg kbd_reset,
-    output reg kbd_nmi
+    output reg kbd_nmi,
+    output reg kbd_mreset
     );
 
     initial begin
         kbd_reset = 1'b1;
         kbd_nmi = 1'b1;
+        kbd_mreset = 1'b1;
     end
 
     `include "mapa_teclado_es.vh"
@@ -85,7 +87,13 @@ module keyboard_for_ace(
                     shift_pressed <= ~is_released;
                 `KEY_LCTRL,
                 `KEY_RCTRL:
-                    ctrl_pressed <= ~is_released;
+                    begin
+                        ctrl_pressed <= ~is_released;
+                        if (is_extended)
+                            matrix[0][1] <= is_released;  // Right control = Symbol shift
+                        else
+                            matrix[0][0] <= is_released;  // Left control = Caps shift
+                    end
                 `KEY_LALT:
                     alt_pressed <= ~is_released;
                 `KEY_KPPUNTO:
@@ -113,7 +121,10 @@ module keyboard_for_ace(
                         matrix[7][0] <= is_released;
                     end
                 `KEY_BKSP:
-                    begin
+                    if (ctrl_pressed && alt_pressed) begin
+                        kbd_mreset <= is_released;                        
+                    end
+                    else begin
                         matrix[0][0] <= is_released;
                         matrix[4][0] <= is_released;
                     end

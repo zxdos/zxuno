@@ -1,0 +1,5 @@
+#NET "clk50mhz" PERIOD=20 ns;
+NET "clk24" KEEP | S | PERIOD=41 ns;
+NET "clk12" KEEP | S | PERIOD=82 ns;
+NET "clk6" KEEP | S | PERIOD=164 ns;
+NET "clk8" KEEP | S | PERIOD=125 ns;

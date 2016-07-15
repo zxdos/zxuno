@@ -31,7 +31,8 @@ module samcoupe (
     output wire [1:0] g,
     output wire [1:0] b,
     output wire bright,
-    output wire csync,
+    output wire hsync_pal,
+    output wire vsync_pal,
     // Audio output
     input wire ear,
     output wire audio_out_left,
@@ -61,6 +62,7 @@ module samcoupe (
     wire [7:0] kbcolumns;
     wire kb_nmi_n;
     wire kb_rst_n;
+    wire kb_mrst_n;
     wire rdmsel;
     assign kbrows = {rdmsel, cpuaddr[15:8]};
     
@@ -91,7 +93,7 @@ module samcoupe (
                          (asic_oe_n == 1'b0)? data_from_asic :
                          8'hFF;
 
-    tv80n el_z80 (
+    tv80a el_z80 (
       .m1_n(),
       .mreq_n(mreq_n),
       .iorq_n(iorq_n),
@@ -148,12 +150,13 @@ module samcoupe (
         .g(g),
         .b(b),
         .bright(bright),
-        .csync(csync),
+        .hsync_pal(hsync_pal),
+        .vsync_pal(vsync_pal),
         .int_n(int_n)
     );
     
     rom rom_32k (
-        .clk(clk12),
+        .clk(clk24),
         .a(romaddr),
         .dout(data_from_rom)
     );
@@ -200,7 +203,7 @@ module samcoupe (
         .cols(kbcolumns),
         .rst_out_n(kb_rst_n),
         .nmi_out_n(kb_nmi_n),
-        .mrst_out_n(),
+        .mrst_out_n(kb_mrst_n),
         .user_toggles(),
         //---------------------------------
         .zxuno_addr(8'h00),
@@ -239,4 +242,8 @@ module samcoupe (
         .audio_right(audio_out_right)
 	);
     
+    multiboot back_to_bios (
+        .clk_icap(clk24),   // WARNING: this clock must not be greater than 20MHz (50ns period)
+        .mrst_n(kb_mrst_n)
+    );
 endmodule

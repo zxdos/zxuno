@@ -1,5 +1,5 @@
 # Clocks & debug
-NET "clk50mhz"        LOC="P55"  | IOSTANDARD = LVCMOS33 | PERIOD=20.0ns;
+NET "clk50mhz"        LOC="P55"  | IOSTANDARD = LVCMOS33;
 #NET "testled"         LOC="P10"  | IOSTANDARD = LVCMOS33;
 
 # Video output
@@ -12,8 +12,8 @@ NET "g<0>"            LOC="P82"  | IOSTANDARD = LVCMOS33;
 NET "b<2>"            LOC="P81"  | IOSTANDARD = LVCMOS33;
 NET "b<1>"            LOC="P80"  | IOSTANDARD = LVCMOS33;
 NET "b<0>"            LOC="P79"  | IOSTANDARD = LVCMOS33;
-NET "csync"           LOC="P87"  | IOSTANDARD = LVCMOS33;
-#NET "vsync"           LOC="P85"  | IOSTANDARD = LVCMOS33;
+NET "hsync"           LOC="P87"  | IOSTANDARD = LVCMOS33;
+NET "vsync"           LOC="P85"  | IOSTANDARD = LVCMOS33;
 NET "stdn"            LOC="P67"  | IOSTANDARD = LVCMOS33;
 NET "stdnb"           LOC="P66"  | IOSTANDARD = LVCMOS33;
 
@@ -87,5 +87,3 @@ NET "sram_we_n"       LOC="P118" | IOSTANDARD = LVCMOS33;
 
 
 # Otros
-NET "clk12"           PERIOD=83 ns;
-

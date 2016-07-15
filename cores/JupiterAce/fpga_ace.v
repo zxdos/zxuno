@@ -22,17 +22,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module fpga_ace (
-    input wire clkram,
+   input wire clkram,
 	input wire clk65,
-    input wire clkcpu,
+   input wire clkcpu,
 	input wire reset,
 	input wire ear,
 	output wire [7:0] filas,
 	input wire [4:0] columnas,
 	output wire video,
-	output wire sync,
-    output wire mic,
-    output wire spk
+	output wire hsync,
+	output wire vsync,
+   output wire mic,
+   output wire spk
 	);
 	
 	// Los buses del Z80
@@ -40,24 +41,31 @@ module fpga_ace (
 	wire [7:0] DoutZ80;
 	wire [15:0] AZ80;
 	
+   // Señales de control, direccion y datos de parte de todas las memorias
 	wire iorq_n, mreq_n, int_n, rd_n, wr_n, wait_n;
-    wire rom_enable, sram_enable, cram_enable, uram_enable, xram_enable, eram_enable, data_from_jace_oe;
-    wire [7:0] dout_rom, dout_sram, dout_cram, dout_uram, dout_xram, dout_eram, data_from_jace;
-    wire [7:0] sram_data, cram_data;
-    wire [9:0] sram_addr, cram_addr;
+   wire rom_enable, sram_enable, cram_enable, uram_enable, xram_enable, eram_enable, data_from_jace_oe;
+   wire [7:0] dout_rom, dout_sram, dout_cram, dout_uram, dout_xram, dout_eram, data_from_jace;
+   wire [7:0] sram_data, cram_data;
+   wire [9:0] sram_addr, cram_addr;
+    
+   // Señales para la implementación de la habilitación de escritura en ROM
+   wire enable_write_to_rom;
+   wire [7:0] dout_modulo_enable_write;
+   wire modulo_enable_write_oe;
 
 	// Copia del bus de direcciones para las filas del teclado
-    assign filas = AZ80[15:8];
+   assign filas = AZ80[15:8];
 
-    // Multiplexor para asignar un valor al bus de datos de entrada del Z80
-    assign DinZ80 = (rom_enable == 1'b1)?        dout_rom :
-                    (sram_enable == 1'b1)?       dout_sram :
-                    (cram_enable == 1'b1)?       dout_cram :
-                    (uram_enable == 1'b1)?       dout_uram :
-                    (xram_enable == 1'b1)?       dout_xram :
-                    (eram_enable == 1'b1)?       dout_eram :
-                    (data_from_jace_oe == 1'b1)? data_from_jace :
-                                                 sram_data | cram_data;  // By default, this is what the data bus sees
+   // Multiplexor para asignar un valor al bus de datos de entrada del Z80
+   assign DinZ80 = (rom_enable == 1'b1)?        dout_rom :
+                   (sram_enable == 1'b1)?       dout_sram :
+                   (cram_enable == 1'b1)?       dout_cram :
+                   (uram_enable == 1'b1)?       dout_uram :
+                   (xram_enable == 1'b1)?       dout_xram :
+                   (eram_enable == 1'b1)?       dout_eram :
+                   (modulo_enable_write_oe == 1'b1)? dout_modulo_enable_write :
+                   (data_from_jace_oe == 1'b1)? data_from_jace :
+                                                sram_data | cram_data;  // By default, this is what the data bus sees
 
 	// Memoria del equipo
 	ram1k_dualport sram (
@@ -112,8 +120,11 @@ module fpga_ace (
 	/* La ROM */
 	rom the_rom(
 	   .clk(clkram),
+       .ce(rom_enable),
 	   .a(AZ80[12:0]),
-	   .dout(dout_rom)
+       .din(DoutZ80),
+	   .dout(dout_rom),
+       .we(~wr_n & enable_write_to_rom)
 		);
 	
 	/* La CPU */
@@ -155,7 +166,21 @@ module fpga_ace (
         .spk(spk),
         .mic(mic),
         .video(video),
-        .csync(sync)
+        .hsync_pal(hsync),
+		  .vsync_pal(vsync)
     );
+    
+    io_write_to_rom modulo_habilitador_escrituras (
+        .clk(clk65),
+        .a(AZ80),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .wr_n(wr_n),
+        .din(DoutZ80),
+        .dout(dout_modulo_enable_write),
+        .dout_oe(modulo_enable_write_oe),
+        .enable_write_to_rom(enable_write_to_rom)
+    );
+    
 endmodule
 

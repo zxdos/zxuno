@@ -2,20 +2,22 @@ set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn tld_sam.prj
+-infer_ramb8 No
 -ofn tld_sam
 -ofmt NGC
 -p xc6slx9-2-tqg144
 -top tld_sam
 -opt_mode Speed
--opt_level 1
+-opt_level 2
 -power NO
+-uc "timings.xcf"
 -iuc NO
 -keep_hierarchy No
 -netlist_hierarchy As_Optimized
 -rtlview Yes
 -glob_opt AllClockNets
 -read_cores YES
--write_timing_constraints NO
+-write_timing_constraints YES
 -cross_clock_analysis NO
 -hierarchy_separator /
 -bus_delimiter <>
@@ -35,7 +37,7 @@ run
 -shreg_extract YES
 -rom_style Auto
 -auto_bram_packing NO
--resource_sharing NO
+-resource_sharing YES
 -async_to_sync NO
 -shreg_min_size 2
 -use_dsp48 Auto

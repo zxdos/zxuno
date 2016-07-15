@@ -29,25 +29,25 @@ NET "ps2_data"        LOC="P142" | IOSTANDARD = LVCMOS33 | PULLUP;
 
 
 # SRAM  
-NET ram_a(0)          LOC="P115" | IOSTANDARD = LVCMOS33;
-NET ram_a(1)          LOC="P116" | IOSTANDARD = LVCMOS33;
-NET ram_a(2)          LOC="P117" | IOSTANDARD = LVCMOS33;
-NET ram_a(3)          LOC="P119" | IOSTANDARD = LVCMOS33;
-NET ram_a(4)          LOC="P120" | IOSTANDARD = LVCMOS33;
-NET ram_a(5)          LOC="P123" | IOSTANDARD = LVCMOS33;
-NET ram_a(6)          LOC="P126" | IOSTANDARD = LVCMOS33;
-NET ram_a(7)          LOC="P131" | IOSTANDARD = LVCMOS33;
-NET ram_a(8)          LOC="P127" | IOSTANDARD = LVCMOS33;
-NET ram_a(9)          LOC="P124" | IOSTANDARD = LVCMOS33;
-NET ram_a(10)         LOC="P118" | IOSTANDARD = LVCMOS33;
-NET ram_a(11)         LOC="P121" | IOSTANDARD = LVCMOS33;
-NET ram_a(12)         LOC="P133" | IOSTANDARD = LVCMOS33;
-NET ram_a(13)         LOC="P132" | IOSTANDARD = LVCMOS33;
-NET ram_a(14)         LOC="P137" | IOSTANDARD = LVCMOS33;
-NET ram_a(15)         LOC="P140" | IOSTANDARD = LVCMOS33;
-NET ram_a(16)         LOC="P139" | IOSTANDARD = LVCMOS33;
-NET ram_a(17)         LOC="P141" | IOSTANDARD = LVCMOS33;
-NET ram_a(18)         LOC="P138" | IOSTANDARD = LVCMOS33;
+NET sram_a(0)         LOC="P115" | IOSTANDARD = LVCMOS33;
+NET sram_a(1)         LOC="P116" | IOSTANDARD = LVCMOS33;
+NET sram_a(2)         LOC="P117" | IOSTANDARD = LVCMOS33;
+NET sram_a(3)         LOC="P119" | IOSTANDARD = LVCMOS33;
+NET sram_a(4)         LOC="P120" | IOSTANDARD = LVCMOS33;
+NET sram_a(5)         LOC="P123" | IOSTANDARD = LVCMOS33;
+NET sram_a(6)         LOC="P126" | IOSTANDARD = LVCMOS33;
+NET sram_a(7)         LOC="P131" | IOSTANDARD = LVCMOS33;
+NET sram_a(8)         LOC="P127" | IOSTANDARD = LVCMOS33;
+NET sram_a(9)         LOC="P124" | IOSTANDARD = LVCMOS33;
+NET sram_a(10)        LOC="P118" | IOSTANDARD = LVCMOS33;
+NET sram_a(11)        LOC="P121" | IOSTANDARD = LVCMOS33;
+NET sram_a(12)        LOC="P133" | IOSTANDARD = LVCMOS33;
+NET sram_a(13)        LOC="P132" | IOSTANDARD = LVCMOS33;
+NET sram_a(14)        LOC="P137" | IOSTANDARD = LVCMOS33;
+NET sram_a(15)        LOC="P140" | IOSTANDARD = LVCMOS33;
+NET sram_a(16)        LOC="P139" | IOSTANDARD = LVCMOS33;
+NET sram_a(17)        LOC="P141" | IOSTANDARD = LVCMOS33;
+NET sram_a(18)        LOC="P138" | IOSTANDARD = LVCMOS33;
 
 
 
@@ -60,7 +60,7 @@ NET ram_d(5)          LOC="P102" | IOSTANDARD = LVCMOS33;
 NET ram_d(6)          LOC="P101" | IOSTANDARD = LVCMOS33;
 NET ram_d(7)          LOC="P100" | IOSTANDARD = LVCMOS33;
 
-NET ram_WE_n          LOC="P134" | IOSTANDARD = LVCMOS33;
+NET sram_WE_n         LOC="P134" | IOSTANDARD = LVCMOS33;
 
 
 

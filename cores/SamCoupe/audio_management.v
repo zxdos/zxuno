@@ -37,7 +37,7 @@ module dac (DACout, DACin, Clk, Reset);
 	always @(SigmaLatch) DeltaB = {SigmaLatch[`MSBI+2], SigmaLatch[`MSBI+2]} << (`MSBI+1);
 	always @(DACin or DeltaB) DeltaAdder = DACin + DeltaB;
 	always @(DeltaAdder or SigmaLatch) SigmaAdder = DeltaAdder + SigmaLatch;
-	always @(posedge Clk or posedge Reset)
+	always @(posedge Clk)
 	begin
 		if(Reset)
 		begin

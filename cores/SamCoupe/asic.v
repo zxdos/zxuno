@@ -56,7 +56,8 @@ module asic (
     output wire [1:0] g,
     output wire [1:0] b,
     output wire bright,
-    output reg csync,
+    output reg hsync_pal,
+    output reg vsync_pal,
     output wire int_n
     );
 
@@ -177,14 +178,17 @@ module asic (
     reg rint_n;
     
     always @* begin
-        csync = 1'b1;
+        hsync_pal = 1'b1;
+        vsync_pal = 1'b1;
         vint_n = 1'b1;
         rint_n = 1'b1;
-        if (hc >= (RBORDER + HFPORCH) && hc < (RBORDER + HFPORCH + HSYNC))
-          csync = 1'b0;
-        if (vc >= BEGINVSYNCV && vc < ENDVSYNCV)
-          csync = ~csync;
-        if (vc == BEGINVSYNCV && hc < 256)
+        if (hc >= (RBORDER + HFPORCH) && hc < (RBORDER + HFPORCH + HSYNC)) begin
+          hsync_pal = 1'b0;
+		end
+        if (vc >= BEGINVSYNCV && vc < ENDVSYNCV) begin
+          vsync_pal = 1'b0;
+		end
+        if (vc == BEGINVSYNCV && hc < 10'd256)
           vint_n = 1'b0;
         if (lineint >= 8'd0 && lineint <= 8'd191)
             if ({1'b0, lineint} == vc && hc < 10'd256)
@@ -197,7 +201,7 @@ module asic (
     reg fetching_pixels;
     
     always @* begin
-        if (vc>=0 && vc<VACTIVEREGION && hc>=256 && hc<HTOTAL)
+        if (vc>=0 && vc<VACTIVEREGION && hc>=10'd256 && hc<HTOTAL)
             fetching_pixels = ~screen_off;
         else
             fetching_pixels = 1'b0;
@@ -226,28 +230,25 @@ module asic (
         mem_contention = 1'b0;
         io_contention = 1'b0;
 
-//        if (screen_off == 1'b0 && hc[3:0]<4'd10)
-//            io_contention = 1'b1;
-//        if (screen_off == 1'b1 && (hc[3:0]==4'd0 ||
-//                                        hc[3:0]==4'd1 ||
-//                                        hc[3:0]==4'd8 ||
-//                                        hc[3:0]==4'd9) )
-//            io_contention = 1'b1;
+        if (screen_off == 1'b0 && hc[3:0]<4'd10)
+            io_contention = 1'b1;
+        if (screen_off == 1'b1 && (hc[3:0]==4'd0 ||
+                                        hc[3:0]==4'd1 ||
+                                        hc[3:0]==4'd8 ||
+                                        hc[3:0]==4'd9) )
+            io_contention = 1'b1;
             
         if (fetching_pixels == 1'b1 && hc[3:0]<4'd10) begin
            mem_contention = 1'b1;
-           //io_contention = 1'b1;
         end
         if (fetching_pixels == 1'b0 && (hc[3:0]==4'd0 ||
                                              hc[3:0]==4'd1 ||
                                              hc[3:0]==4'd8 ||
                                              hc[3:0]==4'd9) ) begin
             mem_contention = 1'b1;
-            //io_contention = 1'b1;
         end
         if (screen_mode == 2'b00 && hc[3:0]<4'd10 && (hc<10'd128 || hc>=10'd256)) begin
             mem_contention = 1'b1;  // extra contention for MODE 1
-            //io_contention = 1'b1;
         end
     end
     assign asic_is_using_ram = mem_contention & fetching_pixels;
@@ -465,7 +466,7 @@ module asic (
             border <= 8'h00;
         end
         else begin
-            if (iorq_n == 1'b0 && wr_n == 1'b0) begin
+            if (iorq_n == 1'b0 && wr_n == 1'b0 && wait_n == 1'b1) begin
                 if (cpuaddr[7:0] == IOADDR_BORDER)
                     border <= data_from_cpu;
                 else if (cpuaddr[7:0] == IOADDR_VMPR)

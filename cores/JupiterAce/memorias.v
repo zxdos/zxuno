@@ -20,6 +20,28 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
+module rom (
+    input wire clk,
+    input wire ce,
+    input wire [12:0] a,
+    input wire we,
+    input wire [7:0] din,
+    output reg [7:0] dout
+    );
+
+   reg [7:0] mem[0:8191];
+   integer i;
+   initial begin  // usa $readmemb/$readmemh dependiendo del formato del fichero que contenga la ROM
+      $readmemh ("ace.hex", mem, 0);
+   end
+
+   always @(posedge clk) begin
+     dout <= mem[a];
+     if (we == 1'b1 && ce == 1'b1)
+        mem[a] <= din;
+   end
+endmodule
+
 module ram1k (
 	input wire clk,
     input wire ce,

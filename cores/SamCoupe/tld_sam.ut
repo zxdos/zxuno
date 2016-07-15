@@ -3,7 +3,7 @@
 -g Compress
 -g CRC:Enable
 -g Reset_on_err:No
--g ConfigRate:4
+-g ConfigRate:2
 -g ProgPin:PullUp
 -g TckPin:PullUp
 -g TdiPin:PullUp

@@ -61,7 +61,7 @@ module cuatro_relojes
   output wire       CLK_OUT4
  );
 
-  wire clkin1,clkout0,clkout1,clkout2,clkout3;
+  wire clkin1,clkout0;
   // Input buffering
   //------------------------------------
   IBUFG clkin1_buf
@@ -76,47 +76,39 @@ module cuatro_relojes
   //    * Unused outputs are labeled unused
   wire [15:0] do_unused;
   wire        drdy_unused;
-  wire        locked_unused;
   wire        clkfbout;
   wire        clkfbout_buf;
-  wire        clkout4_unused;
-  wire        clkout5_unused;
 
   PLL_BASE
   #(.BANDWIDTH              ("OPTIMIZED"),
     .CLK_FEEDBACK           ("CLKFBOUT"),
     .COMPENSATION           ("SYSTEM_SYNCHRONOUS"),
     .DIVCLK_DIVIDE          (1),
-    .CLKFBOUT_MULT          (8),
+    .CLKFBOUT_MULT          (13),
     .CLKFBOUT_PHASE         (0.000),
-    .CLKOUT0_DIVIDE         (15),
+    .CLKOUT0_DIVIDE         (25),
     .CLKOUT0_PHASE          (0.000),
     .CLKOUT0_DUTY_CYCLE     (0.500),
-    .CLKOUT1_DIVIDE         (60),
-    .CLKOUT1_PHASE          (0.000),
-    .CLKOUT1_DUTY_CYCLE     (0.500),
-    .CLKOUT2_DIVIDE         (120),
-    .CLKOUT2_PHASE          (0.000),
-    .CLKOUT3_DIVIDE         (30),
-    .CLKOUT3_PHASE          (0.000),
-    .CLKOUT2_DUTY_CYCLE     (0.500),
     .CLKIN_PERIOD           (20.0),
     .REF_JITTER             (0.010))
   pll_base_inst
     // Output clocks
    (.CLKFBOUT              (clkfbout),
     .CLKOUT0               (clkout0),
-    .CLKOUT1               (clkout1),
-    .CLKOUT2               (clkout2),
-    .CLKOUT3               (clkout3),
-    .CLKOUT4               (clkout4_unused),
-    .CLKOUT5               (clkout5_unused),
-    .LOCKED                (locked_unused),
+    .CLKOUT1               (),
+    .CLKOUT2               (),
+    .CLKOUT3               (),
+    .CLKOUT4               (),
+    .CLKOUT5               (),
+    .LOCKED                (),
     .RST                   (1'b0),
      // Input clock control
     .CLKFBIN               (clkfbout_buf),
     .CLKIN                 (clkin1));
 
+  reg [2:0] clkdivider = 3'b000;
+  always @(posedge clkout0)
+   clkdivider <= clkdivider + 3'b001;
 
   // Output buffering
   //-----------------------------------
@@ -124,22 +116,20 @@ module cuatro_relojes
    (.O (clkfbout_buf),
     .I (clkfbout));
 
-
   BUFG clkout1_buf
    (.O   (CLK_OUT1),
     .I   (clkout0));
 
-
   BUFG clkout2_buf
    (.O   (CLK_OUT2),
-    .I   (clkout1));
+    .I   (clkdivider[0]));
 
   BUFG clkout3_buf
    (.O   (CLK_OUT3),
-    .I   (clkout2));
+    .I   (clkdivider[1]));
 
   BUFG clkout4_buf
    (.O   (CLK_OUT4),
-    .I   (clkout3));
+    .I   (clkdivider[2]));
 
 endmodule
