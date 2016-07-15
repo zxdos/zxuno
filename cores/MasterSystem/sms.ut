@@ -12,7 +12,8 @@
 -g TmsPin:PullUp
 -g UnusedPin:PullDown
 -g UserID:0xFFFFFFFF
--g ExtMasterCclk_en:No
+-g ExtMasterCclk_en:Yes
+-g ExtMasterCclk_divide:50
 -g SPI_buswidth:1
 -g TIMER_CFG:0xFFFF
 -g multipin_wakeup:No
