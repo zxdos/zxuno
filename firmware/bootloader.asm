@@ -143,7 +143,7 @@ bin2    jr      nz, bin2
         block   $0100 - $
         include scroll/define.asm
         ld      sp, 0
-        ld      de, $5e82+filesize-1
+        ld      de, $5e6d+filesize-1
         ld      hl, fin-1
 
 ; -----------------------------------------------------------------------------
