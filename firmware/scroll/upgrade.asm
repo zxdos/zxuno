@@ -51,7 +51,8 @@ FileFound       ld      l, 0
                 dz      'Flash error'
                 jr      Next
 nfallo          halt
-                jr Verify;call    hex
+                halt
+                ;jr Verify;call    hex
                 ld      ixl, 0
                 ld      de, $0000
                 exx
@@ -60,7 +61,11 @@ Bucle           ld      a, ixl
                 and     $0f
                 jr      nz, punto
                 ld      a, '.'
+                exx
+                push    de
                 rst     $10
+                pop     de
+                exx
 punto           ld      hl, $8000
                 ld      bc, $4000
 handle          ld      a, 0
@@ -78,6 +83,9 @@ ReadOK          ld      a, $40
                 exx
                 dec     ixl
                 jr      nz, Bucle
+
+                halt
+                halt
 
 Verify          ld      de, $8000
                 ld      hl, $0040
@@ -98,6 +106,9 @@ Verify1         ex      de, hl
                 call    hex
                 ld      a, l
                 call    hex
+                halt
+                halt
+                
 ;                ld      de, $371a
 ;                sbc     hl, de
 ;                jr      z, Next
