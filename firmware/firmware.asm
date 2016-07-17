@@ -236,7 +236,7 @@ start   ld      bc, chrend-runbit
         rrc     l
         add     hl, hl
         ld      a, (outvid)
-        rrca
+;        rrca
         rrca
         ld      a, h
         adc     a, a
@@ -1984,7 +1984,7 @@ advan1  call    showop
         ld      c, $0b
         call    showop
         defw    cad96
-        defw    cad97
+;        defw    cad97
         defw    cad98
         defw    $ffff
         call    showop
@@ -2005,7 +2005,7 @@ advan1  call    showop
         defw    cad110
         defw    cad111
         defw    cad112
-        defw    cad113
+;        defw    cad113
         defw    $ffff
         ld      de, $1201
         call    listas
@@ -2070,12 +2070,12 @@ advan5  djnz    advan6
         defw    cad110
         defw    cad111
         defw    cad112
-        defw    cad113
+;        defw    cad113
         defw    $ffff
         ret
 advan6  call    popupw
         defw    cad96
-        defw    cad97
+;        defw    cad97
         defw    cad98
         defw    $ffff
         ret
@@ -3433,7 +3433,8 @@ conti5  ld      a, (ix)
         call    alto rdflsh
         ld      a, (checkc)
         dec     a
-        jr      nz, conti8
+;        jr      nz, conti8
+    jr conti8
         push    ix
         push    bc
         call    alto check
