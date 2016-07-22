@@ -1,20 +1,30 @@
-        define  debug   0
+;n26a6
+waitm   push    bc
+        ld      b, 10
+n26a9   call    waitr
+        cp      $fe
+        jr      z, n26b6
+        cp      $ff
+        jr      nz, n26b6
+        djnz    n26a9
+n26b6   pop     bc
+        ret
 
 readat0 ld      e, 0
+;n26b8
 readata push    hl
         push    bc
-        ld      a, READ_SINGLE  ; Command code for multiple block read
-        call    cs_low          ; set cs high
+        call    waittok
+        call    cslow
         ld      bc, READ_SINGLE<<8 | SPI_PORT
         out     (c), b
         ld      a, (sdhc)
         or      a
-        jr      z, mul2
+        jr      nz, mul2
         out     (c), 0
         out     (c), e
         out     (c), h
         out     (c), l
-        call    send0z
         jr      mul3
 mul2    ld      a, e
         add     hl, hl
@@ -22,115 +32,249 @@ mul2    ld      a, e
         out     (c), a
         out     (c), h
         out     (c), l
-        call    send1z
-mul3    or      a
-        jr      nz, waitq
-waitl   call    waitr
-        sub     $fe             ; waits for the MMC to reply $FE (DATA TOKEN)
-        jr      z, waitm
-        djnz    waitl
-waitm   push    ix
-        pop     hl              ; INI usa HL come puntatore
-        ld      b, a
+        out     (c), 0
+mul3    out     (c), 0
+        call    waitr
+        and     a
+        jr      nz, n26bd
+        scf
+n26bd   ld      a, 0
+        jr      nc, twait
+        call    waitm
+        cp      $fe
+        jr      z, n26ca
+        and     a
+        jr      n26bd
+n26ca   push    ix
+        pop     hl
+        ld      bc, SPI_PORT
         inir
+        nop
         inir
-waitq   ;push    af
-        ;in      f, (c)
-        ;in      f, (c)
-        ;pop     af
         pop     bc
         pop     hl
-        ret
-
-mmcinit xor     a
-        ld      (sdhc), a
-        ld      iyl, a
-        dec     a
-        call    cs_high         ; set cs high
-        ld      bc, $09<<8 | SPI_PORT
-l_init  out     (c), a
-        djnz    l_init
-        call    cs_low          ; set cs low
-        ld      hl, $95<<8 | CMD0 
-        call    send5
-        dec     a               ; MMC should respond 01 to this command
-        ret     nz              ; fail to reset
-        ld      l, CMD8
-        out     (c), l          ; sends the command
-        out     (c), 0
-        out     (c), 0
-        inc     a
-        out     (c), a
-        ld      hl, $87aa
-        out     (c), l
-        call    send0z
-        dec     a
-        jr      z, sdv2
-        ld      h, 0
-        call    acmd41
-        cp      2
-        jr      nc, mmc
-      IF debug=1
-        ld      a, 1
-        out     ($fe), a
-      ENDIF
-sdv1    call    acmd41
-        call    count
-        jr      z, count
-        and     a
-        jr      nz, sdv1
-mmc1    and     a
-        ret     z
-mmc     ld      l, CMD1
-        call    send5
-        call    count
-        jr      nz, mmc1
-count   dec     b
-        ret     nz
-        dec     iyl
-        ret
-sdv2    ld      h, $40
-        call    sdv1
-        ld      l, CMD58
-        call    send5
-        in      a, (c)
-        cp      $c0
-        jr      nz, sig2
-        ld      (sdhc), a
-sig2    in      a, (c)
-        in      a, (c)
-        in      a, (c)
-
-cs_low  push    af
-        ld      a, MMC_0
-        jr      cs_hig1
-  
-acmd41  ld      l, CMD55
-        call    send5
-        ld      l, CMD41
-        out     (c), l
-        out     (c), h
-        jr      send3z
-
-cs_high push    af
-        ld      a, $ff
-cs_hig1 out     (OUT_PORT), a
+n26d7   in      a, (SPI_PORT)
+        nop
+        nop
+        in      a, (SPI_PORT)
+        scf
+        jr      waittok
+twait   pop     bc
+        pop     hl
+;n2620
+waittok call    cshigh
+        push    af
+        push    bc
+        ld      b, 10
+n2625   in      a, (SPI_PORT)
+        djnz    n2625
+        pop     bc
         pop     af
         ret
 
-send5   out     (c), l          ; sends the command
-        out     (c), 0          ; then sends four "00" bytes (parameters = NULL)
-send3z  out     (c), 0
-        out     (c), 0
-send1z  out     (c), 0
-send0z  out     (c), h          ; then this byte is ignored.
+;n2628
+send0   ld      h, 0
+;n262a
+send1   ld      l, 0
+        ld      d, l
+        ld      e, l
+;n2630
+sendc   push    bc
+        ld      b, $ff
+        jr      n2638
+;n2637
+send    push    bc
+n2638   ld      c, a
+        call    waittok
+        call    cslow
+        ld      a, c
+        out     (SPI_PORT), a
+        ld      a, h
+        nop
+        out     (SPI_PORT), a
+        ld      a, l
+        nop
+        out     (SPI_PORT), a
+        ld      a, d
+        nop
+        out     (SPI_PORT), a
+        ld      a, e
+        nop
+        out     (SPI_PORT), a
+        ld      a, b
+        nop
+        out     (SPI_PORT), a
+        call    waitr
+        pop     bc
+        and     a
+        ret     nz
+        scf
+        ret
+
+;n266d
+;readcsd push    bc
+;        push    de
+;        push    hl
+;        push    af
+;        call    mmcinit
+;        pop     af
+;        push    de
+;        ld      a, $49    ;CMD9
+;        call    send0
+;        pop     de
+;        pop     hl
+;        jr      nc, n2692
+;        call    waitm
+;        cp      $fe
+;        jr      z, n2689
+;        and     a
+;        jr      n2692
+;n2689   ld      b, $12
+;        ld      c, SPI_PORT
+;n268d   ini
+;        jr      nz, n268d
+;        scf
+;        ld      a, d
+;n2692   pop     de
+;        pop     bc
+;        jr      waittok
+
+;n2695
 waitr   push    bc
-        ld      c, 50           ; retry counter
-resp    in      a, (SPI_PORT)   ; reads a byte from MMC
-        cp      $ff             ; $FF = no card data line activity
-        jr      nz, resp_ok
-        djnz    resp
+        ld      bc, 50
+n2699   in      a, (SPI_PORT)
+        cp      $ff
+        jr      nz, n26a4
+        djnz    n2699
         dec     c
-        jr      nz, resp
-resp_ok pop     bc
+        jr      nz, n2699
+n26a4   pop     bc
+        ret
+
+cshigh  push    af
+        ld      a, $ff
+        jr      n261d
+cslow   push    af
+        ld      a, $fe
+n261d   out     (OUT_PORT), a
+        in      a, (SPI_PORT)
+        pop     af
+        ret
+
+;n278c
+mmcinit push    bc
+        push    af
+;       xor     a
+;       ld      (sdhc), a
+        call    waittok
+        ld      a, $40    ;CMD0
+        ld      hl, 0
+        ld      d, h
+        ld      e, l
+        ld      b, $95    ;CRC
+        call    send
+        dec     a
+        jr      nz, n27c0
+        ld      bc, $0078
+n27a8   pop     af
+        push    af
+        push    bc
+        ld      a, $48    ;CMD8
+        ld      hl, 0
+        ld      de, $01aa
+        ld      b, $87    ;CRC
+n27ad   call    send
+        pop     bc
+        bit     2, a
+        ld      h, 0
+        jr      nz, n27b8
+        dec     a
+        jr      nz, n27c2
+        in      a, (SPI_PORT)
+        ld      h, a
+        nop
+        in      a, (SPI_PORT)
+        ld      l, a
+        nop
+        in      a, (SPI_PORT)
+        and     $0f
+        ld      d, a
+        in      a, (SPI_PORT)
+        cp      e
+        jr      nz, n27c2
+        dec     d
+        jr      nz, n27de
+        ld      h, $40    ;SDv2
+n27b8   pop     af
+        push    af
+        push    hl
+        ld      a, $77    ;CMD55
+        call    send0
+        pop     hl
+        pop     af
+        push    af
+        push    hl
+        ld      a, $69    ;CMD41
+        call    send1
+        pop     hl
+        bit     2, a
+        jr      nz, n27c8
+        jr      c, n27d0
+        dec     a
+        jr      z, n27b8
+n27c0   jr      n27de
+n27c2   djnz    n27a8 
+        dec     c
+        jr      nz, n27a8
+        jr      n27de
+n27c8   pop     af
+        push    af
+        ld      a, $41    ;CMD1
+n27ce   call    send0
+        jr      c, n27d1
+        djnz    n27c8
+        dec     c
+        jr      nz, n27c8
+        jr      n27de
+n27d0   pop     af
+        push    af
+        call    readocr
+        jr      nc, n27de
+        ld      d, a
+        jr      z, n27db
+n27d1   pop     af
+        push    af
+        ld      a, $50    ;SET_BLOCKLEN
+        ld      de, $0200
+        ld      h, e
+        ld      l, e
+        call    sendc
+        jr      nc, n27de
+n27d9   ld      a, 1      ;/sdhc
+n27db   ld      (sdhc), a
+        scf
+        jr      n27df
+n27de   and     a
+n27df   pop     bc
+        pop     bc
+        jp      waittok
+
+;n27e4
+readocr ld      a, $7a    ;CMD58
+        call    send0
+        ret     nc
+        ld      d, $c0
+        in      a, (SPI_PORT)
+        and     d
+        ld      h, a
+        in      a, (SPI_PORT)
+        ld      l, a
+        nop
+        in      a, (SPI_PORT)
+        ld      e, a
+        nop
+        in      a, (SPI_PORT)
+        ld      a, h
+        sub     d
+        scf
         ret

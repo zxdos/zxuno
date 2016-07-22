@@ -9,7 +9,7 @@ fpoke FLASH.ZX1 00000 file:header.bin               ^
                 08000 file:firmware.rom             ^
                 58000 file:tmp.bin
 fcut tmp.bin 0 53f00 sd_binaries\SPECTRUM.%3
-GenRom sm1ta Machine tmp.bin core_taps\SPECTRUM.TAP
+GenRom sm12a Machine tmp.bin core_taps\SPECTRUM.TAP
 rem CgLeches core_taps\SPECTRUM.TAP core_wavs\SPECTRUM.WAV 3
 call :CreateMachine set1 CORE2 "Sam Coupe"        %2 SamCoupe\tld_sam.%2.bit 0 %3
 call :CreateMachine set1 CORE3 "Jupiter ACE"      %2 JupiterAce\jupiter_ace.%2.bit JupiterAce\jupiter_ace.v2_v3.bit %3
@@ -21,7 +21,7 @@ call :CreateMachine set1 CORE8 "Test PAL/NTSC"    %2 test\test_pal_ntsc\tld_test
 call :CreateMachine set1 CORE9 "Test Color Bars"  %2 test\barras_de_color\tld_zxuno.%2.bit test\barras_de_color\tld_zxuno.v2_v3.bit %3
 copy /y rom_binaries\esxdos.rom sd_binaries\ESXDOS.%3
 copy /y firmware.rom "\Google Drive\Proyecto ZX-Uno\cores_%2\sd_binaries\FIRMWARE.%3"
-GenRom sm1t BIOS firmware.rom "\Google Drive\Proyecto ZX-Uno\cores_%2\core_taps\FIRMWARE.TAP"
+GenRom sm12 BIOS firmware.rom "\Google Drive\Proyecto ZX-Uno\cores_%2\core_taps\FIRMWARE.TAP"
 rem CgLeches core_taps\FIRMWARE.TAP core_wavs\FIRMWARE.WAV 3
 GenRom 0    ESXDOS rom_binaries\esxdos.rom core_taps\ESXDOS.TAP
 call :CreateRom 0  "ZX Spectrum 48K"               48               dnlh17

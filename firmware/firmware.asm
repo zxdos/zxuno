@@ -1440,10 +1440,13 @@ tosd    ld      ix, cad75
 ;        call    send1z
 
         call    mmcinit
-        sbc     hl, hl                ; read MBR
+        jr      nz, errsd
+
+        ;sbc     hl, hl                ; read MBR
+        ld   hl, 0
         ld      ix, tmpbu2
         call    readat0
-        jr      nz, errsd
+
         ld      a, (tmpbu2)           ; read first type
         sub     $e0
         cp      $0b
@@ -1774,6 +1777,7 @@ otva    call    readata
         jr      nz, putc0
         push    bc
         push    hl
+        push    de
         ld      hl, tmpbuf+$59
         ld      a, (tmpbu2+$1f)
 otv2    sub     6
@@ -1792,6 +1796,7 @@ otv2    sub     6
         ld      (tmpbu2+$1e), de
         exx
         ld      ix, $c000
+        pop     de
         pop     hl
         pop     bc
 putc0   inc     hl
@@ -4122,7 +4127,7 @@ setvid  ld      l, scandbl_ctrl
         out     (c), a
         ret
 
-l3eff   in      l,(c)
+l3eff   in      l, (c)
         jp      (hl)
 
 lbytes2 di                      ; disable interrupts
