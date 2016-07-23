@@ -88,3 +88,4 @@ NET "sram_we_n"       LOC="P121" | IOSTANDARD = LVCMOS33;
 
 # Otros
 #NET "cpuclk" PERIOD=71.111 ns;
+
