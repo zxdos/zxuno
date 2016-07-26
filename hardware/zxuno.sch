@@ -22277,7 +22277,7 @@ KINGFONT SDCMF-10915W010</description>
 <label x="124.46" y="-40.64" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="D-" class="0">
 <segment>
 <pinref part="PWUSB" gate="G$1" pin="D-"/>
 <wire x1="193.04" y1="10.16" x2="198.12" y2="10.16" width="0.1524" layer="91"/>
@@ -22286,7 +22286,7 @@ KINGFONT SDCMF-10915W010</description>
 <wire x1="198.12" y1="7.62" x2="203.2" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$29" class="0">
+<net name="D+" class="0">
 <segment>
 <pinref part="PWUSB" gate="G$1" pin="D+"/>
 <wire x1="193.04" y1="7.62" x2="195.58" y2="7.62" width="0.1524" layer="91"/>
