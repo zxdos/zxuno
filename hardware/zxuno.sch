@@ -19745,6 +19745,7 @@ KINGFONT SDCMF-10915W010</description>
 <part name="R32" library="rcl" deviceset="R-US_" device="M0805" value="10K"/>
 <part name="J16" library="pinhead" deviceset="PINHD-2X2" device=""/>
 <part name="CVBS" library="uzebox" deviceset="RCA" device=""/>
+<part name="DATA" library="pinhead" deviceset="PINHD-1X2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -19819,7 +19820,7 @@ KINGFONT SDCMF-10915W010</description>
 <instance part="C35" gate="G$1" x="226.06" y="40.64" rot="R90"/>
 <instance part="R30" gate="G$1" x="121.92" y="5.08" rot="R270"/>
 <instance part="3.3V6" gate="VCC" x="121.92" y="17.78"/>
-<instance part="L3" gate="G$1" x="236.22" y="12.7"/>
+<instance part="L3" gate="G$1" x="238.76" y="12.7"/>
 <instance part="U6" gate="G$1" x="208.28" y="-15.24"/>
 <instance part="U7" gate="G$1" x="208.28" y="-40.64"/>
 <instance part="C28" gate="G$1" x="190.5" y="-20.32"/>
@@ -19887,21 +19888,22 @@ KINGFONT SDCMF-10915W010</description>
 <instance part="JTAG" gate="-5" x="274.32" y="86.36"/>
 <instance part="JTAG" gate="-6" x="274.32" y="83.82"/>
 <instance part="RST" gate="G$1" x="119.38" y="68.58" rot="R270"/>
-<instance part="SW" gate="G$1" x="223.52" y="5.08" rot="R270"/>
-<instance part="PWCON" gate="G$1" x="205.74" y="7.62" rot="R180"/>
+<instance part="SW" gate="G$1" x="228.6" y="5.08" rot="R270"/>
+<instance part="PWCON" gate="G$1" x="213.36" y="7.62" rot="R180"/>
 <instance part="PS/2" gate="G$1" x="-25.4" y="-55.88"/>
 <instance part="U5" gate="G$1" x="0" y="81.28"/>
 <instance part="D1" gate="G$1" x="193.04" y="71.12" rot="R90"/>
 <instance part="D2" gate="G$1" x="185.42" y="-132.08" rot="R270"/>
 <instance part="D3" gate="G$1" x="195.58" y="-132.08" rot="R270"/>
 <instance part="H1" gate="G$1" x="-40.64" y="78.74"/>
-<instance part="PWUSB" gate="G$1" x="187.96" y="7.62" rot="MR0"/>
+<instance part="PWUSB" gate="G$1" x="185.42" y="7.62" rot="MR0"/>
 <instance part="SDCARD" gate="G$1" x="154.94" y="2.54"/>
 <instance part="GND19" gate="1" x="172.72" y="-15.24"/>
 <instance part="R31" gate="G$1" x="124.46" y="-15.24" rot="R270"/>
 <instance part="R32" gate="G$1" x="134.62" y="-15.24" rot="R270"/>
 <instance part="J16" gate="A" x="157.48" y="-53.34"/>
 <instance part="CVBS" gate="G$1" x="276.86" y="-104.14" rot="MR0"/>
+<instance part="DATA" gate="G$1" x="205.74" y="5.08"/>
 </instances>
 <busses>
 </busses>
@@ -20440,14 +20442,14 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="SDCARD" gate="G$1" pin="VSS2"/>
 </segment>
 <segment>
-<wire x1="213.36" y1="0" x2="213.36" y2="5.08" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="0" x2="248.92" y2="0" width="0.1524" layer="91"/>
-<junction x="213.36" y="0"/>
+<wire x1="223.52" y1="0" x2="223.52" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="223.52" y1="0" x2="248.92" y2="0" width="0.1524" layer="91"/>
+<junction x="223.52" y="0"/>
 <label x="243.84" y="0" size="1.778" layer="95"/>
-<wire x1="195.58" y1="2.54" x2="195.58" y2="0" width="0.1524" layer="91"/>
-<wire x1="195.58" y1="0" x2="213.36" y2="0" width="0.1524" layer="91"/>
+<wire x1="193.04" y1="2.54" x2="193.04" y2="0" width="0.1524" layer="91"/>
+<wire x1="193.04" y1="0" x2="223.52" y2="0" width="0.1524" layer="91"/>
 <pinref part="PWCON" gate="G$1" pin="1"/>
-<wire x1="208.28" y1="5.08" x2="213.36" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="215.9" y1="5.08" x2="223.52" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="PWUSB" gate="G$1" pin="GND"/>
 </segment>
 <segment>
@@ -21887,29 +21889,29 @@ KINGFONT SDCMF-10915W010</description>
 </net>
 <net name="N$12" class="0">
 <segment>
-<wire x1="223.52" y1="12.7" x2="213.36" y2="12.7" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="12.7" x2="195.58" y2="12.7" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="7.62" x2="213.36" y2="12.7" width="0.1524" layer="91"/>
-<junction x="213.36" y="12.7"/>
-<pinref part="PWCON" gate="G$1" pin="2"/>
-<wire x1="208.28" y1="7.62" x2="213.36" y2="7.62" width="0.1524" layer="91"/>
-<pinref part="SW" gate="G$1" pin="2"/>
+<wire x1="228.6" y1="12.7" x2="223.52" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="223.52" y1="12.7" x2="193.04" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="223.52" y1="7.62" x2="223.52" y2="12.7" width="0.1524" layer="91"/>
+<junction x="223.52" y="12.7"/>
+<pinref part="PWCON" gate="G$1" pin="2"/>
+<wire x1="215.9" y1="7.62" x2="223.52" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="SW" gate="G$1" pin="2"/>
+<wire x1="228.6" y1="7.62" x2="228.6" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="PWUSB" gate="G$1" pin="VCC"/>
 </segment>
 </net>
 <net name="N$13" class="0">
 <segment>
 <pinref part="L3" gate="G$1" pin="1"/>
-<wire x1="231.14" y1="12.7" x2="226.06" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="233.68" y1="12.7" x2="231.14" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="SW" gate="G$1" pin="1"/>
-<wire x1="226.06" y1="7.62" x2="226.06" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="231.14" y1="7.62" x2="231.14" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="5V" class="0">
 <segment>
 <pinref part="L3" gate="G$1" pin="2"/>
-<wire x1="241.3" y1="12.7" x2="248.92" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="243.84" y1="12.7" x2="248.92" y2="12.7" width="0.1524" layer="91"/>
 <label x="246.38" y="12.7" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -22273,6 +22275,24 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="JOY" gate="G$1" pin="5"/>
 <wire x1="124.46" y1="-40.64" x2="134.62" y2="-40.64" width="0.1524" layer="91"/>
 <label x="124.46" y="-40.64" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$16" class="0">
+<segment>
+<pinref part="PWUSB" gate="G$1" pin="D-"/>
+<wire x1="193.04" y1="10.16" x2="198.12" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="10.16" x2="198.12" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="DATA" gate="G$1" pin="1"/>
+<wire x1="198.12" y1="7.62" x2="203.2" y2="7.62" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$29" class="0">
+<segment>
+<pinref part="PWUSB" gate="G$1" pin="D+"/>
+<wire x1="193.04" y1="7.62" x2="195.58" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="7.62" x2="195.58" y2="5.08" width="0.1524" layer="91"/>
+<pinref part="DATA" gate="G$1" pin="2"/>
+<wire x1="195.58" y1="5.08" x2="203.2" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
