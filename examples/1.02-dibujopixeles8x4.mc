@@ -6,8 +6,8 @@
 ;;
 ;; CÓDIGO MAQUINA
 ;;
-;;    21 F0 F0 22 00 C0 21 0F 0F 22 00 C8 21 00 00 22 
-;;    00 D0 21 FF FF 22 00 D8 18 FE 
+;;  4000 - 21 F0 F0 22 00 C0 21 0F 0F 22 00 C8 21 00 00 22 
+;;  4010 - 00 D0 21 FF FF 22 00 D8 18 FE 
 ;;
 ;;
 ;;
@@ -80,11 +80,16 @@
 ;;    3. Dibuja una reja vertical de color rojo
 ;;
 ;;
-;; RETROS CREATIVOS
+;; RETOS CREATIVOS
 ;;
 ;;    1. Dibuja una cara y compártela
 ;;    2. Haz un dibujo original y compártelo
 ;;
+;;
+;; RETOS AVANZADOS
+;;   
+;;    1. Amplía el programa para que el dibujo sea de 16x16 píxeles 
+;;       y aparezca en el centro de la pantalla. 
 ;;
 ;;
 ;; EXPLICACIONES EN ESTE VÍDEO

@@ -6,7 +6,7 @@
 ;;
 ;; CÓDIGO MAQUINA
 ;;
-;;    3E 88 32 00 C0 18 FE
+;;  4000 - 3E 88 32 00 C0 18 FE
 ;;
 ;;
 ;;
@@ -59,7 +59,14 @@
 ;;    2. Ahora los 4 píxeles de color amarillo y cian
 ;;    3. Pinta los 4 primeros píxeles uno de cada color 
 ;;       (fondo, amarillo, cian y rojo)
+;;    4. Amplía el programa para que pinte los 8 primeros píxeles
+;;       (4 rojos y 4 amarillos)
 ;;
+;; RETOS CREATIVOS
+;;
+;;    1. Amplía el programa para que pinte los 16 primeros píxeles
+;;       formando una bandera
+;;       
 ;;
 ;;
 ;; EXPLICACIONES EN ESTE VÍDEO
@@ -75,7 +82,7 @@
 ;;    * La instrucción de salto relativo JR
 ;;    * Números negativos: complemento a 2
 ;;    * La memoria de vídeo: Funcionamiento
-;;    * La memoria de vídeo: Codificación de los píxeles
+;;    * La memoria de vídeo: Codificación de los píxeles (modo 1)
 ;;    * Direcciones de memoria: Little endian y Big Endian
 ;;
 ;;===================================================================================
