@@ -3438,17 +3438,16 @@ conti5  ld      a, (ix)
         call    alto rdflsh
         ld      a, (checkc)
         dec     a
-;        jr      nz, conti8
-    jr conti8
+        jr      nz, conti8
         push    ix
         push    bc
         call    alto check
-        ld      a, iyl
+        ld      a, (ix+1)
         add     a, a
         add     a, ixl
         ld      ixl, a
-        ld      l, (ix+$06)
-        ld      h, (ix+$07)
+        ld      l, (ix+6)
+        ld      h, (ix+7)
         sbc     hl, de
         jr      z, conti7
         add     hl, de
