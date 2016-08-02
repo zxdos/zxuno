@@ -92,8 +92,8 @@
         ei
         jp      start
 
-rst18   push    bc
-        jp      alto prnstr
+rst18   jp      alto prnstr
+        nop
 
 jmptbl
       IF  recovery=0
@@ -1848,7 +1848,7 @@ upgra8  jp      nc, roms12
         ld      bc, $170a
         ld      ix, cad53
         call_prnstr
-        ld      hl, $dfff
+        ld      hl, $e000
         call    alto check0
         ld      hl, (tmpbuf+7)
         sbc     hl, de
@@ -2931,7 +2931,7 @@ showop  ld      a, (iy)
         defb    $fe
 showo1  dec     a
         push    hl
-        call    z, prnstr-1
+        call    z, alto prnstr
         pop     hl
         ld      e, (hl)
         inc     hl
@@ -3299,7 +3299,7 @@ hhhh    push    af
         call    alto wtohex
         ld      ix, cad199
         ld      bc, $0030
-        call    alto prnstr-1
+        call    alto prnstr
         pop     iy
         pop     ix
         pop     hl
@@ -3459,8 +3459,8 @@ conti5  ld      a, (ix)
         call    alto wtohex
         ld      ix, cad55
         ld      bc, $0015
-        call    alto prnstr-1
-        call    alto prnstr-1
+        call    alto prnstr
+        call    alto prnstr
         ld      c, $fe
 conti6  in      a, (c)
         or      $e0
@@ -3638,7 +3638,7 @@ ramts3  ld      de, cad69
         call    alto wtohe1
         pop     bc
         ld      ixl, cad69&$ff
-        call    alto prnstr-1
+        call    alto prnstr
         dec     c
         inc     b
         inc     b
@@ -3658,7 +3658,7 @@ ramts4  ld      a, (hl)
 ramts5  inc     hl
         bit     4, h
         jr      z, ramts4
-        call    alto prnstr-1
+        call    alto prnstr
         inc     iyh
         ld      a, iyh
         and     $07
@@ -3678,14 +3678,14 @@ ramts5  inc     hl
 ; ---------
 ; CRC check
 ; ---------
-check   ld      hl, $bfff       ;4c2b > d432
-check0  ld      c, alto crctab>>8
-        defb    $11
+check   ld      hl, $c000
+check0  ld      a, $ff
+        ld      d, a
 check1  xor     (hl)            ;6*4+4*7+10= 62 ciclos/byte
         ld      e, a
         ex      de, hl
         ld      a, h
-        ld      h, c
+        ld      h, alto crctab>>8
         xor     (hl)
         inc     h
         ld      h, (hl)
@@ -3732,7 +3732,6 @@ help    call    window
         call_prnstr
         call_prnstr
         call_prnstr
-        push    bc
 
 ; -----------------------------------------------------------------------------
 ; Print string routine
@@ -3740,19 +3739,20 @@ help    call    window
 ;  BC: X coord (B) and Y coord (C)
 ;  IX: null terminated string
 ; -----------------------------------------------------------------------------
-prnstr  ld      a, b
+prnstr  push    bc
+        call    alto prnstr1
+        pop     bc
+        inc     c
+        ret
+prnstr1 ld      a, b
         and     %11111100
         ld      d, a
         xor     b
+        ld      b, a
         ld      e, a
         jr      z, prnch1
         dec     e
-prnch1  xor     $fc
-        ld      l, a
-        ld      h, alto prnstr>>8
-        ld      l, (hl)
-        push    hl
-        ld      a, d
+prnch1  ld      a, d
         rrca
         ld      d, a
         rrca
@@ -3770,77 +3770,67 @@ prnch1  xor     $fc
         rrca
         add     a, e
         ld      e, a
-        defb    $3e             ; salta la siguiente instruccion
-posf    pop     bc
-        inc     c
-        ret
-
+        rr      b
+        jr      c, pos26
+        jr      nz, pos4
 pos0    ld      a, (ix)
         inc     ix
         add     a, a
-        jr      z, posf
+        ret     z
+        ld      h, $b0 >> 2
+        ld      b, 8
         ld      l, a
-        ld      h, $2c
         add     hl, hl
         add     hl, hl
-        ld      b, 4
-pos00   ld      a, (hl)
+pos01   ld      a, (hl)
         ld      (de), a
-        inc     l
         inc     d
-        ld      a, (hl)
-        ld      (de), a
         inc     l
-        inc     d
-        djnz    pos00
+        djnz    pos01
         ld      hl, $f800
-        add     hl, de
-        ex      de, hl
-pos1    ld      a, (ix)
-        inc     ix
-        add     a, a
-        jr      z, posf
-        ld      l, a
-        ld      h, $2f
-        add     hl, hl
-        add     hl, hl
-        ld      bc, $04fc
-pos10   ld      a, (de)
-        xor     (hl)
-        and     c
-        xor     (hl)
-        ld      (de), a
-        inc     e
-        ld      a, (hl)
-        and     c
-        ld      (de), a
-        inc     d
-        inc     l
-        ld      a, (hl)
-        and     c
-        ld      (de), a
-        dec     e
-        ld      a, (de)
-        xor     (hl)
-        and     c
-        xor     (hl)
-        ld      (de), a
-        inc     d
-        inc     l
-        djnz    pos10
-        ld      hl, $f801
         add     hl, de
         ex      de, hl
 pos2    ld      a, (ix)
         inc     ix
         add     a, a
-tposf   jr      z, posf
-        ld      l, a
-        ld      h, $2e
-        add     hl, hl
-        add     hl, hl
+        ret     z
+        ld      h, $bc >> 2
+        ld      bc, $04fc
+        call    alto doble
+pos4    ld      a, (ix)
+        inc     ix
+        add     a, a
+        ret     z
+        ld      h, $b8 >> 2
         ld      bc, $04f0
-pos20   ld      a, (de)
+        call    alto doble
+pos6    ld      a, (ix)
+        inc     ix
+        add     a, a
+        ret     z
+        ld      h, $b4 >> 2
+        ld      b, 8
+        ld      l, a
+        add     hl, hl
+        add     hl, hl
+pos61   ld      a, (de)
+        xor     (hl)
+        ld      (de), a
+        inc     d
+        inc     l
+        djnz    pos61
+        ld      hl, $f801
+        add     hl, de
+        ex      de, hl
+        jr      pos0
+pos26   rr      b
+        jr      c, pos6
+        jr      pos2
+
+doble   ld      l, a
+        add     hl, hl
+        add     hl, hl
+doble2  ld      a, (de)
         xor     (hl)
         and     c
         xor     (hl)
@@ -3862,39 +3852,11 @@ pos20   ld      a, (de)
         ld      (de), a
         inc     d
         inc     l
-        djnz    pos20
+        djnz    doble2
         ld      hl, $f801
         add     hl, de
         ex      de, hl
-pos3    ld      a, (ix)
-        inc     ix
-        add     a, a
-        jr      z, tposf
-        ld      l, a
-        ld      h, $2d
-        add     hl, hl
-        add     hl, hl
-        ld      b, 4
-pos30   ld      a, (de)
-        xor     (hl)
-        ld      (de), a
-        inc     d
-        inc     l
-        ld      a, (de)
-        xor     (hl)
-        ld      (de), a
-        inc     d
-        inc     l
-        djnz    pos30
-        ld      hl, $f801
-        add     hl, de
-        ex      de, hl
-        jp      alto pos0
-
-        defb    pos0-crctab & $ff
-        defb    pos1-crctab & $ff
-        defb    pos2-crctab & $ff
-        defb    pos3-crctab & $ff
+        ret
 
 ; ----------
 ; CRC Table
