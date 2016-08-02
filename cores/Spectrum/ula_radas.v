@@ -85,6 +85,12 @@ module ula_radas (
       EVPIXEL =  191,
       BVSYNC  =  248;    
 
+    parameter
+      ULA48K   = 2'b00,
+      ULA128K  = 2'b01,
+      PENTAGON = 2'b10,
+      RESERVED = 2'b11;
+
 	 // RGB inputs to sync module
 	 reg [2:0] ri;
 	 reg [2:0] gi;
@@ -397,6 +403,14 @@ module ula_radas (
 ///////////////////////////////////////////////
 
    // control data flow from VRAM to RGB output
+   reg Border_n;
+   always @* begin
+     if (vc>=BVPIXEL && vc<=EVPIXEL && hc>=BHPIXEL && hc<=EHPIXEL)
+        Border_n = 1;
+    else
+        Border_n = 0;
+	end
+
    always @* begin
       BitmapDataLoad = 1'b0;
       AttrDataLoad = 1'b0;
@@ -409,17 +423,24 @@ module ula_radas (
       
       if (!RadasEnabled) begin   // Control para los modos estándar
       
-         if (hc[2:0]==3'd4) begin // hc=4,12,20,28,etc
-            AttrOutputLoad = 1'b1;  // updated every 8 pixel clocks
-         end
-         if (hc[2:0]==3'd3) begin
-            CALoad = 1'b1;
-         end
          if (hc>=(BHPIXEL+8) && hc<=(EHPIXEL+8) && vc>=BVPIXEL && vc<=EVPIXEL) begin  // VidEN_n is low here: paper area
             VideoEnable = 1'b1;
             if (hc[2:0]==3'd4) begin
                 SerializerLoad = 1'b1;  // updated every 8 pixel clocks, if we are in paper area
             end
+         end
+         if (mode == PENTAGON) begin
+            if (hc<(BHPIXEL+8) || hc>(EHPIXEL+12) || vc<BVPIXEL || vc>EVPIXEL)
+               AttrOutputLoad = 1'b1;  // updated every clock for Pentagon border
+            else if (hc[2:0] == 3'd4)  // hc=4,12,20,28,etc
+               AttrOutputLoad = 1'b1;  // updated every 8 pixel clocks for Pentagon paper
+         end
+         else begin
+            if (hc[2:0] == 3'd4)         // hc=4,12,20,28,etc
+               AttrOutputLoad = 1'b1;  // updated every 8 pixel clocks
+         end
+         if (hc[2:0]==3'd3) begin
+            CALoad = 1'b1;
          end
          if (hc>=BHPIXEL && hc<=EHPIXEL && vc>=BVPIXEL && vc<=EVPIXEL) begin
             if (hc[3:0]==4'd8 || hc[3:0]==4'd12) begin
@@ -534,14 +555,6 @@ module ula_radas (
    wire iorequla = !iorq_n && (a[0]==0);
    wire iorequlaplus = !iorq_n && (a==ULAPLUSADDR || a==ULAPLUSDATA);
    wire ioreqall_n = !(iorequlaplus || iorequla);
-
-   reg Border_n;
-   always @* begin
-     if (vc>=BVPIXEL && vc<=EVPIXEL && hc>=BHPIXEL && hc<=EHPIXEL)
-        Border_n = 1;
-    else
-        Border_n = 0;
-	end
 
 ///////////////////////////////////
 // CPU CLOCK GENERATION (Altwasser method)

@@ -120,8 +120,8 @@ module pal_sync_generator (
                           end_vsync <= 9'd255; // 9'd243;
                           begin_vcint <= 9'd239;
                           end_vcint <= 9'd239;
-                          begin_hcint <= 9'd320; // 9'd318;
-                          end_hcint <= 9'd391; //9'd389;
+                          begin_hcint <= 9'd323; // 9'd320;
+                          end_hcint <= 9'd391; //9'd391;
                        end
               endcase
             end          
