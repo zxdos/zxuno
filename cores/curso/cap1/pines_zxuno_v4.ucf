@@ -1,0 +1,12 @@
+NET "clk50"           LOC="P55"  | IOSTANDARD = LVCMOS33;
+NET "r<2>"            LOC="P81"  | IOSTANDARD = LVCMOS33;
+NET "r<1>"            LOC="P80"  | IOSTANDARD = LVCMOS33;
+NET "r<0>"            LOC="P79"  | IOSTANDARD = LVCMOS33;
+NET "g<2>"            LOC="P84"  | IOSTANDARD = LVCMOS33;
+NET "g<1>"            LOC="P83"  | IOSTANDARD = LVCMOS33;
+NET "g<0>"            LOC="P82"  | IOSTANDARD = LVCMOS33;
+NET "b<2>"            LOC="P93"  | IOSTANDARD = LVCMOS33;
+NET "b<1>"            LOC="P92"  | IOSTANDARD = LVCMOS33;
+NET "b<0>"            LOC="P88"  | IOSTANDARD = LVCMOS33;
+NET "sync"            LOC="P87"  | IOSTANDARD = LVCMOS33;
+NET "pal"             LOC="P67"  | IOSTANDARD = LVCMOS33;

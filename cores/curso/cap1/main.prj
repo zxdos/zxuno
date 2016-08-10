@@ -1,0 +1,3 @@
+vhdl work "clock7.vhd"
+vhdl work "colenc.vhd"
+vhdl work "main.vhd"
