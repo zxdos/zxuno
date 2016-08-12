@@ -1584,7 +1584,7 @@ saba
         jr      nz, erfnf             ; wrong length
         ld      l, (ix+$1a)           ; first cluster of the file
         ld      h, (ix+$1b)
-        ld      ix, $c000
+        ld      ix, $e000
 bucop   push    hl                    ; save current cluster
         ld      b, e
         call    calcs                 ; translate cluster to address
@@ -1675,7 +1675,7 @@ sabe    pop     bc
         ld      b, (ix+$14)
         ld      l, (ix+$1a)
         ld      h, (ix+$1b)
-        ld      ix, $c000
+        ld      ix, $e000
 bucap   push    hl
         call    calcs
         call    trans
@@ -1771,6 +1771,14 @@ desc    pop     hl
 trans   push    bc
         ld      a, (tmpbu2+$d)
         ld      b, a
+        ld      a, (tmpbu2+$1d)
+        or      a
+        jr      nz, otva
+        ld      a, (tmpbu2+$1c)
+        rrca
+        cp      b
+        jr      nc, otva
+        ld      b, a
 otva    call    readata
         inc     ixh
         inc     ixh
@@ -1788,14 +1796,14 @@ otv2    sub     6
         call    prsta1
         ld      de, (tmpbu2+$1e)    ; SPI address, initially 0000
         exx
-        ld      a, $40
-        ld      hl, $c000
+        ld      a, $20
+        ld      hl, $e000
         exx
         call    wrflsh
         inc     de
         ld      (tmpbu2+$1e), de
         exx
-        ld      ix, $c000
+        ld      ix, $e000
         pop     de
         pop     hl
         pop     bc
