@@ -1786,6 +1786,10 @@ otva    call    readata
         push    bc
         push    hl
         push    de
+        ld      hl, (tmpbu2+$1c)
+        ld      de, $ffe0
+        add     hl, de
+        ld      (tmpbu2+$1c), hl
         ld      hl, tmpbuf+$59
         ld      a, (tmpbu2+$1f)
 otv2    sub     6

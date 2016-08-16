@@ -18,8 +18,8 @@ call :CreateMachine set1 CORE4 "Master System"    MasterSystem\sms.%2.bit 0 %3
 call :CreateMachine set1 CORE5 "BBC Micro"        BBCMicro\working\bbc_micro.%2.bit BBCMicro\working\bbc_micro.v2_v3.bit %3
 call :CreateMachine set1 CORE6 "Acorn Electron"   AcornElectron\working\ElectronFpga.%2.bit AcornElectron\working\ElectronFpga.v2_v3.bit %3
 call :CreateMachine set1 CORE7 "Oric Atmos"       Oric\build\oric.%2.bit Oric\build\oric.v2_v3.bit %3
-call :CreateMachine set1 CORE8 "Test PAL/NTSC"    test\test_pal_ntsc\tld_test_pal_ntsc.%2.bit test\test_pal_ntsc\tld_test_pal_ntsc.v2_v3.bit %3
-call :CreateMachine set1 CORE9 "Test Color Bars"  test\barras_de_color\tld_zxuno.%2.bit test\barras_de_color\tld_zxuno.v2_v3.bit %3
+call :CreateMachine set1 CORE8 "Apple 2 (VGA)"    curso\cap1\main.bit 0 %3
+call :CreateMachine set1 CORE9 "NES (VGA)"        NES\xilinx\NES_ZXUNO.%2.bit 0 %3
 copy /y rom_binaries\esxdos.rom "%output%sd_binaries\ESXDOS.%3"
 copy /y firmware.rom "%output%sd_binaries\FIRMWARE.%3"
 GenRom sm12 BIOS firmware.rom "%output%core_taps\FIRMWARE.TAP"
