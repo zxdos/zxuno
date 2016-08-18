@@ -1,6 +1,6 @@
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.50', 0
+        defm    'ZX-Uno BIOS v0.51', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -37,7 +37,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.50    ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.51    ', $7f, '2016 ZX-Uno Team', 0
       IF  recovery=0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -280,6 +280,7 @@ cad75   defb    'Insert SD with', 0
 cad76   defb    'Be quiet, avoid brick', 0
 cad77   defb    'SD or partition error', 0
 cad78   defb    'Not found or bad size', 0
+cad785  defb    'Status:[ooooooooooo]', 0
 cad79   defb    ' Successfully burned ', 0
 cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0

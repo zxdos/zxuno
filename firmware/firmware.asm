@@ -1562,7 +1562,7 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
         jr      z, saba               ; if found ($20) or EOF ($00), exit
         djnz    rotp
 erfnf   ld      ix, cad78
-terror jp      ferror
+terror  jp      ferror
 saba
       IF version=4
         sub     $31
@@ -1609,7 +1609,9 @@ bucop   push    hl                    ; save current cluster
         inc     a                     ; cluster==FFFF
         pop     ix
         jr      nz, bucop
-enbur   ld      ix, cad79
+enbur   ld      bc, $090a
+        ld      ix, cad785
+        call_prnstr
         jr      terror
 fat32   ld      hl, (tmpbu2+$24)      ; Logical sectors per FAT
         add     hl, hl
