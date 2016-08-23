@@ -15,6 +15,7 @@ entity vga is
 	port
 	(
 		clock25 : in  std_logic;
+		border  : in  std_logic_vector( 2 downto 0);
 		va      : out std_logic_vector(12 downto 0);
 		vd      : in  std_logic_vector( 7 downto 0);
 		hs      : out std_logic;
@@ -25,12 +26,12 @@ end;
 
 architecture behavioral of vga is
 
-	signal x    : std_logic_vector( 9 downto 0);
-	signal y    : std_logic_vector( 9 downto 0);
-	signal f    : std_logic_vector( 5 downto 0);
-	signal xy   : std_logic_vector(17 downto 0);
-	signal bmap : std_logic_vector( 7 downto 0);
-	signal attr : std_logic_vector( 7 downto 0);
+	signal xy     : std_logic_vector(17 downto 0);
+	signal x      : std_logic_vector( 9 downto 0) := std_logic_vector(to_unsigned(512-20, 10));
+	signal y      : std_logic_vector( 9 downto 0) := std_logic_vector(to_unsigned(383, 10));
+	signal f      : std_logic_vector( 5 downto 0);
+	signal bmap   : std_logic_vector( 7 downto 0);
+	signal attr   : std_logic_vector( 7 downto 0);
 
 	type tpalette is array (0 to 15) of std_logic_vector(11 downto 0);
 	constant palette : tpalette := ( x"000", x"007", x"700", x"707", x"070", x"077", x"770", x"777", x"000", x"00f", x"f00", x"f0f", x"0f0", x"0ff", x"ff0", x"fff" );
@@ -83,7 +84,7 @@ begin
 				if attr(6) = '1' then c := c+8; end if;
 				rgb <= palette(c);
 			elsif x < 640 and y < 480 then
-				rgb <= x"700";
+				rgb <= palette(to_integer(unsigned(border)));
 			else
 				rgb <= x"000";
 			end if;

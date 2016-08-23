@@ -4,74 +4,102 @@ library ieee;
 entity zxpp is
 	port
 	(
-		netCLK : in  std_logic;
-		netVS  : out std_logic;
-		netHS  : out std_logic;
-		netR   : out std_logic_vector(3 downto 0);
-		netG   : out std_logic_vector(3 downto 0);
-		netB   : out std_logic_vector(3 downto 0)
+		netRST   : in  std_logic;
+		netNMI   : in  std_logic;
+		netCLK   : in  std_logic;
+		--
+		videoV   : out std_logic;
+		videoH   : out std_logic;
+		videoR   : out std_logic_vector(3 downto 0);
+		videoG   : out std_logic_vector(3 downto 0);
+		videoB   : out std_logic_vector(3 downto 0)
 	);
 end;
 
 architecture structural of zxpp is
 
-	component clock is
-	port
-	(
-		clock32 : in  std_logic;
-		clock25 : out std_logic;
-		clock14 : out std_logic
-	);
-	end component;
-
-	component loram
-	port
-	(
-		clka 	  : in  std_logic;	
-		wea  	  : in  std_logic_vector( 0 downto 0);	
-		addra	  : in  std_logic_vector(13 downto 0);	
-		dina 	  : in  std_logic_vector( 7 downto 0);	
-		douta	  : out std_logic_vector( 7 downto 0);	
-		clkb 	  : in  std_logic;	
-		web  	  : in  std_logic_vector( 0 downto 0);	
-		addrb	  : in  std_logic_vector(13 downto 0);	
-		dinb 	  : in  std_logic_vector( 7 downto 0);	
-		doutb   : out std_logic_vector( 7 downto 0)
-	);
-	end component;
-
-	component vga is
-	port
-	(
-		clock25 : in  std_logic;
-		va      : out std_logic_vector(12 downto 0);
-		vd      : in  std_logic_vector( 7 downto 0);
-		hs      : out std_logic;
-		vs      : out std_logic;
-		rgb     : out std_logic_vector(11 downto 0)
-	);
-	end component;
-
-	signal clock25 : std_logic;
-	signal clock14 : std_logic;
-	signal va      : std_logic_vector(12 downto 0);
-	signal vd      : std_logic_vector( 7 downto 0);
+	signal clock25  : std_logic;
+	signal clock14  : std_logic;
+	signal clock4   : std_logic;
+	signal reset    : std_logic;
+	signal nmi      : std_logic;
+	signal int      : std_logic;
+	signal mreq     : std_logic;
+	signal iorq     : std_logic;
+	signal m1       : std_logic;
+	signal rd       : std_logic;
+	signal wr       : std_logic;
+	signal a        : std_logic_vector(15 downto 0);
+	signal d        : std_logic_vector( 7 downto 0);
+	signal va       : std_logic_vector(12 downto 0);
+	signal vd       : std_logic_vector( 7 downto 0);
+	signal dula     : std_logic_vector( 7 downto 0);
+	signal dcpu     : std_logic_vector( 7 downto 0);
+	signal drom     : std_logic_vector( 7 downto 0);
+	signal dloram   : std_logic_vector( 7 downto 0);
+	signal wloram   : std_logic;
 
 begin
 
-	Uclock: clock port map
+	Uclock: entity work.clock port map
 	(
-		clock32          => netCLK,
-		clock25          => clock25,
-		clock14          => clock14
+		clock32            => netCLK,
+		clock25            => clock25,
+		clock14            => clock14
 	);
-	Uloram: loram port map
+	Uula: entity work.ula port map
 	(
-		clka               => '0',
-		wea(0)             => '0',
-		addra              => (others => '0'),
-		dina               => (others => '0'),
-		douta              => open,
+		clock25            => clock25,
+		clock14            => clock14,
+		clock4             => clock4,
+		iorq               => iorq,
+		rd                 => rd,
+		wr                 => wr,
+		a0                 => a(0),
+		di                 => dcpu,
+		do                 => dula,
+		int                => int,
+		va                 => va,
+		vd                 => vd,
+		hs                 => videoH,
+		vs                 => videoV,
+		rgb(11 downto 8)   => videoR,
+		rgb( 7 downto 4)   => videoG,
+		rgb( 3 downto 0)   => videoB
+	);
+	Ucpu: entity work.tv80n port map
+	(
+		clk                => clock4,
+		reset_n            => reset,
+		nmi_n              => nmi,
+		int_n              => int,
+		wait_n             => '1',
+		busrq_n            => '1',
+		mreq_n             => mreq,
+		iorq_n             => iorq,
+		rd_n               => rd,
+		wr_n               => wr,
+		m1_n               => m1,
+		rfsh_n             => open,
+		halt_n             => open,
+		busak_n            => open,
+		a                  => a,
+		di                 => d,
+		dout               => dcpu
+	);
+	Urom: entity work.rom port map
+	(
+		clka               => clock4,
+		addra              => a(13 downto 0),
+		douta              => drom
+	);
+	Uloram: entity work.loram port map
+	(
+		clka               => clock4,
+		wea(0)             => wloram,
+		addra              => a(13 downto 0),
+		dina               => dcpu,
+		douta              => dloram,
 		clkb               => clock25,
 		web(0)             => '0',
 		addrb(13)          => '0',
@@ -79,16 +107,15 @@ begin
 		dinb               => (others => '0'),
 		doutb              => vd
 	);
-	Uvga: vga port map
-	(
-		clock25          => clock25,
-		va               => va,
-		vd               => vd,
-		hs               => netHS,
-		vs               => netVS,
-		rgb(11 downto 8) => netR,
-		rgb( 7 downto 4) => netG,
-		rgb( 3 downto 0) => netB
-	);
+
+	reset    <= not netRST;
+	nmi      <= not netNMI;
+
+	wloram   <= '1' when mreq = '0' and wr = '0' and a(15 downto 14) = "01" else '0';
+
+	d <= dula   when iorq = '0' and rd = '0' and a(0) = '0'
+	else drom   when mreq = '0' and rd = '0' and a(15 downto 14) = "00"
+	else dloram when mreq = '0' and rd = '0' and a(15 downto 14) = "01"
+	else (others => '1');
 
 end;
