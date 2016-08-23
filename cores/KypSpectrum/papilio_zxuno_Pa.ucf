@@ -26,9 +26,26 @@ CONFIG PROHIBIT=P144;
 CONFIG PROHIBIT=P69;
 CONFIG PROHIBIT=P60;
 
-NET netRST          LOC="P85"  | IOSTANDARD=LVTTL | PULLDOWN;                     # A11
-NET netNMI          LOC="P59"  | IOSTANDARD=LVTTL | PULLDOWN;                     # B11
 NET netCLK          LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;               # CLK
+NET netRST          LOC="P85"  | IOSTANDARD=LVTTL | PULLDOWN;                     # A11
+NET netNMI          LOC="P95"  | IOSTANDARD=LVTTL | PULLDOWN;                     # B9  -- SW(2)
+
+NET ps2CLK          LOC="P115" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C1
+NET ps2DAT          LOC="P114" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C0
+
+NET joyBTN(0)       LOC="P123" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C8  -- JOYSTICK A1
+NET joyBTN(1)       LOC="P126" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C10 -- JOYSTICK A2
+NET joyBTN(2)       LOC="P127" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C11 -- JOYSTICK A3
+NET joyBTN(3)       LOC="P132" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C13 -- JOYSTICK A4
+NET joyBTN(4)       LOC="P124" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # C9  -- JOYSTICK A6
+#   joy+5                                                                         #     -- JOYSTICK A7
+NET joyGND          LOC="P131" | IOSTANDARD=LVTTL;                                # C12 -- JOYSTICK A8
+
+NET audioL          LOC="P98"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # A14
+NET audioR          LOC="P100" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # A15
+NET audioEAR        LOC="P57"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # B12 -- JOYSTICK B1
+NET audioGND        LOC="P48"  | IOSTANDARD=LVTTL;                                # C12 -- JOYSTICK B8
+#   audio+5                                                                       #     -- JOYSTICK B7
 
 NET videoV          LOC="P116" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C2
 NET videoH          LOC="P117" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C3
