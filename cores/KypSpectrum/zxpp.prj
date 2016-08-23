@@ -1,0 +1,3 @@
+vhdl work "vga.vhd"
+vhdl work "clock.vhd"
+vhdl work "zxpp.vhd"
