@@ -14,13 +14,13 @@ library ieee;
 entity vga is
 	port
 	(
-		clock25 : in  std_logic;
-		border  : in  std_logic_vector( 2 downto 0);
-		va      : out std_logic_vector(12 downto 0);
-		vd      : in  std_logic_vector( 7 downto 0);
-		hs      : out std_logic;
-		vs      : out std_logic;
-		rgb     : out std_logic_vector(11 downto 0)
+		clockVGA : in  std_logic;
+		border   : in  std_logic_vector( 2 downto 0);
+		va       : out std_logic_vector(12 downto 0);
+		vd       : in  std_logic_vector( 7 downto 0);
+		hs       : out std_logic;
+		vs       : out std_logic;
+		rgb      : out std_logic_vector(11 downto 0)
 	);
 end;
 
@@ -38,13 +38,13 @@ architecture behavioral of vga is
 
 begin
 
-	process(clock25)
+	process(clockVGA)
 		variable bpre : std_logic_vector(7 downto 0);
 		variable apre : std_logic_vector(7 downto 0);
 		variable i, p : std_logic_vector(2 downto 0);
 		variable b, c : integer;
 	begin
-		if rising_edge(clock25) then
+		if rising_edge(clockVGA) then
 			if x < 799 then x <= x+1;
 			else
 				x <= (others => '0');

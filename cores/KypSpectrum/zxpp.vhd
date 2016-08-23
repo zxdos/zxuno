@@ -29,9 +29,10 @@ end;
 
 architecture structural of zxpp is
 
-	signal clock25  : std_logic;
-	signal clock14  : std_logic;
-	signal clock4   : std_logic;
+	signal clockVGA : std_logic;
+	signal clockDAC : std_logic;
+	signal clockCPU : std_logic;
+	signal clockAY  : std_logic;
 	--
 	signal reset    : std_logic;
 	signal nmi      : std_logic;
@@ -45,9 +46,9 @@ architecture structural of zxpp is
 	signal d        : std_logic_vector( 7 downto 0);
 	signal dcpu     : std_logic_vector( 7 downto 0);
 	--
+	signal speaker  : std_logic;
 	signal ear      : std_logic;
 	signal mic      : std_logic;
-	signal speaker  : std_logic;
 	signal keycols  : std_logic_vector( 4 downto 0);
 	signal va       : std_logic_vector(12 downto 0);
 	signal vd       : std_logic_vector( 7 downto 0);
@@ -64,6 +65,12 @@ architecture structural of zxpp is
 	signal whiram   : std_logic;
 	signal dhiram   : std_logic_vector( 7 downto 0);
 	--
+	signal aybdir   : std_logic;
+	signal aybc1    : std_logic;
+	signal ayoe     : std_logic;
+	signal aydata   : std_logic_vector( 7 downto 0);
+	signal ayaudio  : std_logic_vector( 7 downto 0);
+	--
 	signal kempston : std_logic_vector( 7 downto 0);
 
 begin
@@ -71,14 +78,15 @@ begin
 	Uclock: entity work.clock port map
 	(
 		clock32            => netCLK,
-		clock25            => clock25,
-		clock14            => clock14
+		clockVGA           => clockVGA,
+		clockDAC           => clockDAC,
+		clockCPU           => clockCPU,
+		clockAY            => clockAY
 	);
 	Uula: entity work.ula port map
 	(
-		clock25            => clock25,
-		clock14            => clock14,
-		clock4             => clock4,
+		clockVGA           => clockVGA,
+		clockCPU           => clockCPU,
 		iorq               => iorq,
 		rd                 => rd,
 		wr                 => wr,
@@ -100,7 +108,7 @@ begin
 	);
 	Ucpu: entity work.tv80n port map
 	(
-		clk                => clock4,
+		clk                => clockCPU,
 		reset_n            => reset,
 		nmi_n              => nmi,
 		int_n              => int,
@@ -120,20 +128,20 @@ begin
 	);
 	Urom: entity work.rom port map
 	(
-		clka               => clock4,
+		clka               => clockCPU,
 		ena                => erom,
 		addra              => a(13 downto 0),
 		douta              => drom
 	);
 	Uloram: entity work.loram port map
 	(
-		clka               => clock4,
+		clka               => clockCPU,
 		ena                => eloram,
 		wea(0)             => wloram,
 		addra              => a(13 downto 0),
 		dina               => dcpu,
 		douta              => dloram,
-		clkb               => clock25,
+		clkb               => clockVGA,
 		web(0)             => '0',
 		addrb(13)          => '0',
 		addrb(12 downto 0) => va,
@@ -142,7 +150,7 @@ begin
 	);
 	Uhiram: entity work.hiram port map
 	(
-		clka               => clock4,
+		clka               => clockCPU,
 		ena                => ehiram,
 		wea(0)             => whiram,
 		addra              => a(14 downto 0),
@@ -151,39 +159,67 @@ begin
 	);
 	Ukeyboard: entity work.keyboard port map
 	(
-		clock              => clock4,
+		clock              => clockCPU,
 		ps2c               => ps2CLK,
 		ps2d               => ps2DAT,
 		rows               => a(15 downto 8),
 		cols               => keycols
 	);
+	Uym2149: entity work.ym2149 port map
+	(
+		clk                => clockAY,
+		ena                => '1',
+		reset_l            => reset,
+		i_da               => dcpu,
+		o_da               => aydata,
+		o_da_oe_l          => ayoe,
+		i_a9_l             => '0',
+		i_a8               => '1',
+		i_bc2              => '1',
+		i_bc1              => aybc1,
+		i_bdir             => aybdir,
+		i_sel_l            => '0',
+		o_audio            => ayaudio,
+		i_ioa              => (others => '0'),
+		o_ioa              => open,
+		o_ioa_oe_l         => open,
+		i_iob              => (others => '0'),
+		o_iob              => open,
+		o_iob_oe_l         => open
+	);
 	Umixer: entity work.mixer port map
 	(
-		clock              => clock4,
+		clock              => clockDAC,
+		reset              => reset,
 		speaker            => speaker,
 		ear                => audioEAR,
 		mic                => mic,
+		ay                 => ayaudio,
 		l                  => audioL,
 		r                  => audioR
 	);
 
-	reset    <= not netRST;
-	nmi      <= not netNMI;
+	reset  <= not netRST;
+	nmi    <= not netNMI;
 
-	erom     <= '1' when mreq = '0' and a(15 downto 14) = "00" else '0';
+	erom   <= '1' when mreq = '0' and a(15 downto 14) = "00" else '0';
 
-	eloram   <= '1' when mreq = '0' and a(15 downto 14) = "01" else '0';
-	wloram   <= not wr;
+	eloram <= '1' when mreq = '0' and a(15 downto 14) = "01" else '0';
+	wloram <= not wr;
 
-	ehiram   <= '1' when mreq = '0' and a(15) = '1' else '0';
-	whiram   <= not wr;
+	ehiram <= '1' when mreq = '0' and a(15) = '1' else '0';
+	whiram <= not wr;
 
-	d <=	dula     when iorq    = '0' and rd = '0' and a(0) = '0'
-	else	kempston when iorq    = '0' and rd = '0' and a(7 downto 5) = "000"
-	else	drom     when erom    = '1' and rd = '0'
-	else	dloram   when eloram  = '1' and rd = '0'
-	else	dhiram   when ehiram  = '1' and rd = '0'
-	else	(others => '1');
+	aybdir <= '1' when iorq = '0' and wr = '0' and a(15) = '1' and a(1 downto 0) = "01" else '0';
+	aybc1  <= '1' when iorq = '0' and a(15 downto 14) = "11" and a(1 downto 0) = "01" else '0';
+
+	d <= dula     when iorq    = '0' and rd = '0' and a(0) = '0'
+	else kempston when iorq    = '0' and rd = '0' and a(7 downto 5) = "000"
+	else aydata   when ayoe    = '0'
+	else drom     when erom    = '1' and rd = '0'
+	else dloram   when eloram  = '1' and rd = '0'
+	else dhiram   when ehiram  = '1' and rd = '0'
+	else (others => '1');
 
 	audioGND <= '0';
 
