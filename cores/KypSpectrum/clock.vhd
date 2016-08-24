@@ -1,5 +1,6 @@
 library ieee;
 	use ieee.std_logic_1164.all;
+	use ieee.std_logic_unsigned.all;
 library unisim;
 	use unisim.vcomponents.all;
 
@@ -7,9 +8,10 @@ entity clock is
 	port
 	(
 		clock32  : in  std_logic;
-		clockVGA : out std_logic;
-		clockDAC : out std_logic;
 		clockCPU : out std_logic;
+		clockVGA : out std_logic;
+		clockPS2 : out std_logic;
+		clockDAC : out std_logic;
 		clockAY  : out std_logic
 	);
 end;
@@ -19,20 +21,20 @@ architecture behavioral of clock is
 	signal ci32  : std_logic;
 	signal c1fb  : std_logic;
 	signal c2fb  : std_logic;
-	signal covga : std_logic;
-	signal codac : std_logic;
-	signal cocpu : std_logic;
-	signal coay  : std_logic;
+	signal co25  : std_logic;
+	signal co14  : std_logic;
+	signal count : std_logic_vector(1 downto 0);
 
 begin
 
 	Uibufg : ibufg port map(i => clock32, o => ci32);
-	IbufgVGA : bufg port map(i => covga, o => clockVGA);
-	IbufgDAC : bufg port map(i => codac, o => clockDAC);
-	IbufgCPU : bufg port map(i => cocpu, o => clockCPU);
-	IbufgAY  : bufg port map(i => coay,  o => clockAY );
+	IbufgVGA : bufg port map(i => co25, o => clockVGA);
+	IbufgPS2 : bufg port map(i => ci32, o => clockPS2);
+	IbufgDAC : bufg port map(i => co14, o => clockDAC);
+	IbufgCPU : bufg port map(i => count(1), o => clockCPU);
+	IbufgAY  : bufg port map(i => count(1), o => clockAY);
 
-	Uclock1 : pll_base -- 25 MHz
+	Uclock1 : pll_base -- clkout0 = 25.143 MHz
 	generic map
 	(
 		bandwidth          => "optimized",
@@ -52,7 +54,7 @@ begin
 		rst                => '0',
 		clkin              => ci32,
 		clkfbin            => c1fb,
-		clkout0            => covga,
+		clkout0            => co25,
 		clkout1            => open,
 		clkout2            => open,
 		clkout3            => open,
@@ -61,21 +63,18 @@ begin
 		locked             => open,
 		clkfbout           => c1fb
 	);
-	Uclock2 : pll_base -- 3.5 MHz
+	Uclock2 : pll_base -- clkout0 = 14 MHz
 	generic map
 	(
 		bandwidth           => "optimized",
 		clk_feedback        => "clkfbout",
 		compensation        => "system_synchronous",
 		divclk_divide       => 1,
-		clkfbout_mult       => 14,
+		clkfbout_mult       => 28,
 		clkfbout_phase      => 0.000,
-		clkout0_divide      => 32,
+		clkout0_divide      => 64,
 		clkout0_phase       => 0.000,
 		clkout0_duty_cycle  => 0.500,
-		clkout1_divide      => 128,
-		clkout1_phase       => 0.000,
-		clkout1_duty_cycle  => 0.500,
 		clkin_period        => 31.250,
 		ref_jitter          => 0.010
 	)
@@ -84,8 +83,8 @@ begin
 		rst                 => '0',
 		clkin               => ci32,
 		clkfbin             => c2fb,
-		clkout0             => codac,
-		clkout1             => cocpu,
+		clkout0             => co14,
+		clkout1             => open,
 		clkout2             => open,
 		clkout3             => open,
 		clkout4             => open,
@@ -94,7 +93,6 @@ begin
 		clkfbout            => c2fb
 	);
 	
-	coay <= cocpu;--not coay when rising_edge(cocpu);
+	count <= count+1 when rising_edge(co14);
 
 end;
-

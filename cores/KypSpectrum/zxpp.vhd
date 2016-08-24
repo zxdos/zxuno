@@ -30,30 +30,35 @@ end;
 architecture structural of zxpp is
 
 	signal clockVGA : std_logic;
-	signal clockDAC : std_logic;
 	signal clockCPU : std_logic;
+	signal clockPS2 : std_logic;
+	signal clockDAC : std_logic;
 	signal clockAY  : std_logic;
 	--
 	signal reset    : std_logic;
-	signal nmi      : std_logic;
-	signal int      : std_logic;
+	signal kreset   : std_logic;
+	--
 	signal iorq     : std_logic;
 	signal mreq     : std_logic;
-	signal m1       : std_logic;
+	signal nmi      : std_logic;
+	signal int      : std_logic;
 	signal rd       : std_logic;
 	signal wr       : std_logic;
 	signal a        : std_logic_vector(15 downto 0);
 	signal d        : std_logic_vector( 7 downto 0);
 	signal dcpu     : std_logic_vector( 7 downto 0);
 	--
-	signal speaker  : std_logic;
 	signal ear      : std_logic;
 	signal mic      : std_logic;
-	signal keycols  : std_logic_vector( 4 downto 0);
+	signal speaker  : std_logic;
 	signal va       : std_logic_vector(12 downto 0);
 	signal vd       : std_logic_vector( 7 downto 0);
 	signal dula     : std_logic_vector( 7 downto 0);
-	--
+--
+	signal rps2     : std_logic;
+	signal dps2     : std_logic_vector( 7 downto 0);
+	signal keys     : std_logic_vector( 4 downto 0);
+--
 	signal erom     : std_logic;
 	signal drom     : std_logic_vector( 7 downto 0);
 	--
@@ -79,52 +84,69 @@ begin
 	(
 		clock32            => netCLK,
 		clockVGA           => clockVGA,
-		clockDAC           => clockDAC,
 		clockCPU           => clockCPU,
+		clockPS2           => clockPS2,
+		clockDAC           => clockDAC,
 		clockAY            => clockAY
+	);
+	Ucpu: entity work.tv80n port map
+	(
+		clk                => clockCPU,
+		reset_n            => reset,
+		busrq_n            => '1',
+		wait_n             => '1',
+		busak_n            => open,
+		halt_n             => open,
+		rfsh_n             => open,
+		m1_n               => open,
+		mreq_n             => mreq,
+		iorq_n             => iorq,
+		nmi_n              => nmi,
+		int_n              => int,
+		rd_n               => rd,
+		wr_n               => wr,
+		a                  => a,
+		di                 => d,
+		dout               => dcpu
 	);
 	Uula: entity work.ula port map
 	(
 		clockVGA           => clockVGA,
 		clockCPU           => clockCPU,
+		keys               => keys,
 		iorq               => iorq,
+		int                => int,
 		rd                 => rd,
 		wr                 => wr,
 		a0                 => a(0),
 		di                 => dcpu,
 		do                 => dula,
-		int                => int,
-		va                 => va,
-		vd                 => vd,
-		keycols            => keycols,
 		ear                => audioEAR,
 		mic                => mic,
 		speaker            => speaker,
+		va                 => va,
+		vd                 => vd,
 		hs                 => videoH,
 		vs                 => videoV,
 		rgb(11 downto 8)   => videoR,
 		rgb( 7 downto 4)   => videoG,
 		rgb( 3 downto 0)   => videoB
 	);
-	Ucpu: entity work.tv80n port map
+	Ups2: entity work.ps2 port map
 	(
-		clk                => clockCPU,
-		reset_n            => reset,
-		nmi_n              => nmi,
-		int_n              => int,
-		wait_n             => '1',
-		busrq_n            => '1',
-		mreq_n             => mreq,
-		iorq_n             => iorq,
-		rfsh_n             => open,
-		rd_n               => rd,
-		wr_n               => wr,
-		m1_n               => m1,
-		halt_n             => open,
-		busak_n            => open,
-		a                  => a,
-		di                 => d,
-		dout               => dcpu
+		clock              => clockPS2,
+		ps2c               => ps2CLK,
+		ps2d               => ps2DAT,
+		received           => rps2,
+		scancode           => dps2
+	);
+	Ukeyboard: entity work.keyboard port map
+	(
+		received           => rps2,
+		scancode           => dps2,
+		rows               => a(15 downto 8),
+		cols               => keys,
+		reset              => kreset
 	);
 	Urom: entity work.rom port map
 	(
@@ -156,14 +178,6 @@ begin
 		addra              => a(14 downto 0),
 		dina               => dcpu,
 		douta              => dhiram
-	);
-	Ukeyboard: entity work.keyboard port map
-	(
-		clock              => clockCPU,
-		ps2c               => ps2CLK,
-		ps2d               => ps2DAT,
-		rows               => a(15 downto 8),
-		cols               => keycols
 	);
 	Uym2149: entity work.ym2149 port map
 	(
@@ -199,31 +213,28 @@ begin
 		r                  => audioR
 	);
 
-	reset  <= not netRST;
+	reset  <= not (netRST or kreset);
 	nmi    <= not netNMI;
 
+	audioGND <= '0';
+	joyGND   <= '0';
+	kempston <= not ("111"&joyBTN(4)&joyBTN(0)&joyBTN(1)&joyBTN(2)&joyBTN(3));
+
 	erom   <= '1' when mreq = '0' and a(15 downto 14) = "00" else '0';
-
 	eloram <= '1' when mreq = '0' and a(15 downto 14) = "01" else '0';
-	wloram <= not wr;
-
 	ehiram <= '1' when mreq = '0' and a(15) = '1' else '0';
+	
+	wloram <= not wr;
 	whiram <= not wr;
 
 	aybdir <= '1' when iorq = '0' and wr = '0' and a(15) = '1' and a(1 downto 0) = "01" else '0';
 	aybc1  <= '1' when iorq = '0' and a(15 downto 14) = "11" and a(1 downto 0) = "01" else '0';
 
-	d <= dula     when iorq    = '0' and rd = '0' and a(0) = '0'
+	d <= dhiram   when ehiram  = '1' and rd = '0'
+	else dloram   when eloram  = '1' and rd = '0'
+	else drom     when erom    = '1' and rd = '0'
 	else kempston when iorq    = '0' and rd = '0' and a(7 downto 5) = "000"
 	else aydata   when ayoe    = '0'
-	else drom     when erom    = '1' and rd = '0'
-	else dloram   when eloram  = '1' and rd = '0'
-	else dhiram   when ehiram  = '1' and rd = '0'
-	else (others => '1');
-
-	audioGND <= '0';
-
-	joyGND   <= '0';
-	kempston <= not ("111"&joyBTN(4)&joyBTN(0)&joyBTN(1)&joyBTN(2)&joyBTN(3));
+	else dula;
 
 end;

@@ -6,17 +6,17 @@ entity ula is
 	(
 		clockVGA : in  std_logic;
 		clockCPU : in  std_logic;
+		keys     : in  std_logic_vector( 4 downto 0);
 		iorq     : in  std_logic;
+		int      : out std_logic;
 		rd       : in  std_logic;
 		wr       : in  std_logic;
 		a0       : in  std_logic;
 		di       : in  std_logic_vector( 7 downto 0);
 		do       : out std_logic_vector( 7 downto 0);
-		int      : out std_logic;
 		ear      : in  std_logic;
 		mic      : out std_logic;
 		speaker  : out std_logic;
-		keycols  : in  std_logic_vector( 4 downto 0);
 		va       : out std_logic_vector(12 downto 0);
 		vd       : in  std_logic_vector( 7 downto 0);
 		hs       : out std_logic;
@@ -53,7 +53,7 @@ begin
 	process(clockCPU)
 	begin
 		if rising_edge(clockCPU) then 
-			if iorq = '0' and rd = '0' and a0 = '0' then do <= '0'&ear&'0'&keycols; end if;
+			if iorq = '0' and rd = '0' and a0 = '0' then do <= '0'&ear&'0'&keys; end if;
 			if iorq = '0' and wr = '0' and a0 = '0' then
 				portFF  <= di(2 downto 0);
 				mic     <= di(3);
