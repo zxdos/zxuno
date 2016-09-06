@@ -68,8 +68,8 @@ port (
 	BREAK_OUT	:	out	std_logic;
 	
 	-- DIP switch inputs
-	DIP_SWITCH	:	in	std_logic_vector(7 downto 0)
-   ;scanSW	:	buffer	std_logic --q
+	DIP_SWITCH	:	in	std_logic_vector(7 downto 0);
+	scanSW	:	out	std_logic_vector(2 downto 0) --q
 	);
 end entity;
 
@@ -105,6 +105,12 @@ signal keys			:	key_matrix;
 signal col			:	unsigned(3 downto 0);
 signal release		:	std_logic;
 signal extended		:	std_logic;
+
+signal VIDEO: std_logic := '0';
+signal SCANL: std_logic := '0';
+signal CTRL	: std_logic;
+signal ALT	: std_logic;
+
 begin
 
 	ps2 : ps2_intf port map (
@@ -210,9 +216,11 @@ begin
 					when X"16" => keys(0)(3) <= not release; -- 1
 					when X"58" => keys(0)(4) <= not release; -- CAPS LOCK
 					when X"11" => keys(0)(5) <= not release; -- LEFT ALT (SHIFT LOCK)
+									  ALT <= not release; 
 					when X"0D" => keys(0)(6) <= not release; -- TAB
 					when X"76" => keys(0)(7) <= not release; -- ESCAPE
 					when X"14" => keys(1)(0) <= not release; -- LEFT/RIGHT CTRL (CTRL)
+									  CTRL <= not release; 
 					when X"26" => keys(1)(1) <= not release; -- 3
 					when X"1D" => keys(1)(2) <= not release; -- W
 					when X"1E" => keys(1)(3) <= not release; -- 2
@@ -273,7 +281,7 @@ begin
 					when X"72" => keys(9)(2) <= not release; -- DOWN
 					when X"75" => keys(9)(3) <= not release; -- UP
 					when X"5A" => keys(9)(4) <= not release; -- RETURN
-					when X"66" => keys(9)(5) <= not release; -- BACKSPACE (DELETE)
+--					when X"66" => keys(9)(5) <= not release; -- BACKSPACE (DELETE)
 					when X"69" => keys(9)(6) <= not release; -- END (COPY)
 					when X"74" => keys(9)(7) <= not release; -- RIGHT
 					
@@ -282,8 +290,31 @@ begin
 					-- optionally OR it in to the system reset
 					when X"07" => BREAK_OUT <= not release; -- F12 (BREAK)
 
-					when X"7D" => scanSW <= '1'; -- pgUP (VGA)
-					when X"7A" => scanSW <= '0'; -- pgDN (RGB)
+					when X"7E" => 									 -- scrolLock RGB/VGA
+							if (VIDEO = '0' and release = '0') then
+								scanSW(0) <= '1';
+								VIDEO <= '1';
+							elsif (VIDEO = '1' and release = '0') then
+								scanSW(0) <= '0';
+								VIDEO <= '0';
+							end if;	
+
+					when X"7B" => 									 -- scanlines ("-" numpad)
+							if (SCANL = '0' and release = '0') then
+								scanSW(1) <= '1';
+								SCANL <= '1';
+							elsif (SCANL = '1' and release = '0') then
+								scanSW(1) <= '0';
+								SCANL <= '0';
+							end if;		
+
+					--Master reset
+					when X"66" =>  
+							if (CTRL = '1' and ALT = '1') then
+								scanSW(2) <= not release; 
+							else
+								keys(9)(5) <= not release; --normal BACKSPACE
+							end if;			
 										
 					when others => null;
 					end case;

@@ -54,7 +54,6 @@ entity bbc_micro is
      port (clk50      : in    std_logic;
            ps2_clk        : in    std_logic;
            ps2_data       : in    std_logic;
-           ERST           : in    std_logic;
            red            : out   std_logic_vector (2 downto 0);
            green          : out   std_logic_vector (2 downto 0);
            blue           : out   std_logic_vector (2 downto 0);
@@ -70,8 +69,8 @@ entity bbc_micro is
            SDCLK          : out   std_logic;
            SDMOSI         : out   std_logic;
            LED1           : out   std_logic;
-			  NTSC           : out   std_logic; --Q
-			  PAL            : out   std_logic --Q			  
+			  NTSC           : out   std_logic; 
+			  PAL            : out   std_logic 			  
 
     );
 end entity;
@@ -285,9 +284,14 @@ signal sdclk_int : std_logic;
 
 signal RAMWRn_int : std_logic;
 
-signal scanSW : std_logic; --q
+signal scanSW : std_logic_vector(2 downto 0); --q
 signal scanNext : std_logic;
 signal scanReg : std_logic;
+
+signal poweron_reset:	unsigned(7 downto 0) := "00000000";
+signal scandoubler_ctrl: std_logic_vector(1 downto 0);
+signal ram_we_n: std_logic;
+signal ram_a:	std_logic_vector(18 downto 0);
 
 begin
     -------------------------
@@ -480,8 +484,8 @@ begin
         keyb_int,
         keyb_break,
         -- TODO: Add DIP Switches
-        "00000000"
-		  ,scanSW --q
+        "00000000",
+		  scanSW
         );
 
     -- Sound generator (and drive logic for I2S codec)
@@ -495,7 +499,7 @@ begin
 	dac : entity work.pwm_sddac PORT MAP(
 		clk_i => clock,
 		reset => '0',
-		dac_i => std_logic_vector(sound_ao),
+		dac_i => std_logic_vector(128+sound_ao), --added 128 to lower volume and avoid distortion
 		dac_o => audio
 	);
 
@@ -505,7 +509,8 @@ begin
 
 
     -- Keyboard and System VIA are reset by external reset switch or PLL being out of lock
-    hard_reset_n <= not ERST;
+--    hard_reset_n <= not ERST;
+
     -- Rest of system is reset by all of the above plus the keyboard BREAK key
     reset_n <= hard_reset_n and not keyb_break;
 
@@ -694,18 +699,21 @@ begin
             if vid_clken = '1' then
                 -- Fetch data from previous CPU cycle
                 RAMWRn_int <= not ram_write;
-                SRAM_ADDR <= "000" & cpu_a(15 downto 0);
+                --SRAM_ADDR <= "000" & cpu_a(15 downto 0);
+                RAM_A <= "000" & cpu_a(15 downto 0);
                 if ram_write = '1' then
                     SRAM_DATA(7 downto 0) <= cpu_do;
                 end if;
             else
                 -- Fetch data from previous display cycle
                 RAMWRn_int <= '1';
-                SRAM_ADDR <= "0000" & display_a;
+              --  SRAM_ADDR <= "0000" & display_a;
+                RAM_A <= "0000" & display_a;
             end if;
         end if;
     end process;
-    RAMWRn <= RAMWRn_int or (not clock);
+ --   RAMWRn <= RAMWRn_int or (not clock);
+    ram_we_n <= RAMWRn_int or (not clock);
 
     -- Address translation logic for calculation of display address
     process(crtc_ma,crtc_ra,disp_addr_offs)
@@ -841,7 +849,7 @@ begin
         end if;
     end process;
 	 
-  DIP(0) <= scanSW; 
+  DIP(0) <= scandoubler_ctrl(0) xor scanSW(0); -- vga / rgb (via SRAM init or ScrollLock
   DIP(1) <= '0';
 	 
 -----------------------------------------------
@@ -852,7 +860,7 @@ begin
 		clk => clock,
 		clk_16 => clock,
 		clk_16_en => vid_clken,
-		scanlines => '0',
+		scanlines => scanSW(1), --scanlines "-" numpad
 		hs_in => not crtc_hsync,
 		vs_in => not crtc_vsync,
 		r_in => r_out,
@@ -872,27 +880,27 @@ begin
 -- Scan Doubler from RGB2VGA project
 -----------------------------------------------
 
-	inst_rgb2vga_dcm: entity work.rgb2vga_dcm port map (
-		CLKIN_IN => clock,
-		CLKFX_OUT => vga_clock
-	);
-
-	inst_rgb2vga: entity work.rgb2vga port map (
-		clock => clock,
-		clken => vid_clken,
-		clk25 => vga_clock,
-		rgbi_in => r_out & g_out & b_out & '0',
-		hSync_in => crtc_hsync,
-		vSync_in => crtc_vsync,
-		rgbi_out => rgbi_out,
-		hSync_out => vga1_hs,
-		vSync_out => vga1_vs
-	);
-    vga1_r <= rgbi_out(3) & rgbi_out(3);
-    vga1_g <= rgbi_out(2) & rgbi_out(2);
-    vga1_b <= rgbi_out(1) & rgbi_out(1);
-    
-    vga1_mode <= DIP(1);
+--	inst_rgb2vga_dcm: entity work.rgb2vga_dcm port map (
+--		CLKIN_IN => clock,
+--		CLKFX_OUT => vga_clock
+--	);
+--
+--	inst_rgb2vga: entity work.rgb2vga port map (
+--		clock => clock,
+--		clken => vid_clken,
+--		clk25 => vga_clock,
+--		rgbi_in => r_out & g_out & b_out & '0',
+--		hSync_in => crtc_hsync,
+--		vSync_in => crtc_vsync,
+--		rgbi_out => rgbi_out,
+--		hSync_out => vga1_hs,
+--		vSync_out => vga1_vs
+--	);
+--    vga1_r <= rgbi_out(3) & rgbi_out(3);
+--    vga1_g <= rgbi_out(2) & rgbi_out(2);
+--    vga1_b <= rgbi_out(1) & rgbi_out(1);
+--    
+--    vga1_mode <= DIP(1);
 
 -----------------------------------------------
 -- RGBHV Multiplexor
@@ -900,28 +908,58 @@ begin
 
     -- CRTC drives video out (CSYNC on HSYNC output, VSYNC high)
     hsync <= vga0_hs when vga0_mode = '1' else
-             vga1_hs when vga1_mode = '1' else
+--             vga1_hs when vga1_mode = '1' else
              not (crtc_hsync or crtc_vsync);
 
     vsync <= vga0_vs when vga0_mode = '1' else
-             vga1_vs when vga1_mode = '1' else
+--             vga1_vs when vga1_mode = '1' else
              '1';
              
     red   <= vga0_r(1) & vga0_r(0) & "0" when vga0_mode = '1' else
-             vga1_r(1) & vga1_r(0) & "0" when vga1_mode = '1' else
+--             vga1_r(1) & vga1_r(0) & "0" when vga1_mode = '1' else
              r_out & r_out & r_out;
              
     green <= vga0_g(1) & vga0_g(0) & "0" when vga0_mode = '1' else
-             vga1_g(1) & vga1_g(0) & "0" when vga1_mode = '1' else
+--             vga1_g(1) & vga1_g(0) & "0" when vga1_mode = '1' else
              g_out & g_out & g_out;
              
     blue  <= vga0_b(1) & vga0_b(0) & "0" when vga0_mode = '1' else
-             vga1_b(1) & vga1_b(0) & "0" when vga1_mode = '1' else
+--             vga1_b(1) & vga1_b(0) & "0" when vga1_mode = '1' else
              b_out & b_out & b_out;
 	 
 
-    -- Keyboard LEDs
+   -- Keyboard LEDs
    -- LED1 <= not caps_lock_led_n;
-	 LED1 <= not sdclk_int; --SD Led
+	
+LED1 <= not sdclk_int; --SD Led
+	 
+	--- RESET int / SCANDLBLCTRL REG ZXUNO
+	 
+	process (clock)
+	  begin
+		if rising_edge(clock) then
+		  if (poweron_reset < 126) then
+            scandoubler_ctrl <= sram_data(1 downto 0);
+		  end if;
+		  if poweron_reset < 254 then
+				poweron_reset <= poweron_reset + 1;
+		  end if;
+		end if;
+	end process;	 
+	
+	hard_reset_n <= '0' when poweron_reset < 254 else  '1';
+	
+	sram_addr <= "0001000111111010101" when poweron_reset < 254 else ram_a; --0x8FD5 SRAM (SCANDBLCTRL REG)
+	RAMWRn <= '1' when poweron_reset < 254 else ram_we_n;
+	
+	--- endRESET int
+	
+------------multiboot---------------
+
+	multiboot: entity work.multiboot
+	port map(
+		clk_icap		      => CLOCK_24,
+		REBOOT				=> scanSW(2) --mreset key combo
+	);	
 
 end architecture;
