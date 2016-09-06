@@ -9,7 +9,7 @@
 -- From an original by Terasic Technology, Inc.
 -- (DE2_TOP.v, part of the DE2 system board CD supplied by Altera)
 --
--- 2015 Ported to ZX-UNO board by Quest
+-- 2015 Ported and modified to ZX-UNO board by Quest
 -------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -26,8 +26,6 @@ entity APPLE2_TOP is
     
     CLOCK50 : in std_logic;
   	 LED : out std_logic; 		 
-	 LED2 : out std_logic; 	
-	 I_RESET : in std_logic;
 	
     -- SRAM
     
@@ -92,7 +90,7 @@ architecture datapath of APPLE2_TOP is
 
   signal track : unsigned(5 downto 0);
   signal image : unsigned(9 downto 0);
-  signal trackmsb : unsigned(3 downto 0);
+--  signal trackmsb : unsigned(3 downto 0);
   signal D1_ACTIVE, D2_ACTIVE : std_logic;
   signal track_addr : unsigned(13 downto 0);
   signal TRACK_RAM_ADDR : unsigned(13 downto 0);
@@ -110,51 +108,26 @@ architecture datapath of APPLE2_TOP is
   signal csjudlr1 : std_logic_vector(6 downto 0);
   signal BTN3 : std_logic;
   
-  signal keyCode : unsigned(11 downto 0);
   signal resetKey : std_logic;
   signal imageCount : unsigned(7 downto 0) := (others => '0');
+  
+  signal manualreset : std_logic := '0';
+  
+  signal scanSW		:	std_logic_vector(3 downto 0);
+  signal AReset : std_logic;
 
 begin
 
-    reset <=  I_RESET or power_on_reset;
+  reset <=  manualreset or power_on_reset;
   
-    resetKey <= '1' when keyCode = X"007" else '0'; --F12 reset
-	
-	 img_select : process (keyCode) --Disk image selection = SHIFT + Fx (F1 to F10)
-	 begin
-			if keyCode = X"105" then    --F1
-				imageCount <= X"00";
-			elsif keyCode = X"106" then
-				imageCount <= X"01";
-			elsif keyCode = X"104" then
-				imageCount <= X"02";
-			elsif keyCode = X"10C" then
-				imageCount <= X"03";
-			elsif keyCode = X"103" then
-				imageCount <= X"04";
-			elsif keyCode = X"10B" then
-				imageCount <= X"05";
-			elsif keyCode = X"183" then
-				imageCount <= X"06";
-			elsif keyCode = X"10A" then
-				imageCount <= X"07";
-			elsif keyCode = X"101" then
-				imageCount <= X"08";
-			elsif keyCode = X"109" then  --F10
-				imageCount <= X"09";
-			else
-				imageCount <= imageCount + 0;
-			end if;
-	 end process;
+  resetKey <= '1' when AReset = '1' else '0'; --F12 reset
 
   power_on : process(CLK_14M)
   begin
     if rising_edge(CLK_14M) then
-     if flash_clk(22) = '1' and resetKey = '0' then
+     if flash_clk(22) = '1'  then
         power_on_reset <= '0';
-		elsif resetKey = '1' then
-			power_on_reset <= '1';
-		end if;
+     end if;
     end if;
   end process;
 
@@ -164,13 +137,17 @@ begin
     if rising_edge(CLK_14M) then
 	   if resetKey = '0' then
        flash_clk <= flash_clk + 1;
+		 if flash_clk(22) = '1'  then
+		  manualreset <= '0';
+		 end if;
 		else
 		  flash_clk <= "00000000000000000000000";
+		  manualreset <= '1';
 		end if;
     end if;     
   end process;
 
-  --  32 MHz down to 28 MHz and 14 MHz
+  --  50 MHz down to 28 MHz and 14 MHz
 
 	dcm : entity work.CLOCKGEN port map (
 		I_CLK			=> CLOCK50,
@@ -233,7 +210,7 @@ begin
 	end if;
   end process;
   
-  COLOR_LINE_CONTROL <= COLOR_LINE ; --  could we use scroll lock ? and SW(9);  -- Color or B&W mode
+  COLOR_LINE_CONTROL <= COLOR_LINE and not scanSW(3); -- Color or B&W mode (* numpad switch)
   
   core : entity work.apple2 port map (
     CLK_14M        => CLK_14M,
@@ -242,7 +219,7 @@ begin
     FLASH_CLK      => flash_clk(22),
     reset          => reset,
     ADDR           => ADDR,
-    ram_addr       => SRAM_ADDR(15 downto 0),
+    ram_addr       => SRAM_ADDR(17 downto 0),
     D              => D,
     ram_do         => SRAM_DQ(7 downto 0),
     PD             => PD,
@@ -254,7 +231,7 @@ begin
     LD194          => LD194,
     K              => K,
     read_key       => read_key,
-    AN             => open, -- LEDG(7 downto 4),
+    AN             => open, 
     GAMEPORT       => GAMEPORT,
     IO_SELECT      => IO_SELECT,
     DEVICE_SELECT  => DEVICE_SELECT,
@@ -265,6 +242,7 @@ begin
 
   vga : entity work.vga_controller port map (
     CLK_28M    => CLK_28M, 
+	 CLK_14M		=> CLK_14M,
     VIDEO      => VIDEO,
     COLOR_LINE => COLOR_LINE_CONTROL,
     HBL        => HBL,
@@ -275,22 +253,25 @@ begin
     VGA_R      => R_10,
     VGA_G      => G_10,
     VGA_B      => B_10
+	 ,SCANL 		=> scanSW(2)
     );
 
-  VGA_R <= R_10(9 downto 7); --6
+  VGA_R <= R_10(9 downto 7); 
   VGA_G <= G_10(9 downto 7);
   VGA_B <= B_10(9 downto 7);
 
   keyboard : entity work.keyboard port map (
     PS2_Clk  => PS2_CLK,
     PS2_Data => PS2_DAT,
-    CLK_14M  => CLK_14M,
-    reset    => reset,
-	 key_code => keyCode, --Q
-    read     => read_key,
+    clk  	 => CLK_14M,
+    rst_n    => '1',
+    readd    => read_key,
     K        => K
+	 ,scanSW  => scanSW
+	,imagecount => imagecount
+	,AReset   => AReset
     );
-
+	 
   disk : entity work.disk_ii port map (
     CLK_14M        => CLK_14M,
     CLK_2M         => CLK_2M,
@@ -345,13 +326,21 @@ begin
 	O_AUDIO_R <= audio_bit;
 	
   -- Current disk track on right two digits 
-  trackmsb <= "00" & track(5 downto 4);
+  --  trackmsb <= "00" & track(5 downto 4);
   
-  SRAM_DQ(7 downto 0) <= D when ram_we = '1' else (others => 'Z');
-  SRAM_ADDR(18 downto 16) <= "000";
-  SRAM_WE_N <= not ram_we;
+  SRAM_DQ(7 downto 0) <= (others => '0') when reset = '1' else D when ram_we = '1' else (others => 'Z'); --added Data part of SRAM init when reset to jump disk boot code.
+  SRAM_ADDR(18) <= '0';
+  SRAM_WE_N <= '0' when reset = '1' else not ram_we;
 
   LED <= not CS_N; --Led SD
 --  LED2 <= '1' when imageCount = "0000000001" else '0'; --Led ext3
+
+------------multiboot---------------
+
+	multiboot: entity work.multiboot
+	port map(
+		clk_icap		      => CLK_14M,
+		REBOOT				=> scanSW(0)
+	);
 	
 end datapath;

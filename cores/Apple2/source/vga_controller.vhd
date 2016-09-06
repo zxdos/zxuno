@@ -55,20 +55,22 @@ use ieee.numeric_std.all;
 entity vga_controller is
   
   port (
-    CLK_28M    : in  std_logic;	     -- 14.31818 MHz master clock
+    CLK_28M    : in std_logic;	     -- 14.31818 MHz master clock
+	 CLK_14M		: in std_logic;
     VIDEO      : in std_logic;         -- from the Apple video generator
     COLOR_LINE : in std_logic;
     HBL        : in std_logic;
     VBL        : in std_logic;
     LD194      : in std_logic;
     
-    VGA_CLK    : out std_logic;
+--    VGA_CLK    : out std_logic;
     VGA_HS     : out std_logic;             -- Active low
     VGA_VS     : out std_logic;             -- Active low
     VGA_BLANK  : out std_logic;
     VGA_R      : out unsigned(9 downto 0);
     VGA_G      : out unsigned(9 downto 0);
-    VGA_B      : out unsigned(9 downto 0)
+    VGA_B      : out unsigned(9 downto 0);
+	 SCANL		: in std_logic
     );
   
 end vga_controller;
@@ -107,9 +109,7 @@ architecture rtl of vga_controller is
   constant VGA_HSYNC : integer := 54 * 2;
   constant VGA_BACK_PORCH : integer := 66 * 2;
   constant VGA_ACTIVE : integer := 282 * 2;
-  constant VGA_FRONT_PORCH : integer := 54 * 2;
-
-  -- VGA_HSYNC + VGA_BACK_PORCH + VGA_ACTIVE + VGA_FRONT_PORCH = VGA_SCANLINE
+  constant VGA_FRONT_PORCH : integer := 54 * 2; 
 
   constant VBL_TO_VSYNC : integer := 33;
   constant VGA_VSYNC_LINES : integer := 3;
@@ -120,6 +120,11 @@ architecture rtl of vga_controller is
   signal vbl_delayed, vbl_delayed2 : std_logic;
   signal hbl_delayed : std_logic;
   signal color_line_delayed_1, color_line_delayed_2 : std_logic;
+  signal vga_vcount: unsigned(10 downto 0);
+  signal scan_count: unsigned(10 downto 0);
+  signal key_count: unsigned(10 downto 0);
+	
+  signal toggle : std_logic := '0' ;
 
 begin
  
@@ -211,6 +216,31 @@ begin
   ram_we <= '1' when hcount(0) = '1' else '0';
 
   video_active <= hactive and not vbl_delayed2;
+  
+  -- count for scanline option
+  check_scanl: process (CLK_28M) --q
+  begin
+	if rising_edge(CLK_28M) then
+		if scan_count = (912) then				
+				vga_vcount <= vga_vcount + 1;
+				scan_count <= "00000000001";
+		else
+				scan_count <= scan_count + 1;				
+		end if;
+	end if;
+  end process;
+  
+  check_key: process (CLK_28M, SCANL) --q
+  begin
+  if rising_edge(CLK_28M) then
+	if SCANL = '1' and toggle = '0' then
+		key_count <= key_count + 1;
+		toggle <= '1';
+	else
+		toggle <= '0';
+	end if;
+  end if;
+  end process;
 
   pixel_generator: process (CLK_28M)
     variable r, g, b : unsigned(7 downto 0); 
@@ -263,10 +293,23 @@ begin
         end if;
         
       end if;
-      
-      VGA_R <= r & r(7 downto 6);
-      VGA_G <= g & g(7 downto 6);
-      VGA_B <= b & b(7 downto 6);
+      ---  scalines
+		if SCANL = '0' then
+			VGA_R <= r & r(7 downto 6);
+			VGA_G <= g & g(7 downto 6);
+			VGA_B <= b & b(7 downto 6);
+		else
+			if (vga_vcount mod 2) = 0 then
+				VGA_R <= '0' & r & r(7);
+				VGA_G <= '0' & g & g(7);
+				VGA_B <= '0' & b & b(7);
+			else
+				VGA_R <= r & r(7 downto 6);
+				VGA_G <= g & g(7 downto 6);
+				VGA_B <= b & b(7 downto 6);
+			end if;
+		
+		end if;
       
     end if;
   end process pixel_generator;
@@ -282,7 +325,7 @@ begin
     end if;
   end process line_storage;
 
-  VGA_CLK <= CLK_28M;
+--  VGA_CLK <= CLK_28M; 
 
   VGA_BLANK <= video_active;
 
