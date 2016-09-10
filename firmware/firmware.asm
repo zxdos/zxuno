@@ -2671,16 +2671,17 @@ combo2  ld      (hl), $20
         ld      (hl), a
         ex      af, af'
         ld      (offsel+1), a
-        defb    $32
-combo3  dec     a
-        inc     b
-        cp      e
+        sub     e
         jr      nc, combo3
-        ld      a, b
+        sbc     a, a
+combo3  inc     a
 combo4  ld      (offsel), a
         ld      iy, (items)
         ld      iyl, iyh
         ld      bc, (cmbcor)
+        ld      a, iyl
+        or      a
+        jr      z, combo7
 combo5  ld      ix, empstr
         call_prnstr
         dec     iyl
