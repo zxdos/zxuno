@@ -2003,7 +2003,7 @@ advan1  call    showop
         defw    $ffff
         ld      a, iyl
         rrca
-        jr      c, advan1
+        jr      nc, advan1
         ld      c, $0b
         call    showop
         defw    cad96
