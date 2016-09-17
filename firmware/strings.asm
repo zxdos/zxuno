@@ -1,6 +1,6 @@
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.53', 0
+        defm    'ZX-Uno BIOS v0.54', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -37,7 +37,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.53    ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.54    ', $7f, '2016 ZX-Uno Team', 0
       IF  recovery=0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -55,7 +55,8 @@ cad10   defb    'Hardware tests', 0
         defb    'Timing', 0
         defb    'Contended', 0
         defb    'DivMMC', 0
-        defb    'NMI-DivMMC', 0, 0
+        defb    'NMI-DivMMC', 0
+        defb    'New G.Modes', 0, 0
       ENDIF
 cad11   defb    ' ', $10, 0
         defb    ' ', $10, 0
@@ -363,6 +364,11 @@ cad114  defb    'Break to exit', 0
 cad115  defb    'Slot occupied, select', 0
         defb    'another or delete a', 0
         defb    'ROM to free it', 0
+cad195  defb    'Disable for', 0
+        defb    'better compa-', 0
+        defb    'tibility with', 0
+        defb    'old games', 0, 0
+
       ENDIF
 cad116  defb    '2', 0
         defb    '3', 0

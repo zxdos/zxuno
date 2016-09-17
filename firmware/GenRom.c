@@ -45,8 +45,8 @@ int main(int argc, char *argv[]) {
     "GenRom v0.06, generates a TAP for loading a ROM in the ZX-Uno, 2016-07-04\n\n"
     "  GenRom         <params> <name> <input_file> <output_file>\n\n"
     "  <params>       Set 13 flags parameters, combinable\n"
-    "     0           MODE=00, I2KB=DISCONT=DIVEN=DISNMI=0\n"
-    "                 DISD=ENMMU=DIROM1F=DIROM7F=DI1FFD=DI7FFD=DITAY=DIAY=0\n"
+    "     0           MODE=00, DI1FFD=DI7FFD=DITAY=DIAY=DIRADAS=DITIMEX=DIULAPLUS=0\n"
+    "                 I2KB=DISCONT=DIVEN=DISNMI=DISD=ENMMU=DIROM1F=DIROM7F=0\n"
     "     i           Change Issue2\n"
     "     t           Force Timing to 128\n"
     "     p           Force Timing to Pentagon\n"
@@ -61,6 +61,9 @@ int main(int argc, char *argv[]) {
     "     7           Disable 7FFD port (128K memory paging)\n"
     "     2           Disable 2nd AY chip\n"
     "     a           Disable main AY chip\n"
+    "     r           Disable Radastanian mode\n"
+    "     x           Disable Timex mode\n"
+    "     u           Disable Ulaplus\n"
     "  <name>         Name between single quotes up to 32 chars\n"
     "  <input_file>   Input ROM file\n"
     "  <output_file>  Output TAP file\n\n"
@@ -143,7 +146,10 @@ int main(int argc, char *argv[]) {
       case '1': mem[0x4009]^= 0b00001000; break;
       case '7': mem[0x4009]^= 0b00000100; break;
       case '2': mem[0x4009]^= 0b00000010; break;
-      case 'a': mem[0x4009]^= 0b00000001;
+      case 'a': mem[0x4009]^= 0b00000001; break;
+      case 'r': mem[0x400a]^= 0b00000100; break;
+      case 'x': mem[0x400a]^= 0b00000010; break;
+      case 'u': mem[0x400a]^= 0b00000001;
     }
   for ( i= 0; i<32 && i<strlen(argv[2]); i++ )
     mem[i+0x4006+0x32]= argv[2][i];

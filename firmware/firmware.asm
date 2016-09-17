@@ -24,6 +24,7 @@
         define  raster_line     12
         define  raster_ctrl     13
         define  dev_control     14
+        define  dev_control2    15
         define  core_addr       $fc
         define  core_boot       $fd
         define  cold_boot       $fe
@@ -65,8 +66,9 @@
         define  conten  timing+1
         define  divmap  conten+1
         define  nmidiv  divmap+1
+        define  grapmo  nmidiv+1
 
-        define  layout  nmidiv+1
+        define  layout  grapmo+1
         define  joykey  layout+1
         define  joydb9  joykey+1
         define  outvid  joydb9+1
@@ -584,7 +586,7 @@ main4   call    showop
         defw    cad29
         defw    cadv2
         defw    $ffff
-        ld      a, nmidiv&$ff
+        ld      a, grapmo&$ff
         cp      iyl
         jr      nc, main4
         ld      de, $1201
@@ -600,6 +602,7 @@ main4   call    showop
         defb    $0f
         defb    $10
         defb    $11
+        defb    $12
         defb    $ff
         defw    cad14
         defw    cad15
@@ -612,6 +615,7 @@ main4   call    showop
         defw    cad71
         defw    cad18
         defw    cad19
+        defw    cad195
         jr      c, main9
         ld      (menuop+1), a
         cp      4
@@ -3496,6 +3500,17 @@ conti9  ld      a, 0
         inc     b
         ld      a, (ix+3)
         out     (c), a
+        dec     b
+        ld      a, dev_control2
+        out     (c), a
+        inc     b
+        ld      a, (grapmo)
+        srl     a
+        jr      c, contia
+        ld      a, 7            ; Resv Resv Resv Resv Resv DIRADAS DITIMEX DIULAPLUS
+        jr      z, contia
+        ld      a, (ix+4)
+contia  out     (c), a
         rst     0
       ENDIF
 
