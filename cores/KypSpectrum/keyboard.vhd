@@ -4,17 +4,19 @@ library ieee;
 entity keyboard is
 	port
 	(
+		boot     : out std_logic;
+		reset    : out std_logic;
+		nmi      : out std_logic;
 		received : in  std_logic;
 		scancode : in  std_logic_vector(7 downto 0);
 		rows     : in  std_logic_vector(7 downto 0);
-		cols     : out std_logic_vector(4 downto 0);
-		reset    : out std_logic
+		cols     : out std_logic_vector(4 downto 0)
 	);
 end;
 
 architecture behavioral of keyboard is
 
-	type   matrix is array (53 downto 0) of std_logic;
+	type   matrix is array (57 downto 0) of std_logic;
 	signal keys : matrix := (others => '1');
 
 	signal pressed  : std_logic := '0';
@@ -93,6 +95,11 @@ begin
 					when x"49"  => keys(45) <= pressed; -- .
 					when x"41"  => keys(46) <= pressed; -- ,
 
+					when x"03"  => keys(54) <= pressed; -- F5
+					when x"78"  => keys(57) <= pressed; -- F11
+					when x"07"  => keys(55) <= pressed; -- F12
+					when x"76"  => keys(56) <= pressed; -- ESCAPE
+
 					when others => null;
 				end case;
 			else
@@ -113,66 +120,70 @@ begin
 	end process;
 
 	cols(0) <=  ( keys( 0) or rows(0) ) and -- CS
-					( keys( 5) or rows(1) ) and -- A
-					( keys(10) or rows(2) ) and -- Q
-					( keys(15) or rows(3) ) and -- 1
-					( keys(20) or rows(4) ) and -- 0
-					( keys(25) or rows(5) ) and -- P
-					( keys(30) or rows(6) ) and -- ENTER
-					( keys(35) or rows(7) ) and -- SPACE
-					( keys(43) or rows(0) ) and -- DELETE(CS)
-					( keys(43) or rows(4) ) and -- DELETE(0)
-					( keys(50) or rows(0) ) and -- UP(CS)
-					( keys(51) or rows(0) ) and -- DOWN(CS)
-					( keys(52) or rows(0) ) and -- LEFT(CS)
-					( keys(53) or rows(0) );    -- RIGHT(CS)
+				( keys( 5) or rows(1) ) and -- A
+				( keys(10) or rows(2) ) and -- Q
+				( keys(15) or rows(3) ) and -- 1
+				( keys(20) or rows(4) ) and -- 0
+				( keys(25) or rows(5) ) and -- P
+				( keys(30) or rows(6) ) and -- ENTER
+				( keys(35) or rows(7) ) and -- SPACE
+				( keys(43) or rows(0) ) and -- DELETE(CS)
+				( keys(43) or rows(4) ) and -- DELETE(0)
+				( keys(50) or rows(0) ) and -- UP(CS)
+				( keys(51) or rows(0) ) and -- DOWN(CS)
+				( keys(52) or rows(0) ) and -- LEFT(CS)
+				( keys(53) or rows(0) ) and -- RIGHT(CS)
+				( keys(56) or rows(0) ) and -- ESC
+				( keys(56) or rows(7) );    -- ESC
 
 	cols(1) <=  ( keys( 1) or rows(0) ) and -- Z
-					( keys( 6) or rows(1) ) and -- S
-					( keys(11) or rows(2) ) and -- W
-					( keys(16) or rows(3) ) and -- 2
-					( keys(21) or rows(4) ) and -- 9
-					( keys(26) or rows(5) ) and -- O
-					( keys(31) or rows(6) ) and -- L
-					( keys(36) or rows(7) ) and -- SS
-					( keys(44) or rows(7) ) and -- -(SS)
-					( keys(45) or rows(7) ) and -- .(SS)
-					( keys(46) or rows(7) );    -- ,(SS)
+				( keys( 6) or rows(1) ) and -- S
+				( keys(11) or rows(2) ) and -- W
+				( keys(16) or rows(3) ) and -- 2
+				( keys(21) or rows(4) ) and -- 9
+				( keys(26) or rows(5) ) and -- O
+				( keys(31) or rows(6) ) and -- L
+				( keys(36) or rows(7) ) and -- SS
+				( keys(44) or rows(7) ) and -- -(SS)
+				( keys(45) or rows(7) ) and -- .(SS)
+				( keys(46) or rows(7) );    -- ,(SS)
 
 	cols(2) <=  ( keys( 2) or rows(0) ) and -- X
-					( keys( 7) or rows(1) ) and -- D
-					( keys(12) or rows(2) ) and -- E
-					( keys(17) or rows(3) ) and -- 3
-					( keys(22) or rows(4) ) and -- 8
-					( keys(27) or rows(5) ) and -- I
-					( keys(32) or rows(6) ) and -- K
-					( keys(37) or rows(7) ) and -- M
-					( keys(45) or rows(7) ) and -- .(M)
-					( keys(53) or rows(4) );    -- RIGHT(8)
+				( keys( 7) or rows(1) ) and -- D
+				( keys(12) or rows(2) ) and -- E
+				( keys(17) or rows(3) ) and -- 3
+				( keys(22) or rows(4) ) and -- 8
+				( keys(27) or rows(5) ) and -- I
+				( keys(32) or rows(6) ) and -- K
+				( keys(37) or rows(7) ) and -- M
+				( keys(45) or rows(7) ) and -- .(M)
+				( keys(53) or rows(4) );    -- RIGHT(8)
 
 	cols(3) <=  ( keys( 3) or rows(0) ) and -- C
-					( keys( 8) or rows(1) ) and -- F
-					( keys(13) or rows(2) ) and -- R
-					( keys(18) or rows(3) ) and -- 4
-					( keys(23) or rows(4) ) and -- 7
-					( keys(28) or rows(5) ) and -- U
-					( keys(33) or rows(6) ) and -- J
-					( keys(38) or rows(7) ) and -- N
-					( keys(44) or rows(6) ) and -- -(J)
-					( keys(46) or rows(7) ) and -- ,(N)
-					( keys(50) or rows(4) );    -- UP(7)
+				( keys( 8) or rows(1) ) and -- F
+				( keys(13) or rows(2) ) and -- R
+				( keys(18) or rows(3) ) and -- 4
+				( keys(23) or rows(4) ) and -- 7
+				( keys(28) or rows(5) ) and -- U
+				( keys(33) or rows(6) ) and -- J
+				( keys(38) or rows(7) ) and -- N
+				( keys(44) or rows(6) ) and -- -(J)
+				( keys(46) or rows(7) ) and -- ,(N)
+				( keys(50) or rows(4) );    -- UP(7)
 
 	cols(4) <=  ( keys( 4) or rows(0) ) and -- V
-					( keys( 9) or rows(1) ) and -- G
-					( keys(14) or rows(2) ) and -- T
-					( keys(19) or rows(3) ) and -- 5
-					( keys(24) or rows(4) ) and -- 6
-					( keys(29) or rows(5) ) and -- Y
-					( keys(34) or rows(6) ) and -- H
-					( keys(39) or rows(7) ) and -- B
-					( keys(52) or rows(3) ) and -- LEFT(5)
-					( keys(51) or rows(4) );    -- DOWN(7)
+				( keys( 9) or rows(1) ) and -- G
+				( keys(14) or rows(2) ) and -- T
+				( keys(19) or rows(3) ) and -- 5
+				( keys(24) or rows(4) ) and -- 6
+				( keys(29) or rows(5) ) and -- Y
+				( keys(34) or rows(6) ) and -- H
+				( keys(39) or rows(7) ) and -- B
+				( keys(52) or rows(3) ) and -- LEFT(5)
+				( keys(51) or rows(4) );    -- DOWN(7)
 
-	reset <= not ((keys(40) and keys(47)) or (keys(41) and keys(48)) or (keys(42) and keys(49)));
+	nmi   <= keys(54);
+	boot  <= keys(57);
+	reset <= keys(55) and ((keys(40) and keys(47)) or (keys(41) and keys(48)) or (keys(42) and keys(49)));
 
 end;

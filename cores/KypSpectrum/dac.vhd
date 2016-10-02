@@ -23,7 +23,7 @@ entity dac is
 
 	generic
 	(
-		msbi : integer := 9
+		msbi : integer := 7
 	);
 	port
 	(
@@ -42,12 +42,25 @@ architecture rtl of dac is
 begin
 	process(clock, reset)
 	begin
-		if reset = '0' then
-			s <= to_unsigned(2**(msbi+1), s'length);
-			o <= '0';
-		elsif rising_edge(clock) then
-			s <= s+unsigned(s(msbi+2)&s(msbi+2)&i);
-			o <= s(msbi+2);
+	--	if reset = '0' then
+	--		s <= to_unsigned(2**(msbi+1), s'length);
+	--		o <= '0';
+	--	elsif rising_edge(clock) then
+	--		s <= s+unsigned(s(msbi+2)&s(msbi+2)&i);
+	--		o <= s(msbi+2);
+	--	end if;
+
+		if rising_edge(clock)
+		then
+			if reset = '0'
+			then
+				s <= to_unsigned(2**(msbi+1), s'length);
+				o <= '0';
+			else
+				s <= s+unsigned(s(msbi+2)&s(msbi+2)&i);
+				o <= s(msbi+2);
+			end if;
 		end if;
+
 	end process seq;
 end;

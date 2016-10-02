@@ -1,6 +1,6 @@
-SET machine=apple2_top
+SET machine=zxkyp
 SET speed=2
-SET ruta_ucf=..\source\apple2
+SET ruta_ucf=..\zxkyp
 SET ruta_bat=..\..\
 call %ruta_bat%genxst.bat
 rem call %ruta_bat%generar.bat v2 ZZ2

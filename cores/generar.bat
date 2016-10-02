@@ -4,3 +4,4 @@ call %ruta_bat%par      -intstyle ise -w -ol high -mt 4 %machine%_map.ncd %machi
 call %ruta_bat%trce     -intstyle ise -v 3 -s %speed% -n 3 -fastpaths -xml %machine%.twx %machine%.ncd -o %machine%.twr %machine%.pcf
 call %ruta_bat%bitgen   -intstyle ise -f %machine%.ut %machine%.ncd
 copy /y %machine%.bit %machine%.%1.bit
+%ruta_bat%..\firmware\bit2bin %machine%.bit COREn.%2

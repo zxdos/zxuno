@@ -1,11 +1,11 @@
 set -tmpdir "xst/projnav.tmp"
 set -xsthdpdir "xst"
 run
--ifn zxpp.prj
--ofn zxpp
+-ifn zxkyp.prj
+-ofn zxkyp
 -ofmt NGC
 -p xc6slx9-2-tqg144
--top zxpp
+-top zxkyp
 -opt_mode Speed
 -opt_level 1
 -power NO
@@ -15,7 +15,7 @@ run
 -rtlview Yes
 -glob_opt AllClockNets
 -read_cores YES
--sd {"ipcore_dir"  }
+-sd {"../ipcore_dir"  }
 -write_timing_constraints NO
 -cross_clock_analysis NO
 -hierarchy_separator /

@@ -5,9 +5,9 @@ library ieee;
 entity ps2 is
 port
 (
-	clock    : in    std_logic;
-	ps2c     : inout std_logic;
-	ps2d     : inout std_logic;
+	clockPs2 : in    std_logic;
+	clock    : inout std_logic;
+	data     : inout std_logic;
 	received : out   std_logic;
 	scancode : out   std_logic_vector(7 downto 0)
 );
@@ -20,8 +20,8 @@ architecture behavioral of ps2 is
 	constant state_waiting    : std_logic_vector(1 downto 0) := "10";
 	constant state_received   : std_logic_vector(1 downto 0) := "11";
 
-	constant minClockPulseLen : natural := 30*32; -- 30us @ 32MHz
-	constant maxClockPulseLen : natural := 50*32; -- 50us @ 32MHz
+	constant minClockPulseLen : natural := 30*7; -- 30us @ 7 MHz
+	constant maxClockPulseLen : natural := 50*7; -- 50us @ 7 MHz
 
 	type reg is
 	record
@@ -57,13 +57,15 @@ architecture behavioral of ps2 is
 	);
 
 begin
-	ps2c <= 'Z';
-	ps2d <= 'Z';
+	clock <= 'Z';
+	data  <= 'Z';
 	
 	received <= r.dataReceived;
 	scancode <= r.scancode;
 
-	process(r, ps2d, ps2c) 
+	r <= n when rising_edge(clockPs2);
+
+	process(r, clock, data) 
 	begin
 		n <= r;
 
@@ -72,7 +74,7 @@ begin
 		n.ps2lastClkDeglitched <= r.ps2clkDeglitched;
 
 		-- Deglitch the clock signal
-		if ps2c = '1' then
+		if clock = '1' then
 			if r.ps2clkDeglitch < 31 then
 				n.ps2clkDeglitch <= r.ps2clkDeglitch+1;
 			else
@@ -89,7 +91,7 @@ begin
 		end if;
 
 		-- Deglitch the data signal
-		if ps2d = '1' then
+		if data = '1' then
 			if r.ps2dataDeglitch < 31 then
 				n.ps2dataDeglitch <= r.ps2dataDeglitch+1;
 			else
@@ -151,11 +153,6 @@ begin
 			if r.ps2clkDeglitched = '1' then n.state <= state_idle; end if;
 
 		end case;
-	end process;
-
-	process(clock, n)
-	begin
-		if rising_edge(clock) then r <= n; end if;
 	end process;
 
 end;
