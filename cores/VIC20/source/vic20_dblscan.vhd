@@ -94,7 +94,7 @@ architecture RTL of VIC20_DBLSCAN is
   --
   signal vs_cnt      : std_logic_vector(2 downto 0);
   signal rgb_out     : std_logic_vector(15 downto 0);
-  
+   
 begin
 
   p_input_timing : process
@@ -194,8 +194,9 @@ begin
 	  if (hpos_o < 32) then -- may need tweaking !
 		O_HSYNC <= '1';
 	  end if;
+	    
+	  O_BLANK <= rgb_out(12); 
 	  
-	  O_BLANK <= rgb_out(12);
 	  O_B <= rgb_out(11 downto 8);
 	  O_G <= rgb_out(7 downto 4);
 	  O_R <= rgb_out(3 downto 0);
@@ -205,4 +206,3 @@ begin
   end process;
 
 end architecture RTL;
-

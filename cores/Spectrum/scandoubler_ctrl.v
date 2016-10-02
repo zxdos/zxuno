@@ -35,7 +35,8 @@ module scandoubler_ctrl (
     output wire vga_enable,
     output wire scanlines_enable,
     output wire [2:0] freq_option,
-    output wire [1:0] turbo_enable
+    output wire [1:0] turbo_enable,
+    output wire csync_option
     );
 
     parameter SCANDBLCTRL = 8'h0B;
@@ -47,6 +48,7 @@ module scandoubler_ctrl (
     assign scanlines_enable = scandblctrl[1];
     assign freq_option = scandblctrl[4:2];
     assign turbo_enable = scandblctrl[7:6];
+    assign csync_option = scandblctrl[5];
     
     reg [7:0] scandblctrl = 8'h00;  // initial value
     reg [1:0] kbd_change_video_edge_detect = 2'b00;
@@ -58,7 +60,7 @@ module scandoubler_ctrl (
         else if (iorq_n == 1'b0 && wr_n == 1'b0 && a == PRISMSPEEDCTRL)
             scandblctrl <= {din[1:0], scandblctrl[5:0]};
         else if (kbd_change_video_edge_detect == 2'b01) begin
-            scandblctrl <= {scandblctrl[7:5], ((scandblctrl[0] == 1'b0)? 3'b101 : 3'b000), scandblctrl[1], ~scandblctrl[0]};
+            scandblctrl <= {scandblctrl[7:5], ((scandblctrl[0] == 1'b0)? 3'b111 : 3'b000), scandblctrl[1], ~scandblctrl[0]};
         end
         dout <= scandblctrl;
     end

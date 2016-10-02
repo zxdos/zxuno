@@ -1,7 +1,10 @@
---- VIC-20 port for ZX-UNO by Quest
+--- VIC-20 port for ZX-UNO and modifications by Quest 2016
+--- Added 16K expansion (selectable by keyboard), 3 embeded cartridges, cassete load via audio, 
+--- vga switch by keyboard, PAl Kernal and timings.
+---
+---
 --- Original core by MikeJ 
 ---
---- No se puede usar cassete ni cartuchos, por lo que sólo sirve para cacharrear un poco con el BASIC.
 
 
 README ORIGINAL:

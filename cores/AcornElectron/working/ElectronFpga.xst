@@ -1,4 +1,4 @@
-set -tmpdir "projnav.tmp"
+set -tmpdir "xst/projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn ElectronFpga.prj

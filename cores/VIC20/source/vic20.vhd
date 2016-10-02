@@ -1,4 +1,4 @@
---
+-- Port to ZX-UNO and modifications by Quest 2016
 -- A simulation model of VIC20 hardware
 -- Copyright (c) MikeJ - March 2003
 --
@@ -52,12 +52,6 @@ library UNISIM;
 
 entity VIC20 is
   port (
---    O_STRATAFLASH_ADDR    : out   std_logic_vector(23 downto 0);
---    B_STRATAFLASH_DATA    : inout std_logic_vector(7 downto 0);
---    O_STRATAFLASH_CE_L    : out   std_logic;
---    O_STRATAFLASH_OE_L    : out   std_logic;
---    O_STRATAFLASH_WE_L    : out   std_logic;
---    O_STRATAFLASH_BYTE    : out   std_logic;
     --
     I_PS2_CLK             : in    std_logic;
     I_PS2_DATA            : in    std_logic;
@@ -72,13 +66,13 @@ entity VIC20 is
     O_AUDIO_L             : out   std_logic;
     O_AUDIO_R             : out   std_logic;
 	 
-    O_NTSC            : out   std_logic;
-    O_PAL             : out   std_logic;	 
+    O_NTSC            	  : out   std_logic;
+    O_PAL             	  : out   std_logic;	 
     --
---    I_SW                  : in    std_logic_vector(3 downto 0);
---    O_LED                 : out   std_logic_vector(3 downto 0);
+    I_SW                  : in    std_logic_vector(4 downto 0);
+    LED                   : out std_logic;
+    EAR                   : in std_logic;
     --
-    I_RESET               : in    std_logic;
     I_CLK_REF             : in    std_logic
 
     );
@@ -86,9 +80,11 @@ end;
 
 architecture RTL of VIC20 is
     -- default
-    constant K_OFFSET : std_logic_vector (4 downto 0) := "11100"; -- h position of screen to centre on your telly
+    constant K_OFFSET : std_logic_vector (4 downto 0) := "10000"; -- h position of screen to centre on your telly
     -- lunar lander is WAY off to the left
-    --constant K_OFFSET : std_logic_vector (4 downto 0) := "11100"; -- h position of screen to centre on your telly
+
+ -- 1 = enable cartridge
+	 constant Cartridge : std_logic := '1';	 
 
     signal I_RESET_L          : std_logic;
     signal clk_8              : std_logic;
@@ -97,9 +93,14 @@ architecture RTL of VIC20 is
     signal reset_l_sampled    : std_logic;
     -- cpu
     signal c_ena              : std_logic;
-    signal c_addr             : std_logic_vector(23 downto 0);
     signal c_din              : std_logic_vector(7 downto 0);
-    signal c_dout             : std_logic_vector(7 downto 0);
+	 
+    signal c_addr             : unsigned(15 downto 0);
+    signal c_dout             : unsigned(7 downto 0);
+	 
+    signal c_addrT             : std_logic_vector(23 downto 0); --T65
+    signal c_doutT             : std_logic_vector(7 downto 0);	 -- T65
+	 	 
     signal c_rw_l             : std_logic;
     signal c_irq_l            : std_logic;
     signal c_nmi_l            : std_logic;
@@ -144,6 +145,10 @@ architecture RTL of VIC20 is
     signal expansion_nmi_l    : std_logic;
     signal expansion_irq_l    : std_logic;
 
+    signal blk1_dout: std_logic_vector(7 downto 0);
+    signal blk2_dout: std_logic_vector(7 downto 0);
+    signal blk3_dout: std_logic_vector(7 downto 0);
+
     -- VIAs
     signal via1_nmi_l         : std_logic;
     signal via1_pa_in         : std_logic_vector(7 downto 0);
@@ -155,6 +160,7 @@ architecture RTL of VIC20 is
     signal cass_read          : std_logic;
     signal cass_motor         : std_logic;
     signal cass_sw            : std_logic;
+	 signal cass_n					: std_logic;
 
     signal keybd_col_out      : std_logic_vector(7 downto 0);
     signal keybd_col_in       : std_logic_vector(7 downto 0);
@@ -184,7 +190,9 @@ architecture RTL of VIC20 is
     signal user_port_oe_l     : std_logic_vector(7 downto 0);
     -- misc
     signal sw_reg             : std_logic_vector(3 downto 0);
---    signal cart_data          : std_logic_vector(7 downto 0);
+    signal cart_data          : std_logic_vector(7 downto 0);
+	 signal cart2_data         : std_logic_vector(7 downto 0);
+	 signal cart3_data         : std_logic_vector(7 downto 0);
 
     signal video_r            : std_logic_vector(3 downto 0);
     signal video_g            : std_logic_vector(3 downto 0);
@@ -200,24 +208,39 @@ architecture RTL of VIC20 is
 	 signal blanking           : std_logic;
 	 signal blanking_x2        : std_logic;	
 	 
+	 signal scanSW : std_logic_vector(6 downto 0); --q	
+	 
+  SIGNAL   inff    : STD_LOGIC_VECTOR(1 DOWNTO 0); -- input flip flops
+  CONSTANT cnt_max : INTEGER := (33000000/50)-1 ;  -- 33MHz and 1/20ms=50Hz
+  SIGNAL   count   : INTEGER range 0 to cnt_max := 0; 
+  constant prueb : integer := 30;
+	 
+    signal clk_4          : std_logic;	 
+    signal ena_4b          : std_logic;	 
+  
+  	 signal we0           : std_logic; 
+	 signal we1           : std_logic; 
+	 signal we2           : std_logic; 
+	 signal we3           : std_logic; 
+	 signal we4           : std_logic; 
+	 signal we5           : std_logic; 
+  
+    signal EXP8K : std_logic;
+  
+    signal P_RESET: std_logic;
+	 
 begin
+
+	EXP8K <= not scanSW(5);
     
 	O_NTSC <= '0';
 	O_PAL <= '1';
-  --
-  --
-  -- IO connect these to the outside world if you wish ...
-  --
-
-  -- expansion port
-  -- <= c_addr;
---  p_expansion : process(blk_sel_l, cart_data)
---  begin
-    expansion_din <= x"FF";
---    if (blk_sel_l(5) = '0') then
---      expansion_din <= cart_data;
---    end if;
---  end process;
+ 
+   expansion_din <= cart_data when (scanSW(1) = '1' and blk_sel_l(5) = '0') 
+					    else cart2_data when (scanSW(2) = '1' and blk_sel_l(5) = '0')
+						 else cart3_data when (scanSW(3) = '1' and blk_sel_l(5) = '0') else x"FF";
+  
+  
   -- <= c_rw_l;
   -- <= v_rw_l;
   expansion_nmi_l <= '1';
@@ -225,7 +248,6 @@ begin
   -- <= ram_sel_l;
   -- <= io_sel_l;
   -- <= reset_l_sampled;
-
   -- user port
   user_port_cb1_in <= '0';
   user_port_cb2_in <= '0';
@@ -234,10 +256,9 @@ begin
   -- <= user_port_out_oe_l
 
   -- tape
-  cass_read <= '0';
-  --<= cass_write;
-  --<= cass_motor
-  cass_sw <= '1'; -- motor off
+  cass_n <= EAR; 
+  cass_read <= not cass_n; 
+  cass_sw <= '0'; -- motor off 
 
   -- serial
   serial_srq_in <= '0';
@@ -248,14 +269,19 @@ begin
   -- <= serial_data_out_l
 
   -- joy
-  joy <= "1111"; -- 0 up, 1 down, 2 left,  3 right
-  light_pen <= '1'; -- also used for fire button
+  --  joy <= "1111"; -- 0 up, 1 down, 2 left,  3 right
+  --  light_pen <= '1'; -- also used for fire button
+  joy <= I_SW(3 downto 0);		--  "1111"; -- 0 up, 1 down, 2 left,  3 right
+  light_pen <= I_SW(4);  		-- was '1'; -- also used for fire button
   --
   --
   --
-  I_RESET_L <= not I_RESET;
+  I_RESET_L <= '1';
+  
+  reset_l_sampled <= P_RESET and not scanSW(4); --manual reset (F12)
   --
-  u_clocks : entity work.VIC20_CLOCKS
+
+  u_clocks : entity work.relojes
     port map (
       I_CLK_REF         => I_CLK_REF,
       I_RESET_L         => I_RESET_L,
@@ -264,17 +290,29 @@ begin
       --
       O_ENA             => ena_4,
       O_CLK             => clk_8,
-      O_RESET_L         => reset_l_sampled
+		
+      O_RESET_L         => P_RESET
       );
 
   c_ena <= ena_1mhz and ena_4; -- clk ena
+  
+  clkdiv2: process(clk_8)
+  begin
+    if clk_8'event AND clk_8 = '1' then
+      ena_4b <= not ena_4b;
+      clk_4 <= not clk_4;
+    end if;
+  end process;
+
+  c_addr <=  unsigned(c_addrT(15 downto 0)); --T65 
+  c_dout <=  unsigned(c_doutT); --T65
 
   cpu : entity work.T65
       port map (
           Mode    => "00",
           Res_n   => reset_l_sampled,
-          Enable  => c_ena,
-          Clk     => clk_8,
+          Enable  => ena_1mhz, --c_ena,
+          Clk     => clk_4, --clk_8,
           Rdy     => '1',
           Abort_n => '1',
           IRQ_n   => c_irq_l,
@@ -289,10 +327,26 @@ begin
           VP_n    => open,
           VDA     => open,
           VPA     => open,
-          A       => c_addr,
+          A       => c_addrT,
           DI      => c_din,
-          DO      => c_dout
+          DO      => c_doutT
       );
+
+--  cpu : entity work.R65C02 --R65V02
+--      port map (
+--          Reset   => reset_l_sampled,
+--          Clk     => clk_4, --clk_8,
+--          Enable  => ena_1mhz, --c_ena,
+--          NMI_n   => c_nmi_l,
+--          IRQ_n   => c_irq_l,
+--          DI      => unsigned(c_din),
+--          DO      => c_dout,			 
+--          ADDR    => c_addr,			 
+--          nwe     => c_rw_l,
+--          Sync    => open,
+--          sync_irq  => open
+--      );
+
 
   vic : entity work.VIC20_VIC
     generic map (
@@ -317,7 +371,7 @@ begin
       O_HSYNC         => hsync,
       O_VSYNC         => vsync,
       O_COMP_SYNC_L   => csync,
-		O_BLANK         => blanking,
+--		O_BLANK         => blanking,
       --
       --
       I_LIGHT_PEN     => light_pen,
@@ -332,7 +386,7 @@ begin
 
   via1 : entity work.M6522
     port map (
-      I_RS            => c_addr(3 downto 0),
+      I_RS            => std_logic_vector(c_addr(3 downto 0)),
       I_DATA          => v_data(7 downto 0),
       O_DATA          => via1_dout,
       O_DATA_OE_L     => open,
@@ -383,7 +437,7 @@ begin
 
   via2 : entity work.M6522
     port map (
-      I_RS            => c_addr(3 downto 0),
+      I_RS            => std_logic_vector(c_addr(3 downto 0)),
       I_DATA          => v_data(7 downto 0),
       O_DATA          => via2_dout,
       O_DATA_OE_L     => open,
@@ -448,9 +502,10 @@ begin
 
       I_ENA_1MHZ      => ena_1mhz,
       I_P2_H          => p2_h,
-      RESET_L         => reset_l_sampled,
+      RESET_L         => '1',
       ENA_4           => ena_4,
       CLK             => clk_8
+		  ,scanSW 	=> scanSW --q
       );
 
   p_irq_resolve : process(expansion_irq_l, expansion_nmi_l,
@@ -515,8 +570,8 @@ begin
       v_rw_l <= '1';
       col_ram_sel_l <= '1'; -- colour ram has dedicated mux for vic, so disable
     else -- cpu
-      v_addr(13 downto 0) <= blk_sel_l(4) & c_addr(12 downto 0);
-      v_data <= c_dout;
+      v_addr(13 downto 0) <= blk_sel_l(4) & std_logic_vector(c_addr(12 downto 0));
+      v_data <= std_logic_vector(c_dout);
       v_rw_l <= c_rw_l;
       col_ram_sel_l <= io_sel_l(1);
     end if;
@@ -553,7 +608,7 @@ begin
     vic_din(7 downto 0) <= v_data(7 downto 0);
   end process;
 
-  p_v_read_mux : process(col_ram_sel_l, ram_sel_l, vic_oe_l, v_addr,
+  p_v_read_mux : process(col_ram_sel_l, ram_sel_l, blk_sel_l, vic_oe_l, v_addr,
                          col_ram_dout, ram0_dout, ram45_dout, ram67_dout,
                          vic_dout, char_rom_dout,
                          v_data_read_muxr)
@@ -597,15 +652,15 @@ begin
 
   p_v_bus_hold : process
   begin
-    wait until rising_edge(clk_8);
-    if (ena_4 = '1') then
-      v_data_read_muxr <= v_data_read_mux;
-    end if;
+    wait until rising_edge(clk_4);
+    v_data_read_muxr <= v_data_read_mux;
   end process;
-
+ --
+ 
   p_cpu_read_mux : process(p2_h, c_addr, io_sel_l, ram_sel_l, blk_sel_l,
                            v_data_read_mux, via1_dout, via2_dout, v_data_oe_l,
-                           basic_rom_dout, kernal_rom_dout, expansion_din)
+                           basic_rom_dout, kernal_rom_dout, expansion_din,
+									blk1_dout, blk2_dout, blk3_dout)
   begin
 
     if (p2_h = '0') then -- vic is on the bus
@@ -615,6 +670,10 @@ begin
       c_din <= via1_dout;
     elsif (io_sel_l(0) = '0') and (c_addr(5) = '1') then -- blk4
       c_din <= via2_dout;
+	 elsif (blk_sel_l(1) = '0' and EXP8K = '1') then
+      c_din <= blk1_dout;
+    elsif (blk_sel_l(2) = '0' and EXP8K = '1') then
+      c_din <= blk2_dout;
     elsif (blk_sel_l(5) = '0') then
       c_din <= expansion_din;
     elsif (blk_sel_l(6) = '0') then
@@ -630,53 +689,99 @@ begin
   --
   -- main memory
   --
-  rams0 : entity work.VIC20_RAMS
+ 
+  we0 <= (not ram_sel_l(0)) and (not v_rw_l );
+ 
+  rams0 : entity work.DistRAM
+	 generic map (
+    addr_width_g => 10,
+    data_width_g => 8
+    )
     port map (
-      V_ADDR => v_addr(9 downto 0),
-      DIN    => v_data,
-      DOUT   => ram0_dout,
-      V_RW_L => v_rw_l,
-      CS1_L  => ram_sel_l(0),
-      CS2_L  => '1',
-      ENA    => ena_4,
-      CLK    => clk_8
+	   clk_i    => clk_8,
+		ena	=> ena_4,
+      a_i => v_addr(9 downto 0), 
+		we_i => we0,
+      d_i    => v_data,
+      d_o   => ram0_dout
       );
 
-  rams45 : entity work.VIC20_RAMS
+  we1 <= ((not ram_sel_l(4)) or (not ram_sel_l(5))) and (not v_rw_l );
+  
+  rams45 : entity work.DistRAM
+	 generic map (
+    addr_width_g => 11,
+    data_width_g => 8
+    )
     port map (
-      V_ADDR => v_addr(9 downto 0),
-      DIN    => v_data,
-      DOUT   => ram45_dout,
-      V_RW_L => v_rw_l,
-      CS1_L  => ram_sel_l(4),
-      CS2_L  => ram_sel_l(5),
-      ENA    => ena_4,
-      CLK    => clk_8
+	   clk_i    => clk_8,
+		ena	=> ena_4,
+      a_i => v_addr(10 downto 0), 
+		we_i => we1,
+      d_i    => v_data,
+      d_o   => ram45_dout
       );
 
-  rams67 : entity work.VIC20_RAMS
+  we2 <= ((not ram_sel_l(6)) or (not ram_sel_l(7))) and (not v_rw_l );
+  
+  rams67 : entity work.DistRAM
+	 generic map (
+    addr_width_g => 11,
+    data_width_g => 8
+    )
     port map (
-      V_ADDR => v_addr(9 downto 0),
-      DIN    => v_data,
-      DOUT   => ram67_dout,
-      V_RW_L => v_rw_l,
-      CS1_L  => ram_sel_l(6),
-      CS2_L  => ram_sel_l(7),
-      ENA    => ena_4,
-      CLK    => clk_8
+	   clk_i    => clk_8,
+		ena	=> ena_4,
+      a_i => v_addr(10 downto 0), 
+		we_i => we2,
+      d_i    => v_data,
+      d_o   => ram67_dout
       );
 
-
-  col_ram : entity work.VIC20_RAM
+  we3 <= (not col_ram_sel_l) and (not v_rw_l );
+   
+  col_ram : entity work.DistRAM
+	 generic map (
+    addr_width_g => 10,
+    data_width_g => 8
+    )
     port map (
-      V_ADDR => v_addr(9 downto 0),
-      DIN    => v_data,
-      DOUT   => col_ram_dout,
-      V_RW_L => v_rw_l,
-      CS_L   => col_ram_sel_l,
-      ENA    => ena_4,
-      CLK    => clk_8
+	   clk_i    => clk_8,
+		ena	=> ena_4,
+      a_i => v_addr(9 downto 0), 
+		we_i => we3,
+      d_i    => v_data(7 downto 0),
+      d_o   => col_ram_dout(7 downto 0)
       );
+			
+-------------------------------------------------------------------------		
+
+--8k 1		
+  blk1_inst : entity work.VIC20_RAM8
+    port map
+    (
+      V_ADDR => std_logic_vector(c_addr(12 downto 0)),
+      DIN    => v_data,
+      DOUT   => blk1_dout,
+      V_RW_L => v_rw_l,
+      CS_L   => blk_sel_l(1),
+      ENA    => ena_4,
+      CLK    => clk_8	 
+    );	 	
+	 
+--8k 2		
+  blk2_inst : entity work.VIC20_RAM8
+    port map
+    (
+      V_ADDR => std_logic_vector(c_addr(12 downto 0)),
+      DIN    => v_data,
+      DOUT   => blk2_dout,
+      V_RW_L => v_rw_l,
+      CS_L   => blk_sel_l(2),
+      ENA    => ena_4,
+      CLK    => clk_8	 
+    );		
+	
   --
   -- roms
   --
@@ -692,7 +797,7 @@ begin
     port map (
       CLK         => clk_8,
       ENA         => ena_4,
-      ADDR        => c_addr(12 downto 0),
+      ADDR        => std_logic_vector(c_addr(12 downto 0)),
       DATA        => basic_rom_dout
       );
 
@@ -700,9 +805,41 @@ begin
     port map (
       CLK         => clk_8,
       ENA         => ena_4,
-      ADDR        => c_addr(12 downto 0),
+      ADDR        => std_logic_vector(c_addr(12 downto 0)),
       DATA        => kernal_rom_dout
       );
+		
+  --
+  -- cart slots 0xA000-0xBFFF (8K)
+  --
+  
+  --1st cartridge
+  cartridge_rom : entity work.VIC20_CARTRIDGE 
+    port map (
+      CLK         => clk_8,
+      ENA         => ena_4,
+      ADDR        => std_logic_vector(c_addr(12 downto 0)),
+      DATA        => cart_data
+      );
+		
+  --2nd cartridge, for swap
+  cartridge2_rom : entity work.VIC20_CARTRIDGE2 
+    port map (
+      CLK         => clk_8,
+      ENA         => ena_4,
+      ADDR        => std_logic_vector(c_addr(12 downto 0)),
+      DATA        => cart2_data
+      );	
+
+  --3rd cartridge, for swap
+  cartridge3_rom : entity work.VIC20_CARTRIDGE3 
+    port map (
+      CLK         => clk_8,
+      ENA         => ena_4,
+      ADDR        => std_logic_vector(c_addr(12 downto 0)),
+      DATA        => cart3_data
+      );			
+		
   --
   -- scan doubler
   --
@@ -727,28 +864,26 @@ begin
     );
   --
 
- -- Scandoubler. Descomentar para activar VGA
-  p_video_ouput : process
+ p_video_ouput : process
   begin
     wait until rising_edge(clk_8);
-      O_VIDEO_R <= video_r_x2(3 downto 1);
-      O_VIDEO_G <= video_g_x2(3 downto 1);
-      O_VIDEO_B <= video_b_x2(3 downto 1);
-      O_HSYNC   <= hSync_X2;
-      O_VSYNC   <= vSync_X2;
+	  if (scanSW(0) = '1') then   -- was sw_reg(0)
+			O_VIDEO_R <= video_r_x2(3 downto 1);
+			O_VIDEO_G <= video_g_x2(3 downto 1);
+			O_VIDEO_B <= video_b_x2(3 downto 1);
+			O_HSYNC   <= hSync_X2;
+			O_VSYNC   <= vSync_X2;
+	  else
+			--O_LED(0) <= '0';
+			O_VIDEO_R <= video_r(3 downto 1);
+			O_VIDEO_G <= video_g(3 downto 1);
+			O_VIDEO_B <= video_b(3 downto 1);
+			--O_HSYNC   <= hSync;
+			--O_VSYNC   <= vSync;
+			O_HSYNC   <= cSync;
+			O_VSYNC   <= '1';
+	  end if;
   end process;
-
-
- -- Sin Scandoubler. Descomentar para activar RGB/Vcomp (de momento se ve mal)
---  p_video_ouput : process
---  begin
---    wait until rising_edge(clk_8);
---      O_VIDEO_R <= video_r(3 downto 1);
---      O_VIDEO_G <= video_g(3 downto 1);
---      O_VIDEO_B <= video_b(3 downto 1);
---      O_HSYNC   <= hSync;
---      O_VSYNC   <= vSync;
---  end process;
 
   --
   -- Audio
@@ -767,33 +902,15 @@ begin
   O_AUDIO_L <= audio_pwm;
   O_AUDIO_R <= audio_pwm;
   
-  --
-  -- cart slot 0xA000-0xBFFF (8K)
-  --
---  p_flash : process
---  begin
---    wait until rising_edge(clk_8);
---    O_LED(3 downto 1) <= sw_reg(3 downto 1);
---
---    O_STRATAFLASH_CE_L <= '1';
---    if (sw_reg(1) = '1') then -- enable cart
---      O_STRATAFLASH_CE_L <= blk_sel_l(5);
---    end if;
---    O_STRATAFLASH_OE_L <= '0';
---    O_STRATAFLASH_WE_L <= '1';
---    O_STRATAFLASH_BYTE <= '0';
---
---    O_STRATAFLASH_ADDR(23 downto 15) <= (others => '0');
---    O_STRATAFLASH_ADDR(14 downto 13) <= sw_reg(3 downto 2);
---    O_STRATAFLASH_ADDR(12 downto  0) <= c_addr(12 downto 0); -- 8K
---
---    B_STRATAFLASH_DATA <= (others => 'Z');
---    -- should really sample and latch this at the correct point, but it seems to work
---    if (sw_reg(1) = '1') then -- enable cart
---      cart_data <= B_STRATAFLASH_DATA;
---    else
---      cart_data <= (others => '1');
---    end if;
---  end process;
+  LED <= EXP8K; --on = +16k expanded VIC20, off = not expanded
+  
+------------multiboot---------------
 
+	multiboot: entity work.multiboot
+	port map(
+		clk_icap		      => clk_8,
+		REBOOT				=> scanSW(6) --mreset key combo
+	);	
+  
+  
 end RTL;

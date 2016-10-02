@@ -2,6 +2,7 @@ set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn VIC20.prj
+-infer_ramb8 Yes
 -ofn VIC20
 -ofmt NGC
 -p xc6slx9-3-tqg144

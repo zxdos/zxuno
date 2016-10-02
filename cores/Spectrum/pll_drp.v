@@ -43,7 +43,7 @@ module pll_drp
    #(
       //***********************************************************************
       // State 1 Parameters - These are for the first reconfiguration state.
-      // 50 Hz, Salida RGB/VGA
+      // 50 Hz, Salida RGB/VGA, timings originales de 48K
       //***********************************************************************
 
 	  // These parameters have an effect on the feedback path.  A change on
@@ -56,7 +56,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S1_CLKFBOUT_MULT          = 9,
+      parameter S1_CLKFBOUT_MULT          = 14,
       parameter S1_CLKFBOUT_PHASE         = 0,
 
 	  // The bandwidth parameter effects the phase error and the jitter filter
@@ -80,33 +80,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S1_CLKOUT0_DIVIDE         = 16,
+      parameter S1_CLKOUT0_DIVIDE         = 25,
       parameter S1_CLKOUT0_PHASE          = 0,
       parameter S1_CLKOUT0_DUTY           = 50000,
 
-      parameter S1_CLKOUT1_DIVIDE         = 32,
+      parameter S1_CLKOUT1_DIVIDE         = 25,
       parameter S1_CLKOUT1_PHASE          = 0,
       parameter S1_CLKOUT1_DUTY           = 50000,
 
-      parameter S1_CLKOUT2_DIVIDE         = 64,
+      parameter S1_CLKOUT2_DIVIDE         = 25,
       parameter S1_CLKOUT2_PHASE          = 0,
       parameter S1_CLKOUT2_DUTY           = 50000,
 
-      parameter S1_CLKOUT3_DIVIDE         = 128,
+      parameter S1_CLKOUT3_DIVIDE         = 25,
       parameter S1_CLKOUT3_PHASE          = 0,
       parameter S1_CLKOUT3_DUTY           = 50000,
 
-      parameter S1_CLKOUT4_DIVIDE         = 128,
+      parameter S1_CLKOUT4_DIVIDE         = 25,
       parameter S1_CLKOUT4_PHASE          = 0,
       parameter S1_CLKOUT4_DUTY           = 50000,
 
-      parameter S1_CLKOUT5_DIVIDE         = 128,
+      parameter S1_CLKOUT5_DIVIDE         = 25,
       parameter S1_CLKOUT5_PHASE          = 0,
       parameter S1_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 2 Parameters - These are for the second reconfiguration state.
-      // 51 Hz, Salida VGA
+      // 50 Hz, salida RGB/VGA, timings originales de 128K
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -118,7 +118,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S2_CLKFBOUT_MULT          = 8,
+      parameter S2_CLKFBOUT_MULT          = 33,
       parameter S2_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -128,7 +128,7 @@ module pll_drp
 	  // The divclk parameter allows th einput clock to be divided before it
       // reaches the phase and frequency comparitor.  This can be set between
       // 1 and 128.
-      parameter S2_DIVCLK_DIVIDE          = 1,
+      parameter S2_DIVCLK_DIVIDE          = 2,
       
 	  // The following parameters describe the configuration that each clock
       // output should have once the reconfiguration for state one has
@@ -142,33 +142,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if 
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S2_CLKOUT0_DIVIDE         = 14,
+      parameter S2_CLKOUT0_DIVIDE         = 29,
       parameter S2_CLKOUT0_PHASE          = 0,
       parameter S2_CLKOUT0_DUTY           = 50000,
       
-      parameter S2_CLKOUT1_DIVIDE         = 28,
+      parameter S2_CLKOUT1_DIVIDE         = 29,
       parameter S2_CLKOUT1_PHASE          = 0,
       parameter S2_CLKOUT1_DUTY           = 50000,
       
-      parameter S2_CLKOUT2_DIVIDE         = 56,
+      parameter S2_CLKOUT2_DIVIDE         = 29,
       parameter S2_CLKOUT2_PHASE          = 0,
       parameter S2_CLKOUT2_DUTY           = 50000,
       
-      parameter S2_CLKOUT3_DIVIDE         = 112,
+      parameter S2_CLKOUT3_DIVIDE         = 29,
       parameter S2_CLKOUT3_PHASE          = 0,
       parameter S2_CLKOUT3_DUTY           = 50000,
 
-      parameter S2_CLKOUT4_DIVIDE         = 112,
+      parameter S2_CLKOUT4_DIVIDE         = 29,
       parameter S2_CLKOUT4_PHASE          = 0,
       parameter S2_CLKOUT4_DUTY           = 50000,
 
-      parameter S2_CLKOUT5_DIVIDE         = 112,
+      parameter S2_CLKOUT5_DIVIDE         = 29,
       parameter S2_CLKOUT5_PHASE          = 0,
       parameter S2_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 3 Parameters - These are for the second reconfiguration state.
-      // 53.50 Hz, Salida VGA
+      // 52 Hz, Salida VGA
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -180,7 +180,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S3_CLKFBOUT_MULT          = 9,
+      parameter S3_CLKFBOUT_MULT          = 18,
       parameter S3_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -204,33 +204,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S3_CLKOUT0_DIVIDE         = 15,
+      parameter S3_CLKOUT0_DIVIDE         = 31,
       parameter S3_CLKOUT0_PHASE          = 0,
       parameter S3_CLKOUT0_DUTY           = 50000,
 
-      parameter S3_CLKOUT1_DIVIDE         = 30,
+      parameter S3_CLKOUT1_DIVIDE         = 31,
       parameter S3_CLKOUT1_PHASE          = 0,
       parameter S3_CLKOUT1_DUTY           = 50000,
 
-      parameter S3_CLKOUT2_DIVIDE         = 60,
+      parameter S3_CLKOUT2_DIVIDE         = 31,
       parameter S3_CLKOUT2_PHASE          = 0,
       parameter S3_CLKOUT2_DUTY           = 50000,
 
-      parameter S3_CLKOUT3_DIVIDE         = 120,
+      parameter S3_CLKOUT3_DIVIDE         = 31,
       parameter S3_CLKOUT3_PHASE          = 0,
       parameter S3_CLKOUT3_DUTY           = 50000,
 
-      parameter S3_CLKOUT4_DIVIDE         = 120,
+      parameter S3_CLKOUT4_DIVIDE         = 31,
       parameter S3_CLKOUT4_PHASE          = 0,
       parameter S3_CLKOUT4_DUTY           = 50000,
 
-      parameter S3_CLKOUT5_DIVIDE         = 120,
+      parameter S3_CLKOUT5_DIVIDE         = 31,
       parameter S3_CLKOUT5_PHASE          = 0,
       parameter S3_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 4 Parameters - These are for the second reconfiguration state.
-      // 55.80 Hz, Salida VGA
+      // 53 Hz, Salida VGA
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -242,7 +242,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S4_CLKFBOUT_MULT          = 10,
+      parameter S4_CLKFBOUT_MULT          = 16,
       parameter S4_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -266,33 +266,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S4_CLKOUT0_DIVIDE         = 16,
+      parameter S4_CLKOUT0_DIVIDE         = 27,
       parameter S4_CLKOUT0_PHASE          = 0,
       parameter S4_CLKOUT0_DUTY           = 50000,
 
-      parameter S4_CLKOUT1_DIVIDE         = 32,
+      parameter S4_CLKOUT1_DIVIDE         = 27,
       parameter S4_CLKOUT1_PHASE          = 0,
       parameter S4_CLKOUT1_DUTY           = 50000,
 
-      parameter S4_CLKOUT2_DIVIDE         = 64,
+      parameter S4_CLKOUT2_DIVIDE         = 27,
       parameter S4_CLKOUT2_PHASE          = 0,
       parameter S4_CLKOUT2_DUTY           = 50000,
 
-      parameter S4_CLKOUT3_DIVIDE         = 128,
+      parameter S4_CLKOUT3_DIVIDE         = 27,
       parameter S4_CLKOUT3_PHASE          = 0,
       parameter S4_CLKOUT3_DUTY           = 50000,
 
-      parameter S4_CLKOUT4_DIVIDE         = 128,
+      parameter S4_CLKOUT4_DIVIDE         = 27,
       parameter S4_CLKOUT4_PHASE          = 0,
       parameter S4_CLKOUT4_DUTY           = 50000,
 
-      parameter S4_CLKOUT5_DIVIDE         = 128,
+      parameter S4_CLKOUT5_DIVIDE         = 27,
       parameter S4_CLKOUT5_PHASE          = 0,
       parameter S4_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 5 Parameters - These are for the second reconfiguration state.
-      // 57.39 Hz, Salida VGA
+      // 55 Hz, Salida VGA
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -304,7 +304,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S5_CLKFBOUT_MULT          = 9,
+      parameter S5_CLKFBOUT_MULT          = 27,
       parameter S5_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -314,7 +314,7 @@ module pll_drp
 	  // The divclk parameter allows th einput clock to be divided before it
       // reaches the phase and frequency comparitor.  This can be set between
       // 1 and 128.
-      parameter S5_DIVCLK_DIVIDE          = 1,
+      parameter S5_DIVCLK_DIVIDE          = 2,
 
 	  // The following parameters describe the configuration that each clock
       // output should have once the reconfiguration for state one has
@@ -328,33 +328,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S5_CLKOUT0_DIVIDE         = 14,
+      parameter S5_CLKOUT0_DIVIDE         = 22,
       parameter S5_CLKOUT0_PHASE          = 0,
       parameter S5_CLKOUT0_DUTY           = 50000,
 
-      parameter S5_CLKOUT1_DIVIDE         = 28,
+      parameter S5_CLKOUT1_DIVIDE         = 22,
       parameter S5_CLKOUT1_PHASE          = 0,
       parameter S5_CLKOUT1_DUTY           = 50000,
 
-      parameter S5_CLKOUT2_DIVIDE         = 56,
+      parameter S5_CLKOUT2_DIVIDE         = 22,
       parameter S5_CLKOUT2_PHASE          = 0,
       parameter S5_CLKOUT2_DUTY           = 50000,
 
-      parameter S5_CLKOUT3_DIVIDE         = 112,
+      parameter S5_CLKOUT3_DIVIDE         = 22,
       parameter S5_CLKOUT3_PHASE          = 0,
       parameter S5_CLKOUT3_DUTY           = 50000,
 
-      parameter S5_CLKOUT4_DIVIDE         = 112,
+      parameter S5_CLKOUT4_DIVIDE         = 22,
       parameter S5_CLKOUT4_PHASE          = 0,
       parameter S5_CLKOUT4_DUTY           = 50000,
 
-      parameter S5_CLKOUT5_DIVIDE         = 112,
+      parameter S5_CLKOUT5_DIVIDE         = 22,
       parameter S5_CLKOUT5_PHASE          = 0,
       parameter S5_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 6 Parameters - These are for the second reconfiguration state.
-      // 59.52 Hz, Salida VGA
+      // 57 Hz, Salida VGA
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -366,7 +366,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S6_CLKFBOUT_MULT          = 8,
+      parameter S6_CLKFBOUT_MULT          = 14,
       parameter S6_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -390,33 +390,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S6_CLKOUT0_DIVIDE         = 12,
+      parameter S6_CLKOUT0_DIVIDE         = 22,
       parameter S6_CLKOUT0_PHASE          = 0,
       parameter S6_CLKOUT0_DUTY           = 50000,
 
-      parameter S6_CLKOUT1_DIVIDE         = 24,
+      parameter S6_CLKOUT1_DIVIDE         = 22,
       parameter S6_CLKOUT1_PHASE          = 0,
       parameter S6_CLKOUT1_DUTY           = 50000,
 
-      parameter S6_CLKOUT2_DIVIDE         = 48,
+      parameter S6_CLKOUT2_DIVIDE         = 22,
       parameter S6_CLKOUT2_PHASE          = 0,
       parameter S6_CLKOUT2_DUTY           = 50000,
 
-      parameter S6_CLKOUT3_DIVIDE         = 96,
+      parameter S6_CLKOUT3_DIVIDE         = 22,
       parameter S6_CLKOUT3_PHASE          = 0,
       parameter S6_CLKOUT3_DUTY           = 50000,
 
-      parameter S6_CLKOUT4_DIVIDE         = 96,
+      parameter S6_CLKOUT4_DIVIDE         = 22,
       parameter S6_CLKOUT4_PHASE          = 0,
       parameter S6_CLKOUT4_DUTY           = 50000,
 
-      parameter S6_CLKOUT5_DIVIDE         = 96,
+      parameter S6_CLKOUT5_DIVIDE         = 22,
       parameter S6_CLKOUT5_PHASE          = 0,
       parameter S6_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 7 Parameters - These are for the second reconfiguration state.
-      // 61.8 Hz, Salida VGA
+      // 59 Hz, Salida VGA
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -428,7 +428,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S7_CLKFBOUT_MULT          = 9,
+      parameter S7_CLKFBOUT_MULT          = 29,
       parameter S7_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -438,7 +438,7 @@ module pll_drp
 	  // The divclk parameter allows th einput clock to be divided before it
       // reaches the phase and frequency comparitor.  This can be set between
       // 1 and 128.
-      parameter S7_DIVCLK_DIVIDE          = 1,
+      parameter S7_DIVCLK_DIVIDE          = 2,
 
 	  // The following parameters describe the configuration that each clock
       // output should have once the reconfiguration for state one has
@@ -452,33 +452,33 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S7_CLKOUT0_DIVIDE         = 13,
+      parameter S7_CLKOUT0_DIVIDE         = 22,
       parameter S7_CLKOUT0_PHASE          = 0,
       parameter S7_CLKOUT0_DUTY           = 50000,
 
-      parameter S7_CLKOUT1_DIVIDE         = 26,
+      parameter S7_CLKOUT1_DIVIDE         = 22,
       parameter S7_CLKOUT1_PHASE          = 0,
       parameter S7_CLKOUT1_DUTY           = 50000,
 
-      parameter S7_CLKOUT2_DIVIDE         = 52,
+      parameter S7_CLKOUT2_DIVIDE         = 22,
       parameter S7_CLKOUT2_PHASE          = 0,
       parameter S7_CLKOUT2_DUTY           = 50000,
 
-      parameter S7_CLKOUT3_DIVIDE         = 104,
+      parameter S7_CLKOUT3_DIVIDE         = 22,
       parameter S7_CLKOUT3_PHASE          = 0,
       parameter S7_CLKOUT3_DUTY           = 50000,
 
-      parameter S7_CLKOUT4_DIVIDE         = 104,
+      parameter S7_CLKOUT4_DIVIDE         = 22,
       parameter S7_CLKOUT4_PHASE          = 0,
       parameter S7_CLKOUT4_DUTY           = 50000,
 
-      parameter S7_CLKOUT5_DIVIDE         = 104,
+      parameter S7_CLKOUT5_DIVIDE         = 22,
       parameter S7_CLKOUT5_PHASE          = 0,
       parameter S7_CLKOUT5_DUTY           = 50000,
 
       //***********************************************************************
       // State 8 Parameters - These are for the second reconfiguration state.
-      // 63.77 Hz, Salida VGA
+      // 60 Hz, Salida VGA
       //***********************************************************************
 	  // These parameters have an effect on the feedback path.  A change on
       // these parameters will effect all of the clock outputs.
@@ -490,7 +490,7 @@ module pll_drp
       //    _PHASE: This is the phase multiplied by 1000. For example if
       //          a phase of 24.567 deg was desired the input value would be
       //          24567.  The range for the phase is from -360000 to 360000.
-      parameter S8_CLKFBOUT_MULT          = 10,
+      parameter S8_CLKFBOUT_MULT          = 8,
       parameter S8_CLKFBOUT_PHASE         = 0,
 
       // The bandwidth parameter effects the phase error and the jitter filter
@@ -514,27 +514,27 @@ module pll_drp
       //    _DUTY: This is the duty cycle multiplied by 100,000.  For example if
       //          a duty cycle of .24567 was desired the input would be
       //          24567.
-      parameter S8_CLKOUT0_DIVIDE         = 14,
+      parameter S8_CLKOUT0_DIVIDE         = 12,
       parameter S8_CLKOUT0_PHASE          = 0,
       parameter S8_CLKOUT0_DUTY           = 50000,
 
-      parameter S8_CLKOUT1_DIVIDE         = 28,
+      parameter S8_CLKOUT1_DIVIDE         = 12,
       parameter S8_CLKOUT1_PHASE          = 0,
       parameter S8_CLKOUT1_DUTY           = 50000,
 
-      parameter S8_CLKOUT2_DIVIDE         = 56,
+      parameter S8_CLKOUT2_DIVIDE         = 12,
       parameter S8_CLKOUT2_PHASE          = 0,
       parameter S8_CLKOUT2_DUTY           = 50000,
 
-      parameter S8_CLKOUT3_DIVIDE         = 112,
+      parameter S8_CLKOUT3_DIVIDE         = 12,
       parameter S8_CLKOUT3_PHASE          = 0,
       parameter S8_CLKOUT3_DUTY           = 50000,
 
-      parameter S8_CLKOUT4_DIVIDE         = 112,
+      parameter S8_CLKOUT4_DIVIDE         = 12,
       parameter S8_CLKOUT4_PHASE          = 0,
       parameter S8_CLKOUT4_DUTY           = 50000,
 
-      parameter S8_CLKOUT5_DIVIDE         = 112,
+      parameter S8_CLKOUT5_DIVIDE         = 12,
       parameter S8_CLKOUT5_PHASE          = 0,
       parameter S8_CLKOUT5_DUTY           = 50000
 

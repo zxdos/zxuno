@@ -14,15 +14,15 @@ begin
   process (clk_in)
   begin
     if rising_edge( clk_in ) then
-      r_out<= "000" when col_in(1)='0' else
-              "101" when col_in(3)='0' else
-              "111";
-      g_out<= "000" when col_in(2)='0' else
-              "101" when col_in(3)='0' else
-              "111";
-      b_out<= "000" when col_in(0)='0' else
-              "101" when col_in(3)='0' else
-              "111";
+      if( col_in(3)='0' ) then
+        g_out<= col_in(2) & '0' & col_in(2);
+        r_out<= col_in(1) & '0' & col_in(1);
+        b_out<= col_in(0) & '0' & col_in(0);
+      else
+        g_out<= col_in(2) & col_in(2) & col_in(2);
+        r_out<= col_in(1) & col_in(1) & col_in(1);
+        b_out<= col_in(0) & col_in(0) & col_in(0);
+      end if;
     end if;
   end process;
 end behavioral;

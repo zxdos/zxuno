@@ -59,15 +59,15 @@ library ieee ;
   use ieee.std_logic_unsigned.all;
   use ieee.numeric_std.all;
 
-library UNISIM;
-  use UNISIM.Vcomponents.all;
+--library UNISIM;
+  --use UNISIM.Vcomponents.all;
 
 -- 6561 PAL Video Interface Chip model
 
 entity VIC20_VIC is
   generic (
     K_OFFSET          : in    std_logic_vector(4 downto 0) := "10000"
-	 );
+    );
   port (
     I_RW_L            : in    std_logic;
 
@@ -87,7 +87,6 @@ entity VIC20_VIC is
     O_HSYNC           : out   std_logic;
     O_VSYNC           : out   std_logic;
     O_COMP_SYNC_L     : out   std_logic;
-	 O_BLANK           : out   std_logic;
     --
     --
     I_LIGHT_PEN       : in    std_logic;
@@ -103,16 +102,15 @@ end;
 
 architecture RTL of VIC20_VIC is
 
-  constant HSYNC_END          : std_logic_vector(8 downto 0) := "000100000"; -- 33
-  constant LINE_BEGIN         : std_logic_vector(8 downto 0) := "000101011"; -- 44
-  constant LINE_END           : std_logic_vector(8 downto 0) := "100001000"; -- 265
-  constant HORIZ_LEN          : std_logic_vector(8 downto 0) := "100001111"; -- 271
+  -- clocks per line must be divisable by 4
+  constant CLOCKS_PER_LINE_M1 : std_logic_vector(8 downto 0) := "100011011"; -- 284 -1
+  constant TOTAL_LINES_M1     : std_logic_vector(8 downto 0) := "100110111"; -- 312 -1
+  constant H_START_M1         : std_logic_vector(8 downto 0) := "000101011"; -- 44 -1
+--  constant H_START_M1         : std_logic_vector(8 downto 0) := "000101001"; -- 42 -1
+  constant H_END_M1           : std_logic_vector(8 downto 0) := "100001111"; -- 272 -1
+  constant V_START            : std_logic_vector(8 downto 0) := "000011100"; -- 28
+  -- video size 228 pixels by 284 lines
 
-  constant VSYNC_END          : std_logic_vector(8 downto 0) := "000000001"; -- 2
-  constant FRAME_BEGIN        : std_logic_vector(8 downto 0) := "000001111"; -- 16
-  constant FRAME_END          : std_logic_vector(8 downto 0) := "100000011"; -- 260
-  constant VERT_LEN           : std_logic_vector(8 downto 0) := "100000101"; -- 262
-  
   -- close to original                               RGB
   constant col0 : std_logic_vector(11 downto 0) := x"000";  -- 0 - 0000   Black
   constant col1 : std_logic_vector(11 downto 0) := x"FFF";  -- 1 - 0001   White
@@ -173,13 +171,14 @@ architecture RTL of VIC20_VIC is
   signal r_backgnd_colour : std_logic_vector(3 downto 0) := "0001";
 
   -- timing
-  signal hcnt             : std_logic_vector(8 downto 0) := "000000000"; -- pixel counter
-  signal vcnt             : std_logic_vector(8 downto 0) := "000000000"; -- line counter
+  signal hcnt             : std_logic_vector(8 downto 0) := "000000000";
+  signal vcnt             : std_logic_vector(8 downto 0) := "000000000";
 
-  signal hblank           : std_logic := '0';
-  signal vblank           : std_logic := '0';
-  signal hsync            : std_logic := '0';
-  signal vsync            : std_logic := '0';
+  signal do_hsync         : boolean;
+  signal hblank           : std_logic;
+  signal vblank           : std_logic := '1';
+  signal hsync            : std_logic;
+  signal vsync            : std_logic;
 
   signal start_h          : boolean;
   signal h_char_cnt       : std_logic_vector(9 downto 0);
@@ -251,7 +250,6 @@ begin
 
     p2_h_int     <= not hcnt(1);
   end process;
-  
   O_ENA_1MHZ <= ena_1mhz_int;
   O_P2_H <= p2_h_int; -- vic access when P2_H = '0'
 
@@ -357,47 +355,72 @@ begin
   --
   -- video timing
   --
-  p_sync_timing : process
+  -- 312 lines per frame
+  --
+  -- hsync blank picture blank
+  -- 20    24    228     12     total 284 clock
+  p_hvcnt : process
+    variable hcarry,vcarry : boolean;
   begin
     wait until rising_edge(CLK);
     if (ENA_4 = '1') then
-      if (hcnt = HORIZ_LEN) then
+      if (hcnt = CLOCKS_PER_LINE_M1) then
         hcnt <= "000000000";
-		vcnt <= vcnt + "1";
-		hsync <= '1';
       else
-        hcnt <= hcnt + "1";
+        hcnt <= hcnt +"1";
       end if;
 
-      if (vcnt = VERT_LEN) then
-	    vcnt <= "000000000";
-	    vsync <= '1';
+      if do_hsync then
+        if (vcnt = TOTAL_LINES_M1) then
+          vcnt <= "000000000";
+        else
+          vcnt <= vcnt +"1";
+        end if;
       end if;
-	  if (hcnt = HSYNC_END) then
-        hsync <= '0';
-      end if;
-	  if (vcnt = VSYNC_END) then
-	    vsync <= '0';
-	  end if;
-      if (hcnt = LINE_BEGIN) then
-        hblank <= '0';
-      end if;
-	  if (vcnt = FRAME_BEGIN) then
-	    vblank <= '0';
-	  end if;	
-      if (hcnt = LINE_END) then
-        hblank <= '1';
-      end if;
-	  if (vcnt = FRAME_END) then
-	    vblank <= '1';
-	  end if;
     end if;
   end process;
 
-  p_sync_op  : process(hsync, vsync)
+  p_sync_comb : process(hcnt, vcnt)
+  begin
+    vsync <= '0';
+    if (vcnt(8 downto 2) = "0000000") then
+      vsync <= '1';
+    end if;
+
+    do_hsync <= (hcnt = CLOCKS_PER_LINE_M1);
+  end process;
+
+  p_sync : process
+  begin
+    wait until rising_edge(CLK);
+    if (ENA_4 = '1') then
+      if (hcnt = H_END_M1) then
+        hblank <= '1';
+      elsif (hcnt = H_START_M1) then
+        hblank <= '0';
+      end if;
+
+      if do_hsync then
+        hsync <= '1';
+      elsif (hcnt = "0000010011") then -- 20 -1
+        hsync <= '0';
+      end if;
+
+      if do_hsync then
+        if (vcnt = TOTAL_LINES_M1) then
+          vblank <= '1';
+        elsif (vcnt = V_START) then
+          vblank <= '0';
+        end if;
+      end if;
+    end if;
+  end process;
+
+  p_comp_sync : process(hsync, vsync)
   begin
     O_HSYNC <= hsync;
     O_VSYNC <= vsync;
+    O_COMP_SYNC_L <= (not vsync) and (not hsync);
   end process;
 
   --
@@ -483,7 +506,7 @@ begin
       elsif (h_char_cnt(9) = '1') then -- active
 
         --if h_end then --or (hblank = '1') then -- hblank removed to ensure we still get a picture with daft offset values
-        if h_end then
+        if h_end or do_hsync then
           h_char_cnt <= (others => '0');
           h_char_last <= '1';
         else
@@ -640,19 +663,14 @@ begin
     wait until rising_edge(CLK);
     if (ENA_4 = '1') then
       if (hblank = '1') or (vblank = '1') then
-        O_BLANK   <= '1';
+        -- blanking
         O_VIDEO_R <= "000";
         O_VIDEO_G <= "000";
         O_VIDEO_B <= "000";
       else
-		  O_BLANK   <= '0';
---        O_VIDEO_R <= col_rgb(11 downto 8);
---        O_VIDEO_G <= col_rgb( 7 downto 4);
---        O_VIDEO_B <= col_rgb( 3 downto 0);
         O_VIDEO_R <= col_rgb(11 downto 9);
         O_VIDEO_G <= col_rgb( 7 downto 5);
         O_VIDEO_B <= col_rgb( 3 downto 1);
-
       end if;
    end if;
   end process;

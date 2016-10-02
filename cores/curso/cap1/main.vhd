@@ -32,6 +32,7 @@ begin
 
   process (clk7)
   begin
+    sync <= '0';
     color <= "0000";
     if rising_edge( clk7 ) then
       if hcount=447 then
@@ -44,10 +45,8 @@ begin
       else
         hcount <= hcount + 1;
       end if;
-      if  ( vcount>=248   and vcount<252  ) or
-          ( hcount>=344-8 and hcount<376-8) then
-        sync <= '0';
-      else
+      if  ( vcount<248   or vcount>=252  ) and
+          ( hcount<344-8 or hcount>=376-8) then
         sync <= '1';
         if hcount<256 and vcount<192 then
           color <= std_logic_vector(hcount(7 downto 4));

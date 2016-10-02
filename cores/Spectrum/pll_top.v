@@ -237,7 +237,7 @@ module pll_top
       .BANDWIDTH("LOW"), // "HIGH", "LOW" or "OPTIMIZED"
       
       // CLKFBOUT stuff
-      .CLKFBOUT_MULT(9), 
+      .CLKFBOUT_MULT(14), 
       .CLKFBOUT_PHASE(0.0),
       
       // Set the clock period (ns) of input clocks and reference jitter
@@ -249,27 +249,27 @@ module pll_top
       // DIVIDE: (1 to 128)
       // DUTY_CYCLE: (0.01 to 0.99) - This is dependent on the divide value.
       // PHASE: (0.0 to 360.0) - This is dependent on the divide value.
-      .CLKOUT0_DIVIDE(16),
+      .CLKOUT0_DIVIDE(25),
       .CLKOUT0_DUTY_CYCLE(0.5),
       .CLKOUT0_PHASE(0.0), 
       
-      .CLKOUT1_DIVIDE(32), 
+      .CLKOUT1_DIVIDE(25), 
       .CLKOUT1_DUTY_CYCLE(0.5),
       .CLKOUT1_PHASE(0.0), 
       
-      .CLKOUT2_DIVIDE(64),
+      .CLKOUT2_DIVIDE(25),
       .CLKOUT2_DUTY_CYCLE(0.5),
       .CLKOUT2_PHASE(0.0),
       
-      .CLKOUT3_DIVIDE(128),
+      .CLKOUT3_DIVIDE(25),
       .CLKOUT3_DUTY_CYCLE(0.5),
       .CLKOUT3_PHASE(0.0),
       
-      .CLKOUT4_DIVIDE(128),
+      .CLKOUT4_DIVIDE(25),
       .CLKOUT4_DUTY_CYCLE(0.5),
       .CLKOUT4_PHASE(0.0), 
       
-      .CLKOUT5_DIVIDE(128),
+      .CLKOUT5_DIVIDE(25),
       .CLKOUT5_DUTY_CYCLE(0.5),
       .CLKOUT5_PHASE(0.0),
       

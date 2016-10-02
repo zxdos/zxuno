@@ -30,6 +30,7 @@ module vga_scandoubler (
 	input wire [2:0] bi,
 	input wire hsync_ext_n,
 	input wire vsync_ext_n,
+   input wire csync_ext_n,
 	output reg [2:0] ro,
 	output reg [2:0] go,
 	output reg [2:0] bo,
@@ -151,7 +152,7 @@ module vga_scandoubler (
             ro = ri;
             go = gi;
             bo = bi;
-            hsync = hsync_ext_n & vsync_ext_n;
+            hsync = csync_ext_n;
             vsync = 1'b1;
         end
         else begin  // VGA output

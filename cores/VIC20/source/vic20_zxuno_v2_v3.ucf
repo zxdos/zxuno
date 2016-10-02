@@ -1,6 +1,6 @@
 # Clocks & debug
-NET I_CLK_REF         LOC="P55"  | IOSTANDARD = LVCMOS33 | PERIOD=20.0ns;
-#NET "testled"         LOC="P10"  | IOSTANDARD = LVCMOS33;
+NET I_CLK_REF         LOC="P55"  | IOSTANDARD = LVCMOS33;
+NET LED               LOC="P10"   | IOSTANDARD = LVCMOS33;
 
 # Video output
 NET O_VIDEO_R(2)      LOC="P93"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ; 
@@ -20,7 +20,7 @@ NET O_PAL             LOC="P66"  | IOSTANDARD = LVCMOS33;
 # Sound input/output
 NET O_AUDIO_L         LOC="P8"   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
 NET O_AUDIO_R         LOC="P9"   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
-#NET "ear"             LOC="P105" | IOSTANDARD = LVCMOS33;
+NET EAR               LOC="P105" | IOSTANDARD = LVCMOS33;
 
 # Keyboard and mouse
 NET I_PS2_CLK         LOC="P98"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = SLOW ; 
@@ -77,16 +77,15 @@ NET I_PS2_DATA        LOC="P97"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = SL
 #NET "sd_miso"         LOC="P78"  | IOSTANDARD = LVCMOS33;
 
 # JOYSTICK
-#NET "joyup"           LOC="P142" | IOSTANDARD = LVCMOS33 | PULLUP;
-#NET "joydown"         LOC="P1"   | IOSTANDARD = LVCMOS33 | PULLUP;
-#NET "joyleft"         LOC="P2"   | IOSTANDARD = LVCMOS33 | PULLUP;
-#NET "joyright"        LOC="P5"   | IOSTANDARD = LVCMOS33 | PULLUP;
-#NET "joyfire"         LOC="P143" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET I_SW(0)           LOC="P142" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET I_SW(1)           LOC="P1"   | IOSTANDARD = LVCMOS33 | PULLUP;
+NET I_SW(2)           LOC="P2"   | IOSTANDARD = LVCMOS33 | PULLUP;
+NET I_SW(3)           LOC="P5"   | IOSTANDARD = LVCMOS33 | PULLUP;
+NET I_SW(4)           LOC="P143" | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "joyfire2"        LOC="P6"   | IOSTANDARD = LVCMOS33 | PULLUP;
 #NET "joyfire3"        LOC="P7"   | IOSTANDARD = LVCMOS33 | PULLUP;
 
 
 # Otros
-NET I_RESET            LOC="P51"  | IOSTANDARD = LVCMOS33;
 NET I_CLK_REF       TNM_NET = clk_ref_grp;
 TIMESPEC TS01 = PERIOD : clk_ref_grp : 20.00 : PRIORITY 1;   # 50.00 MHz

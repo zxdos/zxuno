@@ -37,6 +37,7 @@ module zxuno (
     output wire [2:0] b,
     output wire hsync,
     output wire vsync,
+    output wire csync,
     inout wire clkps2,
     inout wire dataps2,
     input wire ear,
@@ -142,6 +143,7 @@ module zxuno (
    wire disable_contention;
    wire access_to_screen;
    wire doc_ext_option; // bit 7 del puerto $FF del Timex
+   wire ioreqbank;
 
    // CoreID
    wire oe_n_coreid;
@@ -152,6 +154,7 @@ module zxuno (
    wire [7:0] scratch_dout;
    
    // Scandoubler control
+   wire csync_option;
    wire [7:0] scndblctrl_dout;
    wire oe_n_scndblctrl;
    
@@ -277,19 +280,22 @@ module zxuno (
      .kbd(kbdcol_to_ula),
      .issue2_keyboard(issue2_keyboard),
      .mode(timing_mode),
+     .ioreqbank(ioreqbank),
      .disable_contention(disable_contention),
      .doc_ext_option(doc_ext_option),
      .enable_timexmmu(enable_timexmmu),
      .disable_timexscr(disable_timexscr),
      .disable_ulaplus(disable_ulaplus),
      .disable_radas(disable_radas),
+     .csync_option(csync_option),
 
     // Video
      .r(r),
      .g(g),
      .b(b),
      .hsync(hsync),
-     .vsync(vsync)
+     .vsync(vsync),
+     .csync(csync)
     );
 
    zxunoregs addr_reg_zxuno (
@@ -363,6 +369,7 @@ module zxuno (
       .timing_mode(timing_mode),
       .disable_contention(disable_contention),
       .access_to_screen(access_to_screen),
+      .ioreqbank(ioreqbank),
    
    // Interface con el bus externo (TO-DO)
       .inhibit_rom(1'b0),
@@ -492,7 +499,8 @@ module zxuno (
         .vga_enable(vga_enable),
         .scanlines_enable(scanlines_enable),
         .freq_option(freq_option),
-        .turbo_enable(turbo_enable)
+        .turbo_enable(turbo_enable),
+        .csync_option(csync_option)
     );
 
     rasterint_ctrl control_rasterint (

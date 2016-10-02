@@ -1,4 +1,4 @@
---
+-- Mod by Quest 2016
 -- A simulation model of VIC20 hardware
 -- Copyright (c) MikeJ - March 2003
 --
@@ -70,7 +70,8 @@ entity VIC20_PS2_IF is
     I_P2_H          : in    std_logic; -- high for phase 2 clock  ____----__
     RESET_L         : in    std_logic;
     ENA_4           : in    std_logic; -- 4x system clock (4HZ)   _-_-_-_-_-
-    CLK             : in    std_logic
+    CLK             : in    std_logic;
+	 scanSW	:	out	std_logic_vector(6 downto 0) 
     );
 end;
 
@@ -116,6 +117,12 @@ architecture RTL of VIC20_PS2_IF is
   signal reset_cnt      : std_logic_vector(4 downto 0);
 
   signal tag            : std_logic_vector(7 downto 0);
+  
+  signal VIDEO: std_logic := '0';
+--  signal SCANL: std_logic := '0';
+  signal CTRL	: std_logic;
+  signal ALT	: std_logic;
+  signal EXP8K	: std_logic;
   -- non-xilinx ram
   --type slv_array8 is array (natural range <>) of std_logic_vector(7 downto 0);
   --shared variable  ram  : slv_array8(7 downto 0) := (others => (others => '0'));
@@ -231,7 +238,8 @@ begin
           when x"05" => rowcol <= x"74";--      f1              f1
           when x"04" => rowcol <= x"75";--      f3              f3
           when x"03" => rowcol <= x"76";--      f5              f5
-          when x"83" => rowcol <= x"77";--      f7              f7
+          when x"83" => rowcol <= x"77";--      f7              f7									
+ 		 		 
           when others => rowcol <= x"FF";
         end case;
       else
@@ -244,6 +252,7 @@ begin
           when x"72" => rowcol <= x"73";--      down            down_cursor
           when x"6B" => rowcol <= x"72";--      cbm right       left_cursor
           when x"75" => rowcol <= x"73";--      cbm down        up_cursor
+			 
           when others => rowcol <= x"FF";
         end case;
       end if;
@@ -276,7 +285,51 @@ begin
 
             if (kbd_scancode =  x"75") then       -- up_cursor
               up_cursor <= kbd_press;
-            end if;
+            end if;			
+			 else --q E0
+
+			   if (kbd_scancode =  x"01") then       -- F9, rom/game cart1 active
+					scanSW(4 downto 1) <= kbd_press & "001"; --enable cart1, disable others reset
+				end if;
+				
+			   if (kbd_scancode =  x"09") then       -- F10, rom/game cart2 active
+					scanSW(4 downto 1) <= kbd_press & "010"; --enable cart2, disable others reset
+            end if;	
+				
+			   if (kbd_scancode =  x"78") then       -- F11, rom/game cart3 active
+					scanSW(4 downto 1) <= kbd_press & "100"; --enable cart3, disable others and reset
+            end if;					
+				
+				if (kbd_scancode =  x"07") then       -- F12 cold reset
+					scanSW(5 downto 1) <= '0' & kbd_press & "000"; --disable carts and reset to basic (EXPANDED 16k)						
+				end if;
+				
+				if (kbd_scancode =  x"77") then       -- bloq num cold reset
+					scanSW(5 downto 1) <= '1' & kbd_press & "000"; --disable carts and reset to unexpanded VIC20						
+            end if;				
+				
+			   if (kbd_scancode =  x"7E") then       -- Sroll Lock VGA/RGB
+							if (VIDEO = '0' and kbd_press = '0') then
+								scanSW(0) <= '1';
+								VIDEO <= '1';
+							elsif (VIDEO = '1' and kbd_press = '0') then
+								scanSW(0) <= '0';
+								VIDEO <= '0';
+							end if;	
+            end if;	
+
+			   if (kbd_scancode =  x"11") then --ALT
+					ALT <= kbd_press;
+				end if;
+				
+			   if (kbd_scancode =  x"14") then --CTRL
+					CTRL <= kbd_press;
+				end if;
+				
+			   if (kbd_scancode =  x"66" and ALT = '1' and CTRL = '1') then --Master reset
+					scanSW(6) <= kbd_press;
+				end if;				
+			 
           end if;
         end if;
       end if;
@@ -448,4 +501,3 @@ begin
   end process;
 
 end architecture RTL;
-

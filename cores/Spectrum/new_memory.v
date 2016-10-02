@@ -50,6 +50,7 @@ module new_memory (
    output reg [1:0] timing_mode,
    output wire disable_contention,
    output reg access_to_screen,
+   output reg ioreqbank,
 
    // Interface con el bus externo
    input wire inhibit_rom,
@@ -165,9 +166,9 @@ module new_memory (
       end
    end
     
-`define ADDR_7FFD_PLUS2A (a[0] && !a[1] && a[15:14]==2'b01)
-`define ADDR_7FFD_SP128 (a[0] && !a[1] && !a[15])
-`define ADDR_1FFD (a[0] && !a[1] && a[15:12]==4'b0001)
+`define ADDR_7FFD_PLUS2A (!a[1] && a[15:14]==2'b01)
+`define ADDR_7FFD_SP128 (!a[1] && !a[15])
+`define ADDR_1FFD (!a[1] && a[15:12]==4'b0001)
 `define ADDR_TIMEX_MMU (a[7:0] == 8'hF4)
 
 `define PAGE0 3'b000
@@ -208,6 +209,13 @@ module new_memory (
         else if (enable_timexmmu && !iorq_n && !wr_n && `ADDR_TIMEX_MMU)
             timex_mmu <= din;
       end
+   end
+
+   always @* begin
+      if (!disable_7ffd && disable_1ffd && !iorq_n && (!wr_n || !rd_n) && `ADDR_7FFD_SP128)
+         ioreqbank = 1'b1;
+      else
+         ioreqbank = 1'b0;
    end
    
    reg [18:0] addr_port2;
@@ -383,7 +391,7 @@ module new_memory (
             a[15:13]==2'b111 && timex_mmu[7]==1'b1)
                 access_to_screen = 1'b0;
         else if (!amstrad_allram_page_mode) begin
-           if (a[15:14]==2'b01 || (a[15:14]==2'b11 && (banco_ram==3'd5 || banco_ram==3'd7))) begin
+           if (a[15:14]==2'b01 || (a[15:14]==2'b11 && (/*banco_ram==3'd1 || banco_ram== 3'd3 || */banco_ram==3'd5 || banco_ram==3'd7))) begin
                access_to_screen = 1'b1;
            end
         end
