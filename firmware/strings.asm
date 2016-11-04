@@ -1,6 +1,6 @@
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.55', 0
+        defm    'ZX-Uno BIOS v0.56', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -37,7 +37,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.55    ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.56    ', $7f, '2016 ZX-Uno Team', 0
       IF  recovery=0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -339,7 +339,8 @@ cad85   defb    'Simulated', 0
         defb    'configuration', 0, 0
 cad86   defb    'Real joystick', 0
         defb    'configuration', 0, 0
-cad87   defb    'Select default', 0
+cad87   defb    'Select '
+cad875  defb    'Default', 0
         defb    'video output', 0, 0
 cad99   defb    'Enable VGA', 0
         defb    'scanlines', 0, 0
