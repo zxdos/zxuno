@@ -367,14 +367,14 @@ start50 wreg    scan_code, $f6  ; $f6 = kb set defaults
         halt
         wreg    mouse_data, $f4 ; $f4 = init Kmouse
 star51  ld      a, (layout)
-        ld      b, a
+        rr      a
         ld      hl, fines-1
-        djnz    star52
+        jr      z, star52
         ld      hl, finus-1
-star52  djnz    star53
+        jr      nc, star53
         ld      hl, finav-1
-star53  djnz    star55
-        ld      de, $ffff
+star52  jr      nc, star55
+star53  ld      de, $ffff
         call    dzx7b
         wreg    key_map, 0
         ld      hl, $c001
