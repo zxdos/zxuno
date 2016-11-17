@@ -411,13 +411,16 @@ start6  ld      a, (codcnt)
 tstart5 sub     $80
         jr      c, start5
         ld      (codcnt), a
-        cp      $19
-        jr      z, start7
-        cp      $0c
-start7  jp      z, blst
-        cp      $3a
+        sub     '1'
+        cp      9
+        ld      h, a
+        jp      c, alto runbit1
         jp      z, alto easter
-        cp      $17
+        cp      $19-'1'
+        jr      z, start7
+        sub     $0c-'1'
+start7  jp      z, blst
+        cp      $17-$0c
         jr      nz, tstart5
       ELSE
         pop     af
@@ -3352,7 +3355,11 @@ finstr
 
 runbit
       IF  recovery=0
-        ld      b, h
+        ld      a, (menuop+1)
+        cp      h
+        jr      z, ccon0
+        ld      (menuop), hl
+runbit1 ld      b, h
         call    calbit
         ld      bc, zxuno_port
         ld      e, core_addr
@@ -3371,7 +3378,7 @@ conti   di
         ld      hl, (active)
         cp      h
         jr      nz, runbit
-        ld      h, active>>8
+ccon0   ld      h, active>>8
         ld      l, (hl)
         call    calcu
         push    hl
