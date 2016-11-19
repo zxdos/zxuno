@@ -1469,7 +1469,9 @@ tosd0   push    af
         inc     a
         dec     b
         dec     b
+        push    af
         call    calbi1
+        pop     af
         ld      (tmpbu2+$1e), hl
         ld      b, a
         ld      hl, sdtab-4
@@ -2159,7 +2161,20 @@ exit7   jp      star51
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
 ;++++++++++++++++++++++++++++++++++
-blst    call    clrscr          ; borro pantalla
+blst    
+
+;        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+;        wreg    flash_spi, $9f  ; jedec id
+;        in      e, (c)
+;        in      e, (c)
+;        in      e, (c)
+;        in      e, (c)
+;        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+;        call    hhhh
+;        di
+;        halt
+
+        call    clrscr          ; borro pantalla
         ld      h, bnames-1>>8
         ld      c, $20
         ld      a, c
@@ -2284,8 +2299,12 @@ imyesn  call    bloq1
 ;   HL: address of bitstream
 ; ------------------------------------
 calbit  inc     b
-calbi1  ld      hl, $0040
-        ld      de, $0540
+calbi1  ld      a, 9
+        cp      b
+        ld      hl, $0040
+        jr      nc, calbi2
+        ld      hl, $0b80
+calbi2  ld      de, $0540
 upgraf  add     hl, de
         djnz    upgraf
         ret
@@ -3289,7 +3308,7 @@ romsf   add     a, (hl)
         ret
       ENDIF
 
-      IF  0
+      IF  1
 hhhh    push    af
         push    bc
         push    de
