@@ -1,6 +1,6 @@
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.57', 0
+        defm    'ZX-Uno BIOS v0.58', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -37,7 +37,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.57    ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.58    ', $7f, '2016 ZX-Uno Team', 0
       IF  recovery=0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -265,7 +265,7 @@ cad71   defb    'Memory usually', 0
 cad72   defb    'Performs a', 0
         defb    'tape test', 0, 0
       ENDIF
-cad73   defb    $1b, 0
+;cad73   defb    $1b, 0
       IF  recovery=0
 cad74   defb    'Kempston     Fuller', 0
         defb    'Break key to return', 0
@@ -369,17 +369,8 @@ cad195  defb    'Disable for', 0
         defb    'better compa-', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
-
       ENDIF
-cad116  defb    '2', 0
-        defb    '3', 0
-        defb    '4', 0
-        defb    '5', 0
-        defb    '6', 0
-        defb    '7', 0
-        defb    '8', 0
-        defb    '9', 0, 0
 
-cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
+;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 
 fincad

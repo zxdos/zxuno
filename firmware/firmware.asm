@@ -228,7 +228,7 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
 start   ld      bc, chrend-sdtab
         ldir
       IF  recovery=0
-        call    loadch
+        call    alto loadch
         ld      a, scandbl_ctrl
         ld      bc, zxuno_port
         out     (c), a
@@ -326,14 +326,7 @@ star33  in      a, (c)
         add     a, (hl)
         jr      z, star37
         dec     a
-        ld      h, bnames>>13
-        ld      l, a
-        add     hl, hl
-        add     hl, hl
-        add     hl, hl
-        add     hl, hl
-        add     hl, hl
-        inc     h
+        call    cbname
         jr      star38
 star37  dec     l
         ld      l, (hl)
@@ -1565,7 +1558,7 @@ tosd    ld      ix, cad75
 ;        call    send1z
 
         call    mmcinit
-        jr      nz, errsd
+        jp      nz, errsd
 
         ;sbc     hl, hl                ; read MBR
         ld   hl, 0
@@ -1617,12 +1610,26 @@ tosd3   inc     hl
         jr      nc, tosd4
         ldi
         ldi
-tosd4   add     $2d
-        ld      (fileco+4), a
+tosd4   sub     3
+        ld      hl, fileco+4
+tosd45  inc     b
+        sub     10
+        jr      nc, tosd45
+        add     a, 10+$30
+        ld      (hl), a
+        inc     l
+        ld      (hl), ' '
+        djnz    tosd46
         cp      '1'
         jr      nz, tosd5
         dec     (ix+$1c)
-tosd5   ld      c, SPI_PORT
+        jr      tosd5
+tosd46  ld      (hl), a
+        dec     l
+        ld      a, b
+        add     a, $30
+        ld      (hl), a
+tosd5   ld      bc, SPI_PORT
         pop     de
         pop     af
         cp      $0b
@@ -1641,7 +1648,6 @@ twaitk  jp      nz, waitky
         ld      a, (menuop+1)
         sub     4
         jr      c, twaitk
-        call    alto readna
         ld      ix, cad82
         ld      bc, $090a
         call_prnstr
@@ -2050,7 +2056,6 @@ upgrad  jr      nz, upgraa
 upgrae  call    calbit
         push    hl
         call    prstat
-        call    alto readna
         push    iy
 upgrag  ld      a, (tmpbuf+$65 & $ff)*2
         sub     iyh
@@ -2263,12 +2268,12 @@ exit3   call    yesno
         ld      a, (colcmb+1)
         ld      b, a
         djnz    exit4
-        call    loadch
+        call    alto loadch
         jr      exit7
 exit4   djnz    exit5
         jp      savech
 exit5   djnz    exit6
-        jp      loadch
+        jp      alto loadch
 exit6   call    savech
 exit7   jp      star51
 
@@ -3236,11 +3241,8 @@ calcu   add     hl, hl
 savena  ld      a, (menuop+1)
         sub     4
         ret     c
-        ld      d, bnames>>8
-        rrca
-        rrca
-        rrca
-        ld      e, a
+        call    cbname
+        ex      de, hl
         ld      hl, tmpbuf+$31
         ld      bc, 32
         ldir
@@ -3322,16 +3324,15 @@ waits6  in      a, (c)
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         ret
 
-      IF  recovery=0
-; ------------------------
-; Load flash structures from $06000 to $9000  
-; ------------------------
-loadch  wreg    flash_cs, 1
-        ld      de, config
-        ld      hl, $0060   ;old $0aa0
-        ld      a, $17
-        jp      alto rdflsh
-      ENDIF
+cbname  ld      h, bnames>>13
+        ld      l, a
+        add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        inc     h
+        ret
 
 ; -----------------------------------------------------------------------------
 ; ZX7 Backwards by Einar Saukas, Antonio Villena
@@ -3638,9 +3639,15 @@ easter  di
         wreg    master_conf, 1
         jp      $0100
 
-readna  ld      de, bnames
-        ld      hl, $0071
-        ld      a, 1
+      IF  recovery=0
+; ------------------------
+; Load flash structures from $06000 to $9000  
+; ------------------------
+loadch  wreg    flash_cs, 1
+        ld      de, config
+        ld      hl, $0060   ;old $0aa0
+        ld      a, $17
+      ENDIF
 
 ; ------------------------
 ; Read from SPI flash
