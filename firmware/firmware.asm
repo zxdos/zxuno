@@ -249,7 +249,7 @@ start   ld      bc, chrend-sdtab
       ENDIF
         im      1
         ld      de, fincad-1    ; descomprimo cadenas
-        ld      hl, finstr-1
+        ld      hl, sdtab-1
         call    dzx7b
         ld      hl, $b000
         ld      de, $b400
@@ -326,11 +326,14 @@ star33  in      a, (c)
         add     a, (hl)
         jr      z, star37
         dec     a
-        rrca
-        rrca
-        rrca
+        ld      h, bnames>>13
         ld      l, a
-        ld      h, bnames>>8
+        add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        inc     h
         jr      star38
 star37  dec     l
         ld      l, (hl)
@@ -995,10 +998,7 @@ roms1   ld      l, (iy)
         call    calcu
         ld      c, (hl)
         set     5, l
-        ld      (ix+0), e
-        ld      (ix+1), d
-        inc     ixl
-        inc     ixl
+        call    deixl
         ld      a, (active)
         cp      iyl
         ld      a, $1b
@@ -1436,62 +1436,89 @@ upgra   ld      bc, (menuop)
 upgra1  push    af
         call    help
         pop     af
-        jr      nz, upgra15
-        ld      bc, $1806
-        ld      ix, cad116
-        call    prnmul
-upgra15 ld      de, $0200 | cad60>>8
-        ld      hl, cmbpnt
-        jr      nz, upgra2
-        ld      (hl), cad60 & $ff
-        inc     l
-        ld      (hl), e
-        inc     l
-        ld      (hl), cad61 & $ff
-        inc     l
-        ld      (hl), e
-        inc     l
-        ld      (hl), cad615 & $ff
-        inc     l
-        ld      (hl), e
-        inc     l
-upgra2  ld      (hl), cad62 & $ff
-        inc     l
-        ld      (hl), e
-        inc     l
-        ld      ix, bnames
-        ld      bc, 32
-upgra3  ld      a, ixl
+        ld      de, tmpbuf
+        ld      ix, cmbpnt
+        ld      hl, cad60
+        jr      z, upgr17
+        ld      l, cad62 & $ff
+        ld      a, (bitstr)
+        or      a
+        jr      nz, upgr17
+        call    deixl
+        ld      a, $1b
+        defb    $ca
+upgr15  ld      a, (hl)
+        inc     hl
+upgr16  ld      (de), a
+        inc     de
+        or      a
+        jr      nz, upgr15
+upgr17  call    deixl
+        ld      a, cad63 & $ff
+        sub     l
+        ld      a, ' '
+        jr      nz, upgr16
+        ld      hl, bnames
+        ld      iyl, 1
+upgra3  inc     iyl
+        ld      a, (menuop)
+        dec     a
+        dec     a
+        jr      z, upgr31
+        ld      a, (bitstr)
+        inc     a
+        cp      iyl
+        ld      a, $1b
+        jr      z, upgr32
+upgr31  ld      a, ' '
+upgr32  ld      (de), a
+        ld      a, iyl
+        inc     de
+        ld      bc, 23
+        ldir
+        ex      de, hl
+        ld      (hl), b
+        dec     hl
+upgr33  inc     c
+        sub     10
+        jr      nc, upgr33
+        add     a, 10+$30
         ld      (hl), a
-        inc     l
-        ld      (hl), bnames>>8
-        inc     l
-        ld      (ix+22), b
-        add     ix, bc
-        ld      a, (ix+31)
+        dec     hl
+        dec     c
+        ld      a, ' '
+        jr      z, upgr34
+        ld      a, c
+        add     a, $30
+upgr34  ld      (hl), a
+        dec     hl
+        ld      (hl), ' '
+        ld      c, 4
+        add     hl, bc
+        ex      de, hl
+        ld      c, 8
+        add     hl, bc
+        ld      a, (hl)
+        inc     hl
+        call    deixl
         cp      ' '
         jr      z, upgra3
-        inc     l
-        ld      (hl), $ff
-        ld      e, l
-        srl     e
+        ld      (ix-3), $ff
+        ld      a, ixl
+        rra
+        dec     a
+        cp      20
+        jr      c, upgr38
+        ld      a, 20
+upgr38  ld      e, a
         ld      hl, (menuop)
         dec     l
         dec     l
         ld      a, h
         jr      z, upgra4
-        inc     b
         ld      a, (bitstr)
-        push    af
-        add     a, d
-        ld      c, a
-        ld      ix, cad73
-        push    de
-        call_prnstr
-        pop     de
-        pop     af
-upgra4  ld      h, d
-        ld      l, d
+upgra4  ld      hl, $0102
+        ld      d, $18
         call    combol
         ld      (menuop+1), a
         inc     a
@@ -2384,6 +2411,12 @@ calbi3  add     hl, de
         ret
 
       IF  recovery=0
+deixl   ld      (ix+0), e
+        ld      (ix+1), d
+deixl1  inc     ixl
+        inc     ixl
+        ret
+
 ; ----------------------------
 ; Add an entry to the bootlist
 ; ----------------------------
@@ -2393,8 +2426,7 @@ addbls  ld      (ix+0), e
         call    str2tmp
         pop     hl
 addbl1  inc     iyl
-        inc     ixl
-        inc     ixl
+        call    deixl1
         ld      a, (items)
         sub     2
         sub     iyl
@@ -3444,10 +3476,9 @@ finlog
 ; Compressed messages
 ; -----------------------------------------------------------------------------
         incbin  strings.bin.zx7b
-finstr
-
+sdtab
       IF  recovery=0
-sdtab   defw    $0020, $0040
+        defw    $0020, $0040
         defw    $0040, $0080
 fllen   defw    $0000, $0000
         defw    $0540
