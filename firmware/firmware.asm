@@ -1,5 +1,4 @@
         include version.asm
-        define  w25q80          0
         define  recovery        0
         output  firmware_strings.rom
       macro wreg  dir, dato
@@ -89,8 +88,8 @@
         inc     b
         in      f, (c)
         push    af
-        ld      hl, runbit
-        ld      de, $b400-chrend+runbit
+        ld      hl, sdtab
+        ld      de, $b400-chrend+sdtab
         ei
         jp      start
 
@@ -226,7 +225,7 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
         defb    $0d, $3d, $2b, $2d, $5e ; Enter   =       +       -       ^
         defb    $20, $00, $2e, $2c, $2a ; Space   Symbol  .       ,       *
 
-start   ld      bc, chrend-runbit
+start   ld      bc, chrend-sdtab
         ldir
       IF  recovery=0
         call    loadch
@@ -299,11 +298,11 @@ start3  ld      a, b
         out     (c), a          ; a = $ff = core_id
         inc     b
         ld      hl, cad0+6      ; Load address of coreID string
-star35  in      a, (c)
+star33  in      a, (c)
         ld      (hl), a         ; copia el caracter leido de CoreID 
         inc     hl
         ld      ix, cad0        ; imprimir cadena
-        jr      nz, star35      ; si no recibimos un 0 seguimos pillando caracteres
+        jr      nz, star33      ; si no recibimos un 0 seguimos pillando caracteres
         ld      bc, $090b
         call_prnstr             ; CoreID
         ld      c, b
@@ -346,7 +345,24 @@ star38  ld      de, tmpbuf
         ld      (de), a
         pop     bc
         call_prnstr             ; Imprime máquina (ROM o core)
-start4  ld      d, 4
+start4  wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $9f  ; jedec id
+        in      a, (c)
+        in      a, (c)
+        in      a, (c)
+        in      a, (c)
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        sub     $13
+        cp      5
+        jr      nz, star44
+        ld      hl, alto subnn+1
+        ld      (hl), 6*4
+star44  ld      hl, $0800
+star45  add     hl, hl
+        dec     a
+        jr      nz, star45
+        ld      (alto fllen), hl
+        ld      d, 4
         pop     af
         jr      nz, start5
         ld      d, 16
@@ -406,7 +422,7 @@ star55  ld      hl, (joykey)
         out     (c), e
         inc     b
         out     (c), a
-        jp      alto conti
+        jp      conti
 start6  ld      a, (codcnt)
 tstart5 sub     $80
         jr      c, start5
@@ -414,7 +430,7 @@ tstart5 sub     $80
         sub     '1'
         cp      9
         ld      h, a
-        jp      c, alto runbit1
+        jp      c, runbit1
         jp      z, alto easter
         cp      $19-'1'
         jr      z, start7
@@ -556,9 +572,83 @@ bios7   dec     c
         ld      a, %01111001    ; fondo blanco tinta azul
         ret
 
+      IF  recovery=0
+;++++++++++++++++++++++++++++++++++
+;++++++++    Start ROM     ++++++++
+;++++++++++++++++++++++++++++++++++
+conti   di
+        xor     a
+        ld      hl, (active)
+        cp      h
+        jr      nz, runbit
+ccon0   ld      h, active>>8
+        ld      l, (hl)
+        call    calcu
+        push    hl
+        pop     ix
+        ld      d, (ix+2)
+        ld      hl, timing
+        ld      a, 3
+        cp      (hl)            ; timing
+        ld      b, (hl)
+        jr      nz, ccon1
+        ld      b, d
+ccon1   and     b               ; 0 0 0 0 0 0 MODE1 MODE0
+        rrca                    ; MODE0 0 0 0 0 0 0 MODE1
+        inc     l
+        srl     (hl)            ; conten
+        jr      z, ccon2
+        bit     4, d
+        jr      z, ccon2
+        ccf
+ccon2   adc     a, a            ; 0 0 0 0 0 0 MODE1 /DISCONT
+        ld      l, keyiss & $ff
+        rr      b
+        adc     a, a            ; 0 0 0 0 0 MODE1 /DISCONT MODE0
+        srl     (hl)            ; keyiss
+        jr      z, ccon3
+        bit     5, d
+        jr      z, ccon3
+        ccf
+ccon3   adc     a, a            ; 0 0 0 0 MODE1 /DISCONT MODE0 /I2KB
+        ld      l, nmidiv & $ff
+        srl     (hl)            ; nmidiv
+        jr      z, conti1
+        bit     2, d
+        jr      z, conti1
+        ccf
+conti1  adc     a, a            ; 0 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI
+        dec     l
+        srl     (hl)            ; divmap
+        jr      z, conti2
+        bit     3, d
+        jr      z, conti2
+        ccf
+conti2  adc     a, a            ; 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN
+        add     a, a            ; 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN 0
+        xor     d
+        and     %01111111
+        xor     d
+        xor     %10101100       ; LOCK MODE1 DISCONT MODE0 I2KB DISNMI DIVEN 0
+        ld      (alto conti9+1), a
+        jp      alto micont
+runbit  ld      a, (menuop+1)
+        cp      h
+        jr      z, ccon0
+        ld      (menuop), hl
+runbit1 ld      b, h
+        call    calbit
+        ld      bc, zxuno_port
+        ld      e, core_addr
+        out     (c), e
+        inc     b
+        out     (c), h
+        out     (c), l
+        out     (c), 0
+        wreg    core_boot, 1
+
 ;****  Main Menu  ****
 ;*********************
-      IF  recovery=0
 main    inc     d
         ld      h, l
         call    help
@@ -1474,7 +1564,7 @@ tosd0   push    af
         pop     af
         ld      (tmpbu2+$1e), hl
         ld      b, a
-        ld      hl, sdtab-4
+        ld      hl, alto sdtab-4
         cp      4
         push    af
         jr      c, tosd1
@@ -1724,9 +1814,14 @@ testl   or      a, (ix+$1c)           ; third byte of length
         push    de
         ld      e, (ix+$1d)
         ld      d, (ix+$1e)
-        ld      hl, (tmpbu2+$1c)
+        ld      a, e
+        or      d
+        jr      nz, test1
+        dec     (ix+$1f)
+        jr      nz, test2
+test1   ld      hl, (tmpbu2+$1c)
         sbc     hl, de
-        pop     de
+test2   pop     de
         ret
 
 calcs   push    bc
@@ -1787,7 +1882,8 @@ trans   push    bc
         or      a
         jr      nz, otva
         ld      a, (tmpbu2+$1c)
-        rrca
+        rrc     a
+        jr      z, otva
         cp      b
         jr      nc, otva
         ld      b, a
@@ -1804,7 +1900,7 @@ otva    call    readata
         ld      (tmpbu2+$1c), hl
         ld      hl, tmpbuf+$59
         ld      a, (tmpbu2+$1f)
-otv2    sub     6
+otv2    call    alto subnn
         inc     hl
         jr      nc, otv2
         ld      (hl), 'o'
@@ -1827,15 +1923,6 @@ putc0   inc     hl
         djnz    otva
         pop     bc
         ret
-
-sdtab   defw    $0020, $0040
-        defw    $0040, $0080
-      IF  w25q80=0
-        defw    $4000
-      ELSE
-        defw    $1000
-      ENDIF
-        defw    $0000, $0540
 
         include sd.asm
 
@@ -2161,20 +2248,7 @@ exit7   jp      star51
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
 ;++++++++++++++++++++++++++++++++++
-blst    
-
-;        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-;        wreg    flash_spi, $9f  ; jedec id
-;        in      e, (c)
-;        in      e, (c)
-;        in      e, (c)
-;        in      e, (c)
-;        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-;        call    hhhh
-;        di
-;        halt
-
-        call    clrscr          ; borro pantalla
+blst    call    clrscr          ; borro pantalla
         ld      h, bnames-1>>8
         ld      c, $20
         ld      a, c
@@ -2305,8 +2379,8 @@ calbi1  ld      a, 9
         jr      nc, calbi2
         ld      hl, $0b80
 calbi2  ld      de, $0540
-upgraf  add     hl, de
-        djnz    upgraf
+calbi3  add     hl, de
+        djnz    calbi3
         ret
 
       IF  recovery=0
@@ -3308,7 +3382,7 @@ romsf   add     a, (hl)
         ret
       ENDIF
 
-      IF  1
+      IF  0
 hhhh    push    af
         push    bc
         push    de
@@ -3372,82 +3446,14 @@ finlog
         incbin  strings.bin.zx7b
 finstr
 
-runbit
       IF  recovery=0
-        ld      a, (menuop+1)
-        cp      h
-        jr      z, ccon0
-        ld      (menuop), hl
-runbit1 ld      b, h
-        call    calbit
-        ld      bc, zxuno_port
-        ld      e, core_addr
-        out     (c), e
-        inc     b
-        out     (c), h
-        out     (c), l
-        out     (c), 0
-        wreg    core_boot, 1
-
-;++++++++++++++++++++++++++++++++++
-;++++++++    Start ROM     ++++++++
-;++++++++++++++++++++++++++++++++++
-conti   di
-        xor     a
-        ld      hl, (active)
-        cp      h
-        jr      nz, runbit
-ccon0   ld      h, active>>8
-        ld      l, (hl)
-        call    calcu
-        push    hl
-        pop     ix
-        ld      d, (ix+2)
-        ld      hl, timing
-        ld      a, 3
-        cp      (hl)            ; timing
-        ld      b, (hl)
-        jr      nz, ccon1
-        ld      b, d
-ccon1   and     b               ; 0 0 0 0 0 0 MODE1 MODE0
-        rrca                    ; MODE0 0 0 0 0 0 0 MODE1
-        inc     l
-        srl     (hl)            ; conten
-        jr      z, ccon2
-        bit     4, d
-        jr      z, ccon2
-        ccf
-ccon2   adc     a, a            ; 0 0 0 0 0 0 MODE1 /DISCONT
-        ld      l, keyiss & $ff
-        rr      b
-        adc     a, a            ; 0 0 0 0 0 MODE1 /DISCONT MODE0
-        srl     (hl)            ; keyiss
-        jr      z, ccon3
-        bit     5, d
-        jr      z, ccon3
-        ccf
-ccon3   adc     a, a            ; 0 0 0 0 MODE1 /DISCONT MODE0 /I2KB
-        ld      l, nmidiv & $ff
-        srl     (hl)            ; nmidiv
-        jr      z, conti1
-        bit     2, d
-        jr      z, conti1
-        ccf
-conti1  adc     a, a            ; 0 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI
-        dec     l
-        srl     (hl)            ; divmap
-        jr      z, conti2
-        bit     3, d
-        jr      z, conti2
-        ccf
-conti2  adc     a, a            ; 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN
-        add     a, a            ; 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN 0
-        xor     d
-        and     %01111111
-        xor     d
-        xor     %10101100       ; LOCK MODE1 DISCONT MODE0 I2KB DISNMI DIVEN 0
-        ld      (alto conti9+1), a
-        wreg    master_conf, 1
+sdtab   defw    $0020, $0040
+        defw    $0040, $0080
+fllen   defw    $0000, $0000
+        defw    $0540
+subnn   sub     6
+        ret
+micont  wreg    master_conf, 1
         and     $02
         jr      z, conti4
         wreg    master_mapper, 12
