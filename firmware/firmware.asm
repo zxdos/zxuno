@@ -75,9 +75,9 @@
         define  freque  scanli+1
         define  cpuspd  freque+1
 
+        define  tmpbuf  $7800
+        define  tmpbu2  $7880
         define  bnames  $a100
-        define  tmpbuf  $a200
-        define  tmpbu2  $a280
         define  stack   $aab0
         define  alto    $ae00-crctab+
 
@@ -3297,7 +3297,7 @@ waits6  in      a, (c)
 loadch  wreg    flash_cs, 1
         ld      de, config
         ld      hl, $0060   ;old $0aa0
-        ld      a, $12
+        ld      a, $17
         jp      alto rdflsh
       ENDIF
 
