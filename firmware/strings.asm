@@ -1,6 +1,6 @@
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.58', 0
+        defm    'ZX-Uno BIOS v0.59', 0
         defm    'Copyleft ', 127, ' 2016 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -37,7 +37,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.58    ', $7f, '2016 ZX-Uno Team', 0
+        defb    '   BIOS v0.59    ', $7f, '2016 ZX-Uno Team', 0
       IF  recovery=0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -267,13 +267,13 @@ cad72   defb    'Performs a', 0
       ENDIF
 ;cad73   defb    $1b, 0
       IF  recovery=0
-cad74   defb    'Kempston     Fuller', 0
+cad74   defb    'Kempston', 0
         defb    'Break key to return', 0
         defb             '234567890'
         defb    'Q'+$80, 'WERTYUIOP'
         defb    'A'+$80, 'SDFGHJKLe'
         defb    'c'+$80, 'ZXCVBNMsb'
-        defb    'o'+$80, $1c, $1d, $1e, $1f, $1f, $1e, $1d, $1c, 'o', $80
+        defb    'o'+$80, $1c, $1d, $1e, $1f, $80
       ENDIF
 cad75   defb    'Insert SD with', 0
         defb    'the file on', 0
@@ -365,10 +365,11 @@ cad114  defb    'Break to exit', 0
 cad115  defb    'Slot occupied, select', 0
         defb    'another or delete a', 0
         defb    'ROM to free it', 0
-cad195  defb    'Disable for', 0
+cad116  defb    'Disable for', 0
         defb    'better compa-', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
+cad117  defb    ' Add new core', 0
       ENDIF
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0

@@ -628,10 +628,14 @@ conti2  adc     a, a            ; 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN
         xor     %10101100       ; LOCK MODE1 DISCONT MODE0 I2KB DISNMI DIVEN 0
         ld      (alto conti9+1), a
         jp      alto micont
-runbit  ld      a, (menuop+1)
-        cp      h
-        jr      z, ccon0
-        ld      (menuop), hl
+runbit  ;ld      bc, zxuno_port
+;        ld      e, core_addr
+;        out     (c), e
+;        inc     b
+;        in      l, (c)
+;        in      a, (c)
+;        or      l
+;        jr      nz, ccon0      ; descomentar cuando esté implementada lectura coreaddr
 runbit1 ld      b, h
         call    calbit
         ld      bc, zxuno_port
@@ -705,7 +709,7 @@ main4   call    showop
         defw    cad71
         defw    cad18
         defw    cad19
-        defw    cad195
+        defw    cad116
         jr      c, main9
         ld      (menuop+1), a
         cp      4
@@ -875,12 +879,13 @@ tkeys10 dec     hl
         ld      a, ($5a21)
         add     a, e
         ret     m
-        in      a, ($7f)
-        add     a, $80
-        inc     b
-        call    tkeys12
-        ld      b, 4
-        call    tkeys11
+        ld      l, $6b
+;        in      a, ($7f)
+;        add     a, $80
+;        inc     b
+;        call    tkeys12
+;        ld      b, 4
+;        call    tkeys11
         in      a, ($1f)
         cpl
         ld      b, 5
@@ -1494,21 +1499,32 @@ upgr34  ld      (hl), a
         ld      a, (hl)
         inc     hl
         call    deixl
-        cp      ' '
-        jr      z, upgra3
-        ld      (ix-3), $ff
+        or      a
+        jr      nz, upgra3
+        ld      hl, (menuop)
+        dec     l
+        dec     l
+        ld      a, (alto fllen+1)
+        or      l
         ld      a, ixl
         rra
+        jr      nz, upgr35
+        cp      45+5
+        jr      z, upgr35
+        inc     a
+        ld      (ix-4), cad117 & $ff
+        ld      (ix-3), cad117 >> 8
+        call    deixl1
+upgr35  ld      (ix-3), $ff
+        dec     a
         dec     a
         cp      20
         jr      c, upgr38
         ld      a, 20
 upgr38  ld      e, a
-        ld      hl, (menuop)
-        dec     l
         dec     l
         ld      a, h
-        jr      z, upgra4
+        jr      nz, upgra4
         ld      a, (bitstr)
 upgra4  ld      hl, $0102
         ld      d, $18
@@ -3209,7 +3225,7 @@ bomain  ld      ix, cad65
         ld      bc, $0209
         call_prnstr             ; Performing...
         inc     c
-        ld      iyh, 7
+        ld      iyh, 8
 ramts1  ld      ixl, cad66&$ff
         call_prnstr
         dec     iyh
