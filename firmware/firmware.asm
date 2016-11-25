@@ -327,6 +327,7 @@ star33  in      a, (c)
         jr      z, star37
         dec     a
         call    cbname
+        xor     a
         jr      star38
 star37  dec     l
         ld      l, (hl)
@@ -426,7 +427,7 @@ tstart5 sub     $80
         sub     '1'
         cp      9
         ld      h, a
-        jp      c, runbit1
+        jp      c, runbit
         jp      z, alto easter
         cp      $19-'1'
         jr      z, start7
@@ -628,15 +629,7 @@ conti2  adc     a, a            ; 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN
         xor     %10101100       ; LOCK MODE1 DISCONT MODE0 I2KB DISNMI DIVEN 0
         ld      (alto conti9+1), a
         jp      alto micont
-runbit  ;ld      bc, zxuno_port
-;        ld      e, core_addr
-;        out     (c), e
-;        inc     b
-;        in      l, (c)
-;        in      a, (c)
-;        or      l
-;        jr      nz, ccon0      ; descomentar cuando esté implementada lectura coreaddr
-runbit1 ld      b, h
+runbit  ld      b, h
         call    calbit
         ld      bc, zxuno_port
         ld      e, core_addr
