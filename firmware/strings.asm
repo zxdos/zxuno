@@ -8,7 +8,6 @@ cad1    defm    'http://zxuno.speccy.org', 0
         defm    'hi-res, ULAplus', 0
         defm    'Booting:', 0
         defm    'Press <Edit> to Setup    <Break> Boot Menu', 0
-      IF  recovery=0
 cad2    defb    $12, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -27,7 +26,6 @@ cad5    defm    $10, '    ', $1c, ' and ', $1d, ' to move selection     ', $10, 
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
 cad6    defb    'Enter Setup', 0
-      ENDIF
 cad7    defb    ' Main  ROMs  Upgrade  Boot  Advanced  Exit', 0
         defb    $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $19, $11
@@ -38,7 +36,6 @@ cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11,
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
         defb    '   BIOS v0.59    ', $7f, '2016 ZX-Uno Team', 0
-      IF  recovery=0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0
@@ -57,7 +54,6 @@ cad10   defb    'Hardware tests', 0
         defb    'DivMMC', 0
         defb    'NMI-DivMMC', 0
         defb    'New G.Modes', 0, 0
-      ENDIF
 cad11   defb    ' ', $10, 0
         defb    ' ', $10, 0
         defb    ' ', $10, 0
@@ -73,11 +69,9 @@ cad11   defb    ' ', $10, 0
         defb    ' ', $10, 0
         defb    ' ', $10, 0
         defb    ' ', $10, 0, 0
-      IF  recovery=0
 cad12   defb    'Name               Slot', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, 0
         defb    $11, $11, $11, $11, 0
-      ENDIF
 cad13   defb    $1e, ' ', $1f, ' Sel.Screen', 0
         defb    $1c, ' ', $1d, ' Sel.Item', 0
         defb    'Enter Change', 0
@@ -85,7 +79,6 @@ cad13   defb    $1e, ' ', $1f, ' Sel.Screen', 0
         defb    'Break Exit', 0
         defb    'N   New Entry', 0
         defb    'R   Recovery', 0
-      IF  recovery=0
 cad14   defb    'Run a diagnos-', 0
         defb    'tic test on', 0
         defb    'your system', 0
@@ -113,12 +106,10 @@ cad20   defb    'Behaviour of', 0
         defb    '$FE depends', 0
         defb    'on hardware', 0
         defb    'issue', 0, 0
-      ENDIF
 cad21   defb    $12, $11, $11, $11, ' Options ', $11, $11, $11, $13, 0
 cad22   defb    $10, '               ', $10, 0
         defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $15, 0
-      IF  recovery=0
 cad88   defb    'Spanish', 0
 cad89   defb    'English', 0
 cad90   defb    'Spectrum', 0
@@ -172,9 +163,7 @@ cad41   defb    'Discard Chan-', 0
         defb    'far to any of', 0
         defb    'the setup', 0
         defb    'options', 0, 0
-      ENDIF
 cad45   defb    'Header:', 0
-      IF  recovery=0
 cad46   defb    $12, ' Exit Without Saving ', $11, $13, 0
         defb    $10, '                      ', $10, 0
         defb    $10, ' Quit without saving? ', $10, 0
@@ -184,7 +173,6 @@ cad47   defb    $12, $11, ' Save Setup Values ', $11, $11, $13, 0
 cad48   defb    $12, ' Load Previous Values ', $13, 0
         defb    $10, '                      ', $10, 0
         defb    $10, ' Load previous values?', $10, 0
-      ENDIF
 cad42   defb    $10, '                      ', $10, 0
         defb    $16, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -193,21 +181,17 @@ cad42   defb    $10, '                      ', $10, 0
 cad43   defb    $14, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $15, 0
-      IF  recovery=0
         defb    $12, $11, $11, $11, ' Save and Exit ', $11, $11, $11, $11, $13, 0
         defb    $10, '                      ', $10, 0
         defb    $10, '  Save conf. & Exit?  ', $10, 0
-      ENDIF
 cad44   defb    $12, $11, $11, $11, ' Load from tape ', $11, $11, $11, $13, 0
 cad445  defb    $12, $11, $11, $11, $11, ' Load from SD ', $11, $11, $11, $11, $13, 0
         defb    $10, '                      ', $10, 0
         defb    $10, ' Are you sure?        ', $10, 0
-      IF  recovery=0
 cad37   defb    'Save Changes & Exit', 0
         defb    'Discard Changes & Exit', 0
         defb    'Save Changes', 0
         defb    'Discard Changes', 0
-      ENDIF
 cad49   defb    'Press play on', 0
         defb    'tape & follow', 0
         defb    'the progress', 0
@@ -217,14 +201,12 @@ cad50   defb    'Loading Error', 0
 cad51   defb    'Any key to return', 0
 cad52   defb    'Block 1 of 1:', 0
 cad53   defb    'Done', 0
-      IF  recovery=0
 cad54   defb    'Slot position:', 0
 cad55   defb    'Invalid CRC in ROM 0000. Must be 0000', 0
         defb    'Press any key to continue                 ', 0
 cad56   defb    'Check CRC in', 0
         defb    'all ROMs. Slow', 0
         defb    'but safer', 0, 0
-      ENDIF
 cad57   defb    'Machine upgraded', 0
 cad58   defb    'BIOS upgraded', 0
 cad59   defb    'ESXDOS upgraded', 0
@@ -233,9 +215,7 @@ cad61   defb    'Upgrade BIOS for ZX', 0
 cad615  defb    'Upgrade flash from SD', 0
 cad62   defb    'ZX Spectrum', 0
 cad63   defb    'Status:[           ]', 0
-cad64 
-      IF  recovery=0
-        defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
+cad64   defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    ' Recovery ', $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
         defb    ' ', $10, ' ', $1e, ' ', $1f, '  Enter accept  Break cancel ', $10, 0
         defb    ' ', $16, $11, $11, $11, $11, $11, $11, $11, $11
@@ -264,9 +244,6 @@ cad71   defb    'Memory usually', 0
         defb    'Pentagon 128K', 0, 0
 cad72   defb    'Performs a', 0
         defb    'tape test', 0, 0
-      ENDIF
-;cad73   defb    $1b, 0
-      IF  recovery=0
 cad74   defb    'Kempston', 0
         defb    'Break key to return', 0
         defb             '234567890'
@@ -274,7 +251,6 @@ cad74   defb    'Kempston', 0
         defb    'A'+$80, 'SDFGHJKLe'
         defb    'c'+$80, 'ZXCVBNMsb'
         defb    'o'+$80, $1c, $1d, $1e, $1f, $80
-      ENDIF
 cad75   defb    'Insert SD with', 0
         defb    'the file on', 0
         defb    'root', 0, 0
@@ -317,7 +293,6 @@ fileco  defb    'CORE    ZXA'
       ENDIF
       ENDIF
       ENDIF
-      IF  recovery=0
 cad83   defb    'Input', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, 0
         defb    'Keyb Layout', 0
@@ -370,7 +345,6 @@ cad116  defb    'Disable for', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
 cad117  defb    ' Add new core', 0
-      ENDIF
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 

@@ -244,13 +244,13 @@ start   ld      bc, chrend-sdtab
         or      $c0
         ld      (scnbak), a       ; lo pongo a 28Mhz
         out     (c), a
+        ld      de, fincad-1    ; descomprimo cadenas
+        ld      hl, sdtab-1
+        call    dzx7b
       ELSE
         wreg    scandbl_ctrl, $c0
       ENDIF
         im      1
-        ld      de, fincad-1    ; descomprimo cadenas
-        ld      hl, sdtab-1
-        call    dzx7b
         ld      hl, $b000
         ld      de, $b400
 start1  ld      b, $04
@@ -342,6 +342,7 @@ star38  ld      de, tmpbuf
         ld      (de), a
         pop     bc
         call_prnstr             ; Imprime máquina (ROM o core)
+      ENDIF
 start4  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $9f  ; jedec id
         in      a, (c)
@@ -359,6 +360,7 @@ star45  add     hl, hl
         dec     a
         jr      nz, star45
         ld      (alto fllen), hl
+      IF  recovery=0
         ld      d, 4
         pop     af
         jr      nz, start5
@@ -1497,6 +1499,7 @@ upgr34  ld      (hl), a
         ld      hl, (menuop)
         dec     l
         dec     l
+      IF  recovery=0
         ld      a, (alto fllen+1)
         or      l
         ld      a, ixl
@@ -1515,6 +1518,10 @@ upgr35  ld      (ix-3), $ff
         jr      c, upgr38
         ld      a, 20
 upgr38  ld      e, a
+      ELSE
+        ld      (ix-3), $ff
+        ld      e, 4
+      ENDIF
         dec     l
         ld      a, h
         jr      nz, upgra4
@@ -2424,13 +2431,13 @@ calbi3  add     hl, de
         djnz    calbi3
         ret
 
-      IF  recovery=0
 deixl   ld      (ix+0), e
         ld      (ix+1), d
 deixl1  inc     ixl
         inc     ixl
         ret
 
+      IF  recovery=0
 ; ----------------------------
 ; Add an entry to the bootlist
 ; ----------------------------
@@ -3479,21 +3486,19 @@ finav
 ; Compressed and RCS filtered logo
 ; -----------------------------------------------------------------------------
         incbin  logo256x192.rcs.zx7b
-finlog
+finlog  incbin  strings.bin.zx7b
       ENDIF
 
 ; -----------------------------------------------------------------------------
 ; Compressed messages
 ; -----------------------------------------------------------------------------
-        incbin  strings.bin.zx7b
-sdtab
-      IF  recovery=0
-        defw    $0020, $0040
+sdtab   defw    $0020, $0040
         defw    $0040, $0080
 fllen   defw    $0000, $0000
         defw    $0540
 subnn   sub     6
         ret
+      IF  recovery=0
 micont  wreg    master_conf, 1
         and     $02
         jr      z, conti4
