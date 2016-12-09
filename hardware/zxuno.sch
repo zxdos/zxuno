@@ -19581,8 +19581,8 @@ KINGFONT SDCMF-10915W010</description>
 <part name="R31" library="rcl" deviceset="R-US_" device="M0805" value="10K"/>
 <part name="R32" library="rcl" deviceset="R-US_" device="M0805" value="10K"/>
 <part name="CVBS" library="uzebox" deviceset="RCA" device=""/>
-<part name="JP1" library="pinhead" deviceset="PINHD-1X6" device=""/>
-<part name="JP2" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="JTAG" library="pinhead" deviceset="PINHD-1X6" device=""/>
+<part name="KEYB" library="pinhead" deviceset="PINHD-1X3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -19733,8 +19733,8 @@ KINGFONT SDCMF-10915W010</description>
 <instance part="R31" gate="G$1" x="124.46" y="-15.24" rot="R270"/>
 <instance part="R32" gate="G$1" x="134.62" y="-15.24" rot="R270"/>
 <instance part="CVBS" gate="G$1" x="276.86" y="-104.14" rot="MR0"/>
-<instance part="JP1" gate="A" x="274.32" y="88.9"/>
-<instance part="JP2" gate="A" x="-45.72" y="-71.12" rot="R180"/>
+<instance part="JTAG" gate="A" x="274.32" y="88.9"/>
+<instance part="KEYB" gate="A" x="-45.72" y="-71.12" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -20025,7 +20025,7 @@ KINGFONT SDCMF-10915W010</description>
 <segment>
 <wire x1="261.62" y1="96.52" x2="271.78" y2="96.52" width="0.1524" layer="91"/>
 <label x="261.62" y="96.52" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="1"/>
+<pinref part="JTAG" gate="A" pin="1"/>
 </segment>
 <segment>
 <wire x1="154.94" y1="33.02" x2="142.24" y2="33.02" width="0.1524" layer="91"/>
@@ -20433,7 +20433,7 @@ KINGFONT SDCMF-10915W010</description>
 <segment>
 <wire x1="261.62" y1="93.98" x2="271.78" y2="93.98" width="0.1524" layer="91"/>
 <label x="261.62" y="93.98" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="2"/>
+<pinref part="JTAG" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="XA0" class="0">
@@ -20922,6 +20922,11 @@ KINGFONT SDCMF-10915W010</description>
 <label x="22.86" y="-43.18" size="1.778" layer="95"/>
 <pinref part="U1" gate="B1" pin="IO_L34P_1"/>
 </segment>
+<segment>
+<pinref part="KEYB" gate="A" pin="1"/>
+<wire x1="-43.18" y1="-73.66" x2="-33.02" y2="-73.66" width="0.1524" layer="91"/>
+<label x="-38.1" y="-73.66" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="PS2_CLK" class="0">
 <segment>
@@ -20933,6 +20938,11 @@ KINGFONT SDCMF-10915W010</description>
 <wire x1="35.56" y1="-45.72" x2="22.86" y2="-45.72" width="0.1524" layer="91"/>
 <label x="22.86" y="-45.72" size="1.778" layer="95"/>
 <pinref part="U1" gate="B1" pin="IO_L33N_1"/>
+</segment>
+<segment>
+<pinref part="KEYB" gate="A" pin="2"/>
+<wire x1="-43.18" y1="-71.12" x2="-33.02" y2="-71.12" width="0.1524" layer="91"/>
+<label x="-38.1" y="-71.12" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="EAR" class="0">
@@ -21540,7 +21550,7 @@ KINGFONT SDCMF-10915W010</description>
 <segment>
 <wire x1="261.62" y1="83.82" x2="271.78" y2="83.82" width="0.1524" layer="91"/>
 <label x="261.62" y="83.82" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="6"/>
+<pinref part="JTAG" gate="A" pin="6"/>
 </segment>
 </net>
 <net name="R" class="0">
@@ -21655,7 +21665,7 @@ KINGFONT SDCMF-10915W010</description>
 <segment>
 <wire x1="261.62" y1="91.44" x2="271.78" y2="91.44" width="0.1524" layer="91"/>
 <label x="261.62" y="91.44" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="3"/>
+<pinref part="JTAG" gate="A" pin="3"/>
 </segment>
 </net>
 <net name="TDO" class="0">
@@ -21667,7 +21677,7 @@ KINGFONT SDCMF-10915W010</description>
 <segment>
 <wire x1="261.62" y1="88.9" x2="271.78" y2="88.9" width="0.1524" layer="91"/>
 <label x="261.62" y="88.9" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="4"/>
+<pinref part="JTAG" gate="A" pin="4"/>
 </segment>
 </net>
 <net name="TDI" class="0">
@@ -21679,7 +21689,7 @@ KINGFONT SDCMF-10915W010</description>
 <segment>
 <wire x1="261.62" y1="86.36" x2="271.78" y2="86.36" width="0.1524" layer="91"/>
 <label x="261.62" y="86.36" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="5"/>
+<pinref part="JTAG" gate="A" pin="5"/>
 </segment>
 </net>
 <net name="N$10" class="0">
@@ -21793,7 +21803,7 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="PS/2" gate="G$1" pin="4"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="A" pin="3"/>
+<pinref part="KEYB" gate="A" pin="3"/>
 <wire x1="-43.18" y1="-68.58" x2="-33.02" y2="-68.58" width="0.1524" layer="91"/>
 <label x="-38.1" y="-68.58" size="1.778" layer="95"/>
 </segment>
@@ -22079,12 +22089,6 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="-12.7" y1="-60.96" x2="-20.32" y2="-60.96" width="0.1524" layer="91"/>
 <pinref part="PS/2" gate="G$1" pin="1"/>
-<label x="-20.32" y="-60.96" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="JP2" gate="A" pin="2"/>
-<wire x1="-43.18" y1="-71.12" x2="-33.02" y2="-71.12" width="0.1524" layer="91"/>
-<label x="-38.1" y="-71.12" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CLKPS2" class="0">
@@ -22092,12 +22096,6 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="R10" gate="G$1" pin="1"/>
 <wire x1="-12.7" y1="-50.8" x2="-20.32" y2="-50.8" width="0.1524" layer="91"/>
 <pinref part="PS/2" gate="G$1" pin="5"/>
-<label x="-20.32" y="-50.8" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="JP2" gate="A" pin="1"/>
-<wire x1="-43.18" y1="-73.66" x2="-33.02" y2="-73.66" width="0.1524" layer="91"/>
-<label x="-38.1" y="-73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
