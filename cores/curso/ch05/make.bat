@@ -8,5 +8,5 @@ goto :eof
 SET machine=%1
 call %ruta_bat%genxst.bat
 call %ruta_bat%generar.bat v4 ZX1
-copy /y COREn.ZX1 %machine%.ZX1
+copy /y COREn.ZX1 %ruta_ucf%_%machine%.ZX1
 goto :eof
