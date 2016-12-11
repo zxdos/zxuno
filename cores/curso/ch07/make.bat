@@ -1,7 +1,7 @@
 SET speed=2
 SET ruta_ucf=ch07
 SET ruta_bat=..\..\
-call :genbitstream debounce_test
+call :genbitstream uart_test
 goto :eof
 
 :genbitstream
