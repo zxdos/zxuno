@@ -1,6 +1,8 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.std_logic_unsigned.all;
+library unisim;
+	use unisim.vcomponents.all;
 
 entity zxkyp is
 	port
@@ -31,8 +33,9 @@ end;
 architecture structural of zxkyp is
 
 	signal clock14    : std_logic;
-	signal clock70    : std_logic;
-	signal clock35    : std_logic;
+	signal clock700   : std_logic;
+	signal clock350   : std_logic;
+	signal clock175   : std_logic;
 
 	signal boot       : std_logic;
 
@@ -47,6 +50,10 @@ architecture structural of zxkyp is
 	signal wr         : std_logic;
 	signal data       : std_logic_vector( 7 downto 0);
 	signal addr       : std_logic_vector(15 downto 0);
+
+	signal aP         : std_logic;
+	signal cpuEnable  : std_logic;
+	signal cpuClock   : std_logic;
 
 	signal v          : std_logic;
 	signal h          : std_logic;
@@ -85,6 +92,14 @@ architecture structural of zxkyp is
 	signal sdAc       : std_logic;
 	signal sdData     : std_logic_vector( 7 downto 0);
 
+	signal ayCs       : std_logic;
+	signal ayBc       : std_logic;
+	signal ayBdir     : std_logic;
+	signal ayData     : std_logic_vector( 7 downto 0);
+	signal ayA        : std_logic_vector( 7 downto 0);
+	signal ayB        : std_logic_vector( 7 downto 0);
+	signal ayC        : std_logic_vector( 7 downto 0);
+
 begin
 
 	Umultiboot : entity work.multiboot port map
@@ -96,12 +111,13 @@ begin
 	(
 		clock50     => clock50,
 		clock14     => clock14,
-		clock70     => clock70,
-		clock35     => clock35
+		clock700    => clock700,
+		clock350    => clock350,
+		clock175    => clock175
 	);
 	Ucpu : entity work.tv80n port map
 	(
-		clk         => clock35,
+		clk         => cpuClock,
 		reset_n     => reset,
 		wait_n      => pause,
 		mreq_n      => mreq,
@@ -121,15 +137,18 @@ begin
 	);
 	Uula : entity work.ula port map
 	(
-		cpuClock    => clock35,
+		cpuClock    => clock350,
+		mreq        => mreq,
 		iorq        => iorq,
 		rd          => rd,
 		wr          => wr,
 		a0          => addr(0),
+		aP          => aP,
 		di          => cpuData,
 		do          => ulaData,
+		cpuEnable   => cpuEnable,
 		--
-		vramClock   => clock70,
+		vramClock   => clock700,
 		vramData    => vramData,
 		vramAddr    => vramAddr,
 		int         => int,
@@ -152,7 +171,7 @@ begin
 	);
 	Udiv : entity work.div port map
 	(
-		clock       => clock35,
+		clock       => clock350,
 		reset       => reset,
 		mreq        => mreq,
 		iorq        => iorq,
@@ -169,24 +188,27 @@ begin
 	);
 	Umixer: entity work.mixer port map
 	(
-		clock       => clock35,
+		clock       => clock350,
 		reset       => reset,
 		speaker     => speaker,
 		ear         => ear,
 		mic         => mic,
+		a           => ayA,
+		b           => ayB,
+		c           => ayC,
 		l           => audio(0),
 		r           => audio(1)
 	);
 	Urom : entity work.rom port map
 	(
-		clka        => clock35,
+		clka        => clock350,
 		ena         => romCs,
 		douta       => romData,
 		addra       => addr(13 downto 0)
 	);
 	Udrom : entity work.drom port map
 	(
-		clka        => clock35,
+		clka        => clock350,
 		ena         => dromCs,
 		douta       => dromData,
 		addra       => addr(12 downto 0)
@@ -204,13 +226,13 @@ begin
 	);
 	Uvram : entity work.vram port map
 	(
-		clka        => clock35,
+		clka        => clock350,
 		ena         => vramCs,
 		wea(0)      => vramWe,
 		dina        => cpuData,
 		addra       => addr(12 downto 0),
 		--
-		clkb        => clock70,
+		clkb        => clock700,
 		doutb       => vramData,
 		addrb       => vramAddr
 	);
@@ -231,18 +253,43 @@ begin
 		sdDi        => sdDi,
 		sdDo        => sdDo
 	);
+	Uay8910 : entity work.ay8910 port map
+	(
+		CLK         => clock350,
+		CLC         => clock175,
+		RESET       => reset,
+		BDIR        => ayBdir,
+		CS          => ayCs,
+		BC          => addr(14),
+		DI          => cpuData,
+		DO          => ayData,
+		OUT_A       => ayA,
+		OUT_B       => ayB,
+		OUT_C       => ayC
+	);
+	Ubuggce : BUFGCE_1 port map
+	(
+		I           => clock350,
+		O           => cpuClock,
+		CE          => cpuEnable
+	);
 
 	sdCs <= sdAc;
 	led  <= not sdAc;
 
+	aP <= '1' when addr(15 downto 14) = "01" else '0';
+
 	vramCs <= '1' when mreq = '0' and addr(15 downto 13) = "010" else '0';
 	dromCs <= '1' when mreq = '0' and addr(15 downto 13) = "000" and (conmem = '1' or automap = '1') and mapram = '0' else '0';
-	romCs <= '1' when mreq = '0' and addr(15 downto 14) = "00" and conmem = '0' and automap = '0' else '0';
-	ramCs <= '1' when (mreq = '0' and addr(15 downto 13) = "000" and (conmem = '1' or automap = '1') and mapram = '1')
-				 or   (mreq = '0' and addr(15 downto 13) = "001" and (conmem = '1' or automap = '1'))
-				 or   (mreq = '0' and addr(15 downto 14) = "01")
-				 or   (mreq = '0' and addr(15) = '1')
-				 else '0';
+	romCs  <= '1' when mreq = '0' and addr(15 downto 14) = "00" and conmem = '0' and automap = '0' else '0';
+	ramCs  <= '1' when (mreq = '0' and addr(15 downto 13) = "000" and (conmem = '1' or automap = '1') and mapram = '1')
+				  or   (mreq = '0' and addr(15 downto 13) = "001" and (conmem = '1' or automap = '1'))
+				  or   (mreq = '0' and addr(15 downto 14) = "01")
+				  or   (mreq = '0' and addr(15) = '1')
+				  else '0';
+
+	ayBdir <= not wr;
+	ayCs   <= '0' when iorq = '0' and m1 = '1' and addr(15) = '1' and addr(13) = '1' and addr(1) = '0' else '1';
 
 	vramWe <= not (mreq or wr) when addr(15 downto 13) = "010" else '0';
 	ramWr <= mreq or wr;
@@ -255,6 +302,7 @@ begin
 		else ramData when ramCs = '1'
 		else romData when romCs = '1'
 		else dromData when dromCs = '1'
+		else ayData   when ayCs   = '0'
 		else ulaData;
 
 	videoRgb  <= (r&'0'&r)&(g&'0'&g)&(b&'0'&b) when i = '0' else (r&r&r)&(g&g&g)&(b&b&b);

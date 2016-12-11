@@ -183,7 +183,7 @@ begin
 				( keys(51) or rows(4) );    -- DOWN(7)
 
 	nmi   <= keys(54);
-	boot  <= keys(57);
+	boot  <= keys(57) and ((keys(40) and keys(47)) or (keys(41) and keys(48)) or (keys(43)));
 	reset <= keys(55) and ((keys(40) and keys(47)) or (keys(41) and keys(48)) or (keys(42) and keys(49)));
 
 end;

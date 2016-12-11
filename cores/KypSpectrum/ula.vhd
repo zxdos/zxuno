@@ -6,12 +6,15 @@ entity ula is
 	port
 	(
 		cpuClock   : in  std_logic;
+		mreq       : in  std_logic;
 		iorq       : in  std_logic;
 		rd         : in  std_logic;
 		wr         : in  std_logic;
 		a0         : in  std_logic;
+		aP         : in  std_logic;
 		di         : in  std_logic_vector( 7 downto 0);
 		do         : out std_logic_vector( 7 downto 0);
+		cpuEnable  : out std_logic;
 		--
 		vramClock  : in  std_logic;
 		vramData   : in  std_logic_vector( 7 downto 0);
@@ -55,7 +58,7 @@ architecture behavioral of ula is
 	signal dataOut     : std_logic_vector(7 downto 0);
 
 	signal attrInp     : std_logic_vector(7 downto 0);
-	signal attrMux     : std_logic_vector(7 downto 3);
+	signal attrMux     : std_logic_vector(7 downto 0);
 	signal attrOut     : std_logic_vector(7 downto 0);
 
 	signal dataEnable  : std_logic;
@@ -69,6 +72,11 @@ architecture behavioral of ula is
 	signal attrOutLoad : std_logic;
 
 	signal dataSelect  : std_logic;
+
+	signal cancelContention : std_logic := '1';
+	signal causeContention  : std_logic;
+	signal mayContend       : std_logic;
+	signal iorequla         : std_logic;
 
 begin
 
@@ -95,22 +103,18 @@ begin
 	begin
 		if falling_edge(cpuClock)
 		then
-			do <= attrOut;
-
-			if iorq = '0' and a0 = '0'
+			if iorq = '0' and a0 = '0' and  wr = '0'
 			then
-				if wr = '0'
-				then
-					border  <= di(2 downto 0);
-					mic     <= di(3);
-					speaker <= di(4);
-				elsif rd = '0'
-				then
-					do <= '0'&ear&'0'&keys;
-				end if;
+				border  <= di(2 downto 0);
+				mic     <= di(3);
+				speaker <= di(4);
 			end if;
 		end if;
 	end process;
+
+	do <= '1'&(not ear)&'1'&keys when iorq = '0' and rd = '0' and a0 = '0'
+		else vramData when iorq = '0' and rd = '0' and (dataInpLoad = '1' or attrInpLoad = '1')
+		else x"FF";
 
 	process(vramClock)
 	begin
@@ -131,42 +135,35 @@ begin
 				end if;
 			end if;
 
-			if hCount >= 344 and hCount <= 375 then hSync <= '0'; else hSync <= '1'; end if;
-			if vCount >= 248 and vCount <= 251 then vSync <= '0'; else vSync <= '1'; end if;
+			if dataInpLoad = '1' then dataInp <= vramData; end if;
+			if attrInpLoad = '1' then attrInp <= vramData; end if;
+
+			if dataOutLoad = '1' then dataOut <= dataInp; else dataOut <= dataOut(6 downto 0)&'0'; end if;
+			if attrOutLoad = '1' then attrOut <= attrMux; end if;
+
+			if hCount(3) = '1' then videoEnable <= dataEnable; end if;
 
 			if vCount = 248 and hCount >= 2 and hCount <= 65 then int <= '0'; else int <= '1'; end if;
 		end if;
 	end process;
 
-	process(vramClock)
-	begin
-		if falling_edge(vramClock)
-		then
-			dataInpLoad <= hCount(0) and not hCount(1) and hCount(3) and videoEnable;
-			dataOutLoad <= not hCount(0) and not hCount(1) and hCount(2) and videoEnable;
+	hSync <= '0' when hCount >= 344 and hCount <= 375 else '1';
+	vSync <= '0' when vCount >= 248 and vCount <= 251 else '1';
 
-			attrInpLoad <= hCount(0) and hCount(1) and hCount(3) and videoEnable;
-			attrOutLoad <= hCount(0) and not hCount(1) and hCount(2);
+	dataInpLoad <= '1' when videoEnable = '1' and (hCount(3 downto 0) =  9 or hCount(3 downto 0) = 13) else '0';
+	attrInpLoad <= '1' when videoEnable = '1' and (hCount(3 downto 0) = 11 or hCount(3 downto 0) = 15) else '0';
 
-			dataSelect <= dataOut(7) xor (fCount(4) and attrOut(7));
+	dataOutLoad <= '1' when videoEnable = '1' and hCount(2 downto 0) = 4 else '0';
+	attrOutLoad <= '1' when hCount(2 downto 0) = 4 else '0';
 
-			if hCount(3) = '1' then videoEnable <= dataEnable; end if;
-			if hCount < 256 and vCount < 192 then dataEnable <= '1'; else dataEnable <= '0'; end if;
-			if (hCount >= 320 and hCount <= 415) or (vCount >= 248 and vCount <= 255) then videoBlank <= '1'; else videoBlank <= '0'; end if;
+	dataSelect <= dataOut(7) xor (fCount(4) and attrOut(7));
+	attrMux <= attrInp when videoEnable = '1' else "00"&border&"000";
 
-			if dataInpLoad = '1' then dataInp <= vramData; end if;
-			if dataOutLoad = '1' then dataOut <= dataInp; else dataOut <= dataOut(6 downto 0)&'0'; end if;
+	dataEnable <= '1' when hCount < 256 and vCount < 192 else '0';
+	videoBlank <= '1' when (hCount >= 320 and hCount <= 415) or (vCount >= 248 and vCount <= 255) else '0';
 
-			if attrInpLoad = '1' then attrInp <= vramData; end if;
-			if attrOutLoad = '1' then attrOut <= attrMux&attrInp(2 downto 0); end if;
-
-			if videoEnable = '1' then attrMux(7 downto 3) <= attrInp(7 downto 3); else attrMux(7 downto 3) <= "00"&border; end if;
-
-			vramAddr( 7 downto 0) <= vCount(5 downto 3)&hCount(7 downto 4)&hCount(2);
-			if hCount(1) = '0' then vramAddr(12 downto 8) <= vCount(7 downto 6)&vCount(2 downto 0); else vramAddr(12 downto 8) <= "110"&vCount(7 downto 6); end if;
-
-		end if;
-	end process;
+	vramAddr( 7 downto 0) <= vCount(5 downto 3)&hCount(7 downto 4)&hCount(2);
+	vramAddr(12 downto 8) <= vCount(7 downto 6)&vCount(2 downto 0) when hCount(1) = '0' else "110"&vCount(7 downto 6);
 
 	v <= vSync;
 	h <= hSync;
@@ -174,5 +171,18 @@ begin
 	g <= '0' when videoBlank = '1' else attrOut(2) when dataSelect = '1' else attrOut(5);
 	b <= '0' when videoBlank = '1' else attrOut(0) when dataSelect = '1' else attrOut(3);
 	i <= '0' when videoBlank = '1' else attrOut(6);
+
+	process(cpuClock)
+	begin
+		if falling_edge(cpuClock)
+		then
+			if mreq = '0' or iorequla = '0' then cancelContention <= '0'; else cancelContention <= '1'; end if;
+		end if;
+	end process;
+
+	causeContention <= '0' when aP = '1' or iorequla = '0' else '1';
+	mayContend <= '0' when hCount(3 downto 0) > 3 and dataEnable = '1' else '1';
+	iorequla <= iorq or a0;
+	cpuEnable <= mayContend or causeContention or cancelContention;
 
 end;

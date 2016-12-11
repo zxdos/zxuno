@@ -7,9 +7,12 @@ entity mixer is
 	(
 		clock   : in  std_logic;
 		reset   : in  std_logic;
+		speaker : in  std_logic;
 		ear     : in  std_logic;
 		mic     : in  std_logic;
-		speaker : in  std_logic;
+		a       : in  std_logic_vector(7 downto 0);
+		b       : in  std_logic_vector(7 downto 0);
+		c       : in  std_logic_vector(7 downto 0);
 		l       : out std_logic;
 		r       : out std_logic
 	);
@@ -17,21 +20,12 @@ end;
 
 architecture behavioral of mixer is
 
-	signal src : std_logic_vector(2 downto 0);
-	signal ula : std_logic_vector(7 downto 0);
-	signal mix : std_logic_vector(7 downto 0);
+	signal src  : std_logic_vector(2 downto 0);
+	signal ula  : std_logic_vector(7 downto 0);
+	signal mixl : std_logic_vector(7 downto 0);
+	signal mixr : std_logic_vector(7 downto 0);
 
 begin
-
-	process(clock)
-		variable tmp : std_logic_vector(3 downto 0) := (others => '0');
-	begin
-		if falling_edge(clock)
-		then
-			tmp := tmp+1;
-			if tmp = 0 then mix <= ula; else mix <= (others => '0'); end if;
-		end if;
-	end process;
 
 	src <= ear&mic&speaker;
 	ula <= x"11" when src = "000"
@@ -43,18 +37,35 @@ begin
 	else   x"F4" when src = "101"
 	else   x"FF";
 
+	process(clock)
+		variable tmp : std_logic_vector(1 downto 0) := (others => '0');
+	begin
+		if falling_edge(clock)
+		then
+			case tmp is
+				when "00" => mixl <= a; mixr <= b;
+				when "01" => mixl <= c; mixr <= c;
+				when "10" => mixl <= a; mixr <= b;
+				when "11" => mixl <= ula; mixr <= ula;
+				when others =>
+			end case;
+
+			tmp := tmp+1;
+		end if;
+	end process;
+
 	UdacL: entity work.dac port map
 	(
 		clock => clock,
 		reset => reset,
-		i     => mix,
+		i     => mixl,
 		o     => l
 	);
 	UdacR: entity work.dac port map
 	(
 		clock => clock,
 		reset => reset,
-		i     => mix,
+		i     => mixr,
 		o     => r
 	);
 

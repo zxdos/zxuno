@@ -7,10 +7,11 @@ library unisim;
 entity clock is
 	port
 	(
-		clock50 : in  std_logic;
-		clock14 : out std_logic; -- 14.000 MHz
-		clock70 : out std_logic; --  7.000 MHz
-		clock35 : out std_logic  --  3.500 Mhz
+		clock50  : in  std_logic;
+		clock14  : out std_logic; -- 14.000 MHz
+		clock700 : out std_logic; --  7.000 MHz
+		clock350 : out std_logic; --  3.500 Mhz
+		clock175 : out std_logic  --  1.750 Mhz
 	);
 end;
 
@@ -19,14 +20,16 @@ architecture behavioral of clock is
 	signal cfb : std_logic;
 	signal c50 : std_logic;
 	signal c14 : std_logic;
-	signal count : std_logic_vector(1 downto 0);
+	signal count : std_logic_vector(2 downto 0);
 
 begin
 
 	Uibufg : ibufg port map(i => clock50, o => c50);
 	Uclock14 : bufg port map(i => c14, o => clock14);
-	Uclock70 : bufg port map(i => count(0), o => clock70);
-	Uclock35 : bufg port map(i => count(1), o => clock35);
+	Uclock700 : bufg port map(i => count(0), o => clock700);
+	Uclock350 : bufg port map(i => count(1), o => clock350);
+	clock175 <= count(2);
+--	Uclock175 : bufg port map(i => count(2), o => clock175);
 
 	uclock : pll_base
 	generic map
