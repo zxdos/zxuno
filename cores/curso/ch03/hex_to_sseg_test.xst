@@ -1,12 +1,12 @@
 set -tmpdir "projnav.tmp"
 set -xsthdpdir "xst"
 run
--ifn main.prj
+-ifn hex_to_sseg_test.prj
 -infer_ramb8 No -loop_iteration_limit 32768
--ofn main
+-ofn hex_to_sseg_test
 -ofmt NGC
 -p xc6slx9-2-tqg144
--top main
+-top hex_to_sseg_test
 -opt_mode Speed
 -opt_level 2
 -power NO

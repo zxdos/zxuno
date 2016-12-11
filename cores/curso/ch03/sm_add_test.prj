@@ -1,0 +1,4 @@
+vhdl work "list_ch03_15_smadd_test.vhd"
+vhdl work "list_ch03_14_smadd.vhd"
+vhdl work "hex_to_sseg.vhd"
+vhdl work "disp_mux.vhd"
