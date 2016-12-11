@@ -5,7 +5,6 @@ entity stop_watch_test is
    port(
       clk: in std_logic;
       bot: in std_logic_vector(4 downto 0);
-      sw: in std_logic_vector(7 downto 0);
       led: out std_logic_vector(4 downto 0);
       an: out std_logic_vector(3 downto 0);
       sseg: out std_logic_vector(7 downto 0)

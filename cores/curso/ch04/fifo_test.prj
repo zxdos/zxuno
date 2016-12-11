@@ -1,2 +1,3 @@
 vhdl work "list_ch04_21_fifo_test.vhd"
 vhdl work "list_ch04_20_fifo.vhd"
+vhdl work "debounce.vhd"
