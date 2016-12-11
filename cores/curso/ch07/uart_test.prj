@@ -1,0 +1,6 @@
+vhdl work "list_ch07_05_uart_test.vhd"
+vhdl work "list_ch07_04_uart.vhd"
+vhdl work "list_ch07_03_uart_tx.vhd"
+vhdl work "list_ch07_01_uart_rx.vhd"
+vhdl work "../ch06/list_ch06_01_02_debounce.vhd"
+vhdl work "../ch04/list_ch04_20_fifo.vhd"

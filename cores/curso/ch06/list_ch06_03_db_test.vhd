@@ -5,13 +5,15 @@ use ieee.numeric_std.all;
 entity debounce_test is
    port(
       clk: in std_logic;
-      btn: in std_logic_vector(3 downto 0);
+      bot: in std_logic_vector(4 downto 0);
+      led: out std_logic_vector(4 downto 0);
       an: out std_logic_vector(3 downto 0);
       sseg: out std_logic_vector(7 downto 0)
    );
 end debounce_test;
 
 architecture arch of debounce_test is
+   signal btn: std_logic_vector(3 downto 0);
    signal q1_reg, q1_next: unsigned(7 downto 0);
    signal q0_reg, q0_next: unsigned(7 downto 0);
    signal b_count, d_count: std_logic_vector(7 downto 0);
@@ -19,6 +21,9 @@ architecture arch of debounce_test is
    signal db_tick, btn_tick, clr: std_logic;
 -- Listing 7.3
 begin
+
+   btn <= not bot(3 downto 0);
+   led <= not bot;
    -- instantiate debouncing circuit
    db_unit: entity work.debounce(fsmd_arch)
       port map(
@@ -31,7 +36,8 @@ begin
          clk=>clk, reset=>'0',
          hex3=>b_count(7 downto 4), hex2=>b_count(3 downto 0),
          hex1=>d_count(7 downto 4), hex0=>d_count(3 downto 0),
-         dp_in=>"1011", an=>an, sseg=>sseg
+         point=>'1', colon=>'0',
+         an=>an, sseg=>sseg
       );
 
    --=================================================

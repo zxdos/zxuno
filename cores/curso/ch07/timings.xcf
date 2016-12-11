@@ -1,0 +1,2 @@
+# Timing constraints
+NET "clk" PERIOD=20 ns;
