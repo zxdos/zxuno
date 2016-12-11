@@ -1,10 +1,10 @@
 SET speed=2
 SET ruta_ucf=ch04
 SET ruta_bat=..\..\
-rem call :genbitstream disp_mux_test
+call :genbitstream disp_mux_test
 call :genbitstream hex_mux_test
-rem call :genbitstream shifter_test
-rem call :genbitstream fp_adder_test
+call :genbitstream stop_watch_test
+call :genbitstream fifo_test
 goto :eof
 
 :genbitstream
