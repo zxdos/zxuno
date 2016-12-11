@@ -1,0 +1,4 @@
+vhdl work "list_ch03_19_fp.vhd"
+vhdl work "hex_to_sseg.vhd"
+vhdl work "disp_mux.vhd"
+vhdl work "list_ch03_20_fp_test.vhd"
