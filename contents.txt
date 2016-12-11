@@ -1,0 +1,106 @@
+========================================================================
+== INTRODUCCIÓN Y FILOSOFÍA DEL CURSO
+========================================================================
+ - Aprender haciendo (programar desde el minuto 0)
+ - Contenidos teóricos de varios niveles, bajo demanda del alumno
+   - La teoría debe ser siempre ayuda a la solución de problemas
+   - Entender mejor para ir más allá en lo que se pretende
+
+ - Foco importante en la creatividad
+   - Intentar hacer cosas por uno mismo
+   - Mezclar, integrar, probar, experimentar: crear nuevas cosas
+
+========================================================================
+== CONTENIDOS TEÓRICOS (Sin ordenar ni clasificar)
+========================================================================
+ - Representación de información 
+   - Sistemas de numeración (binario, octal, hexadecimal, decimal)
+   - Little Endian vs Big Endian
+   - Complementos a 1 y a 2 y números con signo
+   - El código ASCII
+   - Números en coma fija (representación manual)
+   - Números en coma flotante (Mantisa - Exponente)
+ - Funcionamiento básico de un ordenador
+ - Arquitectura del procesador
+    - Fetch - Decode - Execute?
+    - El tamaño de palabra (los bits del procesador)
+ - Qué es el código máquina 
+    - El formato de instrucción (Opcode - Operands, 1byte to 4byte instructions)
+ - Qué es el lenguaje ensamblador
+    - Instrucciones del procesador
+    - Directivas de programa
+    - Constantes y Macros
+    - Inserción directa de Bytes y Palabras en memoria
+    - Compilado y linkado
+ - Máquina a utilizar para la parte práctica (El Amstrad CPC 464)
+    - Características técnicas de la máquina
+ 
+ - Interrupciones en el Z80
+    - Enmascarable y no enmascarable (Modos de interrupción)
+ - La Pila de Programa
+ - Los registros del procesador y sus usos
+ - Las instrucciones del Z80 una por una
+ - Operaciones aritméticas
+ - Manipulación de bits
+ - Operaciones Lógicas
+ - Saltos y llamadas
+ - Programación Modular
+    - Llamadas y retornos (funcionamiento gracias a la pila)
+    - Variables locales (almacenamiento temporal)
+    - Múltiples retornos y recursividad.
+ - Entrada y salida de información
+    - Interfaz con periféricos (Mapeado en memoria, Polling, tipos de transferencia de datos)
+    - Dispositivos programables y otros chips
+       - CRTC, AY-8912, 8255A PPI
+ - Depuración de programas
+ - Las matemáticas y la informática son lo mismo
+    - Programa procesa (modifica) información
+    - La información es abstracta
+    - Las matemáticas estudian las propiedades de la información y sus transformaciones
+
+ - Optimización
+    - Timings de instrucciones en Z80
+    - Timings específicos del CPC y explicación
+    - Conceptos avanzados de acceso a memoria
+       - Ciclos y memoria compartida
+       - DMA
+       - Refrescado de memoria dinámica (el registro R)
+    - Técnicas específicas
+       - Look-up tables
+       - Alineamiento de memoria
+
+========================================================================
+== CONTENIDOS PRÁCTICOS
+========================================================================
+ - Programas de ejemplo sobre los que empezar a trabajar
+ - Uso de un emulador de Amstrad CPC 464
+   - Cómo es la máquina real (y el emulador)
+   - La interfaz básica con BASIC (cargar algún programa)
+   - Algún programa sencillo en BASIC y su funcionamiento
+ - Tecnicas básicas de programación
+   - Almacenamiento y uso de datos (variables)
+   - Manipulación de información (operaciones)
+   - Repetición y cuenta (loops)
+   - Indexación (punteros)
+   - Ejecución condicional (jumps)
+ - Introducir código máquina en la memoria
+   - A Mano directamente en la memoria
+   - Utilizando POKES en BASIC
+   - Utilizando lenguaje ensamblador en el emulador
+   - Utilizando CPCtelera para crear programas
+ - Construir un programa en código máquina
+ - Pintar un carácter en pantalla
+ - Pintar un píxel
+   - Usando funciones
+   - A mano
+ - Cambiar el modo gráfico
+ - Leer el teclado
+ - Copiar información
+    - Borrar la pantalla
+    - Dibujar patrones en pantalla
+    - Sprites básicos
+    - Sprites genéricos
+ - Ejercicios de programas con errores o incompletos
+    - Corrección de programas
+    - Modificación de programas
+    - Completado
