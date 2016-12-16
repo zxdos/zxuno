@@ -1,0 +1,6 @@
+# Timing constraints
+NET "clk50mhz" PERIOD=20 ns;
+NET "clkram" KEEP | S | PERIOD=37.5 ns;
+NET "clk65" KEEP | S | PERIOD=150 ns;
+NET "clkcpu" KEEP | S | PERIOD=300 ns;
+NET "clkvga" KEEP | S | PERIOD=75 ns;
