@@ -31,6 +31,8 @@ entity ula is
 		mic        : out std_logic;
 		speaker    : out std_logic;
 		--
+    sw         : in std_logic_vector(7 downto 0);
+    col        : inout std_logic_vector(4 downto 0);
 		rows       : in  std_logic_vector(15 downto 8);
 		boot       : out std_logic;
 		reset      : out std_logic;
@@ -92,6 +94,8 @@ begin
 	(
 		received => received,
 		scancode => scancode,
+    sw       => sw,
+    col      => col,
 		boot     => boot,
 		reset    => reset,
 		nmi      => nmi,
@@ -129,6 +133,18 @@ begin
 				if vCount < 311
 				then
 					vCount <= vCount+1;
+          case vCount(8 downto 6) is
+            when "000" =>
+              col <= "11110";
+            when "001" =>
+              col <= "11101";
+            when "010" =>
+              col <= "11011";
+            when "011" =>
+              col <= "10111";
+            when others =>
+              col <= "01111";
+          end case;
 				else
 					vCount <= (others => '0');
 					fCount <= fCount+1;

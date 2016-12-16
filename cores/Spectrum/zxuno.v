@@ -272,6 +272,7 @@ module zxuno (
      .zxuno_addr(zxuno_addr),
      .zxuno_regrd(zxuno_regrd),
      .zxuno_regwr(zxuno_regwr),
+     .regaddr_changed(regaddr_changed),
     
     // I/O ports
      .ear(ear),

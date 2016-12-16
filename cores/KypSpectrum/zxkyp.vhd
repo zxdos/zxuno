@@ -10,6 +10,9 @@ entity zxkyp is
 		clock50   : in    std_logic;
 		led       : out   std_logic;
 		--
+    sw        : in std_logic_vector(7 downto 0);
+    col       : inout std_logic_vector(4 downto 0);
+		--
 		sramWr    : out   std_logic;
 		sramData  : inout std_logic_vector( 7 downto 0);
 		sramAddr  : out   std_logic_vector(18 downto 0);
@@ -163,6 +166,8 @@ begin
 		mic         => mic,
 		speaker     => speaker,
 		--
+    sw          => sw,
+    col         => col,
 		rows        => addr(15 downto 8),
 		boot        => boot,
 		reset       => reset,

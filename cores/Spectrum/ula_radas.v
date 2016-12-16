@@ -53,6 +53,7 @@ module ula_radas (
     input wire [7:0] zxuno_addr,
     input wire zxuno_regrd,
     input wire zxuno_regwr,
+    input wire regaddr_changed,
 
     // I/O ports
     input wire ear,
@@ -103,13 +104,23 @@ module ula_radas (
 	 wire [8:0] hc;
 	 wire [8:0] vc;
     
+    // Initial values for Radastanian mode pixel and border palette bank
+    reg  radasborderpalettehalf = 1'b0;
+    reg [1:0] radaspixelpalettequarter = 2'b00;
+
     // Initial values for synch, syncv for all supported timings
     reg [8:0] hinit48k = 9'd112;
-    reg [8:0] vinit48k = 9'd2;
+    reg [8:0] vinit48k = 9'd0;
     reg [8:0] hinit128k = 9'd116;
-    reg [8:0] vinit128k = 9'd2;
+    reg [8:0] vinit128k = 9'd0;
     reg [8:0] hinitpen = 9'd110;
     reg [8:0] vinitpen = 9'd0;    
+
+    // Initial values for offset and padding in Radastanian mode, used for HW scroller
+    reg [13:0] radasoffset = 14'h0000;
+    reg [7:0] radaspadding = 8'h00;
+    reg ffbitmapofs = 1'b0;
+    reg [7:0] lastdatatoradasoffset = 8'h00;
    
    // Signal when the vertical counter is in the line that we use to make the INT signal
    wire in_int_line;
@@ -230,7 +241,7 @@ module ula_radas (
     always @* begin
       InputToAttrOutput = AttrData;
       case ({VideoEnable,HR})
-         2'b00 : InputToAttrOutput = (RadasEnabled)? {1'b0,Border,1'b0,Border} : {2'b00,Border,3'b000};
+         2'b00 : InputToAttrOutput = (RadasEnabled)? {radasborderpalettehalf,Border,radasborderpalettehalf,Border} : {2'b00,Border,3'b000};
          2'b01,
          2'b11 : InputToAttrOutput = {2'b01,~HRInk,HRInk};
          2'b10 : InputToAttrOutput = AttrData;
@@ -339,9 +350,9 @@ module ula_radas (
    wire [7:0] ULAplusPaperColour;
    wire [7:0] ULAplusInkColour;
    
-   wire [5:0] AddressA1 = (RadasEnabled)? {2'b00,InputToAttrOutput[7:4]} :
+   wire [5:0] AddressA1 = (RadasEnabled)? {radaspixelpalettequarter,InputToAttrOutput[7:4]} :
                                           {InputToAttrOutput[7:6],1'b1,InputToAttrOutput[5:3]};
-   wire [5:0] AddressA2 = (RadasEnabled)? {2'b00,InputToAttrOutput[3:0]} :
+   wire [5:0] AddressA2 = (RadasEnabled)? {radaspixelpalettequarter,InputToAttrOutput[3:0]} :
                                           {InputToAttrOutput[7:6],1'b0,InputToAttrOutput[2:0]};
    lut palette (
       .clk(clk28),
@@ -418,8 +429,9 @@ module ula_radas (
          else
             va = 14'hZZZZ;
      end
-     else begin
-         va = {PG,vc[7:1],hcd[7:2]};
+     else begin         
+         //va = {PG,vc[7:1],hcd[7:2]};
+         va = {PG,vc[7:1],hcd[7:2]} + radasoffset + vc[7:1]*radaspadding;
      end
   end
 
@@ -500,8 +512,7 @@ module ula_radas (
       TIMEXPORT    = 8'hFF,
       TIMEXMMU     = 8'hF4,
       ULAPLUSADDR  = 16'hBF3B,
-      ULAPLUSDATA  = 16'hFF3B,
-      RADASCTRL    = 8'h40;
+      ULAPLUSDATA  = 16'hFF3B;
       
    parameter
       HOFFS48K     = 8'h80,
@@ -510,6 +521,12 @@ module ula_radas (
       VOFFS128K    = 8'h83,
       HOFFSPEN     = 8'h84,
       VOFFSPEN     = 8'h85;
+      
+   parameter
+      RADASCTRL    = 8'h40,
+      RADASOFFSET  = 8'h41,
+      RADASPADDING = 8'h42,
+      RADASPALBANK = 8'h43;
          
    // Z80 writes values into registers
    // Port 0xFE
@@ -542,7 +559,7 @@ module ula_radas (
       end
    end
    
-   // Sync adjustment
+   // Sync and radastanian palette adjustment
    always @(posedge clkregs) begin
       if (zxuno_regwr == 1'b1) begin
          case (zxuno_addr)
@@ -552,7 +569,43 @@ module ula_radas (
             VOFFS128K: vinit128k <= {din,1'b0};
             HOFFSPEN:  hinitpen  <= {din,1'b0};
             VOFFSPEN:  vinitpen  <= {din,1'b0};
+            RADASPALBANK: {radasborderpalettehalf,radaspixelpalettequarter} <= din[2:0];
          endcase
+      end
+   end
+   
+   // Control de offsets del modo radastaniano
+   reg offset_reg_accessed = 1'b0;
+   always @(posedge clkregs) begin
+      if (rst_n == 1'b0) begin
+         ffbitmapofs <= 1'b0;
+         radasoffset <= 14'h0000;
+         radaspadding <= 8'h00;
+      end
+      else begin
+         if (regaddr_changed && zxuno_addr == RADASOFFSET)
+            ffbitmapofs <= 1'b0;
+         else if (offset_reg_accessed == 1'b0 && zxuno_addr == RADASOFFSET && (zxuno_regrd == 1'b1 || zxuno_regwr == 1'b1)) begin
+            if (zxuno_regwr == 1'b1 && ffbitmapofs == 1'b0) begin
+               radasoffset[7:0] <= din;
+            end
+            else if (zxuno_regwr == 1'b1 && ffbitmapofs == 1'b1) begin
+               radasoffset[13:8] <= din[5:0];
+            end
+            else if (zxuno_regrd == 1'b1 && ffbitmapofs == 1'b0) begin
+               lastdatatoradasoffset <= radasoffset[7:0];
+            end
+            else if (zxuno_regrd == 1'b1 && ffbitmapofs == 1'b1) begin
+               lastdatatoradasoffset <= {2'b00,radasoffset[13:8]};
+            end
+            ffbitmapofs <= ~ffbitmapofs;
+            offset_reg_accessed <= 1'b1;
+         end
+         else if (zxuno_regwr == 1'b1 && zxuno_addr == RADASPADDING) begin
+            radaspadding <= din;
+         end
+         if (offset_reg_accessed == 1'b1 && zxuno_regwr == 1'b0 && zxuno_regwr == 1'b0)
+            offset_reg_accessed <= 1'b0;
       end
    end
 
@@ -570,8 +623,6 @@ module ula_radas (
       if (iorq_n==1'b0 && rd_n==1'b0) begin
          if (a[0]==1'b0 && a[7:0]!=8'hF4)
             dout = {1'b1,post_processed_ear,1'b1,kbd};
-         else if (zxuno_addr == RADASCTRL && zxuno_regrd == 1'b1 && !disable_radas)
-            dout = {6'b000000,RadasCtrl};
          else if (a==ULAPLUSADDR && !disable_ulaplus)
             dout = {1'b0,PaletteReg};
          else if (a==ULAPLUSDATA && PaletteReg[6]==1'b0 && !disable_ulaplus)
@@ -592,6 +643,14 @@ module ula_radas (
             dout = hinitpen[8:1];
          else if (zxuno_addr == VOFFSPEN && zxuno_regrd == 1'b1)
             dout = vinitpen[8:1];
+         else if (zxuno_addr == RADASCTRL && zxuno_regrd == 1'b1 && !disable_radas)
+            dout = {6'b000000,RadasCtrl};
+         else if (zxuno_addr == RADASOFFSET && zxuno_regrd == 1'b1 && !disable_radas)
+            dout = lastdatatoradasoffset;
+         else if (zxuno_addr == RADASPADDING && zxuno_regrd == 1'b1 && !disable_radas)
+            dout = radaspadding;
+         else if (zxuno_addr == RADASPALBANK && zxuno_regrd == 1'b1 && !disable_radas)
+            dout = {5'b00000, radasborderpalettehalf,radaspixelpalettequarter};
          else begin
             if (BitmapAddr || AttrAddr)
                 dout = vramdata;
