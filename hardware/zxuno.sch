@@ -20922,11 +20922,6 @@ KINGFONT SDCMF-10915W010</description>
 <label x="22.86" y="-43.18" size="1.778" layer="95"/>
 <pinref part="U1" gate="B1" pin="IO_L34P_1"/>
 </segment>
-<segment>
-<pinref part="KEYB" gate="A" pin="1"/>
-<wire x1="-43.18" y1="-73.66" x2="-33.02" y2="-73.66" width="0.1524" layer="91"/>
-<label x="-38.1" y="-73.66" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="PS2_CLK" class="0">
 <segment>
@@ -20938,11 +20933,6 @@ KINGFONT SDCMF-10915W010</description>
 <wire x1="35.56" y1="-45.72" x2="22.86" y2="-45.72" width="0.1524" layer="91"/>
 <label x="22.86" y="-45.72" size="1.778" layer="95"/>
 <pinref part="U1" gate="B1" pin="IO_L33N_1"/>
-</segment>
-<segment>
-<pinref part="KEYB" gate="A" pin="2"/>
-<wire x1="-43.18" y1="-71.12" x2="-33.02" y2="-71.12" width="0.1524" layer="91"/>
-<label x="-38.1" y="-71.12" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="EAR" class="0">
@@ -22089,6 +22079,12 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="-12.7" y1="-60.96" x2="-20.32" y2="-60.96" width="0.1524" layer="91"/>
 <pinref part="PS/2" gate="G$1" pin="1"/>
+<label x="-20.32" y="-60.96" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="KEYB" gate="A" pin="2"/>
+<wire x1="-43.18" y1="-71.12" x2="-33.02" y2="-71.12" width="0.1524" layer="91"/>
+<label x="-38.1" y="-71.12" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CLKPS2" class="0">
@@ -22096,6 +22092,12 @@ KINGFONT SDCMF-10915W010</description>
 <pinref part="R10" gate="G$1" pin="1"/>
 <wire x1="-12.7" y1="-50.8" x2="-20.32" y2="-50.8" width="0.1524" layer="91"/>
 <pinref part="PS/2" gate="G$1" pin="5"/>
+<label x="-20.32" y="-50.8" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="KEYB" gate="A" pin="1"/>
+<wire x1="-43.18" y1="-73.66" x2="-33.02" y2="-73.66" width="0.1524" layer="91"/>
+<label x="-38.1" y="-73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
