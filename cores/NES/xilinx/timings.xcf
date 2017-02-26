@@ -1,0 +1,2 @@
+# Timing constraints
+NET "CLOCK_50" PERIOD=20 ns;

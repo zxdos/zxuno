@@ -51,6 +51,8 @@ module NES_ZXUNO(
   wire host_select;
   wire host_start;
   
+  wire master_reset;
+  
   reg boot_state = 1'b0;
  
   wire [31:0] bootdata;
@@ -127,8 +129,7 @@ module NES_ZXUNO(
   wire [7:0] joystick1, joystick2;
   wire p_sel = !host_select;
   wire p_start = !host_start;
-  assign joystick1 = {~P_R, ~P_L, ~P_D, ~P_U, ~p_start, ~p_sel, ~P_tr, ~P_A};
-  
+  assign joystick1 = {~P_R, ~P_L, ~P_D, ~P_U, ~p_start | (~P_R & ~P_L), ~p_sel | (~P_D & ~P_U), ~P_tr, ~P_A};  
  
   always @(posedge clk) begin
     if (joypad_strobe) begin
@@ -276,7 +277,8 @@ wire [31:0] rom_size;
 			.host_reset_loader(host_reset_loader),
 			.host_bootdata(bootdata), 
 			.host_bootdata_req(bootdata_req), 
-			.host_bootdata_ack(bootdata_ack)
+			.host_bootdata_ack(bootdata_ack),
+			.host_master_reset(master_reset)
 	);
 	
 	OSD_Overlay osd (
@@ -385,4 +387,12 @@ begin
 	loader_input <= dout_fifo;
 //	data <= bytesloaded[19:4];
 end
+
+//-----------------Multiboot-------------
+    multiboot el_multiboot (
+        .clk_icap(clk),
+        .REBOOT(master_reset)
+    );
+
+
 endmodule

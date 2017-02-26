@@ -17,6 +17,7 @@
 #define HOST_CONTROL_SELECT 8
 #define HOST_CONTROL_START 16
 #define HOST_CONTROL_LOADER_RESET 32
+#define HOST_CONTROL_MASTER_RESET 64
 
 /* DIP switches / "Front Panel" controls - bits 15 downto 0 */
 #define REG_HOST_SCALERED 0x10

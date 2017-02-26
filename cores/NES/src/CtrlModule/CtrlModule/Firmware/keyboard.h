@@ -47,6 +47,8 @@
 #define KEY_1 0x16
 #define KEY_2 0x1E
 
+#define KEY_BACKSP 0x66
+
 
 int HandlePS2RawCodes();
 void ClearKeyboard();

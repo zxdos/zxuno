@@ -9,6 +9,7 @@ run
 -opt_mode Speed
 -opt_level 1
 -power NO
+-uc "timings.xcf"
 -iuc NO
 -keep_hierarchy No
 -netlist_hierarchy As_Optimized

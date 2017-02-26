@@ -152,6 +152,11 @@ int Menu_Run()
 
 		if(TestKey(KEY_2))
 			Select();
+		// master reset
+		if ((TestKey(KEY_LCTRL) || TestKey(KEY_RCTRL)) && (TestKey(KEY_ALT) || TestKey(KEY_ALTGR)) && TestKey(KEY_BACKSP) ) 
+		{
+			masterReset();
+		}
 		//q
 
 		TestKey(KEY_PAGEUP);
@@ -160,6 +165,11 @@ int Menu_Run()
 		return;
 	}
 
+	// master reset
+	if ((TestKey(KEY_LCTRL) || TestKey(KEY_RCTRL)) && (TestKey(KEY_ALT) || TestKey(KEY_ALTGR)) && TestKey(KEY_BACKSP) ) 
+	{
+		masterReset();
+	}
 
 	if(TestKey(KEY_UPARROW)&2)
 	{

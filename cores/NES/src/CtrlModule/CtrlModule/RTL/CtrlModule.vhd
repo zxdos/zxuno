@@ -45,6 +45,7 @@ entity CtrlModule is
 		host_reset_loader : out std_logic;
 		host_select : out std_logic;
 		host_start : out std_logic;
+		host_master_reset : out std_logic := '0';
 		
 		-- Boot upload signals
 		host_bootdata : out std_logic_vector(31 downto 0);
@@ -326,6 +327,7 @@ begin
 							host_select<=mem_write(3);
 							host_start<=mem_write(4);
 							host_reset_loader <=mem_write(5);
+							host_master_reset <=mem_write(6);
 
 --						when X"F0" => -- Scale Red
 --							mem_busy<='0';
