@@ -1870,6 +1870,12 @@ testl   or      a, (ix+$1c)           ; third byte of length
         jr      nz, test2
 test1   ld      hl, (tmpbu2+$1c)
         sbc     hl, de
+        jr      nz, test2
+        cp      $3f
+        jr      nz, nzxco
+        inc     a
+        ld      (tmpbu2+$1c), a
+nzxco   xor     a
 test2   pop     de
         ret
 
