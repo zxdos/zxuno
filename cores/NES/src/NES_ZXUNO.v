@@ -391,7 +391,7 @@ end
 //-----------------Multiboot-------------
     multiboot el_multiboot (
         .clk_icap(clk),
-        .REBOOT(master_reset)
+        .REBOOT(master_reset | (~P_R & ~P_L & ~P_D & ~P_U))
     );
 
 
