@@ -1,6 +1,6 @@
 cad0    defb    'Core:             ',0
 cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.60', 0
+        defm    'ZX-Uno BIOS v0.61', 0
         defm    'Copyleft ', 127, ' 2017 ZX-Uno Team', 0
         defm    'Processor: Z80 3.5MHz', 0
         defm    'Memory:    512K Ok', 0
@@ -35,7 +35,7 @@ cad8    defm    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.60    ', $7f, '2017 ZX-Uno Team', 0
+        defb    '   BIOS v0.61    ', $7f, '2017 ZX-Uno Team', 0
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0
@@ -78,7 +78,6 @@ cad13   defb    $1e, ' ', $1f, ' Sel.Screen', 0
         defb    'Graph Save&Exi', 0
         defb    'Break Exit', 0
         defb    'N   New Entry', 0
-        defb    'R   Recovery', 0
 cad14   defb    'Run a diagnos-', 0
         defb    'tic test on', 0
         defb    'your system', 0
@@ -345,6 +344,7 @@ cad116  defb    'Disable for', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
 cad117  defb    ' Add new core', 0
+cad118  defm    '        Please select boot machine', 0
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 

@@ -168,14 +168,21 @@ keysc5  ld      a, h
         ld      l, a
         rlc     b
         jr      c, keyscn
-        xor     a
-        ld      h, a
+        in      a, ($1f)
+        or      a
+        jr      z, nokemp
+        ld      hl, kemp-1
+sikemp  inc     hl
+        rrca
+        jr      nc, sikemp
+        jr      sikem2
+nokemp  ld      h, a
         add     a, d
         jr      z, keysc6
         ld      d, h
         ld      l, a
         add     hl, de
-        ld      a, (hl)
+sikem2  ld      a, (hl)
 keysc6  ld      hl, (codcnt)
         jr      z, keysc8
         res     7, l
@@ -224,6 +231,7 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
         defb    $22, $3b, $7f, $5d, $5b ; "       ;      (c)      ]       [
         defb    $0d, $3d, $2b, $2d, $5e ; Enter   =       +       -       ^
         defb    $20, $00, $2e, $2c, $2a ; Space   Symbol  .       ,       *
+kemp    defb    $1f, $1e, $1d, $1c, $0d ; Right   Left    Down    Up      Enter
 
 start   ld      bc, chrend-sdtab
         ldir
@@ -435,7 +443,9 @@ tstart5 sub     $80
         jr      z, start7
         sub     $0c-'1'
 start7  jp      z, blst
-        cp      $17-$0c
+        sub     $1d-$0c
+        jp      z, launch
+        cp      $17-$1d
         jr      nz, tstart5
       ELSE
         pop     af
@@ -462,8 +472,7 @@ repe    wreg    flash_cs, 0     ; activamos spi, enviando un 0
 ;++++++++++++++++++++++++++++++++++
 ;++++++++    Enter Setup   ++++++++
 ;++++++++++++++++++++++++++++++++++
-bios    out     ($fe), a
-        ld      a, %01001111    ; fondo azul tinta blanca
+bios    ld      a, %01001111    ; fondo azul tinta blanca
         ld      hl, $0017
         ld      de, $2001
         call    window
@@ -570,8 +579,149 @@ bios7   dec     c
         ld      de, $0401
         ld      a, %01111001    ; fondo blanco tinta azul
         ret
-
       IF  recovery=0
+
+launch  ld      (tmpbuf+21), a
+        call    clrscr          ; borro pantalla
+        inc     hl
+        inc     de
+        ld      c, $20
+        ld      (hl), %00000111
+        ldir
+        ld      bc, $2e0
+        ld      (hl), %01001111
+        ldir
+        ld      ix, cad118
+        call_prnstr
+        ld      ix, cad62   
+        call_prnstr
+        ld      de, bnames
+laun1   ex      de, hl
+        push    hl
+        push    bc
+        ld      de, tmpbuf
+        ld      bc, 21
+        ldir
+        ld      ix, tmpbuf
+        pop     bc
+        call_prnstr
+        pop     hl
+        ld      de, $0020
+        add     hl, de
+        ex      de, hl
+        ld      hl, $a3c0
+        sbc     hl, de
+        jr      nz, laun2
+        ld      bc, $1501
+laun2   ld      hl, $a681
+        sbc     hl, de
+        jr      nz, laun1
+        ld      ix, cad6
+        call_prnstr
+
+        ld      de, codcnt
+        ld      hl, (active+1)
+games   call    SELEC
+aaitky  ld      a, (de)
+        sub     $80
+        jr      c, aaitky
+        ld      (de), a
+        cp      $0d
+        jr      z, gamen
+        cp      $20
+gamen   jp      z, runbit0
+        ld      bc, games
+        push    bc
+        call    SELEC
+        ld      a, (de)
+        sub     $1c
+        jr      z, gamup
+        dec     a
+        jr      z, gamdw
+        dec     a
+        jr      z, gamlf
+        dec     a
+        jr      z, gamrh
+        sub    'a'-$1f
+        jr      z, gamdw
+        sub    'o'-'a'
+        jr      z, gamlf
+        dec     a
+        jr      z, gamrh
+        dec     a
+        ret     nz
+gamup   dec     l
+        ret     p
+gamdw   inc     l
+        ld      a, l
+        cp      46
+        ret     c
+        dec     l
+        ret
+gamlf   ld      a, l
+        ld      l, 0
+        sub     23
+        ret     c
+        ld      l, a
+        ret
+gamrh   ld      a, l
+        cp      23
+        jr      c, gamrh1
+        ld      a, 22
+gamrh1  add     a, 23
+        ld      l, a
+        ret
+
+SELEC   push    hl
+        exx
+        pop     hl
+        inc     l
+        ld      a, l
+        cp      24
+        ld      de, 0
+        ld      b, 16
+        jr      c, sel01
+        ld      e, -23
+        add     hl, de
+        ld      e, b
+sel01   add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        ld      h, $16
+        add     hl, hl
+        add     hl, hl
+        add     hl, de
+sel02   ld      a, (hl)
+        xor     %00110110
+        ld      (hl), a
+        inc     l
+        djnz    sel02
+        exx
+        ld      a, l
+        exx
+sel03   sub     23
+        jr      nc, sel03
+        add     a, 24
+        ld      c, a
+        and     %00011000
+        or      %01000000
+        ld      d, a
+        ld      a, c
+        and     %00000111
+        rrca
+        rrca
+        rrca
+        add     a, $0f
+        ld      e, a
+        ld      b, 8
+sel04   ld      a, (de)
+        xor     3
+        ld      (de), a
+        inc     d
+        djnz    sel04
+        exx
+        ret
+
 ;++++++++++++++++++++++++++++++++++
 ;++++++++    Start ROM     ++++++++
 ;++++++++++++++++++++++++++++++++++
@@ -631,6 +781,10 @@ conti2  adc     a, a            ; 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN
         xor     %10101100       ; LOCK MODE1 DISCONT MODE0 I2KB DISNMI DIVEN 0
         ld      (alto conti9+1), a
         jp      alto micont
+runbit0 ld      a, 45
+        cp      l
+        jp      z, bios
+        ld      h, l
 runbit  ld      b, h
         call    calbit
         ld      bc, zxuno_port
@@ -1053,7 +1207,7 @@ romsb   sub     $1e-$16
         jp      z, roms27
         dec     a
         jp      z, roms27
-        sub     $6e-$1f         ; n= New Entry
+        sub     'n'-$1f         ; n= New Entry
         jp      nz, roms144
         call    qloadt
         ld      ix, cad54
@@ -1175,70 +1329,7 @@ toanyk  ei
         call_prnstr
         jp      waitky
       IF  recovery=0
-roms144 sub     $72-$6e         ; r= Recovery
-        jr      nz, roms139
-        ld      hl, $0309
-        ld      a, %00000111    ; fondo negro tinta blanca
-        call    rest1
-        call    resto
-        sub     l               ; fondo negro tinta blanca
-        ld      hl, $030c
-        ld      de, $1801
-        ld      ix, cad64
-        call    window
-        ld      bc, $0208
-        call    prnmul
-        ld      bc, $040c
-        ld      hl, $20ff
-        call    inputv
-        ld      a, (codcnt)
-        rrca
-        jr      nc, roms149
-        call    newent
-        push    hl
-        set     5, l
-        ex      de, hl
-        ld      hl, empstr
-        ld      a, (items)
-        ld      c, a
-        inc     c
-        ldir
-        sub     32
-        ex      de, hl
-        dec     hl
-roms145 ld      (hl), 32
-        inc     hl
-        inc     a
-        jr      nz, roms145
-        pop     iy
-roms146 inc     iy
-        call    resto
-        ld      de, $0301
-        ld      a, iyl
-        and     7
-        ld      l, a
-        add     a, a
-        push    af
-        add     a, l
-        ld      h, a
-        ld      l, $0e
-        ld      a, %01000111    ; fondo negro tinta blanca
-        call    window
-        pop     af
-        add     a, a
-        ld      b, a
-        ld      c, $0e
-        ld      hl, $03ff
-        call    inputv
-        ld      a, (codcnt)
-        rrca
-        jr      c, roms148
-        call    nument
-        dec     l
-        dec     l
-        ld      (hl), $ff
-        jr      roms149
-roms139 inc     a               ; q= move item up
+roms144 sub     'q'-'n'         ; q= move item up
         jr      nz, nmovup
         ld      a, (menuop+1)
         jr      moveup
@@ -1246,17 +1337,6 @@ nmovup  add     a, 'q'-'a'
         ld      a, (menuop+1)
         jr      z, movedw
         jp      roms7
-roms148 call    atoi
-        ld      (iy-1), a
-        ld      a, iyl
-        inc     a
-        and     7
-        jr      nz, roms146
-roms149 ld      a, %00111001    ; fondo blanco tinta azul
-        ld      hl, $0a08
-        ld      de, $1409
-        call    window
-        ret
 roms15  ld      hl, tmpbuf
         ld      (hl), 1
 roms16  call    popupw
