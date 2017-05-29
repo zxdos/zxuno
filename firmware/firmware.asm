@@ -2407,7 +2407,7 @@ blst1   ld      h, a
         rra
         ld      l, a
         ld      a, h
-        add     a, 8
+        add     a, 7
         ld      e, a
         ld      a, %01001111    ; fondo azul tinta blanca
         ld      h, $01          ; coordenada X
@@ -2429,7 +2429,6 @@ blst2   ld      ix, cad4
         ld      ix, cad3
         call_prnstr             ; |----------------|
         ld      ix, cad5 
-        call_prnstr
         call_prnstr
         call_prnstr
         call_prnstr
@@ -2464,7 +2463,7 @@ bls37   ld      (ix+0), cad6&$ff
         defw    $1a02
         defb    %01001111
         ld      a, (cmbpnt+1)
-        rrca
+        rlca
         ld      hl, (active)
         ld      a, h
         jr      c, bls38
@@ -2474,9 +2473,10 @@ bls38   pop     hl
 blst4   call    combol
         ld      b, a
         ld      a, (codcnt)
-        cp      $0d
+        sub     $0d
+        ld      (bitstr), a
         ld      a, b
-        jr      c, blst5
+;        jr      c, blst5
         jr      nz, blst4
         ld      a, (items)
         dec     a
@@ -2484,7 +2484,7 @@ blst4   call    combol
         ld      a, $17
         jp      z, bios
         ld      a, (cmbpnt+1)
-        rrca
+        rlca
         ld      a, b
         ld      (active), a
         jr      nc, blst5
