@@ -368,20 +368,7 @@ star45  add     hl, hl
         dec     a
         jr      nz, star45
         ld      (alto fllen), hl
-      IF  recovery=0
-        ld      d, 4
-        pop     af
-        jr      nz, start5
-        ld      d, 16
-start5  djnz    start6
-        dec     de
-        ld      a, d
-        or      e
-        jr      nz, start6
-        ld      hl, $0017       ; Si se acaba el temporizador borrar
-        ld      de, $2001       ; lo de presione Break
-        call    window
-start50 wreg    scan_code, $f6  ; $f6 = kb set defaults
+        wreg    scan_code, $f6  ; $f6 = kb set defaults
         halt
         halt
         wreg    scan_code, $ed  ; $ed + 2 = kb set leds + numlock
@@ -405,7 +392,23 @@ star54  inc     b
         outi
         bit     7, h              ; compruebo si la direccion es 0000 (final)
         jr      nz, star54        ; repito si no lo es
-star55  ld      hl, (joykey)
+star55  
+      IF  recovery=0
+        ld      d, 4
+        pop     af
+        jr      nz, start5
+        ld      d, 16
+start5  djnz    start6
+        dec     de
+        ld      a, d
+        or      e
+        jr      nz, start6
+        ld      hl, $0017       ; Si se acaba el temporizador borrar
+        ld      de, $2001       ; lo de presione Break
+        push    bc
+        call    window
+        pop     bc
+        ld      hl, (joykey)
         inc     h
         inc     l
         ld      a, h
@@ -2489,7 +2492,7 @@ blst4   call    combol
         ld      (active), a
         jr      nc, blst5
         ld      (bitstr), a
-blst5   jp      start50
+blst5   jp      conti
       ENDIF
 
 imyesn  call    bloq1

@@ -24,6 +24,7 @@ cad5    defm    $10, '    ', $1c, ' and ', $1d, ' to move selection     ', $10, 
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
+cad118  defm    '        Please select boot machine', 0
 cad6    defb    'Enter Setup', 0
 cad7    defb    ' Main  ROMs  Upgrade  Boot  Advanced  Exit', 0
         defb    $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
@@ -343,7 +344,6 @@ cad116  defb    'Disable for', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
 cad117  defb    ' Add new core', 0
-cad118  defm    '        Please select boot machine', 0
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 
