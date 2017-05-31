@@ -405,9 +405,7 @@ start5  djnz    start6
         jr      nz, start6
         ld      hl, $0017       ; Si se acaba el temporizador borrar
         ld      de, $2001       ; lo de presione Break
-        push    bc
         call    window
-        pop     bc
         ld      hl, (joykey)
         inc     h
         inc     l
@@ -417,8 +415,8 @@ start5  djnz    start6
         rlca
         rlca
         or      l
+        ld      bc, zxuno_port
         ld      de, joy_conf<<8 | scandbl_ctrl
-        dec     b
         out     (c), d
         inc     b
         out     (c), a
