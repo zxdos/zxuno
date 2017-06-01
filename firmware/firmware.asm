@@ -275,17 +275,17 @@ start2  ld      a, (hl)
         ld      a, (quietb)
         out     ($fe), a
         dec     a
-        jr      nz, star25
+        jr      nz, start3
         ld      h, l
         ld      d, $20
         call    window
-        jr      start4
-star25  ld      hl, finlog-1
+        jr      start8
+start3  ld      hl, finlog-1
         ld      d, $7a
         call    dzx7b           ; descomprimir
         inc     hl
         ld      b, $40          ; filtro RCS inverso
-start3  ld      a, b
+start4  ld      a, b
         xor     c
         and     $f8
         xor     c
@@ -299,18 +299,18 @@ start3  ld      a, b
         ldi
         inc     bc
         bit     3, b
-        jr      z, start3
+        jr      z, start4
         ld      b, $13
         ldir
         ld      bc, zxuno_port
         out     (c), a          ; a = $ff = core_id
         inc     b
         ld      hl, cad0+6      ; Load address of coreID string
-star33  in      a, (c)
+start5  in      a, (c)
         ld      (hl), a         ; copia el caracter leido de CoreID 
         inc     hl
         ld      ix, cad0        ; imprimir cadena
-        jr      nz, star33      ; si no recibimos un 0 seguimos pillando caracteres
+        jr      nz, start5      ; si no recibimos un 0 seguimos pillando caracteres
         ld      bc, $090b
         call_prnstr             ; CoreID
         ld      c, b
@@ -332,17 +332,17 @@ star33  in      a, (c)
         call_prnstr             ; Press <Edit> to Setup
         ld      hl, bitstr
         add     a, (hl)
-        jr      z, star37
+        jr      z, start6
         dec     a
         call    cbname
         xor     a
-        jr      star38
-star37  dec     l
+        jr      start7
+start6  dec     l
         ld      l, (hl)
         ld      l, (hl)
         call    calcu
         set     5, l
-star38  ld      de, tmpbuf
+start7  ld      de, tmpbuf
         push    de
         pop     ix
         ld      c, $1f
@@ -351,7 +351,7 @@ star38  ld      de, tmpbuf
         pop     bc
         call_prnstr             ; Imprime máquina (ROM o core)
       ENDIF
-start4  wreg    flash_cs, 0     ; activamos spi, enviando un 0
+start8  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $9f  ; jedec id
         in      a, (c)
         in      a, (c)
@@ -360,13 +360,13 @@ start4  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         sub     $13
         cp      5
-        jr      nz, star44
+        jr      nz, start9
         ld      hl, alto subnn+1
         ld      (hl), 6*4
-star44  ld      hl, $0800
-star45  add     hl, hl
+start9  ld      hl, $0800
+star10  add     hl, hl
         dec     a
-        jr      nz, star45
+        jr      nz, star10
         ld      (alto fllen), hl
         wreg    scan_code, $f6  ; $f6 = kb set defaults
         halt
@@ -376,37 +376,37 @@ star45  add     hl, hl
         wreg    scan_code, $02
         halt
         wreg    mouse_data, $f4 ; $f4 = init Kmouse
-star51  ld      a, (layout)
+star11  ld      a, (layout)
         rr      a
         ld      hl, fines-1
-        jr      z, star52
+        jr      z, star12
         ld      hl, finus-1
-        jr      nc, star53
+        jr      nc, star13
         ld      hl, finav-1
-star52  jr      nc, star55
-star53  ld      de, $ffff
+star12  jr      nc, star15
+star13  ld      de, $ffff
         call    dzx7b
         wreg    key_map, 0
         ld      hl, $c001
-star54  inc     b
+star14  inc     b
         outi
         bit     7, h              ; compruebo si la direccion es 0000 (final)
-        jr      nz, star54        ; repito si no lo es
-star55  
+        jr      nz, star14        ; repito si no lo es
+star15  
       IF  recovery=0
         ld      d, 4
         pop     af
-        jr      nz, start5
+        jr      nz, star16
         ld      d, 16
-start5  djnz    start6
+star16  djnz    star18
         dec     de
         ld      a, d
         or      e
-        jr      nz, start6
+        jr      nz, star18
         ld      hl, $0017       ; Si se acaba el temporizador borrar
         ld      de, $2001       ; lo de presione Break
         call    window
-        ld      hl, (joykey)
+star17  ld      hl, (joykey)
         inc     h
         inc     l
         ld      a, h
@@ -431,9 +431,9 @@ start5  djnz    start6
         inc     b
         out     (c), a
         jp      conti
-start6  ld      a, (codcnt)
-tstart5 sub     $80
-        jr      c, start5
+star18  ld      a, (codcnt)
+star19  sub     $80
+        jr      c, star16
         ld      (codcnt), a
         sub     '1'
         cp      9
@@ -441,16 +441,16 @@ tstart5 sub     $80
         jp      c, runbit
         jp      z, alto easter
         cp      $19-'1'
-        jr      z, start7
+        jr      z, star20
         sub     $0c-'1'
-start7  jp      z, blst
+star20  jp      z, blst
         sub     $1d-$0c
         jp      z, launch
         cp      $17-$1d
-        jr      nz, tstart5
+        jr      nz, star19
       ELSE
         pop     af
-repe    wreg    flash_cs, 0     ; activamos spi, enviando un 0
+star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
@@ -466,7 +466,7 @@ repe    wreg    flash_cs, 0     ; activamos spi, enviando un 0
         in      a, (c)
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         and     2
-        jr      z, repe
+        jr      z, star21
         xor     a
       ENDIF
 
@@ -2378,7 +2378,7 @@ exit4   djnz    exit5
 exit5   djnz    exit6
         jp      alto loadch
 exit6   call    savech
-exit7   jp      star51
+exit7   jp      star11
 
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
@@ -2490,7 +2490,7 @@ blst4   call    combol
         ld      (active), a
         jr      nc, blst5
         ld      (bitstr), a
-blst5   jp      conti
+blst5   jp      star17
       ENDIF
 
 imyesn  call    bloq1
