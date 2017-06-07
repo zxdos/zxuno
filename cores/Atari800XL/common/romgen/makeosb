@@ -1,0 +1,3 @@
+dd if=osborig.rom of=osborig_low.rom bs=1 count=2048 skip=0
+dd if=osborig.rom of=osborig_high.rom bs=1 count=8192 skip=2048
+

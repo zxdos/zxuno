@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="zpucore.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="attributes" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_misc" />
+            <top_module name="std_logic_textio" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="textio" />
+            <top_module name="zpucore_tb" />
+            <top_module name="zpupkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="12" />
+   <wvobject fp_name="/zpucore_tb/clk_a" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_a</obj_property>
+      <obj_property name="ObjectShortName">clk_a</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_fetch" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_fetch</obj_property>
+      <obj_property name="ObjectShortName">zpu_fetch</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_32bit_write_enable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_32bit_write_enable</obj_property>
+      <obj_property name="ObjectShortName">zpu_32bit_write_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_16bit_write_enable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_16bit_write_enable</obj_property>
+      <obj_property name="ObjectShortName">zpu_16bit_write_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_8bit_write_enable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_8bit_write_enable</obj_property>
+      <obj_property name="ObjectShortName">zpu_8bit_write_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_read_enable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_read_enable</obj_property>
+      <obj_property name="ObjectShortName">zpu_read_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_memory_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_memory_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">zpu_memory_data[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_memory_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_memory_ready</obj_property>
+      <obj_property name="ObjectShortName">zpu_memory_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_addr_rom" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_addr_rom[15:0]</obj_property>
+      <obj_property name="ObjectShortName">zpu_addr_rom[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/zpu_rom_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">zpu_rom_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">zpu_rom_data[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/zpucore_tb/clk_a_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_a_period</obj_property>
+      <obj_property name="ObjectShortName">clk_a_period</obj_property>
+   </wvobject>
+</wave_config>

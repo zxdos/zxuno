@@ -1,2 +1,3 @@
+call %ruta_bat%mypath
 if not exist projnav.tmp mkdir projnav.tmp
-call %ruta_bat%xst -intstyle ise -ifn %machine%.xst -ofn %machine%.syr
+%mypath%xst.exe -intstyle ise -ifn %machine%.xst -ofn %machine%.syr
