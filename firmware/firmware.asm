@@ -249,8 +249,8 @@ start   ld      bc, chrend-sdtab
         rrca
         ld      a, h
         adc     a, a
-        or      $c0
-        ld      (scnbak), a       ; lo pongo a 28Mhz
+        or      $80
+        ld      (scnbak), a       ; lo pongo a 14Mhz
         out     (c), a
         ld      de, fincad-1    ; descomprimo cadenas
         ld      hl, sdtab-1
