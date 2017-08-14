@@ -1,41 +1,75 @@
 cad0    defb    'Core:             ',0
-cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.63', 0
-        defm    'Copyleft ', 127, ' 2017 ZX-Uno Team', 0
-        defm    'Processor: Z80 3.5MHz', 0
-        defm    'Memory:    512K Ok', 0
-        defm    'Graphics:  normal, hi-color', 0
-        defm    'hi-res, ULAplus', 0
-        defm    'Booting:', 0
-        defm    'Press <Edit> to Setup    <Break> Boot Menu', 0
+cad1    defb    'http://zxuno.speccy.org', 0
+        defb    'ZX-Uno BIOS v0.64', 0
+        defb    'Copyleft ', 127, ' 2017 ZX-Uno Team', 0
+        defb    'Processor: Z80 3.5MHz', 0
+        defb    'Memory:    512K Ok', 0
+        defb    'Graphics:  normal, hi-color', 0
+        defb    'hi-res, ULAplus', 0
+        defb    'Booting:', 0
+      IF  vertical=0
+        defb    'Press <Edit> to Setup    <Break> Boot Menu', 0
 cad2    defb    $12, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
-        defm    $10, '   Please select boot machine:    ', $10, 0
+        defb    $10, '   Please select boot machine:    ', $10, 0
 cad3    defb    $16, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $17, 0
-cad4    defm    $10, '                                  ', $10, 0
-cad5    defm    $10, '    ', $1c, ' and ', $1d, ' to move selection     ', $10, 0
-        defm    $10, '   ENTER to select boot machine   ', $10, 0
+cad4    defb    $10, '                                  ', $10, 0
+cad5    defb    $10, '    ', $1c, ' and ', $1d, ' to move selection     ', $10, 0
+        defb    $10, '   ENTER to select boot machine   ', $10, 0
         defb    $14, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-cad118  defm    '        Please select boot machine', 0
+cad118  defb    '        Please select boot machine', 0
 cad6    defb    'Enter Setup', 0
 cad7    defb    ' Main  ROMs  Upgrade  Boot  Advanced  Exit', 0
         defb    $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $19, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
-cad8    defm    $10, '                         ', $10, '              ', $10, 0
-        defm    $10, 0
+cad8    defb    $10, '                         ', $10, '              ', $10, 0
+        defb    $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.63    ', $7f, '2017 ZX-Uno Team', 0
+        defb    '   BIOS v0.64    ', $7f, '2017 ZX-Uno Team', 0
+      ELSE
+        defb    'Press <Edit> to Setup',0
+        defb    '      <Break> Boot Menu', 0
+cad2    defb    $12
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
+        defb    $10, '  Select boot machine:    ', $10, 0
+cad3    defb    $16
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $17, 0
+cad4    defb    $10, '                          ', $10, 0
+cad5    defb    $10, '    ', $1c, ' and ', $1d, ' to move       ', $10, 0
+        defb    $10, '   ENTER to select boot   ', $10, 0
+        defb    $14
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
+cad118  defb    '        Please select boot machine', 0
+cad6    defb    'Enter Setup', 0
+cad7    defb    ' Main ROMs Upgr Boot Advan Exit', 0
+        defb    $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
+cad8    defb    $10, '                              ', $10, 0
+        defb    $10, 0
+cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
+        defb    ' BIOS v0.64 ', $7f, '2017 ZX1 Team', 0
+        defs    $66
+      ENDIF
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0
@@ -133,6 +167,7 @@ cad33   defb    'Set Active', 0
 cad34   defb    'Move Down  a', 0
 cad35   defb    'Rename', 0
 cad36   defb    'Delete', 0
+      IF  vertical=0
         defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    ' Rename ', $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
         defb    ' ', $10, ' ', $1e, ' ', $1f, '  Enter accept  Break cancel ', $10, 0
@@ -145,6 +180,21 @@ cad36   defb    'Delete', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $15, 0
+      ELSE
+        defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    ' Rename ', $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
+        defb    ' ', $10, '    ', $1e, ' ', $1f, '  Enter Break     ', $10, 0
+        defb    ' ', $16
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $17, 0
+        defb    ' ', $10, '                         ', $10, 0
+        defb    ' ', $14
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $15, 0
+        defs    $28
+      ENDIF
 cad38   defb    'Exit system', 0
         defb    'setup after', 0
         defb    'saving the', 0
