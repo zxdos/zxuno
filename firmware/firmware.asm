@@ -284,32 +284,7 @@ start2  ld      a, (hl)
 start3  ld      hl, finlog-1
         ld      d, $7a
         call    dzx7b           ; descomprimir
-        inc     hl
-        ld      b, $40          ; filtro RCS inverso
-start4  ld      a, b
-        xor     c
-        and     $f8
-        xor     c
-        ld      d, a
-        xor     b
-        xor     c
-        rlca
-        rlca
-        ld      e, a
-        inc     bc
-        ldi
-        inc     bc
-      IF  vertical=0
-        bit     3, b
-        jr      z, start4
-      ELSE
-        ld      a, b
-        sub     $58
-        jr      nz, start4
-        dec     a
-      ENDIF
-        ld      b, $13
-        ldir
+        call    drcs
         ld      bc, zxuno_port
         out     (c), a          ; a = $ff = core_id
         inc     b
@@ -435,8 +410,13 @@ star16  djnz    star18
         ld      a, d
         or      e
         jr      nz, star18
+      IF  vertical=0
         ld      hl, $0017       ; Si se acaba el temporizador borrar
         ld      de, $2001       ; lo de presione Break
+      ELSE
+        ld      hl, $001b       ; Si se acaba el temporizador borrar
+        ld      de, $2002       ; lo de presione Break
+      ENDIF
         call    window
 star17  ld      hl, (joykey)
         inc     h
@@ -477,11 +457,7 @@ star19  sub     $80
         sub     $0c-'1'
 star20  jp      z, blst
         sub     $1d-$0c
-      IF  vertical=0
         jp      z, launch
-      ELSE
-        jr      z, star20
-      ENDIF
         cp      $17-$1d
         jr      nz, star19
     ELSE
@@ -688,7 +664,7 @@ bios7   dec     c
         ld      b, (hl)
         call    chcol
         defw    $1201
-        defb    %00111001
+        defw    %0100011100111001
         ld      hl, (menuop)
         ld      l, 0
         push    bc
@@ -837,6 +813,54 @@ sel04   ld      a, (de)
         djnz    sel04
         exx
         ret
+      ELSE
+launch  ld      (tmpbuf), a
+        ld      hl, finbez-1
+        ld      d, $7a
+        call    dzx7b           ; descomprimir
+        call    drcs
+        ld      hl, bnames-1
+        ld      bc, $20
+        ld      a, c
+laun0   add     hl, bc
+        inc     e
+        cp      (hl)
+        jr      z, laun0
+        inc     a
+        ld      (tmpbuf), a
+        inc     e
+        ld      a, e
+        ld      l, a
+        cp      24
+        jr      c, laun1
+        ld      a, 24
+laun1   ld      h, a
+        ld      (items), hl
+        ld      hl, $0104          ; coordenada X
+        push    hl
+        ld      iy, (items)
+        ld      hl, cad62
+        ld      (cmbpnt), hl
+        ld      iy, indexe
+        ld      ix, cmbpnt
+        ld      de, tmpbuf
+        ld      b, e
+        ld      hl, bnames
+        call    addbl1
+laun2   ld      c, $20
+        add     hl, bc
+        call    addbls
+        jr      nc, laun2
+        ld      (ix+0), cad6&$ff
+        ld      (ix+1), cad6>>8
+        ld      (ix+3), a
+        ld      a, (items+1)
+        ld      e, a
+        ld      d, 24
+        call    chcol
+        defw    $1203
+        defw    %0111100001000111
+        jp      bls375
       ENDIF
 ;++++++++++++++++++++++++++++++++++
 ;++++++++    Start ROM     ++++++++
@@ -2396,7 +2420,7 @@ upgr75  call    popupw
         rrca
         call    chcol
         defw    $1201
-        defb    %00111001
+        defw    %0100011100111001
         ret     nz
         jp      c, tosd
         call    loadta
@@ -2809,13 +2833,14 @@ bls37   ld      (ix+0), cad6&$ff
         ld      d, 32
         call    chcol
         defw    $1a02
+        defw    %0100011101001111
       ELSE
         ld      d, 25
         call    chcol
         defw    $1402
+        defw    %0100011101001111
       ENDIF
-        defb    %01001111
-        ld      a, (cmbpnt+1)
+bls375  ld      a, (cmbpnt+1)
         rlca
         ld      hl, (active)
         ld      a, h
@@ -3402,7 +3427,7 @@ combo7  ld      de, (corwid)
         ld      l, a
         ld      h, e
         ld      e, 1
-        ld      a, %01000111
+        ld      a, (colcmb-1)
         call    window
         call    waitky
         ld      hl, (offsel)
@@ -3657,6 +3682,9 @@ chcol   pop     hl
         ld      a, (hl)
         inc     hl
         ld      (colcmb), a
+        ld      a, (hl)
+        inc     hl
+        ld      (colcmb-1), a
         jp      (hl)
 
 ; -------------------------------------
@@ -3764,7 +3792,7 @@ popup2  ld      ix, cad22
       ELSE
         defw    $0b07
       ENDIF
-        defb    %01001111
+        defw    %0100011101001111
         pop     hl
         pop     de
         inc     l
@@ -4004,6 +4032,34 @@ get16   ld      b, 0
         jr      nc, get16
         ret
 
+drcs    inc     hl
+        ld      b, $40          ; filtro RCS inverso
+start4  ld      a, b
+        xor     c
+        and     $f8
+        xor     c
+        ld      d, a
+        xor     b
+        xor     c
+        rlca
+        rlca
+        ld      e, a
+        inc     bc
+        ldi
+        inc     bc
+      IF  vertical=0
+        bit     3, b
+        jr      z, start4
+      ELSE
+        ld      a, b
+        sub     $58
+        jr      nz, start4
+        dec     a
+      ENDIF
+        ld      b, $13
+        ldir
+        ret
+
 ; Parameters:
 ;(empstr): input string
 ; Returns:
@@ -4085,7 +4141,8 @@ finav
         incbin  logo256x192.rcs.zx7b
 finlog  incbin  strings.bin.zx7b
       ELSE
-        incbin  logo192x256.rcs.zx7b
+        incbin  bezel.rcs.zx7b
+finbez  incbin  logo192x256.rcs.zx7b
 finlog  incbin  strings.bin.zx7b
       ENDIF
     ENDIF
