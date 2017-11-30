@@ -31,3 +31,9 @@ The locking mechanism is good for a game selection menu, when you want
 to disable future accidental paging once game is selected. But if
 you want create your own game (it can be up to 512K) is better avoid
 locking.
+
+In the folder "roms" you have a game selection example to show how to
+make a game menu with 32 games of 16K each. That's the format of
+original IF2 cartridge games. Also you have an example in the
+folder "snapshots" to do the same with 48K games from .SNA files and
+with up to 10 games in the cartridge.
