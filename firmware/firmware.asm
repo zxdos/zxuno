@@ -358,6 +358,7 @@ start7  ld      de, tmpbuf
         call_prnstr             ; Imprime máquina (ROM o core)
       ENDIF
 start8  
+      IF  version<5
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $9f  ; jedec id
         in      a, (c)
@@ -375,6 +376,7 @@ star10  add     hl, hl
         dec     a
         jr      nz, star10
         ld      (alto fllen), hl
+      ENDIF
         wreg    scan_code, $f6  ; $f6 = kb set defaults
         halt
         halt
@@ -2129,6 +2131,9 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
 erfnf   ld      ix, cad78
 terror  jp      ferror
 saba
+      IF version=5
+        sub     $32
+      ELSE
       IF version=4
         sub     $31
       ELSE
@@ -2140,6 +2145,7 @@ saba
       ELSE
       IF version=1
         sub     $41
+      ENDIF
       ENDIF
       ENDIF
       ENDIF
@@ -2226,6 +2232,9 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
+      IF version=5
+        sub     $32
+      ELSE
       IF version=4
         sub     $31
       ELSE
@@ -2237,6 +2246,7 @@ sabe    pop     bc
       ELSE
       IF version=1
         sub     $41
+      ENDIF
       ENDIF
       ENDIF
       ENDIF
@@ -2885,12 +2895,17 @@ imyesn  call    bloq1
 ;   HL: address of bitstream
 ; ------------------------------------
 calbit  inc     b
+      IF  version<5
 calbi1  ld      a, 9
         cp      b
         ld      hl, $0040
         jr      nc, calbi2
         ld      hl, $0b80
 calbi2  ld      de, $0540
+      ELSE
+calbi1  ld      hl, $0980
+        ld      de, $0740
+      ENDIF
 calbi3  add     hl, de
         djnz    calbi3
         ret
@@ -4153,8 +4168,13 @@ finlog  incbin  strings.bin.zx7b
 sdtab   defw    $0020, $0040
         defw    $0040, $0080
 fllen   defw    $0000, $0000
+      IF  version<5
         defw    $0540
 subnn   sub     6
+      ELSE
+        defw    $0740
+subnn   sub     6*4
+      ENDIF
         ret
       IF  recovery=0
 micont  wreg    master_conf, 1
@@ -4481,9 +4501,11 @@ slot2a  ld      de, 3
         and     $3f
         ld      h, d
         ld      l, a
+      IF  version<5
         cp      19
         jr      c, slot2b
         ld      e, $c0
+      ENDIF
 slot2b  add     hl, de          ; $00c0 y 2f80
         add     hl, hl
         add     hl, hl

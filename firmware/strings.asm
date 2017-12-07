@@ -311,6 +311,13 @@ cad79   defb    ' Successfully burned ', 0
 cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
+      IF version=5
+files   defb    'ESXDOS  ZX2'
+        defb    'FIRMWAREZX2'
+        defb    'FLASH   ZX2'
+        defb    'SPECTRUMZX2'
+fileco  defb    'CORE    ZX2'
+      ELSE
       IF version=4
 files   defb    'ESXDOS  ZX1'
         defb    'FIRMWAREZX1'
@@ -338,6 +345,7 @@ files   defb    'ESXDOS  ZXA'
         defb    'FLASH   ZXA'
         defb    'SPECTRUMZXA'
 fileco  defb    'CORE    ZXA'
+      ENDIF
       ENDIF
       ENDIF
       ENDIF
