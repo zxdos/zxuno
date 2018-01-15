@@ -75,6 +75,7 @@
         define  scanli  outvid+1
         define  freque  scanli+1
         define  cpuspd  freque+1
+        define  roboot  cpuspd+1  ; boot as root
 
         define  tmpbuf  $7800
         define  tmpbu2  $7880
@@ -250,7 +251,7 @@ start   ld      bc, chrend-sdtab
         rrca
         ld      a, h
         adc     a, a
-        or      $80
+        or      %10100000  ; $A0 - Turbo 14Mhz, COPT=1 (PAL Sync) - es $c0 en el firmware oficial
         ld      (scnbak), a       ; lo pongo a 14Mhz
         out     (c), a
         ld      de, fincad-1    ; descomprimo cadenas
@@ -460,9 +461,19 @@ star19  sub     $80
 star20  jp      z, blst
         sub     $1d-$0c
         jp      z, launch
-        cp      $17-$1d
+        cp      $2f-$1d         ;'/'
+        jr      nz, star20a
+        push    af
+        ld      a,1
+        ld      (roboot), a    ; set boot as root
+        out     (254), a
+        halt
+        xor a
+        out     (254), a
+        pop af
+star20a cp      $17-$1d         ; 'Edit'
         jr      nz, star19
-    ELSE
+ELSE
         pop     af
 star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
@@ -4249,6 +4260,14 @@ conti7  pop     bc
 conti8  dec     (ix+1)
         jr      nz, conti5
 conti9  ld      a, 0
+        push    af  
+        ld a, (roboot)      ; Apply root boot
+        cp 1
+        jr nz, conti9a
+        pop     af
+        and     %01111111
+        push    af
+conti9a pop     af      
         dec     b
         out     (c), 0;d
         inc     b
@@ -4272,7 +4291,6 @@ conti9  ld      a, 0
 contia  out     (c), a
         rst     0
       ENDIF
-
 ; -------------------------------------
 ; Put page A in mode 1 and copies from 4000 to C000
 ;      A: page number
