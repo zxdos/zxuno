@@ -152,6 +152,7 @@ cad92   defb    'SJS1', 0
 cad93   defb    'SJS2', 0
 cad94   defb    'Protek', 0
 cad95   defb    'Fuller', 0
+cad955  defb    'OPQAspM', 0
 cad96   defb    'PAL', 0
 cad97   defb    'NTSC', 0
 cad98   defb    'VGA', 0

@@ -2618,6 +2618,7 @@ advan1  call    showop
         defw    cad93
         defw    cad94
         defw    cad95
+        defw    cad955
         defw    $ffff
         ld      a, iyl
         rrca
@@ -2685,7 +2686,7 @@ advan2  sub     3
         defw    cad92
         defw    cad93
         defw    cad94
-        defw    cad95
+        defw    cad955
         defw    $ffff
         ret
 advan3  ld      b, a
