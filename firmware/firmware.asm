@@ -245,10 +245,15 @@ start   ld      bc, chrend-sdtab
         inc     b
         ld      hl, (scanli)
         rrc     l
-        add     hl, hl
         ld      a, (outvid)
-;        rrca
         rrca
+        rrca
+        jr      c, start0
+        rlca
+        ld      l, a
+start0  ex      af, af'
+        add     hl, hl
+        ex      af, af'
         ld      a, h
         adc     a, a
         or      %10100000  ; $A0 - Turbo 14Mhz, COPT=1 (PAL Sync) - es $c0 en el firmware oficial
@@ -295,6 +300,16 @@ start5  in      a, (c)
         inc     hl
         ld      ix, cad0        ; imprimir cadena
         jr      nz, start5      ; si no recibimos un 0 seguimos pillando caracteres
+        call    alto tstmem
+        jr      z, star55
+        ld      hl, cadmem
+        ld      (hl), ' '
+        inc     hl
+        ld      (hl), ' '
+        inc     hl
+        inc     hl
+        ld      (hl), 'M'
+star55
       IF  vertical=0
         ld      bc, $090b
         call_prnstr             ; CoreID
@@ -394,14 +409,14 @@ star11  ld      a, (layout)
         jr      nc, star13
         ld      hl, finav-1
 star12  jr      nc, star15
-star13  ld      de, $ffff
+star13  ld      de, $cfff
         call    dzx7b
         wreg    key_map, 0
         ld      hl, $c001
 star14  inc     b
         outi
-        bit     7, h              ; compruebo si la direccion es 0000 (final)
-        jr      nz, star14        ; repito si no lo es
+        bit     4, h              ; compruebo si la direccion es D000 (final)
+        jr      z, star14         ; repito si no lo es
 star15  
     IF  recovery=0
         ld      d, 4
@@ -446,14 +461,20 @@ star17  ld      hl, (joykey)
         inc     b
         out     (c), a
         jp      conti
+
+runbit0 ld      a, l
+        cp      45
+        jr      z, bios
+runbit1 ld      (bitstr), a
+        jr      star17
+
 star18  ld      a, (codcnt)
 star19  sub     $80
         jr      c, star16
         ld      (codcnt), a
         sub     '1'
         cp      9
-        ld      h, a
-        jp      c, runbit
+        jr      c, runbit1
         jp      z, alto easter
         cp      $19-'1'
         jr      z, star20
@@ -724,13 +745,9 @@ laun2   ld      hl, $a681
         ld      ix, cad6
         call_prnstr
 
-        ld      de, codcnt
         ld      hl, (active+1)
 games   call    SELEC
-aaitky  ld      a, (de)
-        sub     $80
-        jr      c, aaitky
-        ld      (de), a
+        call    waitky
         cp      $0d
         jr      z, gamen
         cp      $20
@@ -738,7 +755,7 @@ gamen   jp      z, runbit0
         ld      bc, games
         push    bc
         call    SELEC
-        ld      a, (de)
+        ld      a, (codcnt)
         sub     $1c
         jr      z, gamup
         dec     a
@@ -882,15 +899,29 @@ conti   di
         xor     a
         ld      hl, (active)
         cp      h
-        jr      nz, runbit
+        jr      z, ccon0
+runbit  ld      b, h
+        call    calbit
+        ld      bc, zxuno_port
+        ld      e, core_addr
+        out     (c), e
+        inc     b
+        out     (c), h
+        out     (c), l
+        out     (c), 0
+        wreg    core_boot, 1
 ccon0   ld      h, active>>8
         ld      l, (hl)
         call    calcu
         push    hl
         pop     ix
-        ld      d, (ix+2)
         ld      hl, timing
+        ld      a, (outvid)
+        rrca
         ld      a, 3
+        ld      b, a
+        jr      c, ccon1
+        ld      d, (ix+2)
         cp      (hl)            ; timing
         ld      b, (hl)
         jr      nz, ccon1
@@ -934,20 +965,6 @@ conti2  adc     a, a            ; 0 0 MODE1 /DISCONT MODE0 /I2KB /DISNMI DIVEN
         xor     %10101100       ; LOCK MODE1 DISCONT MODE0 I2KB DISNMI DIVEN 0
         ld      (alto conti9+1), a
         jp      alto micont
-runbit0 ld      a, 45
-        cp      l
-        jp      z, bios
-        ld      h, l
-runbit  ld      b, h
-        call    calbit
-        ld      bc, zxuno_port
-        ld      e, core_addr
-        out     (c), e
-        inc     b
-        out     (c), h
-        out     (c), l
-        out     (c), 0
-        wreg    core_boot, 1
 
 ;****  Main Menu  ****
 ;*********************
@@ -2608,7 +2625,7 @@ advan1  call    showop
         ld      c, $0b
         call    showop
         defw    cad96
-;        defw    cad97
+        defw    cad97
         defw    cad98
         defw    $ffff
         call    showop
@@ -2629,7 +2646,7 @@ advan1  call    showop
         defw    cad110
         defw    cad111
         defw    cad112
-;        defw    cad113
+        defw    cad113
         defw    $ffff
         ld      de, $1201
         call    listas
@@ -2695,12 +2712,12 @@ advan5  djnz    advan6
         defw    cad110
         defw    cad111
         defw    cad112
-;        defw    cad113
+        defw    cad113
         defw    $ffff
         ret
 advan6  call    popupw
         defw    cad96
-;        defw    cad97
+        defw    cad97
         defw    cad98
         defw    $ffff
         ret
@@ -4291,6 +4308,17 @@ conti9a pop     af
 contia  out     (c), a
         rst     0
       ENDIF
+; -------------------------------------
+; Detect memory size
+;      Zero flag: 0-> 512K, 1-> 2M
+; -------------------------------------
+tstmem  wreg    master_conf, 1
+        wreg    master_mapper, $28
+        ld      a, ($c000)
+        wreg    master_conf, 0
+        cp      $31
+        ret
+        
 ; -------------------------------------
 ; Put page A in mode 1 and copies from 4000 to C000
 ;      A: page number
