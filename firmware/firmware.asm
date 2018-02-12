@@ -2686,6 +2686,7 @@ advan2  sub     3
         defw    cad92
         defw    cad93
         defw    cad94
+        defw    cad95
         defw    cad955
         defw    $ffff
         ret
