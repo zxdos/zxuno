@@ -1,7 +1,7 @@
 cad0    defb    'Core:             ',0
 cad1    defb    'http://zxuno.speccy.org', 0
-        defb    'ZX-Uno BIOS v0.70', 0
-        defb    'Copyleft ', 127, ' 2017 ZX-Uno Team', 0
+        defb    'ZX-Uno BIOS v0.71', 0
+        defb    'Copyleft ', 127, ' 2018 ZX-Uno Team', 0
         defb    'Processor: Z80 3.5MHz', 0
         defb    'Memory:    '
 cadmem  defb    '512K Ok', 0
@@ -37,7 +37,7 @@ cad8    defb    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.70    ', $7f, '2017 ZX-Uno Team', 0
+        defb    '   BIOS v0.71    ', $7f, '2018 ZX-Uno Team', 0
       ELSE
         defb    'Press <Edit> to Setup',0
         defb    '      <Break> Boot Menu', 0
@@ -68,7 +68,7 @@ cad8    defb    $10, '                              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    ' BIOS v0.70 ', $7f, '2017 ZX1 Team', 0
+        defb    ' BIOS v0.71 ', $7f, '2018 ZX1 Team', 0
         defs    $66
       ENDIF
 cad10   defb    'Hardware tests', 0
@@ -364,7 +364,8 @@ cad83   defb    'Input', 0
         defb    'Video', 0
         defb    'Scanlines', 0
         defb    'Frequency', 0
-        defb    'CPU Speed', 0, 0
+        defb    'CPU Speed', 0
+        defb    'CSync', 0, 0
 cad84   defb    'Select PS/2', 0
         defb    'mapping to', 0
         defb    'spectrum', 0, 0
@@ -383,6 +384,8 @@ cad100  defb    'Set VGA', 0
         defb    'frequency', 0, 0
 cad101  defb    'Set CPU', 0
         defb    'speed', 0, 0
+cad10a  defb    'CSync method', 0
+        defb    'to use', 0, 0
 cad102  defb    '50', 0
 cad103  defb    '51', 0
 cad104  defb    '53.5', 0

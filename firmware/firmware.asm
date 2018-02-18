@@ -25,6 +25,7 @@
         define  raster_ctrl     13
         define  dev_control     14
         define  dev_control2    15
+        define  ad724           $fb
         define  core_addr       $fc
         define  core_boot       $fd
         define  cold_boot       $fe
@@ -75,7 +76,7 @@
         define  scanli  outvid+1
         define  freque  scanli+1
         define  cpuspd  freque+1
-        define  roboot  cpuspd+1  ; boot as root
+        define  copt    cpuspd+1
 
         define  tmpbuf  $7800
         define  tmpbu2  $7880
@@ -239,25 +240,28 @@ start   ld      bc, chrend-sdtab
         ldir
       IF  recovery=0
         call    alto loadch
-        ld      a, scandbl_ctrl
-        ld      bc, zxuno_port
-        out     (c), a
-        inc     b
         ld      hl, (scanli)
         rrc     l
-        ld      a, (outvid)
-        rrca
-        rrca
-        jr      c, start0
-        rlca
-        ld      l, a
-start0  ex      af, af'
         add     hl, hl
-        ex      af, af'
+        ld      a, (copt)
+        rrca
+        jr      nc, start0
+        set     4, h
+start0  ld      a, (outvid)
+        ld      de, ad724<<8 | scandbl_ctrl
+        ld      bc, zxuno_port
+        out     (c), d
+        inc     b
+        out     (c), a
+        dec     b
+        out     (c), e
+        inc     b
+        rrca
+        rrca
         ld      a, h
         adc     a, a
-        or      %10100000  ; $A0 - Turbo 14Mhz, COPT=1 (PAL Sync) - es $c0 en el firmware oficial
-        ld      (scnbak), a       ; lo pongo a 14Mhz
+        or      $80
+        ld      (scnbak), a     ; lo pongo a 14Mhz
         out     (c), a
         ld      de, fincad-1    ; descomprimo cadenas
         ld      hl, sdtab-1
@@ -484,14 +488,8 @@ star20  jp      z, blst
         jp      z, launch
         cp      $2f-$1d         ;'/'
         jr      nz, star20a
-        push    af
-        ld      a,1
-        ld      (roboot), a    ; set boot as root
-        out     (254), a
-        halt
-        xor a
-        out     (254), a
-        pop af
+        ld      hl, alto contia
+        srl     (hl)
 star20a cp      $17-$1d         ; 'Edit'
         jr      nz, star19
 ELSE
@@ -2649,6 +2647,10 @@ advan1  call    showop
         defw    cad112
         defw    cad113
         defw    $ffff
+        call    showop
+        defw    cad90
+        defw    cad96
+        defw    $ffff
         ld      de, $1201
         call    listas
         defb    $04
@@ -2658,6 +2660,7 @@ advan1  call    showop
         defb    $0c
         defb    $0d
         defb    $0e
+        defb    $0f
         defb    $ff
         defw    cad84
         defw    cad85
@@ -2666,22 +2669,32 @@ advan1  call    showop
         defw    cad99
         defw    cad100
         defw    cad101
+        defw    cad10a
         jp      c, main9
         ld      (menuop+1), a
         ld      hl, layout
         ld      e, a
         add     hl, de
         jr      nz, advan2
-        call    popupw
+        call    popupw          ; Keyb Layout
         defw    cad875
         defw    cad88
         defw    cad89
         defw    cad90
         defw    $ffff
         ret
-advan2  sub     3
-        jr      nc, advan3
-        call    popupw
+advan2  ld      b, a
+        djnz    advan3
+        call    popupw          ; Joy Keypad
+        defw    cad91
+        defw    cad92
+        defw    cad93
+        defw    cad94
+        defw    cad95
+        defw    $ffff
+        ret
+advan3  djnz    advan4
+        call    popupw          ; Joy DB9
         defw    cad91
         defw    cad92
         defw    cad93
@@ -2690,16 +2703,22 @@ advan2  sub     3
         defw    cad955
         defw    $ffff
         ret
-advan3  ld      b, a
-        djnz    advan4
-        call    popupw
+advan4  djnz    advan5
+        call    popupw          ; Output
+        defw    cad96
+        defw    cad97
+        defw    cad98
+        defw    $ffff
+        ret
+advan5  djnz    advan6
+        call    popupw          ; Scanlines
         defw    cad28
         defw    cad29
         defw    $ffff
         ret
-advan4  djnz    advan5
-        call    popupw
-        defw    cad102
+advan6  djnz    advan7
+        call    popupw          ; Video
+        defw    cad102      
         defw    cad103
         defw    cad104
         defw    cad105
@@ -2709,20 +2728,14 @@ advan4  djnz    advan5
         defw    cad109
         defw    $ffff
         ret
-advan5  djnz    advan6
-        call    popupw
+advan7  call    popupw          ; CPU Speed
         defw    cad110
         defw    cad111
         defw    cad112
         defw    cad113
         defw    $ffff
         ret
-advan6  call    popupw
-        defw    cad96
-        defw    cad97
-        defw    cad98
-        defw    $ffff
-        ret
+
 
 ;****  Exit Menu  ****
 ;*********************
@@ -4279,14 +4292,7 @@ conti7  pop     bc
 conti8  dec     (ix+1)
         jr      nz, conti5
 conti9  ld      a, 0
-        push    af  
-        ld a, (roboot)      ; Apply root boot
-        cp 1
-        jr nz, conti9a
-        pop     af
-        and     %01111111
-        push    af
-conti9a pop     af      
+contia  and     %11111111
         dec     b
         out     (c), 0;d
         inc     b
@@ -4303,11 +4309,11 @@ conti9a pop     af
         inc     b
         ld      a, (grapmo)
         srl     a
-        jr      c, contia
+        jr      c, contib
         ld      a, 7            ; Resv Resv Resv Resv Resv DIRADAS DITIMEX DIULAPLUS
-        jr      z, contia
+        jr      z, contib
         ld      a, (ix+4)
-contia  out     (c), a
+contib  out     (c), a
         rst     0
       ENDIF
 ; -------------------------------------
