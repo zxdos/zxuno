@@ -25,6 +25,7 @@
         define  raster_ctrl     13
         define  dev_control     14
         define  dev_control2    15
+        define  newreg          16
         define  ad724           $fb
         define  core_addr       $fc
         define  core_boot       $fd
@@ -311,6 +312,7 @@ start5  in      a, (c)
         inc     hl
         ld      (hl), ' '
         inc     hl
+        ld      (hl), e
         inc     hl
         ld      (hl), 'M'
 star55
@@ -4318,15 +4320,32 @@ contib  out     (c), a
       ENDIF
 ; -------------------------------------
 ; Detect memory size
-;      Zero flag: 0-> 512K, 1-> 2M
+;      E: 00110000-> 512K
+;         00110001-> 1M
+;         00110010-> 2M
 ; -------------------------------------
-tstmem  wreg    master_conf, 1
+tstmem  ld      de, newreg<<8 | %00001100
+        wreg    master_conf, 1
+        wreg    master_mapper, $48
+        ld      a, ($c000)
+        sub     $31
+        jr      z, tstme1
+        scf
+tstme1  rl      e
         wreg    master_mapper, $28
         ld      a, ($c000)
+        sub     $31
+        jr      z, tstme2
+        scf
+tstme2  rl      e
         wreg    master_conf, 0
-        cp      $31
+        dec     b
+        out     (c), d
+        inc     b
+        out     (c), e
+        or      e
         ret
-        
+
 ; -------------------------------------
 ; Put page A in mode 1 and copies from 4000 to C000
 ;      A: page number
