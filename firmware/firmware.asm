@@ -915,13 +915,13 @@ ccon0   ld      h, active>>8
         call    calcu
         push    hl
         pop     ix
+        ld      d, (ix+2)
         ld      hl, timing
         ld      a, (outvid)
         rrca
         ld      a, 3
         ld      b, a
         jr      c, ccon1
-        ld      d, (ix+2)
         cp      (hl)            ; timing
         ld      b, (hl)
         jr      nz, ccon1
