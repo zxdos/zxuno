@@ -317,7 +317,11 @@ start5  in      a, (c)
         dec     (hl)
 star54  inc     hl
         ld      (hl), 'M'
-star55
+star55  ld      a, (outvid)
+        rrca
+        jr      nc, star56
+        wreg    master_conf, %01010000
+star56  
       IF  vertical=0
         ld      bc, $090b
         call_prnstr             ; CoreID
