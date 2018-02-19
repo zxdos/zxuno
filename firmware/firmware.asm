@@ -312,8 +312,10 @@ start5  in      a, (c)
         inc     hl
         ld      (hl), ' '
         inc     hl
-        ld      (hl), e
-        inc     hl
+        dec     e
+        jr      nz, star54
+        dec     (hl)
+star54  inc     hl
         ld      (hl), 'M'
 star55
       IF  vertical=0
@@ -2606,13 +2608,13 @@ advan
         call    prnmul
         ld      bc, $0f04
         ld      iy, layout
-        call    showop
+        call    showop          ; Keyb Layout
         defw    cad875
         defw    cad88
         defw    cad89
         defw    cad90
         defw    $ffff
-advan1  call    showop
+advan1  call    showop          ; Joy Keypad & DB9
         defw    cad91
         defw    cad92
         defw    cad93
@@ -2624,16 +2626,16 @@ advan1  call    showop
         rrca
         jr      nc, advan1
         ld      c, $0b
-        call    showop
+        call    showop          ; Output
         defw    cad96
         defw    cad97
         defw    cad98
         defw    $ffff
-        call    showop
+        call    showop          ; Scanlines
         defw    cad28
         defw    cad29
         defw    $ffff
-        call    showop
+        call    showop          ; VSync frequency
         defw    cad102
         defw    cad103
         defw    cad104
@@ -2643,13 +2645,13 @@ advan1  call    showop
         defw    cad108
         defw    cad109
         defw    $ffff
-        call    showop
+        call    showop          ; CPU Speed
         defw    cad110
         defw    cad111
         defw    cad112
         defw    cad113
         defw    $ffff
-        call    showop
+        call    showop          ; CSync
         defw    cad90
         defw    cad96
         defw    $ffff
@@ -2719,7 +2721,7 @@ advan5  djnz    advan6
         defw    $ffff
         ret
 advan6  djnz    advan7
-        call    popupw          ; Video
+        call    popupw          ; VSync frequency
         defw    cad102      
         defw    cad103
         defw    cad104
@@ -2730,11 +2732,17 @@ advan6  djnz    advan7
         defw    cad109
         defw    $ffff
         ret
-advan7  call    popupw          ; CPU Speed
+advan7  djnz    advan8
+        call    popupw          ; CPU Speed
         defw    cad110
         defw    cad111
         defw    cad112
         defw    cad113
+        defw    $ffff
+        ret
+advan8  call    popupw          ; CSync
+        defw    cad90
+        defw    cad96
         defw    $ffff
         ret
 
@@ -4320,11 +4328,11 @@ contib  out     (c), a
       ENDIF
 ; -------------------------------------
 ; Detect memory size
-;      E: 00110000-> 512K
-;         00110001-> 1M
-;         00110010-> 2M
+;      E: 00000000-> 512K
+;         00000001-> 1M
+;         00000011-> 2M
 ; -------------------------------------
-tstmem  ld      de, newreg<<8 | %00001100
+tstmem  ld      de, newreg<<8 | %00000000
         wreg    master_conf, 1
         wreg    master_mapper, $48
         ld      a, ($c000)
