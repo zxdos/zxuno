@@ -494,12 +494,18 @@ star19  sub     $80
 star20  jp      z, blst
         sub     $1d-$0c
         jp      z, launch
+        ld      hl, alto contia+1
         cp      $2f-$1d         ;'/'
         jr      nz, star20a
         out     ($fe), a
-        ld      hl, alto contia+1
-        srl     (hl)
-star20a cp      $17-$1d         ; 'Edit'
+        ld      (hl), %01111111
+star20a cp      $72-$1d         ; 'r'
+        jr      nz, star20b
+        out     ($fe), a
+        ld      (hl), %11111101
+        ld      a, %00000111
+        ld      (contib+1), a
+star20b cp      $17-$1d         ; 'Edit'
         jr      nz, star19
 ELSE
         pop     af
@@ -4320,15 +4326,16 @@ contia  and     %11111111
         out     (c), a
         dec     b
         ld      a, dev_control2
+contib  or      %00000000
         out     (c), a
         inc     b
         ld      a, (grapmo)
         srl     a
-        jr      c, contib
+        jr      c, contic
         ld      a, 7            ; Resv Resv Resv Resv Resv DIRADAS DITIMEX DIULAPLUS
-        jr      z, contib
+        jr      z, contic
         ld      a, (ix+4)
-contib  out     (c), a
+contic  out     (c), a
         rst     0
       ENDIF
 ; -------------------------------------
