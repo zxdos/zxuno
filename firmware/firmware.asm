@@ -496,7 +496,8 @@ star20  jp      z, blst
         jp      z, launch
         cp      $2f-$1d         ;'/'
         jr      nz, star20a
-        ld      hl, alto contia
+        out     ($fe), a
+        ld      hl, alto contia+1
         srl     (hl)
 star20a cp      $17-$1d         ; 'Edit'
         jr      nz, star19
