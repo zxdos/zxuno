@@ -405,14 +405,6 @@ star10  add     hl, hl
         jr      nz, star10
         ld      (alto fllen), hl
       ENDIF
-        wreg    scan_code, $f6  ; $f6 = kb set defaults
-        halt
-        halt
-        wreg    scan_code, $ed  ; $ed + 2 = kb set leds + numlock
-        halt
-        wreg    scan_code, $02
-        halt
-        wreg    mouse_data, $f4 ; $f4 = init Kmouse
 star11  ld      a, (layout)
         rr      a
         ld      hl, fines-1
@@ -440,6 +432,14 @@ star16  djnz    star18
         ld      a, d
         or      e
         jr      nz, star18
+        wreg    scan_code, $f6  ; $f6 = kb set defaults
+        halt
+        halt
+        wreg    scan_code, $ed  ; $ed + 2 = kb set leds + numlock
+        halt
+        wreg    scan_code, $02
+        halt
+        wreg    mouse_data, $f4 ; $f4 = init Kmouse
       IF  vertical=0
         ld      hl, $0017       ; Si se acaba el temporizador borrar
         ld      de, $2001       ; lo de presione Break
