@@ -3,6 +3,10 @@
         include version.asm
 
         di
+        ld      hl, $3ffe
+bucle   dec     h
+        ld      (hl), 23
+        jr      nz, bucle
         im      1
         ld      sp, $8000
         ld      hl, $5800
@@ -26,13 +30,6 @@ start3  ld      a, b
         and     $f8
         xor     c
         ld      d, a
-        xor     b
-        xor     c
-        rlca
-        rlca
-        ld      e, a
-        inc     bc
-        ldi
         jr      cont
 
 ; ----------------------
@@ -75,7 +72,14 @@ keysc9  ld      (codcnt), hl
         pop     af
         ret
 
-cont    inc     bc
+cont    xor     b
+        xor     c
+        rlca
+        rlca
+        ld      e, a
+        inc     bc
+        ldi
+        inc     bc
         ld      a, b
         cp      $58
         jr      nz, start3
@@ -117,13 +121,6 @@ cont1   rrca
         inc     d
       ENDIF
         ei
-
-        exx
-        ld      hl, $40fe
-bucle   dec     h
-        ld      (hl), 23
-        jr      nz, bucle
-        exx
 
 games   call    SELEC
         ld      bc, games
