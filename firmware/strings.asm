@@ -314,11 +314,11 @@ cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
       IF version=5
-files   defb    'ESXDOS  ZX2'
-        defb    'FIRMWAREZX2'
-        defb    'FLASH   ZX2'
-        defb    'SPECTRUMZX2'
-fileco  defb    'CORE    ZX2'
+files   defb    'ESXDOS  ZX', LX16
+        defb    'FIRMWAREZX', LX16
+        defb    'FLASH   ZX', LX16
+        defb    'SPECTRUMZX', LX16
+fileco  defb    'CORE    ZX', LX16
       ELSE
       IF version=4
 files   defb    'ESXDOS  ZX1'

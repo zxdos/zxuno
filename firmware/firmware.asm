@@ -1,4 +1,5 @@
         include version.asm
+        define  LX16            $32
         define  recovery        0
         define  vertical        0
         output  firmware_strings.rom
@@ -475,7 +476,11 @@ star17  ld      hl, (joykey)
         jp      conti
 
 runbit0 ld      a, l
+      IF  version<5
         cp      45
+      ELSE
+        cp      69
+      ENDIF
         jr      z, bios
 runbit1 ld      (bitstr), a
         jr      star17
@@ -662,11 +667,7 @@ bios7   dec     c
         ld      de, $1801
         call    window
         di
-      IF  vertical=0
-        ld      c, $14
-      ELSE
         ld      bc, $16
-      ENDIF
         ld      hl, $403e
         ld      d, b
         ld      e, b
@@ -718,12 +719,13 @@ bios7   dec     c
         ld      de, $0401
         ld      a, %01111001    ; fondo blanco tinta azul
         ret
-    IF  recovery=0
-      IF  vertical=0
+  IF  recovery=0
+    IF  vertical=0
 launch  ld      (tmpbuf+21), a
         call    clrscr          ; borro pantalla
         inc     hl
         inc     de
+      IF  version<5
         ld      c, $20
         ld      (hl), %00000111
         ldir
@@ -734,13 +736,35 @@ launch  ld      (tmpbuf+21), a
         call_prnstr
         ld      ix, cad62   
         call_prnstr
+      ELSE
+        ld      bc, $300
+        ld      (hl), %01001111
+        ldir
+        ld      hl, $5ae0
+        ld      de, $5ae1
+        ld      c, 20
+        ld      (hl), %00000111
+        ldir
+        ld      ix, cad62   
+        call_prnstr
+        ld      c, 23
+        ld      ix, cad118+8
+        call_prnstr
+        ld      c, 1
+      ENDIF
         ld      de, bnames
 laun1   ex      de, hl
         push    hl
         push    bc
         ld      de, tmpbuf
+      IF  version<5
         ld      bc, 21
         ldir
+      ELSE
+        ld      bc, 14
+        ldir
+        ld      (de), a
+      ENDIF
         ld      ix, tmpbuf
         pop     bc
         call_prnstr
@@ -750,9 +774,19 @@ laun1   ex      de, hl
         ex      de, hl
         ld      hl, $a3c0
         sbc     hl, de
+      IF  version<5
         jr      nz, laun2
         ld      bc, $1501
 laun2   ld      hl, $a681
+      ELSE
+        jr      nz, laun2
+        ld      bc, $0e00
+laun2   ld      hl, $a6a1
+        sbc     hl, de
+        jr      nz, laun3
+        ld      bc, $1c00
+laun3   ld      hl, $a981
+      ENDIF
         sbc     hl, de
         jr      nz, laun1
         ld      ix, cad6
@@ -789,6 +823,7 @@ gamup   dec     l
         ret     p
 gamdw   inc     l
         ld      a, l
+      IF  version<5
         cp      46
         ret     c
         dec     l
@@ -806,7 +841,6 @@ gamrh   ld      a, l
 gamrh1  add     a, 23
         ld      l, a
         ret
-
 SELEC   push    hl
         exx
         pop     hl
@@ -857,6 +891,83 @@ sel04   ld      a, (de)
         exx
         ret
       ELSE
+        cp      70
+        ret     c
+        dec     l
+        ret
+gamlf   ld      a, l
+        ld      l, 0
+        sub     23
+        ret     c
+        ld      l, a
+        ret
+gamrh   ld      a, l
+        cp      47
+        jr      c, gamrh1
+        ld      a, 46
+gamrh1  add     a, 23
+        ld      l, a
+        ret
+SELEC   push    hl
+        exx
+        pop     hl
+        ld      a, l
+        cp      23
+        ld      de, 0
+        ld      b, 11
+        jr      c, sel01
+        cp      46
+        jr      nc, seli
+        ld      e, -23
+        add     hl, de
+        ld      e, b
+        dec     b
+        jr      sel01
+seli    ld      e, -46
+        add     hl, de
+        ld      e, 21
+sel01   add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        ld      h, $16
+        add     hl, hl
+        add     hl, hl
+        add     hl, de
+sel02   ld      a, (hl)
+        xor     %00110110
+        ld      (hl), a
+        inc     l
+        djnz    sel02
+        exx
+        ld      a, l
+        cp      46
+        ret     nc
+        exx
+sel03   sub     23
+        jr      nc, sel03
+        add     a, 23
+        ld      c, a
+        and     %00011000
+        or      %01000000
+        ld      d, a
+        ld      a, c
+        and     %00000111
+        rrca
+        rrca
+        rrca
+        add     a, $0a
+        ld      e, a
+        ld      b, 8
+sel04   ld      a, (de)
+        xor     7
+        ld      (de), a
+        inc     d
+        djnz    sel04
+sel05   exx
+        ret
+      ENDIF
+
+    ELSE
 launch  ld      (tmpbuf), a
         ld      hl, finbez-1
         ld      d, $7a
@@ -904,7 +1015,7 @@ laun2   ld      c, $20
         defw    $1203
         defw    %0111100001000111
         jp      bls375
-      ENDIF
+    ENDIF
 ;++++++++++++++++++++++++++++++++++
 ;++++++++    Start ROM     ++++++++
 ;++++++++++++++++++++++++++++++++++
@@ -1625,7 +1736,7 @@ roms10  ld      (offsel), hl
 roms11  dec     iyh
         jr      nz, roms10
         ret
-    ENDIF
+  ENDIF
 roms12  call    romcyb
         ld      ix, cad50
 roms13  call_prnstr
@@ -1927,7 +2038,11 @@ upgr34  ld      (hl), a
         ld      a, ixl
         rra
         jr      nz, upgr35
+      IF  version<5
         cp      45+5
+      ELSE
+        cp      69+5
+      ENDIF
         jr      z, upgr35
         inc     a
         ld      (ix-4), cad117 & $ff
@@ -2172,19 +2287,19 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
 erfnf   ld      ix, cad78
 terror  jp      ferror
 saba
-      IF version=5
-        sub     $32
+      IF  version=5
+        sub     LX16
       ELSE
-      IF version=4
+      IF  version=4
         sub     $31
       ELSE
-      IF version=3
+      IF  version=3
         sub     $33
       ELSE
-      IF version=2
+      IF  version=2
         sub     $32
       ELSE
-      IF version=1
+      IF  version=1
         sub     $41
       ENDIF
       ENDIF
@@ -2273,19 +2388,19 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
-      IF version=5
-        sub     $32
+      IF  version=5
+        sub     LX16
       ELSE
-      IF version=4
+      IF  version=4
         sub     $31
       ELSE
-      IF version=3
+      IF  version=3
         sub     $33
       ELSE
-      IF version=2
+      IF  version=2
         sub     $32
       ELSE
-      IF version=1
+      IF  version=1
         sub     $41
       ENDIF
       ENDIF
@@ -2967,7 +3082,7 @@ calbi1  ld      a, 9
         ld      hl, $0b80
 calbi2  ld      de, $0540
       ELSE
-calbi1  ld      hl, $0980
+calbi1  ld      hl, $0480
         ld      de, $0740
       ENDIF
 calbi3  add     hl, de
@@ -4591,13 +4706,18 @@ check1  xor     (hl)            ;6*4+4*7+10= 62 ciclos/byte
 ;   HL: destination address
     IF  recovery=0
 slot2a  ld      de, 3
+      IF  version<5
         and     $3f
         ld      h, d
         ld      l, a
-      IF  version<5
         cp      19
         jr      c, slot2b
         ld      e, $c0
+      ELSE
+sloti   ld      l, a
+        sub     44
+        jr      nc, sloti
+        ld      h, d
       ENDIF
 slot2b  add     hl, de          ; $00c0 y 2f80
         add     hl, hl
