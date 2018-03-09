@@ -118,6 +118,13 @@ cont1   rrca
       ENDIF
         ei
 
+        exx
+        ld      hl, $40fe
+bucle   dec     h
+        ld      (hl), 23
+        jr      nz, bucle
+        exx
+
 games   call    SELEC
         ld      bc, games
         push    bc
