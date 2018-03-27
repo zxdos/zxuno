@@ -29,14 +29,13 @@ cont    out     (c), h          ; Port A
         and     $10
         ld      e, a
         add     hl, de
-        xor     a
 crctlo  ld      b, $bc          ; inicializo registros CRCT
-        out     (c), a
+        out     (c), d
         ld      b, $be
         outi
-        inc     a
-        cp      $10
-        jr      nz, crctlo
+        inc     d
+        bit     4, d
+        jr      z, crctlo
         ld      bc, $7f98
         out     (c), c
 
@@ -47,18 +46,23 @@ crctlo  ld      b, $bc          ; inicializo registros CRCT
         ld      l, h            ; HL= 0
         ld      de, $4000
         ldir
+
+  ld a, $42                     ; poner borde cyan
+  call border+$4000
+
         jp      toram+$4000
 
 toram   xor     a
         inc     a
         call    chslot+$4000    ; cargo ROM del 464 en 0000
 
+  ld a, $43                     ; poner borde amarillo
+  call border+$4000
 
-        ld      d, c            ; D=0
         call    $0044           ; initialise LOW KERNEL and HIGH KERNEL jumpblocks
         call    $0888           ; JUMP RESTORE
 
-  ld a, $42                     ; poner borde cyan
+  ld a, $44                     ; poner borde azul
   call border+$4000
 
         xor     a
@@ -67,15 +71,10 @@ toram   xor     a
         ld      de, $51f0
         call    sauk            ; descomprimo
 
-  ld a, $43                     ; poner borde amarillo
-  call border+$4000
-
         ld      a, 1
         scf                     ; bloqueo después
         call    chslot+$4000    ; cargo ROM del 464
 
-  ld a, $44                     ; poner borde azul
-  call border+$4000
 
         jp      $6e3f           ; salto a juego
 
