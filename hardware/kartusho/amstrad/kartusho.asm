@@ -8,6 +8,10 @@
         ldir
         jp      conti+$4000
 
+        BLOCK   $38-$
+        ei
+        ret
+
 conti   im      1
         xor     a
         inc     a
