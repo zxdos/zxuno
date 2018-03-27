@@ -48,35 +48,35 @@ crctlo  ld      b, $bc          ; inicializo registros CRCT
         ldir
 
   ld a, $42                     ; poner borde verde
-  call border+$8000
+  call border+$4000
 
-        jp      toram+$8000
+        jp      toram+$4000
 
 toram   
         halt
 
         xor     a
         inc     a
-        call    chslot+$8000    ; cargo ROM del 464 en 0000
+        call    chslot+$4000    ; cargo ROM del 464 en 0000
 
   ld a, $43                     ; poner borde amarillo
-  call border+$8000
+  call border+$4000
 
         call    $0044           ; initialise LOW KERNEL and HIGH KERNEL jumpblocks
         call    $0888           ; JUMP RESTORE
 
   ld a, $44                     ; poner borde azul
-  call border+$8000
+  call border+$4000
 
         xor     a
-        call    chslot+$8000    ; cargo ROM del juego en 0000
+        call    chslot+$4000    ; cargo ROM del juego en 0000
         ld      hl, data
         ld      de, $51f0
         call    sauk            ; descomprimo
 
         ld      a, 1
         scf                     ; bloqueo después
-        call    chslot+$8000    ; cargo ROM del 464
+        call    chslot+$4000    ; cargo ROM del 464
 
 
         jp      $6e3f           ; salto a juego
@@ -85,7 +85,8 @@ toram
 
 ;input A= color
 ;      carry= LOCK
-border  ld      b, $7f
+border  ld      bc, $7f10
+        out     (c), c
         out     (c), a
         ret
 
