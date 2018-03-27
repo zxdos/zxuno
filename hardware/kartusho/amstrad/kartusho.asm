@@ -1,41 +1,35 @@
         OUTPUT  KARTUSHO.ROM
         ORG     $0
         di
+        im      1
         ld      sp, $c000
-        ld      bc, $3ffc
-        ld      hl, $0000
-        ld      de, $4000
-        ldir
-        jp      conti+$4000
-
-        BLOCK   $38-$
-        ei
-        ret
-
-conti   im      1
-        xor     a
-        inc     a
-        call    chslot+$4000    ; cargo ROM del 464 en 0000
-
-  ld a, $40                     ; poner borde gris
-  call border+$4000
-
-        ld      d, c            ; D=0
+        ld      hl, initData60Hz
+        ld      d, h            ; D=H=0
         ld      bc, $f782
         out     (c), c          ; PIO Control-Register
         dec     b
-        out     (c), d          ; Port C
+        out     (c), h          ; Port C
         dec     b
         in      a, (c)          ; Read from port B 
         dec     b
-        out     (c), d          ; Port A
+        jr      cont
+initData60Hz:
+        defb    $3f, $28, $2e, $8e, $1f, $06, $19, $1b
+        defb    $00, $07, $00, $00, $30, $00, $c0, $00
+initData50Hz:
+        defb    $3f, $28, $2e, $8e, $26, $00, $19, $1e
+        defb    $00, $07, $00, $00, $30, $00, $c0, $00
+
+rst38   ei
+        ret
+
+cont    out     (c), h          ; Port A
         ld      bc, $ef7f
         out     (c), c
         and     $10
         ld      e, a
-        ld      hl, $05c4       ; 60hz
+        add     hl, de
         xor     a
-        sbc     hl, de
 crctlo  ld      b, $bc          ; inicializo registros CRCT
         out     (c), a
         ld      b, $be
@@ -45,6 +39,22 @@ crctlo  ld      b, $bc          ; inicializo registros CRCT
         jr      nz, crctlo
         ld      bc, $7f98
         out     (c), c
+
+  ld a, $40                     ; poner borde gris
+  call border
+
+        ld      bc, $3ffc
+        ld      l, h            ; HL= 0
+        ld      de, $4000
+        ldir
+        jp      toram+$4000
+
+toram   xor     a
+        inc     a
+        call    chslot+$4000    ; cargo ROM del 464 en 0000
+
+
+        ld      d, c            ; D=0
         call    $0044           ; initialise LOW KERNEL and HIGH KERNEL jumpblocks
         call    $0888           ; JUMP RESTORE
 
@@ -97,6 +107,7 @@ chslo2  djnz    chslo1
         ld      (hl), a
         ret
 data    incbin  Manic.bin.skv
+
 
         BLOCK   $4000-$
         incbin  OS464.ROM
