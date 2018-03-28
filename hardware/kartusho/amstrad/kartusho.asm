@@ -44,7 +44,7 @@ crctlo  ld      b, $bc          ; inicializo registros CRCT
 
         ld      bc, $3ffc
         ld      l, h            ; HL= 0
-        ld      de, $8000
+        ld      de, $4000
         ldir
 
   ld a, $42                     ; poner borde verde
