@@ -53,7 +53,7 @@ crctlo  ld      b, $bc          ; inicializo registros CRCT
         jp      toram+$4000
 
 toram   
-        halt
+;        halt
 
         xor     a
         inc     a
