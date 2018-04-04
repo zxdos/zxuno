@@ -1,6 +1,8 @@
         include version.asm
         define  LX16            $32
         define  recovery        0
+        define  recodire        0
+        define  zesarux         0
         define  vertical        0
         output  firmware_strings.rom
       macro wreg  dir, dato
@@ -174,7 +176,11 @@ keysc5  ld      a, h
         rlc     b
         jr      c, keyscn
         in      a, ($1f)
+      IF  zesarux=0
         or      a
+      ELSE
+        xor     a
+      ENDIF
         jr      z, nokemp
         ld      hl, kemp-1
 sikemp  inc     hl
@@ -237,6 +243,7 @@ keytab  defb    $00, $7a, $78, $63, $76 ; Caps    z       x       c       v
         defb    $0d, $3d, $2b, $2d, $5e ; Enter   =       +       -       ^
         defb    $20, $00, $2e, $2c, $2a ; Space   Symbol  .       ,       *
 kemp    defb    $1f, $1e, $1d, $1c, $0d ; Right   Left    Down    Up      Enter
+        defb    $0c                     ; Break
 
 start   ld      bc, chrend-sdtab
         ldir
@@ -406,6 +413,7 @@ star10  add     hl, hl
         jr      nz, star10
         ld      (alto fllen), hl
       ENDIF
+    IF  recovery=0
 star11  ld      a, (layout)
         rr      a
         ld      hl, fines-1
@@ -422,9 +430,7 @@ star14  inc     b
         outi
         bit     4, h              ; compruebo si la direccion es D000 (final)
         jr      z, star14         ; repito si no lo es
-star15  
-    IF  recovery=0
-        ld      d, 4
+star15  ld      d, 4
         pop     af
         jr      nz, star16
         ld      d, 16
@@ -2071,13 +2077,17 @@ upgr38  ld      e, a
         ld      a, (bitstr)
 upgra4  ld      hl, $0102
         ld      d, $18
+      IF  recodire=0
         call    combol
+      ELSE
+        ld      a, 2
+      ENDIF
         ld      (menuop+1), a
         inc     a
         ld      iyl, a
+      IF  recovery=0
         ld      a, (codcnt)
         cp      $0d
-      IF  recovery=0
         jp      nz, main9
       ENDIF
         ld      hl, (menuop)
@@ -2097,8 +2107,14 @@ tosd    ld      ix, cad75
       ENDIF
         call    imyesn
         ld      ix, cad445
+      IF  recodire=0
         call    yesno
         ret     nz
+      ELSE
+        ld      c, 8
+        call_prnstr
+        call_prnstr
+      ENDIF
         ld      d, h
         ld      a, %01001111    ; fondo azul tinta blanca
         call    window
