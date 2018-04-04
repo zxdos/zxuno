@@ -46,42 +46,40 @@ crctlo  ld      b, $bc          ; inicializo registros CRCT
         ld      l, h            ; HL= 0
         ld      de, $4000
         ldir
-
-  ld a, $42                     ; poner borde verde
-  call border+$4000
-
         jp      toram+$4000
 
 toram   
-;        halt
 
-        xor     a
-        inc     a
+LEEKB   LD      A, $45          ;kbdline ; from &40 to &49 with bdir/bc1=01
+                                ; bit7 6 5 4 3 2 1 0
+        LD      D, 0            ;SPACE N J H Y U 7 8
+        LD      BC, $F782       ; PPI port A out /C out 
+        OUT     (C), C
+        LD      BC, $F40E       ; Select Ay reg 14 on ppi port A 
+        OUT     (C), C 
+        LD      BC, $F6C0       ; This value is an AY index (R14) 
+        OUT     (C), C 
+        OUT     (C), D          ; Validate!! out (c),0
+        LD      BC, $F792       ; PPI port A in/C out 
+        OUT     (C), C 
+        DEC     B
+        OUT     (C), A          ; Send KbdLine on reg 14 AY through ppi port A
+        LD      B, $F4          ; Read ppi port A 
+        IN      A,(C)           ; e.g. AY R14 (AY port A) 
+        LD      BC, $F782       ; PPI port A out / C out 
+        OUT     (C), C 
+        DEC     B               ; Reset PPI Write 
+        OUT     (C), D          ; out (c),0
+        CP      $FF             ; no se ha pulsado nada?
+        JR      Z, LEEKB
+        LD      B, 0            ; B=1->   8     B=5->   H
+SIGUI   INC     B               ; B=2->   7     B=6->   J
+        RRCA                    ; B=3->   U     B=7->   N
+        JR      C, SIGUI        ; B=4->   Y     B=8->   SPACe
+        
+        ld      a, b
         call    chslot+$4000    ; cargo ROM del 464 en 0000
-
-  ld a, $43                     ; poner borde amarillo
-  call border+$4000
-
-        call    $0044           ; initialise LOW KERNEL and HIGH KERNEL jumpblocks
-        call    $0888           ; JUMP RESTORE
-
-  ld a, $44                     ; poner borde azul
-  call border+$4000
-
-        xor     a
-        call    chslot+$4000    ; cargo ROM del juego en 0000
-        ld      hl, data
-        ld      de, $51f0
-        call    sauk            ; descomprimo
-
-        ld      a, 1
-        scf                     ; bloqueo después
-        call    chslot+$4000    ; cargo ROM del 464
-
-
-        jp      $6e3f           ; salto a juego
-
-        include d.asm
+        rst     0
 
 ;input A= color
 ;      carry= LOCK
@@ -97,7 +95,7 @@ chslot  adc     a, a
         add     a, a
         ld      hl, $3ffc
         ld      b, 5
-chslo1  ld      (hl), a
+chslo1  ld      c, (hl)
         add     a, a
         res     0, l
         jr      nc, chslo2
@@ -107,11 +105,65 @@ chslo2  djnz    chslo1
         rlca
         add     a, l
         ld      l, a
-        ld      (hl), a
+        ld      c, (hl)
         ret
 data    incbin  Manic.bin.skv
 
 
-        BLOCK   $4000-$
-        incbin  OS464.ROM
+        BLOCK   1*$4000-$       ; slot 1 verde mar
+        ld      a, $42
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   2*$4000-$       ; slot 2 amarillo
+        ld      a, $43
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   3*$4000-$       ; slot 3 azul
+        ld      a, $44
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   4*$4000-$       ; slot 4 rosa oscuro
+        ld      a, $45
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   5*$4000-$       ; slot 5 cyan
+        ld      a, $46
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   6*$4000-$       ; slot 6 rosa claro
+        ld      a, $47
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   7*$4000-$       ; slot 7 verde brillante
+        ld      a, $52
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
+        BLOCK   8*$4000-$       ; slot 8 cyan brillante
+        ld      a, $53
+        ld      bc, $7f10
+        out     (c), c
+        out     (c), a
+        halt
+
         BLOCK   $80000-$
