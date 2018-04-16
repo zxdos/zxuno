@@ -536,7 +536,9 @@ star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         in      a, (c)
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         and     2
+      IF  zesarux=0
         jr      z, star21
+      ENDIF
         xor     a
     ENDIF
 
@@ -1945,7 +1947,18 @@ roms27  ld      hl, $0104
 
 ;*** Upgrade Menu ***
 ;*********************
-upgra   ld      bc, (menuop)
+upgra 
+      IF  recovery=1
+        ld      ix, cad117
+        ex      af, af'
+        call    prnhel
+upgra0  in      a, ($1f)
+        jr      nz, upgra0
+        ld      de, $0401
+        ld      a, %01111001    ; fondo blanco tinta azul
+        ld      l, 0
+      ENDIF
+        ld      bc, (menuop)
       IF  vertical=0
         ld      h, 16
         dec     c
@@ -2051,8 +2064,8 @@ upgr34  ld      (hl), a
       ENDIF
         jr      z, upgr35
         inc     a
-        ld      (ix-4), cad117 & $ff
-        ld      (ix-3), cad117 >> 8
+        ld      (ix-4), cad119 & $ff
+        ld      (ix-3), cad119 >> 8
         call    deixl1
 upgr35  ld      (ix-3), $ff
         dec     a

@@ -406,7 +406,9 @@ cad116  defb    'Disable for', 0
         defb    'better compa-', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
-cad117  defb    ' Add new core', 0
+cad117  defb    'Remove jumpers', 0
+        defb    'to continue', 0, 0
+cad119  defb    ' Add new core', 0
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 
