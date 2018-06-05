@@ -144,7 +144,7 @@ module NES_ZXUNO(
   wire [7:0] joystick1, joystick2;
   wire p_sel = !host_select;
   wire p_start = !host_start;
-  assign joystick1 = {~P_R, ~P_L, ~P_D, ~P_U, ~p_start | (~P_R & ~P_L), ~p_sel | (~P_D & ~P_U), ~P_tr, ~P_A};  
+  assign joystick1 = {~P_R & P_L, ~P_L & P_R, ~P_D & P_U, ~P_U & P_D, ~p_start | (~P_R & ~P_L), ~p_sel | (~P_D & ~P_U), ~P_tr, ~P_A};  
  
   always @(posedge clk) begin
     if (joypad_strobe) begin
@@ -406,7 +406,7 @@ end
 //-----------------Multiboot-------------
     multiboot el_multiboot (
         .clk_icap(clk),
-        .REBOOT(master_reset)
+        .REBOOT(master_reset | (~P_R & ~P_L & ~P_D & ~P_U))
     );
 
 
