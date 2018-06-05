@@ -56,12 +56,17 @@ entity VIC20 is
     I_PS2_CLK             : in    std_logic;
     I_PS2_DATA            : in    std_logic;
     --
-    O_VIDEO_R             : out   std_logic_vector(2 downto 0);
-    O_VIDEO_G             : out   std_logic_vector(2 downto 0);
-    O_VIDEO_B             : out   std_logic_vector(2 downto 0);
-	 
-    O_HSYNC               : out   std_logic;
-    O_VSYNC               : out   std_logic;
+    O_VIDEO_R             : inout   std_logic_vector(2 downto 0);
+    O_VIDEO_G             : inout   std_logic_vector(2 downto 0);
+    O_VIDEO_B             : inout   std_logic_vector(2 downto 0);
+    O_HSYNC               : inout   std_logic;
+    O_VSYNC               : inout   std_logic;
+    --
+    D_VIDEO_R             : out   std_logic_vector(2 downto 0);
+    D_VIDEO_G             : out   std_logic_vector(2 downto 0);
+    D_VIDEO_B             : out   std_logic_vector(2 downto 0);
+    D_HSYNC               : out   std_logic;
+    D_VSYNC               : out   std_logic;
     --
     O_AUDIO_L             : out   std_logic;
     O_AUDIO_R             : out   std_logic;
@@ -230,6 +235,12 @@ architecture RTL of VIC20 is
     signal P_RESET: std_logic;
 	 
 begin
+
+    D_VIDEO_R <= O_VIDEO_R;
+    D_VIDEO_G <= O_VIDEO_G;
+    D_VIDEO_B <= O_VIDEO_B;
+    D_VSYNC <= O_VSYNC;
+    D_HSYNC <= O_HSYNC;
 
 	EXP8K <= not scanSW(5);
     

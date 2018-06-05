@@ -26,11 +26,16 @@ module jupiter_ace (
     input wire ear,
     output wire audio_out_left,
     output wire audio_out_right,
-    output wire [2:0] r,
-    output wire [2:0] g,
-    output wire [2:0] b,
-    output wire hsync,
-	 output wire vsync,
+    inout wire [2:0] r,
+    inout wire [2:0] g,
+    inout wire [2:0] b,
+    inout wire hsync,
+    inout wire vsync,
+    output wire [2:0] dr,
+    output wire [2:0] dg,
+    output wire [2:0] db,
+    output wire dhsync,
+    output wire dvsync,
     output wire stdn,
     output wire stdnb,
     ///// SRAM pins (just to get the current video output setting) ////////////
@@ -56,6 +61,12 @@ module jupiter_ace (
     wire [2:0] gi = {video,video,1'b0};
     wire [2:0] bi = {video,video,1'b0};
     
+    assign dr = r;
+    assign dg = g;
+    assign db = b;
+    assign dhsync = hsync;
+    assign dvsync = vsync;
+
     // Trivial conversion for audio
     wire mic,spk;
     assign audio_out_left = spk;

@@ -27,6 +27,12 @@ entity sms is
 		hsync:		buffer	STD_LOGIC;
 		vsync:		buffer	STD_LOGIC;
 
+		dred:			out	STD_LOGIC_VECTOR(2 downto 0);
+		dgreen:		out	STD_LOGIC_VECTOR(2 downto 0); 
+		dblue:			out	STD_LOGIC_VECTOR(2 downto 0);
+		dhsync:		out	STD_LOGIC;
+		dvsync:		out	STD_LOGIC;
+
 		spi_do:		in			STD_LOGIC;
 		spi_sclk:	out		STD_LOGIC;
 		spi_di:		out		STD_LOGIC;
@@ -38,10 +44,8 @@ entity sms is
       ps2_data:	in    	std_logic;		
 		
       NTSC: 		out   	std_logic; --Q
-      PAL: 			out   	std_logic; --Q	
+      PAL: 			out   	std_logic --Q	
 
-	   hdmi_out_p: out   	std_logic_vector(3 downto 0);
-	   hdmi_out_n: out   	std_logic_vector(3 downto 0)	
 		);
 end sms;
 
@@ -119,19 +123,6 @@ architecture Behavioral of sms is
 );
 	end component;
 	
-  COMPONENT MinimalDVID_encoder
-   PORT(
-      clk: 			IN 	std_logic;
-      blank: 		IN 	std_logic;
-      hsync: 		IN 	std_logic;
-      vsync: 		IN 	std_logic;
-      red: 			IN 	std_logic_vector(2 downto 0);
-      green: 		IN 	std_logic_vector(2 downto 0);
-      blue: 		IN 	std_logic_vector(2 downto 0);          
-      hdmi_p: 		OUT 	std_logic_vector(3 downto 0);
-      hdmi_n: 		OUT 	std_logic_vector(3 downto 0)
-      );
-   END COMPONENT;
 	
 	signal clk_cpu:		std_logic;
 	signal clk16:			std_logic;
@@ -270,6 +261,13 @@ begin
 		spi_cs_n		=> spi_cs_n
 		);
 	
+  
+  dred <= red;
+  dgreen <= green;
+  dblue <= blue;
+  dhsync <= hsync;
+  dvsync <= vsync;
+
 	led <= not spi_cs_n; --Q
 --	led <= scandoubler_ctrl(0); --debug scandblctrl reg.
 
@@ -317,19 +315,4 @@ begin
 	scanSW <= scandoubler_ctrl(0) xor scanSWk; -- Video mode change via ScrollLock / SCANDBLCTRL reg.
 
 
---HDMI
-
-Inst_MinimalDVID_encoder: MinimalDVID_encoder PORT MAP(
-      clk    => clk32,
-      blank  => blank,
-      hsync  => hsync,
-      vsync  => vsync,
-      red    => red,
-      green  => green,
-      blue   => blue,
-      hdmi_p => hdmi_out_p,
-      hdmi_n => hdmi_out_n
-   );
-      		
-	
 end Behavioral;

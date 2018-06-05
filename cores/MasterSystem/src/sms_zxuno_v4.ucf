@@ -86,12 +86,15 @@ NET "j1_tr"           LOC="P8"   | IOSTANDARD = LVCMOS33 | PULLUP;
 
 
 
-# Otros
-NET "hdmi_out_p<0>"   LOC="P44"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_n<0>"   LOC="P43"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_p<1>"   LOC="P46"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_n<1>"   LOC="P45"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_p<2>"   LOC="P48"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_n<2>"   LOC="P47"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_p<3>"   LOC="P41"  | IOSTANDARD = "TMDS_33";
-NET "hdmi_out_n<3>"   LOC="P40"  | IOSTANDARD = "TMDS_33";
+
+NET dred(2)           LOC="P51"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dred(1)           LOC="P50"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dred(0)           LOC="P47"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dgreen(2)         LOC="P40"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dgreen(1)         LOC="P35"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dgreen(0)         LOC="P33"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dblue(2)          LOC="P23"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dblue(1)          LOC="P17"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dblue(0)          LOC="P24"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dhsync            LOC="P57"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;
+NET dvsync            LOC="P58"  | IOSTANDARD = LVCMOS33 | DRIVE=2 | SLEW=SLOW;

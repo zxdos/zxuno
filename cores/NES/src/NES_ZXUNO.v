@@ -8,7 +8,16 @@
 module NES_ZXUNO(
   input CLOCK_50,
   // VGA
-  output vga_v, output vga_h, output [2:0] vga_r, output [2:0] vga_g, output [2:0] vga_b,
+  output vga_v,
+  output vga_h,
+  output [2:0] vga_r,
+  output [2:0] vga_g,
+  output [2:0] vga_b,
+  output dvga_v,
+  output dvga_h,
+  output [2:0] dvga_r,
+  output [2:0] dvga_g,
+  output [2:0] dvga_b,
   // Memory
   output ram_WE_n,          // Write Enable. WRITE when Low.
   output [18:0] ram_a,
@@ -78,6 +87,12 @@ module NES_ZXUNO(
   assign vga_r = vga_osd_r[7:5];
   assign vga_g = vga_osd_g[7:5];
   assign vga_b = vga_osd_b[7:5];
+
+  assign dvga_h = vga_hsync;
+  assign dvga_v = vga_vsync;
+  assign dvga_r = vga_osd_r[7:5];
+  assign dvga_g = vga_osd_g[7:5];
+  assign dvga_b = vga_osd_b[7:5];
 
   assign led = loader_fail;
   

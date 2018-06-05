@@ -43,11 +43,18 @@ entity ZXUNO_A2601 is
       LED : out std_logic;
 
 -- Video
-      VGA_R : out std_logic_vector(2 downto 0);
-      VGA_G : out std_logic_vector(2 downto 0);
-      VGA_B : out std_logic_vector(2 downto 0);
-      VGA_HS : out std_logic;
-      VGA_VS : out std_logic;
+      VGA_R : inout std_logic_vector(2 downto 0);
+      VGA_G : inout std_logic_vector(2 downto 0);
+      VGA_B : inout std_logic_vector(2 downto 0);
+      VGA_HS : inout std_logic;
+      VGA_VS : inout std_logic;
+
+      dVGA_R : out std_logic_vector(2 downto 0);
+      dVGA_G : out std_logic_vector(2 downto 0);
+      dVGA_B : out std_logic_vector(2 downto 0);
+      dVGA_HS : out std_logic;
+      dVGA_VS : out std_logic;
+
 		NTSC   : out   std_logic; 
       PAL    : out   std_logic;
 
@@ -143,6 +150,11 @@ architecture rtl of ZXUNO_A2601 is
 
 begin
 
+    dVGA_R <= VGA_R;
+    dVGA_G <= VGA_G;
+    dVGA_B <= VGA_B;
+    dVGA_VS <= VGA_VS;
+    dVGA_HS <= VGA_HS;
 ps2k_dat_in<=PS2_DAT;
 PS2_DAT <= '0' when ps2k_dat_out='0' else 'Z';
 ps2k_clk_in<=PS2_CLK;

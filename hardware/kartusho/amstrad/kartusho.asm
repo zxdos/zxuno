@@ -107,59 +107,57 @@ chslo2  djnz    chslo1
         ld      l, a
         ld      c, (hl)
         ret
-data    incbin  Manic.bin.skv
 
-
-        BLOCK   1*$4000-$       ; slot 1 verde mar
+        BLOCK   1*$4000-$       ; slot 1 verde mar Tecla 8
         ld      a, $42
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   2*$4000-$       ; slot 2 amarillo
+        BLOCK   2*$4000-$       ; slot 2 amarillo Tecla 7
         ld      a, $43
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   3*$4000-$       ; slot 3 azul
+        BLOCK   3*$4000-$       ; slot 3 azul Tecla U
         ld      a, $44
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   4*$4000-$       ; slot 4 rosa oscuro
+        BLOCK   4*$4000-$       ; slot 4 rosa oscuro Tecla Y
         ld      a, $45
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   5*$4000-$       ; slot 5 cyan
+        BLOCK   5*$4000-$       ; slot 5 cyan Tecla H
         ld      a, $46
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   6*$4000-$       ; slot 6 rosa claro
+        BLOCK   6*$4000-$       ; slot 6 rosa claro Tecla J
         ld      a, $47
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   7*$4000-$       ; slot 7 verde brillante
+        BLOCK   7*$4000-$       ; slot 7 verde brillante Tecla N
         ld      a, $52
         ld      bc, $7f10
         out     (c), c
         out     (c), a
         halt
 
-        BLOCK   8*$4000-$       ; slot 8 cyan brillante
+        BLOCK   8*$4000-$       ; slot 8 cyan brillante Tecla SPACE
         ld      a, $53
         ld      bc, $7f10
         out     (c), c

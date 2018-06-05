@@ -33,11 +33,18 @@ port (
 	AUDIO_OUT           : out   std_logic;
 
 	-- VGA out
-	O_VIDEO_R           : out   std_logic_vector(2 downto 0); --Q
-	O_VIDEO_G           : out   std_logic_vector(2 downto 0); --Q
-	O_VIDEO_B           : out   std_logic_vector(2 downto 0); --Q
-	O_HSYNC             : out   std_logic;
-	O_VSYNC             : out   std_logic;
+	O_VIDEO_R           : inout   std_logic_vector(2 downto 0); --Q
+	O_VIDEO_G           : inout   std_logic_vector(2 downto 0); --Q
+	O_VIDEO_B           : inout   std_logic_vector(2 downto 0); --Q
+	O_HSYNC             : inout   std_logic;
+	O_VSYNC             : inout   std_logic;
+
+	D_VIDEO_R           : out   std_logic_vector(2 downto 0); --Q
+	D_VIDEO_G           : out   std_logic_vector(2 downto 0); --Q
+	D_VIDEO_B           : out   std_logic_vector(2 downto 0); --Q
+	D_HSYNC             : out   std_logic;
+	D_VSYNC             : out   std_logic;
+
 	VIDEO_SYNC          : out   std_logic;
 
 	-- K7 connector
@@ -163,6 +170,13 @@ begin
 	-----------------------------------------------
 	-- generate all the system clocks required
 	-----------------------------------------------
+
+    D_VIDEO_R <= O_VIDEO_R;
+    D_VIDEO_G <= O_VIDEO_G;
+    D_VIDEO_B <= O_VIDEO_B;
+    D_HSYNC <= O_HSYNC;
+    D_VSYNC <= O_VSYNC;
+
 	inst_pll_base : PLL_BASE
 	generic map (
 		BANDWIDTH          => "OPTIMIZED", -- "HIGH", "LOW" or "OPTIMIZED"

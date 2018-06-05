@@ -27,11 +27,16 @@ module tld_sam (
     output wire audio_out_left,
     output wire audio_out_right,
     // Video output
-    output wire [2:0] r,
-    output wire [2:0] g,
-    output wire [2:0] b,
-    output wire hsync,
-	 output wire vsync,
+    inout wire [2:0] r,
+    inout wire [2:0] g,
+    inout wire [2:0] b,
+    inout wire hsync,
+    inout wire vsync,
+    output wire [2:0] dr,
+    output wire [2:0] dg,
+    output wire [2:0] db,
+    output wire dhsync,
+    output wire dvsync,
     output wire stdn,
     output wire stdnb,
     // SRAM interface
@@ -56,6 +61,12 @@ module tld_sam (
     wire [2:0] ri = {sam_r, sam_bright};
     wire [2:0] gi = {sam_g, sam_bright};
     wire [2:0] bi = {sam_b, sam_bright};
+
+    assign dr = r;
+    assign dg = g;
+    assign db = b;
+    assign dhsync = hsync;
+    assign dvsync = vsync;
 
     assign stdn = 1'b0;  // fijar norma PAL
 	assign stdnb = 1'b1; // y conectamos reloj PAL
