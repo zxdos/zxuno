@@ -1,0 +1,16 @@
+./create_rom.pl 1 ATARIXL.ROM os16 > ../a8core/os16.vhdl
+./create_rom.pl 1 osborig_high.rom os8 > ../a8core/os8.vhdl
+./create_rom.pl 1 osborig_low.rom os2 > ../a8core/os2.vhdl
+./create_rom.pl 1 ATARIBAS.ROM basic > ../a8core/basic.vhdl
+./create_rom.pl 1 5200.rom os_5200 > ../a8core/os_5200.vhdl
+./create_rom.pl 4 ../../firmware/MCC216.bin zpu_rom 13 > ../../mcc216/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/MCC216_5200.bin zpu_rom 13 > ../../mcc216_5200/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/MCCTV.bin zpu_rom 13 > ../../mcctv/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/MCCTV_5200.bin zpu_rom 13 > ../../mcctv_5200/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/MIST.bin zpu_rom 12 > ../../mist/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/MIST_5200.bin zpu_rom 12 > ../../mist_5200/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/DE1.bin zpu_rom 12 > ../../de1/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/DE1_5200.bin zpu_rom 12 > ../../de1_5200/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/AEON_LITE.bin zpu_rom 12 > ../../aeon_lite/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/PAPILIODUO.bin zpu_rom 12 > ../../papilioduo/zpu_rom.vhdl
+./create_rom.pl 4 ../../firmware/CHAMELEON.bin zpu_rom 12 > ../../chameleon/zpu_rom.vhdl

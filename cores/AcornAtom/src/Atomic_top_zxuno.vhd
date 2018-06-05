@@ -28,11 +28,16 @@ entity Atomic_top_zxuno is
            ps2_mouse_clk  : inout std_logic;
            ps2_mouse_data : inout std_logic;
            ERST           : in    std_logic;
-           red            : out   std_logic_vector (2 downto 0);
-           green          : out   std_logic_vector (2 downto 0);
-           blue           : out   std_logic_vector (2 downto 0);
-           vsync          : out   std_logic;
-           hsync          : out   std_logic;
+           red            : inout std_logic_vector (2 downto 0);
+           green          : inout std_logic_vector (2 downto 0);
+           blue           : inout std_logic_vector (2 downto 0);
+           vsync          : inout std_logic;
+           hsync          : inout std_logic;
+           dred           : out   std_logic_vector (2 downto 0);
+           dgreen         : out   std_logic_vector (2 downto 0);
+           dblue          : out   std_logic_vector (2 downto 0);
+           dvsync         : out   std_logic;
+           dhsync         : out   std_logic;
            audiol         : out   std_logic;
            audioR         : out   std_logic;
            RAMWRn         : out   std_logic;
@@ -95,6 +100,7 @@ architecture behavioral of Atomic_top_zxuno is
     signal pwrup_RSTn : std_logic;
     signal reset_ctr  : std_logic_vector (7 downto 0) := (others => '0');
 
+
 ----Q	 
 	component atom_clocks
 	port
@@ -109,6 +115,12 @@ architecture behavioral of Atomic_top_zxuno is
 ----	 
     
 begin
+
+    dred <= red;
+    dgreen <= green;
+    dblue <= blue;
+    dvsync <= vsync;
+    dhsync <= hsync;
 
 ----Q
 atom_top_clocks : atom_clocks

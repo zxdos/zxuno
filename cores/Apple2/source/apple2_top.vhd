@@ -48,10 +48,16 @@ entity APPLE2_TOP is
     -- VGA output
     
     VGA_HS,                                        -- H_SYNC
-    VGA_VS : out std_logic;                        -- V_SYNC
+    VGA_VS : inout std_logic;                      -- V_SYNC
     VGA_R,                                         -- Red[2:0]
     VGA_G,                                         -- Green[2:0]
-    VGA_B : out unsigned(2 downto 0);              -- Blue[2:0]
+    VGA_B : inout unsigned(2 downto 0);            -- Blue[2:0]
+
+    dVGA_HS,                                       -- H_SYNC
+    dVGA_VS : out std_logic;                       -- V_SYNC
+    dVGA_R,                                        -- Red[2:0]
+    dVGA_G,                                        -- Green[2:0]
+    dVGA_B : out unsigned(2 downto 0);             -- Blue[2:0]
 
     -- Audio OUT
     
@@ -117,6 +123,12 @@ architecture datapath of APPLE2_TOP is
   signal AReset : std_logic;
 
 begin
+
+    dVGA_R <= VGA_R;
+    dVGA_G <= VGA_G;
+    dVGA_B <= VGA_B;
+    dVGA_VS <= VGA_VS;
+    dVGA_HS <= VGA_HS;
 
   reset <=  manualreset or power_on_reset;
   

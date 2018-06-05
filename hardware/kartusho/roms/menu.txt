@@ -1,0 +1,17 @@
+GAME SELECTION MENU by AntonioVillena 2017
+1.Manic Miner        U.Horace & Spiders
+2.Original 48 ROM    I.Space Raiders
+3.Cargando Leches    O.Tranz Am
+4.R&Play no tokens   P.Shadow of Unicorn
+5.Alford ROM Test    A.Hungry Horace
+6.McLeod ROM Test    S.Loco Motion
+7.SE Basic IV 4.0    D.Montezuma's Revenge
+8.Inves Spectrum+    F.Popeye
+9.Sea Change ROM     G.Misco Jones
+0.Gosh Wonderful     H.Return of the Jedi
+Q.Jet Set Willy      J.Star Wars
+W.Pssst              K.Death Chase
+E.Gyrus              L.Cookie
+R.Jet Pac            Z.Lala Prologue
+T.Chess              X.Backgammon
+Y.Planetoids         C.QBert
