@@ -1,41 +1,76 @@
 cad0    defb    'Core:             ',0
-cad1    defm    'http://zxuno.speccy.org', 0
-        defm    'ZX-Uno BIOS v0.60', 0
-        defm    'Copyleft ', 127, ' 2017 ZX-Uno Team', 0
-        defm    'Processor: Z80 3.5MHz', 0
-        defm    'Memory:    512K Ok', 0
-        defm    'Graphics:  normal, hi-color', 0
-        defm    'hi-res, ULAplus', 0
-        defm    'Booting:', 0
-        defm    'Press <Edit> to Setup    <Break> Boot Menu', 0
+cad1    defb    'http://zxuno.speccy.org', 0
+        defb    'ZX-Uno BIOS v0.74', 0
+        defb    'Copyleft ', 127, ' 2018 ZX-Uno Team', 0
+        defb    'Processor: Z80 3.5MHz', 0
+        defb    'Memory:    '
+cadmem  defb    '512K Ok', 0
+        defb    'Graphics:  normal, hi-color', 0
+        defb    'hi-res, ULAplus', 0
+        defb    'Booting:', 0
+      IF  vertical=0
+        defb    'Press <Edit> to Setup    <Break> Boot Menu', 0
 cad2    defb    $12, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
-        defm    $10, '   Please select boot machine:    ', $10, 0
+        defb    $10, '   Please select boot machine:    ', $10, 0
 cad3    defb    $16, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $17, 0
-cad4    defm    $10, '                                  ', $10, 0
-cad5    defm    $10, '    ', $1c, ' and ', $1d, ' to move selection     ', $10, 0
-        defm    $10, '   ENTER to select boot machine   ', $10, 0
-        defm    $10, '    ESC to boot using defaults    ', $10, 0
+cad4    defb    $10, '                                  ', $10, 0
+cad5    defb    $10, '    ', $1c, ' and ', $1d, ' to move selection     ', $10, 0
+        defb    $10, '   ENTER to select boot machine   ', $10, 0
         defb    $14, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
+cad118  defb    '        Please select boot machine', 0
 cad6    defb    'Enter Setup', 0
 cad7    defb    ' Main  ROMs  Upgrade  Boot  Advanced  Exit', 0
         defb    $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $19, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
-cad8    defm    $10, '                         ', $10, '              ', $10, 0
-        defm    $10, 0
+cad8    defb    $10, '                         ', $10, '              ', $10, 0
+        defb    $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.60    ', $7f, '2017 ZX-Uno Team', 0
+        defb    '   BIOS v0.74    ', $7f, '2018 ZX-Uno Team', 0
+      ELSE
+        defb    'Press <Edit> to Setup',0
+        defb    '      <Break> Boot Menu', 0
+cad2    defb    $12
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
+        defb    $10, '  Select boot machine:    ', $10, 0
+cad3    defb    $16
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $17, 0
+cad4    defb    $10, '                          ', $10, 0
+cad5    defb    $10, '    ', $1c, ' and ', $1d, ' to move       ', $10, 0
+        defb    $10, '   ENTER to select boot   ', $10, 0
+        defb    $14
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
+cad118  defb    '        Please select boot machine', 0
+cad6    defb    'Enter Setup', 0
+cad7    defb    ' Main ROMs Upgr Boot Advan Exit', 0
+        defb    $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
+cad8    defb    $10, '                              ', $10, 0
+        defb    $10, 0
+cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
+        defb    ' BIOS v0.74 ', $7f, '2018 ZX1 Team', 0
+        defs    $66
+      ENDIF
 cad10   defb    'Hardware tests', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, 0
@@ -78,7 +113,6 @@ cad13   defb    $1e, ' ', $1f, ' Sel.Screen', 0
         defb    'Graph Save&Exi', 0
         defb    'Break Exit', 0
         defb    'N   New Entry', 0
-        defb    'R   Recovery', 0
 cad14   defb    'Run a diagnos-', 0
         defb    'tic test on', 0
         defb    'your system', 0
@@ -118,6 +152,7 @@ cad92   defb    'SJS1', 0
 cad93   defb    'SJS2', 0
 cad94   defb    'Protek', 0
 cad95   defb    'Fuller', 0
+cad955  defb    'OPQAspM', 0
 cad96   defb    'PAL', 0
 cad97   defb    'NTSC', 0
 cad98   defb    'VGA', 0
@@ -134,6 +169,7 @@ cad33   defb    'Set Active', 0
 cad34   defb    'Move Down  a', 0
 cad35   defb    'Rename', 0
 cad36   defb    'Delete', 0
+      IF  vertical=0
         defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    ' Rename ', $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
         defb    ' ', $10, ' ', $1e, ' ', $1f, '  Enter accept  Break cancel ', $10, 0
@@ -146,6 +182,21 @@ cad36   defb    'Delete', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $15, 0
+      ELSE
+        defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    ' Rename ', $11, $11, $11, $11, $11, $11, $11, $11, $13, 0
+        defb    ' ', $10, '    ', $1e, ' ', $1f, '  Enter Break     ', $10, 0
+        defb    ' ', $16
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $17, 0
+        defb    ' ', $10, '                         ', $10, 0
+        defb    ' ', $14
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $11, $11
+        defb    $11, $11, $11, $11, $11, $11, $11, $15, 0
+        defs    $28
+      ENDIF
 cad38   defb    'Exit system', 0
         defb    'setup after', 0
         defb    'saving the', 0
@@ -262,6 +313,13 @@ cad79   defb    ' Successfully burned ', 0
 cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
+      IF version=5
+files   defb    'ESXDOS  ZX', LX16
+        defb    'FIRMWAREZX', LX16
+        defb    'FLASH   ZX', LX16
+        defb    'SPECTRUMZX', LX16
+fileco  defb    'CORE    ZX', LX16
+      ELSE
       IF version=4
 files   defb    'ESXDOS  ZX1'
         defb    'FIRMWAREZX1'
@@ -293,6 +351,7 @@ fileco  defb    'CORE    ZXA'
       ENDIF
       ENDIF
       ENDIF
+      ENDIF
 cad83   defb    'Input', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, 0
         defb    'Keyb Layout', 0
@@ -305,7 +364,8 @@ cad83   defb    'Input', 0
         defb    'Video', 0
         defb    'Scanlines', 0
         defb    'Frequency', 0
-        defb    'CPU Speed', 0, 0
+        defb    'CPU Speed', 0
+        defb    'CSync', 0, 0
 cad84   defb    'Select PS/2', 0
         defb    'mapping to', 0
         defb    'spectrum', 0, 0
@@ -324,6 +384,8 @@ cad100  defb    'Set VGA', 0
         defb    'frequency', 0, 0
 cad101  defb    'Set CPU', 0
         defb    'speed', 0, 0
+cad10a  defb    'CSync method', 0
+        defb    'to use', 0, 0
 cad102  defb    '50', 0
 cad103  defb    '51', 0
 cad104  defb    '53.5', 0
@@ -344,7 +406,9 @@ cad116  defb    'Disable for', 0
         defb    'better compa-', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
-cad117  defb    ' Add new core', 0
+cad117  defb    'Remove jumpers', 0
+        defb    'to continue', 0, 0
+cad119  defb    ' Add new core', 0
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 

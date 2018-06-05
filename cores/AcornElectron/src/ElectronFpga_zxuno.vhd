@@ -25,11 +25,16 @@ entity ElectronFpga is
         ps2_clk        : in    std_logic;
         ps2_data       : in    std_logic;
         ERST           : in    std_logic;
-        red            : out   std_logic_vector (2 downto 0);
-        green          : out   std_logic_vector (2 downto 0);
-        blue           : out   std_logic_vector (2 downto 0);
-        vsync          : out   std_logic;
-        hsync          : out   std_logic;
+        red            : inout std_logic_vector (2 downto 0);
+        green          : inout std_logic_vector (2 downto 0);
+        blue           : inout std_logic_vector (2 downto 0);
+        vsync          : inout std_logic;
+        hsync          : inout std_logic;
+        dred           : out   std_logic_vector (2 downto 0);
+        dgreen         : out   std_logic_vector (2 downto 0);
+        dblue          : out   std_logic_vector (2 downto 0);
+        dvsync         : out   std_logic;
+        dhsync         : out   std_logic;
         audiol         : out   std_logic;
         audioR         : out   std_logic;
         casIn          : in    std_logic;
@@ -52,6 +57,12 @@ architecture behavioral of ElectronFpga is
     signal reset_ctr  : std_logic_vector (7 downto 0) := (others => '0');
     
 begin
+
+    dred <= red;
+    dgreen <= green;
+    dblue <= blue;
+    dvsync <= vsync;
+    dhsync <= hsync;
 
  relojes_electron: entity work.relojes
   port map
