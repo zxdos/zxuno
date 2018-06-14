@@ -3111,12 +3111,11 @@ calbi1  ld      a, 9
         ld      hl, $0b80
 calbi2  ld      de, $0540
       ELSE
-        ld      a, b        ;1-69
+calbi1  ld      a, b        ;1-69
         sub     35
-        jr      c, calbi1   ;<35 c n
+        jr      c, calbi2   ;<35 c n
         ld      b, a        ;>=35 nc n-35
-calbi1  ld      hl, $0240
-        ccf
+calbi2  ccf
         push    bc
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $c5  ; envío wrear
@@ -3126,6 +3125,7 @@ calbi1  ld      hl, $0240
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         or      a
         pop     bc
+        ld      hl, $0240
         ret     z
         ld      de, $0740
       ENDIF
@@ -4615,8 +4615,10 @@ loadch
 ; ------------------------
       IF  version<5
 rdflsh  ex      af, af'
+        push    hl
       ELSE
-rdflsh  wreg    flash_cs, 0     ; activamos spi, enviando un 0
+rdflsh  push    hl
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $c5  ; envío wrear
         ld      b, 0
         rl      b
@@ -4627,7 +4629,6 @@ rdflsh  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
       ENDIF
         xor     a
-        push    hl
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
         pop     hl
