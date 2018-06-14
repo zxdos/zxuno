@@ -2734,7 +2734,7 @@ upgrai  ld      a, 30
         ld      a, $40
         ld      hl, $4000
         exx
-        call    wrflsh
+        call    wrfls0
         inc     de
         exx
         dec     iyh
@@ -3111,7 +3111,22 @@ calbi1  ld      a, 9
         ld      hl, $0b80
 calbi2  ld      de, $0540
       ELSE
-calbi1  ld      hl, $0480
+        ld      a, b        ;1-69
+        sub     35
+        jr      c, calbi1   ;<35 c n
+        ld      b, a        ;>=35 nc n-35
+calbi1  ld      hl, $0240
+        ccf
+        push    bc
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $c5  ; envío wrear
+        ld      e, 0
+        rl      e
+        out     (c), e
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        or      a
+        pop     bc
+        ret     z
         ld      de, $0740
       ENDIF
 calbi3  add     hl, de
@@ -4125,7 +4140,16 @@ savech  ld      a, $20
 ;   DE: target address without last byte
 ;  HL': source address from memory
 ; ------------------------
-wrflsh  ex      af, af'
+wrflsh  
+      IF  version>4
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $c5  ; envío wrear
+        ld      l, 0
+        adc     hl, hl
+        out     (c), l
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+      ENDIF
+wrfls0  ex      af, af'
         xor     a
 wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
@@ -4572,7 +4596,11 @@ easter  di
 ; ------------------------
 ; Load flash structures from $06000 to $9000  
 ; ------------------------
-loadch  wreg    flash_cs, 1
+loadch  
+      IF  version>4
+        and     a
+      ENDIF
+        wreg    flash_cs, 1
         ld      de, config
         ld      hl, $0060   ;old $0aa0
         ld      a, $17
@@ -4585,7 +4613,19 @@ loadch  wreg    flash_cs, 1
 ;   HL: source address without last byte
 ;    A: number of pages (256 bytes) to read
 ; ------------------------
+      IF  version<5
 rdflsh  ex      af, af'
+      ELSE
+rdflsh  wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $c5  ; envío wrear
+        ld      b, 0
+        rl      b
+        ex      af, af'
+        ld      a, b
+        ld      b, (zxuno_port >> 8)+1
+        out     (c), a
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+      ENDIF
         xor     a
         push    hl
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
@@ -4744,9 +4784,13 @@ slot2a  ld      de, 3
         ld      e, $c0
       ELSE
 sloti   ld      l, a
-        sub     44
+        sub     44              ;-44, -1 -> 0, 43
         jr      nc, sloti
         ld      h, d
+        add     a, 9
+        jr      nc, slot2b
+        ld      hl, $0400
+        ld      e, a
       ENDIF
 slot2b  add     hl, de          ; $00c0 y 2f80
         add     hl, hl
