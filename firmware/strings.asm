@@ -313,44 +313,18 @@ cad79   defb    ' Successfully burned ', 0
 cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
-      IF version=5
+      IF version=2
 files   defb    'ESXDOS  ZX', LX16
         defb    'FIRMWAREZX', LX16
         defb    'FLASH   ZX', LX16
         defb    'SPECTRUMZX', LX16
 fileco  defb    'CORE    ZX', LX16
       ELSE
-      IF version=4
-files   defb    'ESXDOS  ZX1'
-        defb    'FIRMWAREZX1'
-        defb    'FLASH   ZX1'
-        defb    'SPECTRUMZX1'
-fileco  defb    'CORE    ZX1'
-      ELSE
-      IF version=3
-files   defb    'ESXDOS  ZZ3'
-        defb    'FIRMWAREZZ3'
-        defb    'FLASH   ZZ3'
-        defb    'SPECTRUMZZ3'
-fileco  defb    'CORE    ZZ3'
-      ELSE
-      IF version=2
-files   defb    'ESXDOS  ZZ2'
-        defb    'FIRMWAREZZ2'
-        defb    'FLASH   ZZ2'
-        defb    'SPECTRUMZZ2'
-fileco  defb    'CORE    ZZ2'
-      ELSE
-      IF version=1
-files   defb    'ESXDOS  ZXA'
-        defb    'FIRMWAREZXA'
-        defb    'FLASH   ZXA'
-        defb    'SPECTRUMZXA'
-fileco  defb    'CORE    ZXA'
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
+files   defb    'ESXDOS  ZX', $30+version
+        defb    'FIRMWAREZX', $30+version
+        defb    'FLASH   ZX', $30+version
+        defb    'SPECTRUMZX', $30+version
+fileco  defb    'CORE    ZX', $30+version
       ENDIF
 cad83   defb    'Input', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, 0

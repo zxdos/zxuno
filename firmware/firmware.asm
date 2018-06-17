@@ -394,7 +394,7 @@ start7  ld      de, tmpbuf
         call_prnstr             ; Imprime máquina (ROM o core)
       ENDIF
 start8  
-      IF  version<5
+      IF  version=1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $9f  ; jedec id
         in      a, (c)
@@ -482,11 +482,15 @@ star17  ld      hl, (joykey)
         jp      conti
 
 runbit0 ld      a, l
-      IF  version<5
+    IF  version=1
         cp      45
-      ELSE
+    ELSE
+      IF  version=2
         cp      69
+      ELSE
+        cp      31
       ENDIF
+    ENDIF
         jr      z, bios
 runbit1 ld      (bitstr), a
         jr      star17
@@ -733,7 +737,7 @@ launch  ld      (tmpbuf+21), a
         call    clrscr          ; borro pantalla
         inc     hl
         inc     de
-      IF  version<5
+      IF  version=1
         ld      c, $20
         ld      (hl), %00000111
         ldir
@@ -765,7 +769,7 @@ laun1   ex      de, hl
         push    hl
         push    bc
         ld      de, tmpbuf
-      IF  version<5
+      IF  version=1
         ld      bc, 21
         ldir
       ELSE
@@ -782,7 +786,7 @@ laun1   ex      de, hl
         ex      de, hl
         ld      hl, $a3c0
         sbc     hl, de
-      IF  version<5
+      IF  version=1
         jr      nz, laun2
         ld      bc, $1501
 laun2   ld      hl, $a681
@@ -831,7 +835,7 @@ gamup   dec     l
         ret     p
 gamdw   inc     l
         ld      a, l
-      IF  version<5
+      IF  version=1
         cp      46
         ret     c
         dec     l
@@ -2057,11 +2061,15 @@ upgr34  ld      (hl), a
         ld      a, ixl
         rra
         jr      nz, upgr35
-      IF  version<5
+    IF  version=1
         cp      45+5
-      ELSE
+    ELSE
+      IF  version=2
         cp      69+5
+      ELSE
+        cp      31+5
       ENDIF
+    ENDIF
         jr      z, upgr35
         inc     a
         ld      (ix-4), cad119 & $ff
@@ -2316,24 +2324,10 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
 erfnf   ld      ix, cad78
 terror  jp      ferror
 saba
-      IF  version=5
+      IF  version=2
         sub     LX16
       ELSE
-      IF  version=4
-        sub     $31
-      ELSE
-      IF  version=3
-        sub     $33
-      ELSE
-      IF  version=2
-        sub     $32
-      ELSE
-      IF  version=1
-        sub     $41
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
+        sub     $30+version
       ENDIF
         jr      nz, erfnf
         call    testl
@@ -2417,24 +2411,10 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
-      IF  version=5
+      IF  version=2
         sub     LX16
       ELSE
-      IF  version=4
-        sub     $31
-      ELSE
-      IF  version=3
-        sub     $33
-      ELSE
-      IF  version=2
-        sub     $32
-      ELSE
-      IF  version=1
-        sub     $41
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
+        sub     $30+version
       ENDIF
         jr      nz, erfnf2
         call    testl
@@ -3103,7 +3083,7 @@ imyesn  call    bloq1
 ;   HL: address of bitstream
 ; ------------------------------------
 calbit  inc     b
-      IF  version<5
+      IF  version=1
 calbi1  ld      a, 9
         cp      b
         ld      hl, $0040
@@ -4141,7 +4121,7 @@ savech  ld      a, $20
 ;  HL': source address from memory
 ; ------------------------
 wrflsh  
-      IF  version>4
+      IF  version=2
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $c5  ; envío wrear
         ld      l, 0
@@ -4400,7 +4380,7 @@ finlog  incbin  strings.bin.zx7b
 sdtab   defw    $0020, $0040
         defw    $0040, $0080
 fllen   defw    $0000, $0000
-      IF  version<5
+      IF  version=1
         defw    $0540
 subnn   sub     6
       ELSE
@@ -4597,7 +4577,7 @@ easter  di
 ; Load flash structures from $06000 to $9000  
 ; ------------------------
 loadch  
-      IF  version>4
+      IF  version=2
         and     a
       ENDIF
         wreg    flash_cs, 1
@@ -4613,7 +4593,7 @@ loadch
 ;   HL: source address without last byte
 ;    A: number of pages (256 bytes) to read
 ; ------------------------
-      IF  version<5
+      IF  version=1
 rdflsh  ex      af, af'
         push    hl
       ELSE
@@ -4776,7 +4756,7 @@ check1  xor     (hl)            ;6*4+4*7+10= 62 ciclos/byte
 ;   HL: destination address
     IF  recovery=0
 slot2a  ld      de, 3
-      IF  version<5
+      IF  version=1
         and     $3f
         ld      h, d
         ld      l, a
