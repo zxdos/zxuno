@@ -9,7 +9,7 @@
 -g TdiPin:PullUp
 -g TdoPin:PullUp
 -g TmsPin:PullUp
--g UnusedPin:PullDown
+-g UnusedPin:PullUp
 -g UserID:0xFFFFFFFF
 -g ExtMasterCclk_en:Yes
 -g ExtMasterCclk_divide:50
