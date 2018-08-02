@@ -419,15 +419,17 @@ begin
 
 	u_ld_reg: process(CLK_24, lRELOAD_SEL, RESET_INT)
 	begin
-	  if (RESET_INT = '1') then
-		  lREG_INK   <= (others=>'1');
-		  lREG_STYLE <= (others=>'0');
-		  lREG_PAPER <= (others=>'0');
-		  lREG_MODE  <= (others=>'0');
-	  elsif (lRELOAD_SEL = '1') then
-		  lREG_INK   <= (others=>'1');
-		  lREG_STYLE <= (others=>'0');
-		  lREG_PAPER <= (others=>'0');
+          if (falling_edge(CLK_24)) then
+            if (RESET_INT = '1') then
+              lREG_INK   <= (others=>'1');
+              lREG_STYLE <= (others=>'0');
+              lREG_PAPER <= (others=>'0');
+              lREG_MODE  <= (others=>'0');
+            elsif (lRELOAD_SEL = '1') then
+              lREG_INK   <= (others=>'0');
+              lREG_STYLE <= (others=>'0');
+              lREG_PAPER <= (others=>'1');
+            end if;
 	  elsif rising_edge(CLK_24) then
 			if (RELD_REG = '1' and isAttrib = '1') then
 				case lREGHOLD(6 downto 3) is

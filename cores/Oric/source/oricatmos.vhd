@@ -54,6 +54,7 @@ port (
 --	K7_REMOTE         : out   std_logic;
 --	K7_AUDIOOUT       : out   std_logic;
 
+        I_NMI             : in    std_logic;
 	-- PRINTER
 --	PRT_DATA          : inout std_logic_vector(7 downto 0);
 --	PRT_STR           : out   std_logic;  -- strobe
@@ -102,7 +103,9 @@ architecture RTL of ORIC is
 	signal cpu_rw             : std_logic;
 	signal cpu_irq            : std_logic;
 	signal ad                 : std_logic_vector(15 downto 0);
-
+        signal NMI_INT :std_logic;
+        signal RESET_INT:std_logic;
+          
 	-- VIA
 	signal via_pa_out_oe      : std_logic_vector( 7 downto 0);
 	signal via_pa_in          : std_logic_vector( 7 downto 0);
@@ -177,6 +180,9 @@ begin
     D_HSYNC <= O_HSYNC;
     D_VSYNC <= O_VSYNC;
 
+    NMI_INT <= not I_NMI;
+    RESET_INT <= not I_RESET;
+    
 	inst_pll_base : PLL_BASE
 	generic map (
 		BANDWIDTH          => "OPTIMIZED", -- "HIGH", "LOW" or "OPTIMIZED"
@@ -223,7 +229,7 @@ begin
 		LOCKED   => pll_locked, -- Active high PLL lock signal
 		CLKFBIN  => CLKFB,      -- Clock feedback input
 		CLKIN    => CLK_50,     -- Clock input
-		RST      => I_RESET     -- Asynchronous PLL reset
+		RST      => RESET_INT     -- Asynchronous PLL reset
 	);
 
 
@@ -250,7 +256,7 @@ begin
 		Rdy     => '1',
 		Abort_n => '1',
 		IRQ_n   => cpu_irq,
-		NMI_n   => '1',
+		NMI_n   => NMI_INT,
 		SO_n    => '1',
 		R_W_n   => cpu_rw,
 		Sync    => open,
