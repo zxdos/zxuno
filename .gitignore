@@ -48,3 +48,7 @@ cores/Oric/build/xlnx_auto_0_xdb/
 cores/Oric/build/xst/
 
 _xmsgs/
+cores/Oric/build/out.my
+cores/Oric/source/_impact.cmd
+cores/Oric/source/_impact.log
+
