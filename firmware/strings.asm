@@ -1,6 +1,10 @@
 cad0    defb    'Core:             ',0
+      IF version=1
 cad1    defb    'http://zxuno.speccy.org', 0
-        defb    'ZX-Uno BIOS v0.74', 0
+      ELSE
+cad1    defb    'http://zxdos.forofpga.es', 0
+      ENDIF
+        defb    'ZX-Uno BIOS v0.75', 0
         defb    'Copyleft ', 127, ' 2018 ZX-Uno Team', 0
         defb    'Processor: Z80 3.5MHz', 0
         defb    'Memory:    '

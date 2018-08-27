@@ -414,7 +414,8 @@ star10  add     hl, hl
         ld      (alto fllen), hl
       ENDIF
     IF  recovery=0
-star11  ld      a, (layout)
+star11  wreg    key_stat, 0
+        ld      a, (layout)
         rr      a
         ld      hl, fines-1
         jr      z, star12
@@ -4356,7 +4357,7 @@ hhhh    push    af
 ;binf jr binf        
       ENDIF
 
-    IF  recovery=0
+  IF  recovery=0
         incbin  es.zx7b
 fines   incbin  us.zx7b
 finus   incbin  av.zx7b
@@ -4364,15 +4365,23 @@ finav
 ; -----------------------------------------------------------------------------
 ; Compressed and RCS filtered logo
 ; -----------------------------------------------------------------------------
+    IF version=1
       IF  vertical=0
         incbin  logo256x192.rcs.zx7b
-finlog  incbin  strings.bin.zx7b
       ELSE
         incbin  bezel.rcs.zx7b
 finbez  incbin  logo192x256.rcs.zx7b
-finlog  incbin  strings.bin.zx7b
+      ENDIF
+    ELSE
+      IF  vertical=0
+        incbin  logo256x192d.rcs.zx7b
+      ELSE
+        incbin  bezel.rcs.zx7b
+finbez  incbin  logo192x256d.rcs.zx7b
       ENDIF
     ENDIF
+finlog  incbin  strings.bin.zx7b
+  ENDIF
 
 ; -----------------------------------------------------------------------------
 ; Compressed messages
