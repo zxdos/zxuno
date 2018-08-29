@@ -58,7 +58,7 @@ entity VGA_SCANCONV is
 		hC				: integer range 0 to 1023 :=  48;	-- h back porch
 		hD				: integer range 0 to 1023 := 640;	-- visible video
 
---		vA				: integer range 0 to 1023 :=  16;	-- v front porch
+		vA				: integer range 0 to 1023 :=  16;	-- v front porch
 		vB				: integer range 0 to 1023 :=   2;	-- v sync
 		vC				: integer range 0 to 1023 :=  33;	-- v back porch
 		vD				: integer range 0 to 1023 := 480;	-- visible video
@@ -198,7 +198,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- V sync timing
-		if (vcnt < vB) then
+		if (vcnt < vB+vA) and (vcnt >= vA) then
 			O_VSYNC <= '0';
 		else
 			O_VSYNC <= '1';
@@ -210,7 +210,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- visible video area doubled from the original game
-		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt > 2*(vB + vC + vpad)) and (vcnt <= 2*(vB + vC + vD + vpad))) then
+		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt > 2*(vA + vB + vC+vpad)) and (vcnt <= 2*(vA + vB + vC + vD + vpad))) then
 			hpos_o <= hpos_o + 1;
 		else
 			hpos_o <= (others => '0');
@@ -222,7 +222,7 @@ begin
 	begin
 		wait until rising_edge(CLK_X2);
 		-- active video area 640x480 (VGA) after padding with blank borders
-		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt > 2*(vB + vC)) and (vcnt <= 2*(vB + vC + vD + 2*vpad))) then
+		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt > 2*(vA + vB + vC)) and (vcnt <= 2*(vA + vB + vC + vD + 2*vpad))) then
 			O_CMPBLK_N <= '1';
 		else
 			O_CMPBLK_N <= '0';
