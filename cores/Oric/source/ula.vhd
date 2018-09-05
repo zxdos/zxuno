@@ -349,7 +349,7 @@ begin
 	lHBLANKn    <= '1' when (lCTR_H >=   1) and (lCTR_H <=  40) else '0';
 
 	-- Signal to Reload Register to reset attributes
-	lRELOAD_SEL <= '1' when (lCTR_H >=  49) else '0';
+	lRELOAD_SEL <= '1' when (lCTR_H >=  62) else '0';
 
 	-- Vertical Synchronisation
 	lVSYNC50n   <= '0' when (lCTR_V >= 258) and (lCTR_V <= 259) else '1'; -- 50Hz
