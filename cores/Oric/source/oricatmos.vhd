@@ -78,6 +78,7 @@ entity ORIC is
     CLK_50              : in    std_logic;  -- MASTER CLK
     segment   : out std_logic_vector( 7 downto 0);
     position   : out std_logic_vector( 7 downto 0)
+
     );
 end;
 
@@ -176,6 +177,11 @@ architecture RTL of ORIC is
 
   signal clk_s              : std_logic;
   signal s_blank            : std_logic;
+    -- led display
+
+  signal led_signals_save :  std_logic_vector(31 downto 0);
+  signal led_signal_update : std_logic;
+  signal led_mutiplex_clk : std_logic;
 
 begin
   -----------------------------------------------
@@ -566,18 +572,44 @@ begin
   --  wait until rising_edge(clk24);
   --  AUDIO_OUT <= PSG_OUT(5);
   --end process;  
+  inst_clock_div :entity work.clkdiv
+    generic map (
+      DIVRATIO => 1000000
+      )
+    port map (
+      nreset => I_RESET,
+      clk =>clk6,
+      clkout => led_signal_update
+      );
+  inst_clock_div_multiplex :entity work.clkdiv
+    generic map (
+      DIVRATIO => 3750 -- 200Hz whole refresh
+      )
+    port map (
+      nreset => I_RESET,
+      clk =>clk6,
+      clkout => led_mutiplex_clk
+      );
 
+  update_led :process(led_signal_update)
+  begin
+    if (rising_edge(led_signal_update))        then
+      led_signals_save(7  downto  0) <= DATA_BUS_OUT;
+      led_signals_save(23 downto 8) <= CPU_ADDR(15 downto 0);
+      --led_signals_save(11 downto  8) <= X"e";
+      --led_signals_save(15 downto 12) <= X"f";
+      --led_signals_save(19 downto 16) <= X"a";
+      --led_signals_save(23 downto 20) <= X"c";
+      led_signals_save(27 downto 24) <= PSG_OUT(3 downto 0);
+      led_signals_save(31 downto 28) <= PSG_OUT(7 downto 4);
+    end if;     
+  end process;
+      
+        
   led_display : entity work.XSP6X9_Led_Output
     port map (
-      clk => clk6,
-      inputs(7  downto  0) => DATA_BUS_OUT,
-      inputs(23 downto 8) => CPU_ADDR(15 downto 0),
-      --inputs(11 downto  8) => X"e",
-      --inputs(15 downto 12) => X"f",
-      --inputs(19 downto 16) => X"a",
-      --inputs(23 downto 20) => X"c",
-      inputs(27 downto 24) => PSG_OUT(3 downto 0),
-      inputs(31 downto 28) => PSG_OUT(7 downto 4),
+      clk => clk6, --led_mutiplex_clk,
+      inputs (31 downto 0) => led_signals_save,
       segment => segment,
       position => position
       );
