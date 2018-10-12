@@ -31,19 +31,21 @@ port (
 end;
 
 architecture RTL of ram48k is
-	signal ro0, ro1, ro2 : std_logic_vector(7 downto 0);
-	signal cs0, cs1, cs2 : std_logic := '0';
+	signal ro0, ro1, ro2, ro3 : std_logic_vector(7 downto 0);
+	signal cs0, cs1, cs2, cs3: std_logic := '0';
 begin
 
 	cs0 <= '1' when cs='1' and addr(15 downto 14)="00" else '0';
 	cs1 <= '1' when cs='1' and addr(15 downto 14)="01" else '0';
 	cs2 <= '1' when cs='1' and addr(15 downto 14)="10" else '0';
+        cs3 <= '1' when cs='1' and addr(15 downto 14)="11" else '0';
 
-	do <=
-		ro0 when oe='1' and cs0='1' else
-		ro1 when oe='1' and cs1='1' else
-		ro2 when oe='1' and cs2='1' else
-		(others=>'0');
+	do <=   
+          ro0 when oe='1' and cs0='1' else
+          ro1 when oe='1' and cs1='1' else
+          ro2 when oe='1' and cs2='1' else
+          ro3 when oe='1' and cs3='1' else
+          (others=>'0');
 
 	RAM_0000_3FFF : entity work.ram16k
 	port map (
@@ -73,6 +75,15 @@ begin
 		addr => addr(13 downto 0),
 		di   => di,
 		do   => ro2
+	);
+	RAM_C000_FFFF : entity work.ram16k
+	port map (
+		clk  => clk,
+		cs   => cs3,
+		we   => we,
+		addr => addr(13 downto 0),
+		di   => di,
+		do   => ro3
 	);
 
 end RTL;

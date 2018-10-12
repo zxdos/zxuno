@@ -82,7 +82,11 @@ entity VGA_SCANCONV is
 end;
 
 architecture RTL of VGA_SCANCONV is
-	--
+type ram_t is array (0 to 1023) of std_logic_vector(15 downto 0);
+signal ram : ram_t := (others => (others => '0'));
+attribute ram_style: string;
+attribute ram_style of ram : signal is "distributed";
+--
 	-- input timing
 	--
 	signal ivsync_last_x2	: std_logic := '1';
@@ -101,32 +105,46 @@ architecture RTL of VGA_SCANCONV is
 	signal CLK_x2_n		: std_logic := '1';
 
 begin
-	-- dual port line buffer, max line of 1024 pixels
-	u_ram : RAMB16_S18_S18
-		generic map (INIT_A => X"00000", INIT_B => X"00000", SIM_COLLISION_CHECK => "ALL")  -- "NONE", "WARNING", "GENERATE_X_ONLY", "ALL"
-		port map (
-			-- input
-			DOA					=> open,
-			DIA					=> I_VIDEO,
-			DOPA					=> open,
-			DIPA					=> "00",
-			ADDRA					=> hpos_i,
-			WEA					=> '1',
-			ENA					=> CLK,
-			SSRA					=> '0',
-			CLKA					=> CLK_x2,
+  -- dual port line buffer, max line of 1024 pixels
+  ram_write :process(CLK_x2)
+  begin
+    if rising_edge(CLK_x2) then
+      ram(to_integer(unsigned((hpos_i)))) <= I_VIDEO;
+    end if;
+  end process;
+  ram_read :process(CLK_x2)
+  begin
+    if falling_edge(CLK_x2) then
+      O_VIDEO <= ram(to_integer(unsigned(hpos_o)));
+    end if;
+  end process;
+  
 
-			-- output
-			DOB					=> O_VIDEO,
-			DIB					=> x"0000",
-			DOPB					=> open,
-			DIPB					=> "00",
-			ADDRB					=> hpos_o,
-			WEB					=> '0',
-			ENB					=> '1',
-			SSRB					=> '0',
-			CLKB					=> CLK_x2_n
-		);
+	-- u_ram : RAMB16_S18_S18
+	-- 	generic map (INIT_A => X"00000", INIT_B => X"00000", SIM_COLLISION_CHECK => "ALL")  -- "NONE", "WARNING", "GENERATE_X_ONLY", "ALL"
+	-- 	port map (
+	-- 		-- input
+	-- 		DOA					=> open,
+	-- 		DIA					=> I_VIDEO,
+	-- 		DOPA					=> open,
+	-- 		DIPA					=> "00",
+	-- 		ADDRA					=> hpos_i,
+	-- 		WEA					=> '1',
+	-- 		ENA					=> CLK,
+	-- 		SSRA					=> '0',
+	-- 		CLKA					=> CLK_x2,
+
+	-- 		-- output
+	-- 		DOB					=> O_VIDEO,
+	-- 		DIB					=> x"0000",
+	-- 		DOPB					=> open,
+	-- 		DIPB					=> "00",
+	-- 		ADDRB					=> hpos_o,
+	-- 		WEB					=> '0',
+	-- 		ENB					=> '1',
+	-- 		SSRB					=> '0',
+	-- 		CLKB					=> CLK_x2_n
+	-- 	);
 
 	CLK_x2_n <= not CLK_x2;
 

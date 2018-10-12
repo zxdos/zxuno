@@ -62,8 +62,6 @@ entity ORIC is
 --	PRT_STR           : out   std_logic;  -- strobe
 --	PRT_ACK           : in    std_logic;  -- ack
 
---	MAPn              : in    std_logic;
---	ROMDISn           : in    std_logic;
 --	IRQn              : in    std_logic;
     ---
 --	CLK_EXT           : out   std_logic;  -- 1 MHZ
@@ -73,6 +71,13 @@ entity ORIC is
 
     O_NTSC              : out   std_logic; --Q
     O_PAL               : out   std_logic; --Q
+
+
+  --8dos controller
+  SD_DAT : in std_logic;      -- SD Card Data      SD pin 7 "DAT 0/DataOut" //misoP117
+  SD_DAT3 : out std_logic;    -- SD Card Data 3    SD pin 1 "DAT 3/nCS"  cs P121
+  SD_CMD : out std_logic;     -- SD Card Command   SD pin 2 "CMD/DataIn"mosiP119
+  SD_CLK : out std_logic;     -- SD Card Clock     SD pin 5 "CLK" //sckP115
 
     -- Clk master
     CLK_50              : in    std_logic;  -- MASTER CLK
@@ -106,11 +111,12 @@ architecture RTL of ORIC is
   signal CPU_DI             : std_logic_vector( 7 downto 0);
   signal CPU_DO             : std_logic_vector( 7 downto 0);
   signal DATA_BUS_OUT:std_logic_vector(7 downto 0);
-  signal cpu_rw             : std_logic;
+    signal cpu_rw             : std_logic;
   signal cpu_irq            : std_logic;
   signal ad                 : std_logic_vector(15 downto 0);
   signal NMI_INT :std_logic;
-  signal RESET_INT:std_logic;
+  signal RESET_INTn:std_logic;
+
   
   -- VIA
   signal via_pa_out_oe      : std_logic_vector( 7 downto 0);
@@ -151,7 +157,6 @@ architecture RTL of ORIC is
   signal ula_WE_SRAM        : std_logic;
   signal ula_LE_SRAM        : std_logic;
   signal ula_CLK_4          : std_logic;
-  signal ula_IOCONTROL      : std_logic;
   signal ula_VIDEO_R        : std_logic;
   signal ula_VIDEO_G        : std_logic;
   signal ula_VIDEO_B        : std_logic;
@@ -182,20 +187,30 @@ architecture RTL of ORIC is
   signal led_signals_save :  std_logic_vector(31 downto 0);
   signal led_signal_update : std_logic;
   signal led_mutiplex_clk : std_logic;
+  signal CS_N, MOSI, MISO, SCLK : std_logic;
 
+  signal track : unsigned(5 downto 0);
+  signal image : unsigned(9 downto 0);
+  signal D1_ACTIVE, D2_ACTIVE : std_logic;
+  signal track_addr : unsigned(13 downto 0);
+  signal TRACK_RAM_ADDR : unsigned(13 downto 0);
+  signal TRACK_RAM_DI : unsigned(7 downto 0);
+  signal TRACK_RAM_WE : std_logic;
+
+    -- 8dos controler
+  signal cont_MAPn              :     std_logic;
+  signal cont_ROMDISn           :     std_logic;
+  signal cont_D_OUT : std_logic_vector(7 downto 0);
+  signal cont_IOCONTROLn     : std_logic;
+  
 begin
   -----------------------------------------------
   -- generate all the system clocks required
   -----------------------------------------------
 
-  --D_VIDEO_R <= O_VIDEO_R;
-  --D_VIDEO_G <= O_VIDEO_G;
-  --D_VIDEO_B <= O_VIDEO_B;
-  --D_HSYNC <= O_HSYNC;
-  --D_VSYNC <= O_VSYNC;
 
   NMI_INT <= not I_NMI;
-  RESET_INT <= not I_RESET;
+  RESET_INTn <= not I_RESET and loc_reset_n;
   
   inst_pll_base : PLL_BASE
     generic map (
@@ -243,7 +258,7 @@ begin
       LOCKED   => pll_locked, -- Active high PLL lock signal
       CLKFBIN  => CLKFB,      -- Clock feedback input
       CLKIN    => CLK_50,     -- Clock input
-      RST      => RESET_INT     -- Asynchronous PLL reset
+      RST      => RESET_INTn     -- Asynchronous PLL reset
       );
 
 
@@ -322,7 +337,7 @@ begin
       RW         => cpu_rw,
       ADDR       => CPU_ADDR(15 downto 0),
 --		MAPn       => MAPn,
-      MAPn       => '1',
+      MAPn       => cont_MAPn,
       DB         => SRAM_DO,
 
       -- DRAM
@@ -451,7 +466,6 @@ begin
   ------------------------------------------------------------
   -- VIA
   ------------------------------------------------------------
-  ula_CSIO <= not ula_CSIOn;
 
   inst_via : entity work.M6522
     port map (
@@ -461,8 +475,8 @@ begin
       O_DATA_OE_L   => open,
 
       I_RW_L        => cpu_rw,
-      I_CS1         => ula_CSIO,
-      I_CS2_L       => ula_IOCONTROL,
+      I_CS1         => cont_IOCONTROLn,
+      I_CS2_L       => ula_CSIOn,
 
       O_IRQ_L       => cpu_irq,   -- note, not open drain
 
@@ -613,30 +627,48 @@ begin
       segment => segment,
       position => position
       );
+
+
+  controller8dos : entity work.controller_8dos
+    port map
+    (
+      CLK_24 => clk24,
+      PHI_2 => ula_phi2,
+      RW => cpu_rw,
+      IO_SELECTn => ULA_CSIOn,
+      IO_CONTROLn => cont_IOCONTROLn,
+      RESETn => RESET_INTn,
+      O_ROMDISn => cont_ROMDISn,
+      O_MAPn => cont_MAPn,
+      A => CPU_ADDR(15 downto 0),
+      D_IN => CPU_DO,
+      D_OUT => cont_D_OUT
+      );
+  
   
   ------------------------------------------------------------
   -- Multiplex CPU , RAM/VIA , ROM
   ------------------------------------------------------------
-  ula_IOCONTROL <= '0';
 
   process
   begin
     wait until rising_edge(clk24);
 
     -- expansion port
-    if    cpu_rw = '1' and ula_IOCONTROL = '1' and ula_CSIOn  = '0'                       then
-      CPU_DI <= SRAM_DO;
+    if    cpu_rw = '1' and cont_IOCONTROLn = '0' and ula_CSIOn  = '0'                       then
+      CPU_DI <= cont_D_OUT;
     -- Via
-    elsif cpu_rw = '1' and ula_IOCONTROL = '0' and ula_CSIOn  = '0' and ula_LE_SRAM = '0' then
+    elsif cpu_rw = '1' and cont_IOCONTROLn = '1' and ula_CSIOn  = '0' and ula_LE_SRAM = '0' then
       CPU_DI <= VIA_DO;
     -- ROM
-    elsif cpu_rw = '1' and ula_IOCONTROL = '0' and ula_CSROMn = '0'                       then
+    elsif cpu_rw = '1' and cont_IOCONTROLn = '0' and ula_CSROMn = '0' and cont_ROMDISn = '1' then
       CPU_DI <= ROM_DO;
     -- Read data
-    elsif cpu_rw = '1' and ula_IOCONTROL = '0' and ula_phi2   = '1' and ula_LE_SRAM = '0' then
-      cpu_di <= SRAM_DO;
+    elsif cpu_rw = '1' and cont_IOCONTROLn = '1' and ula_phi2   = '1' and ula_LE_SRAM = '0' then
+      CPU_DI <= SRAM_DO;
     end if;
   end process;
+  
   process -- figure out ram
   begin
     wait until rising_edge(clk24);
@@ -659,4 +691,11 @@ begin
 ------------------------------------------------------------
 --	PRT_DATA    <= via_pa_out;
 --	PRT_STR     <= via_out(4);
+
+
+  -- sd card
+  SD_DAT3 <= '0';
+  SD_CMD <= '0';
+  SD_CLK <= '0';
+
 end RTL;
