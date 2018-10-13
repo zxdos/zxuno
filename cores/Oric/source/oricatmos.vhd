@@ -115,7 +115,7 @@ architecture RTL of ORIC is
   signal cpu_irq            : std_logic;
   signal ad                 : std_logic_vector(15 downto 0);
   signal NMI_INT :std_logic;
-  signal RESET_INTn:std_logic;
+  signal RESET_INT:std_logic;
 
   
   -- VIA
@@ -210,7 +210,7 @@ begin
 
 
   NMI_INT <= not I_NMI;
-  RESET_INTn <= not I_RESET and loc_reset_n;
+  RESET_INT <= not I_RESET;
   
   inst_pll_base : PLL_BASE
     generic map (
@@ -258,7 +258,7 @@ begin
       LOCKED   => pll_locked, -- Active high PLL lock signal
       CLKFBIN  => CLKFB,      -- Clock feedback input
       CLKIN    => CLK_50,     -- Clock input
-      RST      => RESET_INTn     -- Asynchronous PLL reset
+      RST      => RESET_INT     -- Asynchronous PLL reset
       );
 
 
@@ -337,7 +337,7 @@ begin
       RW         => cpu_rw,
       ADDR       => CPU_ADDR(15 downto 0),
 --		MAPn       => MAPn,
-      MAPn       => cont_MAPn,
+      MAPn       =>  cont_MAPn,
       DB         => SRAM_DO,
 
       -- DRAM
@@ -575,7 +575,7 @@ begin
   onebit : entity work.XSP6X9_onebit
     generic map (k => 21)
     port map (
-      nreset => I_RESET,
+      nreset => loc_reset_n,
       clk => clk24,
       input => PSG_OUT,
       output => AUDIO_OUT,
@@ -591,7 +591,7 @@ begin
       DIVRATIO => 1000000
       )
     port map (
-      nreset => I_RESET,
+      nreset => loc_reset_n,
       clk =>clk6,
       clkout => led_signal_update
       );
@@ -600,7 +600,7 @@ begin
       DIVRATIO => 3750 -- 200Hz whole refresh
       )
     port map (
-      nreset => I_RESET,
+      nreset => loc_reset_n,
       clk =>clk6,
       clkout => led_mutiplex_clk
       );
@@ -637,7 +637,7 @@ begin
       RW => cpu_rw,
       IO_SELECTn => ULA_CSIOn,
       IO_CONTROLn => cont_IOCONTROLn,
-      RESETn => RESET_INTn,
+      RESETn => loc_reset_n,
       O_ROMDISn => cont_ROMDISn,
       O_MAPn => cont_MAPn,
       A => CPU_ADDR(15 downto 0),
@@ -661,10 +661,10 @@ begin
     elsif cpu_rw = '1' and cont_IOCONTROLn = '1' and ula_CSIOn  = '0' and ula_LE_SRAM = '0' then
       CPU_DI <= VIA_DO;
     -- ROM
-    elsif cpu_rw = '1' and cont_IOCONTROLn = '0' and ula_CSROMn = '0' and cont_ROMDISn = '1' then
+    elsif cpu_rw = '1' and ula_CSIOn = '1' and ula_CSROMn = '0' and cont_ROMDISn = '1' then
       CPU_DI <= ROM_DO;
     -- Read data
-    elsif cpu_rw = '1' and cont_IOCONTROLn = '1' and ula_phi2   = '1' and ula_LE_SRAM = '0' then
+    elsif cpu_rw = '1' and ula_CSIOn = '1' and ula_phi2   = '1' and ula_LE_SRAM = '0' then
       CPU_DI <= SRAM_DO;
     end if;
   end process;

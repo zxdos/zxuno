@@ -114,7 +114,7 @@ begin
   end process;
   ram_read :process(CLK_x2)
   begin
-    if falling_edge(CLK_x2) then
+    if rising_edge(CLK_x2) then
       O_VIDEO <= ram(to_integer(unsigned(hpos_o)));
     end if;
   end process;

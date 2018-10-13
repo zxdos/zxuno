@@ -31,7 +31,7 @@ begin
   --IO_CONTROL_SIGNAL
   IO_CONTROLn_int <= '0'
                  when (A(15 downto 8) = x"03")
-                 and (A(7 downto 4) /= x"3")
+                 and (A(7 downto 4) /= x"0")
                  and (IO_SELECTn = '0')
                      else '1';
   IO_CONTROLn <= IO_CONTROLn_int;
@@ -50,7 +50,7 @@ begin
       end if;
     end if;
   end process;
-  O_MAPn <= s_map;       
+  O_MAPn <= '0' when  s_map = '0'  and A(15 downto 14)="11" else '1';       
   
   extension:process (PHI_2, RESETn)
   begin
@@ -71,7 +71,7 @@ begin
     port map (
       addr(8) => s_extension,
       addr(7 downto 0) => A(7 downto 0),
-      clk=>PHI_2,
+      clk=>CLK_24,
       dout => rom_out
       );
 
