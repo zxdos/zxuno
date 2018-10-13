@@ -25,8 +25,23 @@ architecture imp of controller_8dos is
   signal s_extension: std_logic;
   signal rom_out: std_logic_vector(7 downto 0);
   signal IO_CONTROLn_int : std_logic;
+  signal CUR_PHI_2:std_logic;
+  signal OLD_PHI_2:std_logic;
+  signal rising_PHI_2:std_logic;
+  signal falling_PHI_2:std_logic;
 begin
 
+  -- PHI_2 edges
+  phi_2_edges: process(CLK_24)
+  begin
+    if (rising_edge(CLK_24))then
+      OLD_PHI_2 <= CUR_PHI_2;
+      CUR_PHI_2 <= PHI_2;
+    end if;
+  end process;
+  rising_PHI_2 <= CUR_PHI_2 and not OLD_PHI_2;
+  falling_PHI_2<= not CUR_PHI_2 and CUR_PHI_2;  
+     
   
   --IO_CONTROL_SIGNAL
   IO_CONTROLn_int <= '0'
@@ -38,28 +53,34 @@ begin
   s_romdis <=  '1';
   O_ROMDISn <= s_romdis;
   
-  mappr: process (PHI_2,RESETn)
+  mappr: process (CLK_24,RESETn)
   begin
     if (RESETn = '0') then
       s_map <= '1';
     else
-      if (falling_edge(PHI_2)) then
-        if (IO_CONTROLn_int = '0') and (RW = '0') and (A(7 downto 4) = x"8") then
-          s_map  <= not A(0);
+      if (rising_edge(CLK_24)) then
+        if (rising_PHI_2 = '1') and
+          (IO_CONTROLn_int = '0') and
+          (RW = '0') and
+          (A(7 downto 4) = x"8") then
+            s_map  <= not A(0);
         end if;
       end if;
     end if;
   end process;
   O_MAPn <= '0' when  s_map = '0'  and A(15 downto 14)="11" else '1';       
   
-  extension:process (PHI_2, RESETn)
+  extension:process (CLK_24, RESETn)
   begin
     if (RESETn = '0') then
       s_extension <= '0';
     else
-      if (falling_edge(PHI_2)) then
-        if (IO_CONTROLn_int = '0') and (RW = '0') and (A(7 downto 4) = x"8") then
-          s_extension  <= A(1);
+      if (rising_edge(CLK_24)) then
+        if (rising_PHI_2 = '1') and
+          (IO_CONTROLn_int = '0') and
+          (RW = '0') and
+          (A(7 downto 4) = x"8") then
+            s_extension  <= A(1);
         end if;
       end if;
     end if;
