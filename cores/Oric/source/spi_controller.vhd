@@ -33,9 +33,10 @@ entity spi_controller is
     ram_we         : out std_logic;
     track          : in  unsigned(5 downto 0);  -- Track number (0-34)
     image          : in  unsigned(9 downto 0);  -- Which disk image to read
+    TRACK_GOOD     : out std_logic;             --
     -- System Interface -------------------------------------------------------
     CLK_14M        : in  std_logic;     -- System clock
-    reset          : in  std_logic
+    RESETn          : in  std_logic
   );
 
 end spi_controller;
@@ -127,6 +128,7 @@ begin
   -- Purpose:
   --   Implements the combined "SD Card init", "track read" and "command" FSMs.
   --
+  TRACK_GOOD <= '1' when current_track = track and current_image = image and write_addr = TRACK_SIZE else '0';
   sd_fsm : process(spi_clk)
   subtype cmd_t is std_logic_vector(5 downto 0);
   constant CMD0   : cmd_t := std_logic_vector(to_unsigned(0, 6));
@@ -144,7 +146,7 @@ begin
   begin
     if rising_edge(spi_clk) then
       ram_we <= '0';
-      if reset = '1' then
+      if RESETn = '0' then
         state <= POWER_UP;
         -- Deliberately out of range
         current_track <= (others => '1');
@@ -169,6 +171,21 @@ begin
           -- SD Card init FSM
           ---------------------------------------------------------------------
           when POWER_UP =>
+            current_track <= (others => '1');
+            current_image <= (others => '1');
+            sclk_sig <= '0';
+            slow_clk <= true;
+            CS_N <= '1';
+            command <= (others => '0');
+            argument <= (others => '0');
+            crc7 <= (others => '0');
+            command_out <= (others => '1');
+            counter := TO_UNSIGNED(0, 8);
+            byte_counter := TO_UNSIGNED(0, BLOCK_BITS);
+            write_addr <= (others => '0');
+            high_capacity <= false;
+            version <= MMC;
+            lba := (others => '0');
             counter := TO_UNSIGNED(224, 8);
             state <= RAMP_UP;
 
@@ -317,6 +334,8 @@ begin
             sclk_sig <= '0';
             slow_clk <= true;
             CS_N <= '1';
+            state <= POWER_UP;
+            write_addr <= (others => '0');
 
           ---------------------------------------------------------------------
           -- Embedded "read track" FSM
