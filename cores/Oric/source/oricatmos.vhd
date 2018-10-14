@@ -73,14 +73,20 @@ entity ORIC is
     O_PAL               : out   std_logic; --Q
 
 
-  --8dos controller
+  --sd card controller
   SD_DAT : in std_logic;      -- SD Card Data      SD pin 7 "DAT 0/DataOut" //misoP117
   SD_DAT3 : out std_logic;    -- SD Card Data 3    SD pin 1 "DAT 3/nCS"  cs P121
   SD_CMD : out std_logic;     -- SD Card Command   SD pin 2 "CMD/DataIn"mosiP119
   SD_CLK : out std_logic;     -- SD Card Clock     SD pin 5 "CLK" //sckP115
 
+  disk_a_on : out std_logic; -- 0 when disk is active else 1
+  track_ok  : out std_logic; -- 0 when disk is active else 1
+  image_buton_up : in std_logic;
+  image_buton_down: in std_logic;
     -- Clk master
-    CLK_50              : in    std_logic;  -- MASTER CLK
+  CLK_50              : in    std_logic;  -- MASTER CLK
+
+  -- 7 segment led  indicators
     segment   : out std_logic_vector( 7 downto 0);
     position   : out std_logic_vector( 7 downto 0)
 
@@ -187,21 +193,22 @@ architecture RTL of ORIC is
   signal led_signals_save :  std_logic_vector(31 downto 0);
   signal led_signal_update : std_logic;
   signal led_mutiplex_clk : std_logic;
-  signal CS_N, MOSI, MISO, SCLK : std_logic;
 
-  signal track : unsigned(5 downto 0);
   signal image : unsigned(9 downto 0);
-  signal D1_ACTIVE, D2_ACTIVE : std_logic;
-  signal track_addr : unsigned(13 downto 0);
-  signal TRACK_RAM_ADDR : unsigned(13 downto 0);
-  signal TRACK_RAM_DI : unsigned(7 downto 0);
-  signal TRACK_RAM_WE : std_logic;
 
     -- 8dos controler
   signal cont_MAPn              :     std_logic;
   signal cont_ROMDISn           :     std_logic;
   signal cont_D_OUT : std_logic_vector(7 downto 0);
   signal cont_IOCONTROLn     : std_logic;
+
+  signal  disk_cur_TRACK: std_logic_vector(5 downto 0);  -- Current track (0-34)
+
+  signal IMAGE_NUMBER_out  : std_logic_vector(9 downto 0);
+  signal disk_track_addr: std_logic_vector(13 downto 0);
+  
+  signal image_buton_up_db : std_logic;
+  signal image_buton_down_db: std_logic;
   
 begin
   -----------------------------------------------
@@ -608,14 +615,16 @@ begin
   update_led :process(led_signal_update)
   begin
     if (rising_edge(led_signal_update))        then
-      led_signals_save(7  downto  0) <= DATA_BUS_OUT;
-      led_signals_save(23 downto 8) <= CPU_ADDR(15 downto 0);
-      --led_signals_save(11 downto  8) <= X"e";
-      --led_signals_save(15 downto 12) <= X"f";
-      --led_signals_save(19 downto 16) <= X"a";
-      --led_signals_save(23 downto 20) <= X"c";
-      led_signals_save(27 downto 24) <= PSG_OUT(3 downto 0);
-      led_signals_save(31 downto 28) <= PSG_OUT(7 downto 4);
+      -- led_signals_save(15 downto 0) <= CPU_ADDR(15 downto 0);
+      -- --led_signals_save(11 downto  8) <= X"e";
+      -- --led_signals_save(15 downto 12) <= X"f";
+      -- --led_signals_save(19 downto 16) <= X"a";
+      led_signals_save(13 downto 0)  <= disk_track_addr;
+      led_signals_save(15 downto 14) <= (others => '0');
+      led_signals_save(23 downto 16) <= IMAGE_NUMBER_out(7 downto 0);
+      led_signals_save(27 downto 24) <= disk_cur_TRACK(3 downto 0);
+      led_signals_save(29 downto 28) <= disk_cur_TRACK(5 downto 4);
+      led_signals_save(31 downto 30) <= (others => '0');
     end if;     
   end process;
       
@@ -642,7 +651,37 @@ begin
       O_MAPn => cont_MAPn,
       A => CPU_ADDR(15 downto 0),
       D_IN => CPU_DO,
-      D_OUT => cont_D_OUT
+      D_OUT => cont_D_OUT,
+      -- indicator
+      disk_a_on => disk_a_on,
+      disk_cur_track => disk_cur_track,
+      disk_track_addr => disk_track_addr,
+
+      track_ok => track_ok,
+      IMAGE_UP => image_buton_up_db,
+      IMAGE_DOWN => image_buton_down_db,
+      IMAGE_NUMBER_out => IMAGE_NUMBER_out,
+      
+      -- sd card
+      SD_DAT => SD_DAT,
+      SD_DAT3 => SD_DAT3,
+      SD_CMD => SD_CMD,
+      SD_CLK => SD_CLK
+      );
+
+  debounce_up : entity work.debounce
+    port map
+    (
+      clk =>clk24,
+      button =>image_buton_up,
+      result => image_buton_up_db
+      );
+  debounce_down : entity work.debounce
+    port map
+    (
+      clk =>clk24,
+      button =>image_buton_down,
+      result => image_buton_down_db
       );
   
   
@@ -655,16 +694,16 @@ begin
     wait until rising_edge(clk24);
 
     -- expansion port
-    if    cpu_rw = '1' and cont_IOCONTROLn = '0' and ula_CSIOn  = '0'                       then
+    if    cpu_rw = '1' and ula_phi2 = '1' and ula_CSIOn  = '0' and cont_IOCONTROLn = '0' then
       CPU_DI <= cont_D_OUT;
     -- Via
-    elsif cpu_rw = '1' and cont_IOCONTROLn = '1' and ula_CSIOn  = '0' and ula_LE_SRAM = '0' then
+    elsif cpu_rw = '1' and ula_phi2 = '1' and ula_CSIOn  = '0' and cont_IOCONTROLn = '1' then
       CPU_DI <= VIA_DO;
     -- ROM
-    elsif cpu_rw = '1' and ula_CSIOn = '1' and ula_CSROMn = '0' and cont_ROMDISn = '1' then
+    elsif cpu_rw = '1' and ula_phi2 = '1' and ula_CSIOn = '1' and ula_CSROMn = '0' and cont_ROMDISn = '1' then
       CPU_DI <= ROM_DO;
     -- Read data
-    elsif cpu_rw = '1' and ula_CSIOn = '1' and ula_phi2   = '1' and ula_LE_SRAM = '0' then
+    elsif cpu_rw = '1' and ula_phi2 = '1' and ula_CSIOn = '1' and ula_LE_SRAM = '0' then
       CPU_DI <= SRAM_DO;
     end if;
   end process;
@@ -691,11 +730,5 @@ begin
 ------------------------------------------------------------
 --	PRT_DATA    <= via_pa_out;
 --	PRT_STR     <= via_out(4);
-
-
-  -- sd card
-  SD_DAT3 <= '0';
-  SD_CMD <= '0';
-  SD_CLK <= '0';
 
 end RTL;
