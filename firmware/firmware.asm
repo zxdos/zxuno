@@ -3098,12 +3098,16 @@ calbi1  ld      a, b        ;1-69
         ld      b, a        ;>=35 nc n-35
 calbi2  ccf
         push    bc
+        push    af
+        adc     a, a
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $c5  ; envío wrear
-        ld      e, 0
-        rl      e
-        out     (c), e
+        out     (c), a
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        pop     af
         or      a
         pop     bc
         ld      hl, $0240
@@ -4123,15 +4127,18 @@ savech  ld      a, $20
 ; ------------------------
 wrflsh  
       IF  version=2
+        push    af
+        adc     a, a
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $c5  ; envío wrear
-        ld      l, 0
-        adc     hl, hl
-        out     (c), l
+        out     (c), a
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        pop     af
       ENDIF
 wrfls0  ex      af, af'
-        xor     a
 wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
@@ -4139,7 +4146,7 @@ wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $20  ; envío sector erase
         out     (c), d
         out     (c), e
-        out     (c), a
+        out     (c), 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
 wrfls2  call    waits5
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
@@ -4603,29 +4610,27 @@ loadch
 ;    A: number of pages (256 bytes) to read
 ; ------------------------
       IF  version=1
-rdflsh  ex      af, af'
-        push    hl
+rdflsh  push    hl
       ELSE
 rdflsh  push    hl
+        push    af
+        adc     a, a
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $c5  ; envío wrear
-        ld      b, 0
-        rl      b
-        ex      af, af'
-        ld      a, b
-        ld      b, (zxuno_port >> 8)+1
         out     (c), a
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        pop     af
       ENDIF
-        xor     a
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
         pop     hl
         push    hl
         out     (c), h
         out     (c), l
-        out     (c), a
-        ex      af, af'
+        out     (c), 0
         ex      de, hl
         in      f, (c)
 rdfls1  ld      e, $20

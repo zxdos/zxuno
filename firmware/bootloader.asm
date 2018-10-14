@@ -14,22 +14,21 @@
 
         di
         ld      sp, $bfff-ini+6
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 0
         ld      de, $c771       ; tras el out (c), h de bffc se ejecuta
         push    de              ; un rst 0 para iniciar la nueva ROM
         ld      de, $ed80       ; en $bffc para evitar que el cambio de ROM
         push    de              ; colisione con la siguiente instruccion
         ld      bc, $bffc-ini+6
         push    bc
-        wreg    joyconf, %00010000
-        wreg    master_mapper, 8  ; paginamos la ROM en $c000
-        wreg    scandbl_ctrl, $c0 ; lo pongo a 28MHz
-        in      a, ($1f)
-        cp      %00011000       ; arriba y disparo a la vez
-        jr      z, recov
-        cp      %00010100       ; arriba y disparo a la vez
-        jr      z, recov
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 0
-        jr      cont
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $c5  ; envío wrear
+        out     (c), 0
+        jp      cont
+        nop
 
 rst28   ld      bc, zxuno_port + $100
         pop     hl
@@ -46,7 +45,21 @@ getbit  ld      a, (hl)
 
 rst38   jp      $c006
 
-cont    wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        block   $0066 - $
+
+nmi66   jp      $c003
+        retn
+
+cont    wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    joyconf, %00010000
+        wreg    master_mapper, 8  ; paginamos la ROM en $c000
+        wreg    scandbl_ctrl, $c0 ; lo pongo a 28MHz
+        in      a, ($1f)
+        cp      %00011000       ; arriba y disparo a la vez
+        jr      z, recov
+        cp      %00010100       ; arriba y disparo a la vez
+        jr      z, recov
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
 ini     out     (c), h          ; envia direccion 008000, a=00,e=80,a=00
         out     (c), e
@@ -67,12 +80,6 @@ recov   ld      hl, firmware-1
         call    dzx7b
         pop     bc
         jr      boot1
-
-        defb    'AV2018'
-
-nmi66   jp      $c003
-        retn
-
 
         block   $0100 - $
         include scroll/define.asm
