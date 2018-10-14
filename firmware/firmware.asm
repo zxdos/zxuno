@@ -4599,7 +4599,7 @@ loadch
         wreg    flash_cs, 1
         ld      de, config
         ld      hl, $0060   ;old $0aa0
-        ld      a, $17
+        ld      a, $1a
       ENDIF
 
 ; ------------------------
