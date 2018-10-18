@@ -1,5 +1,8 @@
+
 all:
 	time -p ./makemy.sh |tee out
+my:
+	time -p ./makenew.sh |tee out
 clean:
 	rm -rf COREn.ZX1 _impact.cmd _impact.log makemy.sh~ _ngo oric.bgn oric.bit oric_bitgen.xwbt \
         oric.bld oric.drc ORIC.lso oric_map.map oric_map.mrp oric_map.ncd oric_map.ngm ORIC_map.xrpt \

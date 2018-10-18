@@ -81,6 +81,7 @@ entity ORIC is
 
   disk_a_on : out std_logic; -- 0 when disk is active else 1
   track_ok  : out std_logic; -- 0 when disk is active else 1
+  out_MAPn  : out std_logic;  
   image_buton_up : in std_logic;
   image_buton_down: in std_logic;
     -- Clk master
@@ -619,8 +620,9 @@ begin
       -- --led_signals_save(11 downto  8) <= X"e";
       -- --led_signals_save(15 downto 12) <= X"f";
       -- --led_signals_save(19 downto 16) <= X"a";
-      led_signals_save(13 downto 0)  <= disk_track_addr;
-      led_signals_save(15 downto 14) <= (others => '0');
+      led_signals_save(15 downto 0) <= CPU_ADDR(15 downto 0);
+--      led_signals_save(13 downto 0)  <= disk_track_addr;
+--      led_signals_save(15 downto 14) <= (others => '0');
       led_signals_save(23 downto 16) <= IMAGE_NUMBER_out(7 downto 0);
       led_signals_save(27 downto 24) <= disk_cur_TRACK(3 downto 0);
       led_signals_save(29 downto 28) <= disk_cur_TRACK(5 downto 4);
@@ -637,7 +639,7 @@ begin
       position => position
       );
 
-
+  out_MAPn <= cont_MAPn;
   controller8dos : entity work.controller_8dos
     port map
     (
