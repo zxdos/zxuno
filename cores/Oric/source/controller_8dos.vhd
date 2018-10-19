@@ -73,9 +73,8 @@ begin
   begin
     if (rising_edge(CLK_24)) then
       if (RESETn = '0') then
-        IMAGE_NUMBER <= "0000000000";
+        IMAGE_NUMBER <= "0000000001";
       else
-        
         IMAGE_UP_old <= IMAGE_UP_cur;
         IMAGE_UP_cur <= IMAGE_UP;
         IMAGE_DOWN_old <= IMAGE_DOWN_cur;

@@ -293,21 +293,20 @@ begin
                '0';  -- C08C
   write_d_out:process(CLK)
   begin
-    D_OUT <= (others => '0');
     if rising_edge(CLK) then
-      if read_disk = '1' and track_byte_addr(0) = '0' and TRACK_GOOD = '1' and DRIVE_ON ='1' then
+      if read_disk = '1' and track_byte_addr(0) = '0' and TRACK_GOOD = '1' and DRIVE_ON ='1'  then
         D_OUT <= ram_do;
-      else if (q6 = '1') then
-             if (DRIVE_ON = '1')then
-               D_OUT <= x"20";  
-             else
-               D_OUT <= x"00";
-             end if;
-           end if;
+      elsif (q6 = '1') and A(0) = '0' and DRIVE_ON = '1' then
+        D_OUT <= x"20";
+      elsif (q6 = '1') and A(0) = '0' and DRIVE_ON = '0' then
+        D_OUT <= x"00";
+      elsif (q7 = '1') and (q6 = '0') and A(0) = '0' then
+        D_OUT <= x"80";
+      else
+        D_OUT <= x"00";
       end if;
     end if;
   end process;
-  
  
 
   track_addr <= track_byte_addr(14 downto 1);

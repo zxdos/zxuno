@@ -23,7 +23,6 @@ use unisim.vcomponents.all;
 
 entity ORIC is
   port (
-    I_RESET              : in    std_logic;
 
     -- Keyboard
     PS2CLK1              : in    std_logic;
@@ -35,9 +34,9 @@ entity ORIC is
     AUDIO_OUT2           : out   std_logic;
 
     -- VGA out
-    O_VIDEO_R           : out   std_logic_vector(2 downto 2); --Q
-    O_VIDEO_G           : out   std_logic_vector(2 downto 2); --Q
-    O_VIDEO_B           : out   std_logic_vector(2 downto 2); --Q
+    O_VIDEO_R           : out   std_logic_vector(2 downto 0); --Q
+    O_VIDEO_G           : out   std_logic_vector(2 downto 0); --Q
+    O_VIDEO_B           : out   std_logic_vector(2 downto 0); --Q
     O_HSYNC             : out   std_logic;
     O_VSYNC             : out   std_logic;
 
@@ -56,7 +55,8 @@ entity ORIC is
 --	K7_REMOTE         : out   std_logic;
 --	K7_AUDIOOUT       : out   std_logic;
 
-    I_NMI             : in    std_logic;
+    -- I_RESET              : in    std_logic;
+    -- I_NMI             : in    std_logic;
     -- PRINTER
 --	PRT_DATA          : inout std_logic_vector(7 downto 0);
 --	PRT_STR           : out   std_logic;  -- strobe
@@ -72,6 +72,12 @@ entity ORIC is
     O_NTSC              : out   std_logic; --Q
     O_PAL               : out   std_logic; --Q
 
+    -- SRAM
+    
+    SRAM_DQ : inout std_logic_vector(7 downto 0);         -- Data bus 8 Bits
+    SRAM_ADDR : out std_logic_vector(15 downto 0);        -- Address bus 20 Bits
+    SRAM_WE_N : out std_logic;                    -- Write Enable
+    SRAM_CS_N : out std_logic;
 
   --sd card controller
   SD_DAT : in std_logic;      -- SD Card Data      SD pin 7 "DAT 0/DataOut" //misoP117
@@ -79,17 +85,18 @@ entity ORIC is
   SD_CMD : out std_logic;     -- SD Card Command   SD pin 2 "CMD/DataIn"mosiP119
   SD_CLK : out std_logic;     -- SD Card Clock     SD pin 5 "CLK" //sckP115
 
-  disk_a_on : out std_logic; -- 0 when disk is active else 1
-  track_ok  : out std_logic; -- 0 when disk is active else 1
-  out_MAPn  : out std_logic;  
+  -- disk_a_on : out std_logic; -- 0 when disk is active else 1
+  -- track_ok  : out std_logic; -- 0 when disk is active else 1
+  -- out_MAPn  : out std_logic;  
   image_buton_up : in std_logic;
-  image_buton_down: in std_logic;
+  image_buton_down :  in std_logic; -- 0 when disk is active else 1
+  -- image_buton_down: in std_logic;
     -- Clk master
-  CLK_50              : in    std_logic;  -- MASTER CLK
+  CLK_50              : in    std_logic  -- MASTER CLK
 
   -- 7 segment led  indicators
-    segment   : out std_logic_vector( 7 downto 0);
-    position   : out std_logic_vector( 7 downto 0)
+    -- segment   : out std_logic_vector( 7 downto 0);
+    -- position   : out std_logic_vector( 7 downto 0)
 
     );
 end;
@@ -98,7 +105,9 @@ architecture RTL of ORIC is
 
   -- Resets
   signal loc_reset_n        : std_logic; --active low
-
+  signal I_RESET              :   std_logic := '1';
+  signal I_NMI             :     std_logic := '1';
+  
   -- Internal clocks
   signal CLKFB              : std_logic := '0';
   signal clk24              : std_logic := '0';
@@ -149,6 +158,7 @@ architecture RTL of ORIC is
   signal PSG_OUT            : std_logic_vector( 7 downto 0);
   signal  vaudio_out : std_logic_vector(7 downto 0);
     
+  signal audio_out_tmp  : std_logic := '0';
 
   
   -- ULA
@@ -210,6 +220,11 @@ architecture RTL of ORIC is
   
   signal image_buton_up_db : std_logic;
   signal image_buton_down_db: std_logic;
+
+ -- previous were ports
+  signal disk_a_on :  std_logic; -- 0 when disk is active else 1
+  signal track_ok :  std_logic; -- 0 when disk is active else 1
+
   
 begin
   -----------------------------------------------
@@ -322,16 +337,24 @@ begin
   ad(15 downto 0)  <= ula_AD_SRAM when ula_phi2 = '0' else CPU_ADDR(15 downto 0);
 --	ad(17 downto 16) <= "00";
 
-  inst_ram : entity work.ram48k
-    port map(
-      clk  => clk24,
-      cs   => ula_CE_SRAM,
-      oe   => ula_OE_SRAM,
-      we   => ula_WE_SRAM,
-      addr => ad,
-      di   => CPU_DO,
-      do   => SRAM_DO
-      );
+  
+  SRAM_DQ(7 downto 0) <= (others => '0') when loc_reset_n = '0' else CPU_DO when ula_WE_SRAM = '1' else (others => 'Z'); --added Data part of SRAM init when reset to jump disk boot code.
+  SRAM_ADDR(15 downto 0) <= ad(15 downto 0);
+  SRAM_WE_N <= '1' when loc_reset_n = '0' else not ula_WE_SRAM;
+  SRAM_CS_N <= '1' when loc_reset_n = '0' else not ula_CE_SRAM;
+  
+
+  SRAM_DO <= SRAM_DQ when ula_CE_SRAM = '1' and  ula_WE_SRAM = '0' else (others => '0');
+  -- inst_ram : entity work.ram48k
+  --   port map(
+  --     clk  => clk24,
+  --     cs   => ula_CE_SRAM,
+  --     oe   => ula_OE_SRAM,
+  --     we   => ula_WE_SRAM,
+  --     addr => ad,
+  --     di   => CPU_DO,
+  --     do   => SRAM_DO
+  --     );
 
   ------------------------------------------------------------
   -- ULA
@@ -385,60 +408,60 @@ begin
   -----------------------------------------------------------------
   -- total resolution 354x312, active resolution 240x224, H 15625 Hz, V 50.08 Hz
   -- take note: the values below are relative to the CLK period not standard VGA clock period
-  inst_scan_conv : entity work.VGA_SCANCONV
-    generic map (
-      -- mark active area of input video
-      cstart      =>  65,  -- composite sync start
-      clength     => 240,  -- composite sync length
+--   inst_scan_conv : entity work.VGA_SCANCONV
+--     generic map (
+--       -- mark active area of input video
+--       cstart      =>  65,  -- composite sync start
+--       clength     => 240,  -- composite sync length
 
-      -- output video timing
-      hA          =>  10,	-- h front porch
-      hB          =>  46,	-- h sync
-      hC          =>  24,	-- h back porch
-      hD          => 240,	-- visible video
+--       -- output video timing
+--       hA          =>  10,	-- h front porch
+--       hB          =>  46,	-- h sync
+--       hC          =>  24,	-- h back porch
+--       hD          => 240,	-- visible video
 
-      vA          =>  40,	-- v front porch (not used)
-      vB          =>   2,	-- v sync
-      vC          =>  2,	-- v back porch
-      vD          => 240,	-- visible video
+-- --      vA          =>  40,	-- v front porch (not used)
+--       vB          =>   2,	-- v sync
+--       vC          =>  2,	-- v back porch
+--       vD          => 240,	-- visible video
 
-      hpad        =>  32,	-- H black border
-      vpad        =>  0	-- V black border
-      )
-    port map (
-      I_VIDEO(15 downto 12) => "0000",
+--       hpad        =>  32,	-- H black border
+--       vpad        =>  0	-- V black border
+--       )
+--     port map (
+--       I_VIDEO(15 downto 12) => "0000",
 
-      -- only 3 bit color
-      I_VIDEO(11)           => ULA_VIDEO_R,
-      I_VIDEO(10)           => ULA_VIDEO_R,
-      I_VIDEO(9)            => ULA_VIDEO_R,
-      I_VIDEO(8)            => ULA_VIDEO_R,
+--       -- only 3 bit color
+--       I_VIDEO(11)           => ULA_VIDEO_R,
+--       I_VIDEO(10)           => ULA_VIDEO_R,
+--       I_VIDEO(9)            => ULA_VIDEO_R,
+--       I_VIDEO(8)            => ULA_VIDEO_R,
 
-      I_VIDEO(7)            => ULA_VIDEO_G,
-      I_VIDEO(6)            => ULA_VIDEO_G,
-      I_VIDEO(5)            => ULA_VIDEO_G,
-      I_VIDEO(4)            => ULA_VIDEO_G,
+--       I_VIDEO(7)            => ULA_VIDEO_G,
+--       I_VIDEO(6)            => ULA_VIDEO_G,
+--       I_VIDEO(5)            => ULA_VIDEO_G,
+--       I_VIDEO(4)            => ULA_VIDEO_G,
 
-      I_VIDEO(3)            => ULA_VIDEO_B,
-      I_VIDEO(2)            => ULA_VIDEO_B,
-      I_VIDEO(1)            => ULA_VIDEO_B,
-      I_VIDEO(0)            => ULA_VIDEO_B,
-      I_HSYNC               => hs_int,
-      I_VSYNC               => vs_int,
+--       I_VIDEO(3)            => ULA_VIDEO_B,
+--       I_VIDEO(2)            => ULA_VIDEO_B,
+--       I_VIDEO(1)            => ULA_VIDEO_B,
+--       I_VIDEO(0)            => ULA_VIDEO_B,
+--       I_HSYNC               => hs_int,
+--       I_VSYNC               => vs_int,
 
-      -- for VGA output, feed these signals to VGA monitor
-      O_VIDEO(15 downto 12)=> dummy,
-      O_VIDEO(11 downto 8) => VideoR,
-      O_VIDEO( 7 downto 4) => VideoG,
-      O_VIDEO( 3 downto 0) => VideoB,
-      O_HSYNC					=> HSync,
-      O_VSYNC					=> VSync,
-      O_CMPBLK_N				=> s_cmpblk_n_out,
+--       -- for VGA output, feed these signals to VGA monitor
+--       O_VIDEO(15 downto 12)=> dummy,
+--       O_VIDEO(11 downto 8) => VideoR,
+--       O_VIDEO( 7 downto 4) => VideoG,
+--       O_VIDEO( 3 downto 0) => VideoB,
+--       O_HSYNC					=> HSync,
+--       O_VSYNC					=> VSync,
+--       O_CMPBLK_N				=> s_cmpblk_n_out,
 
-      --
-      CLK                   => clk6,
-      CLK_x2                => clk12
-      );
+--       --
+--       CLK                   => clk6,
+--       CLK_x2                => clk12
+--       );
 
 --Q
 -- Para scandoubler descomentar esto y comentar las directas de la ULA
@@ -463,11 +486,21 @@ begin
   --O_VIDEO_G(2) <=  ULA_VIDEO_G;-- & ULA_VIDEO_G & ULA_VIDEO_G;
   --O_VIDEO_B(2) <=  ULA_VIDEO_B;-- & ULA_VIDEO_B & ULA_VIDEO_B;
   -- vga output
-  O_HSYNC      <= HSync;
-  O_VSYNC      <= VSync;
-  O_VIDEO_R(2) <= VideoR(3); -- ULA_VIDEO_R;-- & ULA_VIDEO_R & ULA_VIDEO_R;  
-  O_VIDEO_G(2) <= VideoG(3); -- ULA_VIDEO_G;-- & ULA_VIDEO_G & ULA_VIDEO_G;
-  O_VIDEO_B(2) <= VideoB(3);-- ULA_VIDEO_B;-- & ULA_VIDEO_B & ULA_VIDEO_B;
+  O_NTSC <= '0';
+  O_PAL <= '1';
+  O_HSYNC      <= ULA_SYNC;
+  O_VSYNC      <= vs_int;
+  O_VIDEO_R <= ULA_VIDEO_R & ULA_VIDEO_R & ULA_VIDEO_R;  
+  O_VIDEO_G <= ULA_VIDEO_G & ULA_VIDEO_G & ULA_VIDEO_G;
+  O_VIDEO_B <= ULA_VIDEO_B & ULA_VIDEO_B & ULA_VIDEO_B;
+  -- O_HSYNC      <= HSync;
+  -- O_VSYNC      <= VSync;
+  -- O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) ;
+  -- O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2) ;
+  -- O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2) ;
+  -- O_VIDEO_R(2) <= VideoR(3); -- ULA_VIDEO_R;-- & ULA_VIDEO_R & ULA_VIDEO_R;  
+  -- O_VIDEO_G(2) <= VideoG(3); -- ULA_VIDEO_G;-- & ULA_VIDEO_G & ULA_VIDEO_G;
+  -- O_VIDEO_B(2) <= VideoB(3);-- ULA_VIDEO_B;-- & ULA_VIDEO_B & ULA_VIDEO_B;
 ----
 --fQ
 
@@ -576,70 +609,67 @@ begin
       clk_i  => clk24,
       resetn => loc_reset_n,
       dac_i  => PSG_OUT,
-      dac_o  => AUDIO_OUT2
+      dac_o  => audio_out_tmp
       );
 
+  AUDIO_OUT <= audio_out_tmp;
+  AUDIO_OUT2 <= audio_out_tmp;
 --         this is my piezo output
-  onebit : entity work.XSP6X9_onebit
-    generic map (k => 21)
-    port map (
-      nreset => loc_reset_n,
-      clk => clk24,
-      input => PSG_OUT,
-      output => AUDIO_OUT,
-      voutput => vaudio_out
-      );
-  --process
-  --begin
-  --  wait until rising_edge(clk24);
-  --  AUDIO_OUT <= PSG_OUT(5);
-  --end process;  
-  inst_clock_div :entity work.clkdiv
-    generic map (
-      DIVRATIO => 1000000
-      )
-    port map (
-      nreset => loc_reset_n,
-      clk =>clk6,
-      clkout => led_signal_update
-      );
-  inst_clock_div_multiplex :entity work.clkdiv
-    generic map (
-      DIVRATIO => 3750 -- 200Hz whole refresh
-      )
-    port map (
-      nreset => loc_reset_n,
-      clk =>clk6,
-      clkout => led_mutiplex_clk
-      );
+  -- onebit : entity work.XSP6X9_onebit
+  --   generic map (k => 21)
+  --   port map (
+  --     nreset => loc_reset_n,
+  --     clk => clk24,
+  --     input => PSG_OUT,
+  --     output => AUDIO_OUT,
+  --     voutput => vaudio_out
+  --     );
+--   inst_clock_div :entity work.clkdiv
+--     generic map (
+--       DIVRATIO => 1000000
+--       )
+--     port map (
+--       nreset => loc_reset_n,
+--       clk =>clk6,
+--       clkout => led_signal_update
+--       );
+--   inst_clock_div_multiplex :entity work.clkdiv
+--     generic map (
+--       DIVRATIO => 3750 -- 200Hz whole refresh
+--       )
+--     port map (
+--       nreset => loc_reset_n,
+--       clk =>clk6,
+--       clkout => led_mutiplex_clk
+--       );
 
-  update_led :process(led_signal_update)
-  begin
-    if (rising_edge(led_signal_update))        then
-      -- led_signals_save(15 downto 0) <= CPU_ADDR(15 downto 0);
-      -- --led_signals_save(11 downto  8) <= X"e";
-      -- --led_signals_save(15 downto 12) <= X"f";
-      -- --led_signals_save(19 downto 16) <= X"a";
-      led_signals_save(15 downto 0) <= CPU_ADDR(15 downto 0);
---      led_signals_save(13 downto 0)  <= disk_track_addr;
---      led_signals_save(15 downto 14) <= (others => '0');
-      led_signals_save(23 downto 16) <= IMAGE_NUMBER_out(7 downto 0);
-      led_signals_save(27 downto 24) <= disk_cur_TRACK(3 downto 0);
-      led_signals_save(29 downto 28) <= disk_cur_TRACK(5 downto 4);
-      led_signals_save(31 downto 30) <= (others => '0');
-    end if;     
-  end process;
+--   update_led :process(led_signal_update)
+--   begin
+--     if (rising_edge(led_signal_update))        then
+--       -- led_signals_save(15 downto 0) <= CPU_ADDR(15 downto 0);
+--       -- --led_signals_save(11 downto  8) <= X"e";
+--       -- --led_signals_save(15 downto 12) <= X"f";
+--       -- --led_signals_save(19 downto 16) <= X"a";
+--       led_signals_save(15 downto 0) <= CPU_ADDR(15 downto 0);
+-- --      led_signals_save(13 downto 0)  <= disk_track_addr;
+-- --      led_signals_save(15 downto 14) <= (others => '0');
+--       led_signals_save(23 downto 16) <= IMAGE_NUMBER_out(7 downto 0);
+--       led_signals_save(27 downto 24) <= disk_cur_TRACK(3 downto 0);
+--       led_signals_save(29 downto 28) <= disk_cur_TRACK(5 downto 4);
+--       led_signals_save(31 downto 30) <= (others => '0');
+--     end if;     
+--   end process;
       
         
-  led_display : entity work.XSP6X9_Led_Output
-    port map (
-      clk => clk6, --led_mutiplex_clk,
-      inputs (31 downto 0) => led_signals_save,
-      segment => segment,
-      position => position
-      );
+--   led_display : entity work.XSP6X9_Led_Output
+--     port map (
+--       clk => clk6, --led_mutiplex_clk,
+--       inputs (31 downto 0) => led_signals_save,
+--       segment => segment,
+--       position => position
+--       );
 
-  out_MAPn <= cont_MAPn;
+--  out_MAPn <= cont_MAPn;
   controller8dos : entity work.controller_8dos
     port map
     (
@@ -723,7 +753,7 @@ begin
   ------------------------------------------------------------
   -- K7 PORT
   ------------------------------------------------------------
-  K7_TAPEOUT  <= via_out(7);
+--  K7_TAPEOUT  <= via_out(7);
 --	K7_REMOTE   <= via_out(6);
 --	K7_AUDIOOUT <= AUDIO_OUT;
 

@@ -190,6 +190,7 @@ architecture RTL of ula is
 	signal lDATABUS     : std_logic_vector( 7 downto 0);
 	signal lSHFREG      : std_logic_vector( 5 downto 0);
 	signal lREGHOLD     : std_logic_vector( 6 downto 0);
+	signal lATTR_REGHOLD     : std_logic_vector( 6 downto 0);
 	signal lRGB         : std_logic_vector( 2 downto 0);
 	signal lREG_INK     : std_logic_vector( 2 downto 0);
 	signal lREG_STYLE   : std_logic_vector( 2 downto 0);
@@ -228,7 +229,7 @@ begin
 
 	--            phase 1  phase 2  phase 3
 	SRAM_OE    <= ph(0) or ph(1) or        RW_INT                ;
-	SRAM_CE    <= ph(0) or ph(1) or (ph(2) and (not CSRAMn_INT) );
+	SRAM_CE    <= (ph(0) and not c(0) ) or (ph(1) and not c(8) ) or (not c(16) and ph(2) and (not CSRAMn_INT) );
 
 	SRAM_WE    <=  (not CSRAMn_INT) and (not RW_INT) and c(17) ;
 
@@ -328,8 +329,8 @@ begin
 		elsif rising_edge(CLK_1_INT) then
 			if (lCTR_H = 63) then
 				-- 50Hz = 312 lines, 60Hz = 260 lines
-				if ((lCTR_V < 312) and lFREQ_SEL='1') or
-					((lCTR_V < 260) and lFREQ_SEL='0') then
+				if ((lCTR_V < 311) and lFREQ_SEL='1') or
+					((lCTR_V < 259) and lFREQ_SEL='0') then
 					lCTR_V <= lCTR_V + 1;
 				else
 					lCTR_V <= (others => '0');
@@ -349,7 +350,7 @@ begin
 	lHBLANKn    <= '1' when (lCTR_H >=   1) and (lCTR_H <=  40) else '0';
 
 	-- Signal to Reload Register to reset attributes
-	lRELOAD_SEL <= '1' when (lCTR_H >=  62) else '0';
+	lRELOAD_SEL <= '1' when (lCTR_H >=  49) else '0';
 
 	-- Vertical Synchronisation
 	lVSYNC50n   <= '0' when (lCTR_V >= 258) and (lCTR_V <= 259) else '1'; -- 50Hz
@@ -391,8 +392,9 @@ begin
 			lInv_hold <= '0';
 		elsif rising_edge(CLK_24) then
 			if ATTRIB_DEC = '1' then
-				IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
-				lInv_hold <= DB_INT(7);
+                          IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
+                          lATTR_REGHOLD <= DB_INT(6 downto 0);
+                          lInv_hold <= DB_INT(7);
 			end if;
 		end if;
 	end process;
@@ -430,7 +432,7 @@ begin
 		  lREG_PAPER <= (others=>'0');
 	  elsif rising_edge(CLK_24) then
 			if (RELD_REG = '1' and isAttrib = '1') then
-				case lREGHOLD(6 downto 3) is
+				case lATTR_REGHOLD(6 downto 3) is
 					when "0000" => lREG_INK   <= lREGHOLD(2 downto 0);
 					when "0001" => lREG_STYLE <= lREGHOLD(2 downto 0);
 					when "0010" => lREG_PAPER <= lREGHOLD(2 downto 0);

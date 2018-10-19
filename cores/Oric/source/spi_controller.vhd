@@ -104,18 +104,19 @@ begin
   --   If slow_clk is true, spi_clk = CLK_14M / 32 and SCLK = 223.214kHz, which
   --   is between 100kHz and 400kHz, as required for MMC compatibility.
   --
-  var_clkgen : process (CLK_14M, slow_clk)
-    variable var_clk : unsigned(4 downto 0) := (others => '0');
-  begin
-    if slow_clk then
-      spi_clk <= var_clk(4);
-      if rising_edge(CLK_14M) then
-        var_clk := var_clk + 1;
-      end if;
-    else
-      spi_clk <= CLK_14M;
-    end if;
-  end process;
+  spi_clk <= CLK_14M;
+  -- var_clkgen : process (CLK_14M, slow_clk)
+  --   variable var_clk : unsigned(4 downto 0) := (others => '0');
+  -- begin
+  --   if slow_clk then
+  --     spi_clk <= var_clk(4);
+  --     if rising_edge(CLK_14M) then
+  --       var_clk := var_clk + 1;
+  --     end if;
+  --   else
+  --     spi_clk <= CLK_14M;
+  --   end if;
+  -- end process;
 
   SCLK <= sclk_sig;
   --
