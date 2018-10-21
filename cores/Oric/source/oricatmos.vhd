@@ -476,18 +476,18 @@ begin
 
       -- 381
       -- output video timing
-      hA          =>  11,	-- h front porch
-      hB          =>  46,	-- h sync
-      hC          =>  24,	-- h back porch
+      hA          =>  10, -- 7.62 11,	-- h front porch
+      hB          =>  46, -- 45,759682224	-- h sync
+      hC          =>  24,-- 22,879841112-- h back porch
       hD          => 240,	-- visible video
-
-      vA          =>  5,	-- v front porch (not used)
-      vB          =>   1,	-- v sync
+ --- total 381.33 
+      vA          =>  40,	-- v front porch (not used)
+      vB          =>   2,	-- v sync
       vC          =>  16,	-- v back porch
-      vD          => 224,	-- visible video
+      vD          => 240,	-- visible video
 
-      hpad        =>  30,	-- H black border
-      vpad        =>  10	-- V black border
+      hpad        =>  32,	-- H black border
+      vpad        =>  0  	-- V black border
       )
     port map (
       I_VIDEO(15 downto 12) => "0000",
@@ -526,9 +526,9 @@ begin
 
 --Q
 --Para scandoubler descomentar esto y comentar las directas de la ULA
-	O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) ;
-	O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2) ;
-	O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2) ;
+	O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2);-- when s_cmpblk_n_out = '1' else (others => '0');
+	O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2);-- when s_cmpblk_n_out = '1' else (others => '0');
+	O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2);-- when s_cmpblk_n_out = '1' else (others => '0');
 
 	O_HSYNC	<= HSync;
 	O_VSYNC	<= VSync;

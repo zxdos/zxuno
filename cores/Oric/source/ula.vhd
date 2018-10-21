@@ -352,8 +352,8 @@ begin
 	lRELOAD_SEL <= '1' when (lCTR_H >=  49) else '0';
 
 	-- Vertical Synchronisation
-	lVSYNC50n   <= '0' when (lCTR_V >= 258) and (lCTR_V <= 259) else '1'; -- 50Hz
-	lVSYNC60n   <= '0' when (lCTR_V >= 241) and (lCTR_V <= 242) else '1'; -- 60Hz
+	lVSYNC50n   <= '0' when (lCTR_V >= 258)  else '1'; -- 50Hz
+	lVSYNC60n   <= '0' when (lCTR_V >= 241)  else '1'; -- 60Hz
 	lVSYNCn     <= lVSYNC50n when lFREQ_SEL='1' else lVSYNC60n;
 
 	-- Vertical Blank
@@ -431,7 +431,7 @@ begin
 	  elsif rising_edge(CLK_24) then
 			if (RELD_REG = '1' and isAttrib = '1') then
 				case lREGHOLD(6 downto 3) is
-					when "0000" => lREG_INK   <= lREGHOLD(2 downto 0);
+                                  when "0000" => lREG_INK   <= lREGHOLD(2 downto 0);
 					when "0001" => lREG_STYLE <= lREGHOLD(2 downto 0);
 					when "0010" => lREG_PAPER <= lREGHOLD(2 downto 0);
 					when "0011" => lREG_MODE  <= lREGHOLD(2 downto 0);
@@ -445,7 +445,7 @@ begin
 	lALT_SEL    <= lREG_STYLE(0); -- Character set select : 0=Standard  1=Alternate
 	lDBLHGT_SEL <= lREG_STYLE(1); -- Character type select: 0=Standard  1=Double
 	lFLASH_SEL  <= lREG_STYLE(2); -- Flash select         : 0=Steady    1=Flashing
-	lFREQ_SEL   <=  lREG_MODE(1);  -- Frequency select     : 0=60Hz      1=50Hz
+	lFREQ_SEL   <= '0'; --  lREG_MODE(1);  -- Frequency select     : 0=60Hz      1=50Hz
 	lHIRES_SEL  <=  lREG_MODE(2);  -- Mode Select          : 0=Text      1=Hires 
 
 	-- Output signal for text/hires mode decode

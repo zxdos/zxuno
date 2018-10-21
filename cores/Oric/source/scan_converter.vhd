@@ -90,6 +90,7 @@ architecture RTL of VGA_SCANCONV is
 	-- input timing
 	--
 	signal ivsync_last_x2	: std_logic := '1';
+	signal ihsync_last_x2	: std_logic := '1';
 	signal ihsync_last		: std_logic := '1';
 	signal hpos_i				: std_logic_vector( 9 downto 0) := (others => '0');
 
@@ -98,6 +99,8 @@ architecture RTL of VGA_SCANCONV is
 	--
 	signal hpos_o			: std_logic_vector(9 downto 0) := (others => '0');
 
+	signal O_VIDEOb				: std_logic_vector(15 downto 0);
+        signal O_CMPBLK_Nb			: std_logic;
 	signal vcnt				: integer range 0 to 1023 := 0;
 	signal hcnt				: integer range 0 to 1023 := 0;
 	signal hcnti			: integer range 0 to 1023 := 0;
@@ -135,7 +138,7 @@ begin
 			CLKA					=> CLK_x2,
 
 			-- output
-			DOB					=> O_VIDEO,
+			DOB					=> O_VIDEOb,
 			DIB					=> x"0000",
 			DOPB					=> open,
 			DIPB					=> "00",
@@ -180,21 +183,31 @@ begin
 	-- VGA H and V counters, synchronized to input frame V sync, then H sync
 	p_out_ctrs : process
 		variable trigger : boolean;
+		variable triggerh : boolean;
 	begin
 		wait until rising_edge(CLK_x2);
 		ivsync_last_x2 <= I_VSYNC;
+		ihsync_last_x2 <= I_HSYNC;
 
 		if (I_VSYNC = '0') and (ivsync_last_x2 = '1') then
-			trigger := true;
-		elsif trigger and I_HSYNC = '0' then
-			trigger := false;
-			hcnt <= 0;
-			vcnt <= 0;
+                  trigger := true;
+                end if;
+		if trigger and (I_HSYNC = '1') and (ihsync_last_x2 = '0') then
+                  triggerh := true;
+                end if;
+                
+		if trigger and triggerh then
+                  trigger := false;
+                  triggerh:= false;
+                  hcnt <= 0;
+                  vcnt <= 0;
 		else
 			hcnt <= hcnt + 1;
 			if hcnt = (hA+hB+hC+hD+hpad+hpad-1) then
-				hcnt <= 0;
-				vcnt <= vcnt + 1;
+                          hcnt <= 0;
+                          if (vcnt <1023) then
+                            vcnt <= vcnt + 1;
+                          end if;
 			end if;
 		end if;
 	end process;
@@ -216,7 +229,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- V sync timing
-		if (vcnt < vB+vA) and (vcnt >= vA) then
+		if (vcnt < vB)  then
 			O_VSYNC <= '0';
 		else
 			O_VSYNC <= '1';
@@ -228,7 +241,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- visible video area doubled from the original game
-		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt > 2*(vA + vB + vC+vpad)) and (vcnt <= 2*(vA + vB + vC + vD + vpad))) then
+		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt >= 2*(vB + vC+vpad)) and (vcnt <= 2*(vB + vC + vD + vpad))) then
 			hpos_o <= hpos_o + 1;
 		else
 			hpos_o <= (others => '0');
@@ -240,11 +253,12 @@ begin
 	begin
 		wait until rising_edge(CLK_X2);
 		-- active video area 640x480 (VGA) after padding with blank borders
-		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt > 2*(vA + vB + vC)) and (vcnt <= 2*(vA + vB + vC + vD + 2*vpad))) then
-			O_CMPBLK_N <= '1';
+		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt >= 2*(vB + vC)) and (vcnt <= 2*(vB + vC + vD + 2*vpad))) then
+			O_CMPBLK_Nb <= '1';
 		else
-			O_CMPBLK_N <= '0';
+			O_CMPBLK_Nb <= '0';
 		end if;
 	end process;
-
+        O_VIDEO <= O_VIDEOb when O_CMPBLK_Nb = '1' else (others => '0');
+        O_CMPBLK_N <= O_CMPBLK_Nb;
 end architecture RTL;
