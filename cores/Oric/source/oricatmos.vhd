@@ -20,7 +20,22 @@ use ieee.std_logic_unsigned.all;
 
 library unisim;
 use unisim.vcomponents.all;
-
+-- component chip_6502 port (
+--   port (
+--     clk: in std_logic;
+--     phi: in std_logic;
+--     res: in std_logic;
+--     so:  in std_logic;
+--     rdy: in std_logic;
+--     nmi: in std_logic;
+--     irq: in std_logic;
+--     dbi : in std_logic_vector(7 downto 0);
+--     dbo : out std_logic_vector(7 downto 0);
+--     rw : out std_logic;
+--     sync: out std_logic;
+--     ab: out std_loogic_vector(15 downto 0);
+--     );
+  
 entity ORIC is
   port (
 
@@ -105,9 +120,9 @@ architecture RTL of ORIC is
 
   -- Resets
   signal loc_reset_n        : std_logic; --active low
+  signal loc_reset        : std_logic; --active low
   signal I_RESET              :   std_logic := '1';
   signal I_NMI             :     std_logic := '1';
-  
   -- Internal clocks
   signal CLKFB              : std_logic := '0';
   signal clk24              : std_logic := '0';
@@ -123,16 +138,19 @@ architecture RTL of ORIC is
   signal pll_locked         : std_logic := '0';
 
   -- cpu
-  signal CPU_ADDR           : std_logic_vector(23 downto 0);
+  signal CPU_ADDR           : std_logic_vector(15 downto 0);
   signal CPU_DI             : std_logic_vector( 7 downto 0);
   signal CPU_DO             : std_logic_vector( 7 downto 0);
+  signal CPU_ADDRun           : ieee.numeric_std.unsigned(15 downto 0);
+  signal CPU_DIun             : ieee.numeric_std.unsigned(7 downto 0);
+  signal CPU_DOun             : ieee.numeric_std.unsigned(7 downto 0);
   signal DATA_BUS_OUT:std_logic_vector(7 downto 0);
     signal cpu_rw             : std_logic;
   signal cpu_irq            : std_logic;
   signal ad                 : std_logic_vector(15 downto 0);
   signal NMI_INT :std_logic;
   signal RESET_INT:std_logic;
-
+  signal we:std_logic; -- active high write enable
   
   -- VIA
   signal via_pa_out_oe      : std_logic_vector( 7 downto 0);
@@ -295,33 +313,75 @@ begin
 
   -- Reset
   loc_reset_n <= pll_locked;
-
+  loc_reset <= not loc_reset_n;
+  
   ------------------------------------------------------------
   -- CPU 6502
   ------------------------------------------------------------
-  inst_cpu : entity work.T65
-    port map (
-      Mode    => "00",
-      Res_n   => loc_reset_n,
-      Enable  => '1',
-      Clk     => ula_phi2,
-      Rdy     => '1',
-      Abort_n => '1',
-      IRQ_n   => cpu_irq,
-      NMI_n   => NMI_INT,
-      SO_n    => '1',
-      R_W_n   => cpu_rw,
-      Sync    => open,
-      EF      => open,
-      MF      => open,
-      XF      => open,
-      ML_n    => open,
-      VP_n    => open,
-      VDA     => open,
-      VPA     => open,
-      A       => CPU_ADDR,
-      DI      => CPU_DI,
-      DO      => CPU_DO
+  -- inst_cpu : entity work.T65
+  --   port map (
+  --     Mode    => "00",
+  --     Res_n   => loc_reset_n,
+  --     Enable  => '1',
+  --     Clk     => ula_phi2,
+  --     Rdy     => '1',
+  --     Abort_n => '1',
+  --     IRQ_n   => cpu_irq,
+  --     NMI_n   => NMI_INT,
+  --     SO_n    => '1',
+  --     R_W_n   => cpu_rw,
+  --     Sync    => open,
+  --     EF      => open,
+  --     MF      => open,
+  --     XF      => open,
+  --     ML_n    => open,
+  --     VP_n    => open,
+  --     VDA     => open,
+  --     VPA     => open,
+  --     A       => CPU_ADDR,
+  --     DI      => CPU_DI,
+  --     DO      => CPU_DO
+  --     );
+
+
+  -- ---cpu65x try
+  -- inst_cpu : entity work.cpu65xx
+  --   generic map (
+  --     pipelineOpcode => false,
+  --     pipelineAluMux => false,
+  --     pipelineAluOut => false)
+  --   port map (
+  --     di             => CPU_DIun,
+  --     clk            => ula_phi2,
+  --     enable         => '1',
+  --     reset          => loc_reset, active high signal
+  --     nmi_n          => NMI_INT,
+  --     irq_n          => cpu_irq,
+  --     do             => CPU_DOun,
+  --     addr           => CPU_ADDRun,
+  --     we             => we
+  --     debugPc     => pcDebugOut,
+  --     debugOpcode => opcodeDebugOut
+  --     );
+  -- cpu_rw <= not we;
+  -- CPU_DIun <= ieee.numeric_std.unsigned(CPU_DI);
+  -- CPU_DO <= std_logic_vector(CPU_DOun);
+  -- CPU_ADDR <= std_logic_vector(CPU_ADDRun);
+
+  inst_cpu: entity work.chip_6502
+    port map(
+    clk => clk24,
+    phi => ULA_PHI2,
+    res => loc_reset_n,
+    so => '1',
+    rdy => '1',
+    nmi => NMI_INT,
+    irq => cpu_irq,
+    dbi => CPU_DI,
+    dbo => CPU_DO,
+    rw  => cpu_rw,
+    sync => we, -- not used
+    ab => CPU_ADDR
       );
 
   inst_rom : entity work.rom_oa
@@ -408,70 +468,71 @@ begin
   -----------------------------------------------------------------
   -- total resolution 354x312, active resolution 240x224, H 15625 Hz, V 50.08 Hz
   -- take note: the values below are relative to the CLK period not standard VGA clock period
---   inst_scan_conv : entity work.VGA_SCANCONV
---     generic map (
---       -- mark active area of input video
---       cstart      =>  65,  -- composite sync start
---       clength     => 240,  -- composite sync length
+  inst_scan_conv : entity work.VGA_SCANCONV
+    generic map (
+      -- mark active area of input video
+      cstart      =>  65,  -- composite sync start
+      clength     => 240,  -- composite sync length
 
---       -- output video timing
---       hA          =>  10,	-- h front porch
---       hB          =>  46,	-- h sync
---       hC          =>  24,	-- h back porch
---       hD          => 240,	-- visible video
+      -- 381
+      -- output video timing
+      hA          =>  11,	-- h front porch
+      hB          =>  46,	-- h sync
+      hC          =>  24,	-- h back porch
+      hD          => 240,	-- visible video
 
--- --      vA          =>  40,	-- v front porch (not used)
---       vB          =>   2,	-- v sync
---       vC          =>  2,	-- v back porch
---       vD          => 240,	-- visible video
+      vA          =>  5,	-- v front porch (not used)
+      vB          =>   1,	-- v sync
+      vC          =>  16,	-- v back porch
+      vD          => 224,	-- visible video
 
---       hpad        =>  32,	-- H black border
---       vpad        =>  0	-- V black border
---       )
---     port map (
---       I_VIDEO(15 downto 12) => "0000",
+      hpad        =>  30,	-- H black border
+      vpad        =>  10	-- V black border
+      )
+    port map (
+      I_VIDEO(15 downto 12) => "0000",
 
---       -- only 3 bit color
---       I_VIDEO(11)           => ULA_VIDEO_R,
---       I_VIDEO(10)           => ULA_VIDEO_R,
---       I_VIDEO(9)            => ULA_VIDEO_R,
---       I_VIDEO(8)            => ULA_VIDEO_R,
+      -- only 3 bit color
+      I_VIDEO(11)           => ULA_VIDEO_R,
+      I_VIDEO(10)           => ULA_VIDEO_R,
+      I_VIDEO(9)            => ULA_VIDEO_R,
+      I_VIDEO(8)            => ULA_VIDEO_R,
 
---       I_VIDEO(7)            => ULA_VIDEO_G,
---       I_VIDEO(6)            => ULA_VIDEO_G,
---       I_VIDEO(5)            => ULA_VIDEO_G,
---       I_VIDEO(4)            => ULA_VIDEO_G,
+      I_VIDEO(7)            => ULA_VIDEO_G,
+      I_VIDEO(6)            => ULA_VIDEO_G,
+      I_VIDEO(5)            => ULA_VIDEO_G,
+      I_VIDEO(4)            => ULA_VIDEO_G,
 
---       I_VIDEO(3)            => ULA_VIDEO_B,
---       I_VIDEO(2)            => ULA_VIDEO_B,
---       I_VIDEO(1)            => ULA_VIDEO_B,
---       I_VIDEO(0)            => ULA_VIDEO_B,
---       I_HSYNC               => hs_int,
---       I_VSYNC               => vs_int,
+      I_VIDEO(3)            => ULA_VIDEO_B,
+      I_VIDEO(2)            => ULA_VIDEO_B,
+      I_VIDEO(1)            => ULA_VIDEO_B,
+      I_VIDEO(0)            => ULA_VIDEO_B,
+      I_HSYNC               => hs_int,
+      I_VSYNC               => vs_int,
 
---       -- for VGA output, feed these signals to VGA monitor
---       O_VIDEO(15 downto 12)=> dummy,
---       O_VIDEO(11 downto 8) => VideoR,
---       O_VIDEO( 7 downto 4) => VideoG,
---       O_VIDEO( 3 downto 0) => VideoB,
---       O_HSYNC					=> HSync,
---       O_VSYNC					=> VSync,
---       O_CMPBLK_N				=> s_cmpblk_n_out,
+      -- for VGA output, feed these signals to VGA monitor
+      O_VIDEO(15 downto 12)=> dummy,
+      O_VIDEO(11 downto 8) => VideoR,
+      O_VIDEO( 7 downto 4) => VideoG,
+      O_VIDEO( 3 downto 0) => VideoB,
+      O_HSYNC					=> HSync,
+      O_VSYNC					=> VSync,
+      O_CMPBLK_N				=> s_cmpblk_n_out,
 
---       --
---       CLK                   => clk6,
---       CLK_x2                => clk12
---       );
+      --
+      CLK                   => clk6,
+      CLK_x2                => clk12
+      );
 
 --Q
--- Para scandoubler descomentar esto y comentar las directas de la ULA
---	O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) ;
---	O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2) ;
---	O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2) ;
---
---	O_HSYNC	<= HSync;
---	O_VSYNC	<= VSync;
-----
+--Para scandoubler descomentar esto y comentar las directas de la ULA
+	O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) ;
+	O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2) ;
+	O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2) ;
+
+	O_HSYNC	<= HSync;
+	O_VSYNC	<= VSync;
+
   
 
 
@@ -480,19 +541,13 @@ begin
   O_PAL <= '1';
 
   -- rgb output
-  --O_HSYNC      <= ULA_SYNC;
-  --O_VSYNC      <= vs_int;
-  --O_VIDEO_R(2) <=  ULA_VIDEO_R;-- & ULA_VIDEO_R & ULA_VIDEO_R;  
-  --O_VIDEO_G(2) <=  ULA_VIDEO_G;-- & ULA_VIDEO_G & ULA_VIDEO_G;
-  --O_VIDEO_B(2) <=  ULA_VIDEO_B;-- & ULA_VIDEO_B & ULA_VIDEO_B;
-  -- vga output
   O_NTSC <= '0';
   O_PAL <= '1';
-  O_HSYNC      <= ULA_SYNC;
-  O_VSYNC      <= vs_int;
-  O_VIDEO_R <= ULA_VIDEO_R & ULA_VIDEO_R & ULA_VIDEO_R;  
-  O_VIDEO_G <= ULA_VIDEO_G & ULA_VIDEO_G & ULA_VIDEO_G;
-  O_VIDEO_B <= ULA_VIDEO_B & ULA_VIDEO_B & ULA_VIDEO_B;
+  -- O_HSYNC      <= ULA_SYNC;
+  -- O_VSYNC      <= vs_int;
+  -- O_VIDEO_R <= ULA_VIDEO_R & ULA_VIDEO_R & ULA_VIDEO_R;  
+  -- O_VIDEO_G <= ULA_VIDEO_G & ULA_VIDEO_G & ULA_VIDEO_G;
+  -- O_VIDEO_B <= ULA_VIDEO_B & ULA_VIDEO_B & ULA_VIDEO_B;
   -- O_HSYNC      <= HSync;
   -- O_VSYNC      <= VSync;
   -- O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) ;

@@ -1,0 +1,67 @@
+# Spartan-3E starter kit constraints
+
+# Analog-to-Digital Converter (ADC)
+# some connections shared with SPI Flash, DAC, ADC, and AMP
+NET "AD_CONV"       LOC = "P11" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 6;
+
+# Programmable Gain Amplifier (AMP)
+# some connections shared with SPI Flash, DAC, ADC, and AMP
+NET "AMP_CS"        LOC = "N7"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 6;
+
+# Pushbuttons (BTN)
+##NET "BTN_EAST"    LOC = "H13" | IOSTANDARD = LVTTL | PULLDOWN;
+##NET "BTN_NORTH"   LOC = "V4"  | IOSTANDARD = LVTTL | PULLDOWN;
+NET "BTN_SOUTH"     LOC = "K17" | IOSTANDARD = LVTTL | PULLDOWN;
+##NET "BTN_WEST"    LOC = "D18" | IOSTANDARD = LVTTL | PULLDOWN;
+
+# Clock inputs (CLK)
+NET "CLK_50MHZ"     LOC = "C9"  | IOSTANDARD = LVCMOS33;
+
+# Define clock period for 50 MHz oscillator (40%/60% duty-cycle)
+NET "CLK_50MHZ" PERIOD = 20.0ns HIGH 40%;
+
+# Digital-to-Analog Converter (DAC)
+# some connections shared with SPI Flash, DAC, ADC, and AMP
+NET "DAC_CLR"       LOC = "P8"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
+NET "DAC_CS"        LOC = "N8"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
+
+# FPGA Configuration Mode, INIT_B Pins (FPGA)
+NET "FPGA_INIT_B"   LOC = "T3" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4; # platformflash_oe
+
+# Discrete LEDs (LED)
+NET "LED<0>"        LOC = "F12" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<1>"        LOC = "E12" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<2>"        LOC = "E11" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<3>"        LOC = "F11" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<4>"        LOC = "C11" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<5>"        LOC = "D11" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<6>"        LOC = "E9"  | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+NET "LED<7>"        LOC = "F9"  | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 4;
+
+# Rotary Pushbutton Switch (ROT)
+##NET "ROT_A"       LOC = "K18" | IOSTANDARD = LVTTL | PULLUP;
+##NET "ROT_B"       LOC = "G18" | IOSTANDARD = LVTTL | PULLUP;
+
+# Intel StrataFlash Parallel NOR Flash (SF)
+NET "SF_CE0"        LOC = "D16" | IOSTANDARD = LVCMOS33 | DRIVE = 4 | SLEW = SLOW; # strataflash_ce
+NET "SF_OE"         LOC = "C18" | IOSTANDARD = LVCMOS33 | DRIVE = 4 | SLEW = SLOW; # strataflash_oe
+NET "SF_WE"         LOC = "D17" | IOSTANDARD = LVCMOS33 | DRIVE = 4 | SLEW = SLOW; # strataflash_we
+
+# STMicro SPI serial Flash (SPI)
+# some connections shared with SPI Flash, DAC, ADC, and AMP
+##NET "SPI_MISO"    LOC = "N10" | IOSTANDARD = LVCMOS33;
+NET "SPI_MOSI"      LOC = "T4"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 6;
+NET "SPI_SCK"       LOC = "U16" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 6;
+NET "SPI_SS_B"      LOC = "U3"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 6; # spi_rom_cs
+
+# Slide Switches (SW)
+NET "SW<0>" LOC = "L13" | IOSTANDARD = LVTTL | PULLUP;
+NET "SW<1>" LOC = "L14" | IOSTANDARD = LVTTL | PULLUP;
+NET "SW<2>" LOC = "H18" | IOSTANDARD = LVTTL | PULLUP;
+NET "SW<3>" LOC = "N17" | IOSTANDARD = LVTTL | PULLUP;
+
+NET clk_phi PERIOD = 20.0ns;
+
+#
+# End of File
+#

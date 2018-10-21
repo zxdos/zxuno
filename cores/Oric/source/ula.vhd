@@ -190,7 +190,6 @@ architecture RTL of ula is
 	signal lDATABUS     : std_logic_vector( 7 downto 0);
 	signal lSHFREG      : std_logic_vector( 5 downto 0);
 	signal lREGHOLD     : std_logic_vector( 6 downto 0);
-	signal lATTR_REGHOLD     : std_logic_vector( 6 downto 0);
 	signal lRGB         : std_logic_vector( 2 downto 0);
 	signal lREG_INK     : std_logic_vector( 2 downto 0);
 	signal lREG_STYLE   : std_logic_vector( 2 downto 0);
@@ -229,8 +228,8 @@ begin
 
 	--            phase 1  phase 2  phase 3
 	SRAM_OE    <= ph(0) or ph(1) or        RW_INT                ;
-	SRAM_CE    <= (ph(0) and not c(0) ) or (ph(1) and not c(8) ) or (not c(16) and ph(2) and (not CSRAMn_INT) );
-
+        SRAM_CE    <= (ph(0) and not c(0)) or (ph(1) and not c(8) ) or (not c(16) and ph(2) and (not CSRAMn_INT) );
+ 
 	SRAM_WE    <=  (not CSRAMn_INT) and (not RW_INT) and c(17) ;
 
 	-- VIDEO OUT
@@ -361,7 +360,7 @@ begin
 	lVBLANKn    <= '0' when (lCTR_V >= 224) else '1';
 
 	-- Signal To Force TEXT MODE
-	lFORCETXT   <= '1' when (lCTR_V >  199) else '0'; 
+	lFORCETXT   <= '1' when (lCTR_V >  199) and (lCTR_V < 224 )else '0'; 
 
 	-- Assign output signals
 	CLK_FLASH    <= lCTR_FLASH(4); 	-- Flash clock toggles every 16 video frames
@@ -392,9 +391,8 @@ begin
 			lInv_hold <= '0';
 		elsif rising_edge(CLK_24) then
 			if ATTRIB_DEC = '1' then
-                          IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
-                          lATTR_REGHOLD <= DB_INT(6 downto 0);
-                          lInv_hold <= DB_INT(7);
+				IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
+				lInv_hold <= DB_INT(7);
 			end if;
 		end if;
 	end process;
@@ -432,7 +430,7 @@ begin
 		  lREG_PAPER <= (others=>'0');
 	  elsif rising_edge(CLK_24) then
 			if (RELD_REG = '1' and isAttrib = '1') then
-				case lATTR_REGHOLD(6 downto 3) is
+				case lREGHOLD(6 downto 3) is
 					when "0000" => lREG_INK   <= lREGHOLD(2 downto 0);
 					when "0001" => lREG_STYLE <= lREGHOLD(2 downto 0);
 					when "0010" => lREG_PAPER <= lREGHOLD(2 downto 0);
@@ -447,8 +445,8 @@ begin
 	lALT_SEL    <= lREG_STYLE(0); -- Character set select : 0=Standard  1=Alternate
 	lDBLHGT_SEL <= lREG_STYLE(1); -- Character type select: 0=Standard  1=Double
 	lFLASH_SEL  <= lREG_STYLE(2); -- Flash select         : 0=Steady    1=Flashing
-	lFREQ_SEL   <= lREG_MODE(1);  -- Frequency select     : 0=60Hz      1=50Hz
-	lHIRES_SEL  <= lREG_MODE(2);  -- Mode Select          : 0=Text      1=Hires 
+	lFREQ_SEL   <=  lREG_MODE(1);  -- Frequency select     : 0=60Hz      1=50Hz
+	lHIRES_SEL  <=  lREG_MODE(2);  -- Mode Select          : 0=Text      1=Hires 
 
 	-- Output signal for text/hires mode decode
 	HIRES_DEC   <= (lHIRES_SEL  and (not lFORCETXT));

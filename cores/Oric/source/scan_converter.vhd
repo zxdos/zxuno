@@ -28,7 +28,7 @@
 -- VSYNC             |__|              VSYNC             |__|              VSYNC
 
 -- Scan converter input and output timings compared to standard VGA
---	Resolution   - Frame   | Pixel      | Front     | HSYNC      | Back       | Active      | HSYNC    | Front    | VSYNC    | Back     | Active    | VSYNC
+--  esolution   - Frame   | Pixel      | Front     | HSYNC      | Back       | Active      | HSYNC    | Front    | VSYNC    | Back     | Active    | VSYNC
 --              - Rate    | Clock      | Porch hA  | Pulse hB   | Porch hC   | Video hD    | Polarity | Porch vA | Pulse vB | Porch vC | Video vD  | Polarity
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 --  In  256x224 - 59.18Hz |  6.000 MHz | 38 pixels |  32 pixels |  58 pixels |  256 pixels | negative | 16 lines | 8 lines  | 16 lines | 224 lines | negative
@@ -58,7 +58,7 @@ entity VGA_SCANCONV is
 		hC				: integer range 0 to 1023 :=  48;	-- h back porch
 		hD				: integer range 0 to 1023 := 640;	-- visible video
 
---		vA				: integer range 0 to 1023 :=  16;	-- v front porch
+		vA				: integer range 0 to 1023 :=  16;	-- v front porch
 		vB				: integer range 0 to 1023 :=   2;	-- v sync
 		vC				: integer range 0 to 1023 :=  33;	-- v back porch
 		vD				: integer range 0 to 1023 := 480;	-- visible video
@@ -82,7 +82,11 @@ entity VGA_SCANCONV is
 end;
 
 architecture RTL of VGA_SCANCONV is
-	--
+-- type ram_t is array (0 to 1023) of std_logic_vector(15 downto 0);
+-- signal ram : ram_t := (others => (others => '0'));
+-- attribute ram_style: string;
+-- attribute ram_style of ram : signal is "distributed";
+--
 	-- input timing
 	--
 	signal ivsync_last_x2	: std_logic := '1';
@@ -101,7 +105,21 @@ architecture RTL of VGA_SCANCONV is
 	signal CLK_x2_n		: std_logic := '1';
 
 begin
-	-- dual port line buffer, max line of 1024 pixels
+  -- dual port line buffer, max line of 1024 pixels
+  -- ram_write :process(CLK_x2)
+  -- begin
+  --   if rising_edge(CLK_x2) then
+  --     ram(to_integer(unsigned((hpos_i)))) <= I_VIDEO;
+  --   end if;
+  -- end process;
+  -- ram_read :process(CLK_x2)
+  -- begin
+  --   if falling_edge(CLK_x2) then
+  --     O_VIDEO <= ram(to_integer(unsigned(hpos_o)));
+  --   end if;
+  -- end process;
+  
+
 	u_ram : RAMB16_S18_S18
 		generic map (INIT_A => X"00000", INIT_B => X"00000", SIM_COLLISION_CHECK => "ALL")  -- "NONE", "WARNING", "GENERATE_X_ONLY", "ALL"
 		port map (
@@ -198,7 +216,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- V sync timing
-		if (vcnt < vB) then
+		if (vcnt < vB+vA) and (vcnt >= vA) then
 			O_VSYNC <= '0';
 		else
 			O_VSYNC <= '1';
@@ -210,7 +228,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- visible video area doubled from the original game
-		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt > 2*(vB + vC + vpad)) and (vcnt <= 2*(vB + vC + vD + vpad))) then
+		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt > 2*(vA + vB + vC+vpad)) and (vcnt <= 2*(vA + vB + vC + vD + vpad))) then
 			hpos_o <= hpos_o + 1;
 		else
 			hpos_o <= (others => '0');
@@ -222,7 +240,7 @@ begin
 	begin
 		wait until rising_edge(CLK_X2);
 		-- active video area 640x480 (VGA) after padding with blank borders
-		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt > 2*(vB + vC)) and (vcnt <= 2*(vB + vC + vD + 2*vpad))) then
+		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt > 2*(vA + vB + vC)) and (vcnt <= 2*(vA + vB + vC + vD + 2*vpad))) then
 			O_CMPBLK_N <= '1';
 		else
 			O_CMPBLK_N <= '0';
