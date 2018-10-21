@@ -190,6 +190,7 @@ architecture RTL of ula is
 	signal lDATABUS     : std_logic_vector( 7 downto 0);
 	signal lSHFREG      : std_logic_vector( 5 downto 0);
 	signal lREGHOLD     : std_logic_vector( 6 downto 0);
+	signal lATTRIBHOLD     : std_logic_vector( 6 downto 0);
 	signal lRGB         : std_logic_vector( 2 downto 0);
 	signal lREG_INK     : std_logic_vector( 2 downto 0);
 	signal lREG_STYLE   : std_logic_vector( 2 downto 0);
@@ -360,7 +361,7 @@ begin
 	lVBLANKn    <= '0' when (lCTR_V >= 224) else '1';
 
 	-- Signal To Force TEXT MODE
-	lFORCETXT   <= '1' when (lCTR_V >  199) and (lCTR_V < 224 )else '0'; 
+	lFORCETXT   <= '1' when (lCTR_V >  199) and (lCTR_V<224) else '0'; 
 
 	-- Assign output signals
 	CLK_FLASH    <= lCTR_FLASH(4); 	-- Flash clock toggles every 16 video frames
@@ -389,9 +390,11 @@ begin
 		if (RESET_INT = '1') then
 			IsATTRIB  <= '0';
 			lInv_hold <= '0';
+                        lATTRIBHOLD <= b"0011000";
 		elsif rising_edge(CLK_24) then
 			if ATTRIB_DEC = '1' then
-				IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
+                          IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
+                          lATTRIBHOLD <= DB_INT(6 downto 0);
 				lInv_hold <= DB_INT(7);
 			end if;
 		end if;
@@ -424,20 +427,21 @@ begin
 		  lREG_STYLE <= (others=>'0');
 		  lREG_PAPER <= (others=>'0');
 		  lREG_MODE  <= (others=>'0');
-	  elsif (lRELOAD_SEL = '1') then
-		  lREG_INK   <= (others=>'1');
-		  lREG_STYLE <= (others=>'0');
-		  lREG_PAPER <= (others=>'0');
 	  elsif rising_edge(CLK_24) then
-			if (RELD_REG = '1' and isAttrib = '1') then
-				case lREGHOLD(6 downto 3) is
-                                  when "0000" => lREG_INK   <= lREGHOLD(2 downto 0);
-					when "0001" => lREG_STYLE <= lREGHOLD(2 downto 0);
-					when "0010" => lREG_PAPER <= lREGHOLD(2 downto 0);
-					when "0011" => lREG_MODE  <= lREGHOLD(2 downto 0);
-					when others => null;
-				end case;
-			end if;
+            if (lRELOAD_SEL = '1') then
+              lREG_INK   <= (others=>'1');
+              lREG_STYLE <= (others=>'0');
+              lREG_PAPER <= (others=>'0');
+              
+            elsif (RELD_REG = '1' and isAttrib = '1') then
+              case lATTRIBHOLD(6 downto 3) is
+                when "0000" => lREG_INK   <= lATTRIBHOLD(2 downto 0);
+                when "0001" => lREG_STYLE <= lATTRIBHOLD(2 downto 0);
+                when "0010" => lREG_PAPER <= lATTRIBHOLD(2 downto 0);
+                when "0011" => lREG_MODE  <= lATTRIBHOLD(2 downto 0);
+                when others => null;
+              end case;
+            end if;
 	  end if;
 	end process;
 
