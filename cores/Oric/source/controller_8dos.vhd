@@ -46,7 +46,7 @@ architecture imp of controller_8dos is
   signal CUR_PHI_2:std_logic;
   signal OLD_PHI_2:std_logic;
   signal rising_PHI_2:std_logic;
-  signal falling_PHI_2:std_logic;
+--  signal falling_PHI_2:std_logic;
   signal disk_D_OUT  : std_logic_vector(7 downto 0);
 
   -- connection between spi_controller & disk_ii
@@ -99,7 +99,7 @@ begin
     end if;
   end process;
   rising_PHI_2 <= CUR_PHI_2 and not OLD_PHI_2;
-  falling_PHI_2<= not CUR_PHI_2 and CUR_PHI_2;  
+--  falling_PHI_2<= not CUR_PHI_2 and CUR_PHI_2;  
      
   
   --IO_CONTROL_SIGNAL

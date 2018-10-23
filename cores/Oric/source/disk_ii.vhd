@@ -122,7 +122,7 @@ attribute ram_style of track_memory : signal is "block"; --"distributed";
   signal CUR_PHI_2:std_logic;
   signal OLD_PHI_2:std_logic;
   signal rising_PHI_2:std_logic;
-  signal falling_PHI_2:std_logic;
+--  signal falling_PHI_2:std_logic;
 begin
   -- PHI_2 edges
   phi_2_edges: process(CLK)
@@ -133,7 +133,7 @@ begin
     end if;
   end process;
   rising_PHI_2 <= CUR_PHI_2 and not OLD_PHI_2;
-  falling_PHI_2<= not CUR_PHI_2 and CUR_PHI_2;  
+--  falling_PHI_2<= not CUR_PHI_2 and CUR_PHI_2;  
 
   interpret_io : process (CLK,RESETn)
   begin

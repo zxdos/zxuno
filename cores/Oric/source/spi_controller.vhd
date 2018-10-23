@@ -13,6 +13,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+library unisim;
+use unisim.vcomponents.all;
 
 entity spi_controller is
   generic (
@@ -76,6 +78,7 @@ architecture rtl of spi_controller is
 
   signal slow_clk : boolean := true;
   signal spi_clk : std_logic;
+  signal spi_clk_sig : std_logic;
   signal sclk_sig : std_logic;
   
   signal current_track : unsigned(5 downto 0);
@@ -104,19 +107,19 @@ begin
   --   If slow_clk is true, spi_clk = CLK_14M / 32 and SCLK = 223.214kHz, which
   --   is between 100kHz and 400kHz, as required for MMC compatibility.
   --
-  spi_clk <= CLK_14M;
-  -- var_clkgen : process (CLK_14M, slow_clk)
-  --   variable var_clk : unsigned(4 downto 0) := (others => '0');
-  -- begin
-  --   if slow_clk then
-  --     spi_clk <= var_clk(4);
-  --     if rising_edge(CLK_14M) then
-  --       var_clk := var_clk + 1;
-  --     end if;
-  --   else
-  --     spi_clk <= CLK_14M;
-  --   end if;
-  -- end process;
+  bufered_io : BUFG port map (I => spi_clk_sig, O => spi_clk);
+  var_clkgen : process (CLK_14M, slow_clk)
+    variable var_clk : unsigned(4 downto 0) := (others => '0');
+  begin
+    if slow_clk then
+      spi_clk_sig <= var_clk(4);
+      if rising_edge(CLK_14M) then
+        var_clk := var_clk + 1;
+      end if;
+    else
+      spi_clk_sig <= CLK_14M;
+    end if;
+  end process;
 
   SCLK <= sclk_sig;
   --
@@ -480,7 +483,7 @@ begin
             end if;
             sclk_sig <= not sclk_sig;
                         
-          when others => null;
+--          when others => null;
         end case;
       end if;
     end if;
