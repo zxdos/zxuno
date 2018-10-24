@@ -392,10 +392,10 @@ begin
 			lInv_hold <= '0';
                         lATTRIBHOLD <= b"0011000";
 		elsif rising_edge(CLK_24) then
-			if ATTRIB_DEC = '1' then
+			if (ATTRIB_DEC = '1') and (lCTR_V <224 )then
                           IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
                           lATTRIBHOLD <= DB_INT(6 downto 0);
-				lInv_hold <= DB_INT(7);
+                          lInv_hold <= DB_INT(7);
 			end if;
 		end if;
 	end process;
@@ -420,19 +420,18 @@ begin
 		end if;
 	end process;
 
-	u_ld_reg: process(CLK_24, lRELOAD_SEL, RESET_INT)
+	u_ld_reg: process(CLK_24)
 	begin
-	  if (RESET_INT = '1') then
-		  lREG_INK   <= (others=>'1');
-		  lREG_STYLE <= (others=>'0');
-		  lREG_PAPER <= (others=>'0');
-		  lREG_MODE  <= (others=>'0');
-	  elsif rising_edge(CLK_24) then
-            if (lRELOAD_SEL = '1') then
+	  if rising_edge(CLK_24) then
+            if (RESET_INT = '1') then
               lREG_INK   <= (others=>'1');
               lREG_STYLE <= (others=>'0');
               lREG_PAPER <= (others=>'0');
-              
+              lREG_MODE  <= (others=>'0');
+            elsif (lRELOAD_SEL = '1') then
+              lREG_INK   <= (others=>'1');
+              lREG_STYLE <= (others=>'0');
+              lREG_PAPER <= (others=>'0');
             elsif (RELD_REG = '1' and isAttrib = '1') then
               case lATTRIBHOLD(6 downto 3) is
                 when "0000" => lREG_INK   <= lATTRIBHOLD(2 downto 0);
