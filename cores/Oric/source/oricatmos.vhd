@@ -70,8 +70,9 @@ entity ORIC is
 --	K7_REMOTE         : out   std_logic;
 --	K7_AUDIOOUT       : out   std_logic;
 
-    -- I_RESET              : in    std_logic;
-    -- I_NMI             : in    std_logic;
+    I_RESET              : in    std_logic;
+    I_NMI             : in    std_logic;
+    led :out std_logic;
     -- PRINTER
 --	PRT_DATA          : inout std_logic_vector(7 downto 0);
 --	PRT_STR           : out   std_logic;  -- strobe
@@ -90,7 +91,7 @@ entity ORIC is
     -- SRAM
     
     SRAM_DQ : inout std_logic_vector(7 downto 0);         -- Data bus 8 Bits
-    SRAM_ADDR : out std_logic_vector(15 downto 0);        -- Address bus 20 Bits
+    SRAM_ADDR : out std_logic_vector(20 downto 0);        -- Address bus 20 Bits
     SRAM_WE_N : out std_logic;                    -- Write Enable
     SRAM_CS_N : out std_logic;
 
@@ -103,9 +104,6 @@ entity ORIC is
   -- disk_a_on : out std_logic; -- 0 when disk is active else 1
   -- track_ok  : out std_logic; -- 0 when disk is active else 1
   -- out_MAPn  : out std_logic;  
-  image_buton_up : in std_logic;
-  image_buton_down :  in std_logic; -- 0 when disk is active else 1
-  -- image_buton_down: in std_logic;
     -- Clk master
   CLK_50              : in    std_logic  -- MASTER CLK
 
@@ -121,8 +119,7 @@ architecture RTL of ORIC is
   -- Resets
   signal loc_reset_n        : std_logic; --active low
   signal loc_reset        : std_logic; --active low
-  signal I_RESET              :   std_logic := '1';
-  signal I_NMI             :     std_logic := '1';
+  signal cpu_reset_n        : std_logic; --active low
   -- Internal clocks
   signal CLKFB              : std_logic := '0';
   signal clk24              : std_logic := '0';
@@ -144,7 +141,7 @@ architecture RTL of ORIC is
   signal CPU_ADDRun           : ieee.numeric_std.unsigned(15 downto 0);
   signal CPU_DIun             : ieee.numeric_std.unsigned(7 downto 0);
   signal CPU_DOun             : ieee.numeric_std.unsigned(7 downto 0);
-  signal DATA_BUS_OUT:std_logic_vector(7 downto 0);
+--  signal DATA_BUS_OUT:std_logic_vector(7 downto 0);
     signal cpu_rw             : std_logic;
   signal cpu_irq            : std_logic;
   signal ad                 : std_logic_vector(15 downto 0);
@@ -236,13 +233,15 @@ architecture RTL of ORIC is
   signal IMAGE_NUMBER_out  : std_logic_vector(9 downto 0);
   signal disk_track_addr: std_logic_vector(13 downto 0);
   
-  signal image_buton_up_db : std_logic;
-  signal image_buton_down_db: std_logic;
-
  -- previous were ports
   signal disk_a_on :  std_logic; -- 0 when disk is active else 1
   signal track_ok :  std_logic; -- 0 when disk is active else 1
 
+  signal key_scroll : std_logic;
+  signal key_home : std_logic;
+  signal key_end : std_logic;
+  signal key_pg_up : std_logic;
+  signal key_pg_down:std_logic;
   
 begin
   -----------------------------------------------
@@ -250,7 +249,7 @@ begin
   -----------------------------------------------
 
 
-  NMI_INT <= not I_NMI;
+  NMI_INT <= I_NMI or not key_end;
   RESET_INT <= not I_RESET;
   
   inst_pll_base : PLL_BASE
@@ -314,14 +313,15 @@ begin
   -- Reset
   loc_reset_n <= pll_locked;
   loc_reset <= not loc_reset_n;
-  
+
+  cpu_reset_n <= loc_reset_n and not key_home;
   ------------------------------------------------------------
   -- CPU 6502
   ------------------------------------------------------------
   -- inst_cpu : entity work.T65
   --   port map (
   --     Mode    => "00",
-  --     Res_n   => loc_reset_n,
+  --     Res_n   => cpu_reset_n,
   --     Enable  => '1',
   --     Clk     => ula_phi2,
   --     Rdy     => '1',
@@ -372,7 +372,7 @@ begin
     port map(
     clk => clk24,
     phi => ULA_PHI2,
-    res => loc_reset_n,
+    res => cpu_reset_n,
     so => '1',
     rdy => '1',
     nmi => NMI_INT,
@@ -400,6 +400,7 @@ begin
   
   SRAM_DQ(7 downto 0) <= (others => '0') when loc_reset_n = '0' else CPU_DO when ula_WE_SRAM = '1' else (others => 'Z'); --added Data part of SRAM init when reset to jump disk boot code.
   SRAM_ADDR(15 downto 0) <= ad(15 downto 0);
+  SRAM_ADDR(20 downto 16) <= (others => '1');
   SRAM_WE_N <= '1' when loc_reset_n = '0' else not ula_WE_SRAM;
   SRAM_CS_N <= '1' when loc_reset_n = '0' else not ula_CE_SRAM;
   
@@ -421,7 +422,7 @@ begin
   ------------------------------------------------------------
   inst_ula : entity work.ULA
     port map (
-      RESETn     => loc_reset_n,
+      RESETn     => cpu_reset_n,
       CLK        => clk24,
       CLK_4      => ula_CLK_4,
 
@@ -601,7 +602,7 @@ begin
       O_PB_OE_L     => via_oe_l,
 
       --
-      RESET_L       => loc_reset_n,
+      RESET_L       => cpu_reset_n,
       I_P2_H        => ula_phi2,
       ENA_4         => '1',
       CLK           => ula_CLK_4
@@ -619,7 +620,14 @@ begin
       PS2DATA	=> PS2DAT1,
 
       COL		=> via_out(2 downto 0),
-      ROWbit	=> KEY_ROW
+      ROWbit	=> KEY_ROW,
+
+      KEY_PG_UP  => key_pg_up,
+      KEY_PG_DOWN => key_pg_down,
+      KEY_S_LOCK => key_scroll,
+      KEY_HOME => key_home,
+      KEY_END => key_end
+
       );
 
   -- Keyboard
@@ -651,7 +659,7 @@ begin
 --		O_IOB      => open,
 --		O_IOB_OE_L => open,
 
-      RESET_L    => loc_reset_n,
+      RESET_L    => cpu_reset_n,
       ENA        => '1',
       CLK        => ula_PHI2
       );
@@ -745,8 +753,8 @@ begin
       disk_track_addr => disk_track_addr,
 
       track_ok => track_ok,
-      IMAGE_UP => image_buton_up_db,
-      IMAGE_DOWN => image_buton_down_db,
+      IMAGE_UP => key_pg_up,
+      IMAGE_DOWN => key_pg_down,
       IMAGE_NUMBER_out => IMAGE_NUMBER_out,
       
       -- sd card
@@ -756,22 +764,7 @@ begin
       SD_CLK => SD_CLK
       );
 
-  debounce_up : entity work.debounce
-    port map
-    (
-      clk =>clk24,
-      button =>image_buton_up,
-      result => image_buton_up_db
-      );
-  debounce_down : entity work.debounce
-    port map
-    (
-      clk =>clk24,
-      button =>image_buton_down,
-      result => image_buton_down_db
-      );
-  
-  
+  led <= disk_a_on;
   ------------------------------------------------------------
   -- Multiplex CPU , RAM/VIA , ROM
   ------------------------------------------------------------
@@ -795,15 +788,15 @@ begin
     end if;
   end process;
   
-  process -- figure out ram
-  begin
-    wait until rising_edge(clk24);
-    if (cpu_rw = '1')then
-      DATA_BUS_OUT <= CPU_DI;
-    else
-      DATA_BUS_OUT <= CPU_DO;
-    end if;
-  end process;
+  -- process -- figure out ram
+  -- begin
+  --   wait until rising_edge(clk24);
+  --   if (cpu_rw = '1')then
+  --     DATA_BUS_OUT <= CPU_DI;
+  --   else
+  --     DATA_BUS_OUT <= CPU_DO;
+  --   end if;
+  -- end process;
 
   ------------------------------------------------------------
   -- K7 PORT
