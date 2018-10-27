@@ -101,6 +101,7 @@ architecture RTL of VGA_SCANCONV is
 
 	signal O_VIDEOb				: std_logic_vector(15 downto 0);
         signal O_CMPBLK_Nb			: std_logic;
+        signal to_blank                         : std_logic;
 	signal vcnt				: integer range 0 to 1023 := 0;
 	signal hcnt				: integer range 0 to 1023 := 0;
 	signal hcnti			: integer range 0 to 1023 := 0;
@@ -172,7 +173,7 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		if CLK = '0' then
-			if (hcnti < cstart) or (hcnti >= (cstart + clength)) then
+			if (hcnti < cstart) or (hcnti > (cstart + clength)) then
 				hpos_i <= (others => '0');
 			else
 				hpos_i <= hpos_i + 1;
@@ -241,10 +242,10 @@ begin
 	begin
 		wait until rising_edge(CLK_x2);
 		-- visible video area doubled from the original game
-		if ((hcnt >= (hB + hC + hpad)) and (hcnt < (hB + hC + hD + hpad))) and ((vcnt >= 2*(vB + vC+vpad)) and (vcnt <= 2*(vB + vC + vD + vpad))) then
-			hpos_o <= hpos_o + 1;
+		if ((hcnt >= (hB + hC + hpad)) and (hcnt <=(hB + hC + hD + hpad))) and ((vcnt >= 2*(vB + vC+vpad)) and (vcnt <= 2*(vB + vC + vD + vpad))) then
+                  hpos_o <= hpos_o + 1;
 		else
-			hpos_o <= (others => '0');
+                  hpos_o <= (others => '0');
 		end if;
 	end process;
 
@@ -253,12 +254,14 @@ begin
 	begin
 		wait until rising_edge(CLK_X2);
 		-- active video area 640x480 (VGA) after padding with blank borders
-		if ((hcnt >= (hB + hC)) and (hcnt < (hB + hC + hD + 2*hpad))) and ((vcnt >= 2*(vB + vC)) and (vcnt <= 2*(vB + vC + vD + 2*vpad))) then
+		if ((hcnt > (hB + hC +hpad)) and (hcnt <= (hB + hC + hD + hpad))) and ((vcnt >= 2*(vB + vC+vpad)) and (vcnt <= 2*(vB + vC + vD + vpad))) then
 			O_CMPBLK_Nb <= '1';
+                        to_blank <= '0';
 		else
 			O_CMPBLK_Nb <= '0';
+                        to_blank <= '1';
 		end if;
 	end process;
-        O_VIDEO <= O_VIDEOb when O_CMPBLK_Nb = '1' else (others => '0');
+        O_VIDEO <= O_VIDEOb when to_blank='0' else (others => '0');
         O_CMPBLK_N <= O_CMPBLK_Nb;
 end architecture RTL;

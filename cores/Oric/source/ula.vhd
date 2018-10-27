@@ -84,6 +84,7 @@ port (
 
 	CLK        :   in  std_logic;                     -- 24 MHz                       -- pin 07
 	PHI2       :   out std_logic;                     -- 1 MHz CPU & system           -- pin 14
+        PRE_PHI2   :   out std_logic;
 	RW         :   in  std_logic;                     -- R/W from CPU                 -- pin 27
 	MAPn       :   in  std_logic;                     -- MAP                          -- pin 26
 	DB         :   in  std_logic_vector( 7 downto 0); -- DATA BUS                     -- pin 18,34,5,13,12,11,17,8
@@ -95,6 +96,7 @@ port (
 	SRAM_OE    :   out std_logic;
 	SRAM_CE    :   out std_logic;
 	SRAM_WE    :   out std_logic;
+        SRAM_DO    :   out std_logic; -- enable drive of databus
 	LATCH_SRAM :   out std_logic;
 
 	-- DRAM
@@ -215,6 +217,7 @@ begin
 
 	-- output assignments
 	PHI2         <= CLK_1_INT;
+        PRE_PHI2     <= c(15);
 --	AD_RAM       <= AD_RAM_INT(15 downto 8);
 	CSIOn        <= CSIOn_INT;
 	CSROMn       <= CSROMn_INT;
@@ -229,9 +232,10 @@ begin
 
 	--            phase 1  phase 2  phase 3
 	SRAM_OE    <= ph(0) or ph(1) or        RW_INT                ;
-        SRAM_CE    <= (ph(0) and not c(0)) or (ph(1) and not c(8) ) or (not c(16) and ph(2) and (not CSRAMn_INT) );
+        SRAM_CE    <= '1'; -- always enabled  (ph(0) and not c(0)) or (ph(1) and not c(8) ) or (not c(16) and not c(16) and ph(2) and (not CSRAMn_INT) );
  
-	SRAM_WE    <=  (not CSRAMn_INT) and (not RW_INT) and c(17) ;
+	SRAM_WE    <=  (not CSRAMn_INT) and (not RW_INT) and (c(18) or c(19));
+	SRAM_DO    <=  (not CSRAMn_INT) and (not RW_INT) and (c(19) or c(19));
 
 	-- VIDEO OUT
 	R       <= RGB_INT(0);
@@ -347,7 +351,19 @@ begin
 	lHSYNCn     <= '0' when (lCTR_H >=  49) and (lCTR_H <=  53) else '1';
 
 	-- Horizontal Blank
-	lHBLANKn    <= '1' when (lCTR_H >=   1) and (lCTR_H <=  40) else '0';
+	hblankfr: process (CLK_24)
+	begin
+          if (rising_edge(CLK_24)) then
+            if  (lCTR_H >=   0) and (lCTR_H <=  40) then
+              lHBLANKn <= '1';
+            else
+              lHBLANKn <= '0';
+            end if;
+          end if;
+        end process;
+        
+                
+                             
 
 	-- Signal to Reload Register to reset attributes
 	lRELOAD_SEL <= '1' when (lCTR_H >=  49) else '0';
@@ -392,7 +408,7 @@ begin
 			lInv_hold <= '0';
                         lATTRIBHOLD <= b"0011000";
 		elsif rising_edge(CLK_24) then
-			if (ATTRIB_DEC = '1') and (lCTR_V <224 )then
+			if (ATTRIB_DEC = '1') and (lCTR_V <224 ) and (lCTR_H <40) then
                           IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
                           lATTRIBHOLD <= DB_INT(6 downto 0);
                           lInv_hold <= DB_INT(7);
@@ -476,8 +492,8 @@ begin
 	lRGB <= lREG_INK when lBGFG_SEL = '1' else lREG_PAPER;
 
 	-- Assign out signal
-	RGB_INT <=     lRGB  when (lInv = '0' and BLANKINGn = '1') else
-			     not(lRGB) when (lInv = '1' and BLANKINGn = '1') else
+	RGB_INT <=     lRGB  when (lInv = '0') and (BLANKINGn = '1') else
+			     not(lRGB) when (lInv = '1') and (BLANKINGn = '1') else
 			     (others=>'0');
 
 	-- Compute offset 
