@@ -118,8 +118,8 @@ architecture RTL of ORIC is
 
   -- Resets
   signal loc_reset_n        : std_logic; --active low
-  signal loc_reset        : std_logic; --active low
   signal cpu_reset_n        : std_logic; --active low
+  signal cpu_reset        : std_logic; --active low
   -- Internal clocks
   signal CLKFB              : std_logic := '0';
   signal clk24              : std_logic := '0';
@@ -175,6 +175,7 @@ architecture RTL of ORIC is
     
   signal audio_out_tmp  : std_logic := '0';
 
+  signal ym_o_ioa :std_logic_vector (7 downto 0);
   
   -- ULA
   signal ula_phi2           : std_logic;
@@ -249,7 +250,7 @@ begin
   -----------------------------------------------
 
 
-  NMI_INT <= I_NMI or not key_end;
+  NMI_INT <= I_NMI and not key_end;
   RESET_INT <= not I_RESET;
   
   inst_pll_base : PLL_BASE
@@ -312,9 +313,8 @@ begin
 
   -- Reset
   loc_reset_n <= pll_locked;
-  loc_reset <= not loc_reset_n;
-
   cpu_reset_n <= loc_reset_n and not key_home;
+  cpu_reset   <= not cpu_reset_n;
   ------------------------------------------------------------
   -- CPU 6502
   ------------------------------------------------------------
@@ -354,7 +354,7 @@ begin
   --     di             => CPU_DIun,
   --     clk            => ula_phi2,
   --     enable         => '1',
-  --     reset          => loc_reset, active high signal
+  --     reset          => cpu_reset, active high signal
   --     nmi_n          => NMI_INT,
   --     irq_n          => cpu_irq,
   --     do             => CPU_DOun,
@@ -398,11 +398,11 @@ begin
 --	ad(17 downto 16) <= "00";
 
   
-  SRAM_DQ(7 downto 0) <= (others => '0') when loc_reset_n = '0' else CPU_DO when ula_WE_SRAM = '1' else (others => 'Z'); --added Data part of SRAM init when reset to jump disk boot code.
+  SRAM_DQ(7 downto 0) <= (others => '0') when cpu_reset_n = '0' else CPU_DO when ula_WE_SRAM = '1' else (others => 'Z'); --added Data part of SRAM init when reset to jump disk boot code.
   SRAM_ADDR(15 downto 0) <= ad(15 downto 0);
   SRAM_ADDR(20 downto 16) <= (others => '1');
-  SRAM_WE_N <= '1' when loc_reset_n = '0' else not ula_WE_SRAM;
-  SRAM_CS_N <= '1' when loc_reset_n = '0' else not ula_CE_SRAM;
+  SRAM_WE_N <= '1' when cpu_reset_n = '0' else not ula_WE_SRAM;
+  SRAM_CS_N <= '1' when cpu_reset_n = '0' else not ula_CE_SRAM;
   
 
   SRAM_DO <= SRAM_DQ when ula_CE_SRAM = '1' and  ula_WE_SRAM = '0' else (others => '0');
@@ -631,7 +631,11 @@ begin
       );
 
   -- Keyboard
-  via_in <= x"F7" when (KEY_ROW or VIA_PA_OUT) = x"FF" else x"FF";
+  via_in(2 downto 0) <= via_out(2 downto 0);
+  via_in(3) <= '0' when ( (KEY_ROW and  not ym_o_ioa)) /= x"00"
+               else  '1';
+  via_in(7 downto 4) <= via_out(7 downto 4);
+
 
   ------------------------------------------------------------
   -- PSG AY-3-8192
@@ -652,7 +656,7 @@ begin
       O_AUDIO    => PSG_OUT,
       -- port a
 --		I_IOA      => x"00",
---		O_IOA      => open,
+      O_IOA      => ym_o_ioa,
 --		O_IOA_OE_L => open,
       -- port b
 --		I_IOB      => x"00",
@@ -670,7 +674,7 @@ begin
   inst_dac : entity work.DAC
     port map (
       clk_i  => clk24,
-      resetn => loc_reset_n,
+      resetn => cpu_reset_n,
       dac_i  => PSG_OUT,
       dac_o  => audio_out_tmp
       );
@@ -681,7 +685,7 @@ begin
   -- onebit : entity work.XSP6X9_onebit
   --   generic map (k => 21)
   --   port map (
-  --     nreset => loc_reset_n,
+  --     nreset => cpu_reset_n,
   --     clk => clk24,
   --     input => PSG_OUT,
   --     output => AUDIO_OUT,
@@ -692,7 +696,7 @@ begin
 --       DIVRATIO => 1000000
 --       )
 --     port map (
---       nreset => loc_reset_n,
+--       nreset => cpu_reset_n,
 --       clk =>clk6,
 --       clkout => led_signal_update
 --       );
@@ -701,7 +705,7 @@ begin
 --       DIVRATIO => 3750 -- 200Hz whole refresh
 --       )
 --     port map (
---       nreset => loc_reset_n,
+--       nreset => cpu_reset_n,
 --       clk =>clk6,
 --       clkout => led_mutiplex_clk
 --       );
@@ -741,7 +745,7 @@ begin
       RW => cpu_rw,
       IO_SELECTn => ULA_CSIOn,
       IO_CONTROLn => cont_IOCONTROLn,
-      RESETn => loc_reset_n,
+      RESETn => cpu_reset_n,
       O_ROMDISn => cont_ROMDISn,
       O_MAPn => cont_MAPn,
       A => CPU_ADDR(15 downto 0),

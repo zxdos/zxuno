@@ -76,8 +76,8 @@ entity YM2149 is
   O_AUDIO             : out std_logic_vector(7 downto 0) := (others => '0');
   -- port a
 --  I_IOA               : in  std_logic_vector(7 downto 0);
---  O_IOA               : out std_logic_vector(7 downto 0);
---  O_IOA_OE_L          : out std_logic;
+ O_IOA               : out std_logic_vector(7 downto 0);
+ O_IOA_OE_L          : out std_logic;
   -- port b
 --  I_IOB               : in  std_logic_vector(7 downto 0);
 --  O_IOB               : out std_logic_vector(7 downto 0);
@@ -577,14 +577,14 @@ begin
     end if;
   end process;
 
---  p_io_ports             : process(reg)
---  begin
---    O_IOA <= reg(14);
+ p_io_ports             : process(reg)
+ begin
+   O_IOA <= reg(14);
 
---    O_IOA_OE_L <= not reg(7)(6);
---    O_IOB <= reg(15);
---    O_IOB_OE_L <= not reg(7)(7);
---  end process;
+   O_IOA_OE_L <= not reg(7)(6);
+   -- O_IOB <= reg(15);
+   -- O_IOB_OE_L <= not reg(7)(7);
+ end process;
 
 --  p_io_ports_inreg       : process
 --  begin
