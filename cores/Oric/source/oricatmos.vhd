@@ -239,6 +239,8 @@ architecture RTL of ORIC is
   signal track_ok :  std_logic; -- 0 when disk is active else 1
 
   signal key_scroll : std_logic;
+  signal key_scroll_old : std_logic;
+  signal video_vga :std_logic;
   signal key_home : std_logic;
   signal key_end : std_logic;
   signal key_pg_up : std_logic;
@@ -525,41 +527,40 @@ begin
       CLK_x2                => clk12
       );
 
---Q
---Para scandoubler descomentar esto y comentar las directas de la ULA
-	O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2);-- when s_cmpblk_n_out = '1' else (others => '0');
-	O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2);-- when s_cmpblk_n_out = '1' else (others => '0');
-	O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2);-- when s_cmpblk_n_out = '1' else (others => '0');
 
-	O_HSYNC	<= HSync;
-	O_VSYNC	<= VSync;
+  -- select vga or rgb
+  -- vido_vga = '1' - vga, = '0' - rgb
+  video_select :process (clk24, cpu_reset_n)
+  begin
+    if cpu_reset_n = '0' then
+      video_vga <= '1';
+      key_scroll_old <= '1';
+    else
+      if rising_edge(clk24) then
+        key_scroll_old <= key_scroll;
+        if (key_scroll = '1' and key_scroll_old = '0') then
+          video_vga <= not video_vga;
+        end if;
+      end if;
+    end if;
+  end process;
+    
 
-  
 
-
--- Señales TV directas de la ULA	
-  O_NTSC <= '0';
-  O_PAL <= '1';
-
+  -- video output
+  O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) when video_vga = '1' else
+               ULA_VIDEO_R & ULA_VIDEO_R & ULA_VIDEO_R;
+  O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2) when video_vga = '1' else
+               ULA_VIDEO_G & ULA_VIDEO_G & ULA_VIDEO_G;
+  O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2) when video_vga = '1' else
+               ULA_VIDEO_B & ULA_VIDEO_B & ULA_VIDEO_B;
+  O_HSYNC   <= HSync when video_vga = '1' else
+               ULA_SYNC;
+  O_VSYNC   <= VSync when video_vga = '1' else
+               vs_int;
   -- rgb output
   O_NTSC <= '0';
   O_PAL <= '1';
-  -- O_HSYNC      <= ULA_SYNC;
-  -- O_VSYNC      <= vs_int;
-  -- O_VIDEO_R <= ULA_VIDEO_R & ULA_VIDEO_R & ULA_VIDEO_R;  
-  -- O_VIDEO_G <= ULA_VIDEO_G & ULA_VIDEO_G & ULA_VIDEO_G;
-  -- O_VIDEO_B <= ULA_VIDEO_B & ULA_VIDEO_B & ULA_VIDEO_B;
-  -- O_HSYNC      <= HSync;
-  -- O_VSYNC      <= VSync;
-  -- O_VIDEO_R <= VideoR(0) & VideoR(1) & VideoR(2) ;
-  -- O_VIDEO_G <= VideoG(0) & VideoG(1) & VideoG(2) ;
-  -- O_VIDEO_B <= VideoB(0) & VideoB(1) & VideoB(2) ;
-  -- O_VIDEO_R(2) <= VideoR(3); -- ULA_VIDEO_R;-- & ULA_VIDEO_R & ULA_VIDEO_R;  
-  -- O_VIDEO_G(2) <= VideoG(3); -- ULA_VIDEO_G;-- & ULA_VIDEO_G & ULA_VIDEO_G;
-  -- O_VIDEO_B(2) <= VideoB(3);-- ULA_VIDEO_B;-- & ULA_VIDEO_B & ULA_VIDEO_B;
-----
---fQ
-
   ------------------------------------------------------------
   -- VIA
   ------------------------------------------------------------
