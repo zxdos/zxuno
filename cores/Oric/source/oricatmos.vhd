@@ -457,6 +457,7 @@ begin
       PHI2       => ula_PHI2,
 
       -- Video
+      video_vga  => video_vga,
       R          => ULA_VIDEO_R,
       G          => ULA_VIDEO_G,
       B          => ULA_VIDEO_B,

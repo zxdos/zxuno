@@ -115,7 +115,8 @@ port (
 	                                                  -- VCC                          -- pin 24
 	                                                  -- GND                          -- pin 06
 	HSYNC      :   out std_logic;
-	VSYNC      :   out std_logic
+	VSYNC      :   out std_logic;
+        video_vga  :   in std_logic
 );
 end;
 
@@ -354,7 +355,7 @@ begin
 	hblankfr: process (CLK_24)
 	begin
           if (rising_edge(CLK_24)) then
-            if  (lCTR_H >=   0) and (lCTR_H <=  40) then
+            if  (lCTR_H >   0) and (lCTR_H <=  40) then
               lHBLANKn <= '1';
             else
               lHBLANKn <= '0';
@@ -464,7 +465,7 @@ begin
 	lALT_SEL    <= lREG_STYLE(0); -- Character set select : 0=Standard  1=Alternate
 	lDBLHGT_SEL <= lREG_STYLE(1); -- Character type select: 0=Standard  1=Double
 	lFLASH_SEL  <= lREG_STYLE(2); -- Flash select         : 0=Steady    1=Flashing
-	lFREQ_SEL   <= '0'; --  lREG_MODE(1);  -- Frequency select     : 0=60Hz      1=50Hz
+	lFREQ_SEL   <= lREG_MODE(1) when video_vga = '0' else '0';  -- Frequency select     : 0=60Hz      1=50Hz
 	lHIRES_SEL  <=  lREG_MODE(2);  -- Mode Select          : 0=Text      1=Hires 
 
 	-- Output signal for text/hires mode decode
