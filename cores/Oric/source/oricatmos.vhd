@@ -17,6 +17,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
+--use ieee.numeric_std.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -135,7 +136,8 @@ architecture RTL of ORIC is
   signal pll_locked         : std_logic := '0';
 
   -- cpu
-  signal CPU_ADDR           : std_logic_vector(15 downto 0);
+  signal CPU_ADDR           : std_logic_vector(23 downto 0);
+  signal CPU_ADDR_latch           : std_logic_vector(15 downto 0);
   signal CPU_DI             : std_logic_vector( 7 downto 0);
   signal CPU_DO             : std_logic_vector( 7 downto 0);
   signal CPU_ADDRun           : ieee.numeric_std.unsigned(15 downto 0);
@@ -147,7 +149,10 @@ architecture RTL of ORIC is
   signal ad                 : std_logic_vector(15 downto 0);
   signal NMI_INT :std_logic;
   signal RESET_INT:std_logic;
-  signal we:std_logic; -- active high write enable
+  signal cpu_sync:std_logic; -- active high write enable
+  signal display_enable:std_logic;
+  signal display_value: std_logic_vector(7 downto 0);
+  signal display_value_latch: std_logic_vector(7 downto 0);
   
   -- VIA
   signal via_pa_out_oe      : std_logic_vector( 7 downto 0);
@@ -245,14 +250,19 @@ architecture RTL of ORIC is
   signal key_end : std_logic;
   signal key_pg_up : std_logic;
   signal key_pg_down:std_logic;
-  
+function to_HexChar(Value : std_logic_vector(3 downto 0) ) return std_logic_vector  is
+  constant HEX : STRING := "0123456789ABCDEF!";
+begin
+    return std_logic_vector(ieee.numeric_std.to_unsigned(character'pos(HEX(ieee.numeric_std.to_integer(ieee.numeric_std.unsigned(Value)))),8));
+end function;
+
 begin
   -----------------------------------------------
   -- generate all the system clocks required
   -----------------------------------------------
 
 
-  NMI_INT <= I_NMI and not key_end;
+  NMI_INT <= not I_NMI; --not key_end;
   RESET_INT <= not I_RESET;
   
   inst_pll_base : PLL_BASE
@@ -315,7 +325,7 @@ begin
 
   -- Reset
   loc_reset_n <= pll_locked;
-  cpu_reset_n <= loc_reset_n and not key_home;
+  cpu_reset_n <= loc_reset_n;-- and not key_home;
   cpu_reset   <= not cpu_reset_n;
   ------------------------------------------------------------
   -- CPU 6502
@@ -332,7 +342,7 @@ begin
   --     NMI_n   => NMI_INT,
   --     SO_n    => '1',
   --     R_W_n   => cpu_rw,
-  --     Sync    => open,
+  --     Sync    => cpu_sync,
   --     EF      => open,
   --     MF      => open,
   --     XF      => open,
@@ -382,8 +392,8 @@ begin
     dbi => CPU_DI,
     dbo => CPU_DO,
     rw  => cpu_rw,
-    sync => we, -- not used
-    ab => CPU_ADDR
+    sync => cpu_sync, -- not used
+    ab => CPU_ADDR(15 downto 0)
       );
 
   inst_rom : entity work.rom_oa
@@ -405,9 +415,20 @@ begin
   SRAM_ADDR(20 downto 16) <= (others => '1');
   SRAM_WE_N <= '1' when cpu_reset_n = '0' else not ula_WE_SRAM;
   SRAM_CS_N <= '1' when cpu_reset_n = '0' else not ula_CE_SRAM;
-  
 
-  SRAM_DO <= SRAM_DQ when ula_CE_SRAM = '1' and  ula_WE_SRAM = '0' else (others => '0');
+  display_enable <= '1' when (key_home = '1') and ula_WE_SRAM = '0' and ula_CE_SRAM = '1' and ula_ad_sram >=x"BFD0" and ula_ad_sram <=x"BFD3"  and ula_PHI2='0'
+                    else '0';
+
+  display_value <= to_HexChar("00" & disk_cur_track(5 downto 4)) when ula_ad_sram = x"BFD0" else
+                   to_HexChar(disk_cur_track(3 downto 0)) when ula_ad_sram = x"BFD1" else
+                   to_HexChar(IMAGE_NUMBER_out(7 downto 4)) when ula_ad_sram = x"BFD2" else
+                   to_HexChar(IMAGE_NUMBER_out(3 downto 0));
+
+  cpu_addr_latch <= cpu_addr(15 downto 0)  when key_home = '1' and cpu_sync='1' and ula_PHI2='1';
+                   
+
+  SRAM_DO <= display_value when display_enable = '1' and ula_PHI2='0' else
+    SRAM_DQ when ula_CE_SRAM = '1' and  ula_WE_SRAM = '0' else (others => '0');
   -- inst_ram : entity work.ram48k
   --   port map(
   --     clk  => clk24,
@@ -633,10 +654,12 @@ begin
       );
 
   -- Keyboard
-  via_in(2 downto 0) <= via_out(2 downto 0);
-  via_in(3) <= '0' when ( (KEY_ROW and  not ym_o_ioa)) /= x"00"
-               else  '1';
-  via_in(7 downto 4) <= via_out(7 downto 4);
+  -- via_in(2 downto 0) <= via_out(2 downto 0);
+  -- via_in(3) <= '0' when ( (KEY_ROW and  not ym_o_ioa)) /= x"00"
+  --              else  '1';
+  -- via_in(7 downto 4) <= via_out(7 downto 4);
+
+  via_in <= x"F7" when (KEY_ROW or VIA_PA_OUT) = x"FF" else x"FF";
 
 
   ------------------------------------------------------------
