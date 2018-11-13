@@ -101,6 +101,8 @@ entity ORIC is
   SD_DAT3 : out std_logic;    -- SD Card Data 3    SD pin 1 "DAT 3/nCS"  cs P121
   SD_CMD : out std_logic;     -- SD Card Command   SD pin 2 "CMD/DataIn"mosiP119
   SD_CLK : out std_logic;     -- SD Card Clock     SD pin 5 "CLK" //sckP115
+  SD_CD : in std_logic; -- card detect
+  SD_WP : in std_logic; -- card write protect
 
   -- disk_a_on : out std_logic; -- 0 when disk is active else 1
   -- track_ok  : out std_logic; -- 0 when disk is active else 1
@@ -157,6 +159,7 @@ architecture RTL of ORIC is
   -- VIA
   signal via_pa_out_oe      : std_logic_vector( 7 downto 0);
   signal via_pa_in          : std_logic_vector( 7 downto 0);
+  signal via_pa_in_from_psg : std_logic_vector( 7 downto 0);
   signal via_pa_out         : std_logic_vector( 7 downto 0);
 --	signal via_ca2_out        : std_logic;
 --	signal via_ca2_oe_l       : std_logic;
@@ -253,7 +256,7 @@ architecture RTL of ORIC is
 function to_HexChar(Value : std_logic_vector(3 downto 0) ) return std_logic_vector  is
   constant HEX : STRING := "0123456789ABCDEF!";
 begin
-    return std_logic_vector(ieee.numeric_std.to_unsigned(character'pos(HEX(ieee.numeric_std.to_integer(ieee.numeric_std.unsigned(Value)))),8));
+    return std_logic_vector(ieee.numeric_std.to_unsigned(128+character'pos(HEX(1+ieee.numeric_std.to_integer(ieee.numeric_std.unsigned(Value)))),8));
 end function;
 
 begin
@@ -261,8 +264,7 @@ begin
   -- generate all the system clocks required
   -----------------------------------------------
 
-
-  NMI_INT <= not I_NMI; --not key_end;
+  NMI_INT <= I_NMI and not key_end;
   RESET_INT <= not I_RESET;
   
   inst_pll_base : PLL_BASE
@@ -324,7 +326,7 @@ begin
 --	CLK_EXT <= ula_phi2;
 
   -- Reset
-  loc_reset_n <= pll_locked;
+  loc_reset_n <= pll_locked and not (key_home and key_end);
   cpu_reset_n <= loc_reset_n;-- and not key_home;
   cpu_reset   <= not cpu_reset_n;
   ------------------------------------------------------------
@@ -416,16 +418,27 @@ begin
   SRAM_WE_N <= '1' when cpu_reset_n = '0' else not ula_WE_SRAM;
   SRAM_CS_N <= '1' when cpu_reset_n = '0' else not ula_CE_SRAM;
 
-  display_enable <= '1' when (key_home = '1') and ula_WE_SRAM = '0' and ula_CE_SRAM = '1' and ula_ad_sram >=x"BFD0" and ula_ad_sram <=x"BFD3"  and ula_PHI2='0'
+  display_enable <= '1' when (key_home = '1') and ula_WE_SRAM = '0' and ula_CE_SRAM = '1' and ula_ad_sram >=x"BFD0" and ula_ad_sram <=x"BFD7"  and ula_PHI2='0'
                     else '0';
 
   display_value <= to_HexChar("00" & disk_cur_track(5 downto 4)) when ula_ad_sram = x"BFD0" else
                    to_HexChar(disk_cur_track(3 downto 0)) when ula_ad_sram = x"BFD1" else
                    to_HexChar(IMAGE_NUMBER_out(7 downto 4)) when ula_ad_sram = x"BFD2" else
-                   to_HexChar(IMAGE_NUMBER_out(3 downto 0));
+                   to_HexChar(IMAGE_NUMBER_out(3 downto 0)) when ula_ad_sram = x"BFD3" else
+                   to_HexChar(cpu_addr_latch(15 downto 12)) when ula_ad_sram = x"BFD4" else
+                   to_HexChar(cpu_addr_latch(11 downto 8)) when ula_ad_sram = x"BFD5" else
+                   to_HexChar(cpu_addr_latch(7 downto 4)) when ula_ad_sram = x"BFD6" else
+                   to_HexChar(cpu_addr_latch(3 downto 0));
 
-  cpu_addr_latch <= cpu_addr(15 downto 0)  when key_home = '1' and cpu_sync='1' and ula_PHI2='1';
-                   
+  cpu_latch1:process(CLK24)
+  begin
+    if (rising_edge(CLK24)) then
+      if key_pg_down = '1' and cpu_sync='1' and ula_PHI2='1'       then
+        cpu_addr_latch <= cpu_addr(15 downto 0);
+      end if;
+    end if;
+  end process;
+                     
 
   SRAM_DO <= display_value when display_enable = '1' and ula_PHI2='0' else
     SRAM_DQ when ula_CE_SRAM = '1' and  ula_WE_SRAM = '0' else (others => '0');
@@ -654,12 +667,13 @@ begin
       );
 
   -- Keyboard
-  -- via_in(2 downto 0) <= via_out(2 downto 0);
-  -- via_in(3) <= '0' when ( (KEY_ROW and  not ym_o_ioa)) /= x"00"
-  --              else  '1';
-  -- via_in(7 downto 4) <= via_out(7 downto 4);
+  via_pa_in <= (via_pa_out and not via_pa_out_oe) or (via_pa_in_from_psg and via_pa_out_oe);
+  via_in(2 downto 0) <= via_out(2 downto 0);
+  via_in(3) <= '0' when ( (KEY_ROW and  not ym_o_ioa)) /= x"00"
+               else  '1';
+  via_in(7 downto 4) <= x"b"; --via_out(7 downto 4);
 
-  via_in <= x"F7" when (KEY_ROW or VIA_PA_OUT) = x"FF" else x"FF";
+--  via_in <= x"F7" when (KEY_ROW or VIA_PA_OUT) = x"FF" else x"FF";
 
 
   ------------------------------------------------------------
@@ -668,7 +682,7 @@ begin
   inst_psg : entity work.YM2149
     port map (
       I_DA       => via_pa_out,
-      O_DA       => via_pa_in,
+      O_DA       => via_pa_in_from_psg,
       O_DA_OE_L  => open,
       -- control
       I_A9_L     => '0',

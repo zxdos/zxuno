@@ -48,7 +48,7 @@ architecture arch of keyboard is
 
 begin
 
-  decode: process (CLK)
+  decode: process (CLK, RESETn)
   begin
     if RESETn = '0' then
       KEY_PG_UP <= '0';

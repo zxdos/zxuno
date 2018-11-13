@@ -107,22 +107,16 @@ begin
   --   If slow_clk is true, spi_clk = CLK_14M / 32 and SCLK = 223.214kHz, which
   --   is between 100kHz and 400kHz, as required for MMC compatibility.
   --
-  bufered_io : BUFG port map (I => spi_clk_sig, O => spi_clk);
-  var_clkgen : process (CLK_14M, slow_clk)
-    variable var_clk : unsigned(4 downto 0) := (others => '0');
+--  bufered_io : BUFG port map (I => spi_clk_sig, O => spi_clk);
+  var_clkgen : process (CLK_14M)
   begin
-    if slow_clk then
-      spi_clk_sig <= var_clk(4);
-      if rising_edge(CLK_14M) then
-        var_clk := var_clk + 1;
-      end if;
-    else
-      spi_clk_sig <= CLK_14M;
+    if rising_edge(CLK_14M) then
+      spi_clk_sig <= not spi_clk_sig;
     end if;
   end process;
-
+  spi_clk <= spi_clk_sig;
   SCLK <= sclk_sig;
-  --
+  
   -----------------------------------------------------------------------------
  
  

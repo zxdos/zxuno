@@ -35,7 +35,7 @@ signal idlcnt	: std_logic_vector(15 downto 0);
 -- Shifting
 signal bitcnt	: std_logic_vector(3 downto 0);
 signal cready	: std_logic;
-signal char		: std_logic_vector(10 downto 0);
+signal char		: std_logic_vector(10 downto 1);
 
 -- Decodage
 signal brkcode		: std_logic;
@@ -77,7 +77,7 @@ begin
 
 		-- Bit-shifting
 		if shift = '1' then
-			char <= PS2DATA & char(10 downto 1);
+			char <= PS2DATA & char(10 downto 2);
 
 			if bitcnt = x"A" then
 				bitcnt <= x"0";
