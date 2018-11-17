@@ -200,7 +200,13 @@ begin
       if (p2_h_t1 = '0') and (I_P2_H = '1') then
         phase <= "11";
       else
-        phase <= phase + "1";
+        case phase is
+          when "00" => phase <= "01";
+          when "01" => phase <= "10";
+          when "10" => phase <= "11";
+          when "11" => phase <= "00";
+          when others => null;
+        end case;
       end if;
     end if;
   end process;

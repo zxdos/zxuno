@@ -295,7 +295,10 @@ begin
 	CLK_1_INT <= ph(2);
 
 	-- VIA 6522 clock
-	CLK_4_INT     <= c(0) or c(1) or c(2) or c(6) or c(7) or c(8) or c(12) or c(13) or c(14) or c(18) or c(19) or c(20);
+	CLK_4_INT     <= c(23) or c(0) or c(1)
+                         or c(5) or c(6) or c(7)
+                         or c(11) or c(12) or c(13)
+                         or c(17) or c(18) or c(19);
 
 --	LD_REG_0      <= isAttrib and c(5);
 
@@ -413,6 +416,8 @@ begin
                           IsATTRIB  <= not (DB_INT(6) or DB_INT(5)); -- 1 = attribute, 0 = not an attribute
                           lATTRIBHOLD <= DB_INT(6 downto 0);
                           lInv_hold <= DB_INT(7);
+                        elsif  (ATTRIB_DEC = '1') then
+                          IsATTRIB <= '0';
 			end if;
 		end if;
 	end process;
