@@ -80,7 +80,6 @@ library ieee;
 entity ula is
 port (
 	RESETn     :   in  std_logic;                     -- RESET master
-	CLK_4      :   out std_logic;                     -- 4 MHz internal
 
 	CLK        :   in  std_logic;                     -- 24 MHz                       -- pin 07
 	PHI2       :   out std_logic;                     -- 1 MHz CPU & system           -- pin 14
@@ -124,7 +123,6 @@ architecture RTL of ula is
 
 	-- Signal CLOCK
 	signal CLK_24        : std_logic;                    -- CLOCK 24 MHz internal
-	signal CLK_4_INT     : std_logic;                    -- CLOCK  4 MHz internal
 	signal CLK_1_INT     : std_logic;                    -- CLOCK  1 MHz internal
 	signal CLK_PIXEL_INT : std_logic;                    -- CLOCK PIXEL  internal 
 	signal CLK_FLASH     : std_logic;                    -- CLOCK FLASH  external
@@ -223,7 +221,6 @@ begin
 	CSIOn        <= CSIOn_INT;
 	CSROMn       <= CSROMn_INT;
 	CSRAMn       <= CSRAMn_INT;
-	CLK_4        <= CLK_4_INT;
 
 	------------------
 	-- SRAM signals --
@@ -294,11 +291,6 @@ begin
 	-- CPU clock --
 	CLK_1_INT <= ph(2);
 
-	-- VIA 6522 clock
-	CLK_4_INT     <= c(23) or c(0) or c(1)
-                         or c(5) or c(6) or c(7)
-                         or c(11) or c(12) or c(13)
-                         or c(17) or c(18) or c(19);
 
 --	LD_REG_0      <= isAttrib and c(5);
 

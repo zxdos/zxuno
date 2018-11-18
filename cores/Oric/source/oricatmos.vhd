@@ -197,7 +197,6 @@ architecture RTL of ORIC is
   signal ula_OE_SRAM        : std_logic;
   signal ula_WE_SRAM        : std_logic;
   signal ula_LE_SRAM        : std_logic;
-  signal ula_CLK_4          : std_logic;
   signal ula_VIDEO_R        : std_logic;
   signal ula_VIDEO_G        : std_logic;
   signal ula_VIDEO_B        : std_logic;
@@ -460,7 +459,6 @@ begin
     port map (
       RESETn     => cpu_reset_n,
       CLK        => clk24,
-      CLK_4      => ula_CLK_4,
 
       RW         => cpu_rw,
       ADDR       => CPU_ADDR(15 downto 0),
@@ -641,7 +639,7 @@ begin
       RESET_L       => cpu_reset_n,
       I_P2_H        => ula_phi2,
       ENA_4         => '1',
-      CLK           => ula_CLK_4
+      CLK           => CLK24 
       );
 
   ------------------------------------------------------------

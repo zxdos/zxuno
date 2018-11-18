@@ -191,22 +191,18 @@ architecture RTL of M6522 is
 
   signal final_irq         : std_logic;
 begin
-  p_phase : process
+  p_phase : process(RESET_L, CLK)
   begin
-    -- internal clock phase
-    wait until rising_edge(CLK);
-    if (ENA_4 = '1') then
+    if rising_edge(CLK) then
       p2_h_t1 <= I_P2_H;
-      if (p2_h_t1 = '0') and (I_P2_H = '1') then
-        phase <= "11";
-      else
-        case phase is
-          when "00" => phase <= "01";
-          when "01" => phase <= "10";
-          when "10" => phase <= "11";
-          when "11" => phase <= "00";
-          when others => null;
-        end case;
+      if (ENA_4 = '1') then
+        if (p2_h_t1 = '0') and (I_P2_H = '1') then
+            phase <= "11";
+        elsif (p2_h_t1 = '1') and (I_P2_H = '0') then
+          phase <= "00";
+        else
+          phase <= "01";
+        end if;
       end if;
     end if;
   end process;
@@ -649,7 +645,7 @@ begin
   begin
     wait until rising_edge(CLK);
     if (ENA_4 = '1') then
-      if (phase = "01") then -- leading edge p2_h
+      if (phase = "00") then -- leading edge p2_h
         t2_pb6    <= I_PB(6);
         t2_pb6_t1 <= t2_pb6;
       end if;
