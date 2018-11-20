@@ -121,6 +121,11 @@ architecture RTL of ORIC is
 
   -- Resets
   signal loc_reset_n        : std_logic; --active low
+  signal I_RESET_db        : std_logic; --debounsed reset
+  signal I_NMI_db        : std_logic; -- debounsed reset
+  signal loc_reset_sig        : std_logic; --active low
+  signal loc_reset_p1        : std_logic; 
+  signal loc_reset_p2        : std_logic; 
   signal cpu_reset_n        : std_logic; --active low
   signal cpu_reset        : std_logic; --active low
   -- Internal clocks
@@ -263,8 +268,8 @@ begin
   -- generate all the system clocks required
   -----------------------------------------------
 
-  NMI_INT <= I_NMI and not key_end;
-  RESET_INT <= not I_RESET;
+  NMI_INT <= I_NMI_db and not key_end;
+  RESET_INT <= not I_RESET_db;
   
   inst_pll_base : PLL_BASE
     generic map (
@@ -312,7 +317,7 @@ begin
       LOCKED   => pll_locked, -- Active high PLL lock signal
       CLKFBIN  => CLKFB,      -- Clock feedback input
       CLKIN    => CLK_50,     -- Clock input
-      RST      => RESET_INT     -- Asynchronous PLL reset
+      RST      => '0' --RESET_INT     -- Asynchronous PLL reset
       );
 
 
@@ -321,12 +326,51 @@ begin
   clk6 <= clkout5;
 
   ------------------------------------------------
+  inst_debounce_reset : entity work.debounce
+    port map (
+      clk => clk6,
+      button => I_RESET,
+      result => I_RESET_db
+      );
+  inst_debounce_nmi : entity work.debounce
+    port map (
+      clk => clk6,
+      button => I_NMI,
+      result => I_NMI_db
+      );
 
 --	CLK_EXT <= ula_phi2;
-
+  loc_reset_sig <= I_RESET_db and pll_locked and  not (key_home and key_end) ;
+  reset_pr_1: process (clk6)
+  begin
+    if (rising_edge(clk6)) then
+      loc_reset_p1 <= loc_reset_sig;
+      loc_reset_p2 <= loc_reset_p1;
+    end if;
+  end process;
+  
+      
   -- Reset
-  loc_reset_n <= pll_locked and not (key_home and key_end);
-  cpu_reset_n <= loc_reset_n;-- and not key_home;
+  loc_reset_n <= loc_reset_p2 and loc_reset_sig ;
+  -- real mos needs running clock we start clock with loc_reset
+  -- and then dealy the cpu reset clock
+  cpu_delay_reset:process(clk6)
+    variable a:integer;
+  begin
+    if (rising_edge(clk6))then
+      if (loc_reset_n = '0') then
+        a:= 0;
+        cpu_reset_n <= '0';
+      elsif(a <6000*50) then
+        a:= a + 1;
+        cpu_reset_n <= '0';
+      else
+        cpu_reset_n <= '1';
+      end if;          
+    end if;
+  end process;
+    
+  --  cpu_reset_n <= loc_reset_n;-- and not key_home;
   cpu_reset   <= not cpu_reset_n;
   ------------------------------------------------------------
   -- CPU 6502
@@ -457,7 +501,7 @@ begin
   ------------------------------------------------------------
   inst_ula : entity work.ULA
     port map (
-      RESETn     => cpu_reset_n,
+      RESETn     => loc_reset_n,
       CLK        => clk24,
 
       RW         => cpu_rw,
@@ -648,7 +692,7 @@ begin
   inst_key : entity work.keyboard
     port map(
       CLK		=> clk24,
-      RESETn	=> loc_reset_n, -- active high reset
+      RESETn	=> pll_locked, -- active high reset
 
       PS2CLK	=> PS2CLK1,
       PS2DATA	=> PS2DAT1,

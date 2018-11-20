@@ -609,32 +609,33 @@ begin
       --end if;
   end process;
 
-  p_timer1 : process
+  p_timer1 : process(CLK, RESET_L)
   begin
-    wait until rising_edge(CLK);
-    if (ENA_4 = '1') then
-      if t1_load_counter or (t1_reload_counter and phase = "11") then
-        t1c( 7 downto 0) <= r_t1l_l;
-        t1c(15 downto 8) <= r_t1l_h;
-      elsif (phase="11") then
-        t1c <= t1c - "1";
-      end if;
+    if RESET_L = '0' then
+      t1c_active <= false;
+      t1_irq <= '0';
+    elsif rising_edge(CLK) then
+      if (ENA_4 = '1') then
+        if t1_load_counter or (t1_reload_counter and phase = "11") then
+          t1c( 7 downto 0) <= r_t1l_l;
+          t1c(15 downto 8) <= r_t1l_h;
+        elsif (phase="11") then
+          t1c <= t1c - "1";
+        end if;
 
-      if t1_load_counter or t1_reload_counter then
-        t1c_active <= true;
-      elsif t1c_done then
-        t1c_active <= false;
-      end if;
-      if RESET_L = '0' then
-        t1c_active <= false;
-      end if;
+        if t1_load_counter or t1_reload_counter then
+          t1c_active <= true;
+        elsif t1c_done then
+          t1c_active <= false;
+        end if;
 
-      t1_toggle <= '0';
-      if t1c_active and t1c_done then
-        t1_toggle <= '1';
-        t1_irq <= '1';
-      elsif RESET_L = '0' or t1_w_reset_int or t1_r_reset_int or (clear_irq(6) = '1') then
-        t1_irq <= '0';
+        t1_toggle <= '0';
+        if t1c_active and t1c_done then
+          t1_toggle <= '1';
+          t1_irq <= '1';
+        elsif  t1_w_reset_int or t1_r_reset_int or (clear_irq(6) = '1') then
+          t1_irq <= '0';
+        end if;
       end if;
     end if;
   end process;
@@ -662,46 +663,47 @@ begin
       --end if;
   end process;
 
-  p_timer2 : process
+  p_timer2 : process(CLK, RESET_L)
     variable ena : boolean;
   begin
-    wait until rising_edge(CLK);
-    if (ENA_4 = '1') then
-      if (r_acr(5) = '0') then
-        ena := true;
-      else
-        ena := (t2_pb6_t1 = '1') and (t2_pb6 = '0'); -- falling edge
-      end if;
-
-      if t2_load_counter
-      --  or (t2_reload_counter and phase = "11")
-      then
-      -- not sure if t2c_reload should be here. Does timer2 just continue to
-      -- count down, or is it reloaded ? Reloaded makes more sense if using
-      -- it to generate a clock for the shift register.
-        t2c( 7 downto 0) <= r_t2l_l;
-        t2c(15 downto 8) <= r_t2l_h;
-      else
-        if (phase="11") and ena then -- or count mode
-            t2c <= t2c - "1";
+    if RESET_L = '0' then
+      t2_irq <= '0';
+      t2c_active <= false;
+    elsif rising_edge(CLK) then
+      if (ENA_4 = '1') then
+        if (r_acr(5) = '0') then
+          ena := true;
+        else
+          ena := (t2_pb6_t1 = '1') and (t2_pb6 = '0'); -- falling edge
         end if;
-      end if;
 
-      t2_sr_ena <= (t2c(7 downto 0) = x"00") and (phase = "11");
+        if t2_load_counter
+        --  or (t2_reload_counter and phase = "11")
+        then
+          -- not sure if t2c_reload should be here. Does timer2 just continue to
+          -- count down, or is it reloaded ? Reloaded makes more sense if using
+          -- it to generate a clock for the shift register.
+          t2c( 7 downto 0) <= r_t2l_l;
+          t2c(15 downto 8) <= r_t2l_h;
+        else
+          if (phase="11") and ena then -- or count mode
+            t2c <= t2c - "1";
+          end if;
+        end if;
 
-      if t2_load_counter then
-        t2c_active <= true;
-      elsif t2c_done then
-        t2c_active <= false;
-      end if;
-      if RESET_L = '0' then
-		t2c_active <= false;
-	  end if;
+        t2_sr_ena <= (t2c(7 downto 0) = x"00") and (phase = "11");
 
-      if t2c_active and t2c_done then
-        t2_irq <= '1';
-      elsif RESET_L = '0' or t2_w_reset_int or t2_r_reset_int or (clear_irq(5) = '1') then
-        t2_irq <= '0';
+        if t2_load_counter then
+          t2c_active <= true;
+        elsif t2c_done then
+          t2c_active <= false;
+        end if;
+
+        if t2c_active and t2c_done then
+          t2_irq <= '1';
+        elsif t2_w_reset_int or t2_r_reset_int or (clear_irq(5) = '1') then
+          t2_irq <= '0';
+        end if;
       end if;
     end if;
   end process;

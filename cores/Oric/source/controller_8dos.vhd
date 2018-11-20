@@ -50,7 +50,7 @@ architecture imp of controller_8dos is
   signal disk_D_OUT  : std_logic_vector(7 downto 0);
 
   -- connection between spi_controller & disk_ii
-  signal IMAGE_NUMBER : unsigned(9 downto 0);
+  signal IMAGE_NUMBER : unsigned(9 downto 0) := "0000000001";
   signal TRACK : unsigned(5 downto 0);
   signal TRACK_ADDR : unsigned(13 downto 0);
   signal TRACK_RAM_ADDR : unsigned(13 downto 0);
@@ -68,23 +68,19 @@ architecture imp of controller_8dos is
 begin
   IMAGE_NUMBER_OUT <= std_logic_vector(IMAGE_NUMBER);
 
-  imgnum:process  (CLK_24)
+  imgnum:process  (CLK_24, RESETn)
     constant maxcount:integer := 1000000000;
   begin
     if (rising_edge(CLK_24)) then
-      if (RESETn = '0') then
-        IMAGE_NUMBER <= "0000000001";
-      else
-        IMAGE_UP_old <= IMAGE_UP_cur;
-        IMAGE_UP_cur <= IMAGE_UP;
-        IMAGE_DOWN_old <= IMAGE_DOWN_cur;
-        IMAGE_DOWN_cur <= IMAGE_DOWN;
-        if (IMAGE_UP_cur = '0' and IMAGE_UP_old = '1') then
-          IMAGE_NUMBER <= IMAGE_NUMBER + 1;
-        end if;
-        if (IMAGE_DOWN_cur = '0' and IMAGE_DOWN_old = '1') and IMAGE_NUMBER >0 then
-          IMAGE_NUMBER <= IMAGE_NUMBER - 1;
-        end if;
+      IMAGE_UP_old <= IMAGE_UP_cur;
+      IMAGE_UP_cur <= IMAGE_UP;
+      IMAGE_DOWN_old <= IMAGE_DOWN_cur;
+      IMAGE_DOWN_cur <= IMAGE_DOWN;
+      if (IMAGE_UP_cur = '0' and IMAGE_UP_old = '1') then
+        IMAGE_NUMBER <= IMAGE_NUMBER + 1;
+      end if;
+      if (IMAGE_DOWN_cur = '0' and IMAGE_DOWN_old = '1') and IMAGE_NUMBER >0 then
+        IMAGE_NUMBER <= IMAGE_NUMBER - 1;
       end if;
     end if;
   end process;

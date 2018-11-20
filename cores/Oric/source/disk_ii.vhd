@@ -268,22 +268,20 @@ begin
   end process;
 
   -- Go to the next byte when the disk is accessed or if the counter times out
-  read_head : process (CLK)
+  read_head : process (CLK, RESETn)
   variable byte_delay : unsigned(8 downto 0);  -- Accounts for disk spin rate
   begin
-    if rising_edge(CLK) then
-      if RESETn = '0' then
-        track_byte_addr <= (others => '0');
-        byte_delay := (others => '0');
-      else
-        byte_delay := byte_delay - 1;
-        if (read_disk = '1' and rising_PHI_2 = '1') then --or byte_delay = 0 then
-          byte_delay := "000000100";
-          if track_byte_addr = X"33FE" then
-            track_byte_addr <= (others => '0');
-          else
-            track_byte_addr <= track_byte_addr + 1;
-          end if;
+    if RESETn = '0' then
+      track_byte_addr <= (others => '0');
+      byte_delay := (others => '0');
+    elsif rising_edge(CLK) then
+      byte_delay := byte_delay - 1;
+      if (read_disk = '1' and rising_PHI_2 = '1') then --or byte_delay = 0 then
+        byte_delay := "000000100";
+        if track_byte_addr = X"33FE" then
+          track_byte_addr <= (others => '0');
+        else
+          track_byte_addr <= track_byte_addr + 1;
         end if;
       end if;
     end if;

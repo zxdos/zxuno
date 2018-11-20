@@ -127,7 +127,7 @@ begin
   --   Implements the combined "SD Card init", "track read" and "command" FSMs.
   --
   TRACK_GOOD <= '1' when current_track = track and current_image = image and write_addr = TRACK_SIZE else '0';
-  sd_fsm : process(spi_clk)
+  sd_fsm : process(spi_clk, RESETn)
   subtype cmd_t is std_logic_vector(5 downto 0);
   constant CMD0   : cmd_t := std_logic_vector(to_unsigned(0, 6));
   constant CMD1   : cmd_t := std_logic_vector(to_unsigned(1, 6));
@@ -142,27 +142,27 @@ begin
   variable lba : unsigned(31 downto 0);
 
   begin
-    if rising_edge(spi_clk) then
-      ram_we <= '0';
-      if RESETn = '0' then
-        state <= POWER_UP;
-        -- Deliberately out of range
-        current_track <= (others => '1');
-        current_image <= (others => '1');
-        sclk_sig <= '0';
-        slow_clk <= true;
-        CS_N <= '1';
-        command <= (others => '0');
-        argument <= (others => '0');
-        crc7 <= (others => '0');
-        command_out <= (others => '1');
-        counter := TO_UNSIGNED(0, 8);
-        byte_counter := TO_UNSIGNED(0, BLOCK_BITS);
-        write_addr <= (others => '0');
-        high_capacity <= false;
-        version <= MMC;
-        lba := (others => '0');
-      else
+    if RESETn = '0' then
+      state <= POWER_UP;
+      -- Deliberately out of range
+      current_track <= (others => '1');
+      current_image <= (others => '1');
+      sclk_sig <= '0';
+      slow_clk <= true;
+      CS_N <= '1';
+      command <= (others => '0');
+      argument <= (others => '0');
+      crc7 <= (others => '0');
+      command_out <= (others => '1');
+      counter := TO_UNSIGNED(0, 8);
+      byte_counter := TO_UNSIGNED(0, BLOCK_BITS);
+      write_addr <= (others => '0');
+      high_capacity <= false;
+      version <= MMC;
+      lba := (others => '0');
+    else
+      if rising_edge(spi_clk) then
+        ram_we <= '0';
         case state is
 
           ---------------------------------------------------------------------
@@ -476,7 +476,7 @@ begin
               end if;
             end if;
             sclk_sig <= not sclk_sig;
-                        
+            
 --          when others => null;
         end case;
       end if;

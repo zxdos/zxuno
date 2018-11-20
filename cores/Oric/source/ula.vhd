@@ -365,8 +365,10 @@ begin
 	lRELOAD_SEL <= '1' when (lCTR_H >=  49) else '0';
 
 	-- Vertical Synchronisation
-	lVSYNC50n   <= '0' when (lCTR_V >= 258)  else '1'; -- 50Hz
-	lVSYNC60n   <= '0' when (lCTR_V >= 241)  else '1'; -- 60Hz
+        lVSYNC50n   <= '0' when (lCTR_V >= 258) and (lCTR_V <= 259) else '1'; -- 50Hz
+        lVSYNC60n   <= '0' when (lCTR_V >= 241) and (lCTR_V <= 242) else '1'; -- 60Hz
+	-- lVSYNC50n   <= '0' when (lCTR_V >= 258)  else '1'; -- 50Hz
+	-- lVSYNC60n   <= '0' when (lCTR_V >= 241)  else '1'; -- 60Hz
 	lVSYNCn     <= lVSYNC50n when lFREQ_SEL='1' else lVSYNC60n;
 
 	-- Vertical Blank
@@ -436,13 +438,13 @@ begin
 
 	u_ld_reg: process(CLK_24)
 	begin
-	  if rising_edge(CLK_24) then
-            if (RESET_INT = '1') then
-              lREG_INK   <= (others=>'1');
-              lREG_STYLE <= (others=>'0');
-              lREG_PAPER <= (others=>'0');
-              lREG_MODE  <= (others=>'0');
-            elsif (lRELOAD_SEL = '1') then
+          if (RESET_INT = '1') then
+            lREG_INK   <= (others=>'1');
+            lREG_STYLE <= (others=>'0');
+            lREG_PAPER <= (others=>'0');
+            lREG_MODE  <= (others=>'0');
+          elsif rising_edge(CLK_24) then
+            if (lRELOAD_SEL = '1') then
               lREG_INK   <= (others=>'1');
               lREG_STYLE <= (others=>'0');
               lREG_PAPER <= (others=>'0');
@@ -455,7 +457,7 @@ begin
                 when others => null;
               end case;
             end if;
-	  end if;
+          end if;
 	end process;
 
 	-- selector bits in mode/style registers
