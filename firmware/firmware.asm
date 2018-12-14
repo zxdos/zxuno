@@ -269,8 +269,9 @@ start0  ld      a, (outvid)
         rrca
         ld      a, h
         adc     a, a
-        or      $80
-        ld      (scnbak), a     ; lo pongo a 14Mhz
+        or      $c0
+        ld      (scnbak), a
+        sub     $40             ; lo pongo a 14Mhz
         out     (c), a
         ld      de, fincad-1    ; descomprimo cadenas
         ld      hl, sdtab-1
