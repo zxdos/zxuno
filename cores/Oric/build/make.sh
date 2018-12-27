@@ -5,5 +5,5 @@ export ruta_ucf=../source/oric
 export ruta_bat=../../
 "$ruta_bat"genxst.sh
 #"$ruta_bat"generar.sh v2_v3 ZZ3
-"$ruta_bat"generar.sh v4 ZX1
+"$ruta_bat"generar.sh v4_my ZX1
 #"$ruta_bat"generar.sh Ap ZZA
