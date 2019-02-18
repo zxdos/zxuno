@@ -1,4 +1,4 @@
-                output  ROMSBACK
+                output  BACK32M
 
                 include zxuno.inc
 
@@ -13,7 +13,19 @@
                 call    Print
                 dz      'ROM not rooted'
                 ret
-Nonlock         ld      a, scandbl_ctrl
+Nonlock         wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, $9f  ; jedec id
+                in      a, (c)
+                in      a, (c)
+                in      a, (c)
+                in      a, (c)
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                sub     $19
+                jr      z, Goodflsh
+                call    Print
+                dz      'Incorrect flash IC'
+                ret
+Goodflsh        ld      a, scandbl_ctrl
                 dec     b
                 out     (c), a
                 inc     b
@@ -42,44 +54,11 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'Can\'t open ROMS.ZX1'
+                dz      'Can\'t open FLASH.ZX2'
                 ret
 FileFound       call    Print
-                db      'Backing up ROMS.ZX1 to SD', 13
-                dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
-                wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, $9f  ; jedec id
-                in      a, (c)
-                in      a, (c)
-                in      a, (c)
-                in      a, (c)
-                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                sub     $19
-                jr      nz, ZX1
-                ld      ix, $1d40
-                ld      iy, $0000
-                jr      ZX2cont
-ZX1             ld      ix, $2d40
-                ld      iy, $34c0
-ZX2cont         ld      de, $8000
-                ld      hl, $0060
-                ld      a, $11
-                call    rdflsh
-                ld      hl, $8000
-                ld      bc, $1041
-handle          ld      a, 0
-                esxdos  F_WRITE
-                ld      hl, $00c0
-                jr      c, tError
-Bucle           ld      a, ixl
-                dec     a
-                and     $03
-                jr      nz, punto
-                ld      a, 'o'
-                rst     $10
-punto           ld      a, ixl
-                cp      ixh
-                jr      nz, o29roms
+                dz      'Backing up FLASH.ZX2 to SD', 13
+                call    write16m
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
@@ -88,30 +67,10 @@ punto           ld      a, ixl
                 ld      l, 1
                 out     (c), l
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                push    iy
-                pop     hl
-o29roms         ld      de, $8000
-                ld      a, $40
-                call    rdflsh
-                ld      de, $0040
-                add     hl, de
-                push    hl
-                ld      hl, $8000
-                ld      bc, $4000
-                ld      a, (handle+1)
-                esxdos  F_WRITE
-                pop     hl
-                jr      nc, ReadOK
-tError          call    Print
-                dz      'Write Error'
-                ret
-ReadOK          dec     ixl
-                jr      nz, Bucle
-                ld      a, (handle+1)
+                call    write16m
                 esxdos  F_CLOSE
                 call    Print
-                dz      13, 'Backup complete', 13
-                ld      iy, $5c3a
+                dz      13, 'Backup complete'
 wrear0          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
@@ -119,6 +78,32 @@ wrear0          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $c5  ; envío wrear
                 out     (c), 0
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                ret
+
+write16m        ld      hl, $0000
+Bucle           push    hl
+                ld      de, $8000
+                ld      a, $40
+                call    rdflsh
+                add     hl, hl
+                add     hl, hl
+                ld      a, h
+                and     $3f
+                jr      nz, punto
+                ld      a, 'o'
+                rst     $10
+punto           ld      hl, $8000
+                ld      bc, $4000
+handle          ld      a, 0
+                esxdos  F_WRITE
+                pop     hl
+                jr      nc, WriteOK
+                call    Print
+                dz      'Write Error'
+                ret
+WriteOK         ld      de, $0040
+                adc     hl, de
+                jr      nc, Bucle
                 ret
 
 Print           pop     hl
@@ -182,4 +167,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'ROMS.ZX1'
+FileName        dz      'FLASH.ZX2'
