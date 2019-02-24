@@ -1,0 +1,79 @@
+Archivo ROM             CRC(ZIP)  Nombre ROM
+---------------------------------------------------------------------------------------
+ROMs de 16K  
+  48.rom                DDEE531F  Original del Spectrum 16K/48K
+  48-beckman.rom        A8A41DA5  Escandinava hecha por Beckman Innovation AB
+  48-busysoft.rom       1511CDDB  Modificada por Busy Soft v1.18
+  48-busysoft-140.rom   07017C6D  Modificada por Busy Soft v1.40
+  48-groot.rom          ABF18C45  Modificada por Henk de Groot
+  48-imc.rom            D1BE99EE  Modificada por Ian Collier
+  48-jgh.rom            F6713813  Modificada por Jonathan Harston v0.72
+  48-plus4.rom          7E0F47CB  Modificada por ????
+  48-simulator.rom      996BC458  Modificada para ZX Spectrum Simulator
+  48-russian.rom        CEB4005D  Modificada para ZX Emulator
+  48-specem.rom         705192C7  Modificada como ROM1 de 128K en SpecEm
+  80-lec.rom            5B5C92B1  Modificada para un Spectrum expandido a 80K
+  deutsch.rom           1A9190F4  Traducida al alemán por Andrew Owen
+  gw03v33.rom           3705A9AD  Gosh Wonderful v1.33 por Geoff Wearmouth
+  inves.rom             8FF7A4D1  Clon español Inves Spectrum +
+  leches.rom            43DF1282  CargandoLeches easy/resetplay/pokemon
+  lg18v07.rom           B609E85C  Looking Glass ROM 1.07 por Geoff Wearmouth
+  pokemon48.rom         441FB9BC  Pokemon
+  seachange.rom         73B4057A  Sea Change por Geoff Wearmouth
+  sinleches.rom         6E58F131  SinLeches
+  tc2048.rom            F1B5FA67  Timex 2048
+  testrom48.rom         E1EA7894  Test ROM McLeod
+  tk90x.rom             3E785F6F  Clon brasileño TK90X
+  tk95.rom              17368E07  Clon brasileño TK95
+
+ROMs de 32K
+  128en.rom             2CBE8995  Original 128K inglesa
+  128es.rom             0437B160  Original 128K española
+  BBCBasic.rom          4B14EA53  BBC Basic
+  derbyp.rom            7C656043  Derby+
+  jupace.rom            92C967B0  Jupiter Ace Emulator
+  pentagon.rom          AA1CE4BD  Pentagon 128
+  plus2en.rom           E7A517DC  Original +2 inglesa
+  plus2es.rom           5660F4B4  Original +2 española
+  plus2fr.rom           8F769DE7  Original +2 francesa
+  se.rom                1622E3CD  SE Basic IV 4.0 Anya por Andrew Owen
+  tc2068.rom            50D3D9D2  Timex 2068
+  zx80.rom              9C806204  ZX80 Emulator
+  zx81.rom              9916C5F3  ZX81 Emulator
+
+ROMs de 64K
+  dvmen3eE.rom          51516841  +3e EN 1.43
+  next.rom              531B37DD  ZX Next +3e 1.53
+  plus3en40.rom         96E3C17A  Original +2A/+3 inglesa 4.0
+  plus3en40divmmc.rom   A2441D01  Modificada +3e inglesa 4.0 soporte DivMMC
+  plus3en40zxmmc.rom    BAF9DEDA  Modificada +3e inglesa 4.0 soporte ZXMMC
+  plus3en41.rom         BE0D9EC4  Original +2A/+3 inglesa 4.1
+  plus3es40.rom         BCD3924E  Original +2A/+3 española 4.0
+  plus3es40zxmmc.rom    13202ED9  Modificada +3e española 4.0 soporte ZXMMC
+  plus3es41.rom         0ADE13F8  Original +2A/+3 española 4.1
+  plus3es143.rom        D52BB245  +3e ES 1.43
+              
+Juegos de cartucho de 16K
+  Backgammon.rom        40E78B48  Backgammon (Psion 1983)
+  Chess.rom             08C6A8C6  Chess (Psion & Mikro Gen 1983)
+  Cookie.rom            7108E9A8  Cookie (Ultimate 1983)
+  Deathchase.rom        144EF070  Deathchase (Micromega 1983) adaptación juego 16K AntonioVillena
+  Gyruss.rom            0DD3BCEB  Gyruss (Parker Software 1984)
+  HoraceSpiders.rom     8CE28FFE  Horace & the Spiders (Psion 1983)
+  HungryHorace.rom      BEF35699  Hungry Horace (Psion & Melbourne House 1982)
+  JetPac.rom            1D194E5B  Jet Pac (Ultimate 1983)
+  JetSetWilly.rom       3CDDE27A  Jet Set Willy (Software Projects Ltd 1984) adaptación juego 48K AntonioVillena
+  LalaPrologue.rom      6BEDB1E5  Lala Prologue (Ubhres Productions 2010) adaptación juego 48K AntonioVillena
+  LocoMotion.rom        33B8AE50  Loco Motion (Amazon Software 1984)
+  ManicMiner.rom        6D851F07  ManicMiner (Bug-Byte Software Ltd 1983) adaptación juego 48K AntonioVillena
+  MiscoJones.rom        8D6B43C5  Misco Jones (Radastan 2013) adaptación juego 48K AntonioVillena
+  PanamaJoe.rom         FF8D7DC3  Montezuma's Revenge (Parker Software 1984)
+  Planetoids.rom        06E43FA2  Planetoids (Psion 1982)
+  Popeye.rom            85C189C1  Popeye (Parker Software 1984)
+  Pssst.rom             464CD4F6  Pssst (Ultimate 1983)
+  QBert.rom             5DE868DB  QBert (Parker Software 1984)
+  ReturnJedi.rom        5F5BF622  Return Of The Jedi - Death Star Battle (Parker Software 1984)
+  ShadowUnicorn.rom     7085A0FD  Shadow of the Unicorn ROM (Sólo cargador) (Ross, Fraser 2001)
+  SpaceRaiders.rom      A570BD3D  Space Raiders (Psion 1982)
+  StarWars.rom          732C6F5D  Star Wars (Parker Software 1984)
+  TranzAm.rom           03DA9BE7  Tranz Am (Ultimate 1983)
