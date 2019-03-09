@@ -6,7 +6,7 @@ GenRom xdnlh17  "Inves Spectrum+"      roms\inves.rom        inves.tap
 GenRom xdnlh17  "Microdigital TK95"    roms\tk95.rom         tk95.tap
 GenRom xdnlh17  "Looking Glass 1.07"   roms\lg18v07.rom      lg18v07.tap
 GenRom xdnmlh17 "Timex Computer 2048"  roms\tc2048.rom       tc2048.tap
-GenRom xdnmh1   "Timex Computer 2068"  roms\tc2068.rom       tc2068.tap
+GenRom xmh1     "Timex Computer 2068"  roms\tc2068.rom       tc2068.tap
 GenRom xpch1    "Pentagon 128"         roms\pentagon.rom     pentagon.tap
 GenRom xdlh17   "Pokemon"              roms\pokemon.rom      pokemon.tap
 GenRom xdnlh17  "Gosh Wonderful v1.33" roms\gw03v33.rom      gw03v33.tap
