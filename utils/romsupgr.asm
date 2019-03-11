@@ -4,7 +4,8 @@
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
-Main            ld      bc, zxuno_port
+                call    wrear0
+                dec     b
                 out     (c), 0
                 inc     b
                 in      f, (c)
@@ -43,11 +44,27 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 call    Print
                 dz      'File ROMS.ZX1 not found'
                 ret
-FileFound       call    Print
+FileFound       wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, $9f  ; jedec id
+                in      a, (c)
+                in      a, (c)
+                in      a, (c)
+                in      a, (c)
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                sub     $19
+                jr      nz, ZX1
+                call    Print
+                db      'Upgrading ROMS.ZX1 from SD', 13
+                dz      '[           ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
+                ld      ix, $0a2c
+                ld      iy, $0000
+                jr      ZX2cont
+ZX1             call    Print
                 db      'Upgrading ROMS.ZX1 from SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
-                ld      ixl, 64
-                ld      de, $8000
+                ld      ix, $2e40
+                ld      iy, $34c0
+ZX2cont         ld      de, $8000
                 ld      hl, $0060
                 ld      a, $20
                 call    rdflsh
@@ -88,16 +105,33 @@ ReadOK          ld      a, $40
                 call    wrflsh
                 inc     de
                 ld      a, ixl
-                cp      46
-                jr      nz, o45roms
-                ld      de, $34c0
-o45roms         exx
+                cp      ixh
+                jr      nz, o10roms
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, 6    ; envío write enable
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, $c5  ; envío wrear
+                ld      l, 1
+                out     (c), l
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                push    iy
+                pop     de
+o10roms         exx
                 dec     ixl
                 jr      nz, Bucle
                 ld      a, (handle+1)
                 esxdos  F_CLOSE
                 call    Print
                 dz      13, 'Upgrade complete', 13
+                ld      iy, $5c3a
+wrear0          wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, 6    ; envío write enable
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, $c5  ; envío wrear
+                out     (c), 0
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 ret
 
 Print           pop     hl
