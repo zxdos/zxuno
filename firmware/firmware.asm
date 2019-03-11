@@ -273,6 +273,7 @@ start0  ld      a, (outvid)
         ld      (scnbak), a
         sub     $40             ; lo pongo a 14Mhz
         out     (c), a
+        nop
         ld      de, fincad-1    ; descomprimo cadenas
         ld      hl, sdtab-1
         call    dzx7b
