@@ -1,5 +1,5 @@
 GenRom xdnlh17  "ZX Spectrum 48K"      roms\48.rom           48.tap
-GenRom xtdh1    "ZX Spectrum 128K EN"  roms\128en.rom        128en.tap
+GenRom xtdnh1   "ZX Spectrum 128K EN"  roms\128en.rom        128en.tap
 GenRom xt       "ZX Spectrum +2A EN"   roms\plus3en41.rom    plus3en41.tap
 GenRom xdlh     "48K Cargando Leches"  roms\leches.rom       leches.tap
 GenRom xdnlh17  "Inves Spectrum+"      roms\inves.rom        inves.tap
