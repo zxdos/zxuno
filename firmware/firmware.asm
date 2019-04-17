@@ -416,8 +416,7 @@ star10  add     hl, hl
         ld      (alto fllen), hl
       ENDIF
     IF  recovery=0
-star11  wreg    key_stat, 0
-        ld      a, (layout)
+star11  ld      a, (layout)
         rr      a
         ld      hl, fines-1
         jr      z, star12
@@ -525,13 +524,23 @@ star20a cp      $72-$1d         ; 'r'
         ld      (contib+1), a
 star20b cp      $17-$1d         ; 'Edit'
         jr      nz, star19
-ELSE
+    ELSE
         pop     af
 star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 1    ; envío write register status
+      IF  version=3
+        ld      hl, $0202
+        ld      (menuop), hl
+        ld      l, $40
+        out     (c), l
+        out     (c), 0
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $05  ; envío write register status
+      ELSE
         ld      hl, $0202
         ld      (menuop), hl
         out     (c), 0
@@ -539,6 +548,7 @@ star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $35  ; envío write register status
+      ENDIF
         in      a, (c)
         in      a, (c)
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
@@ -1045,8 +1055,14 @@ runbit  ld      b, h
         ld      e, core_addr
         out     (c), e
         inc     b
+      IF  version=3
+        ld      a, (alto highb+1)
+        out     (c), a
+        out     (c), h
+      ELSE
         out     (c), h
         out     (c), l
+      ENDIF
         out     (c), 0
         wreg    core_boot, 1
 ccon0   ld      h, active>>8
@@ -3086,14 +3102,18 @@ imyesn  call    bloq1
 ;   HL: address of bitstream
 ; ------------------------------------
 calbit  inc     b
-      IF  version=1
+    IF  version=1
 calbi1  ld      a, 9
         cp      b
         ld      hl, $0040
         jr      nc, calbi2
         ld      hl, $0b80
 calbi2  ld      de, $0540
-      ELSE
+calbi3  add     hl, de
+        djnz    calbi3
+        ret
+    ELSE
+      IF  version=2
 calbi1  ld      a, b        ;1-69
         sub     35
         jr      c, calbi2   ;<35 c n
@@ -3115,10 +3135,21 @@ calbi2  ccf
         ld      hl, $0240
         ret     z
         ld      de, $0740
-      ENDIF
 calbi3  add     hl, de
         djnz    calbi3
         ret
+      ELSE
+calbi1  ld      hl, $ff00
+calbi2  ld      de, $0900
+calbi3  add     hl, de
+        djnz    calbi3
+        xor     a
+        add     hl, hl
+        adc     a, a
+        ld      (alto highb+1), a
+        ret
+      ENDIF
+    ENDIF
 
 deixl   ld      (ix+0), e
         ld      (ix+1), d
@@ -4141,21 +4172,34 @@ wrflsh
         pop     af
       ENDIF
 wrfls0  ex      af, af'
+        xor     a
 wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
+      IF  version=3
+        wreg    flash_spi, $21  ; envío sector erase
+        ld      hl, (alto highb)
+        out     (c), h
+      ELSE
         wreg    flash_spi, $20  ; envío sector erase
+      ENDIF
         out     (c), d
         out     (c), e
-        out     (c), 0
+        out     (c), a
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
 wrfls2  call    waits5
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, 2    ; page program
+      IF  version=3
+        wreg    flash_spi, $12  ; envío page program
+        ld      hl, (highb)
+        out     (c), h
+      ELSE
+        wreg    flash_spi, 2    ; envío page program
+      ENDIF
         out     (c), d
         out     (c), e
         out     (c), a
@@ -4366,7 +4410,7 @@ hhhh    push    af
 ;binf jr binf        
       ENDIF
 
-  IF  recovery=0
+    IF  recovery=0
         incbin  es.zx7b
 fines   incbin  us.zx7b
 finus   incbin  av.zx7b
@@ -4374,23 +4418,15 @@ finav
 ; -----------------------------------------------------------------------------
 ; Compressed and RCS filtered logo
 ; -----------------------------------------------------------------------------
-    IF version=1
       IF  vertical=0
         incbin  logo256x192.rcs.zx7b
+finlog  incbin  strings.bin.zx7b
       ELSE
         incbin  bezel.rcs.zx7b
 finbez  incbin  logo192x256.rcs.zx7b
-      ENDIF
-    ELSE
-      IF  vertical=0
-        incbin  logo256x192d.rcs.zx7b
-      ELSE
-        incbin  bezel.rcs.zx7b
-finbez  incbin  logo192x256d.rcs.zx7b
+finlog  incbin  strings.bin.zx7b
       ENDIF
     ENDIF
-finlog  incbin  strings.bin.zx7b
-  ENDIF
 
 ; -----------------------------------------------------------------------------
 ; Compressed messages
@@ -4398,13 +4434,17 @@ finlog  incbin  strings.bin.zx7b
 sdtab   defw    $0020, $0040
         defw    $0040, $0080
 fllen   defw    $0000, $0000
-      IF  version=1
+    IF  version=1
         defw    $0540
 subnn   sub     6
-      ELSE
+    ELSE
+      IF  version=2
         defw    $0740
-subnn   sub     6*4
+      ELSE
+        defw    $1200
       ENDIF
+subnn   sub     6*4
+    ENDIF
         ret
       IF  recovery=0
 micont  wreg    master_conf, 1
@@ -4611,9 +4651,7 @@ loadch
 ;   HL: source address without last byte
 ;    A: number of pages (256 bytes) to read
 ; ------------------------
-      IF  version=1
-rdflsh  push    hl
-      ELSE
+      IF  version=2
 rdflsh  push    hl
         push    af
         adc     a, a
@@ -4625,14 +4663,25 @@ rdflsh  push    hl
         out     (c), a
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         pop     af
+      ELSE
+rdflsh  ex      af, af'
+        push    hl
       ENDIF
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
+      IF  version=3
+        wreg    flash_spi, $13    ; envio flash_spi un 3, orden de lectura
+highb   ld      a, 0
+        out     (c), a
+      ELSE
         wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
+      ENDIF
         pop     hl
         push    hl
+        xor     a
         out     (c), h
         out     (c), l
-        out     (c), 0
+        out     (c), a
+        ex      af, af'
         ex      de, hl
         in      f, (c)
 rdfls1  ld      e, $20
@@ -4770,17 +4819,18 @@ check1  xor     (hl)            ;6*4+4*7+10= 62 ciclos/byte
 ;    A: input slot
 ; Returns:
 ;   HL: destination address
-    IF  recovery=0
+  IF  recovery=0
 slot2a  ld      de, 3
-      IF  version=1
+    IF  version=1
         and     $3f
         ld      h, d
         ld      l, a
         cp      19
         jr      c, slot2b
         ld      e, $c0
-      ELSE
+    ELSE
 sloti   ld      l, a
+      IF  version=2
         sub     44              ;-44, -1 -> 0, 43
         jr      nc, sloti
         ld      h, d
@@ -4788,7 +4838,12 @@ sloti   ld      l, a
         jr      nc, slot2b
         ld      hl, $0400
         ld      e, a
+      ELSE
+        sub     61              ;-44, -1 -> 0, 43
+        jr      nc, sloti
+        ld      h, d
       ENDIF
+    ENDIF
 slot2b  add     hl, de          ; $00c0 y 2f80
         add     hl, hl
         add     hl, hl
@@ -4797,7 +4852,7 @@ slot2c  add     hl, hl
         add     hl, hl
         add     hl, hl
         ret
-    ENDIF
+  ENDIF
 
 help    call    window
         ld      a, %00111000    ; fondo blanco tinta negra
