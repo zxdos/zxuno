@@ -1,7 +1,7 @@
 ; Initialize WiFi chip and connect to WiFi
 initWifi:
     call loadWiFiConfig
-
+    call uartBegin
     ld hl, cmd_plus
     call uartWriteStringZ
     ld b,#ff

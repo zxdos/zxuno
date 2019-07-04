@@ -1,9 +1,7 @@
 UART_DATA_REG = #c6
 UART_STAT_REG = #c7
 UART_BYTE_RECIVED = #80
-UART_BYTE_SENT = #40
-ZXUNO_ADDR = #FC3B
-ZXUNO_REG = #FD3B
+UART_BYTE_SENDING = #40
 
 ; Enable UART
 ; Cleaning all flags by reading UART regs
@@ -67,7 +65,7 @@ waitWriteReady:
 checkSent:
     ld bc, ZXUNO_REG 
     in A, (c)
-    and UART_BYTE_SENT
+    and UART_BYTE_SENDING
     jr nz, checkSent
 
     ld bc, ZXUNO_ADDR

@@ -1,13 +1,13 @@
-iWecome to uGophy - ZX-Uno's gopher client!	fake	(NULL)	0
+iWelcome to uGophy v.0.2	fake	(NULL)	0
 i(c) 2019 Alexander Sharikhin aka Nihirash	fake	(NULL)	0
-iVersion 0.1 - First public release	fake	(NULL)	0
+iVersion 0.2 - trubo mode version	fake	(NULL)	0
 i	fake	(NULL)	0
 iNavigation keys:	fake	(NULL)	0
-i Q - Up	fake	(NULL)	0
-i A - Down	fake	(NULL)	0
-i B - History back	fake	(NULL)	0
-i O - Enter server name to browse(using port 70)	fake	(NULL)	0
-i Enter - visit page/download file	fake	(NULL)	0
+iQ - Up	fake	(NULL)	0
+iA - Down	fake	(NULL)	0
+iB - Hisotry back	fake	(NULL)	0
+io - Enter server name to browse(using port 70)	fake	(NULL)	0
+iEnter - Visit page/Download file	fake	(NULL)	0
 i	fake	(NULL)	0
-iYou may visit:	fake	(NULL)	0
-1Nihirash.net - there you can download my software	/	nihirash.net	70
+iBookmarks:	fake	(NULL)	0
+1Nihirash.net - BIG collection of games and nihirash's things	/	nihirash.net	70

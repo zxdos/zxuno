@@ -2,6 +2,9 @@
     org 24100
 Start:
     call renderHeader
+    ld hl, connecting_wifi
+    call printZ64
+    call setNoTurboMode
     call initWifi
     jp showPage
 wSec: ld b, 50
@@ -19,6 +22,7 @@ wsLp  halt
     include "ring.asm"
     include "esxdos.asm"
 
+connecting_wifi db 13, ' Connecting to WiFi', 13, 0
 open_lbl db 'Opening connection to ', 0
 
 path    db '/'
@@ -33,4 +37,5 @@ page_buffer
     incbin "index.pg"
     db 0
 eop equ $
+    display $
     SAVEBIN "ugoph.bin", Start, eop-Start

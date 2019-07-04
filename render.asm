@@ -1,4 +1,5 @@
 showPage:
+    call setTurbo8Mode
     xor a
     ld (show_offset), a
     ld a, 1
@@ -35,6 +36,7 @@ controls:
     ret
 
 historyBack:
+    call setNoTurboMode
     ld hl, server
     ld de, path
     ld bc, port
@@ -120,6 +122,7 @@ selectItem:
 
 downPg:
     push af
+    call setNoTurboMode
     call extractInfo
 
     ld hl, hist
@@ -143,6 +146,7 @@ downPg:
 
 downFl:
     call extractInfo
+    call setNoTurboMode
 
     call cleanIBuff
     ld hl, file_buffer
@@ -429,7 +433,7 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.1 (c) Alexander Sharikhin  ",0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.2 (c) Alexander Sharikhin  ",0
 
 cleanLine db "                                                                ",0
 

@@ -38,7 +38,6 @@ makeRequest:
     push bc
     push HL
 
-
     ld hl, downloading_msg
     call showTypePrint
 

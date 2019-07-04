@@ -1,7 +1,7 @@
-all: ugoph.tap
+all: ugoph.bin
 
-ugoph.tap: *.asm *.pg
+ugoph.bin: *.asm *.pg
 	sjasmplus main.asm
 
 clean: 
-	rm *.tap
+	rm ugoph.bin
