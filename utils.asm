@@ -19,7 +19,7 @@ setNoTurboMode:
     pop af
     ret
 
-setTurbo8Mode:
+setTurbo4Mode:
     push af
     push bc
     ld a, SCANDBLCTRL_REG
@@ -29,7 +29,7 @@ setTurbo8Mode:
     ld bc, ZXUNO_REG
     in a, (c)
     and #3f
-    or #C0
+    or #80
     out (c), a
     
     pop bc

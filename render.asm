@@ -1,5 +1,4 @@
 showPage:
-    call setTurbo8Mode
     xor a
     ld (show_offset), a
     ld a, 1
@@ -36,7 +35,6 @@ controls:
     ret
 
 historyBack:
-    call setNoTurboMode
     ld hl, server
     ld de, path
     ld bc, port
@@ -122,7 +120,6 @@ selectItem:
 
 downPg:
     push af
-    call setNoTurboMode
     call extractInfo
 
     ld hl, hist
@@ -146,14 +143,18 @@ downPg:
 
 downFl:
     call extractInfo
-    call setNoTurboMode
 
     call cleanIBuff
+    ld hl, file_buffer
+    call findFnme
+    jp isImage
+dfl:
     ld hl, file_buffer
     call findFnme
     ld de, iBuff
     ld bc, 65
     ldir
+    
     call input
     ld hl, server_buffer
     ld de, file_buffer
@@ -165,6 +166,41 @@ downFl:
     call showCursor
     ret
 
+isImage:
+	ld a, (hl)
+	and a
+	jr z, checkImg
+	push hl
+	call pushRing
+	call putC 
+	pop hl
+	inc hl
+	jr isImage
+imgExt	db ".scr", 0
+imgExt2 db ".SCR", 0
+checkImg:
+	ld hl, imgExt
+	call searchRing
+	cp 1
+	jr z, loadImage
+
+	ld hl, imgExt2
+	call searchRing
+	cp 1
+	jr z, loadImage
+	jp dfl
+loadImage:
+	ld hl, server_buffer
+	ld de, file_buffer
+	ld bc, port_buffer
+	call makeRequest
+	ld hl, #4000
+	call loadData
+wKey:	call inkey
+	or a
+	jr z, wKey
+	jp showPage
+   
 findFnme:
     push hl
     pop de
@@ -433,7 +469,7 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.2 (c) Alexander Sharikhin  ",0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.3 (c) Alexander Sharikhin  ",0
 
 cleanLine db "                                                                ",0
 

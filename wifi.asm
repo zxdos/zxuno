@@ -1,5 +1,6 @@
 ; Initialize WiFi chip and connect to WiFi
 initWifi:
+    call setNoTurboMode
     call loadWiFiConfig
     call uartBegin
     ld hl, cmd_plus
@@ -11,7 +12,7 @@ wlp:
     djnz $
     pop bc
     djnz wlp
-
+    
     ld hl, cmd_rst
     call uartWriteStringZ
 rstLp:
@@ -57,7 +58,7 @@ rstLp:
     
     ld hl, log_ok
     call putStringZ
-
+    call setTurbo4Mode
     ret
 errInit
     ld hl, log_err

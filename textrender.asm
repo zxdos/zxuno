@@ -1,5 +1,4 @@
 showText:
-    call setTurbo8Mode
     xor a
     ld (show_offset), a
     call renderTextScreen
