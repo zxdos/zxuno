@@ -9,14 +9,14 @@ openPage:
     ex hl, de
 
     ld de, hist
-    ld bc, 147
+    ld bc, 322
     ldir
 
     ld hl, page_buffer
     xor a
     ld (hl), a
     ld de, page_buffer + 1
-    ld bc, 32767
+    ld bc, #ffff - page_buffer - 1
     ldir
     pop bc
     pop de
@@ -210,7 +210,7 @@ d_host    defs 70
 d_port    db '70'
           defs 5
 
-hist            ds 147
+hist            ds 322
 connectionOpen  db 0
 downloading_msg db 'Downloading...', 0
 connectionError db 'Cant open TCP connection', 0

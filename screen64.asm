@@ -70,6 +70,11 @@ printZ64:
 	jr printZ64
 
 printT64:
+	ld b, 63
+ptlp:
+	ld a, 0
+	or b
+	ret z
 	ld a, (hl)
 	
 	and a
@@ -78,11 +83,14 @@ printT64:
 	cp 09
 	ret z
 
+	push bc
 	push hl
 	call putC
 	pop hl
 	inc hl
-	jr printT64
+	pop bc	
+	dec b
+	jr ptlp
 
 printL64:
 	ld a, (hl)

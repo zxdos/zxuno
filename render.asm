@@ -124,7 +124,7 @@ downPg:
 
     ld hl, hist
     ld de, path
-    ld bc, 147
+    ld bc, 322
     ldir
 
     ld hl, server_buffer
@@ -481,7 +481,7 @@ type_unkn db "Unknown type ", 0
 
     display $
 
-file_buffer defs 70     ; URI path
+file_buffer defs 255     ; URI path
 server_buffer defs 70   ; Host name
 port_buffer defs 7      ; Port
 

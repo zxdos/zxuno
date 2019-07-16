@@ -25,13 +25,12 @@ connecting_wifi db 13, ' Connecting to WiFi', 13, 0
 open_lbl db 'Opening connection to ', 0
 
 path    db '/'
-        defs 69              
+        defs 254              
 server  db 'nihirash.net'
         defs 58    
 port    db '70'
         defs 5
 
-data_buff   defs 255
 page_buffer 
     incbin "index.pg"
     db 0
