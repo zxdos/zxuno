@@ -19,6 +19,7 @@ Current version supports:
  * Rendering plain-text pages
  * Downloading binary files to SD card
  * Opening specified server(only by root path)
+ * Screen dumps viewing
 
 ## Legals
 

@@ -172,7 +172,6 @@ isImage:
 	jr z, checkImg
 	push hl
 	call pushRing
-	call putC 
 	pop hl
 	inc hl
 	jr isImage
