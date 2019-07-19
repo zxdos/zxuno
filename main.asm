@@ -13,7 +13,6 @@ wSec: ld b, 50
 wsLp  halt
       djnz wsLp
 
-    ;include "screen64.asm"
     include "tscreen.asm"
     include "keyboard.asm"
     include "utils.asm"
