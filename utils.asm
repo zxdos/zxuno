@@ -36,6 +36,60 @@ setTurbo4Mode:
     pop af
     ret
 
+; Print zero-terminated string
+; HL - string pointer
+putStringZ:
+printZ64:
+	ld a,(hl)
+	and a
+	ret z
+	push hl
+	call putC
+	pop hl
+	inc hl
+	jr printZ64
+
+printT64:
+	ld b, 63
+ptlp:
+	ld a, 0
+	or b
+	ret z
+	ld a, (hl)
+	
+	and a
+	ret z
+	
+	cp 09
+	ret z
+
+	push bc
+	push hl
+	call putC
+	pop hl
+	inc hl
+	pop bc	
+	dec b
+	jr ptlp
+
+printL64:
+	ld a, (hl)
+	
+	and a
+	ret z
+	
+	cp #0A
+	ret z
+
+	cp #0D
+	ret z
+
+	push hl
+	call putC
+	pop hl
+	inc hl
+	jr printL64
+
 ; HL - string
 ; Return: bc - len
 getStringLength:

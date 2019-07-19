@@ -195,6 +195,10 @@ loadImage:
 	call makeRequest
 	ld hl, #4000
 	call loadData
+
+    ld c, #ff
+    xor a
+    out (c), a
 wKey:	call inkey
 	or a
 	jr z, wKey
@@ -298,50 +302,21 @@ showTypePrint:
     ld b, 21
     ld c, 0
     call gotoXY
-    ld a, 3
-    ld (attr_screen), a
     pop hl
     call printZ64
-    ld a, #7
-    ld (attr_screen), a
-    ret
-
-showCursor:
-    ld a, (cursor_pos)
-    ld c, 0
-    ld b, a
-    call bc_to_attr
-    ld (hl), #C
-    ld de, hl
-    inc de
-    ld bc, 31
-    ldir
-    call showType
-    ret
-
-hideCursor:
-    ld a, (cursor_pos)
-    ld b, a
-    ld c, 0
-    call bc_to_attr
-    ld (hl), #07
-    ld de, hl
-    inc de
-    ld bc, 31
-    ldir
     ret
 
 renderHeader:
     call clearScreen
-    ld a, #0F
-    ld (attr_screen), a
     ld bc, 0
     call gotoXY
+
     ld hl, head
     call printZ64
     
-    ld a, #07
-    ld (attr_screen), a
+    ld d, 0
+    call inverseLine
+
     ret
 
 renderScreen:
@@ -468,7 +443,7 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.3 (c) Alexander Sharikhin  ",0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.4 (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
 

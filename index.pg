@@ -1,6 +1,7 @@
-iWelcome to uGophy v.0.3	fake	(NULL)	0
+iWelcome to uGophy v.0.4	fake	(NULL)	0
 i(c) 2019 Alexander Sharikhin aka Nihirash	fake	(NULL)	0
-iVersion 0.3 - Showing screens version	fake	(NULL)	0
+i	fake	(NULL)	0
+iVersion 0.4 - Timex screen version	fake	(NULL)	0
 iThis version works on 14MHz turbo mode	fake	(NULL)	0
 iIf you using old core - please update.	fake	(NULL)	0
 i	fake	(NULL)	0
@@ -9,9 +10,10 @@ i	fake	(NULL)	0
 iNavigation keys:	fake	(NULL)	0
 iQ - Up	fake	(NULL)	0
 iA - Down	fake	(NULL)	0
-iB - Hisotry back	fake	(NULL)	0
+iB - History back	fake	(NULL)	0
 io - Enter server name to browse(using port 70)	fake	(NULL)	0
 iEnter - Visit page/Download file	fake	(NULL)	0
 i	fake	(NULL)	0
 iBookmarks:	fake	(NULL)	0
 1Nihirash.net - BIG collection of games and nihirash's things	/	nihirash.net	70
+1i-LogOut.cz - Gopher phlog aggregator and other things	/	i-logout.cz	70

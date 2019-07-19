@@ -94,7 +94,7 @@ reqErr
     call putStringZ
     xor a
     ld (connectionOpen), a
-    ret
+    jp showPage
 
 ; Load data to ram via gopher
 ; HL - data pointer
