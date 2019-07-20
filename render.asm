@@ -116,7 +116,36 @@ selectItem:
     cp '9'
     jp z, downFl
 
+    cp '7'
+    jr z, userInput
+
     ret  
+
+userInput:
+    call cleanIBuff
+    call input
+
+    call extractInfo
+    ld hl, file_buffer
+    call findEnd
+    ld a, 9
+    ld (hl), a
+    inc hl
+    ex hl, de
+    ld hl, iBuff
+    ld bc, 64
+    ldir
+
+    ld hl, hist
+    ld de, path
+    ld bc, 322
+    ldir
+
+    ld hl, server_buffer
+    ld de, file_buffer
+    ld bc, port_buffer
+    call openPage
+    jp showPage
 
 downPg:
     push af
@@ -254,7 +283,16 @@ showType:
     cp '0'
     jr z, showTypeText
 
+    cp '7'
+    jr z, showTypeInput
+
     jr showTypeUnknown
+
+showTypeInput:
+    ld hl, type_inpt
+    call showTypePrint
+    call showURI
+    ret
 
 showTypeText:
     ld hl, type_text
@@ -443,10 +481,11 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.4 (c) Alexander Sharikhin", 13,0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.5 (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
 
+type_inpt db "User input: ", 0
 type_text db "Text file: ", 0
 type_info db "Information ", 0
 type_page db "Page: ", 0

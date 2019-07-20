@@ -109,6 +109,13 @@ SkipWhitespace:
 	inc hl
     jr SkipWhitespace
 
+findEnd:
+    ld a,(hl)
+    and a
+    ret z
+    inc hl
+    jr findEnd
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Binary to decimal stuff
