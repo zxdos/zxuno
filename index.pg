@@ -10,8 +10,8 @@ i	fake	(NULL)	0
 iNavigation keys:	fake	(NULL)	0
 iQ - Up	fake	(NULL)	0
 iA - Down	fake	(NULL)	0
-iB - Hisotry back	fake	(NULL)	0
-io - Enter server name to browse(using port 70)	fake	(NULL)	0
+iB - History back	fake	(NULL)	0
+iO - Enter server name to browse(using port 70)	fake	(NULL)	0
 iEnter - Visit page/Download file	fake	(NULL)	0
 i	fake	(NULL)	0
 iBookmarks:	fake	(NULL)	0
