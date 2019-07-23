@@ -4,7 +4,7 @@
 
 For running you need:
  * ZX-Uno(or compatible) zx-spectrum clone with UART core
- * Stored WiFi creds via [.iwconfig](https://github.com/nihirash/iwconfig) utility.
+ * Stored WiFi creds via [.iwconfig](https://github.com/antoniovillena/zxuno/tree/master/software/iwconfig) utility.
 
 For development you need only sjasmplus. 
 
