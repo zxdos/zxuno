@@ -1,0 +1,4 @@
+*.tap
+ugoph.bin
+.vscode
+dist/
