@@ -1,4 +1,4 @@
 *.tap
+player.bin
 ugoph.bin
 .vscode
-dist/

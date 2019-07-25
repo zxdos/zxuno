@@ -7,6 +7,10 @@ showPage:
     call showCursor
 showLp:
     call controls
+
+    xor a
+    call changeBank
+
     dup 5
     halt
     edup
@@ -176,7 +180,7 @@ downFl:
     call cleanIBuff
     ld hl, file_buffer
     call findFnme
-    jp isImage
+    jp isOpenable
 dfl:
     ld hl, file_buffer
     call findFnme
@@ -195,18 +199,23 @@ dfl:
     call showCursor
     ret
 
-isImage:
+isOpenable:
 	ld a, (hl)
 	and a
-	jr z, checkImg
+	jr z, checkFile
 	push hl
 	call pushRing
 	pop hl
 	inc hl
-	jr isImage
+	jr isOpenable
+
 imgExt	db ".scr", 0
 imgExt2 db ".SCR", 0
-checkImg:
+pt3Ext  db ".pt3", 0
+pt3Ext2 db ".PT3", 0
+
+checkFile:
+;; Images
 	ld hl, imgExt
 	call searchRing
 	cp 1
@@ -216,14 +225,30 @@ checkImg:
 	call searchRing
 	cp 1
 	jr z, loadImage
+;; Music
+    ld hl, pt3Ext
+    call searchRing
+    cp 1
+    jr z, playMusic
+
+    ld hl, pt3Ext2
+    call searchRing
+    cp 1
+    jr z, playMusic
+
 	jp dfl
 loadImage:
 	ld hl, server_buffer
 	ld de, file_buffer
 	ld bc, port_buffer
 	call makeRequest
-	ld hl, #4000
+	
+    ld a, 7
+    call changeBank
+
+    ld hl, #c000
 	call loadData
+
 
     ld c, #ff
     xor a
@@ -231,8 +256,40 @@ loadImage:
 wKey:	call inkey
 	or a
 	jr z, wKey
+
+    xor a
+    call changeBank
 	jp showPage
-   
+
+playMusic:
+    ld hl, hist
+    ld de, path
+    ld bc, 322
+    ldir
+
+    ld hl, server_buffer
+    ld de, file_buffer
+    ld bc, port_buffer
+    call openPage
+
+    ld hl, playing
+    call showTypePrint
+
+    xor a
+    call changeBank
+
+    ld hl, page_buffer
+    call #4003
+playLp:
+    halt
+    call #4005
+    in a, (#fe)
+    cpl 
+    and 15
+    jr z, playLp
+    call #4008
+    jp historyBack
+
 findFnme:
     push hl
     pop de
@@ -481,10 +538,10 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.5 (c) Alexander Sharikhin", 13,0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.6 (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
-
+playing   db "Playing... Hold <SPACE> to stop!", 0
 type_inpt db "User input: ", 0
 type_text db "Text file: ", 0
 type_info db "Information ", 0

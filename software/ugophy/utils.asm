@@ -2,6 +2,13 @@ SCANDBLCTRL_REG = #0B
 ZXUNO_ADDR = #FC3B
 ZXUNO_REG = #FD3B
 
+; A - memory bank
+changeBank:
+    ld bc, #7ffd
+    or #18
+    out (c), a
+    ret
+
 setNoTurboMode:
     push af
     push bc

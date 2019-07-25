@@ -6,6 +6,9 @@ openPage:
     push de
     push bc
 
+    xor a
+    call changeBank
+
     ex hl, de
 
     ld de, hist
@@ -22,6 +25,10 @@ openPage:
     pop de
     pop hl
     call makeRequest
+
+    xor a
+    call changeBank
+
     ld hl, page_buffer
     call loadData
     xor a
@@ -40,6 +47,9 @@ makeRequest:
 
     ld hl, downloading_msg
     call showTypePrint
+
+    xor a
+    call changeBank
 
     ld hl, cmd_open1 ; Open TCP connection
     call uartWriteStringZ
@@ -205,7 +215,7 @@ closed_callback
 hostTxt   db 'Enter host: ', 0
 
 d_path    db '/'
-          defs 69
+          defs 254
 d_host    defs 70
 d_port    db '70'
           defs 5

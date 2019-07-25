@@ -4,6 +4,10 @@ showText:
     call renderTextScreen
 showTxLp:
     call txControls
+    
+    xor a
+    call changeBank
+    
     dup 5
     halt
     edup

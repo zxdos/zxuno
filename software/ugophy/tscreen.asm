@@ -12,6 +12,8 @@ ilp
 	push bc
 	push de
 	call findAddr
+    ld a, 7
+    call changeBank
 	
 	ld b, 8
 iCLP:	
@@ -24,7 +26,11 @@ iCLP:
 	inc e
 	pop bc
 	djnz ilp
-	ret
+
+    ;xor a
+    ;call changeBank
+	
+    ret
 
 gotoXY:
     ld (coords), bc
@@ -55,6 +61,10 @@ putC:
     ret nc
 
 	push bc
+
+    ld a, 7
+    call changeBank
+
 	call findAddr
 	pop af
 	ld l, a
@@ -83,9 +93,9 @@ findAddr:
     ld a, e
     srl a
     ld e, a
-    ld hl, 8192
+    ld hl, #A000
     jr c, fa1
-    ld hl, 0
+    ld hl, #8000
 fa1:		   
     LD A,D
     AND 7
@@ -103,9 +113,15 @@ fa1:
     ret
 
 clearScreen:
+
+    ld a, 7
+    call changeBank
+
     ld c, #ff
     ld a, #3E
     out (c), a
+
+
     di
     ld	hl,0
     ld	d,h
@@ -113,7 +129,7 @@ clearScreen:
     ld	b,h
     ld	c,b
     add	hl,sp
-    ld	sp,16384+6144
+    ld	sp,#c000 + 6144
 clgloop
 	push	de
     push	de
@@ -133,7 +149,7 @@ clgloop
     djnz	clgloop
 
     ld	b,c
-    ld	sp,24576+6144
+    ld	sp,#e000 + 6144
 clgloop2:
     push	de
     push	de
@@ -153,6 +169,10 @@ clgloop2:
     djnz	clgloop2
 
     ld	sp,hl
+
+    xor a
+    call changeBank
+    
     ei
     ret
 
