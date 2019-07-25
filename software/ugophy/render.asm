@@ -283,6 +283,7 @@ playMusic:
 playLp:
     halt
     call #4005
+    xor a
     in a, (#fe)
     cpl 
     and 15
