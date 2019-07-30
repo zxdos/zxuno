@@ -3,24 +3,25 @@ showPage:
     ld (show_offset), a
     ld a, 1
     ld (cursor_pos), a
+backToPage:    
     call renderScreen
     call showCursor
 showLp:
-    call controls
-
     xor a
     call changeBank
 
+    jp controls
     dup 5
     halt
     edup
+
     jr showLp
 
 controls:
     call inkey
     
     cp 0
-    ret z 
+    jr z, showLp 
 
     cp 'q'
     jr z, pageCursorUp
@@ -36,7 +37,8 @@ controls:
 
     cp 'o'
     jp z, openURI
-    ret
+    
+    jp showLp
 
 historyBack:
     ld hl, server
@@ -56,7 +58,7 @@ pageCursorUp:
     pop af
     ld (cursor_pos), a
     call showCursor
-    ret
+    jp showLp
 
 pageCursorDown:
     ld a, (cursor_pos)
@@ -69,7 +71,7 @@ pageCursorDown:
     pop af
     ld (cursor_pos), a
     call showCursor
-    ret
+    jp showLp
 
 pageScrollDn:
     ld hl, (show_offset)
@@ -80,7 +82,7 @@ pageScrollDn:
     ld (cursor_pos), a
     call renderScreen
     call showCursor
-    ret 
+    jp showLp
 
 pageScrollUp:
     ld a, (show_offset)
@@ -96,7 +98,7 @@ pageScrollUp:
     ld (cursor_pos), a
     call renderScreen
     call showCursor
-    ret
+    jp showLp
 
 selectItem:
     ld a, (cursor_pos)
@@ -123,7 +125,7 @@ selectItem:
     cp '7'
     jr z, userInput
 
-    ret  
+    jp showLp  
 
 userInput:
     call cleanIBuff
@@ -172,32 +174,44 @@ downPg:
     cp '0'
     jp z, showText
 
-    ret
+    jp showLp
 
 downFl:
     call extractInfo
-
+    call clearRing
     call cleanIBuff
+
     ld hl, file_buffer
     call findFnme
     jp isOpenable
 dfl:
     ld hl, file_buffer
     call findFnme
+
     ld de, iBuff
     ld bc, 65
     ldir
     
     call input
+
+    ld hl, iBuff
+    call showTypePrint
+
     ld hl, server_buffer
     ld de, file_buffer
     ld bc, port_buffer
     call makeRequest
     
+    xor a
+    call changeBank
+
     ld hl, iBuff
     call downloadData
+
+    call hideCursor
     call showCursor
-    ret
+
+    jp showLp
 
 isOpenable:
 	ld a, (hl)
@@ -259,7 +273,7 @@ wKey:	call inkey
 
     xor a
     call changeBank
-	jp showPage
+	jp backToPage
 
 playMusic:
     ld hl, hist
@@ -278,6 +292,8 @@ playMusic:
     xor a
     call changeBank
 
+    call setNoTurboMode
+
     ld hl, page_buffer
     call #4003
 playLp:
@@ -289,6 +305,8 @@ playLp:
     and 15
     jr z, playLp
     call #4008
+    
+    call setTurbo4Mode
     jp historyBack
 
 findFnme:
@@ -539,7 +557,7 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.6 (c) Alexander Sharikhin", 13,0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.7 (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
 playing   db "Playing... Hold <SPACE> to stop!", 0

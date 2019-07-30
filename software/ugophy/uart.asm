@@ -22,18 +22,6 @@ uartBegin:
     in A, (c)
     ret
 
-; Pushes to UART zero-terminated string
-; HL - string poiner
-uartWriteStringZ:
-    ld a, (hl)
-    and a
-    ret z
-    push hl
-    call uartWriteByte
-    pop hl
-    inc hl
-    jp uartWriteStringZ
-
 ; Blocking read one byte
 uartReadBlocking:
     call uartRead

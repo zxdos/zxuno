@@ -88,6 +88,7 @@ cleanIBuff:
     ldir
     ret 
 iRet:
+    pop hl
     ld b, 20
     ld c, 0
     call gotoXY

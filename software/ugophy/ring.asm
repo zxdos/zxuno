@@ -54,7 +54,16 @@ ringCmpLp
     djnz ringCmpLp
     ld a, 1
     ret
-    
+
+clearRing:
+    xor a
+    ld hl, ring_buffer
+    ld de, ring_buffer + 1
+    ld bc, 32
+    ld (hl), a
+    ldir
+    ret
+
 ring_buffer dup 33
             defb 0
             edup

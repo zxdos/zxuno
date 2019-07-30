@@ -43,6 +43,18 @@ setTurbo4Mode:
     pop af
     ret
 
+; Pushes to UART zero-terminated string
+; HL - string poiner
+uartWriteStringZ:
+    ld a, (hl)
+    and a
+    ret z
+    push hl
+    call uartWriteByte
+    pop hl
+    inc hl
+    jp uartWriteStringZ
+
 ; Print zero-terminated string
 ; HL - string pointer
 putStringZ:

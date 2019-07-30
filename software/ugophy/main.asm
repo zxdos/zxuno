@@ -1,19 +1,26 @@
     DEVICE ZXSPECTRUM128
     org 24100
 Start: 
+    di
+
     xor a
     call changeBank
+    ld sp, #5aff
 
     ld de, #4000
     ld bc, eop - page_buffer
     ld hl, page_buffer
     ldir
 
+    ei
+
     call renderHeader
     ld hl, connecting_wifi
     call printZ64
     call initWifi
     
+    call wSec
+
     ld de, path
     ld hl, server
     ld bc, port

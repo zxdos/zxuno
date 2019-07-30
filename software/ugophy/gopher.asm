@@ -61,9 +61,12 @@ makeRequest:
     call uartWriteStringZ
     ld hl, cmd_open3
     call okErrCmd
+
+    pop hl
     cp 1
     jp nz, reqErr
-    
+    push hl
+
     ld hl, cmd_send ; Send request
     call uartWriteStringZ
     pop hl
@@ -79,9 +82,11 @@ makeRequest:
     call uartWriteStringZ  
     
     ld hl, crlf
-    call okErrCmd   
+    call okErrCmd  
+    pop hl 
     cp 1
     jp nz, reqErr
+    push hl
 wPrmt:
     call uartReadBlocking
     call pushRing
