@@ -1,10 +1,23 @@
-	DEVICE ZXSPECTRUM48
-;Vortex Tracker II v1.0 PT3 player for ZX Spectrum
-;(c)2004,2007 S.V.Bulba <vorobey@mail.khstu.ru>
+;Universal PT2 and PT3 player for ZX Spectrum and MSX
+;(c)2004-2007 S.V.Bulba <vorobey@mail.khstu.ru>
 ;http://bulba.untergrund.net (http://bulba.at.kz)
 
 ;Release number
-Release EQU "7"
+Release EQU "1"
+    DEVICE ZXSPECTRUM48
+
+;Conditional assembly
+;1) Version of ROUT (ZX or MSX standards)
+ZX=1
+MSX=0
+;2) Current position counter at (START+11)
+CurPosCounter=0
+;3) Allow channels allocation bits at (START+10)
+ACBBAC=0
+;4) Allow loop checking and disabling
+LoopChecker=0
+;5) Insert official identificator
+Id=0
 
 ;Features
 ;--------
@@ -12,22 +25,24 @@ Release EQU "7"
 ; address).
 ;-Variables (VARS) can be located at any address (not only after
 ;code block).
-;-INIT subroutine detects module version and rightly generates
-; both note and volume tables outside of code block (in VARS).
+;-INIT subprogram checks PT3-module version and rightly
+; generates both note and volume tables outside of code block
+; (in VARS).
 ;-Two portamento (spc. command 3xxx) algorithms (depending of
-; module version).
+; PT3 module version).
 ;-New 1.XX and 2.XX special command behaviour (only for PT v3.7
 ; and higher).
 ;-Any Tempo value are accepted (including Tempo=1 and Tempo=2).
-;-Fully compatible with Ay_Emul PT3 player codes.
+;-Fully compatible with Ay_Emul PT3 and PT2 players codes.
 ;-See also notes at the end of this source code.
 
 ;Limitations
 ;-----------
 ;-Can run in RAM only (self-modified code is used).
+;-PT2 position list must be end by #FF marker only.
 
-;Warning!!! PLAY subroutine can crash if no module are loaded
-;into RAM or INIT subroutine was not called before.
+;Warning!!! PLAY subprogram can crash if no module are loaded
+;into RAM or INIT subprogram was not called before.
 
 ;Call MUTE or INIT one more time to mute sound after stopping
 ;playing 
@@ -35,6 +50,8 @@ Release EQU "7"
 	ORG #4000
 
 ;Test codes (commented)
+;	LD A,2 ;PT2,ABC,Looped
+;	LD (START+10),A
 ;	CALL START
 ;	EI
 ;_LP	HALT
@@ -58,26 +75,36 @@ Env	EQU 11
 EnvTp	EQU 13
 
 ;Entry and other points
-;START initialization
+;START initialize playing of module at MDLADDR
 ;START+3 initialization with module address in HL
 ;START+5 play one quark
 ;START+8 mute
 ;START+10 setup and status flags
-;START+11 pointer to current position value in PT3 module;
-;After INIT (START+11) points to Postion0-1 (optimization)
+;START+11 current position value (byte) (optional)
 
 START
 	LD HL,MDLADDR
 	JR INIT
 	JP PLAY
 	JR MUTE
-SETUP	DB 0 ;set bit0 to 1, if you want to play without looping
+SETUP	DB 0 ;set bit0, if you want to play without looping
+	     ;(optional);
+	     ;set bit1 for PT2 and reset for PT3 before
+	     ;calling INIT;
+	     ;bits2-3: %00-ABC, %01 ACB, %10 BAC (optional);
+	     ;bits4-6 are not used
 	     ;bit7 is set each time, when loop point is passed
-CrPsPtr	DW 0 
+	     ;(optional)
+	IF CurPosCounter
+CurPos	DB 0 ;for visualization only (i.e. no need for playing)
+	ENDIF
 
 ;Identifier
-	DB "=VTII PT3 Player r.",Release,"="
+	IF Id
+	DB "=Uni PT2 and PT3 Player r.",Release,"="
+	ENDIF
 
+	IF LoopChecker
 CHECKLP	LD HL,SETUP
 	SET 7,(HL)
 	BIT 0,(HL)
@@ -87,18 +114,22 @@ CHECKLP	LD HL,SETUP
 	INC (HL)
 	LD HL,ChanA+CHP.NtSkCn
 	INC (HL)
+	ENDIF
+
 MUTE	XOR A
 	LD H,A
 	LD L,A
 	LD (AYREGS+AmplA),A
 	LD (AYREGS+AmplB),HL
-	JP ROUT_A0
+	JP ROUT
 
 INIT
 ;HL - AddressOfModule
+	LD A,(START+10)
+	AND 2
+	JR NZ,INITPT2
 
-	LD (MODADDR),HL
-	LD (MDADDR2),HL
+	CALL SETMDAD
 	PUSH HL
 	LD DE,100
 	ADD HL,DE
@@ -109,8 +140,14 @@ INIT
 	ADD HL,DE
 	LD (CrPsPtr),HL
 	LD E,(IX+102-100)
-	ADD HL,DE
 	INC HL
+
+	IF CurPosCounter
+	LD A,L
+	LD (PosSub+1),A
+	ENDIF
+
+	ADD HL,DE
 	LD (LPosPtr),HL
 	POP DE
 	LD L,(IX+103-100)
@@ -123,10 +160,103 @@ INIT
 	LD HL,105
 	ADD HL,DE
 	LD (SamPtrs),HL
-	LD HL,SETUP
-	RES 7,(HL)
+	LD A,(IX+13-100) ;EXTRACT VERSION NUMBER
+	SUB #30
+	JR C,L20
+	CP 10
+	JR C,L21
+L20	LD A,6
+L21	LD (Version),A
+	PUSH AF ;VolTable version
+	CP 4
+	LD A,(IX+99-100) ;TONE TABLE NUMBER
+	RLA
+	AND 7
+	PUSH AF ;NoteTable number
+	LD HL,(e_-SamCnv-2)*256+#18
+	LD (SamCnv),HL
+	LD A,#BA
+	LD (OrnCP),A
+	LD (SamCP),A
+	LD A,#7B
+	LD (OrnLD),A
+	LD (SamLD),A
+	LD A,#87
+	LD (SamClc2),A
+	LD BC,PT3PD
+	LD HL,0
+	LD DE,PT3EMPTYORN
+	JR INITCOMMON
+
+INITPT2	LD A,(HL)
+	LD (Delay),A
+	PUSH HL
+	PUSH HL
+	PUSH HL
+	INC HL
+	INC HL
+	LD A,(HL)
+	INC HL
+	LD (SamPtrs),HL
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	AND A
+	SBC HL,DE
+	CALL SETMDAD
+	POP HL
+	LD DE,67
+	ADD HL,DE
+	LD (OrnPtrs),HL
+	LD E,32
+	ADD HL,DE
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	LD E,30
+	ADD HL,DE
+	LD (CrPsPtr),HL
+	LD E,A
+	INC HL
+
+	IF CurPosCounter
+	LD A,L
+	LD (PosSub+1),A
+	ENDIF
+
+	ADD HL,DE
+	LD (LPosPtr),HL
+	POP HL
+	ADD HL,BC
+	LD (PatsPtr),HL
+	LD A,5
+	LD (Version),A
+	PUSH AF
+	LD A,2
+	PUSH AF
+	LD HL,#51CB
+	LD (SamCnv),HL
+	LD A,#BB
+	LD (OrnCP),A
+	LD (SamCP),A
+	LD A,#7A
+	LD (OrnLD),A
+	LD (SamLD),A
+	LD A,#80
+	LD (SamClc2),A
+	LD BC,PT2PD
+	LD HL,#8687
+	LD DE,PT2EMPTYORN
+
+INITCOMMON
+
+	LD (PTDECOD+1),BC
+	LD (PsCalc),HL
+	PUSH DE
 
 ;note table data depacker
+;(c) Ivan Roshin
 	LD DE,T_PACK
 	LD BC,T1_+(2*49)-1
 TP_0	LD A,(DE)
@@ -153,41 +283,41 @@ TP_2	LD A,H
 	SUB #F8*2
 	JR NZ,TP_0
 
+	IF LoopChecker
+	LD HL,SETUP
+	RES 7,(HL)
+
+	IF CurPosCounter
+	INC HL
+	LD (HL),A
+	ENDIF
+
+	ELSE
+
+	IF CurPosCounter
+	LD (CurPos),A
+	ENDIF
+	
+	ENDIF
+
 	LD HL,VARS
 	LD (HL),A
 	LD DE,VARS+1
 	LD BC,VAR0END-VARS-1
 	LDIR
+	LD (AdInPtA),HL ;ptr to zero
 	INC A
 	LD (DelyCnt),A
 	LD HL,#F001 ;H - CHP.Volume, L - CHP.NtSkCn
 	LD (ChanA+CHP.NtSkCn),HL
 	LD (ChanB+CHP.NtSkCn),HL
 	LD (ChanC+CHP.NtSkCn),HL
+	POP HL
+	LD (ChanA+CHP.OrnPtr),HL
+	LD (ChanB+CHP.OrnPtr),HL
+	LD (ChanC+CHP.OrnPtr),HL
 
-	LD HL,EMPTYSAMORN
-	LD (AdInPtA),HL ;ptr to zero
-	LD (ChanA+CHP.OrnPtr),HL ;ornament 0 is "0,1,0"
-	LD (ChanB+CHP.OrnPtr),HL ;in all versions from
-	LD (ChanC+CHP.OrnPtr),HL ;3.xx to 3.6x and VTII
-
-	LD (ChanA+CHP.SamPtr),HL ;S1 There is no default
-	LD (ChanB+CHP.SamPtr),HL ;S2 sample in PT3, so, you
-	LD (ChanC+CHP.SamPtr),HL ;S3 can comment S1,2,3; see
-				    ;also EMPTYSAMORN comment
-
-	LD A,(IX+13-100) ;EXTRACT VERSION NUMBER
-	SUB #30
-	JR C,L20
-	CP 10
-	JR C,L21
-L20	LD A,6
-L21	LD (Version),A
-	PUSH AF
-	CP 4
-	LD A,(IX+99-100) ;TONE TABLE NUMBER
-	RLA
-	AND 7
+	POP AF
 
 ;NoteTableCreator (c) Ivan Roshin
 ;A - NoteTableNumber*2+VersionForNoteTable
@@ -286,7 +416,7 @@ TC_EXIT
 
 ;VolTableCreator (c) Ivan Roshin
 ;A - VersionForVolumeTable (0..4 - 3.xx..3.4x;
-			   ;5.. - 3.5x..3.6x..VTII1.0)
+			   ;5.. - 2.x,3.5x..3.6x..VTII1.0)
 
 	CP 5
 	LD HL,#11
@@ -300,14 +430,15 @@ TC_EXIT
 M1      LD (M2),A
 
 	LD IX,VT_+16
-	LD C,#10
 
+	LD C,#F
 INITV2  PUSH HL
 
 	ADD HL,DE
 	EX DE,HL
 	SBC HL,HL
 
+	LD B,#10
 INITV1  LD A,L
 M2      DB #7D
 	LD A,H
@@ -315,49 +446,165 @@ M2      DB #7D
 	LD (IX),A
 	INC IX
 	ADD HL,DE
-	INC C
-	LD A,C
-	AND 15
-	JR NZ,INITV1
+	DJNZ INITV1
 
 	POP HL
 	LD A,E
 	CP #77
 	JR NZ,M3
 	INC E
-M3      LD A,C
-	AND A
+M3      DEC C
 	JR NZ,INITV2
 
-	JP ROUT_A0
+	JP ROUT
 
-;pattern decoder
+SETMDAD	LD (MODADDR),HL
+	LD (MDADDR1),HL
+	LD (MDADDR2),HL
+	RET
+
+PTDECOD JP #C3C3
+
+;PT2 pattern decoder
+PD2_SAM	CALL SETSAM
+	JR PD2_LOOP
+
+PD2_EOff LD (IX-12+CHP.Env_En),A
+	JR PD2_LOOP
+
+PD2_ENV	LD (IX-12+CHP.Env_En),16
+	LD (AYREGS+EnvTp),A
+	LD A,(BC)
+	INC BC
+	LD L,A
+	LD A,(BC)
+	INC BC
+	LD H,A
+	LD (EnvBase),HL
+	JR PD2_LOOP
+
+PD2_ORN	CALL SETORN
+	JR PD2_LOOP
+
+PD2_SKIP INC A
+	LD (IX-12+CHP.NNtSkp),A
+	JR PD2_LOOP
+
+PD2_VOL	RRCA
+	RRCA
+	RRCA
+	RRCA
+	LD (IX-12+CHP.Volume),A
+	JR PD2_LOOP
+
+PD2_DEL	CALL C_DELAY
+	JR PD2_LOOP
+
+PD2_GLIS SET 2,(IX-12+CHP.Flags)
+	INC A
+	LD (IX-12+CHP.TnSlDl),A
+	LD (IX-12+CHP.TSlCnt),A
+	LD A,(BC)
+	INC BC
+        LD (IX-12+CHP.TSlStp),A
+	ADD A,A
+	SBC A,A
+        LD (IX-12+CHP.TSlStp+1),A
+	SCF
+	JR PD2_LP2
+
+PT2PD	AND A
+
+PD2_LP2	EX AF,AF'
+
+PD2_LOOP LD A,(BC)
+	INC BC
+	ADD A,#20
+	JR Z,PD2_REL
+	JR C,PD2_SAM
+	ADD A,96
+	JR C,PD2_NOTE
+	INC A
+	JR Z,PD2_EOff
+	ADD A,15
+	JP Z,PD_FIN
+	JR C,PD2_ENV
+	ADD A,#10
+	JR C,PD2_ORN
+	ADD A,#40
+	JR C,PD2_SKIP
+	ADD A,#10
+	JR C,PD2_VOL
+	INC A
+	JR Z,PD2_DEL
+	INC A
+	JR Z,PD2_GLIS
+	INC A
+	JR Z,PD2_PORT
+	INC A
+	JR Z,PD2_STOP
+	LD A,(BC)
+	INC BC
+	LD (IX-12+CHP.CrNsSl),A
+	JR PD2_LOOP
+
+PD2_PORT RES 2,(IX-12+CHP.Flags)
+	LD A,(BC)
+	INC BC
+	INC BC ;ignoring precalc delta to right sound
+	INC BC
+	SCF
+	JR PD2_LP2
+
+PD2_STOP LD (IX-12+CHP.TSlCnt),A
+	JR PD2_LOOP
+
+PD2_REL	LD (IX-12+CHP.Flags),A
+	JR PD2_EXIT
+
+PD2_NOTE LD L,A
+	LD A,(IX-12+CHP.Note)
+	LD (PrNote+1),A
+	LD (IX-12+CHP.Note),L
+	XOR A
+	LD (IX-12+CHP.TSlCnt),A
+	SET 0,(IX-12+CHP.Flags)
+	EX AF,AF'
+	JR NC,NOGLIS2
+	BIT 2,(IX-12+CHP.Flags)
+	JR NZ,NOPORT2
+	LD (LoStep),A
+	ADD A,A
+	SBC A,A
+	EX AF,AF'
+	LD H,A
+	LD L,A
+	INC A
+	CALL SETPORT
+NOPORT2	LD (IX-12+CHP.TSlCnt),1
+NOGLIS2	XOR A
+
+
+PD2_EXIT LD (IX-12+CHP.PsInSm),A
+	LD (IX-12+CHP.PsInOr),A
+	LD (IX-12+CHP.CrTnSl),A
+	LD (IX-12+CHP.CrTnSl+1),A
+	JP PD_FIN
+
+;PT3 pattern decoder
 PD_OrSm	LD (IX-12+CHP.Env_En),0
 	CALL SETORN
-	LD A,(BC)
+PD_SAM_	LD A,(BC)
 	INC BC
 	RRCA
 
-PD_SAM	ADD A,A
-PD_SAM_	LD E,A
-	LD D,0
-SamPtrs EQU $+1
-	LD HL,#2121
-	ADD HL,DE
-	LD E,(HL)
-	INC HL
-	LD D,(HL)
-MODADDR EQU $+1
-	LD HL,#2121
-	ADD HL,DE
-	LD (IX-12+CHP.SamPtr),L
-	LD (IX-12+CHP.SamPtr+1),H
+PD_SAM	CALL SETSAM
 	JR PD_LOOP
 
-PD_VOL	RLCA
-	RLCA
-	RLCA
-	RLCA
+PD_VOL	RRCA
+	RRCA
+	RRCA
+	RRCA
 	LD (IX-12+CHP.Volume),A
 	JR PD_LP2
 	
@@ -381,11 +628,9 @@ PD_ORN	CALL SETORN
 PD_ESAM	LD (IX-12+CHP.Env_En),A
 	LD (IX-12+CHP.PsInOr),A
 	CALL NZ,SETENV
-	LD A,(BC)
-	INC BC
 	JR PD_SAM_
 
-PTDECOD LD A,(IX-12+CHP.Note)
+PT3PD	LD A,(IX-12+CHP.Note)
 	LD (PrNote+1),A
 	LD L,(IX-12+CHP.CrTnSl)
 	LD H,(IX-12+CHP.CrTnSl+1)
@@ -428,7 +673,7 @@ PD_NOIS	LD (Ns_Base),A
 
 PD_REL	RES 0,(IX-12+CHP.Flags)
 	JR PD_RES
-	
+
 PD_NOTE	LD (IX-12+CHP.Note),A
 	SET 0,(IX-12+CHP.Flags)
 	XOR A
@@ -449,15 +694,30 @@ PD_FIN	LD A,(IX-12+CHP.NNtSkp)
 	LD (IX-12+CHP.NtSkCn),A
 	RET
 
-C_PORTM RES 2,(IX-12+CHP.Flags)
-	LD A,(BC)
+C_PORTM LD A,(BC)
 	INC BC
 ;SKIP PRECALCULATED TONE DELTA (BECAUSE
 ;CANNOT BE RIGHT AFTER PT3 COMPILATION)
 	INC BC
 	INC BC
+	EX AF,AF'
+	LD A,(BC) ;SIGNED TONE STEP
+	INC BC
+	LD (LoStep),A
+	LD A,(BC)
+	INC BC
+	AND A
+	EX AF,AF'
+	LD L,(IX-12+CHP.CrTnSl)
+	LD H,(IX-12+CHP.CrTnSl+1)
+
+;Set portamento variables
+;A - Delay; A' - Hi(Step); ZF' - (A'=0); HL - CrTnSl
+
+SETPORT	RES 2,(IX-12+CHP.Flags)
 	LD (IX-12+CHP.TnSlDl),A
 	LD (IX-12+CHP.TSlCnt),A
+	PUSH HL
 	LD DE,NT_
 	LD A,(IX-12+CHP.Note)
 	LD (IX-12+CHP.SlToNt),A
@@ -483,8 +743,7 @@ PrNote	LD A,#3E
 	SBC HL,DE
 	LD (IX-12+CHP.TnDelt),L
 	LD (IX-12+CHP.TnDelt+1),H
-	LD E,(IX-12+CHP.CrTnSl)
-	LD D,(IX-12+CHP.CrTnSl+1)
+	POP DE
 Version EQU $+1
 	LD A,#3E
 	CP 6
@@ -492,12 +751,9 @@ Version EQU $+1
 PrSlide	LD DE,#1111
 	LD (IX-12+CHP.CrTnSl),E
 	LD (IX-12+CHP.CrTnSl+1),D
-OLDPRTM	LD A,(BC) ;SIGNED TONE STEP
-	INC BC
+LoStep	EQU $+1
+OLDPRTM	LD A,#3E
 	EX AF,AF'
-	LD A,(BC)
-	INC BC
-	AND A
 	JR Z,NOSIG
 	EX DE,HL
 NOSIG	SBC HL,DE
@@ -592,17 +848,33 @@ SETORN	ADD A,A
 	LD E,A
 	LD D,0
 	LD (IX-12+CHP.PsInOr),D
-OrnPtrs	EQU $+1
+OrnPtrs EQU $+1
 	LD HL,#2121
 	ADD HL,DE
 	LD E,(HL)
 	INC HL
 	LD D,(HL)
-MDADDR2	EQU $+1
+MDADDR2 EQU $+1
 	LD HL,#2121
 	ADD HL,DE
 	LD (IX-12+CHP.OrnPtr),L
 	LD (IX-12+CHP.OrnPtr+1),H
+	RET
+
+SETSAM	ADD A,A
+	LD E,A
+	LD D,0
+SamPtrs EQU $+1
+	LD HL,#2121
+	ADD HL,DE
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+MDADDR1	EQU $+1
+	LD HL,#2121
+	ADD HL,DE
+	LD (IX-12+CHP.SamPtr),L
+	LD (IX-12+CHP.SamPtr+1),H
 	RET
 
 ;ALL 16 ADDRESSES TO PROTECT FROM BROKEN PT3 MODULES
@@ -638,9 +910,10 @@ CHREGS	XOR A
 	LD L,A
 	ADD HL,SP
 	INC A
-	CP D
+		;PT2	PT3
+OrnCP	INC A	;CP E	CP D
 	JR C,CH_ORPS
-	LD A,E
+OrnLD	DB 1	;LD A,D	LD A,E
 CH_ORPS	LD (IX+CHP.PsInOr),A
 	LD A,(IX+CHP.Note)
 	ADD A,(HL)
@@ -659,19 +932,48 @@ CH_NOK	ADD A,A
 	LD A,(IX+CHP.PsInSm)
 	LD B,A
 	ADD A,A
-	ADD A,A
+SamClc2	ADD A,A ;or ADD A,B for PT2
 	LD L,A
 	ADD HL,SP
 	LD SP,HL
 	LD A,B
 	INC A
-	CP D
+		;PT2	PT3
+SamCP	INC A	;CP E	CP D
 	JR C,CH_SMPS
-	LD A,E
+SamLD	DB 1	;LD A,D	LD A,E
 CH_SMPS	LD (IX+CHP.PsInSm),A
 	POP BC
 	POP HL
-	LD E,(IX+CHP.TnAcc)
+
+;Convert PT2 sample to PT3
+		;PT2		PT3
+SamCnv	POP HL  ;BIT 2,C	JR e_
+	POP HL	
+	LD H,B
+	JR NZ,$+8
+	EX DE,HL
+	AND A
+	SBC HL,HL
+	SBC HL,DE
+	LD D,C
+	RR C
+	SBC A,A
+	CPL
+	AND #3E
+	RR C
+	RR B
+	AND C
+	LD C,A
+	LD A,B
+	RRA
+	RRA
+	RR D
+	RRA
+	AND #9F
+	LD B,A
+
+e_	LD E,(IX+CHP.TnAcc)
 	LD D,(IX+CHP.TnAcc+1)
 	ADD HL,DE
 	BIT 6,B
@@ -680,10 +982,11 @@ CH_SMPS	LD (IX+CHP.PsInSm),A
 	LD (IX+CHP.TnAcc+1),H
 CH_NOAC EX DE,HL
 	EX AF,AF'
+	ADD A,NT_
 	LD L,A
-	LD H,0
-	LD SP,NT_
-	ADD HL,SP
+	ADC A,NT_/256
+	SUB L
+	LD H,A
 	LD SP,HL
 	POP HL
 	ADD HL,DE
@@ -743,10 +1046,11 @@ CH_APOS	CP 16
 	JR C,CH_VOL
 	LD A,15
 CH_VOL	OR (IX+CHP.Volume)
+	ADD A,VT_
 	LD L,A
-	LD H,0
-	LD DE,VT_
-	ADD HL,DE
+	ADC A,VT_/256
+	SUB L
+	LD H,A
 	LD A,(HL)
 CH_ENV	BIT 0,C
 	JR NZ,CH_NOEN
@@ -765,8 +1069,7 @@ CH_NOEN	LD (Ampl),A
 	JR Z,NO_ENAC
 	LD (IX+CHP.CrEnSl),A
 NO_ENAC	LD HL,AddToEn
-	ADD A,(HL) ;BUG IN PT3 - NEED WORD HERE.
-		   ;FIX IT IN NEXT VERSION?
+	ADD A,(HL) ;BUG IN PT3 - NEED WORD HERE
 	LD (HL),A
 	JR CH_MIX
 NO_ENSL RRA
@@ -804,36 +1107,52 @@ PLAY    XOR A
 	LD (AYREGS+EnvTp),A
 	LD HL,DelyCnt
 	DEC (HL)
-	JR NZ,PL2
+	JP NZ,PL2
 	LD HL,ChanA+CHP.NtSkCn
 	DEC (HL)
 	JR NZ,PL1B
-AdInPtA	EQU $+1
+AdInPtA EQU $+1
 	LD BC,#0101
 	LD A,(BC)
 	AND A
 	JR NZ,PL1A
 	LD D,A
 	LD (Ns_Base),A
-	LD HL,(CrPsPtr)
+CrPsPtr EQU $+1
+	LD HL,#2121
 	INC HL
 	LD A,(HL)
 	INC A
 	JR NZ,PLNLP
+
+	IF LoopChecker
 	CALL CHECKLP
-LPosPtr	EQU $+1
+	ENDIF
+
+LPosPtr EQU $+1
 	LD HL,#2121
 	LD A,(HL)
 	INC A
 PLNLP	LD (CrPsPtr),HL
 	DEC A
+		;PT2		PT3
+PsCalc	DEC A	;ADD A,A	NOP
+	DEC A	;ADD A,(HL)	NOP
 	ADD A,A
 	LD E,A
 	RL D
-PatsPtr	EQU $+1
+
+	IF CurPosCounter
+	LD A,L
+PosSub	SUB #D6
+	LD (CurPos),A
+	ENDIF
+
+PatsPtr EQU $+1
 	LD HL,#2121
 	ADD HL,DE
-	LD DE,(MODADDR)
+MODADDR	EQU $+1
+	LD DE,#1111
 	LD (PSP_+1),SP
 	LD SP,HL
 	POP HL
@@ -888,8 +1207,6 @@ PL2	LD IX,ChanA
 	LD IX,ChanC
 	LD HL,(AYREGS+TonC)
 	CALL CHREGS
-;	LD A,(Ampl) ;Ampl = AYREGS+AmplC
-;	LD (AYREGS+AmplC),A
 	LD (AYREGS+TonC),HL
 
 	LD HL,(Ns_Base_AddToNs)
@@ -912,7 +1229,7 @@ AddToEn EQU $+1
 	XOR A
 	LD HL,CurEDel
 	OR (HL)
-	JR Z,ROUT_A0
+	JR Z,ROUT
 	DEC (HL)
 	JR NZ,ROUT
 Env_Del	EQU $+1
@@ -923,8 +1240,65 @@ ESldAdd	EQU $+1
 	ADD HL,DE
 	LD (CurESld),HL
 
-ROUT	XOR A
-ROUT_A0	LD DE,#FFBF
+ROUT
+	IF ACBBAC
+	LD A,(SETUP)
+	AND 12
+	JR Z,ABC
+	ADD A,CHTABLE
+	LD E,A
+	ADC A,CHTABLE/256
+	SUB E
+	LD D,A
+	LD B,0
+	LD IX,AYREGS
+	LD HL,AYREGS
+	LD A,(DE)
+	INC DE
+	LD C,A
+	ADD HL,BC
+	LD A,(IX+TonB)
+	LD C,(HL)
+	LD (IX+TonB),C
+	LD (HL),A
+	INC HL
+	LD A,(IX+TonB+1)
+	LD C,(HL)
+	LD (IX+TonB+1),C
+	LD (HL),A
+	LD A,(DE)
+	INC DE
+	LD C,A
+	ADD HL,BC
+	LD A,(IX+AmplB)
+	LD C,(HL)
+	LD (IX+AmplB),C
+	LD (HL),A
+	LD A,(DE)
+	INC DE
+	LD (RxCA1),A
+	XOR 8
+	LD (RxCA2),A
+	LD HL,AYREGS+Mixer
+	LD A,(DE)
+	AND (HL)
+	LD E,A
+	LD A,(HL)
+RxCA1	LD A,(HL)
+	AND %010010
+	OR E
+	LD E,A
+	LD A,(HL)
+	AND %010010
+RxCA2	OR E
+	OR E
+	LD (HL),A
+ABC
+	ENDIF
+
+	IF ZX
+	XOR A
+	LD DE,#FFBF
 	LD BC,#FFFD
 	LD HL,AYREGS
 LOUT	OUT (C),A
@@ -941,6 +1315,33 @@ LOUT	OUT (C),A
 	LD B,E
 	OUT (C),A
 	RET
+	ENDIF
+
+	IF MSX
+;MSX version of ROUT (c)Dioniso
+	XOR A
+	LD C,#A0
+	LD HL,AYREGS
+LOUT	OUT (C),A
+	INC C
+	OUTI 
+	DEC C
+	INC A
+	CP 13
+	JR NZ,LOUT
+	OUT (C),A
+	LD A,(HL)
+	AND A
+	RET M
+	INC C
+	OUT (C),A
+	RET
+	ENDIF
+
+	IF ACBBAC
+CHTABLE	EQU $-4
+	DB 4,5,15,%001001,0,7,7,%100100
+	ENDIF
 
 NT_DATA	DB (T_NEW_0-T1_)*2
 	DB TCNEW_0-T_
@@ -974,8 +1375,8 @@ TCNEW_1 EQU TCOLD_1
 TCNEW_2	DB #1A+1,#20+1,#24+1,#28+1,#2A+1,#3A+1,#4C+1,#5E+1
 	DB #BA+1,#BC+1,#BE+1,0
 
-EMPTYSAMORN EQU $-1
-	DB 1,0,#90 ;delete #90 if you don't need default sample
+PT3EMPTYORN EQU $-1
+	DB 1,0
 
 ;first 12 values of tone tables (packed)
 
@@ -1096,6 +1497,8 @@ T_NEW_1	EQU T_OLD_1
 T_NEW_2	EQU T_NEW_0+24
 T_NEW_3	EQU T_OLD_3
 
+PT2EMPTYORN EQU VT_+31 ;1,0,0 sequence
+
 NT_	DS 192 ;CreatedNoteTableAddress
 
 ;local var
@@ -1108,82 +1511,45 @@ VARSEND EQU $
 MDLADDR EQU $
 
 ;Release 0 steps:
-;11.Sep.2004 - Note tables creator
-;12.Sep.2004 - Volume tables creator; INIT subroutine
-;13.Sep.2004 - Play counters, position counters
-;14.Sep.2004 - Patterns decoder subroutine
-;15.Sep.2004 - Resting (no code)
-;16.Sep.2004 - CHREGS subroutine; global debugging; 1st stable
-;version was born
-;17.Sep.2004 - Debugging and optimization. First release!
+;02/27/2005
+;Merging PT2 and PT3 players; debug
+;02/28/2005
+;debug; optimization
+;03/01/2005
+;Migration to SjASM; conditional assembly (ZX, MSX and
+;visualization)
+;03/03/2005
+;SETPORT subprogram (35 bytes shorter)
+;03/05/2005
+;fixed CurPosCounter error
+;03/06/2005
+;Added ACB and BAC channels swapper (for Spectre); more cond.
+;assembly keys; optimization
 ;Release 1 steps:
-;20.Sep.2004 - local vars moved to code (selfmodified code
-;smaller and faster)
-;22.Sep.2004 - added mute sound entry at START+8; position
-;pointer moved to START+11; added setup and status byte at
-;START+10 noloop mode and loop passed flags added
-;Release 2 steps:
-;28.Sep.2004 - Optimization: code around CHREGS's volume and
-;vibrato faster now; zeroing PD_RES through stack; Ton and Ampl
-;moved from channel vars to global ones; first position selector
-;removed from INIT; optimization for packers(Ivan Roshin method)
-;Release 3 steps:
-;2.Oct.2004 - optimization in INIT and PD_LOOP (thanks to Ivan
-;Roshin)
-;4.Oct.2004 - load delay from (hl) in INIT (2 bytes shorter)
-;5.Oct.2004 - optimization in PD_LOOP (->PD_LP2)
-;7.Oct.2004 - swaping some commands for better packing
-;Release 4 steps:
-;9.Oct.2004 - optimization around LD HL,SPCCOMS (thanks to Ivan
-;Roshin); in PTDECOD swapped BC and DE to optimize C_PORTM;
-;removed sam and orn len and loop channel vars; CHREGS totally
-;optimized
-;Release 5 steps:
-;11.Oct.2004 - PD_OrSm and C_PORTM optimized; Ivan Roshin's
-;volume tables creator algorithm (51 bytes shorter than mine)
-;12.Oct.2004 - Ivan Roshin's note tables creator algorithm (74
-;bytes shorter than mine)
-;Release 6 steps:
-;14.Oct.2004 - loop and next position calculations moved to INIT
-;15.Oct.2004 - AdInPt moved to code
-;19.Oct.2004 - Env_Del moved to code
-;20.Oct.2004 - Version PUSH and POP (1 byte shorter, thanks to
-;Ivan Roshin)
-;22.Oct.2004 - Env_En moved from Flags' bit to byte (shorter and
-;faster code)
-;25.Oct.2004 - SETENV optimized
-;29.Oct.2004 - Optimized around AddToEn (SBC A,A, thanks to Ivan
-;Roshin)
-;3.Nov.2004 - Note tables data was compressed; with depacker it
-;is 9 bytes shorter than uncompressed (thanks to Ivan Roshin)
-;4.Nov.2004 - default sample and ornament both are fixed now
-;and placed into code block (6 bytes shorter)
-;7.Nov.2004 - LD A,(Ns_Base):LD L,A changed to LD HL,(Ns_Base)
-;(thanks to Dima Bystrov)
-;9.Nov.2004 - Ns_Base and AddToNs are merged to Ns_Base_AddToNs;
-;LD A,255 changed to DEC A (at start of PLAY); added ROUT_A0
-;12.Nov.2004 - NtSkCn&Volume are merged (8 bytes smaller init);
-;LD BC,T1_ changed to PUSH DE...POP BC in note table creator
-;19.Dec.2004 - NT_DATA reorganized (6 bytes shorter, thanks to
-;Ivan Roshin); C_PORTM and C_GLISS are merged via SET_STP (48
-;tacts slower, but 8 bytes smaller, thanks to Ivan Roshin)
-;Release 7 steps:
-;29.Apr.2007 - SjAsm adaptation; new 1.xx and 2.xx
-;interpretation for PT 3.7+.
+;04/15/2005
+;Removed loop bit resetting for no loop build (5 bytes shorter)
+;04/30/2007
+;New 1.xx and 2.xx interpretation for PT 3.7+.
 
-;Tests in IMMATION TESTER V1.0 by Andy Man/POS (thanks to
-;Himik's ZxZ for help):
-;Module name/author	Min tacts	Max tacts	Average
-;Spleen/Nik-O		1720		9256		5500
-;Chuta/Miguel		1720		9496		5500
-;Zhara/Macros		4536		8744		5500
+;Tests in IMMATION TESTER V1.0 by Andy Man/POS
+;(for minimal build)
+;Module name/author	Min tacts	Max tacts
+;PT3 (a little slower than standalone player)
+;Spleen/Nik-O		1720		9368
+;Chuta/Miguel		1720		9656
+;Zhara/Macros		4536		8792
+;PT2 (more slower than standalone player)
+;Epilogue/Nik-O		3928		10232
+;NY tHEMEs/zHenYa	3848		9208
+;GUEST 4/Alex Job	2824		9352
+;KickDB/Fatal Snipe	1720		9880
 
-;Size:
-;Code block #651 bytes
+;Size (minimal build for ZX Spectrum):
+;Code block #7B9 bytes
 ;Variables #21D bytes (can be stripped)
-;Size in RAM #651+#21D=#86E (2158) bytes
+;Size in RAM #7B9+#21D=#9D6 (2518) bytes
 
 ;Notes:
 ;Pro Tracker 3.4r can not be detected by header, so PT3.4r tone
-;tables really used only for modules of 3.3 and older versions.
-	SAVEBIN "player.bin", START, $ - START
+;tables realy used only for modules of 3.3 and older versions.
+    SAVEBIN "player.bin", #4000, $ - #4000

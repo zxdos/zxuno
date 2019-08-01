@@ -87,7 +87,7 @@ pageScrollDn:
 pageScrollUp:
     ld a, (show_offset)
     and a
-    ret z
+    jp z, showLp
 
     ld hl, (show_offset)
     ld de, 20
@@ -96,9 +96,7 @@ pageScrollUp:
 
     ld a, 20
     ld (cursor_pos), a
-    call renderScreen
-    call showCursor
-    jp showLp
+    jp backToPage
 
 selectItem:
     ld a, (cursor_pos)
@@ -227,6 +225,8 @@ imgExt	db ".scr", 0
 imgExt2 db ".SCR", 0
 pt3Ext  db ".pt3", 0
 pt3Ext2 db ".PT3", 0
+pt2Ext  db ".pt2", 0
+pt2Ext2 db ".PT2", 0
 
 checkFile:
 ;; Images
@@ -240,12 +240,29 @@ checkFile:
 	cp 1
 	jr z, loadImage
 ;; Music
+    xor a
+    ld (#4000 + 10), a
+
     ld hl, pt3Ext
     call searchRing
     cp 1
     jr z, playMusic
 
     ld hl, pt3Ext2
+    call searchRing
+    cp 1
+    jr z, playMusic
+
+    ld a, 2
+    ld (#4000 + 10), a
+
+    ld hl, pt2Ext2
+    call searchRing
+    cp 1
+    jr z, playMusic
+
+
+    ld hl, pt2Ext
     call searchRing
     cp 1
     jr z, playMusic
@@ -557,7 +574,7 @@ show_offset     db  0
     display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.7 (c) Alexander Sharikhin", 13,0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.7b (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
 playing   db "Playing... Hold <SPACE> to stop!", 0
