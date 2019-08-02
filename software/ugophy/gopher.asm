@@ -109,7 +109,7 @@ reqErr
     call putStringZ
     xor a
     ld (connectionOpen), a
-    jp showPage
+    ret
 
 ; Load data to ram via gopher
 ; HL - data pointer
@@ -184,6 +184,10 @@ openURI:
 
     call input
 
+    ld a, (iBuff)
+    or a
+    jp z, backToPage
+
     ld b, 19
     ld c, 0
     call gotoXY
@@ -206,7 +210,7 @@ openURI:
     ld bc, d_port
     call openPage
     jp showPage
-    ret
+    
 
 data_pointer    defw #4000
 data_recv       defw 0

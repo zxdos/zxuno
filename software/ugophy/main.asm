@@ -46,8 +46,8 @@ wsLp  halt
 connecting_wifi db 13, ' Connecting to WiFi', 13, 0
 open_lbl db 'Opening connection to ', 0
 
-path    db '/unomenu'
-        defs 247              
+path    db '/ncmenu'
+        defs 248              
 server  db 'nihirash.net'
         defs 58    
 port    db '70'

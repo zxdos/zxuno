@@ -24,18 +24,24 @@ controls:
     jr z, showLp 
 
     cp 'q'
-    jr z, pageCursorUp
+    jp z, pageCursorUp
 
     cp 'a'
-    jr z, pageCursorDown
+    jp z, pageCursorDown
 
     cp 13
     jp z, selectItem 
 
     cp 'b'
-    jr z, historyBack
+    jp z, historyBack
 
     cp 'o'
+    jp z, pageScrollUp
+
+    cp 'p'
+    jp z, pageScrollDn
+
+    cp 'n'
     jp z, openURI
     
     jp showLp
@@ -298,6 +304,9 @@ playMusic:
     ld bc, 322
     ldir
 
+    ld hl, (show_offset)
+    push hl
+
     ld hl, server_buffer
     ld de, file_buffer
     ld bc, port_buffer
@@ -324,7 +333,16 @@ playLp:
     call #4008
     
     call setTurbo4Mode
-    jp historyBack
+    
+    ld hl, server
+    ld de, path
+    ld bc, port
+    call openPage
+
+    pop hl
+    ld (show_offset), hl
+
+    jp backToPage
 
 findFnme:
     push hl
@@ -571,10 +589,9 @@ findNextBlock:
     jp findNextBlock
 
 show_offset     db  0
-    display $
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.7b (c) Alexander Sharikhin", 13,0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.7c (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
 playing   db "Playing... Hold <SPACE> to stop!", 0
