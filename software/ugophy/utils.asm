@@ -2,56 +2,45 @@ SCANDBLCTRL_REG = #0B
 ZXUNO_ADDR = #FC3B
 ZXUNO_REG = #FD3B
 
+; This routine checks availability of extended(128K) memory.
+; Output: 
+; Flag: Z - High memory available 
+checkHighMem:
+    xor a : call changeBank: ld hl, #c000 : xor a :ld (hl), a ; Let's write in zero page zero value
+    inc a : call changeBank : ld a, 13 : ld (hl), a           ; In other page - any other value. Let's write luck 13
+    xor a : call changeBank : ld a, (hl) : and a              ; When we back to zero page - still there zero?!
+    ret
+
 ; A - memory bank
 changeBank:
-    ld bc, #7ffd
-    or #18
-    out (c), a
+    ld bc, #7ffd : or #18 : out (c), a
     ret
 
 setNoTurboMode:
-    push af
-    push bc
+    push af : push bc
 
-    ld a, SCANDBLCTRL_REG
-    ld bc, ZXUNO_ADDR
-    out (c), a 
-
-    ld bc, ZXUNO_REG
-    in a, (c)
-    and #3f
-    out (c), a
+    ld a, SCANDBLCTRL_REG : ld bc, ZXUNO_ADDR : out (c), a 
+    ld bc, ZXUNO_REG : in a, (c) : and #3f : out (c), a     ; And #3F - keep scandoubler settings
     
-    pop bc
-    pop af
+    pop bc : pop af
     ret
 
 setTurbo4Mode:
-    push af
-    push bc
-    ld a, SCANDBLCTRL_REG
-    ld bc, ZXUNO_ADDR
-    out (c), a 
+    push af : push bc
 
-    ld bc, ZXUNO_REG
-    in a, (c)
-    and #3f
-    or #80
-    out (c), a
+    ld a, SCANDBLCTRL_REG : ld bc, ZXUNO_ADDR : out (c), a 
+    ld bc, ZXUNO_REG : in a, (c) : and #3f : or #80 : out (c), a
     
-    pop bc
-    pop af
+    pop bc : pop af
     ret
 
 ; Pushes to UART zero-terminated string
 ; HL - string poiner
 uartWriteStringZ:
-    ld a, (hl)
-    and a
-    ret z
-    push hl
-    call uartWriteByte
-    pop hl
+    ld a, (hl) : and a : ret z
+
+    push hl : call uartWriteByte : pop hl
+    
     inc hl
     jp uartWriteStringZ
 
@@ -59,54 +48,40 @@ uartWriteStringZ:
 ; HL - string pointer
 putStringZ:
 printZ64:
-	ld a,(hl)
-	and a
-	ret z
-	push hl
-	call putC
-	pop hl
+	ld a,(hl) : and a : ret z
+	
+    push hl : call putC : pop hl
+
 	inc hl
 	jr printZ64
 
 printT64:
 	ld b, 63
 ptlp:
-	ld a, 0
-	or b
-	ret z
-	ld a, (hl)
+	ld a, 0 : or b : ret z
 	
-	and a
-	ret z
+    ld a, (hl)
 	
-	cp 09
-	ret z
+	and a : ret z
+	cp 09 : ret z
 
-	push bc
-	push hl
-	call putC
-	pop hl
-	inc hl
-	pop bc	
-	dec b
+	push bc 
+
+	push hl : call putC : pop hl
+	
+    inc hl : pop bc : dec b
 	jr ptlp
 
 printL64:
 	ld a, (hl)
 	
-	and a
-	ret z
-	
-	cp #0A
-	ret z
+	and a : ret z
+	cp #0A : ret z
+	cp #0D : ret z
 
-	cp #0D
-	ret z
-
-	push hl
-	call putC
-	pop hl
-	inc hl
+	push hl : call putC : pop hl
+    
+    inc hl
 	jr printL64
 
 ; HL - string
@@ -114,24 +89,24 @@ printL64:
 getStringLength:
     ld bc, 0
 strLnLp
-    ld a, (hl)
-    and a
-    ret z
-    inc bc
+    ld a, (hl) : and a : ret z
+    inc bc 
     inc hl
     jr strLnLp
 
 SkipWhitespace:
-	ld a, (hl)
-	cp ' '
-	ret nz
-	inc hl
+	ld a, (hl) 
+    
+    cp ' ' : ret nz 
+    
+    inc hl
     jr SkipWhitespace
 
 findEnd:
     ld a,(hl)
-    and a
-    ret z
+
+    and a : ret z
+    
     inc hl
     jr findEnd
 
