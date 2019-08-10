@@ -14,8 +14,7 @@ FMODE_CREATE = #0E
 ; Returns: 
 ;  A - current drive
 getDefaultDrive:
-    ld a, 0
-    rst #8
+    ld a, 0 : rst #8
     defb ESX_GETSETDRV
     ret
 
@@ -25,11 +24,9 @@ getDefaultDrive:
 ; Returns:
 ;  A - file stream id
 fopen:
-    push bc
-    push hl
+    push bc : push hl 
     call getDefaultDrive
-    pop ix
-    pop bc
+    pop ix : pop bc
     rst #8
     defb ESX_FOPEN
     ret
@@ -46,8 +43,7 @@ fclose:
 ; Returns
 ;  BC - length(how much was actually read) 
 fread:
-    push hl
-    pop ix
+    push hl : pop ix
     rst #8
     defb ESX_FREAD
     ret
@@ -58,8 +54,7 @@ fread:
 ; Returns:
 ;   BC - actually written bytes
 fwrite:
-    push hl
-    pop ix
+    push hl : pop ix
     rst #8
     defb ESX_FWRITE
     ret

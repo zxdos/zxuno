@@ -1,68 +1,39 @@
 ; Initialize WiFi chip and connect to WiFi
 initWifi:
-    call setNoTurboMode
-    call loadWiFiConfig
-    call uartBegin
-    ld hl, cmd_plus
-    call uartWriteStringZ
+    call setNoTurboMode : call loadWiFiConfig : call uartBegin
+    
+    ld hl, cmd_plus : call uartWriteStringZ
     ld b,#ff
 wlp:
-    push bc
-    ld b, #ff
-    djnz $
-    pop bc
-    djnz wlp
+    push bc : ld b, #ff : djnz $ : pop bc : djnz wlp
     
-    ld hl, cmd_rst
-    call uartWriteStringZ
+    ld hl, cmd_rst : call uartWriteStringZ
 rstLp:
-    call uartReadBlocking
-    call pushRing
-    ld hl, response_rdy
-    call searchRing
-    cp 1
-    jr nz, rstLp     
+    call uartReadBlocking : call pushRing
 
-    ld hl, cmd_at   ; Disable ECHO. BTW Basic UART test
-    call okErrCmd
-    and 1
-    jr z, errInit
+    ld hl, response_rdy : call searchRing : cp 1 : jr nz, rstLp     
+; Disable ECHO. BTW Basic UART test
+
+
+    ld hl, cmd_at : call okErrCmd : and 1 : jr z, errInit
+; Lets disconnect from last AP    
+    ld hl, cmd_cwqap : call okErrCmd : and 1 : jr z, errInit
+; Single connection mode 
+    ld hl, cmd_cmux : call okErrCmd : and 1 : jr z, errInit
+; FTP enables this info? We doesn't need it :-)
+    ld hl, cmd_inf_off : call okErrCmd : and 1 : jr z, errInit
+
+; Access Point connection
+    ld hl, cmd_cwjap1 : call uartWriteStringZ : ld hl, ssid : call uartWriteStringZ : ld hl, cmd_cwjap2 : call uartWriteStringZ
+    ld hl, pass :call uartWriteStringZ : ld hl, cmd_cwjap3 : call okErrCmd
+
+    and 1 :jr z, errInit
     
-    ld hl, cmd_cwqap ; Lets disconnect from last AP
-    call okErrCmd
-    and 1
-    jr z, errInit
-
-    ld hl, cmd_cmux ; Single connection mode 
-    call okErrCmd
-    and 1
-    jr z, errInit
-
-    ld hl, cmd_inf_off  ; FTP enables this info? We doesn't need it :-)
-    call okErrCmd
-    and 1
-    jr z, errInit
-
-    ld hl, cmd_cwjap1 ; Access Point connection
-    call uartWriteStringZ
-    ld hl, ssid
-    call uartWriteStringZ
-    ld hl, cmd_cwjap2
-    call uartWriteStringZ
-    ld hl, pass
-    call uartWriteStringZ
-    ld hl, cmd_cwjap3
-    call okErrCmd
-    and 1
-    jr z, errInit
-    
-    ld hl, log_ok
-    call putStringZ
+    ld hl, log_ok : call putStringZ
     call setTurbo4Mode
     ret
 errInit
-    ld hl, log_err
-    call putStringZ
+    ld hl, log_err : call putStringZ
     jr $
 
 
@@ -74,25 +45,12 @@ errInit
 okErrCmd: 
     call uartWriteStringZ
 okErrCmdLp:
-    call uartReadBlocking
-    call pushRing
+    call uartReadBlocking : call pushRing
     
-    ld hl, response_ok
-    call searchRing
-    cp 1
-    jr z, okErrOk
+    ld hl, response_ok   : call searchRing : cp 1 : jr z, okErrOk
+    ld hl, response_err  : call searchRing : cp 1 : jr z, okErrErr
+    ld hl, response_fail : call searchRing : cp 1 : jr z, okErrErr
     
-    ld hl, response_err
-    call searchRing
-    cp 1
-    jr z, okErrErr
-
-    ld hl, response_fail
-    call searchRing
-    cp 1
-    jr z, okErrErr
-
-
     jp okErrCmdLp
 okErrOk
     ld a, 1
@@ -107,59 +65,34 @@ okErrErr
 ;
 ; If connection was closed it calls 'closed_callback'
 getPacket
-	call uartReadBlocking
-	call pushRing
+	call uartReadBlocking : call pushRing
 
-	ld hl, closed
-	call searchRing
-	cp 1
-	jp z, closed_callback
+	ld hl, closed : call searchRing : cp 1 : jp z, closed_callback
+	ld hl, ipd : call searchRing : cp 1 : jr nz, getPacket
 
-	ld hl, ipd
-	call searchRing
-	cp 1
-	jr nz, getPacket
-
-	call count_ipd_lenght
-	ld (bytes_avail), hl
-	push hl
-	pop bc
-	ld hl, output_buffer
+	call count_ipd_lenght : ld (bytes_avail), hl 
+    push hl : pop bc
+    
+    ld hl, output_buffer
 readp:
-	push bc
-	push hl
+	push bc : push hl
 	call uartReadBlocking
 	pop hl
-	ld (hl), a
+	ld (hl), a 
 	pop bc
-	dec bc
-	inc hl
-	ld a, b
-	or c
-	jr nz, readp
-	ld hl, (bytes_avail)
+
+	dec bc : inc hl 
+    
+    ld a, b : or c : jr nz, readp
+	
+    ld hl, (bytes_avail)
 	ret
 
 count_ipd_lenght
 		ld hl,0			; count lenght
-cil1	push hl
-		call uartReadBlocking
-		push af
-		call pushRing
-		pop af
-		pop hl
-		cp      ':'
-		ret z
-		sub     0x30
-		ld      c,l
-		ld      b,h
-		add     hl,hl
-		add     hl,hl
-		add     hl,bc
-		add     hl,hl
-		ld      c,a
-		ld      b,0
-		add     hl,bc
+cil1	push hl : call uartReadBlocking : push af : call pushRing : pop af : pop hl
+		cp      ':' : ret z
+		sub 0x30 : ld c,l : ld b,h : add hl,hl : add hl,hl : add hl,bc : add hl,hl : ld c,a : ld b,0 : add hl,bc
 		jr      cil1
 
 ; HL - z-string to hostname or ip
@@ -167,36 +100,26 @@ cil1	push hl
 startTcp:
     push de
     push hl
-    ld hl, cmd_open1
-    call uartWriteStringZ
-    pop hl
-    call uartWriteStringZ
-    ld hl, cmd_open2
-    call uartWriteStringZ
-    pop de
-    call uartWriteStringZ
-    ld hl, cmd_open3
-    call okErrCmd
+    ld hl, cmd_open1 : call uartWriteStringZ
+    pop hl : call uartWriteStringZ 
+    ld hl, cmd_open2 : call uartWriteStringZ
+    pop de : call uartWriteStringZ 
+    ld hl, cmd_open3 : call okErrCmd
     ret
 
 ; Returns:
 ;  A: 1 - Success
 ;     0 - Failed
 sendByte:
-    push af
-    ld hl, cmd_send_b
-    call okErrCmd
-    cp 1
-    jr nz, sbErr
+    push af 
+    ld hl, cmd_send_b : call okErrCmd
+    cp 1 : jr nz, sbErr
 sbLp
-    call uartReadBlocking
-    ld hl, send_prompt
-    call searchRing
-    cp 1
-    jr nz, sbLp
+    call uartReadBlocking 
+    ld hl, send_prompt : call searchRing : cp 1 : jr nz, sbLp
     pop af
-    ld (sbyte_buff), a
-    call okErrCmd
+
+    ld (sbyte_buff), a : call okErrCmd
     ret
 sbErr:
     pop af
@@ -204,18 +127,11 @@ sbErr:
     ret
 
 loadWiFiConfig:
-    ld b, FMODE_READ
-    ld hl, conf_file
-    call fopen
-
-    push af
-    ld hl, ssid
-    ld bc, 160
-    call fread
-    pop af
-
+    ld b, FMODE_READ : ld hl, conf_file : call fopen
+    push af : ld hl, ssid : ld bc, 160 : call fread : pop af
     call fclose
     ret
+    
 cmd_plus    defb "+++", 0
 cmd_rst     defb "AT+RST",13, 10, 0
 cmd_at      defb "ATE0", 13, 10, 0                  ; Disable echo - less to parse

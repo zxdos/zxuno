@@ -8,8 +8,6 @@ For running you need:
 
 For development you need only sjasmplus. 
 
-Sadly, but there no emulator with ZX-Uno's UART.
-
 ## Supported features
 
 Current version supports:
@@ -17,9 +15,10 @@ Current version supports:
  * Rendering gopher-pages(catalogs)
  * Navigation between pages and servers
  * Rendering plain-text pages
+ * Displaying zx-spectrum screens
+ * Playing PT3 and PT2 music(including TruboSound tracks)
  * Downloading binary files to SD card
  * Opening specified server(only by root path)
- * Screen dumps viewing
 
 ## Legals
 

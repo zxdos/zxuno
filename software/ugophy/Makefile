@@ -1,9 +1,6 @@
 all: ugoph.bin
 
-player.bin: vtpl.asm
-	sjasmplus vtpl.asm
-
-ugoph.bin: *.asm player.bin
+ugoph.bin: *.asm 
 	sjasmplus main.asm
 
 clean: 
