@@ -6,27 +6,32 @@ Start:
 
     call uartBegin
 
-    ld hl, cmd_mode
-    call uartWriteStringZ
-    
-    call wait
+    ld hl, ent : call putS
+    ld hl, cmd_mode : call uartWriteStringZ
+    call wait : call wait
 
-    ld hl, cmd_rst
-    call uartWriteStringZ
-    
-    call wait
-    call wait
+    ld hl, configuring : call putS
+    ld hl, cmd_uart : call uartWriteStringZ
+    call wait : call wait
 
-    ld hl, cmd_at
-    call uartWriteStringZ
+    ld hl, reseting : call putS
+    ld hl, cmd_rst : call uartWriteStringZ
+    call wait : call wait
+
+    ld hl, setting_m : call putS
+    ld hl, cmd_cwmode : call uartWriteStringZ
 wtlp:
-    call uartReadBlocking
-    call pushRing
+    call uartReadBlocking : call pushRing
 
-    ld hl,response_ok
-    call searchRing
-    cp 1
-    jr nz, wtlp
+    ld hl,response_ok : call searchRing
+    cp 1 : jr nz, wtlp
+
+    ld hl, receiv_info : call putS
+    ld hl, cmd_info : call uartWriteStringZ
+infoLp:
+    call uartReadBlocking: push af : call putC : pop af : call pushRing
+    ld hl, response_ok : call searchRing
+    cp 1 : jr nz, infoLp
 
     ld hl, fin
     call putS
@@ -48,19 +53,33 @@ putS:
     or 0
     ret z
     push hl
-    rst #10
+    call putC
     pop hl
     inc hl 
     jr putS
 
-init_txt    defb ".EspRst v.0.1 (c) Nihirash",13,"This tool resets esp-chip",13,0
+putC:
+    cp 13
+    ret s
+    rst #10
+    ret
 
-fin         defb "WiFi module ready to work", 13, 0
+init_txt    defb ".EspRst v.0.2 (c) Nihirash",13,"This tool resets esp-chip",13,0
+fin         defb 13, "WiFi module ready to work!", 13, 0
+ent         defb "Entering command mode", 13, 0
+configuring defb "Configuring UART mode", 13, 0
+reseting    defb "Reseting ESP-chip", 13, 0
+setting_m   defb "WiFi chip to client mode", 13, 0
+receiv_info defb "Getting ESP-chip version", 13, 0
 
 cmd_mode    defb "+++", 0
+cmd_uart    defb "AT+UART_DEF=115200,8,1,0,2", 13, 10, 0
 cmd_rst     defb "AT+RST", 13, 10, 0
-cmd_at      defb "AT", 13, 10, 0
+cmd_echo    defb "ATE0", 13, 10, 0
+cmd_cwmode  defb "AT+CWMODE=1", 13, 10, 0
+cmd_info    defb "AT+GMR", 13, 10, 0
 
 response_ok defb "OK", 13, 10, 0
+response_er defb "ready", 13, 10, 0
 
     SAVEBIN "esprst", Start, $ - Start

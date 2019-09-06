@@ -1,6 +1,6 @@
 all: esprst
 
-esprst:
+esprst: *.asm
 	sjasmplus main.asm
 
 clean:
