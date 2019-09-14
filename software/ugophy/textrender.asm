@@ -17,7 +17,9 @@ txControls:
     and a : ret z
 
     cp 'q' : jp z, txUp
+    cp 'o' : jp z, txUp
     cp 'a' : jp z, txDn
+    cp 'p' : jp z, txDn
     cp 'b' : jp z, historyBack
     cp 'n' : jp z, openURI
 

@@ -2,14 +2,14 @@ showPage:
     xor a : ld (show_offset), a
     inc a :ld (cursor_pos), a
 backToPage:    
+    xor a : call changeBank
     call renderScreen : call showCursor
 showLp:
     xor a : call changeBank
-    jp controls
-
 controls:
-    call inkey
-    
+    xor a : ld (s_show_flag), a
+
+    call inkey 
     cp 0   : jr z, showLp 
     cp 'q' : jp z, pageCursorUp
     cp 'a' : jp z, pageCursorDown
@@ -44,7 +44,7 @@ pageCursorDown:
 pageScrollDn:
     ld hl, (show_offset) : ld de, 20 : add hl, de : ld (show_offset), hl
     ld a, 1 : ld (cursor_pos), a
-
+    
     jp backToPage
 
 pageScrollUp:
@@ -59,7 +59,7 @@ selectItem:
     call findLine
 
     ld a, h : or l : jp z, showLp
-
+    
     ld a, (hl)
 
     cp '1' : jr z, downPg
@@ -117,7 +117,7 @@ dfl:
 
     call hideCursor : call showCursor
 
-    jp showLp
+    jp backToPage
 
 isOpenable:
 	ld a, (hl) : and a : jr z, checkFile
@@ -139,7 +139,7 @@ checkFile:
 ;; Music
     xor a: ld (#400A), a
 
-    ld hl, pt3Ext  : call searchRing : cp 1: jr z, playMusic
+    ld hl, pt3Ext  : call searchRing : cp 1 : jr z, playMusic
     ld hl, pt3Ext2 : call searchRing : cp 1 : jr z, playMusic
 
     ld a, 2 : ld (#400A), a
@@ -155,17 +155,30 @@ loadImage:
     ld hl, #c000 : call loadData
 
 
-    ld c, #ff : xor a : out (c), a
+    xor a : out (#ff), a : out (#fe), a
+    ld b, 255
 wKey:	
-    call inkey : or a : jr z, wKey
+    halt 
+    ld a, (s_show_flag) : and a : jr z, wK2
+    dec b  : jp z, startNext
+wK2:    
+    call inkey  
+    or a   : jr z, wKey
+    cp 's' : jr z, toggleSS
     xor a : call changeBank
 	jp backToPage
+
+toggleSS:
+    ld a, (s_show_flag) : xor #ff : ld (s_show_flag), a 
+    and a : jp nz, startNext
+    jp backToPage
 
 playMusic:
     ld hl, hist : ld de, path : ld bc, 322 : ldir
 
-    ld hl, (show_offset) : push hl
+    ld hl, (show_offset) : ld (offset_tmp), hl
 
+    xor a : call changeBank 
     ld hl, server_buffer : ld de, file_buffer : ld bc, port_buffer : call openPage
 
     ld hl, playing : call showTypePrint
@@ -177,30 +190,30 @@ playMusic:
     ld a, (#400A) : or 1 : ld  (#400A), a
     ld hl, page_buffer : call #4003
 playLp:
-    halt : call #4005
-    xor a : in a, (#fe) : cpl : and 15 : jp nz, stopPlay
+    halt : di : call #4005 : ei
+    xor a : in a, (#fe) : cpl : and 31 : jp nz, stopPlay
     ld a, (#400A) : rla : jr nc, playLp 
 songEnded:
-    call #4008
-    call setTurbo4Mode
+    call #4008 : call setTurbo4Mode
     ld hl, server : ld de, path : ld bc, port : call openPage
     
-    pop hl : ld (show_offset), hl
+    ld hl, (offset_tmp) : ld (show_offset), hl
+startNext:
     ld a, (cursor_pos) : inc a : cp 21 : jr z, playNxtPg : ld (cursor_pos), a
 
     jr playContinue
 playNxtPg:
-    ld hl, (show_offset) : ld de, 20 : add hl, de : ld (show_offset), hl : ld a, 1 : ld (cursor_pos), a
+    ld a, (show_offset) : add 20 : ld (show_offset), a : ld a, 1 : ld (cursor_pos), a
 playContinue:
     call renderScreen : call showCursor
+    xor a : call changeBank
     jp selectItem
 
 stopPlay:
-    call #4008
-    call setTurbo4Mode
+    call #4008 : call setTurbo4Mode
     
     ld hl, server : ld de, path : ld bc, port : call openPage
-    pop hl : ld (show_offset), hl
+    ld hl, (offset_tmp) : ld (show_offset), hl
 
     jp backToPage
 
@@ -360,10 +373,12 @@ findNextBlock:
     inc hl
     jp findNextBlock
 
+s_show_flag     db  0
+offset_tmp      dw  0
 show_offset     db  0
 cursor_pos      db  1
 
-head      db "  UGophy - ZX-UNO Gopher client v. 0.8 (c) Alexander Sharikhin", 13,0
+head      db "  UGophy - ZX-UNO Gopher client v. 0.9 (c) Alexander Sharikhin", 13,0
 
 cleanLine db "                                                                ",0
 playing   db "Playing... Hold <SPACE> to stop!", 0
