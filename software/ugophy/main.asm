@@ -14,14 +14,15 @@
 
     DEVICE ZXSPECTRUM128
     org 24100
+stack_pointer EQU #5aff
 Start: 
     di
-
+    res 4, (iy+1)
     call checkHighMem : jp nz, noMem
     
     xor a : out (#fe), a : call changeBank
 
-    ld sp, #5aff
+    ld sp, stack_pointer
 
     ld de, #4000 : ld bc, eop - player : ld hl, player : ldir
 
@@ -76,9 +77,9 @@ port    db '70'
         db 0
 page_buffer equ $
     display "PAGE buffer:", $
-no128k  db 13, "You're started in 48k mode!", 13
+no128k  db 13, "You're in 48k mode!", 13, 13
         db     "Current version require full", 13 
-        db     "128K memory access", 13
+        db     "128K memory access", 13, 13
         db     "System halted!", 0
 player 
     DISPLAY "Player starts:" , $       

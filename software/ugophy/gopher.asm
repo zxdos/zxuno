@@ -2,19 +2,16 @@
 ; de - path
 ; bc - port
 openPage:
-    push hl : push de : push bc
-
+    ld (srv_ptr), hl : ld (path_ptr), de : ld (port_ptr), bc
     xor a : call changeBank
 
     ex hl, de : ld de, hist : ld bc, 322 : ldir
 
-    ld hl, page_buffer : xor a : ld (hl), a :  ld de, page_buffer + 1 : ld bc, #ffff - page_buffer - 1 : ldir
-
-    pop bc : pop de : pop hl
-
+    ld hl, (srv_ptr) : ld de, (path_ptr) : ld bc, (port_ptr)
     call makeRequest
 
     xor a : call changeBank
+    ld hl, page_buffer : xor a : ld (hl), a :  ld de, page_buffer + 1 : ld bc, #ffff - page_buffer - 1 : ldir
 
     ld hl, page_buffer : call loadData
     
@@ -22,11 +19,15 @@ openPage:
     inc a : ld (cursor_pos), a
     ret
 
+srv_ptr dw 0
+path_ptr dw 0
+port_ptr dw 0 
+
 ; HL - domain stringZ
 ; DE - path stringZ
 ; BC - port stringZ
 makeRequest:
-    push de : push bc : push hl
+    ld (srv_ptr), hl : ld (path_ptr), de : ld (port_ptr), bc
 
     ld hl, downloading_msg : call showTypePrint
 
@@ -34,34 +35,34 @@ makeRequest:
 
 ; Open TCP connection
     ld hl, cmd_open1 : call uartWriteStringZ
-    pop hl : call uartWriteStringZ
+    ld hl, (srv_ptr) : call uartWriteStringZ
     ld hl, cmd_open2 : call uartWriteStringZ
-    pop hl : call uartWriteStringZ
+    ld hl, (port_ptr) : call uartWriteStringZ
     ld hl, cmd_open3 : call okErrCmd
 
-    pop hl : cp 1 : jp nz, reqErr : push hl
+    cp 1 : jp nz, reqErr 
 
 ; Send request
     ld hl, cmd_send : call uartWriteStringZ
-    pop hl : push hl
+    ld hl, (path_ptr)
     call getStringLength 
     push bc : pop hl : inc hl : inc hl :  call B2D16
 
     ld hl, B2DBUF : call SkipWhitespace : call uartWriteStringZ  
     ld hl, crlf : call okErrCmd  
 
-    pop hl : cp 1 : jp nz, reqErr : push hl
+    cp 1 : jp nz, reqErr 
 wPrmt:
     call uartReadBlocking : call pushRing
     ld hl, send_prompt : call searchRing : cp 1 : jr nz, wPrmt
     
-    pop hl : call uartWriteStringZ
+    ld hl, (path_ptr) : call uartWriteStringZ
     
     ld hl, crlf : call uartWriteStringZ : ld a, 1 : ld (connectionOpen), a
     ret
 
-reqErr: 
-    pop hl  ; Now we won't back to same address
+reqErr:  
+    ld sp, stack_pointer
     
     ld hl, connectionError : call showTypePrint : call wSec 
     xor a : ld (connectionOpen), a
@@ -87,7 +88,7 @@ lpLoop:
     jp lpLoop
 
 ldEnd 
-    xor a : ld (data_pointer), a
+    ld hl, 0 : ld (data_pointer), hl
     ret
 
 ; Download file via gopher
@@ -131,6 +132,7 @@ fstream         defb 0
 closed_callback
     xor a
     ld (connectionOpen), a
+    ei
     ret
 
 hostTxt   db 'Enter host: ', 0
