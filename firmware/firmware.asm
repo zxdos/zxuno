@@ -1,6 +1,5 @@
         include version.asm
-        define  LX16            $32
-        define  recovery        0
+        define  recovery        1
         define  recodire        0
         define  zesarux         0
         define  vertical        0
@@ -490,7 +489,11 @@ runbit0 ld      a, l
       IF  version=2
         cp      69
       ELSE
-        cp      56
+        IF  version=3
+          cp      40
+        ELSE
+          cp      56
+        ENDIF
       ENDIF
     ENDIF
         jr      z, bios
@@ -531,7 +534,7 @@ star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 1    ; envío write register status
-      IF  version=3
+      IF  version=4
         ld      hl, $0202
         ld      (menuop), hl
         ld      l, $40
@@ -1051,6 +1054,7 @@ conti   di
         jr      z, ccon0
 runbit  ld      b, h
         call    calbit
+
         ld      bc, zxuno_port
         ld      e, core_addr
         out     (c), e
@@ -2343,8 +2347,8 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
 erfnf   ld      ix, cad78
 terror  jp      ferror
 saba
-      IF  version=2
-        sub     LX16
+      IF  version=3
+        sub     'D'
       ELSE
         sub     $30+version
       ENDIF
@@ -2430,8 +2434,8 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
-      IF  version=2
-        sub     LX16
+      IF  version=3
+        sub     'D'
       ELSE
         sub     $30+version
       ENDIF
@@ -3113,32 +3117,7 @@ calbi3  add     hl, de
         djnz    calbi3
         ret
     ELSE
-      IF  version=2
-calbi1  ld      a, b        ;1-69
-        sub     35
-        jr      c, calbi2   ;<35 c n
-        ld      b, a        ;>=35 nc n-35
-calbi2  ccf
-        push    bc
-        push    af
-        adc     a, a
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, 6    ; envío write enable
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, $c5  ; envío wrear
-        out     (c), a
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-        pop     af
-        or      a
-        pop     bc
-        ld      hl, $0240
-        ret     z
-        ld      de, $0740
-calbi3  add     hl, de
-        djnz    calbi3
-        ret
-      ELSE
+      IF  version=4
 calbi1  ld      hl, $ff00
 calbi2  ld      de, $0900
 calbi3  add     hl, de
@@ -3148,6 +3127,30 @@ calbi3  add     hl, de
         adc     a, a
         ld      (alto highb+1), a
         ret
+      ELSE
+        IF  version=2
+calbi1    ld      a, b        ;1-69
+          sub     35
+          jr      c, calbi2   ;<35 c n
+          ld      b, a        ;>=35 nc n-35
+calbi2    ld      hl, $0240
+          ret     z
+          ld      de, $0740
+calbi3    add     hl, de
+          djnz    calbi3
+          ret
+        ELSE
+calbi1    ld      a, b        ;1-40
+          sub     20
+          jr      c, calbi2   ;<20 c n
+          ld      b, a        ;>=20 nc n-20
+calbi2    ld      hl, $fec0
+          ret     z
+          ld      de, $0c40
+calbi3    add     hl, de
+          djnz    calbi3
+          ret
+        ENDIF
       ENDIF
     ENDIF
 
@@ -4135,7 +4138,7 @@ calcu   add     hl, hl
       ENDIF
 
 savena  
-      IF  version=2
+      IF  version=2 OR version=3
         ld      b, 1
         call    calbit
       ENDIF
@@ -4169,7 +4172,7 @@ wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version=3
+      IF  version>1
         wreg    flash_spi, $21  ; envío sector erase
         ld      hl, (alto highb)
         out     (c), h
@@ -4185,7 +4188,7 @@ wrfls2  call    waits5
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version=3
+      IF  version>1
         wreg    flash_spi, $12  ; envío page program
         ld      hl, (highb)
         out     (c), h
@@ -4411,11 +4414,23 @@ finav
 ; Compressed and RCS filtered logo
 ; -----------------------------------------------------------------------------
       IF  vertical=0
-        incbin  logo256x192.rcs.zx7b
+        IF version=1
+          incbin  logo256x192.rcs.zx7b
+        ELSE
+          IF version=2
+            incbin  logo256x192d.rcs.zx7b
+          ELSE
+            incbin  logo256x192dp.rcs.zx7b
+          ENDIF
+        ENDIF
 finlog  incbin  strings.bin.zx7b
       ELSE
         incbin  bezel.rcs.zx7b
-finbez  incbin  logo192x256.rcs.zx7b
+        IF version=1
+finbez    incbin  logo192x256.rcs.zx7b
+        ELSE
+finbez    incbin  logo192x256d.rcs.zx7b
+        ENDIF
 finlog  incbin  strings.bin.zx7b
       ENDIF
     ENDIF
@@ -4430,10 +4445,10 @@ fllen   defw    $0000, $0000
         defw    $0540
 subnn   sub     6
     ELSE
-      IF  version=2
-        defw    $0740
-      ELSE
+      IF  version=4
         defw    $1200
+      ELSE
+        defw    $0740
       ENDIF
 subnn   sub     6*4
     ENDIF
@@ -4627,9 +4642,9 @@ easter  di
 ; Load flash structures from $06000 to $9000  
 ; ------------------------
 loadch  
-      IF  version=2
-        and     a
-      ENDIF
+;      IF  version=2
+;        and     a
+;      ENDIF
         wreg    flash_cs, 1
         ld      de, config
         ld      hl, $0060   ;old $0aa0
@@ -4646,7 +4661,7 @@ loadch
 rdflsh  ex      af, af'
         push    hl
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version=3
+      IF  version>1
         wreg    flash_spi, $13    ; envio flash_spi un 3, orden de lectura
 highb   ld      a, 0
         out     (c), a
@@ -4808,7 +4823,12 @@ slot2a  ld      de, 3
         ld      e, $c0
     ELSE
 sloti   ld      l, a
-      IF  version=2
+      IF  version=4
+        sub     61              ;-44, -1 -> 0, 43
+        jr      nc, sloti
+        ld      h, d
+      ELSE
+       IF version=2
         sub     44              ;-44, -1 -> 0, 43
         jr      nc, sloti
         ld      h, d
@@ -4816,10 +4836,15 @@ sloti   ld      l, a
         jr      nc, slot2b
         ld      hl, $0400
         ld      e, a
-      ELSE
-        sub     61              ;-44, -1 -> 0, 43
-        jr      nc, sloti
+       ELSE
+        and     $3f
         ld      h, d
+        ld      l, a
+        cp      41
+        jr      c, slot2b
+        sub     41
+        ld      e, d
+       ENDIF
       ENDIF
     ENDIF
 slot2b  add     hl, de          ; $00c0 y 2f80
