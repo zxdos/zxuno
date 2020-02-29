@@ -490,7 +490,7 @@ runbit0 ld      a, l
       IF  version=2
         cp      69
       ELSE
-        cp      31
+        cp      56
       ENDIF
     ENDIF
         jr      z, bios
@@ -2086,7 +2086,7 @@ upgr34  ld      (hl), a
       IF  version=2
         cp      69+5
       ELSE
-        cp      31+5
+        cp      56+5
       ENDIF
     ENDIF
         jr      z, upgr35
@@ -2733,7 +2733,7 @@ upgrai  ld      a, 30
         ld      a, $40
         ld      hl, $4000
         exx
-        call    wrfls0
+        call    wrflsh
         inc     de
         exx
         dec     iyh
@@ -4134,7 +4134,12 @@ calcu   add     hl, hl
         jp      alto slot2c
       ENDIF
 
-savena  ld      a, (menuop+1)
+savena  
+      IF  version=2
+        ld      b, 1
+        call    calbit
+      ENDIF
+        ld      a, (menuop+1)
         sub     4
         ret     c
         call    cbname
@@ -4158,20 +4163,7 @@ savech  ld      a, $20
 ;   DE: target address without last byte
 ;  HL': source address from memory
 ; ------------------------
-wrflsh  
-      IF  version=2
-        push    af
-        adc     a, a
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, 6    ; envío write enable
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, $c5  ; envío wrear
-        out     (c), a
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-        pop     af
-      ENDIF
-wrfls0  ex      af, af'
+wrflsh  ex      af, af'
         xor     a
 wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
@@ -4651,22 +4643,8 @@ loadch
 ;   HL: source address without last byte
 ;    A: number of pages (256 bytes) to read
 ; ------------------------
-      IF  version=2
-rdflsh  push    hl
-        push    af
-        adc     a, a
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, 6    ; envío write enable
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-        wreg    flash_cs, 0     ; activamos spi, enviando un 0
-        wreg    flash_spi, $c5  ; envío wrear
-        out     (c), a
-        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-        pop     af
-      ELSE
 rdflsh  ex      af, af'
         push    hl
-      ENDIF
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
       IF  version=3
         wreg    flash_spi, $13    ; envio flash_spi un 3, orden de lectura
