@@ -1,6 +1,7 @@
 ; Pushes A to ring buffer
 pushRing
     push af
+    rst #10
     ld b, 32
     ld hl, ring_buffer + 1
     ld de, ring_buffer 

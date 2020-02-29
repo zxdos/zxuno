@@ -12,11 +12,15 @@ Start:
 
     ld hl, configuring : call putS
     ld hl, cmd_uart : call uartWriteStringZ
-    call wait : call wait
+    ld b, 255
+rdWt:
+    push bc : call uartRead : halt : pop bc : djnz rdWt
 
     ld hl, reseting : call putS
     ld hl, cmd_rst : call uartWriteStringZ
-    call wait : call wait
+wrlp:
+    call uartReadBlocking : call pushRing
+    ld hl, response_er : call searchRing : cp 1 : jr nz, wrlp
 
     ld hl, setting_m : call putS
     ld hl, cmd_cwmode : call uartWriteStringZ
@@ -80,6 +84,6 @@ cmd_cwmode  defb "AT+CWMODE=1", 13, 10, 0
 cmd_info    defb "AT+GMR", 13, 10, 0
 
 response_ok defb "OK", 13, 10, 0
-response_er defb "ready", 13, 10, 0
+response_er defb "ready", 0
 
     SAVEBIN "esprst", Start, $ - Start
