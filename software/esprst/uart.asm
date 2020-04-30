@@ -55,6 +55,7 @@ urb:
 ; BC will be wasted
 uartWriteByte:
     push af
+    rst #10
     ld bc, ZXUNO_ADDR
     ld a, UART_STAT_REG
     out (c), a

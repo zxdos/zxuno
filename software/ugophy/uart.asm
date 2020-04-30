@@ -17,7 +17,6 @@ uartBegin:
 uartReadBlocking:
     call uartRead
     push af : ld a, 1 : cp b : jr z, urb : pop af
-    ret nz
     jp uartReadBlocking
 urb: 
     pop af
