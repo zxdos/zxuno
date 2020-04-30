@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=C:\Projects\Spartan3a\Coleco_cart\Coleco_cart\synth\DP500e_CV.ncd
+OUTFILE=C:\Projects\Spartan3a\Coleco_cart\Coleco_cart\synth\DP500e_CV.bit
+FAMILY=Spartan3A and Spartan3AN
+PART=xc3s700a-4fg484
+WORKINGDIR=C:\Projects\Spartan3a\Coleco_cart\Coleco_cart\synth
+LICENSE=WebPack
+USER_INFO=__0_0_0

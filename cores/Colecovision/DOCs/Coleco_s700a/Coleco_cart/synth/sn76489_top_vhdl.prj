@@ -1,0 +1,7 @@
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_comp_pack-p.vhd"
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_attenuator.vhd"
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_tone.vhd"
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_noise.vhd"
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_latch_ctrl.vhd"
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_clock_div.vhd"
+vhdl work "C:\Projects\DP_XC500E\Coleco_xm\src\sn76489\sn76489_top.vhd"

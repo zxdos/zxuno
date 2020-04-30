@@ -1,0 +1,17 @@
+	NAME	calc_offset(16)
+	RSEG	CODE(0)
+	PUBLIC	calc_offset
+
+;*********** CALC_OFFSET ************
+; INPUT : d = y, e = x;
+; OUTPUT : de = NAME + y * 32 + x;
+
+
+calc_offset:
+        call    08C0h       ; calc offset by Coleco bios
+        ld      hl,(73f6h)  ; hl = Name Table Offset
+        add     hl,de
+        ex      de,hl        ; de = NAME + y * 32 + x
+        ret
+	
+	end

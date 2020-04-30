@@ -1,0 +1,274 @@
+iMPACT Version: 14.5
+
+iMPACT log file Started on Sat May 25 02:13:54 2013
+
+Welcome to iMPACT
+iMPACT Version: 14.5
+Project: 'C:\Projects\Spartan3a\z80_ddr2\z80_ddr2\\auto_project.ipf' alreadyexists.
+Original project has been renamed to'C:\Projects\Spartan3a\z80_ddr2\z80_ddr2\\auto_project_1.ipf'.
+Project: C:\Projects\Spartan3a\z80_ddr2\z80_ddr2\\auto_project.ipf created.
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : addConfigDevice  -name "coleco_s700a" -path"C:\Projects\Spartan3a\Coleco_cart"
+// *** BATCH CMD : setSubmode -pffserial
+// *** BATCH CMD : setAttribute -configdevice -attr multibootBpiType -value ""
+// *** BATCH CMD : addDesign -version 0 -name "0"
+// *** BATCH CMD : setAttribute -configdevice -attr compressed -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr autoSize -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr fileFormat -value "mcs"
+// *** BATCH CMD : setAttribute -configdevice -attr fillValue -value "FF"
+// *** BATCH CMD : setAttribute -configdevice -attr swapBit -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr dir -value "UP"
+// *** BATCH CMD : setAttribute -configdevice -attr multiboot -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr spiSelected -value "FALSE"
+// *** BATCH CMD : addPromDevice -p 1 -size 0 -name xcf04s
+'1': Added Device xcf04s successfully.
+----------------------------------------------------------------------
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : setSubmode -pffserial
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : addDeviceChain -index 0
+// *** BATCH CMD : setMode -pff
+------------------------  GUI: Wizard Data Report  ---------------------------
+      Compression : false
+      Fill Value : FF
+      Output Format : mcs
+      Swap Bits : false
+      LoadDirection : UP
+      PROM Basename : coleco_s700a
+      File Location : C:\Projects\Spartan3a\Coleco_cart/
+      Auto Selcet : false
+      Number of Revision : 1
+      Number of PROMs : 1
+      PROM Name : xcf04s,   PROM Size : 4194304 bits
+-------------------------- END of Report ----------------------------
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : addDeviceChain -index 0
+Override chain at index 0.
+Overriding chain at index 0.
+1// *** BATCH CMD : deletePromDevice -position 1
+// *** BATCH CMD : setCurrentDesign -version 0
+// *** BATCH CMD : deleteDesign -version 0
+// *** BATCH CMD : setCurrentDesign -version -1
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : addConfigDevice  -name "coleco_s700a" -path"C:\Projects\Spartan3a\Coleco_cart"
+// *** BATCH CMD : setSubmode -pffserial
+// *** BATCH CMD : setAttribute -configdevice -attr multibootBpiType -value ""
+// *** BATCH CMD : addDesign -version 0 -name "0"
+// *** BATCH CMD : setAttribute -configdevice -attr compressed -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr autoSize -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr fileFormat -value "mcs"
+// *** BATCH CMD : setAttribute -configdevice -attr fillValue -value "FF"
+// *** BATCH CMD : setAttribute -configdevice -attr swapBit -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr dir -value "UP"
+// *** BATCH CMD : setAttribute -configdevice -attr multiboot -value "FALSE"
+// *** BATCH CMD : setAttribute -configdevice -attr spiSelected -value "FALSE"
+// *** BATCH CMD : addPromDevice -p 1 -size 0 -name xcf04s
+'1': Added Device xcf04s successfully.
+----------------------------------------------------------------------
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : setSubmode -pffserial
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : addDeviceChain -index 0
+// *** BATCH CMD : setMode -pff
+------------------------  GUI: Wizard Data Report  ---------------------------
+      Compression : false
+      Fill Value : FF
+      Output Format : mcs
+      Swap Bits : false
+      LoadDirection : UP
+      PROM Basename : coleco_s700a
+      File Location : C:\Projects\Spartan3a\Coleco_cart/
+      Auto Selcet : false
+      Number of Revision : 1
+      Number of PROMs : 1
+      PROM Name : xcf04s,   PROM Size : 4194304 bits
+-------------------------- END of Report ----------------------------
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : addDeviceChain -index 0
+Override chain at index 0.
+Overriding chain at index 0.
+// *** BATCH CMD : addDevice -p 1 -file"C:/Projects/Spartan3a/Coleco_cart/Coleco_cart/synth/dp500e_cv.bit"
+'1': Loading file'C:/Projects/Spartan3a/Coleco_cart/Coleco_cart/synth/dp500e_cv.bit' ...
+INFO:iMPACT - Elapsed time =      0 sec.
+done.
+INFO:iMPACT:501 - '1': Added Device xc3s700a successfully.
+----------------------------------------------------------------------
+Add one device.53691INFO:iMPACT - Current time: 25-May-13 2:17:13 AM
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : setSubmode -pffserial
+Total configuration bit size = 2732640 bits.
+Total configuration byte size = 341580 bytes.
+// *** BATCH CMD : generate
+0x53672 (341618) bytes loaded up from 0x0
+Using user-specified prom size of 512K
+Writing file "C:\Projects\Spartan3a\Coleco_cart\coleco_s700a.mcs".
+Writing file "C:\Projects\Spartan3a\Coleco_cart\coleco_s700a.prm".
+Writing file "C:\Projects\Spartan3a\Coleco_cart\coleco_s700a.sig".
+Writing file "C:\Projects\Spartan3a\Coleco_cart\coleco_s700a.cfi".
+// *** BATCH CMD : setCurrentDesign -version 0
+// *** BATCH CMD : deletePromDevice -position 1
+// *** BATCH CMD : setCurrentDesign -version 0
+// *** BATCH CMD : deleteDevice -position 1
+// *** BATCH CMD : deleteDesign -version 0
+// *** BATCH CMD : setCurrentDesign -version -1
+// *** BATCH CMD : setMode -bs
+// *** BATCH CMD : setMode -ss
+// *** BATCH CMD : setMode -sm
+// *** BATCH CMD : setMode -hw140
+// *** BATCH CMD : setMode -spi
+// *** BATCH CMD : setMode -acecf
+// *** BATCH CMD : setMode -acempm
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : setMode -bs
+GUI --- Auto connect to cable...
+// *** BATCH CMD : setCable -port auto
+INFO:iMPACT - Connecting to TCF agent...
+INFO:iMPACT - Digilent Plugin: Plugin Version: 2.4.4
+INFO:iMPACT - Digilent Plugin: no JTAG device was found.
+AutoDetecting cable. Please wait.
+*** WARNING ***: When port is set to auto detect mode, cable speed is set todefault 6 MHz regardless of explicit arguments supplied for setting the baudrates
+PROGRESS_START - Starting Operation.
+Connecting to cable (Usb Port - USB21).
+Checking cable driver.
+ Driver file xusbdfwu.sys found.
+ Driver version: src=1027, dest=1027.
+ Driver windrvr6.sys version = 10.2.1.0. WinDriver v10.21 Jungo (c) 1997 - 2010 Build Date: Aug 31 2010 x86_64 64bit SYS14:14:44, version = 1021.
+ Cable PID = 0008.
+ Max current requested during enumeration is 74 mA.
+Type = 0x0004.
+ Cable Type = 3, Revision = 0.
+ Setting cable speed to 6 MHz.
+Cable connection established.
+Firmware version = 1303.
+File version of C:/Xilinx/14.5/ISE_DS/ISE/data/xusb_xlp.hex = 1303.
+Firmware hex file version = 1303.
+PLD file version = 0012h.
+ PLD version = 0012h.
+PROGRESS_END - End Operation.
+Elapsed time =      1 sec.
+Type = 0x0004.
+ ESN device is not available for this cable.
+Attempting to identify devices in the boundary-scan chain configuration...
+INFO:iMPACT - Current time: 25-May-13 2:18:19 AM
+// *** BATCH CMD : Identify 
+PROGRESS_START - Starting Operation.
+Identifying chain contents...'0': : Manufacturer's ID = Xilinx xcf04s, Version : 15
+INFO:iMPACT:1777 - 
+   Reading C:/Xilinx/14.5/ISE_DS/ISE/xcf/data/xcf04s.bsd...
+INFO:iMPACT:501 - '1': Added Device xcf04s successfully.
+----------------------------------------------------------------------
+'1': : Manufacturer's ID = Xilinx xc3s700a, Version : 0
+INFO:iMPACT:1777 - 
+   Reading C:/Xilinx/14.5/ISE_DS/ISE/spartan3a/data/xc3s700a.bsd...
+INFO:iMPACT:501 - '1': Added Device xc3s700a successfully.
+----------------------------------------------------------------------
+done.
+PROGRESS_END - End Operation.
+Elapsed time =      0 sec.
+// *** BATCH CMD : identifyMPM 
+// *** BATCH CMD : assignFile -p 1 -file"C:/Projects/Spartan3a/Coleco_cart/Coleco_cart/synth/dp500e_cv.bit"
+'1': Loading file'C:/Projects/Spartan3a/Coleco_cart/Coleco_cart/synth/dp500e_cv.bit' ...
+done.
+INFO:iMPACT:2257 - Startup Clock has been changed to 'JtagClk' in the bitstream   stored in memory,
+   but the original bitstream file remains unchanged.
+UserID read from the bitstream file = 0xFFFFFFFF.
+----------------------------------------------------------------------
+INFO:iMPACT:501 - '1': Added Device xc3s700a successfully.
+----------------------------------------------------------------------
+INFO:iMPACT - Current time: 25-May-13 2:18:36 AM
+// *** BATCH CMD : Program -p 1 
+Maximum TCK operating frequency for this device chain: 10000000.
+Validating chain...
+Boundary-scan chain validated successfully.
+'1': Programming device...
+PROGRESS_START - Starting Operation.
+ LCK_cycle = NoWait.
+LCK cycle: NoWait
+done.
+'1': Reading status register contents...
+CRC error                                                                  :        0
+IDCODE not validated while writing FDRI                                    :        0
+DCM Locked                                                                 :        1
+status of GTS_CFG_B                                                        :        1
+status of GWE                                                              :        1
+status of GHIGH                                                            :        1
+value of VSEL pin 0                                                        :        1
+value of VSEL pin 1                                                        :        1
+value of VSEL pin 2                                                        :        1
+value of MODE pin M0                                                       :        1
+value of MODE pin M1                                                       :        0
+value of MODE pin M2                                                       :        1
+value of CFG_RDY (INIT_B)                                                  :        1
+DONEIN input from Done Pin                                                 :        1
+SYNC word not found                                                        :        0
+INFO:iMPACT:2219 - Status register values:
+INFO:iMPACT - 0011 1111 1101 1100 
+INFO:iMPACT:579 - '1': Completed downloading bit file to device.
+INFO:iMPACT:188 - '1': Programming completed successfully.
+ LCK_cycle = NoWait.
+LCK cycle: NoWait
+INFO:iMPACT - '1': Checking done pin....done.
+'1': Programmed successfully.
+PROGRESS_END - End Operation.
+Elapsed time =      1 sec.
+INFO:iMPACT - Current time: 25-May-13 2:19:14 AM
+// *** BATCH CMD : Erase -p 2 
+Maximum TCK operating frequency for this device chain: 10000000.
+Validating chain...
+Boundary-scan chain validated successfully.
+'2': Erasing device...
+PROGRESS_START - Starting Operation.
+'2': Erasure completed successfully.
+PROGRESS_END - End Operation.
+Elapsed time =      6 sec.
+// *** BATCH CMD : assignFile -p 2 -file"C:/Projects/Spartan3a/Coleco_cart/coleco_s700a.mcs"
+'2': Loading file 'C:/Projects/Spartan3a/Coleco_cart/coleco_s700a.mcs' ...
+done.
+// *** BATCH CMD : setAttribute -position 2 -attr packageName -value ""
+INFO:iMPACT - Current time: 25-May-13 2:19:33 AM
+// *** BATCH CMD : Program -p 2 -e -v 
+Maximum TCK operating frequency for this device chain: 10000000.
+Validating chain...
+Boundary-scan chain validated successfully.
+'2': Erasing device...
+PROGRESS_START - Starting Operation.
+'2': Erasure completed successfully.
+'2': Programming device...
+done.
+'2': Putting device in ISP mode...done.
+'2': Putting device in ISP mode...done.
+'2': Verifying device...done.
+'2': Verification completed successfully.
+'2': Calculated checksum matches expected checksum, 0033370e4
+'2': Putting device in ISP mode...done.
+'2': Putting device in ISP mode...done.
+'2': Setting user-programmable bits...
+done.
+'2': Putting device in ISP mode...done.
+'2': Programming completed successfully.
+PROGRESS_END - End Operation.
+Elapsed time =     14 sec.
+Cable is not connected.
+Project: 'C:\Projects\Spartan3a\z80_ddr2\z80_ddr2\\auto_project.ipf' created.
+// *** BATCH CMD : setMode -bs
+// *** BATCH CMD : setMode -ss
+// *** BATCH CMD : setMode -sm
+// *** BATCH CMD : setMode -hw140
+// *** BATCH CMD : setMode -spi
+// *** BATCH CMD : setMode -acecf
+// *** BATCH CMD : setMode -acempm
+// *** BATCH CMD : setMode -pff
+// *** BATCH CMD : setMode -bs
+// *** BATCH CMD : saveProjectFile -file"C:\Projects\Spartan3a\z80_ddr2\z80_ddr2\\auto_project.ipf"
+// *** BATCH CMD : setMode -bs
+// *** BATCH CMD : deleteDevice -position 1
+----------------------------------------------------------------------
+// *** BATCH CMD : deleteDevice -position 1
+// *** BATCH CMD : setMode -bs
+// *** BATCH CMD : setMode -ss
+// *** BATCH CMD : setMode -sm
+// *** BATCH CMD : setMode -hw140
+// *** BATCH CMD : setMode -spi
+// *** BATCH CMD : setMode -acecf
+// *** BATCH CMD : setMode -acempm
+// *** BATCH CMD : setMode -pff

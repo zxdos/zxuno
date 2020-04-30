@@ -1,0 +1,21 @@
+	NAME	screen_on(16)
+	RSEG	CODE(0)
+	PUBLIC	screen_on
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+screen_on:
+        ;push  hl
+        ;push  de
+        ;push  bc
+        push  ix
+	ld 	a,(0x73c4)
+	or	0x40
+	ld      c,a
+	ld      b,1
+	call     0x1fd9
+        pop ix
+        ;pop bc
+        ;pop de
+        ;pop hl
+        ret
+	END

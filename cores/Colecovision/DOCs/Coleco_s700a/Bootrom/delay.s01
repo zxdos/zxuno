@@ -1,0 +1,48 @@
+	NAME	delay(16)
+	RSEG	CODE(0)
+	EXTERN	?CLZ80L_4_06_L00
+	EXTERN	?ENT_PARM_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+
+	extern nmi_flag
+	public  delay
+
+	RSEG	CODE
+	
+	; delay (unsigned icount)
+	
+	; IAR DE = icount
+delay:
+	CALL	?ENT_PARM_DIRECT_L09
+	ld      a,(0x73c4)       ; check if NMI enabled
+	and     0x20
+	jr      z,s3
+s1:              
+	ld      a,e             ; NMI enabled, check _nmi_flag
+	or      d
+	;ret     z
+	jr	z,exit
+	xor     a
+	ld      (nmi_flag),a
+s2:      
+	ld      a,(nmi_flag)
+	or      a
+	jr      z,s2
+	dec     de
+	jr      s1
+s3:      
+	call    0x1fdc           ; NMI disabled, check VDP status
+s4:      
+	ld      a,e
+	or      d
+	;ret    z
+	jr	z,exit
+s5:      
+	call    0x1fdc
+	rlca
+	jr      nc,s5
+	dec     de
+	jr      s4
+exit:
+	JP	?LEAVE_DIRECT_L09
+	end

@@ -1,0 +1,957 @@
+##############################################################################
+#                                                                            #
+# IAR Z80/64180 C-Compiler V4.06A/WIN                                        #
+#                                                                            #
+#       Compile time  =  24/Aug/2012  23:34:33                               #
+#       Target option =  Z80                                                 #
+#       Memory model  =  large                                               #
+#       Source file   =  c:\projects\dp_xc500e\coleco_cart\bootrom\mmc.c     #
+#       List file     =  c:\projects\dp_xc500e\coleco_cart\bootrom\debug\list\mmc.lst#
+#       Object file   =  c:\projects\dp_xc500e\coleco_cart\bootrom\debug\obj\mmc.r01#
+#       ASM file      =  c:\projects\dp_xc500e\coleco_cart\bootrom\debug\list\mmc.s01#
+#       Command line  =  -v0 -ml                                             #
+#                        -OC:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\ #
+#                        -e -K -gA -z9 -RCODE                                #
+#                        -LC:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\List\ #
+#                        -q -t8                                              #
+#                        -AC:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\List\ #
+#                        -IC:\IARZ80\EW23\z80\inc\                           #
+#                        C:\Projects\DP_XC500E\Coleco_cart\Bootrom\mmc.c     #
+#                                                                            #
+#                           Copyright 2001 IAR Systems. All rights reserved. #
+##############################################################################
+
+   \   0000                    NAME    mmc(16)
+   \   0000                    RSEG    CODE(0)
+   \   0000                    RSEG    UDATA0(0)
+   \   0000                    PUBLIC  delay_us
+   \   0000                    PUBLIC  disk_initialize
+   \   0000                    PUBLIC  disk_readp
+   \   0000                    EXTERN  ?CLZ80L_4_06_L00
+   \   0000                    EXTERN  ?L_LSHASG_L03
+   \   0000                    EXTERN  ?ENT_PARM_DIRECT_L09
+   \   0000                    EXTERN  ?ENT_AUTO_DIRECT_L09
+   \   0000                    EXTERN  ?LEAVE_DIRECT_L09
+   \   0000                    RSEG    CODE
+      1          /*------------------------------------------------------------------------/
+      2          /  Bitbanging MMCv3/SDv1/SDv2 (in SPI mode) control module for PFF
+      3          /-------------------------------------------------------------------------/
+      4          /
+      5          /  Copyright (C) 2010, ChaN, all right reserved.
+      6          /
+      7          / * This software is a free software and there is NO WARRANTY.
+      8          / * No restriction on use. You can use, modify and redistribute it for
+      9          /   personal, non-profit or commercial products UNDER YOUR RESPONSIBILITY.
+     10          / * Redistributions of source code must retain the above copyright notice.
+     11          /
+     12          /--------------------------------------------------------------------------/
+     13           Features:
+     14          
+     15           * Very Easy to Port
+     16             It uses only 4-6 bit of GPIO port. No interrupt, no SPI port is used.
+     17          
+     18           * Platform Independent
+     19             You need to modify only a few macros to control GPIO ports.
+     20          
+     21          /-------------------------------------------------------------------------*/
+     22          
+     23          
+     24          #include "diskio.h"
+     25          
+     26          
+     27          /*-------------------------------------------------------------------------*/
+     28          /* Platform dependent macros and functions needed to be modified           */
+     29          /*-------------------------------------------------------------------------*/
+     30          
+     31          #include <intrz80.h>            /* Include hardware specific declareation file here */
+     32          
+     33          //#define OPORT 0x50
+     34          //#define IPORT   0x50
+     35          
+     36          //#define CS  5  
+     37          
+     38          // for software SPI      SD Pin 3,6 = GND , SD Pin 4=VCC
+     39          //#define MOSI 4 // Master Out / Slave In (output)      SD Pin 2
+     40          //#define MISO 3 // Master In / Slave Out (input)       SD Pin 7
+     41          //#define  SCK 2 // Serial Clock (output)               SD Pin 5
+     42          //#define  NSS 5 // Slave Select                                SD Pin 1
+     43          
+     44          
+     45          #define INIT_PORT()     init_port()     /* Initialize MMC control port (CS/CLK/DI:output, DO:input) */
+     46          #define DLY_US(n)       delay_us(n)     /* Delay n microseconds */
+     47          //#define       FORWARD(d)      forward(d)      /* Data in-time processing function (depends on the project) */
+     48          
+     49          //#define       CS_H()  output(OPORT,OUTBYTE |= (1<<CS))  
+     50          //#define CS_L()        output(OPORT,OUTBYTE &= ~(1<<CS))   /* Set MMC CS "low" */
+     51          //#define CK_H()        output(OPORT,OUTBYTE |= (1<<SCK))  /* Set MMC SCLK "high" */
+     52          //#define       CK_L()  output(OPORT,OUTBYTE &= ~(1<<SCK)) /* Set MMC SCLK "low" */
+     53          //#define DI_H()        output(OPORT,OUTBYTE=OUTBYTE | (1<<MOSI))   /* Set MMC DI "high" */
+     54          //#define DI_L()        output(OPORT,OUTBYTE=OUTBYTE & ~(1<<MOSI))  /* Set MMC DI "low" */
+     55          //#define DO    input(IPORT) & (1<<MISO)
+     56          //#define DO                    btest(P3)       /* Get MMC DO value (high:true, low:false) */
+     57          
+     58          
+     59          
+     60          //#define OPORT 0x50
+     61          //#define IPORT 0x50
+     62          
+     63          #define SPI_SS 0x50
+     64          #define SPI_WR 0x51
+     65          #define SPI_RD 0x50
+     66          
+     67          #define CS_L() output(SPI_SS,0)
+     68          #define CS_H() output(SPI_SS,1)
+     69          
+     70          
+     71          /*--------------------------------------------------------------------------
+     72          
+     73             Module Private Functions
+     74          
+     75          ---------------------------------------------------------------------------*/
+     76          
+     77          /* Definitions for MMC/SDC command */
+     78          #define CMD0    (0x40+0)        /* GO_IDLE_STATE */
+     79          #define CMD1    (0x40+1)        /* SEND_OP_COND (MMC) */
+     80          #define ACMD41  (0xC0+41)       /* SEND_OP_COND (SDC) */
+     81          #define CMD8    (0x40+8)        /* SEND_IF_COND */
+     82          #define CMD16   (0x40+16)       /* SET_BLOCKLEN */
+     83          #define CMD17   (0x40+17)       /* READ_SINGLE_BLOCK */
+     84          #define CMD24   (0x40+24)       /* WRITE_BLOCK */
+     85          #define CMD55   (0x40+55)       /* APP_CMD */
+     86          #define CMD58   (0x40+58)       /* READ_OCR */
+     87          
+     88          /* Card type flags (CardType) */
+     89          #define CT_MMC                          0x01    /* MMC ver 3 */
+     90          #define CT_SD1                          0x02    /* SD ver 1 */
+     91          #define CT_SD2                          0x04    /* SD ver 2 */
+     92          #define CT_SDC                          (CT_SD1|CT_SD2) /* SD */
+     93          #define CT_BLOCK                        0x08    /* Block addressing */
+     94          
+     95          
+     96          void delay_us (UINT delay) {
+   \   0000            delay_us:
+   \   0000  CD0000            CALL    ?ENT_AUTO_DIRECT_L09
+   \   0003  0000              DEFW    0
+     97          UINT d;
+     98           for (d=0; d < delay; d++) ;              // delay*2 for AT89C52
+   \   0005  110000            LD      DE,0
+   \   0008            ?0001:
+   \   0008  DD4E02            LD      C,(IX+2)
+   \   000B  DD4603            LD      B,(IX+3)
+   \   000E  6B                LD      L,E
+   \   000F  62                LD      H,D
+   \   0010  A7                AND     A
+   \   0011  ED42              SBC     HL,BC
+   \   0013  3003              JR      NC,?0000
+   \   0015            ?0002:
+   \   0015  13                INC     DE
+     99          
+    100          }
+   \   0016  18F0              JR      ?0001
+   \   0018            ?0000:
+   \   0018  C30000            JP      ?LEAVE_DIRECT_L09
+    101          
+    102          
+    103          static
+    104          BYTE CardType;                  /* b0:MMC, b1:SDv1, b2:SDv2, b3:Block addressing */
+    105          
+    106          
+    107          
+    108          
+    109          
+    110          /*-----------------------------------------------------------------------*/
+    111          /* Transmit a byte to the MMC (bitbanging)                               */
+    112          /*-----------------------------------------------------------------------*/
+    113          
+    114          static
+    115          void xmit_mmc (
+    116                  BYTE d                  /* Data to be sent */
+    117          )
+    118          {
+   \   001B            xmit_mmc:
+   \   001B  CD0000            CALL    ?ENT_PARM_DIRECT_L09
+    119          // BYTE j=0;
+    120           
+    121          //unsigned char SPI_count; // counter for SPI transaction
+    122          //SCK=0;
+    123          //for (SPI_count = 8; SPI_count > 0; SPI_count--) // single byte SPI loop
+    124          //{
+    125          //MOSI = d & 0x80; // put current outgoing bit on MOSI
+    126          //d = SPI_byte << 1; // shift next bit into MSB
+    127          //SCK = 1; // set SCK high
+    128          //d |= MISO; // capture current bit on MISO
+    129          //SCK = 0; // set SCK low
+    130          //}
+    131          
+    132          
+    133          //      if (d & 0x80) DI_H(); else DI_L();      /* bit7 */
+    134          //      CK_H();   CK_L();  
+    135          //      if (d & 0x40) DI_H(); else DI_L();      /* bit6 */
+    136          //      CK_H();   CK_L();  
+    137          //      if (d & 0x20) DI_H(); else DI_L();      /* bit5 */
+    138          //      CK_H();   CK_L(); 
+    139          //      if (d & 0x10) DI_H(); else DI_L();      /* bit4 */
+    140          //      CK_H();  CK_L();         
+    141          //      if (d & 0x08) DI_H(); else DI_L();      /* bit3 */
+    142          //      CK_H();  CK_L();         
+    143          //      if (d & 0x04) DI_H(); else DI_L();      /* bit2 */
+    144          //      CK_H();  CK_L();           
+    145          //      if (d & 0x02) DI_H(); else DI_L();      /* bit1 */
+    146          //      CK_H();  CK_L();          
+    147          //      if (d & 0x01) DI_H(); else DI_L();      /* bit0 */
+    148          //      CK_H();  CK_L();
+    149          
+    150          output(SPI_WR,d);
+   \   001E  015100            LD      BC,81
+   \   0021  ED59              OUT     (C),E
+    151          
+    152          }
+   \   0023  C30000            JP      ?LEAVE_DIRECT_L09
+    153          
+    154          
+    155          
+    156          /*-----------------------------------------------------------------------*/
+    157          /* Receive a byte from the MMC (bitbanging)                              */
+    158          /*-----------------------------------------------------------------------*/
+    159          
+    160          static
+    161          BYTE rcvr_mmc (void)
+    162          {
+   \   0026            rcvr_mmc:
+   \   0026  C5                PUSH    BC
+   \   0027  D5                PUSH    DE
+    163                  BYTE r;
+    164          
+    165          
+    166          //      DI_H(); /* Send 0xFF */
+    167          
+    168          //      r = 0;   if (DO) r++;   /* bit7 */
+    169          //      CK_H(); CK_L();
+    170          //      r <<= 1; if (DO) r++;   /* bit6 */
+    171          //      CK_H(); CK_L();
+    172          //      r <<= 1; if (DO) r++;   /* bit5 */
+    173          //      CK_H(); CK_L();
+    174          //      r <<= 1; if (DO) r++;   /* bit4 */
+    175          //      CK_H(); CK_L();
+    176          //      r <<= 1; if (DO) r++;   /* bit3 */
+    177          //      CK_H(); CK_L();
+    178          //      r <<= 1; if (DO) r++;   /* bit2 */
+    179          //      CK_H(); CK_L();
+    180          //      r <<= 1; if (DO) r++;   /* bit1 */
+    181          //      CK_H(); CK_L();
+    182          //      r <<= 1; if (DO) r++;   /* bit0 */
+    183          //      CK_H(); CK_L();
+    184                  
+    185                  output(SPI_WR,0xff);
+   \   0028  3EFF              LD      A,255
+   \   002A  015100            LD      BC,81
+   \   002D  ED79              OUT     (C),A
+    186              r = input(SPI_RD);
+   \   002F  0B                DEC     BC
+   \   0030  ED50              IN      D,(C)
+    187                  return r;
+   \   0032  7A                LD      A,D
+    188          }
+   \   0033  D1                POP     DE
+   \   0034  C1                POP     BC
+   \   0035  C9                RET
+    189          
+    190          
+    191          /*---------------------*/
+    192          /* Wait for card ready */
+    193          
+    194          //static
+    195          //BYTE wait_ready()
+    196          //{
+    197          //      BYTE data res;
+    198          //
+    199          //UINT  Timer = 5000;                   /* Wait for ready in timeout of 500ms */
+    200          //      rcvr_mmc ();
+    201          //      do
+    202          //      {
+    203          //              res = rcvr_mmc ();
+    204          //      }
+    205          //      while ((res != 0xFF) && Timer--);
+    206          //
+    207          //      return res;
+    208          //}
+    209          
+    210          
+    211          /*-----------------------------------------------------------------------*/
+    212          /* Skip bytes on the MMC (bitbanging)                                    */
+    213          /*-----------------------------------------------------------------------*/
+    214          
+    215          static
+    216          void skip_mmc (
+    217                  WORD n          /* Number of bytes to skip */
+    218          )
+    219          {
+   \   0036            skip_mmc:
+   \   0036  C5                PUSH    BC
+   \   0037  DDE5              PUSH    IX
+   \   0039  D5                PUSH    DE
+   \   003A  DDE1              POP     IX
+   \   003C            ?0089:
+   \   003C            ?0006:
+    220          //      DI_H(); /* Send 0xFF */
+    221          
+    222                  do {
+    223                  output(SPI_WR,0xff);
+   \   003C  3EFF              LD      A,255
+   \   003E  015100            LD      BC,81
+   \   0041  ED79              OUT     (C),A
+    224          //              CK_H(); CK_L();
+    225          //              CK_H(); CK_L();
+    226          //              CK_H(); CK_L();
+    227          //              CK_H(); CK_L();
+    228          //              CK_H(); CK_L();
+    229          //              CK_H(); CK_L();
+    230          //              CK_H(); CK_L();
+    231          //              CK_H(); CK_L();
+    232                  } while (--n);
+   \   0043  DD2B              DEC     IX
+   \   0045  DDE5              PUSH    IX
+   \   0047  E1                POP     HL
+   \   0048  7D                LD      A,L
+   \   0049  B4                OR      H
+   \   004A  20F0              JR      NZ,?0089
+   \   004C            ?0004:
+    233          
+    234          }
+   \   004C  DDE1              POP     IX
+   \   004E  C1                POP     BC
+   \   004F  C9                RET
+    235          
+    236          
+    237          /*-----------------------------------------------------------------------*/
+    238          /* Deselect the card and release SPI bus                                 */
+    239          /*-----------------------------------------------------------------------*/
+    240          
+    241          static
+    242          void release_spi (void)
+    243          {
+   \   0050            release_spi:
+   \   0050  C5                PUSH    BC
+    244                  CS_H();
+    245                  rcvr_mmc();
+   \   0051  CD5600            CALL    ?0091
+    246          }
+   \   0054  C1                POP     BC
+   \   0055  C9                RET
+   \   0056            ?0091:
+   \   0056  3E01              LD      A,1
+   \   0058  015000            LD      BC,80
+   \   005B            ?0092:
+   \   005B  ED79              OUT     (C),A
+   \   005D  C32600            JP      rcvr_mmc
+    247          
+    248          
+    249          /*-----------------------------------------------------------------------*/
+    250          /* Send a command packet to MMC                                          */
+    251          /*-----------------------------------------------------------------------*/
+    252          // RE-ENTRANT !
+    253          static
+    254          BYTE send_cmd (
+    255                  BYTE cmd,               /* Command byte */
+    256                  DWORD arg               /* Argument */
+    257          )  
+    258          {
+   \   0060            send_cmd:
+   \   0060  CD0000            CALL    ?ENT_AUTO_DIRECT_L09
+   \   0063  FEFF              DEFW    65534
+    259                  BYTE n, res;
+    260          
+    261          
+    262          //   if (wait_ready() != 0xFF)
+    263          //      {
+    264          //              return 0xFF;
+    265          //      }
+    266          
+    267          
+    268                  if (cmd & 0x80) {       /* ACMD<n> is the command sequense of CMD55-CMD<n> */
+   \   0065  DDCB027E          BIT     7,(IX+2)
+   \   0069  2819              JR      Z,?0010
+   \   006B            ?0007:
+    269                          cmd &= 0x7F;
+   \   006B  DDCB02BE          RES     7,(IX+2)
+    270                          res = send_cmd(CMD55, 0);
+   \   006F  210000            LD      HL,0
+   \   0072  E5                PUSH    HL
+   \   0073  E5                PUSH    HL
+   \   0074  1E77              LD      E,119
+   \   0076  CD6000            CALL    send_cmd
+   \   0079  E1                POP     HL
+   \   007A  E1                POP     HL
+   \   007B  DD77FF            LD      (IX-1),A
+    271                          if (res > 1) return res;
+   \   007E  47                LD      B,A
+   \   007F  3E01              LD      A,1
+   \   0081  B8                CP      B
+   \   0082  385B              JR      C,?0015
+   \   0084            ?0009:
+    272                  }
+   \   0084            ?0010:
+   \   0084            ?0008:
+    273          
+    274                  /* Select the card */
+    275                  CS_H(); rcvr_mmc();
+   \   0084  CD5600            CALL    ?0091
+    276                  CS_L(); rcvr_mmc();
+   \   0087  AF                XOR     A
+   \   0088  CD5B00            CALL    ?0092
+    277          
+    278                  /* Send a command packet */
+    279                  xmit_mmc(cmd);                                  /* Start + Command index */
+   \   008B  DD5E02            LD      E,(IX+2)
+   \   008E  CD1B00            CALL    xmit_mmc
+    280                  xmit_mmc((BYTE)(arg >> 24));    /* Argument[31..24] */
+   \   0091  DD4E0A            LD      C,(IX+10)
+   \   0094  DD5E0B            LD      E,(IX+11)
+   \   0097  CD1B00            CALL    xmit_mmc
+    281                  xmit_mmc((BYTE)(arg >> 16));    /* Argument[23..16] */
+   \   009A  59                LD      E,C
+   \   009B  CD1B00            CALL    xmit_mmc
+    282                  xmit_mmc((BYTE)(arg >> 8));             /* Argument[15..8] */
+   \   009E  DD5E09            LD      E,(IX+9)
+   \   00A1  CD1B00            CALL    xmit_mmc
+    283                  xmit_mmc((BYTE)arg);                    /* Argument[7..0] */
+   \   00A4  DD5E08            LD      E,(IX+8)
+   \   00A7  CD1B00            CALL    xmit_mmc
+    284                  n = 0x01;                                               /* Dummy CRC + Stop */
+   \   00AA  DD36FE01          LD      (IX-2),1
+    285                  if (cmd == CMD0) n = 0x95;              /* Valid CRC for CMD0(0) */
+   \   00AE  DD7E02            LD      A,(IX+2)
+   \   00B1  FE40              CP      64
+   \   00B3  2004              JR      NZ,?0012
+   \   00B5            ?0011:
+   \   00B5  DD36FE95          LD      (IX-2),149
+   \   00B9            ?0012:
+    286                  if (cmd == CMD8) n = 0x87;              /* Valid CRC for CMD8(0x1AA) */
+   \   00B9  FE48              CP      72
+   \   00BB  2004              JR      NZ,?0014
+   \   00BD            ?0013:
+   \   00BD  DD36FE87          LD      (IX-2),135
+   \   00C1            ?0014:
+    287                  xmit_mmc(n);
+   \   00C1  DD5EFE            LD      E,(IX-2)
+   \   00C4  CD1B00            CALL    xmit_mmc
+    288          
+    289                  /* Receive a command response */
+    290                  n = 10;                                                         /* Wait for a valid response in timeout of 10 attempts */
+   \   00C7  DD36FE0A          LD      (IX-2),10
+   \   00CB            ?0017:
+    291                  do {
+    292                          res = rcvr_mmc();
+   \   00CB  CD2600            CALL    rcvr_mmc
+   \   00CE  DD77FF            LD      (IX-1),A
+    293                  } while ((res & 0x80) && --n);
+   \   00D1  B7                OR      A
+   \   00D2  F2DF00            JP      P,?0015
+   \   00D5  DD35FE            DEC     (IX-2)
+   \   00D8  DD46FE            LD      B,(IX-2)
+   \   00DB  04                INC     B
+   \   00DC  05                DEC     B
+   \   00DD  20EC              JR      NZ,?0017
+   \   00DF            ?0015:
+    294          
+    295                  return res;                     /* Return with the response value */
+   \   00DF  DD7EFF            LD      A,(IX-1)
+    296          }
+   \   00E2            ?0020:
+   \   00E2  C30000            JP      ?LEAVE_DIRECT_L09
+    297          
+    298          
+    299          
+    300          /*--------------------------------------------------------------------------
+    301          
+    302             Public Functions
+    303          
+    304          ---------------------------------------------------------------------------*/
+    305          
+    306          
+    307          /*-----------------------------------------------------------------------*/
+    308          /* Initialize Disk Drive                                                 */
+    309          /*-----------------------------------------------------------------------*/
+    310          
+    311          DSTATUS disk_initialize (void)
+    312          {
+   \   00E5            disk_initialize:
+   \   00E5  CD0000            CALL    ?ENT_AUTO_DIRECT_L09
+   \   00E8  F6FF              DEFW    65526
+    313                  BYTE n, cmd, ty, buf[4];
+    314                  UINT tmr;
+    315          
+    316          
+    317                  CS_H();
+   \   00EA  3E01              LD      A,1
+   \   00EC  015000            LD      BC,80
+   \   00EF  ED79              OUT     (C),A
+    318                  skip_mmc(100);                  /* Dummy clocks */
+   \   00F1  116400            LD      DE,100
+   \   00F4  CD3600            CALL    skip_mmc
+    319          
+    320                  ty = 0;
+   \   00F7  DD70F7            LD      (IX-9),B
+    321                  if (send_cmd(CMD0, 0) == 1) {                   /* Enter Idle state */
+   \   00FA  68                LD      L,B
+   \   00FB  60                LD      H,B
+   \   00FC  E5                PUSH    HL
+   \   00FD  E5                PUSH    HL
+   \   00FE  1E40              LD      E,64
+   \   0100  CD6000            CALL    send_cmd
+   \   0103  E1                POP     HL
+   \   0104  E1                POP     HL
+   \   0105  3D                DEC     A
+   \   0106  C20A02            JP      NZ,?0061
+   \   0109            ?0021:
+    322                          if (send_cmd(CMD8, 0x1AA) == 1) {       /* SDv2 */
+   \   0109  68                LD      L,B
+   \   010A  60                LD      H,B
+   \   010B  E5                PUSH    HL
+   \   010C  21AA01            LD      HL,426
+   \   010F  E5                PUSH    HL
+   \   0110  1E48              LD      E,72
+   \   0112  CD6000            CALL    send_cmd
+   \   0115  E1                POP     HL
+   \   0116  E1                POP     HL
+   \   0117  3D                DEC     A
+   \   0118  C2AF01            JP      NZ,?0024
+   \   011B            ?0023:
+    323                                  for (n = 0; n < 4; n++) buf[n] = rcvr_mmc();    /* Get trailing return value of R7 resp */
+   \   011B  DD70F6            LD      (IX-10),B
+   \   011E            ?0026:
+   \   011E  DD7EF6            LD      A,(IX-10)
+   \   0121  FE04              CP      4
+   \   0123  3011              JR      NC,?0025
+   \   0125            ?0027:
+   \   0125  4F                LD      C,A
+   \   0126  210400            LD      HL,4
+   \   0129  39                ADD     HL,SP
+   \   012A  09                ADD     HL,BC
+   \   012B  E5                PUSH    HL
+   \   012C  CD2600            CALL    rcvr_mmc
+   \   012F  E1                POP     HL
+   \   0130  77                LD      (HL),A
+   \   0131  DD34F6            INC     (IX-10)
+   \   0134  18E8              JR      ?0026
+   \   0136            ?0025:
+    324                                  if (buf[2] == 0x01 && buf[3] == 0xAA) {                 /* The card can work at vdd range of 2.7-3.6V */
+   \   0136  DD46FC            LD      B,(IX-4)
+   \   0139  05                DEC     B
+   \   013A  C20A02            JP      NZ,?0061
+   \   013D  DD7EFD            LD      A,(IX-3)
+   \   0140  FEAA              CP      170
+   \   0142  C20A02            JP      NZ,?0061
+   \   0145            ?0032:
+   \   0145            ?0031:
+   \   0145            ?0029:
+    325                                          for (tmr = 1000; tmr; tmr--) {                          /* Wait for leaving idle state (ACMD41 with HCS bit) */
+   \   0145  DD36F8E8          LD      (IX-8),232
+   \   0149  DD36F903          LD      (IX-7),3
+   \   014D            ?0034:
+   \   014D  DD7EF8            LD      A,(IX-8)
+   \   0150  DDB6F9            OR      (IX-7)
+   \   0153  2815              JR      Z,?0033
+   \   0155            ?0035:
+    326                                                  if (send_cmd(ACMD41, 1UL << 30) == 0) break;
+   \   0155  210040            LD      HL,16384
+   \   0158  E5                PUSH    HL
+   \   0159  65                LD      H,L
+   \   015A  E5                PUSH    HL
+   \   015B  1EE9              LD      E,233
+   \   015D  CD6000            CALL    send_cmd
+   \   0160  E1                POP     HL
+   \   0161  E1                POP     HL
+   \   0162  B7                OR      A
+   \   0163  2805              JR      Z,?0033
+   \   0165            ?0037:
+   \   0165            ?0038:
+    327                                                  DLY_US(1000);
+   \   0165  CD2002            CALL    ?0093
+   \   0168  18E3              JR      ?0034
+   \   016A            ?0033:
+    328                                          }
+    329                                          if (tmr && send_cmd(CMD58, 0) == 0) {           /* Check CCS bit in the OCR */
+   \   016A  DD7EF8            LD      A,(IX-8)
+   \   016D  DDB6F9            OR      (IX-7)
+   \   0170  283B              JR      Z,?0040
+   \   0172  210000            LD      HL,0
+   \   0175  E5                PUSH    HL
+   \   0176  E5                PUSH    HL
+   \   0177  1E7A              LD      E,122
+   \   0179  CD6000            CALL    send_cmd
+   \   017C  E1                POP     HL
+   \   017D  E1                POP     HL
+   \   017E  B7                OR      A
+   \   017F  202C              JR      NZ,?0040
+   \   0181            ?0042:
+   \   0181            ?0041:
+   \   0181            ?0039:
+    330                                                  for (n = 0; n < 4; n++) buf[n] = rcvr_mmc();
+   \   0181  DD77F6            LD      (IX-10),A
+   \   0184            ?0044:
+   \   0184  DD7EF6            LD      A,(IX-10)
+   \   0187  FE04              CP      4
+   \   0189  3013              JR      NC,?0043
+   \   018B            ?0045:
+   \   018B  4F                LD      C,A
+   \   018C  0600              LD      B,0
+   \   018E  210400            LD      HL,4
+   \   0191  39                ADD     HL,SP
+   \   0192  09                ADD     HL,BC
+   \   0193  E5                PUSH    HL
+   \   0194  CD2600            CALL    rcvr_mmc
+   \   0197  E1                POP     HL
+   \   0198  77                LD      (HL),A
+   \   0199  DD34F6            INC     (IX-10)
+   \   019C  18E6              JR      ?0044
+   \   019E            ?0043:
+    331                                                  ty = (buf[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;      /* SDv2 (HC or SC) */
+   \   019E  DDCBFA76          BIT     6,(IX-6)
+   \   01A2  2804              JR      Z,?0048
+   \   01A4  3E0C              LD      A,12
+   \   01A6  1802              JR      ?0049
+   \   01A8            ?0048:
+   \   01A8  3E04              LD      A,4
+   \   01AA            ?0049:
+   \   01AA  DD77F7            LD      (IX-9),A
+   \   01AD            ?0040:
+   \   01AD            ?0030:
+    332                                          }
+    333                                  }
+    334                          } else {                                                        /* SDv1 or MMCv3 */
+   \   01AD  185B              JR      ?0061
+   \   01AF            ?0024:
+    335                                  if (send_cmd(ACMD41, 0) <= 1)   {
+   \   01AF  68                LD      L,B
+   \   01B0  60                LD      H,B
+   \   01B1  E5                PUSH    HL
+   \   01B2  E5                PUSH    HL
+   \   01B3  1EE9              LD      E,233
+   \   01B5  CD6000            CALL    send_cmd
+   \   01B8  E1                POP     HL
+   \   01B9  E1                POP     HL
+   \   01BA  47                LD      B,A
+   \   01BB  3E01              LD      A,1
+   \   01BD  B8                CP      B
+   \   01BE  3806              JR      C,?0052
+   \   01C0            ?0051:
+    336                                          ty = CT_SD1; cmd = ACMD41;      /* SDv1 */
+   \   01C0  DD36F702          LD      (IX-9),2
+    337                                  } else {
+   \   01C4  1803              JR      ?0053
+   \   01C6            ?0052:
+    338                                          ty = CT_MMC; cmd = CMD1;        /* MMCv3 */
+   \   01C6  DD77F7            LD      (IX-9),A
+   \   01C9            ?0053:
+    339                                  }
+    340                                  for (tmr = 1000; tmr; tmr--) {                  /* Wait for leaving idle state */
+   \   01C9  DD36F8E8          LD      (IX-8),232
+   \   01CD  DD36F903          LD      (IX-7),3
+   \   01D1            ?0055:
+   \   01D1  DD7EF8            LD      A,(IX-8)
+   \   01D4  DDB6F9            OR      (IX-7)
+   \   01D7  2814              JR      Z,?0054
+   \   01D9            ?0056:
+    341                                          if (send_cmd(ACMD41, 0) == 0) break;
+   \   01D9  210000            LD      HL,0
+   \   01DC  E5                PUSH    HL
+   \   01DD  E5                PUSH    HL
+   \   01DE  1EE9              LD      E,233
+   \   01E0  CD6000            CALL    send_cmd
+   \   01E3  E1                POP     HL
+   \   01E4  E1                POP     HL
+   \   01E5  B7                OR      A
+   \   01E6  2805              JR      Z,?0054
+   \   01E8            ?0058:
+   \   01E8            ?0059:
+    342                                          DLY_US(1000);
+   \   01E8  CD2002            CALL    ?0093
+   \   01EB  18E4              JR      ?0055
+   \   01ED            ?0054:
+    343                                  }
+    344                                  if (!tmr || send_cmd(CMD16, 512) != 0)                  /* Set R/W block length to 512 */
+   \   01ED  DD7EF8            LD      A,(IX-8)
+   \   01F0  DDB6F9            OR      (IX-7)
+   \   01F3  2811              JR      Z,?0062
+   \   01F5  210000            LD      HL,0
+   \   01F8  E5                PUSH    HL
+   \   01F9  2602              LD      H,2
+   \   01FB  E5                PUSH    HL
+   \   01FC  1E50              LD      E,80
+   \   01FE  CD6000            CALL    send_cmd
+   \   0201  E1                POP     HL
+   \   0202  E1                POP     HL
+   \   0203  B7                OR      A
+   \   0204  2804              JR      Z,?0061
+   \   0206            ?0062:
+   \   0206            ?0063:
+   \   0206            ?0060:
+    345                                          ty = 0;
+   \   0206  DD36F700          LD      (IX-9),0
+   \   020A            ?0061:
+   \   020A            ?0050:
+   \   020A            ?0022:
+    346                          }
+    347                  }
+    348                  CardType = ty;
+   \   020A  DD46F7            LD      B,(IX-9)
+   \   020D  78                LD      A,B
+   \   020E  320000            LD      (CardType),A
+    349                  release_spi();
+   \   0211  CD5000            CALL    release_spi
+    350          
+    351                  return ty ? 0 : STA_NOINIT;
+   \   0214  04                INC     B
+   \   0215  05                DEC     B
+   \   0216  2803              JR      Z,?0065
+   \   0218  AF                XOR     A
+   \   0219  1802              JR      ?0066
+   \   021B            ?0065:
+   \   021B  3E01              LD      A,1
+   \   021D            ?0066:
+    352          }
+   \   021D  C30000            JP      ?LEAVE_DIRECT_L09
+   \   0220            ?0093:
+   \   0220  11E803            LD      DE,1000
+   \   0223  CD0000            CALL    delay_us
+   \   0226  DD6EF8            LD      L,(IX-8)
+   \   0229  DD66F9            LD      H,(IX-7)
+   \   022C  2B                DEC     HL
+   \   022D  DD75F8            LD      (IX-8),L
+   \   0230  DD74F9            LD      (IX-7),H
+   \   0233  C9                RET
+    353          
+    354          
+    355          
+    356          /*-----------------------------------------------------------------------*/
+    357          /* Read partial sector                                                   */
+    358          /*-----------------------------------------------------------------------*/
+    359          
+    360          DRESULT disk_readp (
+    361                  BYTE *buff,             /* Pointer to the read buffer (NULL:Read bytes are forwarded to the stream) */
+    362                  DWORD lba,              /* Sector number (LBA) */
+    363                  WORD ofs,               /* Byte offset to read from (0..511) */
+    364                  WORD cnt                /* Number of bytes to read (ofs + cnt mus be <= 512) */
+    365          )
+    366          {
+   \   0234            disk_readp:
+   \   0234  CD0000            CALL    ?ENT_AUTO_DIRECT_L09
+   \   0237  FCFF              DEFW    -4
+   \   0239  FDE5              PUSH    IY
+   \   023B  DD5E0E            LD      E,(IX+14)
+   \   023E  DD560F            LD      D,(IX+15)
+    367                  DRESULT res;
+    368                  BYTE d;
+    369                  WORD bc, tmr;
+    370          
+    371          
+    372                  if (!(CardType & CT_BLOCK)) lba *= 512;         /* Convert to byte address if needed */
+   \   0241  3A0000            LD      A,(CardType)
+   \   0244  CB5F              BIT     3,A
+   \   0246  200B              JR      NZ,?0068
+   \   0248            ?0067:
+   \   0248  D5                PUSH    DE
+   \   0249  211000            LD      HL,16
+   \   024C  39                ADD     HL,SP
+   \   024D  3E09              LD      A,9
+   \   024F  CD0000            CALL    ?L_LSHASG_L03
+   \   0252  D1                POP     DE
+   \   0253            ?0068:
+    373          
+    374                  res = RES_ERROR;
+   \   0253  DD36FD01          LD      (IX-3),1
+    375                  if (send_cmd(CMD17, lba) == 0) {                /* READ_SINGLE_BLOCK */
+   \   0257  D5                PUSH    DE
+   \   0258  DD6E0A            LD      L,(IX+10)
+   \   025B  DD660B            LD      H,(IX+11)
+   \   025E  E5                PUSH    HL
+   \   025F  DD6E08            LD      L,(IX+8)
+   \   0262  DD6609            LD      H,(IX+9)
+   \   0265  E5                PUSH    HL
+   \   0266  1E51              LD      E,81
+   \   0268  CD6000            CALL    send_cmd
+   \   026B  E1                POP     HL
+   \   026C  E1                POP     HL
+   \   026D  B7                OR      A
+   \   026E  D1                POP     DE
+   \   026F  C2F302            JP      NZ,?0077
+   \   0272            ?0069:
+    376          
+    377                          tmr = 1000;
+   \   0272  FD21E803          LD      IY,1000
+   \   0276            ?0073:
+    378                          do {                                                    /* Wait for data packet in timeout of 100ms */
+    379                                  DLY_US(100);
+   \   0276  D5                PUSH    DE
+   \   0277  116400            LD      DE,100
+   \   027A  CD0000            CALL    delay_us
+   \   027D  D1                POP     DE
+    380                                  d = rcvr_mmc();
+   \   027E  CD2600            CALL    rcvr_mmc
+   \   0281  DD77FC            LD      (IX-4),A
+    381                          } while (d == 0xFF && --tmr);
+   \   0284  3C                INC     A
+   \   0285  2009              JR      NZ,?0071
+   \   0287  FD2B              DEC     IY
+   \   0289  FDE5              PUSH    IY
+   \   028B  E1                POP     HL
+   \   028C  7D                LD      A,L
+   \   028D  B4                OR      H
+   \   028E  20E6              JR      NZ,?0073
+   \   0290            ?0071:
+    382          
+    383                          if (d == 0xFE) {                                /* A data packet arrived */
+   \   0290  DD46FC            LD      B,(IX-4)
+   \   0293  04                INC     B
+   \   0294  04                INC     B
+   \   0295  205C              JR      NZ,?0077
+   \   0297            ?0076:
+    384                                  bc = 514 - ofs - cnt;
+   \   0297  DD4E0C            LD      C,(IX+12)
+   \   029A  DD460D            LD      B,(IX+13)
+   \   029D  210202            LD      HL,514
+   \   02A0  A7                AND     A
+   \   02A1  ED42              SBC     HL,BC
+   \   02A3  A7                AND     A
+   \   02A4  ED52              SBC     HL,DE
+   \   02A6  DD75FE            LD      (IX-2),L
+   \   02A9  DD74FF            LD      (IX-1),H
+    385          
+    386                                  /* Skip leading bytes */
+    387                                  if (ofs) skip_mmc(ofs);
+   \   02AC  79                LD      A,C
+   \   02AD  B0                OR      B
+   \   02AE  280B              JR      Z,?0079
+   \   02B0            ?0078:
+   \   02B0  D5                PUSH    DE
+   \   02B1  DD5E0C            LD      E,(IX+12)
+   \   02B4  DD560D            LD      D,(IX+13)
+   \   02B7  CD3600            CALL    skip_mmc
+   \   02BA  D1                POP     DE
+   \   02BB            ?0079:
+    388          
+    389                                  /* Receive a part of the sector */
+    390                                  if (buff) {     /* Store data to the memory */
+   \   02BB  DD7E02            LD      A,(IX+2)
+   \   02BE  DDB603            OR      (IX+3)
+   \   02C1  281B              JR      Z,?0081
+   \   02C3            ?0080:
+   \   02C3            ?0084:
+    391                                          do
+    392                                                  *buff++ = rcvr_mmc();
+   \   02C3  DD6E02            LD      L,(IX+2)
+   \   02C6  DD6603            LD      H,(IX+3)
+   \   02C9  23                INC     HL
+   \   02CA  DD7502            LD      (IX+2),L
+   \   02CD  DD7403            LD      (IX+3),H
+   \   02D0  2B                DEC     HL
+   \   02D1  E5                PUSH    HL
+   \   02D2  CD2600            CALL    rcvr_mmc
+   \   02D5  E1                POP     HL
+   \   02D6  77                LD      (HL),A
+    393                                          while (--cnt);
+   \   02D7  1B                DEC     DE
+   \   02D8  7B                LD      A,E
+   \   02D9  B2                OR      D
+   \   02DA  20E7              JR      NZ,?0080
+   \   02DC            ?0082:
+    394                                  } else {        /* Forward data to the outgoing stream */
+   \   02DC  1808              JR      ?0086
+   \   02DE            ?0081:
+   \   02DE            ?0088:
+    395                                          do {
+    396                                                  d = rcvr_mmc();
+   \   02DE  CD2600            CALL    rcvr_mmc
+    397                                          //      FORWARD(d);
+    398                                          } while (--cnt);
+   \   02E1  1B                DEC     DE
+   \   02E2  7B                LD      A,E
+   \   02E3  B2                OR      D
+   \   02E4  20F8              JR      NZ,?0081
+   \   02E6            ?0086:
+   \   02E6            ?0085:
+    399                                  }
+    400          
+    401                                  /* Skip trailing bytes and CRC */
+    402                                  skip_mmc(bc);
+   \   02E6  DD5EFE            LD      E,(IX-2)
+   \   02E9  DD56FF            LD      D,(IX-1)
+   \   02EC  CD3600            CALL    skip_mmc
+    403          
+    404                                  res = RES_OK;
+   \   02EF  DD36FD00          LD      (IX-3),0
+   \   02F3            ?0077:
+   \   02F3            ?0070:
+    405                          }
+    406                  }
+    407          
+    408                  release_spi();
+   \   02F3  CD5000            CALL    release_spi
+    409          
+    410                  return res;
+   \   02F6  DD7EFD            LD      A,(IX-3)
+    411          }
+   \   02F9  FDE1              POP     IY
+   \   02FB  C30000            JP      ?LEAVE_DIRECT_L09
+    412          
+    413          
+    414          
+    415          /*-----------------------------------------------------------------------*/
+    416          /* Write partial sector                                                  */
+    417          /*-----------------------------------------------------------------------*/
+    418          #if _USE_WRITE
+    419          
+    420          DRESULT disk_writep (
+    421              const BYTE *buff,   /* Pointer to the bytes to be written (NULL:Initiate/Finalize sector write) */
+    422                  DWORD sa                        /* Number of bytes to send, Sector number (LBA) or zero */
+    423          )
+    424          {
+    425                  DRESULT res;
+    426                  WORD bc, tmr;
+    427                  static WORD wc;
+    428          
+    429          
+    430                  res = RES_ERROR;
+    431          
+    432                  if (buff) {             /* Send data bytes */
+    433                          bc = (WORD)sa;
+    434                          while (bc && wc) {              /* Send data bytes to the card */
+    435                                  xmit_mmc(*buff++);
+    436                                  wc--; bc--;
+    437                          }
+    438                          res = RES_OK;
+    439                  } else {
+    440                          if (sa) {       /* Initiate sector write process */
+    441                                  if (!(CardType & CT_BLOCK)) sa *= 512;  /* Convert to byte address if needed */
+    442                                  if (send_cmd(CMD24, sa) == 0) {                 /* WRITE_SINGLE_BLOCK */
+    443                                          xmit_mmc(0xFF); xmit_mmc(0xFE);         /* Data block header */
+    444                                          wc = 512;                                                       /* Set byte counter */
+    445                                          res = RES_OK;
+    446                                  }
+    447                          } else {        /* Finalize sector write process */
+    448                                  bc = wc + 2;
+    449                                  while (bc--) xmit_mmc(0);       /* Fill left bytes and CRC with zeros */
+    450                                  if ((rcvr_mmc() & 0x1F) == 0x05) {      /* Receive data resp and wait for end of write process in timeout of 300ms */
+    451                                          for (tmr = 10000; rcvr_mmc() != 0xFF && tmr; tmr--)     /* Wait for ready (max 1000ms) */
+    452                                                  DLY_US(100);
+    453                                          if (tmr) res = RES_OK;
+    454                                  }
+    455                                  release_spi();
+    456                          }
+    457                  }
+    458          
+    459                  return res;
+    460          }
+    461          #endif
+   \   0000                    RSEG    UDATA0
+   \   0000            CardType:
+   \   0001                    DEFS    1
+   \   0001                    END
+
+Errors: none
+Warnings: none
+Code size: 766
+Constant size: 0
+Static variable size: Data(1) Iram(0)
+

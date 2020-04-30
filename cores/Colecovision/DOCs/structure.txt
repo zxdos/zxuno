@@ -1,0 +1,25 @@
+Z80 has clock of 3.58MHz
+SN76489 has clock of 3.58 MHz
+
+Memory map (8K blocks)
+----------------------
+0000-1FFF	= BIOS
+2000-3FFF	= ?
+4000-5FFF	= ?
+6000-7FFF	= RAM (1K originally)
+8000-9FFF	= Cartridge
+A000-BFFF	= Cartridge
+C000-DFFF	= Cartridge
+E000-FFFF	= Cartridge
+
+I/O Map
+-------
+00-7F(R/W) = Empty
+80-9F(W)   = Controller 2
+A0-BF(R/W) = VDP
+C0-DF(W)   = Controller 1
+E0-FF(R)   = Controllers:
+ 111xxx0x  = Controller 1
+ 111xxx1x  = Controller 2
+E0-FF(W)   = Audio
+

@@ -1,0 +1,17 @@
+	NAME	cls(16)
+	RSEG	CODE(0)
+	PUBLIC	cls
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE 
+	; cls ()
+
+cls:	
+	push	ix	
+	ld	hl,(0x73F6)
+	ld	de,0x0300	; de = 300h
+	ld   	a,32		;a = chr(32)
+	call	0x1F82
+	pop	ix
+	ret
+	
+	end

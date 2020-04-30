@@ -1,0 +1,11 @@
+# PROMGEN: Xilinx Prom Generator P.20131013
+# Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+SOFTWARE_VERSION P.20131013
+DATE            11/01/2017 - 10:18
+SOURCE          D:\Documentos\Documents\FPGA\8bits\colecofpga\synth\cvuno3\cvuno3_flash.mcs
+DEVICE          16384K
+DATA_WIDTH      4
+FILL_DATA       0xFF
+SIGNATURE       0xF88AA110
+START_ADDRESS   0x00000000 END_ADDRESS 0x00071587 DIRECTION_UP   "D:/Documentos/Documents/FPGA/8bits/colecofpga/synth/cvuno3/cvuno3_top.bit" 6slx16csg324

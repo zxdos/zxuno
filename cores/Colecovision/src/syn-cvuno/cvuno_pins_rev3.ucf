@@ -1,0 +1,173 @@
+#TODO:
+#high priority
+#	Add Cart Dir and OE
+#	Check SRAM OE and CS, 
+#low priority
+#	Add PS/2 keyboard
+#	add HDMI
+
+# Clocks
+NET "clock_50_i"        LOC="V10" | IOSTANDARD = LVCMOS33;
+
+# Buttons
+NET "btn_reset_n_i"		LOC="B2"  | IOSTANDARD = LVCMOS33;
+
+# Video output
+NET "vga_r_o<3>"        LOC="V9"  | IOSTANDARD = LVCMOS33;
+NET "vga_r_o<2>"        LOC="R8"  | IOSTANDARD = LVCMOS33;
+NET "vga_r_o<1>"        LOC="T8"  | IOSTANDARD = LVCMOS33;
+NET "vga_r_o<0>"        LOC="T7"  | IOSTANDARD = LVCMOS33;
+NET "vga_g_o<3>"        LOC="R7"  | IOSTANDARD = LVCMOS33;
+NET "vga_g_o<2>"        LOC="R5"  | IOSTANDARD = LVCMOS33;
+NET "vga_g_o<1>"        LOC="T5"  | IOSTANDARD = LVCMOS33;
+NET "vga_g_o<0>"        LOC="V4"  | IOSTANDARD = LVCMOS33;
+NET "vga_b_o<3>"        LOC="T4"  | IOSTANDARD = LVCMOS33;
+NET "vga_b_o<2>"        LOC="U3"  | IOSTANDARD = LVCMOS33;
+NET "vga_b_o<1>"        LOC="T3"  | IOSTANDARD = LVCMOS33;
+NET "vga_b_o<0>"        LOC="R3"  | IOSTANDARD = LVCMOS33;
+NET "vga_hsync_n_o"     LOC="U10" | IOSTANDARD = LVCMOS33;
+NET "vga_vsync_n_o"     LOC="V11" | IOSTANDARD = LVCMOS33;
+NET "stnd_o"            LOC="H4"  | IOSTANDARD = LVCMOS33;
+NET "pal_clk_en_o"      LOC="H5"  | IOSTANDARD = LVCMOS33;
+
+# HDMI
+NET "hdmi_n_o<0>"       LOC="V6"  | IOSTANDARD = TMDS_33;
+NET "hdmi_p_o<0>"       LOC="T6"  | IOSTANDARD = TMDS_33;
+NET "hdmi_n_o<1>"       LOC="V7"  | IOSTANDARD = TMDS_33;
+NET "hdmi_p_o<1>"       LOC="U7"  | IOSTANDARD = TMDS_33;
+NET "hdmi_n_o<2>"       LOC="V8"  | IOSTANDARD = TMDS_33;
+NET "hdmi_p_o<2>"       LOC="U8"  | IOSTANDARD = TMDS_33;
+NET "hdmi_n_o<3>"       LOC="V5"  | IOSTANDARD = TMDS_33;
+NET "hdmi_p_o<3>"       LOC="U5"  | IOSTANDARD = TMDS_33;
+
+# Sound input/output
+NET "dac_l_o"           LOC="P1"  | IOSTANDARD = LVCMOS33;
+NET "dac_r_o"           LOC="P2"  | IOSTANDARD = LVCMOS33;
+
+# SRAM
+NET "sram_addr_o<0>"    LOC="U18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<1>"    LOC="U17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<2>"    LOC="T18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<3>"    LOC="T17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<4>"    LOC="P16" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<5>"    LOC="M16" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<6>"    LOC="K16" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<7>"    LOC="K17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<8>"    LOC="L17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<9>"    LOC="L18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<10>"   LOC="J16" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<11>"   LOC="J18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<12>"   LOC="H17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<13>"   LOC="H18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<14>"   LOC="G16" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<15>"   LOC="E18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<16>"   LOC="D17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<17>"   LOC="D18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<18>"   LOC="C17" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<19>"   LOC="K18" | IOSTANDARD = LVCMOS33;
+NET "sram_addr_o<20>"   LOC="C18" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<0>"   LOC="P18" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<1>"   LOC="P17" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<2>"   LOC="N18" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<3>"   LOC="N17" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<4>"   LOC="G18" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<5>"   LOC="F17" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<6>"   LOC="F18" | IOSTANDARD = LVCMOS33;
+NET "sram_data_io<7>"   LOC="E16" | IOSTANDARD = LVCMOS33;
+NET "sram_oe_n_o"       LOC="F16" | IOSTANDARD = LVCMOS33;
+NET "sram_we_n_o"       LOC="M18" | IOSTANDARD = LVCMOS33;
+
+# SD/MMC
+NET "sd_cs_n_o"         LOC="A5"  | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "sd_sclk_o"         LOC="A6"  | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "sd_mosi_o"         LOC="B6"  | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "sd_miso_i"         LOC="C6"  | IOSTANDARD = LVCMOS33;
+#Missing on board require jumper to D14 LED
+NET "sd_cd_n_i"			LOC="D14" | IOSTANDARD = LVCMOS33 | PULLUP;
+
+# SPI Flash
+NET "flash_cs_n_o"      LOC="V3"  | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "flash_sclk_o"      LOC="R15" | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "flash_mosi_o"      LOC="T13" | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "flash_miso_i"      LOC="R13" | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "flash_wp_o"        LOC="T14" | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+NET "flash_hold_o"      LOC="V14" | IOSTANDARD = LVCMOS33 | DRIVE = 8;
+
+# Keyboard
+NET "ps2_clk_io"        LOC="B4"  | IOSTANDARD = LVCMOS33 | PULLUP | DRIVE = 8;
+NET "ps2_data_io"       LOC="A2"  | IOSTANDARD = LVCMOS33 | PULLUP | DRIVE = 8;
+#NET "ps2_mouse_clk_io"  LOC="A4"  | IOSTANDARD = LVCMOS33 | PULLUP | DRIVE = 8;
+#NET "ps2_mouse_data_io" LOC="A3"  | IOSTANDARD = LVCMOS33 | PULLUP | DRIVE = 8;
+
+# Joystick
+NET "joy_p5_o"          LOC="A7"  | IOSTANDARD = LVCMOS33;
+NET "joy_p8_o"          LOC="C8"  | IOSTANDARD = LVCMOS33;
+NET "joy1_p1_i"         LOC="A15" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy1_p2_i"         LOC="A14" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy1_p3_i"         LOC="B12" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy1_p4_i"         LOC="A12" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy1_p6_i"         LOC="B14" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy1_p7_i"         LOC="C14" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy1_p9_i"         LOC="B11" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p1_i"         LOC="A11" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p2_i"         LOC="A10" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p3_i"         LOC="A9"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p4_i"         LOC="B8"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p6_i"         LOC="C11" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p7_i"         LOC="B9"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "joy2_p9_i"         LOC="A8"  | IOSTANDARD = LVCMOS33 | PULLUP;
+
+# Cartridge board
+NET "cart_addr_o<0>"    LOC="E3"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<1>"    LOC="F3"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<2>"    LOC="F1"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<3>"    LOC="H3"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<4>"    LOC="H1"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<5>"    LOC="K2"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<6>"    LOC="L3"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<7>"    LOC="L1"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<8>"    LOC="N3"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<9>"    LOC="M3"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<10>"   LOC="H2"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<11>"   LOC="G1"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<12>"   LOC="L2"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<13>"   LOC="J1"  | IOSTANDARD = LVCMOS33;
+NET "cart_addr_o<14>"   LOC="K3"  | IOSTANDARD = LVCMOS33;
+NET "cart_data_i<0>"    LOC="D2"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<1>"    LOC="C2"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<2>"    LOC="E4"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<3>"    LOC="C1"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<4>"    LOC="D1"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<5>"    LOC="E1"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<6>"    LOC="F2"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_data_i<7>"    LOC="G3"  | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "cart_dir_o"        LOC="N1"  | IOSTANDARD = LVCMOS33;
+NET "cart_oe_n_o"       LOC="N2"  | IOSTANDARD = LVCMOS33;
+NET "cart_en_80_n_o"    LOC="J3"  | IOSTANDARD = LVCMOS33;
+NET "cart_en_A0_n_o"    LOC="K1"  | IOSTANDARD = LVCMOS33;
+NET "cart_en_C0_n_o"    LOC="D3"  | IOSTANDARD = LVCMOS33;
+NET "cart_en_E0_n_o"    LOC="M1"  | IOSTANDARD = LVCMOS33;
+
+#LED
+NET "led_o"             LOC="F5"  | IOSTANDARD = LVCMOS33 | DRIVE = 16;
+NET "led2_o"            LOC="C15" | IOSTANDARD = LVCMOS33 | DRIVE = 16;
+#LED DONE in V17
+
+# Timings
+NET "clock_50_i" TNM_NET = clock_50_i;
+TIMESPEC TS_clock_50_i = PERIOD "clock_50_i" 20 ns HIGH 50%;
+
+NET "clock_master_s" KEEP | TNM_NET = clock_master_s;
+TIMESPEC TS_clock_master_s = PERIOD "clock_master_s" 46.560 ns HIGH 50%;
+
+NET "clock_mem_s" KEEP | TNM_NET = clock_mem_s;
+TIMESPEC TS_clock_mem_s = PERIOD "clock_mem_s" 23.280 ns HIGH 50%;
+
+NET "clock_vga_s" KEEP | TNM_NET = clock_vga_s;
+TIMESPEC TS_clock_vga_s = PERIOD "clock_vga_s" 40 ns HIGH 50%;
+
+#NET "clock_vdp_en_s" KEEP | TNM_NET = clock_vdp_en_s;
+#TIMESPEC TS_clock_vdp_en_s = PERIOD "clock_vdp_en_s" 93.120 ns HIGH 50%;
+
+NET "clock_hdmi_s" KEEP | TNM_NET = clock_hdmi_s;
+TIMESPEC TS_clock_hdmi_s = PERIOD "clock_hdmi_s" 8 ns HIGH 50%;

@@ -1,0 +1,115 @@
+Format (16 bits)
+
+Bits 15..13 is Packet type:
+001 = Type 1
+010 = Type 2
+
+Type 1:
+111111
+5432109876543210
+001AABBBBBBCCCCC
+
+Type 1 was word count in bits 4..0
+
+Type 2:
+111111
+5432109876543210
+010AABBBBBBxxxxx
+
+Type 2 was word count in next two words:
+
+Word1:
+111111
+5432109876543210
+0000cccccccccccc
+
+Word2:
+111111
+5432109876543210
+cccccccccccccccc
+
+AA     = Op
+BBBBBB = Register
+CCCCC  = Word count (payload)
+xxxxx  = Not used
+
+
+Op:
+00 = Nop
+01 = Read
+10 = Write
+
+Registers:
+000000 (00)	CRC			
+000001 (01)	FAR_MAJ		
+000010 (02)	FAR_MIN		
+000011 (03)	FDRI		
+000100 (04)	FDRO		
+000101 (05)	CMD			Command
+000110 (06)	CTL			Control
+000111 (07)	MASK		Control Mask
+001000 (08)	STAT		
+001001 (09)	LOUT		
+001010 (0A)	COR1		
+001011 (0B)	COR2		
+001100 (0C)	PWRDN_REG	
+001101 (0D)	FLR			
+001110 (0E)	IDCODE		
+001111 (0F)	CWDT		
+010000 (10)	HC_OPT_REG	
+010001 (11)	
+010010 (12)	CSBO		
+010011 (13)	GENERAL1	
+010100 (14)	GENERAL2	
+010101 (15)	GENERAL3	
+010110 (16)	GENERAL4	
+010111 (17)	GENERAL5	
+011000 (18)	MODE_REG	Reboot mode
+011001 (19)	PU_GWE		
+011010 (1A)	PU_GTS		
+011011 (1B)	MFWR		
+011100 (1C)	CCLK_FREQ	
+011101 (1D)	SEU_OPT		
+011110 (1E)	EXP_SIGN	
+011111 (1F)	RDBK_SIGN	
+100000 (20)	BOOTSTS		
+100001 (21)	EYE_MASK	
+100010 (22)	CBC_REG		
+
+
+Commands:
+00000	NULL
+00001	WCFG
+00010	MFW
+00011	LFRM
+00100	RCFG
+00101	START
+00110	
+00111	RCRC
+01000	ACHIGH
+01001	
+01010	GRESTORE
+01011	SHUTDOWN
+01100	
+01101	DESYNC
+01110	IPROG
+
+
+Mode Register:
+111111
+5432109876543210
+00ABBCCCDDDDDDDD
+
+A        = NEW_MODE (0 = Physical Mode, ignores 10..0, 1 = Bitstream Mode, uses bits 10..1)
+BB       = BUSWIDTH (00 = by 1, 01 = by 2, 10 = by 4)
+CCC      = BOOTMODE (bit 9 = BootMode 1, bit 8 = BootMode 0)
+DDDDDDDD = BOOTVSEL (The vsel setting to reboot)
+
+HC_OPT_REG:
+111111
+5432109876543210
+000000000ABBBBBB
+
+A      = (0 = Do not skip init, 1 = Skip)
+BBBBBB = Reserved (011111)
+

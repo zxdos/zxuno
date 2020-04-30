@@ -1,0 +1,12 @@
+	NAME	vdp_init(16)
+	RSEG	CODE(0)
+	PUBLIC	vdp_init
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+vdp_init:
+        push  ix
+	call     0x18e9
+        pop ix
+      
+        ret
+	END

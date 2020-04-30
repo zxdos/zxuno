@@ -1,0 +1,25 @@
+	NAME	play_sound(16)
+	RSEG	CODE(0)
+	PUBLIC	play_sound
+	EXTERN	?CLZ80L_4_06_L00
+	EXTERN	?ENT_PARM_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+	RSEG	CODE
+
+    
+play_sound:
+	CALL	?ENT_PARM_DIRECT_L09	
+	push    ix
+	push    iy
+	;push    de
+	;push    bc
+	
+    	;ld    	b,(ix+2) ; works
+    	ld      b,e
+    	call	0x1ff1
+    	;pop     bc
+    	;pop     de
+    	pop     iy
+    	pop     ix
+	JP	?LEAVE_DIRECT_L09
+    	END

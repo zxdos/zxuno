@@ -1,0 +1,19 @@
+CC = c2
+CFLAGS = -C -V -O
+
+OBJECTS = ctrainer.obj ctr_tabl.obj
+
+%.obj : %.c
+	$(CC) $(CFLAGS) $<
+
+all: ctrainer.rom
+
+ctrainer.rom: $(OBJECTS) libcv.lib
+	c2 -V -Mctrainer.map $(OBJECTS)
+
+ctrainer.obj: ctrainer.c
+
+ctr_tabl.obj: ctr_tabl.c
+
+clean:
+	rm -f $(OBJECTS)

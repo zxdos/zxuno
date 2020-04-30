@@ -1,0 +1,14 @@
+	NAME	load_ascii(16)
+	RSEG	CODE(0)
+	PUBLIC	load_ascii
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+load_ascii:
+	push  ix
+	;push  bc
+	
+	call  1f7fh
+        ;pop   bc
+        pop   ix
+        ret
+	END

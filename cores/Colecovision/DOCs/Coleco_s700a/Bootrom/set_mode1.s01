@@ -1,0 +1,13 @@
+	NAME	set_mode1(16)
+	RSEG	CODE(0)
+	PUBLIC	set_mode1
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+set_mode1:
+	;push  de
+	push  ix
+	call  1f85h
+        pop  ix
+        ;pop  de
+        ret
+	END

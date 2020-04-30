@@ -1,0 +1,45 @@
+	NAME	set_snd(16)
+	RSEG	CODE(0)
+	PUBLIC	set_snd_table
+	PUBLIC	_set_snd_table
+	EXTERN  snd_table
+	EXTERN	?CLZ80L_4_06_L00
+	EXTERN	?ENT_PARM_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+	RSEG	CODE
+
+set_snd_table:
+	CALL	?ENT_PARM_DIRECT_L09
+	
+	;push  ix
+	;push    bc
+	;ld      h,(ix+3) ; works
+	;ld      l,(ix+2) ; works
+	push    de
+	pop     hl
+	ld	b,6
+    	ld 	a,h
+    	or 	a
+    	jr 	nz, call_snd_table
+    	ld 	hl,snd_table_dummy
+call_snd_table:
+    	call 	0x1fee
+	;pop     bc
+	;pop     ix	
+	JP	?LEAVE_DIRECT_L09
+
+_set_snd_table:
+	ld	b,6
+    	ld 	a,h
+    	or 	a
+    	jr 	nz, c_snd_table
+    	ld 	hl,snd_table_dummy
+c_snd_table:
+    	jp 	0x1fee
+
+snd_table_dummy:
+    defw snd_dummy, 0x702b ; SOUNDAREA1
+snd_dummy:
+    defb 0xff
+
+	END    

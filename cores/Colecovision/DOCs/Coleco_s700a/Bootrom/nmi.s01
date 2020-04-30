@@ -1,0 +1,40 @@
+	NAME	nmi(16)
+	RSEG	CODE(0)
+	PUBLIC	enable_nmi
+	PUBLIC	disable_nmi
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+enable_nmi:
+	;push	hl
+        ;push  	de
+        push  	ix
+	ld      a,(0x73c4)
+	or      0x20
+
+	ld      c,a
+	ld      b,1
+	call    0x1fd9
+
+	call    0x1fdc
+	pop   	ix
+	;pop   	de
+	;pop	hl
+	ret
+	
+
+disable_nmi:
+	push	ix
+	;push  	de
+        ;push  	bc
+	ld      a,(0x73c4)
+	and     0xdf
+
+	ld      c,a
+	ld      b,1
+	call    0x1fd9
+	;pop	bc
+	;pop	de
+	pop	ix
+	ret
+
+	END

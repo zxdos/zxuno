@@ -1,0 +1,19 @@
+CC = c2
+CFLAGS = -C -V -O
+
+OBJECTS = copt.obj copttabl.obj
+
+%.obj : %.c
+	$(CC) $(CFLAGS) $<
+
+all: copt.rom
+
+copt.rom: $(OBJECTS) libcv.lib
+	c2 -V -Mcopt.map $(OBJECTS)
+
+copt.obj: copt.c
+
+copttabl.obj: copttabl.c
+
+clean:
+	rm -f $(OBJECTS)

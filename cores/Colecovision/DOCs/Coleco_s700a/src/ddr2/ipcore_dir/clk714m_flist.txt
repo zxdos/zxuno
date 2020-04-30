@@ -1,0 +1,2 @@
+# Output products list for <clk714m>
+clk714m_flist.txt

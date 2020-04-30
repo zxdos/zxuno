@@ -1,0 +1,237 @@
+============================================
+= Sega Six Button Controller Hardware Info =
+============================================
+
+     Source: http://www.cs.cmu.edu/~chuck/infopg/segasix.txt
+     Author: Charles Rosenberg, chuck@cs.cmu.edu
+    Version: 1.0
+Last Update: 9/9/96
+
+
+==========
+Background
+==========
+
+A couple of months ago I was looking for a cheap, robust, hand held
+controller for a project I was working on.  The controller for the
+Sega Genesis was the perfect choice because it was ready available and
+had a standard DB-9 connector for interfacing instead of the
+proprietary connectors used on the controllers for a lot of the newer
+game systems.  I was able to find interface info for the 3 button
+controller, but I could not find any information about accessing the
+X, Y, and Z buttons on the newer 6 button controllers.  A little
+reverse engineering uncovered the necessary info.  This document
+describes how to interface to a 6 button Sega Genesis Controller.
+
+============
+Introduction
+============
+
+The controller for the Sega Genesis is a hand held controller useful
+for many applications.  It has a joypad, a start button, and action
+buttons.  Another big advantage is that it has a standard DB-9
+connector for interfacing instead of a proprietary connector.  The
+original version of the controller has three action buttons, labeled:
+A, B, and C.  The original version was easy to interface to.  Newer
+versions of controller have six buttons, the original three and three
+new ones, labeled: X, Y, and Z.  The newer version is a little more
+tricky.
+
+======================
+Three Button Interface
+======================
+
+The interface for the original three button controller is relatively
+simple.  (I know that it has been described elsewhere, but I think
+that this description is more straightforward.)  You can open up the
+controller and see that a standard quad 2:1 multiplexer chip is
+inside, a 74HC157.  A 2:1 multiplexer directs data from one of two
+sources to a single input line based on the state of a select signal.
+So, theoretically, this chip would allow 8 signals to be sent over 4
+data lines.  The way the Genesis uses this chip, the data from the 8
+switches in the controller is sent over 6 data lines, not quite the
+most economical solution, but one which makes the controller backwards
+compatible with Atari 2600 joysticks.
+
+Inside the controller is a small PC board which contains the 74HC157,
+some 10K pull-up resistors and some bypass capacitors.  The switches
+are connected so when a switch is pressed (closed) it shorts its
+output to ground, otherwise it's output is 5 volts (via the pull-up
+resistors).  One additional connection is a pull-up resistor on the
+select line.  If it is left unconnected it will be "pulled" high.
+
+The following tables summarize how the signals are mapped to DB-9.
+The output signal to a particular pin depends on the state of the
+select line from the Genesis.  During a standard game, the processor
+will set the select line high or low, depending on the which game
+controller buttons it wants to read.
+
+This table lists connections which are outputs from the Genesis to the
+controller, the first column is the pin number of the DB-9:
+
+Pin  Connection 
+---  ---------------
+ 5   Power: +5 Volts
+ 7   Select signal
+ 8   Power: Ground
+
+This table lists connections which are outputs from the controller to
+the Genesis and are dependent on the logic level to the select signal,
+again the first column is the pin of number the DB-9:
+
+Pin  Connection with select low  Connection with select high
+---  --------------------------  ---------------------------
+ 1   joypad up signal            joypad up signal
+ 2   joypad down signal          joypad down signal
+ 3   logic low (ground)          joypad left signal
+ 4   logic low (ground)          joypad right signal
+ 6   Button A signal             Button B signal
+ 9   Start button signal         Button C signal
+
+Notice that the signals on pins 1 and 2 are not affected by the select
+signal, there is a direct connection from those switches to the
+corresponding pins.  Also notice that signals on pins 3 and 4 are not
+used to send switch info when select is low.
+
+If you monitor the select signal to the controller on an oscilloscope
+while playing a game on the Genesis, it will look something like this:
+
+5V ---+ +-------------+ +-------------+ +---
+      | |             | |             | |
+0V    |_|             |_|             |_|
+
+The low time of the signals is not drawn to scale with the period of
+the signals.  However, notice that the signal is mostly in one state
+(high), and then is low (inverted) for a short period.  A typical game
+may sample the controller at 60 Hz, resulting in a period of 16.7
+milliseconds.  The low time for a select signal pulse might be around
+20 microseconds.  The timing can vary significantly from game to game.
+The basic reason for this pulse pattern, is that every so often, the
+game will call a routine which reads the state of the controller.
+This routine will bring the select signal low and then record those
+values and the bring it back to its default state.
+
+That sums up the three button controller, now on to the new stuff.
+
+====================
+Six Button Interface
+====================
+
+The three button controller description was just a preamble for the
+six button controller.  When you open up the six button controller,
+you notice a bunch of differences in the circuit besides the three
+new buttons.  The simple one is the addition of a fourth button which
+acts as a mode select and tells the controller to be compatible with
+three button controller games.  The ugly one is that the nice standard
+HC157 has been replaced with a custom chip (a microcontroller, a GAL?)
+and most of the pull-up resistors are gone.  So instead of being able
+to trace out the circuit, you have to resort to the oscilloscope (or
+logic analyzer) and see what the signals are doing while playing a
+game that uses the additional three buttons.  My test subject was MK3.
+
+So why did Sega go to all of this trouble of replacing a nice simple
+logic chip with a custom IC?  Did they have too much time and money on
+their hands?  (Of course that is a possibility.)  No, the reason seems
+to be backwards compatibility.  As the descriptions following I hope
+will show, the new controller is designed to be compatible with almost
+all three button games, without the use of the mode select switch.
+
+Some quick probing on the circuit board reveals that the pull-up
+resistors for the switches have moved inside the chip and all of the
+switches still output a logic low when pressed.  The pull-up for the
+select signal still exists as a discrete resistor.  There are also
+some additional capacitors for power supply filtering and generating
+the clock signal for the custom chip.
+
+If you monitor the select signal generated during a game, you will see
+something like the following:
+
+5V ---+-+-+-+-------------+-+-+-+-------------+-+-+-+---
+      | | | |             | | | |             | | | |
+0V    | | | |             | | | |             | | | |
+
+The amount of time between the start one of these pulse groups and the
+next is about 16.6 milliseconds or 60 Hz.  In my interfacing
+experiments I have successfully used 33.3 milliseconds or 30 Hz.
+
+A closer examination of the pulse groups on the select line:
+
+5V ---+ +-+ +-+ +-+ +-----------------------------------
+      | | | | | | | |
+0V    |_| |_| |_| |_|
+
+The period of these signals for MK3 was about 27.6 microseconds.  That
+is the high or low time for the pulses was 13.8 microseconds.  In my
+interfacing experiments I successfully used a signal with a 200
+microsecond period, 100 microsecond high or low time.  I suspect that
+there is some maximum period length associated with a time-out in the
+custom chip, but I have not investigated what that is.
+
+Interesting things reveal themselves if you monitor pin 3 of the DB-9
+with the X button pressed:
+
+5V ---+ +-+ +-+   +-------------------------------------
+      | | | | |   | 
+0V    |_| |_| |___|
+
+And if you monitor pin 3 of the DB-9 with the X button NOT pressed:
+
+5V ---+ +-+ +-+ +---------------------------------------
+      | | | | | |
+0V    |_| |_| |_|
+
+Now what Sega has done can be deciphered.  To obtain the new button
+data, a series of pulses needs to be sent to the controller on the
+select line.  For the first two pulses, the controller responds in the
+same way as a three button controller.  However, immediately after the
+third pulse goes from low to high, the controller will output new data
+on existing data lines.  You can think of this as a new value for the
+select line: Low, High, and what I will call Pulse-3.  The fourth
+pulse resets the controller to compatible mode.
+
+The updated table with the third select state is as follows, the first
+two columns are the same as the three button case:
+
+Pin  Select: low  Select: high  Select: pulse-3
+--- ------------  ------------  ---------------
+ 1  joypad up     joypad up     button Z
+ 2  joypad down   joypad down   button Y
+ 3  logic low     joypad left   button X
+ 4  logic low     joypad right
+ 6  button A      button B
+ 9  start button  button C
+
+This table does not change from the three button controller case:
+
+Pin  Connection
+---  ---------------
+ 5   Power: +5 Volts
+ 7   Select signal
+ 8   Power: Ground
+
+So what about compatibility?  Under normal circumstances this system
+maintains compatibility.  So what's the use of the "compatibility"
+mode switch?  Obviously the controller could be fooled if some games
+do strange things with the select line.  Some game code might not poll
+and store the state of the controller, if game code accesses the
+controller throughout its code, then unpredictable pulse trains could
+be sent to the controller which put it in "pulse-3" mode.  And how
+about games that aren't compatible no matter what?  My guess is that
+that has to do with the speed of the custom chip.  Because the three
+button version uses a discrete logic chip, the outputs of the
+multiplexer can react to the state of select line in a matter of
+nanoseconds.  However a little microprocessor or a slowly clocked
+state machine made from custom logic would not be able to respond as
+quickly, causing incompatibility problems if code was written to
+assume instantaneous response on the select line.
+
+==========
+Conclusion
+==========
+
+So interfacing is not that difficult after all if you are interfacing
+the controller to a microprocessor of some sort.  In my case it was a
+68332 running Lisp.  I highly recommend the controller it packs a lot
+of punch in a small price and the DB-9 interface makes it easily
+replaceable if it goes bad.  Have fun interfacing.
+

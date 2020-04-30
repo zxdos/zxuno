@@ -1,0 +1,2 @@
+# Output products list for <clk21m6>
+clk21m6_flist.txt

@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Projects\DP_XC500E\Coleco_cart\Coleco_cart\synth\impact.xsl
+OUTFILE=C:\Projects\DP_XC500E\Coleco_cart\Coleco_cart\synth\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Projects\DP_XC500E\Coleco_cart\Coleco_cart\synth
+LICENSE=iMPACT
+USER_INFO=iMPACT

@@ -1,0 +1,692 @@
+	NAME	bootrom(16)
+	RSEG	CODE(0)
+	RSEG	CSTR(0)
+	RSEG	UDATA0(0)
+	RSEG	IDATA0(0)
+	RSEG	CDATA0(0)
+	PUBLIC	buff
+	EXTERN	cls
+	PUBLIC	die
+	EXTERN	disable_nmi
+	EXTERN	fill_vram
+	EXTERN	load_ascii
+	PUBLIC	main
+	EXTERN	pf_lseek
+	EXTERN	pf_mount
+	EXTERN	pf_open
+	EXTERN	pf_read
+	EXTERN	print_at
+	EXTERN	read_joy
+	EXTERN	screen_on
+	EXTERN	set_color
+	EXTERN	set_mode1
+	EXTERN	vdp_init
+	PUBLIC	xp
+	EXTERN	?CLZ80L_4_06_L00
+	EXTERN	?S_MUL_L02
+	EXTERN	?SS_CMP_L02
+	EXTERN	?ENT_AUTO_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+	EXTERN	?STRCPY_L11
+	EXTERN	?STRCAT_L11
+	EXTERN	?STRCHR_L11
+	RSEG	CODE
+; 1.	#include "coleco.h"
+; 2.	#include <stdio.h>
+; 3.	#include <string.h>
+; 4.	#include <intrz80.h>
+; 5.	#include <intz80.h>
+; 6.	
+; 7.	#include "getput1.h"
+; 8.	
+; 9.	#include "pff.h"
+; 10.	
+; 11.	// UP  0x0001; RIGHT 0x0002; DOWN 0x0004 LEFT 0x0008  RFIRE 0x8000 LFIRE 0x4000
+; 12.	#define _UP    0x0001
+; 13.	#define _DOWN  0x0004
+; 14.	#define _LEFT  0x0008
+; 15.	#define _RIGHT 0x0002
+; 16.	#define _LFIRE 0x4000
+; 17.	#define _RFIRE 0x8000
+; 18.	
+; 19.	//extern const sound_t snd_table[];
+; 20.	
+; 21.	extern void set_color(unsigned char);
+; 22.	extern void load_ascii(void); 
+; 23.	extern void sound_off(void);
+; 24.	extern void set_mode1(void);
+; 25.	extern void fill_vram(unsigned char);
+; 26.	extern void screen_on(void);
+; 27.	extern void print_at(unsigned char, unsigned char, char *);
+; 28.	extern void enable_nmi(void);
+; 29.	extern void disable_nmi(void);
+; 30.	//extern void set_snd_table();
+; 31.	extern void vdp_init(void);
+; 32.	extern unsigned int read_joy(unsigned char); 
+; 33.	//extern void disable_nmi(void);
+; 34.	     
+; 35.	//void nmi(void) {}
+; 36.	
+; 37.	void die (FRESULT rc)
+; 38.	{
+die:
+	CALL	?ENT_AUTO_DIRECT_L09
+	DEFW	0
+; 39.	unsigned int dly;
+; 40.	    print_at(12,18,"Error......Reset");
+	LD	HL,?0010
+	PUSH	HL
+	LD	C,18
+	LD	E,12
+	CALL	print_at
+	POP	HL
+; 41.	    for(dly=0;dly<50000;) { dly++;rc=rc;}
+	LD	DE,0
+?0012:
+	LD	BC,50000
+	LD	L,E
+	LD	H,D
+	AND	A
+	SBC	HL,BC
+	JR	NC,?0011
+?0013:
+	INC	DE
+	JR	?0012
+?0011:
+; 42.	    _opc(0xc3);_opc(0);_opc(0); 
+	DEFB	195
+	DEFB	0
+	DEFB	0
+; 43.	}
+	JP	?LEAVE_DIRECT_L09
+; 44.	
+; 45.	BYTE  buff[27]; // ? T80SOC error reading if buff > ~300?
+; 46.	 char xp[]="=>";
+; 47.	
+; 48.	   
+; 49.	void main(void)
+; 50.	{     
+main:
+	CALL	?ENT_AUTO_DIRECT_L09
+	DEFW	-96
+	PUSH	IY
+; 51.	        FATFS  fatfs;                   /* File system object */
+; 52.	        DIR  dir;                               /* Directory object */
+; 53.	        FILINFO  fno;                   /* File information object */
+; 54.	        WORD  bw, br, i;
+; 55.	        
+; 56.	        BYTE  rc,k,l;
+; 57.	        unsigned char *cp;      
+; 58.	       
+; 59.	        BYTE snum,cpos;
+; 60.	        WORD  w,dly;
+; 61.	        char *sp,*s;
+; 62.	        
+; 63.	        
+; 64.	        BYTE fn[15];
+; 65.	        char cart_name[25];
+; 66.	        char * cartp;
+; 67.	        BYTE page,rcount,select;
+; 68.	        
+; 69.	 //char restart[]={0x3e, 0x04, 
+; 70.	 //                0xd3, 0x24,
+; 71.	 //                0xc3, 0x00, 0x00}; 
+; 72.	                 
+; 73.	    
+; 74.	        
+; 75.	        
+; 76.	// Init UART T16450 (do not init here)
+; 77.	
+; 78.	//        output(0x21,0x00);
+; 79.	//        output(0x23,0x80);
+; 80.	//        output(0x20,0x23); // baud 38400
+; 81.	//        output(0x21,0x00);
+; 82.	//        output(0x23,0x03);
+; 83.	//        output(0x24,0x0b);    
+; 84.	       
+; 85.	        vdp_init();  
+	CALL	vdp_init
+; 86.	        set_mode1();
+	CALL	set_mode1
+; 87.	        disable_nmi();
+	CALL	disable_nmi
+; 88.	        fill_vram(0x0);
+	LD	E,0
+	CALL	fill_vram
+; 89.	        set_color(0xf4);
+	LD	E,244
+	CALL	set_color
+; 90.	        load_ascii();
+	CALL	load_ascii
+; 91.	        screen_on();
+	CALL	screen_on
+; 92.	        
+; 93.	         output(0x24,0x0b); // unlock cart_rom
+	LD	A,11
+	LD	BC,36
+	OUT	(C),A
+; 94.	       
+; 95.	        rc = pf_mount(&fatfs);
+	LD	HL,62
+	ADD	HL,SP
+	EX	DE,HL
+	CALL	pf_mount
+; 96.	        if (rc) die(rc);
+	OR	A
+	JR	Z,?0015
+?0014:
+	LD	E,A
+	CALL	die
+?0015:
+; 97.	        
+; 98.	        
+; 99.	        rc = pf_open("MENU.TXT");
+	LD	DE,?0016
+	CALL	pf_open
+; 100.	        if (rc) die(rc);
+	OR	A
+	JR	Z,?0018
+?0017:
+	LD	E,A
+	CALL	die
+?0018:
+; 101.	
+; 102.	        page = 0;
+; 103.	        select = 0;
+	LD	(IX-94),B
+?0021:
+; 104.	      
+; 105.	       do {
+; 106.	        cls();
+	CALL	cls
+; 107.	       // print_at(10,1,"CART LIST");
+; 108.	       // print_at(10,2,"---------");
+; 109.	        print_at(3,1,"L-Fire:Load  R-Fire:Restart");
+	LD	HL,?0022
+	PUSH	HL
+	LD	C,1
+	LD	E,3
+	CALL	print_at
+	POP	HL
+; 110.	        print_at(3,3,"   U/D:Select   L/R:Page");
+	LD	HL,?0023
+	PUSH	HL
+	LD	C,3
+	LD	E,C
+	CALL	print_at
+	POP	HL
+; 111.	        
+; 112.	        print_at(1,20,"<ESC>Reset <U/D>Sel <L/R>Page");
+	LD	HL,?0024
+	PUSH	HL
+	LD	C,20
+	LD	E,1
+	CALL	print_at
+	POP	HL
+; 113.	        print_at(1,22,"<Q>* <W># <Z>L-Fire <X>R-Fire");
+	LD	HL,?0025
+	PUSH	HL
+	LD	C,22
+	LD	E,1
+	CALL	print_at
+	POP	HL
+; 114.	         
+; 115.	        rcount = 0;  
+	LD	(IX-93),0
+?0027:
+; 116.	        for (;;) {
+; 117.	                rc = pf_read(buff, 27, &br);    /* Read a line of file */
+	LD	HL,12
+	ADD	HL,SP
+	PUSH	HL
+	LD	BC,27
+	LD	DE,buff
+	CALL	pf_read
+	POP	HL
+; 118.	                if (rc || !br) break;                   /* Error or end of file */
+	OR	A
+	JR	NZ,?0026
+	LD	A,(IX-86)
+	OR	(IX-85)
+	JR	Z,?0026
+?0030:
+?0031:
+?0028:
+?0029:
+; 119.	                rcount++;
+	INC	(IX-93)
+; 120.	                
+; 121.	                s = strchr(buff,';');
+	LD	DE,59
+	LD	HL,buff
+	CALL	?STRCHR_L11
+; 122.	                *s='\0'; // terminate the cart name             
+	LD	(HL),D
+; 123.	                print_at(4,rcount+4,buff);  
+	LD	HL,buff
+	PUSH	HL
+	LD	A,(IX-93)
+	ADD	A,4
+	LD	C,A
+	LD	E,4
+	CALL	print_at
+	POP	HL
+; 124.	                
+; 125.	                if (rcount == 10) { break;}            
+	LD	A,(IX-93)
+	CP	10
+	JR	NZ,?0027
+?0032:
+?0033:
+?0026:
+; 126.	        }
+; 127.	
+; 128.	          cpos=5; snum=0;
+; 129.	          
+; 130.	          print_at(2,cpos,xp);
+	LD	HL,xp
+	PUSH	HL
+	LD	C,5
+	CALL	?0081
+	POP	HL
+	LD	(IX-95),5
+	LD	(IX-92),0
+?0035:
+; 131.	          
+; 132.	        // UP  0x0001; RIGHT 0002; DOWN 0x0004 LEFT 0x0008
+; 133.	        for(;;){
+; 134.	       
+; 135.	        //do {
+; 136.	        //      w=read_joy(0);
+; 137.	        //      for(dly=0;dly<1000;) { dly++;}
+; 138.	        //      w1=read_joy(0);
+; 139.	        //    } while (w!=w1);
+; 140.	         
+; 141.	          w=read_joy(0);
+	LD	E,0
+	CALL	read_joy
+	LD	(IX-90),L
+	LD	(IX-89),H
+; 142.	                
+; 143.	          if ((w & _DOWN) && (cpos < rcount+4)) {
+	BIT	2,L
+	JR	Z,?0037
+	LD	C,(IX-93)
+	LD	B,0
+	LD	HL,4
+	ADD	HL,BC
+	LD	C,L
+	LD	B,H
+	LD	L,(IX-95)
+	LD	H,0
+	CALL	?SS_CMP_L02
+	JR	NC,?0037
+?0039:
+?0038:
+?0036:
+; 144.	        
+; 145.	            print_at(2,cpos,"  "); cpos++;
+	LD	HL,?0040
+	PUSH	HL
+	CALL	?0082
+	POP	HL
+	INC	(IX-95)
+; 146.	            print_at(2,cpos,xp);snum++;
+	LD	HL,xp
+	PUSH	HL
+	CALL	?0082
+	POP	HL
+	INC	(IX-92)
+	JR	?0052
+?0037:
+; 147.	           } 
+; 148.	          else if ((w & _UP) && (cpos>5)) {
+	BIT	0,(IX-90)
+	JR	Z,?0043
+	LD	A,5
+	CP	(IX-95)
+	JR	NC,?0043
+?0045:
+?0044:
+?0042:
+; 149.	            print_at(2,cpos,"  "); cpos--;
+	LD	HL,?0040
+	PUSH	HL
+	CALL	?0082
+	POP	HL
+	DEC	(IX-95)
+; 150.	            print_at(2,cpos,xp);snum--;
+	LD	HL,xp
+	PUSH	HL
+	CALL	?0082
+	POP	HL
+	DEC	(IX-92)
+	JR	?0052
+?0043:
+; 151.	            } 
+; 152.	          else if (w & _LEFT) {
+	BIT	3,(IX-90)
+	JR	Z,?0048
+?0047:
+; 153.	            if (page > 0) page--; 
+	XOR	A
+	OR	(IX-94)
+	JR	Z,?0080
+?0049:
+	DEC	(IX-94)
+?0050:
+; 154.	            select=0;
+; 155.	            rc = pf_lseek(page*270);
+	JR	?0080
+; 156.	            break;    
+?0048:
+; 157.	          }
+; 158.	          
+; 159.	          else if (w & _RIGHT) {
+	BIT	1,(IX-90)
+	JR	Z,?0052
+?0051:
+; 160.	            page++; 
+	INC	(IX-94)
+; 161.	            select=0;
+; 162.	            rc = pf_lseek(page*270); 
+?0080:
+	LD	C,(IX-94)
+	LD	B,0
+	LD	DE,270
+	CALL	?S_MUL_L02
+	LD	A,D
+	RLCA
+	SBC	A,A
+	LD	C,A
+	LD	B,C
+	CALL	pf_lseek
+	LD	(IX-91),0
+; 163.	            break;
+	JR	?0034
+?0052:
+?0046:
+?0041:
+; 164.	          }
+; 165.	          
+; 166.	          if (w & (_RFIRE|_LFIRE)) { 
+	LD	A,(IX-89)
+	LD	L,0
+	AND	192
+	LD	H,A
+	LD	A,L
+	OR	H
+	JR	Z,?0054
+?0053:
+; 167.	            select=1;
+	LD	(IX-91),1
+; 168.	            break;
+	JR	?0034
+?0054:
+; 169.	          }
+; 170.	        for(dly=0;dly<2800;) { dly++;}
+	XOR	A
+	LD	(IX-84),A
+	LD	(IX-83),A
+?0056:
+	LD	BC,2800
+	LD	L,(IX-84)
+	LD	H,(IX-83)
+	AND	A
+	SBC	HL,BC
+	JR	NC,?0055
+?0057:
+	INC	(IX-84)
+	JR	NZ,?0056
+	INC	(IX-83)
+; 171.	        }
+	JR	?0056
+?0055:
+	JP	?0035
+?0034:
+; 172.	      } while (select==0);
+	XOR	A
+	OR	(IX-91)
+	JP	Z,?0021
+?0019:
+; 173.	      
+; 174.	        if (w ==_RFIRE)  goto LOAD;
+	LD	A,128
+	XOR	(IX-89)
+	OR	(IX-90)
+	JP	Z,?0077
+?0058:
+?0059:
+; 175.	      
+; 176.	        rc = pf_lseek(page*270+snum*27+17);
+	LD	C,(IX-92)
+	LD	B,0
+	LD	DE,27
+	CALL	?S_MUL_L02
+	PUSH	DE
+	LD	C,(IX-94)
+	LD	DE,270
+	CALL	?S_MUL_L02
+	EX	DE,HL
+	POP	DE
+	ADD	HL,DE
+	LD	C,17
+	ADD	HL,BC
+	EX	DE,HL
+	LD	A,D
+	RLCA
+	SBC	A,A
+	LD	C,A
+	LD	B,C
+	CALL	pf_lseek
+; 177.	        rc = pf_read(buff, 13, &br);
+	LD	HL,12
+	ADD	HL,SP
+	PUSH	HL
+	LD	BC,13
+	LD	DE,buff
+	CALL	pf_read
+	POP	HL
+; 178.	        
+; 179.	        sp=strchr(buff,'\r');
+	LD	DE,13
+	LD	HL,buff
+	CALL	?STRCHR_L11
+; 180.	        if (sp) *sp='\0';
+	LD	A,L
+	OR	H
+	JR	Z,?0062
+?0061:
+	LD	(HL),D
+?0062:
+; 181.	        sp=strchr(buff,' ');
+	LD	E,32
+	LD	HL,buff
+	CALL	?STRCHR_L11
+; 182.	        if (sp) *sp='\0';
+	LD	A,L
+	OR	H
+	JR	Z,?0064
+?0063:
+	LD	(HL),D
+?0064:
+; 183.	        strcpy(fn,buff);
+	LD	DE,buff
+	LD	HL,20
+	ADD	HL,SP
+	CALL	?STRCPY_L11
+; 184.	        strcat(fn,".rom");       
+	LD	DE,?0065
+	LD	HL,20
+	ADD	HL,SP
+	CALL	?STRCAT_L11
+; 185.	        
+; 186.	        print_at(4,18,"Loading");
+	LD	HL,?0066
+	PUSH	HL
+	LD	C,18
+	LD	E,4
+	CALL	print_at
+	POP	HL
+; 187.	        print_at(12,18,fn);
+	LD	HL,20
+	ADD	HL,SP
+	PUSH	HL
+	LD	C,18
+	LD	E,12
+	CALL	print_at
+	POP	HL
+; 188.	        
+; 189.	        strcpy(cart_name,"Coleco/");       
+	LD	DE,?0067
+	LD	HL,36
+	ADD	HL,SP
+	CALL	?STRCPY_L11
+; 190.	        cartp=strcat(cart_name,fn);
+	LD	HL,20
+	ADD	HL,SP
+	EX	DE,HL
+	LD	HL,36
+	ADD	HL,SP
+	CALL	?STRCAT_L11
+; 191.	        rc = pf_open(cartp);
+	EX	DE,HL
+	CALL	pf_open
+; 192.	        if (rc) die(rc);
+	OR	A
+	JR	Z,?0069
+?0068:
+	LD	E,A
+	CALL	die
+?0069:
+; 193.	        
+; 194.	        // rc = pf_open("cart/galaxian.rom");
+; 195.	        //if (rc) die(rc);
+; 196.	        
+; 197.	        cp = (unsigned char *)0x8000; //cartram ptr;
+	LD	IY,32768
+?0071:
+; 198.	        for (;;) {
+; 199.	                rc = pf_read(cp, 32768, &br);   /* Read a chunk of file */
+	LD	HL,12
+	ADD	HL,SP
+	PUSH	HL
+	LD	BC,32768
+	PUSH	IY
+	POP	DE
+	CALL	pf_read
+	POP	HL
+	LD	(IX-96),A
+; 200.	                if (rc || !br) break;           /* Error or end of file */
+	OR	A
+	JR	NZ,?0074
+	LD	A,(IX-86)
+	OR	(IX-85)
+	JR	NZ,?0071
+?0074:
+?0075:
+?0072:
+?0073:
+?0070:
+; 201.	
+; 202.	        }
+; 203.	        if (rc) die(rc);
+	XOR	A
+	OR	(IX-96)
+	JR	Z,?0077
+?0076:
+	LD	E,A
+	CALL	die
+?0077:
+?0060:
+; 204.	
+; 205.	LOAD:
+; 206.	        cp=(unsigned char *)0x7100;
+	LD	IY,28929
+; 207.	        
+; 208.	        *cp++=0x3e;
+	LD	A,62
+	LD	(28928),A
+; 209.	         *cp++=0x04;
+	LD	(IY+0),4
+; 210.	          *cp++=0xd3;
+	LD	(IY+1),211
+; 211.	           *cp++=0x24;
+	LD	(IY+2),36
+; 212.	            *cp++=0xc3;
+	LD	(IY+3),195
+; 213.	             *cp++=0x00;
+	LD	(IY+4),0
+; 214.	              *cp++=0x00;
+	LD	(IY+5),0
+; 215.	           _opc(0xc3);
+	DEFB	195
+; 216.	           _opc(0x00);
+	DEFB	0
+; 217.	           _opc(0x71);    
+	DEFB	113
+; 218.	
+; 219.	        //output(0x24,0x04);
+; 220.	        // Disable write cart ram using T16450 OUT1_n (inverted logic)
+; 221.	//      _opc(0x3e);  //ld a,4
+; 222.	//      _opc(0x04);  
+; 223.	//      _opc(0xd3);  //out (24h),a
+; 224.	//      _opc(0x24); 
+; 225.	        // init original stack ptr
+; 226.	//      _opc(0x31); 
+; 227.	//      _opc(0xb9);
+; 228.	//      _opc(0x73);
+; 229.	        // jump to bios (cont'd)
+; 230.	//      _opc(0xc3); 
+; 231.	//      _opc(0x6e);
+; 232.	//      _opc(0x00);
+; 233.	        
+; 234.	}
+	POP	IY
+	JP	?LEAVE_DIRECT_L09
+?0082:
+	LD	C,(IX-95)
+?0081:
+	LD	E,2
+	JP	print_at
+	RSEG	CSTR
+?0010:
+	DEFB	'Error......Reset'
+	DEFB	0
+?0016:
+	DEFB	'MENU.TXT'
+	DEFB	0
+?0022:
+	DEFB	'L-Fire:Load  R-Fire:Restart'
+	DEFB	0
+?0023:
+	DEFB	'   U/D:Select   L/R:Page'
+	DEFB	0
+?0024:
+	DEFB	'<ESC>Reset <U/D>Sel <L/R>Page'
+	DEFB	0
+?0025:
+	DEFB	'<Q>* <W># <Z>L-Fire <X>R-Fire'
+	DEFB	0
+?0040:
+	DEFB	'  '
+	DEFB	0
+?0065:
+	DEFB	'.rom'
+	DEFB	0
+?0066:
+	DEFB	'Loading'
+	DEFB	0
+?0067:
+	DEFB	'Coleco/'
+	DEFB	0
+	RSEG	UDATA0
+buff:
+	DEFS	27
+	RSEG	IDATA0
+xp:
+	DEFS	3
+	RSEG	CDATA0
+	DEFB	'=>'
+	DEFB	0
+	END

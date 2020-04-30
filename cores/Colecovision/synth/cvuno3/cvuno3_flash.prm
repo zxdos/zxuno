@@ -1,0 +1,17 @@
+PROMGEN: Xilinx Prom Generator P.20131013
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+promgen -w -p mcs -c FF -o D:\Documentos\Documents\FPGA\8bits\colecofpga\synth\cvuno3//cvuno3_flash -s 16384 -u 0000 D:/Documentos/Documents/FPGA/8bits/colecofpga/synth/cvuno3/cvuno3_top.bit -spi 
+
+PROM D:\Documentos\Documents\FPGA\8bits\colecofpga\synth\cvuno3\cvuno3_flash.prm map: Wed Nov 01 10:18:26 2017
+
+Calculating PROM checksum with fill value ff
+
+Format        Mcs86 (32-bit)
+Size          16384K
+PROM start    0000:0000
+PROM end      00ff:ffff
+PROM checksum f88aa110
+
+        Addr1        Addr2                     Date File(s)
+    0000:0000    0007:1587     Nov 01 10:13:51 2017 D:/Documentos/Documents/FPGA/8bits/colecofpga/synth/cvuno3/cvuno3_top.bit

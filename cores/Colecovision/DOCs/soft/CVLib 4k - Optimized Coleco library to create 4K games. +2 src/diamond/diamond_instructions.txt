@@ -1,0 +1,71 @@
+==================================
+          Diamond Dash
+
+A 4K entry for the 2004 Mini Game
+            compo.
+
+Programming, Graphics and Music by
+         Daniel Bienvenu
+
+FORMAT: ColecoVision
+
+==================================
+
+Loading:
+
+Simply load and run "diamondd.rom" 
+with a good ColecoVision emulator.
+If your emulator cannot run a
+rom filesize under 8k, use
+"diamond8.rom". 
+
+The Game:
+
+You are a the super miner of this
+town and there are mountains
+with diamond mines. Your goal is
+to extract diamonds and exit mine,
+but you can exit a mountain only if
+you get enough diamonds.
+More faster you did it, more bonus
+points you will have.
+
+Score as many points as you 
+possibly can and maybe challenge
+your friends or family to see 
+who gets the highest score.
+
+
+More Info:
+
+ 1st mountain  : 35/85
+ 2nd mountain  : 45/85
+ 3rd mountain  : 60/85
+ 4th mountain  : 75/85
+next mountains : 85/85
+
+
+Controls: 
+
+Use a joystick in port #1
+
+Move in all 8 directions
+Press fire to use a dynamite
+
+2004, Daniel Bienvenu.
+Released for the Minigame Compo.
+A bigger version is in development.
+
+Enjoy and please vote :)
+
+=================================
+Resources:
+----------
+Hi-Tech C compiler for CP/M
+22NICE CP/M emulator for DOS
+Marcel de Kogel's Coleco library*
+My own tools and libraries
+
+*: I modified his library to 
+optimize the rom filesize to 4K.
+==================================

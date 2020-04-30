@@ -1,0 +1,201 @@
+
+A Synthesizable model of TI's TMS9918A, TMS9928A, TMS9929A
+==========================================================
+Version: $Date: 2006/06/18 19:28:06 $
+
+Copyright (c) 2006, Arnim Laeuger (arnim.laeuger@gmx.net)
+See the file COPYING.
+
+
+Integration
+-----------
+
+The vdp18 design exhibits a set of interface signals that is compatible to the
+original chips. It mainly differs in the video and VRAM interfaces, which are
+tailored to better fit a modern SoC.
+
+  generic (
+    is_pal_g      : integer := 0;
+    -- Select PAL or NTSC video timing.
+    -- 0 = NTSC
+    -- 1 = PAL
+
+    compat_rgb_g  : integer := 0
+    -- Select full or compatibility RGB palettes.
+    -- Refer to vdp18_col_pack-p.vhd for details.
+
+  );
+  port (
+    -- Global Interface -------------------------------------------------------
+    clk_i         : in  std_logic;
+    -- Global clock input
+    -- Equivalent to XTAL1/2 on TMS9918A.
+    -- Drive with the target frequency of 10.7 MHz or any integer multiple.
+
+    clk_en_10m7_i : in  std_logic;
+    -- Clock enable
+    -- A '1' on this input qualifies a valid rising edge on clk_i. A '0'
+    -- disables the next rising clock edge, effectivley halting the design
+    -- until the next enabled rising clock edge.
+    -- Can be used to run the core at lower frequencies than applied on
+    -- clk_i.
+
+    reset_n_i     : in  std_logic;
+    -- Asynchronous low active reset input
+    -- Sets all sequential elements to a known state.
+    -- NOTE: SYNC operation not supported.
+
+    -- CPU Interface ----------------------------------------------------------
+    csr_n_i       : in  std_logic;
+    -- CPU-VDP read strobe, low active
+
+    csw_n_i       : in  std_logic;
+    -- CPU-VDP write strobe, low active
+
+    mode_i        : in  std_logic;
+    -- CPU interface mode select
+
+    int_n_o       : out std_logic;
+    -- CPU interrupt output, low active
+
+    cd_i          : in  std_logic_vector(0 to  7);
+    -- CPU data bus input
+    -- MSB 0 ... 7 LSB
+
+    cd_o          : out std_logic_vector(0 to  7);
+    -- CPU data bus output
+    -- MSB 0 ... 7 LSB
+
+    -- VRAM Interface ---------------------------------------------------------
+    vram_we_o     : out std_logic;
+    -- VRAM write enable
+
+    vram_a_o      : out std_logic_vector(0 to 13);
+    -- VRAM address output
+    -- MSB 0 ... 13 LSB
+
+    vram_d_o      : out std_logic_vector(0 to  7);
+    -- VRAM data output
+    -- MSB 0 ... 7 LSB
+
+    vram_d_i      : in  std_logic_vector(0 to  7);
+    -- VRAM data input
+    -- MSB 0 ... 7 LSB
+
+    -- Video Interface --------------------------------------------------------
+    col_o         : out std_logic_vector(0 to 3);
+    -- Color code output
+    -- Encoded pixel color information
+
+    rgb_r_o       : out std_logic_vector(0 to 7);
+    -- Red color information
+
+    rgb_g_o       : out std_logic_vector(0 to 7);
+    -- Green color information
+
+    rgb_b_o       : out std_logic_vector(0 to 7);
+    -- Blue color information
+
+    hsync_n_o     : out std_logic;
+    -- Horizontal synchronization pulse, active low
+
+    vsync_n_o     : out std_logic;
+    -- Vertical synchronization pulse, active low
+
+    comp_sync_n_o : out std_logic
+    -- Composite synchronization pulse, active low
+  );
+
+
+All 8 bit vector ports are defined (0 to 7) which declares bit 0 to be the MSB
+and bit 7 to be the LSB. This has been implemented according to TI's data
+sheet, thus all register/data format figures apply 1:1 for this design.
+Many systems will flip the system data bus bit wise before it is connected to
+this PSG. This is simply achieved with the following VHDL construct:
+
+  signal data_s : std_logic_vector(7 downto 0);
+
+  ...
+  cd_i => data_s,
+  ...
+
+d_i and data_s will be assigned from left to right, resulting in the expected
+bit assignment:
+
+  cd_i    data_s
+   0        7
+   1        6
+       ...
+   6        1
+   7        0
+
+
+As this design is fully synchronous, care has to be taken when the design
+replaces an TMS99x8 in asynchronous mode. No problems are expected when
+interfacing the code to other synchronous components.
+
+
+Design Hierarchy
+----------------
+
+  vdp18_core
+    |
+    +-- vdp18_clk_gen
+    |
+    +-- vdp18_hor_vert
+    |
+    +-- vdp18_ctrl
+    |
+    +-- vdp18_cpuio
+    |
+    +-- vdp18_addr_mux
+    |
+    +-- vdp18_pattern
+    |
+    +-- vdp18_sprite
+    |
+    \-- vdp18_col_mux
+
+Resulting compolation sequence:
+
+  vdp18_pack-p.vhd
+  vdp18_comp_pack-p.vhd
+  vdp18_core.vhd
+  vdp18_clk_gen.vhd
+  vdp18_clk_gen-c.vhd
+  vdp18_hor_vert.vhd
+  vdp18_hor_vert-c.vhd
+  vdp18_ctrl.vhd
+  vdp18_ctrl-c.vhd
+  vdp18_cpuio.vhd
+  vdp18_cpuio-c.vhd
+  vdp18_addr_mux.vhd
+  vdp18_addr_mux-c.vhd
+  vdp18_pattern.vhd
+  vdp18_pattern-c.vhd
+  vdp18_sprite.vhd
+  vdp18_sprite-c.vhd
+  vdp18_col_mux.vhd
+  vdp18_col_mux-c.vhd
+  vdp18_core-c.vhd
+  vdp18_core_com_pack-p.vhd
+
+Skip the files containing VHDL configurations when analyzing the code for
+synthesis.
+
+
+References
+----------
+
+* TI Data book TMS9918.pdf
+  http://www.bitsavers.org/pdf/ti/_dataBooks/TMS9918.pdf
+
+* Sean Young's tech article:
+  http://bifi.msxnet.org/msxnet/tech/tms9918a.txt
+
+* Paul Urbanus' discussion of the timing details
+  http://bifi.msxnet.org/msxnet/tech/tmsposting.txt
+
+* Richard F. Drushel's article series
+  "This Week With My Coleco ADAM"
+  http://junior.apk.net/~drushel/pub/coleco/twwmca/index.html

@@ -1,0 +1,64 @@
+/*			-LNKZ80.XCL-
+
+	XLINK 4.xx command file to be used with the Z80/64180 C-compiler V4.xx
+	using the -ml (default) and -v0 (default) options.
+	Usage: xlink your_file(s) -f lnkz80.
+
+  	$Revision: 1.4 $ 
+*/
+//    First define CPU  
+-cZ80
+/* T80 SOC
+   MONITOR=0-1FFF
+   RAM = 7000 - 73FF
+   PROGRAM START= 8000
+*/
+
+//  Allocate segments which should be loaded  
+
+/*
+    First allocate read only segments.
+    0 is supposed to be start of PROM
+    0-FF is left free for RST routines 
+*/
+
+/* -Z(CODE)RCODE,CODE,CDATA0,CONST,CSTR,CCSTR=8000-FEFF */
+-Z(CODE)RCODE,CODE,CDATA0,CONST,CSTR,CCSTR=8000-FFFF
+
+
+/*
+    The interrupts vectors are supposed to start at BF00
+    and take 256 (FFH) bytes                              
+*/    
+
+//-Z(CODE)INTVEC=FF00-FFFF
+
+/*
+    Then the writeable segments which must be mapped to a RAM area
+    C000 was here supposed to be start of RAM.
+    Note: Stack size is set to 512 (200H) bytes with 'CSTACK+200    
+*/    
+/*-Z(DATA)DATA0,IDATA0,UDATA0,ECSTR,TEMP,CSTACK+200=C000-FFFF*/
+
+-Z(DATA)DATA0,IDATA0,UDATA0,ECSTR,TEMP,CSTACK+0=7000-73B8
+
+
+/*
+    NOTE: In case of RAM-only system, the two segment lists may be 
+    connected to allocate a contiguous memory space. I.e. :
+	-Z...CCSTR,DATA0...=start_of_RAM  
+*/        
+
+//  See configuration section concerning printf/sprintf  
+//-e_small_write=_formatted_write
+
+//  See configuration section concerning scanf/sscanf  
+//-e_medium_read=_formatted_read
+
+//  Load the 'C' library 
+
+clz80
+
+//  Code will now reside on file aout.a01 in format INTEL-STANDARD  
+
+

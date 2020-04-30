@@ -1,0 +1,757 @@
+Warning[w9]: Ignoring redeclared program entry in module CSTARTUP (C:\IARZ80\EW23\z80\LIB\clz80.r01). Using entry from module CVSTART (C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\CVstart.r01)
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V4.52D/WIN                                         #
+#                                                                              #
+#           Link time     =  24/Aug/2012  23:34:33                             #
+#           Target CPU    =  Z80/64180                                         #
+#           List file     =  C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\L #
+#                            ist\Boot_Rom.map                                  #
+#           Output file 1 =  C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\E #
+#                            xe\Boot_Rom.a01                                   #
+#                            Format: intel-standard                            #
+#           Command line  =  C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\bootrom.r01                                    #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\calcoff.r01                                    #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\cls.r01                                        #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\CVstart.r01                                    #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\fill_vram.r01                                  #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\load_ascii.r01                                 #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\mmc.r01                                        #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\nmi.r01                                        #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\pff.r01                                        #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\print_at.r01                                   #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\put_at.r01                                     #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\read_ctl.r01                                   #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\screen_on.r01                                  #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\set_color.r01                                  #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\set_mode1.r01                                  #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\O #
+#                            bj\vdp_init.r01                                   #
+#                            -o                                                #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\E #
+#                            xe\Boot_Rom.a01                                   #
+#                            -Fintel-standard -l                               #
+#                            C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\L #
+#                            ist\Boot_Rom.map                                  #
+#                            -xms -IC:\IARZ80\EW23\z80\LIB\ -f                 #
+#                            C:\Projects\DP_XC500E\Coleco_spi\BootLoad\LnkCV_C #
+#                            art.xcl                                           #
+#                            (-cZ80                                            #
+#                            -Z(CODE)RCODE,CODE,CDATA0,CONST,CSTR,CCSTR=8000-F #
+#                            FFF                                               #
+#                            -Z(DATA)DATA0,IDATA0,UDATA0,ECSTR,TEMP,CSTACK+0=7 #
+#                            000-73B8                                          #
+#                            clz80)                                            #
+#                                                                              #
+#                        Copyright 1987-2001 IAR Systems. All rights reserved. #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+       Program entry at :           8000  Absolute, from module : CVSTART
+
+                 Neglected program entries :
+            0000  Absolute, from module :CSTARTUP
+
+
+
+
+                ****************************************
+                *                                      *
+                *              MODULE MAP              *
+                *                                      *
+                ****************************************
+
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\bootrom.r01
+  PROGRAM MODULE, NAME : bootrom
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 8323 - 85E7 (2c5 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           die                     8323 
+           main                    834A            Segment part 11 (CSTARTUP)
+                                                   Segment part 11 (CVSTART)
+    -------------------------------------------------------------------------
+CSTR
+  Relative segment, address: 980B - 98AD (a3 bytes), align: 0
+  Segment part 1. ROOT.       Intra module refs:   die
+    -------------------------------------------------------------------------
+UDATA0
+  Relative segment, address: 7003 - 701D (1b bytes), align: 0
+  Segment part 10. ROOT.      Intra module refs:   die
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           buff                    7003 
+    -------------------------------------------------------------------------
+IDATA0
+  Relative segment, address: 7000 - 7002 (3 bytes), align: 0
+  Segment part 11. ROOT.      Intra module refs:   die
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           xp                      7000 
+    -------------------------------------------------------------------------
+CDATA0
+  Relative segment, address: 9808 - 980A (3 bytes), align: 0
+  Segment part 12. ROOT.
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\calcoff.r01
+  PROGRAM MODULE, NAME : calc_offset
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 85E8 - 85F0 (9 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           calc_offset             85E8            put_at (put_at)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\cls.r01
+  PROGRAM MODULE, NAME : cls
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 85F1 - 8600 (10 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cls                     85F1            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\CVstart.r01
+  PROGRAM MODULE, NAME : CVSTART
+
+Absolute parts
+     8000 - 8022
+  SEGMENTS IN THE MODULE
+  ======================
+    -------------------------------------------------------------------------
+CSTACK
+  Relative segment, address: 7090, align: 0
+    -------------------------------------------------------------------------
+IDATA0
+  Relative segment, address: 7003, align: 0
+  Segment part 2. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+ECSTR
+  Relative segment, address: 7090, align: 0
+  Segment part 3. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+UDATA0
+  Relative segment, address: 701E - 708C (6f bytes), align: 0
+  Segment part 5. ROOT.       Intra module refs:   Absolute parts
+                                                   Segment part 11
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           buffer32                701E 
+           no_nmi                  7086 
+           vdp_status              7087 
+           nmi_flag                7088 
+           joypad_1                7089 
+           keypad_1                708A 
+           joypad_2                708B 
+           keypad_2                708C 
+           snd_areas               7049 
+    -------------------------------------------------------------------------
+CDATA0
+  Relative segment, address: 980B, align: 0
+  Segment part 7. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+CCSTR
+  Relative segment, address: 98AE, align: 0
+  Segment part 8. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 8023 - 8073 (51 bytes), align: 0
+  Segment part 11. ROOT.      Intra module refs:   Absolute parts
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : exit
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8074 - 8076 (3 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           exit                    8074 
+           ?C_EXIT                 8074            Segment part 11 (CSTARTUP)
+                                                   Segment part 11 (CVSTART)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\fill_vram.r01
+  PROGRAM MODULE, NAME : fill_vram
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 8601 - 8612 (12 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           fill_vram               8601            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\load_ascii.r01
+  PROGRAM MODULE, NAME : load_ascii
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 8613 - 861A (8 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           load_ascii              8613            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\mmc.r01
+  PROGRAM MODULE, NAME : mmc
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 861B - 8918 (2fe bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           delay_us                861B 
+           disk_initialize         8700            pf_lseek (pff)
+           disk_readp              884F            pf_lseek (pff)
+    -------------------------------------------------------------------------
+UDATA0
+  Relative segment, address: 708D - 708D (1 bytes), align: 0
+  Segment part 10. ROOT.      Intra module refs:   delay_us
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\nmi.r01
+  PROGRAM MODULE, NAME : nmi
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 8919 - 893B (23 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           enable_nmi              8919 
+           disable_nmi             892C            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\pff.r01
+  PROGRAM MODULE, NAME : pff
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 893C - 9763 (e28 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           pf_lseek                94EF            die (bootrom)
+           pf_mount                8F1E            die (bootrom)
+           pf_open                 925E            die (bootrom)
+           pf_read                 9302            die (bootrom)
+    -------------------------------------------------------------------------
+UDATA0
+  Relative segment, address: 708E - 708F (2 bytes), align: 0
+  Segment part 10. ROOT.      Intra module refs:   pf_lseek
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\print_at.r01
+  PROGRAM MODULE, NAME : print_at
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 9764 - 979D (3a bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           print_at                9764            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\put_at.r01
+  PROGRAM MODULE, NAME : put_at
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 979E - 97B6 (19 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           put_at                  979E 
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\read_ctl.r01
+  PROGRAM MODULE, NAME : read_joy
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 97B7 - 97D5 (1f bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           read_joy                97B7            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\screen_on.r01
+  PROGRAM MODULE, NAME : screen_on
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 97D6 - 97E5 (10 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           screen_on               97D6            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\set_color.r01
+  PROGRAM MODULE, NAME : set_color
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 97E6 - 97F7 (12 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           set_color               97E6            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\set_mode1.r01
+  PROGRAM MODULE, NAME : set_mode1
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 97F8 - 97FF (8 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           set_mode1               97F8            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\vdp_init.r01
+  PROGRAM MODULE, NAME : vdp_init
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 9800 - 9807 (8 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           vdp_init                9800            die (bootrom)
+
+    *************************************************************************
+
+  FILE NAME : C:\IARZ80\EW23\z80\LIB\clz80.r01
+  PROGRAM MODULE, NAME : CSTARTUP
+
+Absolute parts
+     0000 - 0002
+  SEGMENTS IN THE MODULE
+  ======================
+    -------------------------------------------------------------------------
+CSTACK
+  Relative segment, address: 7090, align: 0
+  Segment part 0. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+UDATA0
+  Relative segment, address: 7090, align: 0
+  Segment part 1. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+IDATA0
+  Relative segment, address: 7003, align: 0
+  Segment part 2. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+ECSTR
+  Relative segment, address: 7090, align: 0
+  Segment part 3. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+CDATA0
+  Relative segment, address: 980B, align: 0
+  Segment part 7. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+CCSTR
+  Relative segment, address: 98AE, align: 0
+  Segment part 8. ROOT.       Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 8077 - 80B5 (3f bytes), align: 0
+  Segment part 11. ROOT.      Intra module refs:   Absolute parts
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LIB_VERSION_L00
+
+Absolute parts
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?CLZ80L_4_06_L00        0000 
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?US_RSH_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 80B6 - 80BF (a bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?US_RSH_L02             80B6            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?S_MUL_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 80C0 - 80E1 (22 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?S_MUL_L02              80C0            die (bootrom)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?SS_CMP_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 80E2 - 80F3 (12 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SS_CMP_L02             80E2            die (bootrom)
+                                                   pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_LSH_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 80F4 - 810B (18 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_LSH_L03              80F4            ?L_LSHASG_L03 (?L_LSHASG_L03)
+                                                   pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?UL_RSH_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 810C - 8126 (1b bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?UL_RSH_L03             810C            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_MUL_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8127 - 818E (68 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_MUL_L03              8127            ?L_MULASG_L03 (?L_MULASG_L03)
+                                                   pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?UL_DIV_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 818F - 81B6 (28 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?UL_DIV_L03             818F            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_DIVMOD_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 81B7 - 820E (58 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_DIVMOD_L03           81B7            ?UL_DIV_L03 (?UL_DIV_L03)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_AND_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 820F - 822C (1e bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_AND_L03              820F            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_OR_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 822D - 824A (1e bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_OR_L03               822D            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_INC_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 824B - 8252 (8 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_INC_L03              824B            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_NOT_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8253 - 8261 (f bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_NOT_L03              8253            ?UL_DIV_L03 (?UL_DIV_L03)
+                                                   pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_MULASG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8262 - 8271 (10 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_MULASG_L03           8262            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_END_MULDIVASG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8272 - 827A (9 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_END_MULDIVASG_L03    8272            ?L_MULASG_L03 (?L_MULASG_L03)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_ADDASG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 827B - 8293 (19 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_ADDASG_L03           827B            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_SUBASG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8294 - 82AC (19 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_SUBASG_L03           8294            pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_LSHASG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82AD - 82BA (e bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_LSHASG_L03           82AD            delay_us (mmc)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_END_ASG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82BB - 82C3 (9 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_END_ASG_L03          82BB            ?L_LSHASG_L03 (?L_LSHASG_L03)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?ENT_PARM_DIRECT_L09
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82C4 - 82CF (c bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?ENT_PARM_DIRECT_L09    82C4            delay_us (mmc)
+                                                   fill_vram (fill_vram)
+                                                   print_at (print_at)
+                                                   put_at (put_at)
+                                                   read_joy (read_joy)
+                                                   set_color (set_color)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?ENT_AUTO_DIRECT_L09
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82D0 - 82E3 (14 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?ENT_AUTO_DIRECT_L09    82D0            delay_us (mmc)
+                                                   die (bootrom)
+                                                   pf_lseek (pff)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LEAVE_DIRECT_L09
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82E4 - 82EA (7 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?LEAVE_DIRECT_L09       82E4            delay_us (mmc)
+                                                   die (bootrom)
+                                                   fill_vram (fill_vram)
+                                                   pf_lseek (pff)
+                                                   print_at (print_at)
+                                                   put_at (put_at)
+                                                   read_joy (read_joy)
+                                                   set_color (set_color)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LEAVE_32_L09
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82EB - 82F2 (8 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?LEAVE_32_L09           82EB 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?STRCPY_L11
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 82F3 - 8302 (10 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?STRCPY_L11             82F3            die (bootrom)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?STRCAT_L11
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8303 - 8317 (15 bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?STRCAT_L11             8303            die (bootrom)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?STRCHR_L11
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 8318 - 8322 (b bytes), align: 0
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?STRCHR_L11             8318            die (bootrom)
+
+
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE   START ADDRESS    END ADDRESS      SIZE  TYPE  ALIGN
+=======              =====   =============    ===========      ====  ====  =====
+DATA0                                    7000                         dse    0
+IDATA0                                7000 - 7002                 3   rel    0
+UDATA0                                7003 - 708F                8D   rel    0
+ECSTR                                    7090                         rel    0
+TEMP                                     7090                         dse    0
+CSTACK                                   7090                         rel    0
+RCODE                                 8023 - 8322               300   rel    0
+CODE                                  8323 - 9807              14E5   rel    0
+CDATA0                                9808 - 980A                 3   rel    0
+CONST                                    980B                         dse    0
+CSTR                                  980B - 98AD                A3   rel    0
+CCSTR                                    98AE                         rel    0
+                                      0000 - 0002                 3  aseg  
+                                      8000 - 8022                23  aseg  
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+  6356 bytes of CODE memory
+   144 bytes of DATA memory
+
+Errors: none
+Warnings: 1
+

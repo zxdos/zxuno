@@ -1,0 +1,418 @@
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 1
+
+0000                         1  
+0000                         2  
+0000                         3  ; SERIAL I/O
+0020                         4  TTI	EQU	$20
+0020                         5  TTO	EQU	$20
+0025                         6  TTS	EQU	$25
+0001                         7  TTYDA	EQU	$01
+0020                         8  TTYTR	EQU	$20
+0000                         9  
+0000                        10  
+0000                        11    
+0000                        12  
+0000                        13  ;CONSTANTS
+0000                        14  
+0024                        15  CTRX	EQU	$24	; CONTROLX
+000D                        16  CR	EQU	$0D
+0001                        17  SOH	EQU	1	; Start of Header
+0006                        18  ACK     EQU     06H     ; Acknowledge
+0015                        19  NAK     EQU     15H     ; Negative acknowledge
+001A                        20  EOF     EQU     1AH     ; End of file - ^Z
+0004                        21  EOT     EQU     04H     ; End of transmission
+000A                        22  ERRLIM	EQU	10	; Max allowable errors
+0000                        23  
+0000                        24  
+0000                        25  **********************************************************
+0000                        26  
+0000                        27  REST	EQU	$0
+0050                        28  DEV_SW	EQU	$50
+18D4                        29  FILL_VRAM	EQU	$18D4
+18E9                        30  VIDEO_INIT	EQU	$18E9
+1927                        31  FONT_INIT	EQU	$1927
+1FD9                        32  WRTRGV	EQU	$1FD9
+1FBE                        33  RCOPYV	EQU	$1FBE
+143B                        34  COLOR_TAB	EQU	$143B
+0000                        35  
+8000                        36  CARTADD	EQU	$8000
+0000                        37  
+0000                        38  
+0000                        39  
+0000                        40  *
+0000                        41  *	XMODEM 38400,8,N,1
+0000                        42  *
+0000                        43  
+7400                        44  	ORG	$7400  * For 2K ram start at 1K=$7000-73ff ; 2k=$7400 - 7800 
+7400                        45  			*// hex2bin need offset of 0x0200 for the hex file //Bios is set top jmp 0x7200
+7400                        46  *	ORG     $2000  * ROM BASED AT 0X2000
+7400  DB 50                 47  	IN	DEV_SW
+7402  E6 01                 48  	ANI	$01
+7404  CA 6E 00              49  	JZ	$006E
+7407                        50  
+7407  21 00 00              51  	LXI	H,0000
+740A  11 00 40              52  	LXI	D,$4000
+740D  CD D4 18              53          CALL	FILL_VRAM
+7410  CD E9 18              54          CALL	VIDEO_INIT
+7413  CD 27 19              55          CALL    FONT_INIT
+7416                        56  
+7416  21 00 76              57  	LXI	H,MSG
+7419  11 E2 01              58  	LXI	D,$01E2
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 2
+
+741C  FD 21                 59  	DB	$FD,$21 * LD IY,
+741E  1C 00                 60  	DW      28      *       LENGTH
+7420  3E 02                 61  	MVI	A,2
+7422  CD BE 1F              62  	CALL	RCOPYV
+7425                        63  
+7425  21 3B 14              64  	LXI	H,COLOR_TAB
+7428  11 00 00              65          LXI	D,0000
+742B  3E 04                 66  	MVI	A,4
+742D  FD 21                 67  	DB	$FD,$21  * LD IY,
+742F  12 00                 68  	DW	$0012    *       LENGTH
+7431  CD BE 1F              69  	CALL	RCOPYV        
+7434                        70  
+7434  06 01                 71  	MVI	B,1
+7436  0E C0                 72  	MVI	C,$C0
+7438  CD D9 1F              73  	CALL	WRTRGV
+743B                        74  
+743B                        75  ;INIT UART	
+743B  3E 00                 76  	MVI A,0     * INT OFF
+743D  D3 21                 77          OUT $21
+743F  3E 80                 78          MVI A,$80
+7441  D3 23                 79          OUT $23       * DLAB
+7443  3E 23                 80          MVI A,$23 *38400  * 19200 = $46     *$8b   * div hi 21400000/(139*16)=9600     *6500000/(42 * 16)=9600 -use 42
+7445  D3 20                 81          OUT $20       
+7447  3E 00                 82          MVI A,0      * div lo
+7449  D3 21                 83          OUT $21
+744B  3E 03                 84          MVI A,3      * 8,n,1
+744D  D3 23                 85          OUT $23
+744F  3E 0B                 86          MVI A,$0B    *TURN ON DTR,RTS,OUT2
+7451  D3 24                 87          OUT $24
+7453                        88  
+7453                        89  
+7453                        90  ;---------------------
+7453                        91  ; XMODEM receive routine
+7453                        92  ;---------------------
+7453                        93  ; Implements basic XMODEM checksum receive function to allow loading larger
+7453                        94  ; files from PC with fewer errors.  Code modified from XMODEM v3.2 source
+7453                        95  ; by Keith Petersen
+7453                        96  XMODEM:
+7453  21 00 80              97          LXI	H,CARTADD
+7456  22 1F 76              98  	SHLD	DEST	;save destination address
+7459                        99  	;MVI	A,0	; Initialize sector number to zero
+7459  AF                   100  	XRA	A
+745A  32 1D 76             101  	STA	SECTNO	;
+745D                       102  	
+745D                       103  RCVLP:	
+745D  CD 7A 74             104  	CALL	RCVSECT	;GET A SECTOR
+7460  DA 6F 74             105  	JC	RCVEOT	;GOT EOT?
+7463  CD 35 75             106  	CALL	WRSECT	;WRITE THE SECTOR
+7466  CD 2D 75             107  	CALL	INCRSNO	;BUMP SECTOR #
+7469  CD 0A 75             108  	CALL	SENDACK	;ACK THE SECTOR
+746C  C3 5D 74             109  	JMP	RCVLP	;LOOP UNTIL EOF
+746F                       110  ;
+746F                       111  ;GOT EOT ON SECTOR - FLUSH BUFFERS, END
+746F                       112  ;
+746F                       113  RCVEOT:	
+746F                       114  		
+746F  CD 0A 75             115  	CALL	SENDACK	;ACK THE SECTOR
+7472  3E 47                116  	MVI	A,'G'
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 3
+
+7474  CD 69 75             117  	CALL	SEND		
+7477  C3 00 00             118  	JMP	REST
+747A                       119  
+747A                       120  
+747A                       121  
+747A                       122  
+747A                       123  ;**** XMODEM SUBROUTINES		
+747A                       124  ;
+747A                       125  ;---->	RCVSECT: RECEIVE A SECTOR
+747A                       126  ;
+747A                       127  ;RETURNS WITH CARRY SET IF EOT RECEIVED.
+747A                       128  ;
+747A                       129  RCVSECT:
+747A  AF                   130  	XRA	A	;GET 0
+747B  32 1E 76             131  	STA	ERRCT	;INIT ERROR COUNT
+747E                       132  ;
+747E                       133  RCVRPT:	
+747E  06 0A                134  	MVI	B,10	;10 SEC TIMEOUT
+7480  CD 46 75             135  	CALL	RECV	;GET SOH/EOT
+7483  DA B4 74             136  	JC	RCVSTOT	;TIMEOUT
+7486  FE 01                137  	CPI	SOH	;GET SOH?
+7488  CA B7 74             138  	JZ	RCVSOH	;..YES
+748B                       139  ;
+748B                       140  ;EARLIER VERS. OF MODEM PROG SENT SOME NULLS -
+748B                       141  ;IGNORE THEM
+748B                       142  ;
+748B  B7                   143  	ORA	A	;00 FROM SPEED CHECK?
+748C  CA 7E 74             144  	JZ	RCVRPT	;YES, IGNORE IT
+748F  FE 04                145  	CPI	EOT	;END OF TRANSFER?
+7491  37                   146  	STC		;RETURN WITH CARRY..
+7492  C8                   147  	RZ		;..SET IF EOT
+7493                       148  ;
+7493                       149  ;DIDN'T GET SOH  OR EOT - 
+7493                       150  ;
+7493                       151  ;DIDN'T GET VALID HEADER - PURGE THE LINE,
+7493                       152  ;THEN SEND NAK.
+7493                       153  ;
+7493                       154  RCVSERR:
+7493  06 01                155  	MVI	B,1	;WAIT FOR 1 SEC..
+7495  CD 46 75             156  	CALL	RECV	;..WITH NO CHARS
+7498  D2 93 74             157  	JNC	RCVSERR	;LOOP UNTIL SENDER DONE
+749B  3E 15                158  	MVI	A,NAK	;SEND..
+749D  CD 69 75             159  	CALL	SEND	;..THE NAK
+74A0  3A 1E 76             160  	LDA	ERRCT	;ABORT IF..
+74A3  3C                   161  	INR	A	;..WE HAVE REACHED..
+74A4  32 1E 76             162  	STA	ERRCT	;..THE ERROR..
+74A7  FE 0A                163  	CPI	ERRLIM	;..LIMIT?
+74A9  DA 7E 74             164  	JC	RCVRPT	;..NO, TRY AGAIN
+74AC                       165  ;
+74AC                       166  ;10 ERRORS IN A ROW - 
+74AC                       167  ;
+74AC                       168  RCVSABT:
+74AC                       169  ;	CALL	ILPRT
+74AC                       170  ;	DB	'++UNABLE TO RECEIVE BLOCK '
+74AC                       171  ;	DB	'- ABORTING++',CR,0
+74AC                       172  
+74AC  3E 45                173  	MVI	A,'E'
+74AE  CD 69 75             174  	CALL	SEND
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 4
+
+74B1  C3 00 00             175  	JMP	REST    ;JUMP TO RESET
+74B4                       176  
+74B4                       177  ;
+74B4                       178  ;TIMEDOUT ON RECEIVE
+74B4                       179  ;
+74B4                       180  RCVSTOT:
+74B4  C3 93 74             181  	JMP	RCVSERR	;BUMP ERR CT, ETC.
+74B7                       182  ;
+74B7                       183  ;GOT SOH - GET BLOCK #, BLOCK # COMPLEMENTED
+74B7                       184  ;
+74B7                       185  RCVSOH:
+74B7  06 01                186  	MVI	B,1	;TIMEOUT = 1 SEC
+74B9  CD 46 75             187  	CALL	RECV	;GET SECTOR
+74BC  DA B4 74             188  	JC	RCVSTOT	;GOT TIMEOUT
+74BF  57                   189  	MOV	D,A	;D=BLK #
+74C0  06 01                190  	MVI	B,1	;TIMEOUT = 1 SEC
+74C2  CD 46 75             191  	CALL	RECV	;GET CMA'D SECT #
+74C5  DA B4 74             192  	JC	RCVSTOT	;TIMEOUT
+74C8  2F                   193  	CMA		;CALC COMPLEMENT
+74C9  BA                   194  	CMP	D	;GOOD SECTOR #?
+74CA  CA D0 74             195  	JZ	RCVDATA	;YES, GET DATA
+74CD                       196  ;
+74CD                       197  ;GOT BAD SECTOR #
+74CD                       198  ;
+74CD  C3 93 74             199  	JMP	RCVSERR	;BUMP ERROR CT.
+74D0                       200  ;
+74D0                       201  RCVDATA:
+74D0  7A                   202  	MOV	A,D	;GET SECTOR #
+74D1  32 1C 76             203  	STA	RCVSNO	;SAVE IT
+74D4  0E 00                204  	MVI	C,0	;INIT CKSUM
+74D6  21 80 75             205  	LXI	H,DMABUF ;POINT TO BUFFER  
+74D9                       206  ;
+74D9                       207  RCVCHR:
+74D9  06 01                208  	MVI	B,1	;1 SEC TIMEOUT
+74DB  CD 46 75             209  	CALL	RECV	;GET CHAR
+74DE  DA B4 74             210  	JC	RCVSTOT	;TIMEOUT
+74E1  77                   211  	MOV	M,A	;STORE CHAR
+74E2  2C                   212  	INR	L	;DONE?
+74E3  C2 D9 74             213  	JNZ	RCVCHR	;NO, LOOP
+74E6                       214  ;
+74E6                       215  ;VERIFY CHECKSUM
+74E6                       216  ;
+74E6  51                   217  	MOV	D,C	;SAVE CHECKSUM
+74E7  06 01                218  	MVI	B,1	;TIMEOUT LEN.
+74E9  CD 46 75             219  	CALL	RECV	;GET CHECKSUM
+74EC  DA B4 74             220  	JC	RCVSTOT	;TIMEOUT
+74EF  BA                   221  	CMP	D	;CHECKSUM OK?
+74F0  C2 93 74             222  	JNZ	RCVSERR	;NO, ERROR
+74F3                       223  ;
+74F3                       224  ;GOT A SECTOR, IT'S A DUP IF = PREV,
+74F3                       225  ;	OR OK IF = 1 + PREV SECTOR
+74F3                       226  ;
+74F3  3A 1C 76             227  	LDA	RCVSNO	;GET RECEIVED
+74F6  47                   228  	MOV	B,A	;SAVE IT
+74F7  3A 1D 76             229  	LDA	SECTNO	;GET PREV
+74FA  B8                   230  	CMP	B	;PREV REPEATED?
+74FB  CA 04 75             231  	JZ	RECVACK	;ACK TO CATCH UP
+74FE  3C                   232  	INR	A	;CALC NEXT SECTOR #
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 5
+
+74FF  B8                   233  	CMP	B	;MATCH?
+7500  C2 10 75             234  	JNZ	ABORT	;NO MATCH - STOP SENDER, EXIT
+7503  C9                   235  	RET		;CARRY OFF - NO ERRORS
+7504                       236  ;
+7504                       237  ;PREV SECT REPEATED, DUE TO THE LAST ACK
+7504                       238  ;BEING GARBAGED.  ACK IT SO SENDER WILL CATCH UP 
+7504                       239  ;
+7504                       240  RECVACK:
+7504  CD 0A 75             241  	CALL	SENDACK	;SEND THE ACK,
+7507  C3 7A 74             242  	JMP	RCVSECT	;GET NEXT BLOCK
+750A                       243  ;
+750A                       244  ;SEND AN ACK FOR THE SECTOR
+750A                       245  ;
+750A                       246  SENDACK:
+750A  3E 06                247  	MVI	A,ACK	;GET ACK
+750C  CD 69 75             248  	CALL	SEND	;..AND SEND IT
+750F  C9                   249  	RET
+7510                       250  ;	
+7510                       251  
+7510                       252  ABORT:
+7510                       253  	;LXI	SP,STACK
+7510                       254  ;
+7510                       255  ABORTL:
+7510  06 01                256  	MVI	B,1	;1 SEC. W/O CHARS.
+7512  CD 46 75             257  	CALL	RECV
+7515  D2 10 75             258  	JNC	ABORTL	;LOOP UNTIL SENDER DONE
+7518  3E 24                259  	MVI	A,CTRX	;CONTROL X
+751A  CD 69 75             260  	CALL	SEND	;STOP SENDING END
+751D                       261  ;
+751D                       262  ABORTW:
+751D  06 01                263  	MVI	B,1	;1 SEC W/O CHARS.
+751F  CD 46 75             264  	CALL	RECV
+7522  D2 1D 75             265  	JNC	ABORTW	;LOOP UNTIL SENDER DONE
+7525  3E 20                266  	MVI	A,' '	;GET A SPACE...
+7527  CD 69 75             267  	CALL	SEND	;TO CLEAR OUT CONTROL X
+752A                       268  
+752A                       269  ;	MVI	A,'X'
+752A                       270  ;	CALL	SEND
+752A  C3 00 00             271  	JMP	REST
+752D                       272  
+752D                       273  ;	CALL	ILPRT
+752D                       274  ;	DB	CR,'XMODEM CANCELLED',CR,'0'
+752D                       275  ;	RET		; <--------exit point -------
+752D                       276  
+752D                       277  ;
+752D                       278  ;---->	INCRSNO: INCREMENT SECTOR #
+752D                       279  ;
+752D                       280  INCRSNO:
+752D  3A 1D 76             281  	LDA	SECTNO	;INCR..
+7530  3C                   282  	INR	A	;..SECT..
+7531  32 1D 76             283  	STA	SECTNO	;..NUMBER
+7534  C9                   284  	RET
+7535                       285  ;
+7535                       286  
+7535                       287  ;
+7535                       288  ;---->	WRSECT: WRITE A SECTOR
+7535                       289  ;
+7535                       290  WRSECT:
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 6
+
+7535  2A 1F 76             291  	LHLD	DEST		;load destination address to HL
+7538  EB                   292  	XCHG			;put destination address in DE
+7539  21 80 75             293  	LXI	H,DMABUF	;load CPM dma buffer address to HL
+753C  01 80 00             294  	LXI	B,$0080
+753F  ED                   295  	DB	$ED ;LDIR
+7540  B0                   296  	DB	$B0
+7541  EB                   297  	XCHG
+7542  22 1F 76             298  	SHLD	DEST
+7545  C9                   299  	RET
+7546                       300  
+7546                       301  ;	LHLD	DEST		;load destination address to HL
+7546                       302  ;	XCHG			;put destination address in DE
+7546                       303  ;	LXI	H,DMABUF	;load CPM dma buffer address to HL
+7546                       304  ;	CALL	MOVE128		;move 128 bytes to destination
+7546                       305  ;	XCHG			; get updated dest addr in HL
+7546                       306  ;	SHLD	DEST		; store it - update destination pointer
+7546                       307  ;	RET
+7546                       308  
+7546                       309  ;
+7546                       310  ;---->	RECV: RECEIVE A CHARACTER
+7546                       311  ;
+7546                       312  ;TIMEOUT TIME IS IN B, IN SECONDS.  
+7546                       313  ;
+7546                       314  RECV:
+7546  D5                   315  	PUSH	D	;SAVE
+7547                       316  ;
+7547                       317  	;IF	FASTCLK	;4MHZ?
+7547                       318  	;MOV	A,B	;GET TIME REQUEST
+7547                       319  	;ADD	A	;DOUBLE IT
+7547                       320  	;MOV	B,A	;NEW TIME IN B
+7547                       321  	;ENDIF
+7547                       322  ;
+7547                       323  MSEC:
+7547  11 EE 1B             324  	LXI	D,7150  ;50000	;1 SEC DCR COUNT
+754A                       325  ;
+754A                       326  MWTI:
+754A  DB 25                327      	IN      TTS		; IMSAI specific, check input status
+754C  E6 01                328      	ANI     TTYDA	; ""
+754E  C2 60 75             329      	JNZ	MCHAR	;got a char
+7551                       330      
+7551  1D                   331  	DCR	E	;COUNT..
+7552  C2 4A 75             332  	JNZ	MWTI	;..DOWN..
+7555  15                   333  	DCR	D	;..FOR..
+7556  C2 4A 75             334  	JNZ	MWTI	;..TIMEOUT
+7559  05                   335  	DCR	B	;MORE SECONDS?
+755A  C2 47 75             336  	JNZ	MSEC	;YES, WAIT
+755D                       337  ;
+755D                       338  ;MODEM TIMED OUT RECEIVING
+755D                       339  ;
+755D  D1                   340  	POP	D	;RESTORE D,E
+755E  37                   341  	STC		;CARRY SHOWS TIMEOUT
+755F  C9                   342  	RET
+7560                       343  ;
+7560                       344  ;GOT CHAR FROM MODEM
+7560                       345  ;
+7560                       346  MCHAR:
+7560  DB 20                347      	IN      TTI	; IMSAI specific, get input byte
+7562  D1                   348  	POP	D	;RESTORE DE
+DUNFIELD 8085 ASSEMBLER: XMDM80                                       PAGE: 7
+
+7563                       349  ;
+7563                       350  ;CALC CHECKSUM
+7563                       351  ;
+7563  F5                   352  	PUSH	PSW	;SAVE THE CHAR
+7564  81                   353  	ADD	C	;ADD TO CHECKSUM
+7565  4F                   354  	MOV	C,A	;SAVE CHECKSUM
+7566  F1                   355  	POP	PSW	;RESTORE CHAR
+7567  B7                   356  	ORA	A	;CARRY OFF: NO ERROR
+7568  C9                   357  	RET		;FROM "RECV"
+7569                       358  ;
+7569                       359  ;
+7569                       360  ;---->	SEND: SEND A CHARACTER TO THE MODEM
+7569                       361  ;
+7569                       362  SEND:
+7569  F5                   363  	PUSH	PSW	;SAVE THE CHAR
+756A                       364  ;	ADD	C	;CALC CKSUM    WHY ? LAK
+756A                       365  ;	MOV	C,A	;SAVE CKSUM    WHY ? LAK
+756A                       366  
+756A                       367  SENDW:
+756A  DB 25                368  	IN	TTS	; IMSAI specific, Check Console Output Status
+756C  E6 20                369      	ANI	TTYTR 
+756E  CA 6A 75             370  	JZ	SENDW	;..NO, WAIT
+7571  F1                   371  	POP	PSW	;GET CHAR
+7572  D3 20                372      	OUT	TTO     ; IMSAI specific, Send Data
+7574  C9                   373  	RET		;FROM "SEND"
+7575                       374  
+7575                       375  ;
+7575                       376  ;----->  MOVE 128 CHARACTERS
+7575                       377  ;
+7575                       378  ;MOVE128:
+7575                       379  ;	MVI	B,128	;SET MOVE COUNT
+7575                       380  ;
+7575                       381  ;MOVE FROM (HL) TO (DE) LENGTH IN (B)
+7575                       382  ;
+7575                       383  ;MOVE:
+7575                       384  ;	MOV	A,M	;GET A CHAR
+7575                       385  ;	STAX	D	;STORE IT
+7575                       386  ;	INX	H	;TO NEXT "FROM"
+7575                       387  ;	INX	D	;TO NEXT "TO"
+7575                       388  ;	DCR	B	;MORE?
+7575                       389  ;	JNZ	MOVE	;..YES, LOOP
+7575                       390  ;	RET		;..NO, RETURN
+7575                       391  
+7575                       392  
+7575                       393  ;
+7580                       394  	ORG	$7580
+7580                       395  
+7580                       396  DMABUF	DS	128
+7600                       397        
+7600  58 4D 4F 44 45 4D +  398  MSG	STR	"XMODEM RECEIVE (38400,8,N,1)"
+761C                       399  
+761C                       400  
+761C  01                   401  RCVSNO	DB	1	; SECT # RECEIVED (XMODEM)
+761D  01                   402  SECTNO	DB	1	; CURRENT SECTOR NUMBER (XMODEM)
+761E  01                   403  ERRCT	DB	1	; ERROR COUNT(XMODEM)
+761F  01 00                404  DEST	DW	1	; destination address pointer 2BYTES (XMODEM)  

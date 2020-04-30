@@ -1,0 +1,357 @@
+;
+; Modified for ColecoVision
+;----------------------------------------------------------;
+;						      	   ;
+;		    CSTARTUP.S01		      	   ;
+;						      	   ;
+
+	NAME	CVSTART
+        
+	EXTERN	main			; where to begin execution
+	EXTERN  nmi
+	EXTERN  _set_snd_table
+	EXTERN	?C_EXIT			; where to go when program is done
+    
+        
+        PUBLIC  buffer32
+	PUBLIC  no_nmi
+	PUBLIC  vdp_status
+	PUBLIC  nmi_flag
+	PUBLIC  joypad_1
+	PUBLIC  keypad_1
+	PUBLIC  joypad_2
+	PUBLIC  keypad_2
+	PUBLIC  snd_areas
+	
+	
+;---------------------------------------------------------------;
+;  CSTACK - The C stack segment					;
+;  								;
+;  Please, see in the link file lnk*.xcl how to increment	;
+;  the stack size without having to reassemble cstartup.s01 !	;
+;---------------------------------------------------------------;
+
+	RSEG	CSTACK
+	DEFS	0			; a bare minimum !
+
+;---------------------------------------------------------------;
+;  Forward declarations of segment used during initialization	;
+;---------------------------------------------------------------;
+	RSEG	DATA0
+
+	RSEG	IDATA0
+	RSEG	ECSTR
+	RSEG	TEMP
+	RSEG	UDATA0
+	
+buffer32:: defs	32 ; buffer space 32    [7000-701F]
+snd_addr:: defs	11 ; sound addresses    [7020-702A]
+snd_areas:: defs	61 ; 5 sound slots + NULL (00h) [702B-...]
+no_nmi::   defs    1
+vdp_status:: defs  1
+nmi_flag:: defs    1
+joypad_1:: defs    1
+keypad_1:: defs    1
+joypad_2:: defs    1
+keypad_2:: defs    1			
+
+	RSEG	WCSTR
+
+	RSEG	CDATA0
+	RSEG	CCSTR
+	RSEG	CONST
+	RSEG	CSTR
+
+
+	ASEG
+	ORG	8000h
+init_A
+	defb	55h, 0aah		; no default colecovision title screen => 55 AA
+	defw	0			; no copy of sprite table, etc.
+	defw	0			; all unused
+	defw	buffer32		; work buffer
+	defw	0			; ??
+	defw	start_program	; start address for game coding
+	defb	0c9h,0,0		; no RST 08 support
+	defb	0c9h,0,0		; no RST 10 support
+	defb	0c9h,0,0		; no RST 18 support
+	defb	0c9h,0,0		; no RST 20 support
+	defb	0c9h,0,0		; no RST 28 support
+	defb	0c9h,0,0		; no RST 30 support
+	defb	0c9h,0,0		; no RST 38 support  (spinner)
+	jp  nmi_asm
+	;retn
+
+nmi_asm:
+        push    ix        
+        push    hl
+        push    de
+        push    bc
+	push	af
+        ld	a,1
+        ld      (nmi_flag),a           ; set NMI flag
+	;;;
+        call    0x1fdc                   ; get VDP status
+        ld      (vdp_status),a
+	;;;
+        ld      a,(no_nmi)             ; check if nmi() should be
+        or      a                       ;  called
+        jp      nz,nmi_exit
+        inc     a
+        ld      (no_nmi),a
+        push    bc
+        push    de
+        push    hl
+        push    ix
+        push    iy
+        ex      af,af'
+        push    af
+        exx
+        push    bc
+        push    de
+        push    hl
+        call    0x1f76                   ; update controllers
+        ld      a,(0x73ee)
+        and	0x4f
+        ld      (joypad_1),a
+        ld      a,(0x73ef)
+        and	0x4f
+        ld      (joypad_2),a
+        ld      a,(0x73f0)
+        and	0x4f
+        ld      (keypad_1),a
+        ld      a,(0x73f1)
+        and	0x4f
+        ld      (keypad_2),a
+        call    decode_controllers
+        call    nmi                    ; call C function
+        call    0x1f61                   ; play sounds
+        call    0x1ff4                   ; update snd_addr with snd_areas
+        pop     hl
+        pop     de
+        pop     bc
+        exx
+        pop     af
+        ex      af,af'
+        pop     iy
+        pop     ix
+        pop     hl
+        pop     de
+        pop     bc
+        xor     a
+        ld      (no_nmi),a
+nmi_exit:
+        pop     af
+        pop     bc
+        pop     de
+        pop     hl
+        pop     ix
+        ret
+        ;ei      ; optional
+        ;reti    ; ret ?
+
+keypad_table::
+	defb    0xff,8,4,5,0xff,7,11,2,0xff,10,0,9,3,1,6,0xff
+
+; joypads will be decoded as follows:
+; bit
+; 0     left
+; 1     down
+; 2     right
+; 3     up
+; 4     --------
+; 5     --------
+; 6     button 2
+; 7     button 1
+; keypads will hold key pressed (0-11), or 0xff
+decode_controllers:
+	ld      ix, joypad_1
+	call    decode_controller
+	inc     ix
+	inc     ix
+decode_controller:
+	ld      a,(ix+0)
+	ld      b,a
+	and     0x40
+	rlca
+	ld      c,a
+	ld      a,b
+	and     0x0f
+	or      c
+	ld      b,a
+	ld      a,(ix+1)
+	ld      c,a
+	and     0x40
+	or      b
+	ld      (ix+1),a
+	ld      a,c
+	cpl
+	and     0x0f
+	ld      e,a
+	ld      d,0
+	ld      hl,keypad_table
+	add     hl,de
+	ld      a,(hl)
+	ld      (ix+1),a
+	ret
+
+
+;---------------------------------------------------------------;
+;  RCODE - where the execution actually begins			;
+;---------------------------------------------------------------;
+	RSEG	RCODE
+start_program
+	im       1                      ; interrupt mode -> rst 38h
+	di
+
+	;LD	SP,.SFE.(CSTACK-1)	; from high to low address
+
+;---------------------------------------------------------------;
+; If hardware must be initiated from assembly or if interrupts	;
+; should be on when reaching main, this is the place to insert	;
+; such code.							;
+;---------------------------------------------------------------;
+
+;
+;
+;
+
+;---------------------------------------------------------------;
+; If it is not a requirement that static/global data is set	;
+; to zero or to some explicit value at startup, the following	;
+; line refering to seg_init can be deleted, or commented.	;
+;---------------------------------------------------------------;
+
+	CALL	seg_init
+
+	;xor     a                       ; clear carry
+	;ld      bc,3b8h	; ram size left
+	;ld      hl,7000h	; starting from 7000
+	;ld      de,7001h
+	;ld      (hl),a
+	;ldir                            ; zero-fill bss
+
+	;call gsinit					; Initialize global variables.
+
+	ld	h,0 ; set dummy sound table
+	call    _set_snd_table
+
+	ld      hl,0033h                ; initialise random generator
+	ld      (73c8h),hl
+                                    ; set screen mode 2 text
+	call    1f85h                   ; set default VDP regs 16K
+	ld      de,4000h                ; clear VRAM
+	xor     a
+	ld      l,a
+	ld      h,a
+	call    1f82h
+
+
+#ifdef banking
+
+	LD	HL,LWRD(main)		; banked call to main()
+	LD	A,BYTE3(main)
+	CALL	?BANK_CALL_DIRECT_L08
+#else
+	CALL	main			; non-banked call to main()
+#endif
+
+;---------------------------------------------------------------;
+; Now when we are ready with our C program we must perform a    ;
+; system-dependent action.  In this case we just stop.		;
+;---------------------------------------------------------------;
+; DO NOT CHANGE THE NEXT LINE OF CSTARTUP IF YOU WANT TO RUN    ;
+; YOUR SOFTWARE WITH THE HELP OF THE C-SPY HLL DEBUGGER.        ;
+;---------------------------------------------------------------;
+
+	JP	?C_EXIT	
+
+;---------------------------------------------------------------;
+; Copy initialized PROMmed code to shadow RAM and clear		;
+; uninitialized variables.					;
+;---------------------------------------------------------------;
+
+seg_init
+
+;---------------------------------------;
+; Zero out UDATA0			;
+;---------------------------------------;
+	LD	HL,.SFE.(UDATA0)
+	LD	DE,.SFB.(UDATA0)
+	CALL	zero_mem
+
+;---------------------------------------;
+; Copy CDATA0 into IDATA0		;
+;---------------------------------------;
+	LD	DE,.SFB.(IDATA0)		;destination address
+	LD	HL,.SFE.(CDATA0)
+	LD	BC,.SFB.(CDATA0)
+	CALL	copy_mem
+
+;---------------------------------------;
+; Copy CCSTR into ECSTR			;
+;---------------------------------------;
+	LD	DE,.SFB.(ECSTR)			;destination address
+	LD	HL,.SFE.(CCSTR)
+	LD	BC,.SFB.(CCSTR)
+
+	; Just fall in to the copy_mem function
+
+;---------------------------------------;
+; Copy memory				;
+;---------------------------------------;
+copy_mem
+	XOR	A
+	SBC	HL,BC
+	PUSH	BC
+	LD	C,L
+	LD	B,H				; BC - that many bytes
+	POP	HL				; source address
+	RET	Z				; If block size = 0 return now
+	LDIR
+	RET
+
+;---------------------------------------;
+; Clear memory				;
+;---------------------------------------;
+zero_mem
+	XOR	A
+again	PUSH	HL
+	SBC	HL,DE
+	POP	HL
+	RET	Z
+	LD	(DE),A
+	INC	DE
+	JR	again
+
+;---------------------------------------------------------------;
+; Interrupt vectors must be inserted here by the user.		;
+;---------------------------------------------------------------;
+
+	;COMMON	INTVEC
+
+	ENDMOD	init_A
+
+;---------------------------------------------------------------;
+; Function/module: exit (int code)				;
+;								;
+; When C-SPY is used this code will automatically be replaced   ;
+; by a 'debug' version of exit().				;
+;---------------------------------------------------------------;
+	MODULE	exit
+
+	PUBLIC	exit
+	PUBLIC	?C_EXIT
+
+	RSEG	RCODE
+
+?C_EXIT
+exit	EQU	?C_EXIT
+
+;--------------------------------------------------------------;
+; The next line can be replaced by user defined code.          ;
+;--------------------------------------------------------------;
+        NOP
+	JR	$			; loop forever
+
+	END

@@ -1,0 +1,20 @@
+	NAME	sound_off(16)
+	RSEG	CODE(0)
+	PUBLIC	sound_off
+	EXTERN	snd_areas
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+sound_off:
+        push  ix
+	ld	b,5
+	ld	de,0x000a
+	ld	hl,snd_areas
+loop:
+	ld	(hl),0xff
+	add	hl,de
+	djnz	loop
+	
+	call	0x1fd6
+        pop ix
+        ret
+	END

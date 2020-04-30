@@ -1,0 +1,114 @@
+   ******* How to write ColecoVision ROM images with HiTech-C 3.09 *******
+                                Version 1.0
+                                     
+                    Copyright (C) 1997  Marcel de Kogel
+
+Hardware and Software Requirements
+==================================
+A ColecoVision or compatible video game console
+An EPROM programmer
+Hi-Tech C CP/M-80 3.09. Can be downloaded on http://www.htsoft.com/
+A CP/M-80 machine or a CP/M-80 emulator
+
+Files included in coleco.lzh
+============================
+adam/        Coleco ADAM interface
+cch/         Cosmo Challenge sample game
+copt/        Game selector, used by the ADAM interface
+ctrainer/    Cosmo Trainer sample game
+lib/         The library source code
+coleco.txt   This file
+The latest version of this project can always be found on its
+distribution site at http://www.komkon.org/~dekogel/classic.html
+
+Building the test programs
+==========================
+1) Install coleco.h, libcv.lib and crtcv.obj in your Hi-Tech C directory
+2) Install the sample game source code, e.g. cch.c and cch_tabl.c, in your
+   Hi-Tech C directory
+3) Compile the source code:
+   C -C -V -O cch.c
+   C -C -V -O cch_tabl.c
+4) Link all code and libraries. Code and initialised data should be loaded
+   at 8000h, uninitialised data at 7000h, don't forget to link with the
+   standard C library:
+   LINK
+   link> -Z -Mcch.map -Occh.rom -C -Ptext=8000h/0,data,bss=7000h/ \
+   link> crtcv.obj cch.obj cch_tabl.obj libcv.lib libc.lib
+
+Building the ADAM interface
+===========================
+1) First, build all sample programs
+2) Assemble the boot block CADAM.AS:
+   ZAS CADAM.AS
+3) Link CADAM.AS. Code should be loaded at c800h, uninitialised data at 2000h
+   LINK
+   link> -Z -Mcadam.map -Ocadam.bin -C -Ptext=c800h/0,data,bss=2000h/ \
+   link> cadam.obj
+4) Put all files on a Coleco ADAM floppy, name them BOOT_TRCH, COSMO_OP,
+   COSMO_CH and COSMO_TR - all files should have type 02h
+5) Change the boot block of the floppy to the one in cadam.bin
+
+Note: It's very easy to modify the C.COM source code (C.C) to automatically
+pass the correct arguments to the linker
+
+The RLE algorithm
+=================
+The RLE algorithm used by the library functions rle2ram() and rle2vram() is
+as follows:
+0xff   - End marker
+<0x80  - Copy next (n&0x7f)+1 bytes
+>=0x80 - Repeat next byte (n&0x7f)+1 times
+
+Writing your own program
+========================
+Things to be aware of include:
+- As all of the code and initialised data will be in ROM, make sure your data
+is either uninitialised or constant, e.g.:
+        void nmi (void)
+        {
+         static byte ucount=2;
+         if (!--ucount)
+         {
+          do_something();
+          ucount=2;
+         }
+        }
+will _not_ work correctly as ucount cannot be modified.
+        static byte ucount;
+        void nmi (void)
+        {
+         if (!--ucount)
+         {
+          do_something();
+          ucount=2;
+         }
+        }
+        void main (void)
+        {
+         ucount=2;
+         ...
+        }
+will work fine.
+- The maximum amount of uninitialised data is slightly smaller than 1K, the
+exact amount depends on the use of stack variables. Because the linker will
+not issue an overflow, if you're in doubt you should generate a map file and
+verify the total bss size is not too large
+
+Legal issues
+============
+This software can be used free of charge and may be distributed freely, as
+long as the archive isn't modified in any way and no profit is made from
+distributing it. Applications made with this software may be distributed
+without this archive only if proper credit is given and the distribution
+site is noted in your application's documentation. If you want to use this
+software to create commercial applications with, please contact me
+Finally, this software comes without any warranty, neither express nor
+implied: Use at your own risk
+
+History
+=======
+1.0  23-11-1997   Initial release
+
+Please send your comments to Marcel at
+m.dekogel@student.utwente.nl

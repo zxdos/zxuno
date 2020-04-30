@@ -1,0 +1,29 @@
+	NAME	put_at(16)
+	RSEG	CODE(0)
+	PUBLIC	put_at
+	EXTERN  calc_offset
+	EXTERN	?CLZ80L_4_06_L00
+	EXTERN	?ENT_PARM_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+	RSEG	CODE
+		 
+      ; put_at (x,y,byte[],size)
+	 ;        e,c, ix+8,9, ix+10/11
+   
+put_at:
+	call	?ENT_PARM_DIRECT_L09
+       
+        ld	d,c
+    	call	calc_offset	; de = offset
+    
+	ld	l,(ix+8)
+	ld	h,(ix+9)
+    			; bc = count
+    	ld    	c,(ix+10)
+    	ld      b,(ix+11)
+    	call  	0x1fdf
+        
+	jp ?LEAVE_DIRECT_L09
+
+	END
+

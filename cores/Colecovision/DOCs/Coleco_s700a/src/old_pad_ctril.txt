@@ -1,0 +1,77 @@
+ -----------------------------------------------------------------------------
+  -- Process pad_ctrl
+  --
+  -- Purpose:
+  --   Maps the gamepad signals to the controller buses of the console.
+  --
+  pad_ctrl: process (ctrl_p5_s, ctrl_p8_s,
+                     but_a_s, but_b_s,
+                     but_up_s, but_down_s, but_left_s, but_right_s,
+                     but_x_s, but_y_s,
+                     but_sel_s, but_start_s,
+                     but_tl_s, but_tr_s)
+    variable key_v : natural range cv_keys_t'range;
+  begin
+    -- quadrature device not implemented
+    ctrl_p7_s          <= "11";
+    ctrl_p9_s          <= "11";
+
+    for idx in 1 to 2 loop
+      if    ctrl_p5_s(idx) = '0' and ctrl_p8_s(idx) = '1' then
+        -- keys and right button enabled --------------------------------------
+        -- keys not fully implemented
+
+        key_v := cv_key_none_c;
+
+        if but_tl_s(idx-1) = '0' then
+          if    but_a_s(idx-1) = '0' then
+            -- KEY 1
+            key_v := cv_key_1_c;
+          elsif but_b_s(idx-1) = '0' then
+            -- KEY 2
+            key_v := cv_key_2_c;
+          elsif but_x_s(idx-1) = '0' then
+            -- KEY 3
+            key_v := cv_key_3_c;
+          elsif but_y_s(idx-1) = '0' then
+            -- KEY 4
+            key_v := cv_key_4_c;
+          elsif but_sel_s(idx-1) = '0' then
+            -- KEY *
+            key_v := cv_key_asterisk_c;
+          elsif but_start_s(idx-1) = '0' then
+            -- KEY #
+            key_v := cv_key_number_c;
+          end if;
+        end if;
+
+        ctrl_p1_s(idx) <= cv_keys_c(key_v)(1);
+        ctrl_p2_s(idx) <= cv_keys_c(key_v)(2);
+        ctrl_p3_s(idx) <= cv_keys_c(key_v)(3);
+        ctrl_p4_s(idx) <= cv_keys_c(key_v)(4);
+
+        if but_tl_s(idx-1) = '1' then
+          ctrl_p6_s(idx) <= but_b_s(idx-1);
+        else
+          ctrl_p6_s(idx) <= '1';
+        end if;
+
+      elsif ctrl_p5_s(idx) = '1' and ctrl_p8_s(idx) = '0' then
+        -- joystick and left button enabled -----------------------------------
+        ctrl_p1_s(idx) <= but_up_s(idx-1);
+        ctrl_p2_s(idx) <= but_down_s(idx-1);
+        ctrl_p3_s(idx) <= but_left_s(idx-1);
+        ctrl_p4_s(idx) <= but_right_s(idx-1);
+        ctrl_p6_s(idx) <= but_a_s(idx-1);
+
+      else
+        -- nothing active -----------------------------------------------------
+        ctrl_p1_s(idx) <= '1';
+        ctrl_p2_s(idx) <= '1';
+        ctrl_p3_s(idx) <= '1';
+        ctrl_p4_s(idx) <= '1';
+        ctrl_p6_s(idx) <= '1';
+        ctrl_p7_s(idx) <= '1';
+      end if;
+    end loop;
+  end process pad_ctrl;

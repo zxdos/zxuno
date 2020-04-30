@@ -1,0 +1,51 @@
+Compra:
+
+Qty Value             Device            Package        Parts       Description
+------------------------------------------------------------------------------------------------------------
+1   PLACAEP2C5LASER   PLACAEP2C5LASER   4X28_LASER     PLC1        Placa EP2C5
+1   CY7C1019CV33-12VC CY7C1019CV33-12VC SOJ32-400      IC1         128K x 8 Static RAM 10ns
+2   120               R-EU_R1206        R1206          R14, R15    RESISTOR, European symbol
+3   1K                R-EU_R1206        R1206          R4, R8, R12 RESISTOR, European symbol
+3   2K                R-EU_R1206        R1206          R3, R7, R11 RESISTOR, European symbol
+1   2K2               R-EU_R1206        R1206          R1          RESISTOR, European symbol
+3   4K                R-EU_R1206        R1206          R2, R6, R10 RESISTOR, European symbol
+3   500               R-EU_R1206        R1206          R5, R9, R13 RESISTOR, European symbol
+2   100n              C-EUC1206         C1206          C1, C2      CAPACITOR, European symbol
+1   10n               C-EUC1206         C1206          C3          CAPACITOR, European symbol
+1                     MICROSD-9P        9P-SMD-W/-RING J1          Micro SD 9 pins
+1                     VGAH              HDF15H         X3          SUB-D
+1   AUDIO-JACK2PTH    AUDIO-JACK2PTH    AUDIO-JACK     U$1         Stereo audio jack with bypass switches.
+2                     31-XX             B3F-31XX       S1, S2      OMRON SWITCH
+1                     MA06-1            MA06-1         SV1         PIN HEADER
+
+
+Montagem:
+
+Part Value             Device            Package        Description
+------------------------------------------------------------------------------------------------------------
+PLC1 PLACAEP2C5LASER   PLACAEP2C5LASER   4X28_LASER     Placa EP2C5
+IC1  CY7C1019CV33-12VC CY7C1019CV33-12VC SOJ32-400      128K x 8 Static RAM 10ns
+R1   2K2               R-EU_R1206        R1206          RESISTOR, European symbol
+R2   4K                R-EU_R1206        R1206          RESISTOR, European symbol
+R3   2K                R-EU_R1206        R1206          RESISTOR, European symbol
+R4   1K                R-EU_R1206        R1206          RESISTOR, European symbol
+R5   500               R-EU_R1206        R1206          RESISTOR, European symbol
+R6   4K                R-EU_R1206        R1206          RESISTOR, European symbol
+R7   2K                R-EU_R1206        R1206          RESISTOR, European symbol
+R8   1K                R-EU_R1206        R1206          RESISTOR, European symbol
+R9   500               R-EU_R1206        R1206          RESISTOR, European symbol
+R10  4K                R-EU_R1206        R1206          RESISTOR, European symbol
+R11  2K                R-EU_R1206        R1206          RESISTOR, European symbol
+R12  1K                R-EU_R1206        R1206          RESISTOR, European symbol
+R13  500               R-EU_R1206        R1206          RESISTOR, European symbol
+R14  120               R-EU_R1206        R1206          RESISTOR, European symbol
+R15  120               R-EU_R1206        R1206          RESISTOR, European symbol
+C1   100n              C-EUC1206         C1206          CAPACITOR, European symbol
+C2   100n              C-EUC1206         C1206          CAPACITOR, European symbol
+C3   10n               C-EUC1206         C1206          CAPACITOR, European symbol
+U$1  AUDIO-JACK2PTH    AUDIO-JACK2PTH    AUDIO-JACK     Stereo audio jack with bypass switches.
+J1                     MICROSD-9P        9P-SMD-W/-RING Micro SD 9 pins
+X3                     VGAH              HDF15H         SUB-D
+S1                     31-XX             B3F-31XX       OMRON SWITCH
+S2                     31-XX             B3F-31XX       OMRON SWITCH
+SV1                    MA06-1            MA06-1         PIN HEADER

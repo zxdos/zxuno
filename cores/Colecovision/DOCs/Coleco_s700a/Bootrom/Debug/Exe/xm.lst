@@ -1,0 +1,330 @@
+0001   0000             
+0002   0000             #DEFINE ORG	.ORG
+0003   0000             #DEFINE EQU	.EQU
+0004   0000             #DEFINE DW	.DW
+0005   0000             #DEFINE DB	.DB
+0006   0000             #DEFINE DS	.DS
+0007   0000             #DEFINE END	.END
+0008   0000             
+0009   0000             ; SERIAL I/O
+0010   0000             TTI	EQU	$20
+0011   0000             TTO	EQU	$20
+0012   0000             TTS	EQU	$25
+0013   0000             TTYDA	EQU	$01
+0014   0000             TTYTR	EQU	$20
+0015   0000             
+0016   0000             
+0017   0000               
+0018   0000             
+0019   0000             ;CONSTANTS
+0020   0000             
+0021   0000             CTRX	EQU	$24	; CONTROLX
+0022   0000             CR	EQU	$0D
+0023   0000             SOH	EQU	1	; Start of Header
+0024   0000             ACK     EQU     06H     ; Acknowledge
+0025   0000             NAK     EQU     15H     ; Negative acknowledge
+0026   0000             EOF     EQU     1AH     ; End of file - ^Z
+0027   0000             EOT     EQU     04H     ; End of transmission
+0028   0000             ERRLIM	EQU	10	; Max allowable errors
+0029   0000             
+0030   0000             
+0031   0000             ;**********************************************************
+0032   0000             L006E		EQU	$006E
+0033   0000             REST		EQU	$0
+0034   0000             ;READ_CTL	EQU	$1F79
+0035   0000             ;FILL_VRAM	EQU	$1F82
+0036   0000             ;VIDEO_INIT	EQU	$18E9
+0037   0000             ;FONT_INIT	EQU	$1F7F
+0038   0000             ;WRTRGV		EQU	$1FD9
+0039   0000             ;RCOPYV		EQU	$1FBE
+0040   0000             ;COLOR_TAB	EQU	$143B
+0041   0000             
+0042   0000             CARTADD		EQU	$8000
+0043   0000             DMABUF		EQU	$7480
+0044   0000             
+0045   0000             ;===================================================================LAK		
+0046   4000             	ORG	$4000
+0047   4000             
+0048   4000             XMODEM: 
+0049   4000             
+0050   4000             UART_INIT
+0051   4000             	
+0052   4000 3E 00       	LD	A,0     ;* INT OFF
+0053   4002 D3 21               OUT 	($21),A
+0054   4004 3E 80               LD 	A,$80
+0055   4006 D3 23               OUT 	($23),A       ;* DLAB
+0056   4008 3E 23               LD 	A,$23 ;*38400  ;*19200 = $46 *$8b* div hi 21400000/(139*16)=9600 *6500000/(42 * 16)=9600 -use 42
+0057   400A D3 20               OUT 	($20),A       
+0058   400C 3E 00               LD 	A,0      ;* div lo
+0059   400E D3 21               OUT 	($21),A
+0060   4010 3E 03               LD 	A,3      ;* 8,n,1
+0061   4012 D3 23               OUT 	($23),A
+0062   4014 3E 0B               LD 	A,$0B    ;*TURN ON DTR,RTS,OUT2
+0063   4016 D3 24               OUT 	($24),A
+0064   4018 C3 1B 40    	JP	XMODEMR
+0065   401B             
+0066   401B             
+0067   401B             ;---------------------
+0068   401B             ; XMODEM receive routine
+0069   401B             ;---------------------
+0070   401B             ; Implements basic XMODEM checksum receive function to allow loading larger
+0071   401B             ; files from PC with fewer errors.  Code modified from XMODEM v3.2 source
+0072   401B             ; by Keith Petersen
+0073   401B             XMODEMR:
+0074   401B 21 00 80            LD	HL,CARTADD
+0075   401E 22 41 41    	LD	(DEST),HL;save destination address
+0076   4021 3E 00       	LD	A,0	; Initialize sector number to zero
+0077   4023 32 3F 41    	LD	(SECTNO),A	;
+0078   4026             	
+0079   4026             RCVLP:	
+0080   4026 CD 43 40    	CALL	RCVSECT	;GET A SECTOR
+0081   4029 DA 38 40    	JP	C,RCVEOT	;GOT EOT?
+0082   402C CD FE 40    	CALL	WRSECT	;WRITE THE SECTOR
+0083   402F CD F6 40    	CALL	INCRSNO	;BUMP SECTOR #
+0084   4032 CD D3 40    	CALL	SENDACK	;ACK THE SECTOR
+0085   4035 C3 26 40    	JP	RCVLP	;LOOP UNTIL EOF
+0086   4038             ;
+0087   4038             ;GOT EOT ON SECTOR - FLUSH BUFFERS, END
+0088   4038             ;
+0089   4038             RCVEOT:	
+0090   4038             		
+0091   4038 CD D3 40    	CALL	SENDACK	;ACK THE SECTOR
+0092   403B 3E 47       	LD	A,'G'
+0093   403D CD 32 41    	CALL	SEND		
+0094   4040 C3 6E 00    	JP	L006E
+0095   4043             
+0096   4043             ;**** XMODEM SUBROUTINES		
+0097   4043             ;
+0098   4043             ;---->	RCVSECT: RECEIVE A SECTOR
+0099   4043             ;
+0100   4043             ;RETURNS WITH CARRY SET IF EOT RECEIVED.
+0101   4043             ;
+0102   4043             RCVSECT:
+0103   4043 AF          	XOR	A	 ;GET 0
+0104   4044 32 40 41    	LD	(ERRCT),A;INIT ERROR COUNT
+0105   4047             ;
+0106   4047             RCVRPT:	
+0107   4047 06 0A       	LD	B,10	;10 SEC TIMEOUT
+0108   4049 CD 0F 41    	CALL	RECV	;GET SOH/EOT
+0109   404C DA 7D 40    	JP	C,RCVSTOT	;TIMEOUT
+0110   404F FE 01       	CP	SOH	;GET SOH?
+0111   4051 CA 80 40    	JP	Z,RCVSOH	;..YES
+0112   4054             ;
+0113   4054             ;EARLIER VERS. OF MODEM PROG SENT SOME NULLS -
+0114   4054             ;IGNORE THEM
+0115   4054             ;
+0116   4054 B7          	OR	A	;00 FROM SPEED CHECK?
+0117   4055 CA 47 40    	JP	Z,RCVRPT;YES, IGNORE IT
+0118   4058 FE 04       	CP	EOT	;END OF TRANSFER?
+0119   405A 37          	SCF		;RETURN WITH CARRY..
+0120   405B C8          	RET	Z	;..SET IF EOT
+0121   405C             ;
+0122   405C             ;DIDN'T GET SOH  OR EOT - 
+0123   405C             ;
+0124   405C             ;DIDN'T GET VALID HEADER - PURGE THE LINE,
+0125   405C             ;THEN SEND NAK.
+0126   405C             ;
+0127   405C             RCVSERR:
+0128   405C 06 01       	LD	B,1	;WAIT FOR 1 SEC..
+0129   405E CD 0F 41    	CALL	RECV	;..WITH NO CHARS
+0130   4061 D2 5C 40    	JP	NC,RCVSERR	;LOOP UNTIL SENDER DONE
+0131   4064 3E 15       	LD	A,NAK	;SEND..
+0132   4066 CD 32 41    	CALL	SEND	;..THE NAK
+0133   4069 3A 40 41    	LD	A,(ERRCT)	;ABORT IF..
+0134   406C 3C          	INC	A	;..WE HAVE REACHED..
+0135   406D 32 40 41    	LD	(ERRCT),A	;..THE ERROR..
+0136   4070 FE 0A       	CP	ERRLIM	;..LIMIT?
+0137   4072 DA 47 40    	JP	C,RCVRPT	;..NO, TRY AGAIN
+0138   4075             ;
+0139   4075             ;10 ERRORS IN A ROW - 
+0140   4075             ;
+0141   4075             RCVSABT:
+0142   4075 3E 45       	LD	A,'E'
+0143   4077 CD 32 41    	CALL	SEND
+0144   407A C3 00 00    	JP	REST    ;JUMP TO RESET
+0145   407D             
+0146   407D             ;
+0147   407D             ;TIMEDOUT ON RECEIVE
+0148   407D             ;
+0149   407D             RCVSTOT:
+0150   407D C3 5C 40    	JP	RCVSERR	;BUMP ERR CT, ETC.
+0151   4080             ;
+0152   4080             ;GOT SOH - GET BLOCK #, BLOCK # COMPLEMENTED
+0153   4080             ;
+0154   4080             RCVSOH:
+0155   4080 06 01       	LD	B,1	;TIMEOUT = 1 SEC
+0156   4082 CD 0F 41    	CALL	RECV	;GET SECTOR
+0157   4085 DA 7D 40    	JP	C,RCVSTOT	;GOT TIMEOUT
+0158   4088 57          	LD	D,A	;D=BLK #
+0159   4089 06 01       	LD	B,1	;TIMEOUT = 1 SEC
+0160   408B CD 0F 41    	CALL	RECV	;GET CMA'D SECT #
+0161   408E DA 7D 40    	JP	C,RCVSTOT	;TIMEOUT
+0162   4091 2F          	CPL		;CALC COMPLEMENT
+0163   4092 BA          	CP	D	;GOOD SECTOR #?
+0164   4093 CA 99 40    	JP	Z,RCVDATA	;YES, GET DATA
+0165   4096             ;
+0166   4096             ;GOT BAD SECTOR #
+0167   4096             ;
+0168   4096 C3 5C 40    	JP	RCVSERR	;BUMP ERROR CT.
+0169   4099             ;
+0170   4099             RCVDATA:
+0171   4099 7A          	LD	A,D	;GET SECTOR #
+0172   409A 32 3E 41    	LD	(RCVSNO),A;SAVE IT
+0173   409D 0E 00       	LD	C,0	;INIT CKSUM
+0174   409F 21 80 74    	LD	HL,DMABUF ;POINT TO BUFFER  
+0175   40A2             ;
+0176   40A2             RCVCHR:
+0177   40A2 06 01       	LD	B,1	;1 SEC TIMEOUT
+0178   40A4 CD 0F 41    	CALL	RECV	;GET CHAR
+0179   40A7 DA 7D 40    	JP	C,RCVSTOT	;TIMEOUT
+0180   40AA 77          	LD	(HL),A	;STORE CHAR
+0181   40AB 2C          	INC	L	;DONE?
+0182   40AC C2 A2 40    	JP	NZ,RCVCHR	;NO, LOOP
+0183   40AF             ;
+0184   40AF             ;VERIFY CHECKSUM
+0185   40AF             ;
+0186   40AF 51          	LD	D,C	;SAVE CHECKSUM
+0187   40B0 06 01       	LD	B,1	;TIMEOUT LEN.
+0188   40B2 CD 0F 41    	CALL	RECV	;GET CHECKSUM
+0189   40B5 DA 7D 40    	JP	C,RCVSTOT	;TIMEOUT
+0190   40B8 BA          	CP	D	;CHECKSUM OK?
+0191   40B9 C2 5C 40    	JP	NZ,RCVSERR	;NO, ERROR
+0192   40BC             ;
+0193   40BC             ;GOT A SECTOR, IT'S A DUP IF = PREV,
+0194   40BC             ;	OR OK IF = 1 + PREV SECTOR
+0195   40BC             ;
+0196   40BC 3A 3E 41    	LD	A,(RCVSNO);GET RECEIVED
+0197   40BF 47          	LD	B,A	;SAVE IT
+0198   40C0 3A 3F 41    	LD	A,(SECTNO);GET PREV
+0199   40C3 B8          	CP	B	;PREV REPEATED?
+0200   40C4 CA CD 40    	JP	Z,RECVACK	;ACK TO CATCH UP
+0201   40C7 3C          	INC	A	;CALC NEXT SECTOR #
+0202   40C8 B8          	CP	B	;MATCH?
+0203   40C9 C2 D9 40    	JP	NZ,ABORT	;NO MATCH - STOP SENDER, EXIT
+0204   40CC C9          	RET		;CARRY OFF - NO ERRORS
+0205   40CD             ;
+0206   40CD             ;PREV SECT REPEATED, DUE TO THE LAST ACK
+0207   40CD             ;BEING GARBAGED.  ACK IT SO SENDER WILL CATCH UP 
+0208   40CD             ;
+0209   40CD             RECVACK:
+0210   40CD CD D3 40    	CALL	SENDACK	;SEND THE ACK,
+0211   40D0 C3 43 40    	JP	RCVSECT	;GET NEXT BLOCK
+0212   40D3             ;
+0213   40D3             ;SEND AN ACK FOR THE SECTOR
+0214   40D3             ;
+0215   40D3             SENDACK:
+0216   40D3 3E 06       	LD	A,ACK	;GET ACK
+0217   40D5 CD 32 41    	CALL	SEND	;..AND SEND IT
+0218   40D8 C9          	RET
+0219   40D9             ;	
+0220   40D9             
+0221   40D9             ABORT:
+0222   40D9             	;LXI	SP,STACK
+0223   40D9             ;
+0224   40D9             ABORTL:
+0225   40D9 06 01       	LD	B,1	;1 SEC. W/O CHARS.
+0226   40DB CD 0F 41    	CALL	RECV
+0227   40DE D2 D9 40    	JP	NC,ABORTL	;LOOP UNTIL SENDER DONE
+0228   40E1 3E 24       	LD	A,CTRX	;CONTROL X
+0229   40E3 CD 32 41    	CALL	SEND	;STOP SENDING END
+0230   40E6             ;
+0231   40E6             ABORTW:
+0232   40E6 06 01       	LD	B,1	;1 SEC W/O CHARS.
+0233   40E8 CD 0F 41    	CALL	RECV
+0234   40EB D2 E6 40    	JP	NC,ABORTW	;LOOP UNTIL SENDER DONE
+0235   40EE 3E 20       	LD	A,' '	;GET A SPACE...
+0236   40F0 CD 32 41    	CALL	SEND	;TO CLEAR OUT CONTROL X
+0237   40F3 C3 00 00    	JP	REST
+0238   40F6             
+0239   40F6             ;
+0240   40F6             ;---->	INCRSNO: INCREMENT SECTOR #
+0241   40F6             ;
+0242   40F6             INCRSNO:
+0243   40F6 3A 3F 41    	LD	A,(SECTNO);INCR..
+0244   40F9 3C          	INC	A	;..SECT..
+0245   40FA 32 3F 41    	LD	(SECTNO),A;..NUMBER
+0246   40FD C9          	RET
+0247   40FE             
+0248   40FE             ;
+0249   40FE             ;---->	WRSECT: WRITE A SECTOR
+0250   40FE             ;
+0251   40FE             WRSECT:
+0252   40FE 2A 41 41    	LD	HL,(DEST)	;load destination address to HL
+0253   4101 EB          	EX	DE,HL		;put destination address in DE
+0254   4102 21 80 74    	LD	HL,DMABUF	;load CPM dma buffer address to HL
+0255   4105 01 80 00    	LD	BC,$0080
+0256   4108 ED B0       	LDIR
+0257   410A EB          	EX	DE,HL
+0258   410B 22 41 41    	LD	(DEST),HL
+0259   410E C9          	RET
+0260   410F                
+0261   410F             
+0262   410F             ;
+0263   410F             ;---->	RECV: RECEIVE A CHARACTER
+0264   410F             ;
+0265   410F             ;TIMEOUT TIME IS IN B, IN SECONDS.  
+0266   410F             ;
+0267   410F             RECV:
+0268   410F D5          	PUSH	DE	;SAVE
+0269   4110             
+0270   4110             MSEC:
+0271   4110 11 EE 1B    	LD	DE,7150  ;50000	;1 SEC DCR COUNT
+0272   4113             ;
+0273   4113             MWTI:
+0274   4113 DB 25           	IN      A,(TTS)		; IMSAI specific, check input status
+0275   4115 E6 01           	AND     TTYDA	; ""
+0276   4117 C2 29 41        	JP	NZ,MCHAR	;got a char
+0277   411A                 
+0278   411A 1D          	DEC	E	;COUNT..
+0279   411B C2 13 41    	JP	NZ,MWTI	;..DOWN..
+0280   411E 15          	DEC	D	;..FOR..
+0281   411F C2 13 41    	JP	NZ,MWTI	;..TIMEOUT
+0282   4122 05          	DEC	B	;MORE SECONDS?
+0283   4123 C2 10 41    	JP	NZ,MSEC	;YES, WAIT
+0284   4126             ;
+0285   4126             ;MODEM TIMED OUT RECEIVING
+0286   4126             ;
+0287   4126 D1          	POP	DE	;RESTORE D,E
+0288   4127 37          	SCF		;CARRY SHOWS TIMEOUT
+0289   4128 C9          	RET
+0290   4129             ;
+0291   4129             ;GOT CHAR FROM MODEM
+0292   4129             ;
+0293   4129             MCHAR:
+0294   4129 DB 20           	IN      A,(TTI)	; IMSAI specific, get input byte
+0295   412B D1          	POP	DE	;RESTORE DE
+0296   412C             ;
+0297   412C             ;CALC CHECKSUM
+0298   412C             ;
+0299   412C F5          	PUSH	AF	;SAVE THE CHAR
+0300   412D 81          	ADD	A,C	;ADD TO CHECKSUM
+0301   412E 4F          	LD	C,A	;SAVE CHECKSUM
+0302   412F F1          	POP	AF	;RESTORE CHAR
+0303   4130 B7          	OR	A	;CARRY OFF: NO ERROR
+0304   4131 C9          	RET		;FROM "RECV"
+0305   4132             ;
+0306   4132             ;
+0307   4132             ;---->	SEND: SEND A CHARACTER TO THE MODEM
+0308   4132             ;
+0309   4132             SEND:
+0310   4132 F5          	PUSH	AF	;SAVE THE CHAR
+0311   4133             ;	ADD	A,C	;CALC CKSUM    
+0312   4133             ;	LD	C,A	;SAVE CKSUM    
+0313   4133             
+0314   4133             SENDW:
+0315   4133 DB 25       	IN	A,(TTS)	; IMSAI specific, Check Console Output Status
+0316   4135 E6 20           	AND	TTYTR 
+0317   4137 CA 33 41    	JP	Z,SENDW	;..NO, WAIT
+0318   413A F1          	POP	AF	;GET CHAR
+0319   413B D3 20           	OUT	(TTO),A     ; IMSAI specific, Send Data
+0320   413D C9          	RET		;FROM "SEND"
+0321   413E             
+0322   413E             
+0323   413E 00          RCVSNO	DB	0	; SECT # RECEIVED (XMODEM)
+0324   413F 00          SECTNO	DB	0	; CURRENT SECTOR NUMBER (XMODEM)
+0325   4140 00          ERRCT	DB	0	; ERROR COUNT(XMODEM)
+0326   4141 00 00       DEST	DW	0	; destination address pointer 2BYTES (XMODEM)  
+0327   4143             
+0328   4143             
+0329   4143             	END
+0330   4143             		tasm: Number of errors = 0

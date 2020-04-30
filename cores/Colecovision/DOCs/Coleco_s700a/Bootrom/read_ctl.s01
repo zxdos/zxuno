@@ -1,0 +1,33 @@
+	NAME	read_joy(16)
+	RSEG	CODE(0)
+	PUBLIC	read_joy
+        EXTERN	?ENT_PARM_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+	EXTERN	?CLZ80L_4_06_L00
+	RSEG	CODE
+
+; Read a joystick or keypad controller and a fire button
+;
+; ENTRY	H = 0 for left control, 1 for right control
+; 	L = 0 for joystick/left fire, 1 for keypad/right fire
+; EXIT:	H = left right fire button in 40H bit and 80H bit
+;	L = joystick directionals or key code
+;	E = old pulse counter (only if L=0)
+
+read_joy:
+	CALL	?ENT_PARM_DIRECT_L09
+	call    0x1f76 ; readctl_raw
+       	ld	h,(ix+2)
+       	ld      l,0; ; check left fire button
+	call    0x1f79
+	push    hl
+	ld      h,(ix+2);
+	ld      l,1  ; check right fire button
+        call    0x1f79
+        ld      a,h
+        rla         ; make right fire button 0x80
+        pop     hl
+        or      h
+        ld      h,a  
+        JP	?LEAVE_DIRECT_L09    
+	END

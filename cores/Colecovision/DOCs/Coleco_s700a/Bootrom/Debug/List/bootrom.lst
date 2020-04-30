@@ -1,0 +1,762 @@
+##############################################################################
+#                                                                            #
+# IAR Z80/64180 C-Compiler V4.06A/WIN                                        #
+#                                                                            #
+#       Compile time  =  24/Aug/2012  23:34:33                               #
+#       Target option =  Z80                                                 #
+#       Memory model  =  large                                               #
+#       Source file   =  c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c #
+#       List file     =  c:\projects\dp_xc500e\coleco_cart\bootrom\debug\list\bootrom.lst#
+#       Object file   =  c:\projects\dp_xc500e\coleco_cart\bootrom\debug\obj\bootrom.r01#
+#       ASM file      =  c:\projects\dp_xc500e\coleco_cart\bootrom\debug\list\bootrom.s01#
+#       Command line  =  -v0 -ml                                             #
+#                        -OC:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\Obj\ #
+#                        -e -K -gA -z9 -RCODE                                #
+#                        -LC:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\List\ #
+#                        -q -t8                                              #
+#                        -AC:\Projects\DP_XC500E\Coleco_cart\Bootrom\Debug\List\ #
+#                        -IC:\IARZ80\EW23\z80\inc\                           #
+#                        C:\Projects\DP_XC500E\Coleco_cart\Bootrom\bootrom.c #
+#                                                                            #
+#                           Copyright 2001 IAR Systems. All rights reserved. #
+##############################################################################
+
+
+}
+^
+"c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c",234  Warning[33]: Local or formal 'l' was never referenced
+"c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c",234  Warning[33]: Local or formal 'k' was never referenced
+"c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c",234  Warning[33]: Local or formal 'i' was never referenced
+"c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c",234  Warning[33]: Local or formal 'bw' was never referenced
+"c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c",234  Warning[33]: Local or formal 'fno' was never referenced
+"c:\projects\dp_xc500e\coleco_cart\bootrom\bootrom.c",234  Warning[33]: Local or formal 'dir' was never referenced
+   \   0000                    NAME    bootrom(16)
+   \   0000                    RSEG    CODE(0)
+   \   0000                    RSEG    CSTR(0)
+   \   0000                    RSEG    UDATA0(0)
+   \   0000                    RSEG    IDATA0(0)
+   \   0000                    RSEG    CDATA0(0)
+   \   0000                    PUBLIC  buff
+   \   0000                    EXTERN  cls
+   \   0000                    PUBLIC  die
+   \   0000                    EXTERN  disable_nmi
+   \   0000                    EXTERN  fill_vram
+   \   0000                    EXTERN  load_ascii
+   \   0000                    PUBLIC  main
+   \   0000                    EXTERN  pf_lseek
+   \   0000                    EXTERN  pf_mount
+   \   0000                    EXTERN  pf_open
+   \   0000                    EXTERN  pf_read
+   \   0000                    EXTERN  print_at
+   \   0000                    EXTERN  read_joy
+   \   0000                    EXTERN  screen_on
+   \   0000                    EXTERN  set_color
+   \   0000                    EXTERN  set_mode1
+   \   0000                    EXTERN  vdp_init
+   \   0000                    PUBLIC  xp
+   \   0000                    EXTERN  ?CLZ80L_4_06_L00
+   \   0000                    EXTERN  ?S_MUL_L02
+   \   0000                    EXTERN  ?SS_CMP_L02
+   \   0000                    EXTERN  ?ENT_AUTO_DIRECT_L09
+   \   0000                    EXTERN  ?LEAVE_DIRECT_L09
+   \   0000                    EXTERN  ?STRCPY_L11
+   \   0000                    EXTERN  ?STRCAT_L11
+   \   0000                    EXTERN  ?STRCHR_L11
+   \   0000                    RSEG    CODE
+      1          #include "coleco.h"
+      2          #include <stdio.h>
+      3          #include <string.h>
+      4          #include <intrz80.h>
+      5          #include <intz80.h>
+      6          
+      7          #include "getput1.h"
+      8          
+      9          #include "pff.h"
+     10          
+     11          // UP  0x0001; RIGHT 0x0002; DOWN 0x0004 LEFT 0x0008  RFIRE 0x8000 LFIRE 0x4000
+     12          #define _UP    0x0001
+     13          #define _DOWN  0x0004
+     14          #define _LEFT  0x0008
+     15          #define _RIGHT 0x0002
+     16          #define _LFIRE 0x4000
+     17          #define _RFIRE 0x8000
+     18          
+     19          //extern const sound_t snd_table[];
+     20          
+     21          extern void set_color(unsigned char);
+     22          extern void load_ascii(void); 
+     23          extern void sound_off(void);
+     24          extern void set_mode1(void);
+     25          extern void fill_vram(unsigned char);
+     26          extern void screen_on(void);
+     27          extern void print_at(unsigned char, unsigned char, char *);
+     28          extern void enable_nmi(void);
+     29          extern void disable_nmi(void);
+     30          //extern void set_snd_table();
+     31          extern void vdp_init(void);
+     32          extern unsigned int read_joy(unsigned char); 
+     33          //extern void disable_nmi(void);
+     34               
+     35          //void nmi(void) {}
+     36          
+     37          void die (FRESULT rc)
+     38          {
+   \   0000            die:
+   \   0000  CD0000            CALL    ?ENT_AUTO_DIRECT_L09
+   \   0003  0000              DEFW    0
+     39          unsigned int dly;
+     40              print_at(12,18,"Error......Reset");
+   \   0005  210000            LD      HL,?0010
+   \   0008  E5                PUSH    HL
+   \   0009  0E12              LD      C,18
+   \   000B  1E0C              LD      E,12
+   \   000D  CD0000            CALL    print_at
+   \   0010  E1                POP     HL
+     41              for(dly=0;dly<50000;) { dly++;rc=rc;}
+   \   0011  110000            LD      DE,0
+   \   0014            ?0012:
+   \   0014  0150C3            LD      BC,50000
+   \   0017  6B                LD      L,E
+   \   0018  62                LD      H,D
+   \   0019  A7                AND     A
+   \   001A  ED42              SBC     HL,BC
+   \   001C  3003              JR      NC,?0011
+   \   001E            ?0013:
+   \   001E  13                INC     DE
+   \   001F  18F3              JR      ?0012
+   \   0021            ?0011:
+     42              _opc(0xc3);_opc(0);_opc(0); 
+   \   0021  C3                DEFB    195
+   \   0022  00                DEFB    0
+   \   0023  00                DEFB    0
+     43          }
+   \   0024  C30000            JP      ?LEAVE_DIRECT_L09
+     44          
+     45          BYTE  buff[27]; // ? T80SOC error reading if buff > ~300?
+     46           char xp[]="=>";
+     47          
+     48             
+     49          void main(void)
+     50          {     
+   \   0027            main:
+   \   0027  CD0000            CALL    ?ENT_AUTO_DIRECT_L09
+   \   002A  A0FF              DEFW    -96
+   \   002C  FDE5              PUSH    IY
+     51                  FATFS  fatfs;                   /* File system object */
+     52                  DIR  dir;                               /* Directory object */
+     53                  FILINFO  fno;                   /* File information object */
+     54                  WORD  bw, br, i;
+     55                  
+     56                  BYTE  rc,k,l;
+     57                  unsigned char *cp;      
+     58                 
+     59                  BYTE snum,cpos;
+     60                  WORD  w,dly;
+     61                  char *sp,*s;
+     62                  
+     63                  
+     64                  BYTE fn[15];
+     65                  char cart_name[25];
+     66                  char * cartp;
+     67                  BYTE page,rcount,select;
+     68                  
+     69           //char restart[]={0x3e, 0x04, 
+     70           //                0xd3, 0x24,
+     71           //                0xc3, 0x00, 0x00}; 
+     72                           
+     73              
+     74                  
+     75                  
+     76          // Init UART T16450 (do not init here)
+     77          
+     78          //        output(0x21,0x00);
+     79          //        output(0x23,0x80);
+     80          //        output(0x20,0x23); // baud 38400
+     81          //        output(0x21,0x00);
+     82          //        output(0x23,0x03);
+     83          //        output(0x24,0x0b);    
+     84                 
+     85                  vdp_init();  
+   \   002E  CD0000            CALL    vdp_init
+     86                  set_mode1();
+   \   0031  CD0000            CALL    set_mode1
+     87                  disable_nmi();
+   \   0034  CD0000            CALL    disable_nmi
+     88                  fill_vram(0x0);
+   \   0037  1E00              LD      E,0
+   \   0039  CD0000            CALL    fill_vram
+     89                  set_color(0xf4);
+   \   003C  1EF4              LD      E,244
+   \   003E  CD0000            CALL    set_color
+     90                  load_ascii();
+   \   0041  CD0000            CALL    load_ascii
+     91                  screen_on();
+   \   0044  CD0000            CALL    screen_on
+     92                  
+     93                   output(0x24,0x0b); // unlock cart_rom
+   \   0047  3E0B              LD      A,11
+   \   0049  012400            LD      BC,36
+   \   004C  ED79              OUT     (C),A
+     94                 
+     95                  rc = pf_mount(&fatfs);
+   \   004E  213E00            LD      HL,62
+   \   0051  39                ADD     HL,SP
+   \   0052  EB                EX      DE,HL
+   \   0053  CD0000            CALL    pf_mount
+     96                  if (rc) die(rc);
+   \   0056  B7                OR      A
+   \   0057  2804              JR      Z,?0015
+   \   0059            ?0014:
+   \   0059  5F                LD      E,A
+   \   005A  CD0000            CALL    die
+   \   005D            ?0015:
+     97                  
+     98                  
+     99                  rc = pf_open("MENU.TXT");
+   \   005D  111100            LD      DE,?0016
+   \   0060  CD0000            CALL    pf_open
+    100                  if (rc) die(rc);
+   \   0063  B7                OR      A
+   \   0064  2804              JR      Z,?0018
+   \   0066            ?0017:
+   \   0066  5F                LD      E,A
+   \   0067  CD0000            CALL    die
+   \   006A            ?0018:
+    101          
+    102                  page = 0;
+    103                  select = 0;
+   \   006A  DD70A2            LD      (IX-94),B
+   \   006D            ?0021:
+    104                
+    105                 do {
+    106                  cls();
+   \   006D  CD0000            CALL    cls
+    107                 // print_at(10,1,"CART LIST");
+    108                 // print_at(10,2,"---------");
+    109                  print_at(3,1,"L-Fire:Load  R-Fire:Restart");
+   \   0070  211A00            LD      HL,?0022
+   \   0073  E5                PUSH    HL
+   \   0074  0E01              LD      C,1
+   \   0076  1E03              LD      E,3
+   \   0078  CD0000            CALL    print_at
+   \   007B  E1                POP     HL
+    110                  print_at(3,3,"   U/D:Select   L/R:Page");
+   \   007C  213600            LD      HL,?0023
+   \   007F  E5                PUSH    HL
+   \   0080  0E03              LD      C,3
+   \   0082  59                LD      E,C
+   \   0083  CD0000            CALL    print_at
+   \   0086  E1                POP     HL
+    111                  
+    112                  print_at(1,20,"<ESC>Reset <U/D>Sel <L/R>Page");
+   \   0087  214F00            LD      HL,?0024
+   \   008A  E5                PUSH    HL
+   \   008B  0E14              LD      C,20
+   \   008D  1E01              LD      E,1
+   \   008F  CD0000            CALL    print_at
+   \   0092  E1                POP     HL
+    113                  print_at(1,22,"<Q>* <W># <Z>L-Fire <X>R-Fire");
+   \   0093  216D00            LD      HL,?0025
+   \   0096  E5                PUSH    HL
+   \   0097  0E16              LD      C,22
+   \   0099  1E01              LD      E,1
+   \   009B  CD0000            CALL    print_at
+   \   009E  E1                POP     HL
+    114                   
+    115                  rcount = 0;  
+   \   009F  DD36A300          LD      (IX-93),0
+   \   00A3            ?0027:
+    116                  for (;;) {
+    117                          rc = pf_read(buff, 27, &br);    /* Read a line of file */
+   \   00A3  210C00            LD      HL,12
+   \   00A6  39                ADD     HL,SP
+   \   00A7  E5                PUSH    HL
+   \   00A8  011B00            LD      BC,27
+   \   00AB  110000            LD      DE,buff
+   \   00AE  CD0000            CALL    pf_read
+   \   00B1  E1                POP     HL
+    118                          if (rc || !br) break;                   /* Error or end of file */
+   \   00B2  B7                OR      A
+   \   00B3  202C              JR      NZ,?0026
+   \   00B5  DD7EAA            LD      A,(IX-86)
+   \   00B8  DDB6AB            OR      (IX-85)
+   \   00BB  2824              JR      Z,?0026
+   \   00BD            ?0030:
+   \   00BD            ?0031:
+   \   00BD            ?0028:
+   \   00BD            ?0029:
+    119                          rcount++;
+   \   00BD  DD34A3            INC     (IX-93)
+    120                          
+    121                          s = strchr(buff,';');
+   \   00C0  113B00            LD      DE,59
+   \   00C3  210000            LD      HL,buff
+   \   00C6  CD0000            CALL    ?STRCHR_L11
+    122                          *s='\0'; // terminate the cart name             
+   \   00C9  72                LD      (HL),D
+    123                          print_at(4,rcount+4,buff);  
+   \   00CA  210000            LD      HL,buff
+   \   00CD  E5                PUSH    HL
+   \   00CE  DD7EA3            LD      A,(IX-93)
+   \   00D1  C604              ADD     A,4
+   \   00D3  4F                LD      C,A
+   \   00D4  1E04              LD      E,4
+   \   00D6  CD0000            CALL    print_at
+   \   00D9  E1                POP     HL
+    124                          
+    125                          if (rcount == 10) { break;}            
+   \   00DA  DD7EA3            LD      A,(IX-93)
+   \   00DD  FE0A              CP      10
+   \   00DF  20C2              JR      NZ,?0027
+   \   00E1            ?0032:
+   \   00E1            ?0033:
+   \   00E1            ?0026:
+    126                  }
+    127          
+    128                    cpos=5; snum=0;
+    129                    
+    130                    print_at(2,cpos,xp);
+   \   00E1  210000            LD      HL,xp
+   \   00E4  E5                PUSH    HL
+   \   00E5  0E05              LD      C,5
+   \   00E7  CDC002            CALL    ?0081
+   \   00EA  E1                POP     HL
+   \   00EB  DD36A105          LD      (IX-95),5
+   \   00EF  DD36A400          LD      (IX-92),0
+   \   00F3            ?0035:
+    131                    
+    132                  // UP  0x0001; RIGHT 0002; DOWN 0x0004 LEFT 0x0008
+    133                  for(;;){
+    134                 
+    135                  //do {
+    136                  //      w=read_joy(0);
+    137                  //      for(dly=0;dly<1000;) { dly++;}
+    138                  //      w1=read_joy(0);
+    139                  //    } while (w!=w1);
+    140                   
+    141                    w=read_joy(0);
+   \   00F3  1E00              LD      E,0
+   \   00F5  CD0000            CALL    read_joy
+   \   00F8  DD75A6            LD      (IX-90),L
+   \   00FB  DD74A7            LD      (IX-89),H
+    142                          
+    143                    if ((w & _DOWN) && (cpos < rcount+4)) {
+   \   00FE  CB55              BIT     2,L
+   \   0100  282D              JR      Z,?0037
+   \   0102  DD4EA3            LD      C,(IX-93)
+   \   0105  0600              LD      B,0
+   \   0107  210400            LD      HL,4
+   \   010A  09                ADD     HL,BC
+   \   010B  4D                LD      C,L
+   \   010C  44                LD      B,H
+   \   010D  DD6EA1            LD      L,(IX-95)
+   \   0110  2600              LD      H,0
+   \   0112  CD0000            CALL    ?SS_CMP_L02
+   \   0115  3018              JR      NC,?0037
+   \   0117            ?0039:
+   \   0117            ?0038:
+   \   0117            ?0036:
+    144                  
+    145                      print_at(2,cpos,"  "); cpos++;
+   \   0117  218B00            LD      HL,?0040
+   \   011A  E5                PUSH    HL
+   \   011B  CDBD02            CALL    ?0082
+   \   011E  E1                POP     HL
+   \   011F  DD34A1            INC     (IX-95)
+    146                      print_at(2,cpos,xp);snum++;
+   \   0122  210000            LD      HL,xp
+   \   0125  E5                PUSH    HL
+   \   0126  CDBD02            CALL    ?0082
+   \   0129  E1                POP     HL
+   \   012A  DD34A4            INC     (IX-92)
+   \   012D  1858              JR      ?0052
+   \   012F            ?0037:
+    147                     } 
+    148                    else if ((w & _UP) && (cpos>5)) {
+   \   012F  DDCBA646          BIT     0,(IX-90)
+   \   0133  281F              JR      Z,?0043
+   \   0135  3E05              LD      A,5
+   \   0137  DDBEA1            CP      (IX-95)
+   \   013A  3018              JR      NC,?0043
+   \   013C            ?0045:
+   \   013C            ?0044:
+   \   013C            ?0042:
+    149                      print_at(2,cpos,"  "); cpos--;
+   \   013C  218B00            LD      HL,?0040
+   \   013F  E5                PUSH    HL
+   \   0140  CDBD02            CALL    ?0082
+   \   0143  E1                POP     HL
+   \   0144  DD35A1            DEC     (IX-95)
+    150                      print_at(2,cpos,xp);snum--;
+   \   0147  210000            LD      HL,xp
+   \   014A  E5                PUSH    HL
+   \   014B  CDBD02            CALL    ?0082
+   \   014E  E1                POP     HL
+   \   014F  DD35A4            DEC     (IX-92)
+   \   0152  1833              JR      ?0052
+   \   0154            ?0043:
+    151                      } 
+    152                    else if (w & _LEFT) {
+   \   0154  DDCBA65E          BIT     3,(IX-90)
+   \   0158  280B              JR      Z,?0048
+   \   015A            ?0047:
+    153                      if (page > 0) page--; 
+   \   015A  AF                XOR     A
+   \   015B  DDB6A2            OR      (IX-94)
+   \   015E  280E              JR      Z,?0080
+   \   0160            ?0049:
+   \   0160  DD35A2            DEC     (IX-94)
+   \   0163            ?0050:
+    154                      select=0;
+    155                      rc = pf_lseek(page*270);
+   \   0163  1809              JR      ?0080
+    156                      break;    
+   \   0165            ?0048:
+    157                    }
+    158                    
+    159                    else if (w & _RIGHT) {
+   \   0165  DDCBA64E          BIT     1,(IX-90)
+   \   0169  281C              JR      Z,?0052
+   \   016B            ?0051:
+    160                      page++; 
+   \   016B  DD34A2            INC     (IX-94)
+    161                      select=0;
+    162                      rc = pf_lseek(page*270); 
+   \   016E            ?0080:
+   \   016E  DD4EA2            LD      C,(IX-94)
+   \   0171  0600              LD      B,0
+   \   0173  110E01            LD      DE,270
+   \   0176  CD0000            CALL    ?S_MUL_L02
+   \   0179  7A                LD      A,D
+   \   017A  07                RLCA
+   \   017B  9F                SBC     A,A
+   \   017C  4F                LD      C,A
+   \   017D  41                LD      B,C
+   \   017E  CD0000            CALL    pf_lseek
+   \   0181  DD36A500          LD      (IX-91),0
+    163                      break;
+   \   0185  1834              JR      ?0034
+   \   0187            ?0052:
+   \   0187            ?0046:
+   \   0187            ?0041:
+    164                    }
+    165                    
+    166                    if (w & (_RFIRE|_LFIRE)) { 
+   \   0187  DD7EA7            LD      A,(IX-89)
+   \   018A  2E00              LD      L,0
+   \   018C  E6C0              AND     192
+   \   018E  67                LD      H,A
+   \   018F  7D                LD      A,L
+   \   0190  B4                OR      H
+   \   0191  2806              JR      Z,?0054
+   \   0193            ?0053:
+    167                      select=1;
+   \   0193  DD36A501          LD      (IX-91),1
+    168                      break;
+   \   0197  1822              JR      ?0034
+   \   0199            ?0054:
+    169                    }
+    170                  for(dly=0;dly<2800;) { dly++;}
+   \   0199  AF                XOR     A
+   \   019A  DD77AC            LD      (IX-84),A
+   \   019D  DD77AD            LD      (IX-83),A
+   \   01A0            ?0056:
+   \   01A0  01F00A            LD      BC,2800
+   \   01A3  DD6EAC            LD      L,(IX-84)
+   \   01A6  DD66AD            LD      H,(IX-83)
+   \   01A9  A7                AND     A
+   \   01AA  ED42              SBC     HL,BC
+   \   01AC  300A              JR      NC,?0055
+   \   01AE            ?0057:
+   \   01AE  DD34AC            INC     (IX-84)
+   \   01B1  20ED              JR      NZ,?0056
+   \   01B3  DD34AD            INC     (IX-83)
+    171                  }
+   \   01B6  18E8              JR      ?0056
+   \   01B8            ?0055:
+   \   01B8  C3F300            JP      ?0035
+   \   01BB            ?0034:
+    172                } while (select==0);
+   \   01BB  AF                XOR     A
+   \   01BC  DDB6A5            OR      (IX-91)
+   \   01BF  CA6D00            JP      Z,?0021
+   \   01C2            ?0019:
+    173                
+    174                  if (w ==_RFIRE)  goto LOAD;
+   \   01C2  3E80              LD      A,128
+   \   01C4  DDAEA7            XOR     (IX-89)
+   \   01C7  DDB6A6            OR      (IX-90)
+   \   01CA  CA9402            JP      Z,?0077
+   \   01CD            ?0058:
+   \   01CD            ?0059:
+    175                
+    176                  rc = pf_lseek(page*270+snum*27+17);
+   \   01CD  DD4EA4            LD      C,(IX-92)
+   \   01D0  0600              LD      B,0
+   \   01D2  111B00            LD      DE,27
+   \   01D5  CD0000            CALL    ?S_MUL_L02
+   \   01D8  D5                PUSH    DE
+   \   01D9  DD4EA2            LD      C,(IX-94)
+   \   01DC  110E01            LD      DE,270
+   \   01DF  CD0000            CALL    ?S_MUL_L02
+   \   01E2  EB                EX      DE,HL
+   \   01E3  D1                POP     DE
+   \   01E4  19                ADD     HL,DE
+   \   01E5  0E11              LD      C,17
+   \   01E7  09                ADD     HL,BC
+   \   01E8  EB                EX      DE,HL
+   \   01E9  7A                LD      A,D
+   \   01EA  07                RLCA
+   \   01EB  9F                SBC     A,A
+   \   01EC  4F                LD      C,A
+   \   01ED  41                LD      B,C
+   \   01EE  CD0000            CALL    pf_lseek
+    177                  rc = pf_read(buff, 13, &br);
+   \   01F1  210C00            LD      HL,12
+   \   01F4  39                ADD     HL,SP
+   \   01F5  E5                PUSH    HL
+   \   01F6  010D00            LD      BC,13
+   \   01F9  110000            LD      DE,buff
+   \   01FC  CD0000            CALL    pf_read
+   \   01FF  E1                POP     HL
+    178                  
+    179                  sp=strchr(buff,'\r');
+   \   0200  110D00            LD      DE,13
+   \   0203  210000            LD      HL,buff
+   \   0206  CD0000            CALL    ?STRCHR_L11
+    180                  if (sp) *sp='\0';
+   \   0209  7D                LD      A,L
+   \   020A  B4                OR      H
+   \   020B  2801              JR      Z,?0062
+   \   020D            ?0061:
+   \   020D  72                LD      (HL),D
+   \   020E            ?0062:
+    181                  sp=strchr(buff,' ');
+   \   020E  1E20              LD      E,32
+   \   0210  210000            LD      HL,buff
+   \   0213  CD0000            CALL    ?STRCHR_L11
+    182                  if (sp) *sp='\0';
+   \   0216  7D                LD      A,L
+   \   0217  B4                OR      H
+   \   0218  2801              JR      Z,?0064
+   \   021A            ?0063:
+   \   021A  72                LD      (HL),D
+   \   021B            ?0064:
+    183                  strcpy(fn,buff);
+   \   021B  110000            LD      DE,buff
+   \   021E  211400            LD      HL,20
+   \   0221  39                ADD     HL,SP
+   \   0222  CD0000            CALL    ?STRCPY_L11
+    184                  strcat(fn,".rom");       
+   \   0225  118E00            LD      DE,?0065
+   \   0228  211400            LD      HL,20
+   \   022B  39                ADD     HL,SP
+   \   022C  CD0000            CALL    ?STRCAT_L11
+    185                  
+    186                  print_at(4,18,"Loading");
+   \   022F  219300            LD      HL,?0066
+   \   0232  E5                PUSH    HL
+   \   0233  0E12              LD      C,18
+   \   0235  1E04              LD      E,4
+   \   0237  CD0000            CALL    print_at
+   \   023A  E1                POP     HL
+    187                  print_at(12,18,fn);
+   \   023B  211400            LD      HL,20
+   \   023E  39                ADD     HL,SP
+   \   023F  E5                PUSH    HL
+   \   0240  0E12              LD      C,18
+   \   0242  1E0C              LD      E,12
+   \   0244  CD0000            CALL    print_at
+   \   0247  E1                POP     HL
+    188                  
+    189                  strcpy(cart_name,"Coleco/");       
+   \   0248  119B00            LD      DE,?0067
+   \   024B  212400            LD      HL,36
+   \   024E  39                ADD     HL,SP
+   \   024F  CD0000            CALL    ?STRCPY_L11
+    190                  cartp=strcat(cart_name,fn);
+   \   0252  211400            LD      HL,20
+   \   0255  39                ADD     HL,SP
+   \   0256  EB                EX      DE,HL
+   \   0257  212400            LD      HL,36
+   \   025A  39                ADD     HL,SP
+   \   025B  CD0000            CALL    ?STRCAT_L11
+    191                  rc = pf_open(cartp);
+   \   025E  EB                EX      DE,HL
+   \   025F  CD0000            CALL    pf_open
+    192                  if (rc) die(rc);
+   \   0262  B7                OR      A
+   \   0263  2804              JR      Z,?0069
+   \   0265            ?0068:
+   \   0265  5F                LD      E,A
+   \   0266  CD0000            CALL    die
+   \   0269            ?0069:
+    193                  
+    194                  // rc = pf_open("cart/galaxian.rom");
+    195                  //if (rc) die(rc);
+    196                  
+    197                  cp = (unsigned char *)0x8000; //cartram ptr;
+   \   0269  FD210080          LD      IY,32768
+   \   026D            ?0071:
+    198                  for (;;) {
+    199                          rc = pf_read(cp, 32768, &br);   /* Read a chunk of file */
+   \   026D  210C00            LD      HL,12
+   \   0270  39                ADD     HL,SP
+   \   0271  E5                PUSH    HL
+   \   0272  010080            LD      BC,32768
+   \   0275  FDE5              PUSH    IY
+   \   0277  D1                POP     DE
+   \   0278  CD0000            CALL    pf_read
+   \   027B  E1                POP     HL
+   \   027C  DD77A0            LD      (IX-96),A
+    200                          if (rc || !br) break;           /* Error or end of file */
+   \   027F  B7                OR      A
+   \   0280  2008              JR      NZ,?0074
+   \   0282  DD7EAA            LD      A,(IX-86)
+   \   0285  DDB6AB            OR      (IX-85)
+   \   0288  20E3              JR      NZ,?0071
+   \   028A            ?0074:
+   \   028A            ?0075:
+   \   028A            ?0072:
+   \   028A            ?0073:
+   \   028A            ?0070:
+    201          
+    202                  }
+    203                  if (rc) die(rc);
+   \   028A  AF                XOR     A
+   \   028B  DDB6A0            OR      (IX-96)
+   \   028E  2804              JR      Z,?0077
+   \   0290            ?0076:
+   \   0290  5F                LD      E,A
+   \   0291  CD0000            CALL    die
+   \   0294            ?0077:
+   \   0294            ?0060:
+    204          
+    205          LOAD:
+    206                  cp=(unsigned char *)0x7100;
+   \   0294  FD210171          LD      IY,28929
+    207                  
+    208                  *cp++=0x3e;
+   \   0298  3E3E              LD      A,62
+   \   029A  320071            LD      (28928),A
+    209                   *cp++=0x04;
+   \   029D  FD360004          LD      (IY+0),4
+    210                    *cp++=0xd3;
+   \   02A1  FD3601D3          LD      (IY+1),211
+    211                     *cp++=0x24;
+   \   02A5  FD360224          LD      (IY+2),36
+    212                      *cp++=0xc3;
+   \   02A9  FD3603C3          LD      (IY+3),195
+    213                       *cp++=0x00;
+   \   02AD  FD360400          LD      (IY+4),0
+    214                        *cp++=0x00;
+   \   02B1  FD360500          LD      (IY+5),0
+    215                     _opc(0xc3);
+   \   02B5  C3                DEFB    195
+    216                     _opc(0x00);
+   \   02B6  00                DEFB    0
+    217                     _opc(0x71);    
+   \   02B7  71                DEFB    113
+    218          
+    219                  //output(0x24,0x04);
+    220                  // Disable write cart ram using T16450 OUT1_n (inverted logic)
+    221          //      _opc(0x3e);  //ld a,4
+    222          //      _opc(0x04);  
+    223          //      _opc(0xd3);  //out (24h),a
+    224          //      _opc(0x24); 
+    225                  // init original stack ptr
+    226          //      _opc(0x31); 
+    227          //      _opc(0xb9);
+    228          //      _opc(0x73);
+    229                  // jump to bios (cont'd)
+    230          //      _opc(0xc3); 
+    231          //      _opc(0x6e);
+    232          //      _opc(0x00);
+    233                  
+    234          }
+   \   02B8  FDE1              POP     IY
+   \   02BA  C30000            JP      ?LEAVE_DIRECT_L09
+   \   02BD            ?0082:
+   \   02BD  DD4EA1            LD      C,(IX-95)
+   \   02C0            ?0081:
+   \   02C0  1E02              LD      E,2
+   \   02C2  C30000            JP      print_at
+   \   0000                    RSEG    CSTR
+   \   0000            ?0010:
+   \   0000  4572726F          DEFB    'Error......Reset'
+   \   0004  722E2E2E
+   \   0008  2E2E2E52
+   \   000C  65736574
+   \   0010  00                DEFB    0
+   \   0011            ?0016:
+   \   0011  4D454E55          DEFB    'MENU.TXT'
+   \   0015  2E545854
+   \   0019  00                DEFB    0
+   \   001A            ?0022:
+   \   001A  4C2D4669          DEFB    'L-Fire:Load  R-Fire:Restart'
+   \   001E  72653A4C
+   \   0022  6F616420
+   \   0026  20522D46
+   \   002A  6972653A
+   \   002E  52657374
+   \   0032  617274
+   \   0035  00                DEFB    0
+   \   0036            ?0023:
+   \   0036  20202055          DEFB    '   U/D:Select   L/R:Page'
+   \   003A  2F443A53
+   \   003E  656C6563
+   \   0042  74202020
+   \   0046  4C2F523A
+   \   004A  50616765
+   \   004E  00                DEFB    0
+   \   004F            ?0024:
+   \   004F  3C455343          DEFB    '<ESC>Reset <U/D>Sel <L/R>Page'
+   \   0053  3E526573
+   \   0057  6574203C
+   \   005B  552F443E
+   \   005F  53656C20
+   \   0063  3C4C2F52
+   \   0067  3E506167
+   \   006B  65
+   \   006C  00                DEFB    0
+   \   006D            ?0025:
+   \   006D  3C513E2A          DEFB    '<Q>* <W># <Z>L-Fire <X>R-Fire'
+   \   0071  203C573E
+   \   0075  23203C5A
+   \   0079  3E4C2D46
+   \   007D  69726520
+   \   0081  3C583E52
+   \   0085  2D466972
+   \   0089  65
+   \   008A  00                DEFB    0
+   \   008B            ?0040:
+   \   008B  2020              DEFB    '  '
+   \   008D  00                DEFB    0
+   \   008E            ?0065:
+   \   008E  2E726F6D          DEFB    '.rom'
+   \   0092  00                DEFB    0
+   \   0093            ?0066:
+   \   0093  4C6F6164          DEFB    'Loading'
+   \   0097  696E67
+   \   009A  00                DEFB    0
+   \   009B            ?0067:
+   \   009B  436F6C65          DEFB    'Coleco/'
+   \   009F  636F2F
+   \   00A2  00                DEFB    0
+   \   0000                    RSEG    UDATA0
+   \   0000            buff:
+   \   001B                    DEFS    27
+   \   0000                    RSEG    IDATA0
+   \   0000            xp:
+   \   0003                    DEFS    3
+   \   0000                    RSEG    CDATA0
+   \   0000  3D3E              DEFB    '=>'
+   \   0002  00                DEFB    0
+   \   0003                    END
+
+Errors: none
+Warnings: 6
+Code size: 709
+Constant size: 166
+Static variable size: Data(30) Iram(0)
+

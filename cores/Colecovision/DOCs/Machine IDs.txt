@@ -1,0 +1,8 @@
+1 = DE-1
+2 = DE-2
+3 = Prototype 1 (SDRAM)
+4 = Prototype 2 (SRAM)
+5 = WXEDA
+6 = Multicore
+7 = ZX-Uno
+8 = CVUNO board

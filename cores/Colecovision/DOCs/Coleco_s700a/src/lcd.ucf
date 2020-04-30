@@ -1,0 +1,22 @@
+# Constraints for reference design 'LCD'.
+#
+#
+# Period constraint for 50MHz operation
+#
+
+# LCD display
+# Very slow so can use lowest drive strength. 
+#
+NET "LCD_RS"   LOC = "Y14" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_RW"   LOC = "W13" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_E"    LOC = "AB4" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_0" LOC = "Y13" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_1" LOC = "Ab18" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_2" LOC = "AB17" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_3" LOC = "AB12" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_4" LOC = "AA12" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_5" LOC = "Y16" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_6" LOC = "AB16" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+NET "LCD_7" LOC = "Y15" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 2;
+# End of File
+

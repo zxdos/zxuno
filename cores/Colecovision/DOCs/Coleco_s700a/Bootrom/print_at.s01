@@ -1,0 +1,55 @@
+	NAME	print_at(16)
+	RSEG	CODE(0)
+	PUBLIC	print_at
+	EXTERN	?CLZ80L_4_06_L00
+	EXTERN	?ENT_PARM_DIRECT_L09
+	EXTERN	?LEAVE_DIRECT_L09
+	RSEG	CODE
+
+print_at:
+	CALL	?ENT_PARM_DIRECT_L09
+	
+	; E=X, C=Y
+	; DE = YX before enter calclc_offset
+	ld      d,(ix+4)
+	;ld      d,c
+	ld      e,(ix+2)
+	call	calc_offset	; de = offset
+	push    de
+	ld	e,(ix+8)
+	ld      d,(ix+9)
+	call	strlen0
+	ld	b,0
+	ld	c,l  		; bc=count
+	ld      l,(ix+8)
+	ld      h,(ix+9)
+	pop de
+	ld	a,c
+	call	1fdfh
+	
+	JP	?LEAVE_DIRECT_L09
+
+calc_offset:
+        call    08C0h       ; calc offset by Coleco bios
+        ld      hl,(73f6h)  ; hl = Name Table Offset
+        add     hl,de
+        ex      de,hl        ; de = NAME + y * 32 + x
+        ret
+
+
+; de = string ptr
+; returns len in hl (max 255)
+strlen0:
+	ld	hl,0000h
+again:	ld	a,(de)
+	or	a
+	ret	z
+	inc	hl
+	inc	de
+	jr	again
+
+
+	END
+
+
+ 

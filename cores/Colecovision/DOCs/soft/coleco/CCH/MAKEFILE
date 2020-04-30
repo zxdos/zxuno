@@ -1,0 +1,19 @@
+CC = c2
+CFLAGS = -C -V -O
+
+OBJECTS = cch.obj cch_tabl.obj
+
+%.obj : %.c
+	$(CC) $(CFLAGS) $<
+
+all: cch.rom
+
+cch.rom: $(OBJECTS) libcv.lib
+	c2 -V -Mcch.map $(OBJECTS)
+
+cch.obj: cch.c
+
+cch_tabl.obj: cch_tabl.c
+
+clean:
+	rm -f $(OBJECTS)
