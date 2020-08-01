@@ -4,7 +4,7 @@ cad1    defb    'http://zxuno.speccy.org', 0
       ELSE
 cad1    defb    'http://zxdos.forofpga.es', 0
       ENDIF
-        defb    'ZX-Uno BIOS v0.77', 0
+        defb    'ZX-Uno BIOS v0.78', 0
         defb    'Copyleft ', 127, ' 2018 ZX-Uno Team', 0
         defb    'Processor: Z80 3.5MHz', 0
         defb    'Memory:    '
@@ -41,7 +41,7 @@ cad8    defb    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.77    ', $7f, '2018 ZX-Uno Team', 0
+        defb    '   BIOS v0.78    ', $7f, '2018 ZX-Uno Team', 0
       ELSE
         defb    'Press <Edit> to Setup',0
         defb    '      <Break> Boot Menu', 0
@@ -72,7 +72,7 @@ cad8    defb    $10, '                              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    ' BIOS v0.77 ', $7f, '2018 ZX1 Team', 0
+        defb    ' BIOS v0.78 ', $7f, '2018 ZX1 Team', 0
         defs    $66
       ENDIF
 cad10   defb    'Hardware tests', 0
@@ -317,14 +317,14 @@ cad79   defb    ' Successfully burned ', 0
 cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
-      IF version=2
-files   defb    'ESXDOS  ZX', LX16
-        defb    'FIRMWAREZX', LX16
-        defb    'FLASH   ZX', LX16
-        defb    'SPECTRUMZX', LX16
-fileco  defb    'CORE    ZX', LX16
+      IF version=3
+files   defb    'ESXDOS  BIN'
+        defb    'FIRMWAREZXD'
+        defb    'FLASH   ZXD'
+        defb    'SPECTRUMZXD'
+fileco  defb    'CORE    ZXD'
       ELSE
-files   defb    'ESXDOS  ZX', $30+version
+files   defb    'ESXDOS  BIN'
         defb    'FIRMWAREZX', $30+version
         defb    'FLASH   ZX', $30+version
         defb    'SPECTRUMZX', $30+version
@@ -343,7 +343,8 @@ cad83   defb    'Input', 0
         defb    'Scanlines', 0
         defb    'Frequency', 0
         defb    'CPU Speed', 0
-        defb    'CSync', 0, 0
+        defb    'CSync', 0
+        defb    'Color Burst', 0, 0
 cad84   defb    'Select PS/2', 0
         defb    'mapping to', 0
         defb    'spectrum', 0, 0
@@ -364,6 +365,10 @@ cad101  defb    'Set CPU', 0
         defb    'speed', 0, 0
 cad10a  defb    'CSync method', 0
         defb    'to use', 0, 0
+cad10b  defb    'Select FPGA to', 0
+        defb    'avoid aliasing', 0, 0
+cad10c  defb    'Crystal', 0
+cad10d  defb    'FPGA', 0
 cad102  defb    '50', 0
 cad103  defb    '51', 0
 cad104  defb    '53.5', 0

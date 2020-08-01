@@ -53,8 +53,9 @@ nmi66   jp      $c003
 cont    wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    joyconf, %00010000
         wreg    master_mapper, 8  ; paginamos la ROM en $c000
+lee     in      a, ($1f)
+        djnz    lee
         wreg    scandbl_ctrl, $c0 ; lo pongo a 28MHz
-        in      a, ($1f)
         cp      %00011000       ; arriba y disparo a la vez
         jr      z, recov
         cp      %00010100       ; arriba y disparo a la vez

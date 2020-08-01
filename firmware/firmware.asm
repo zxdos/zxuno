@@ -1,5 +1,5 @@
         include version.asm
-        define  recovery        1
+        define  recovery        0
         define  recodire        0
         define  zesarux         0
         define  vertical        0
@@ -80,6 +80,7 @@
         define  freque  scanli+1
         define  cpuspd  freque+1
         define  copt    cpuspd+1
+        define  cburst  copt+1
 
         define  tmpbuf  $7800
         define  tmpbu2  $7880
@@ -256,11 +257,16 @@ start   ld      bc, chrend-sdtab
         jr      nc, start0
         set     4, h
 start0  ld      a, (outvid)
+        push    af
+        rrca
+        ld      a, (cburst)
+        adc     a, a
         ld      de, ad724<<8 | scandbl_ctrl
         ld      bc, zxuno_port
         out     (c), d
         inc     b
         out     (c), a
+        pop     af
         dec     b
         out     (c), e
         inc     b
@@ -1059,7 +1065,7 @@ runbit  ld      b, h
         ld      e, core_addr
         out     (c), e
         inc     b
-      IF  version=3
+      IF  version=4
         ld      a, (alto highb+1)
         out     (c), a
         out     (c), h
@@ -2813,6 +2819,10 @@ advan1  call    showop          ; Joy Keypad & DB9
         defw    cad90
         defw    cad96
         defw    $ffff
+        call    showop          ; Color Burst
+        defw    cad10c
+        defw    cad10d
+        defw    $ffff
         ld      de, $1201
         call    listas
         defb    $04
@@ -2823,6 +2833,7 @@ advan1  call    showop          ; Joy Keypad & DB9
         defb    $0d
         defb    $0e
         defb    $0f
+        defb    $10
         defb    $ff
         defw    cad84
         defw    cad85
@@ -2832,6 +2843,7 @@ advan1  call    showop          ; Joy Keypad & DB9
         defw    cad100
         defw    cad101
         defw    cad10a
+        defw    cad10b
         jp      c, main9
         ld      (menuop+1), a
         ld      hl, layout
@@ -2898,9 +2910,15 @@ advan7  djnz    advan8
         defw    cad113
         defw    $ffff
         ret
-advan8  call    popupw          ; CSync
+advan8  djnz    advan9
+        call    popupw          ; CSync
         defw    cad90
         defw    cad96
+        defw    $ffff
+        ret
+advan9  call    popupw          ; Color Burst
+        defw    cad10c
+        defw    cad10d
         defw    $ffff
         ret
 
@@ -4448,7 +4466,11 @@ subnn   sub     6
       IF  version=4
         defw    $1200
       ELSE
+       IF  version=2
         defw    $0740
+       ELSE
+        defw    $0c40
+       ENDIF
       ENDIF
 subnn   sub     6*4
     ENDIF
