@@ -422,7 +422,7 @@ star10  add     hl, hl
       ENDIF
     IF  recovery=0
 star11  ld      a, (layout)
-        rr      a
+        srl     a
         ld      hl, fines-1
         jr      z, star12
         ld      hl, finus-1
