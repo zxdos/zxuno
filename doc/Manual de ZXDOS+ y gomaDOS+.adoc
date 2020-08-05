@@ -44,7 +44,7 @@ Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partici�
 
 [NOTE]
 ====
-El tamaño máximo de una partición FAT16 son 2GB
+El tamaño máximo de una partición FAT16 son 4GB
 ====
 
 ===== Windows
