@@ -317,19 +317,25 @@ cad79   defb    ' Successfully burned ', 0
 cad80   defb    'EAR input', 0
 cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
-      IF version=3
-files   defb    'ESXDOS  BIN'
+files   defb    'ESXMMC  BIN'
+    IF version=3
         defb    'FIRMWAREZXD'
         defb    'FLASH   ZXD'
         defb    'SPECTRUMZXD'
 fileco  defb    'CORE    ZXD'
-      ELSE
-files   defb    'ESXMMC  BIN'
+    ELSE
+      IF version<3
         defb    'FIRMWAREZX', $30+version
         defb    'FLASH   ZX', $30+version
         defb    'SPECTRUMZX', $30+version
 fileco  defb    'CORE    ZX', $30+version
+      ELSE
+        defb    'FIRMWAREZX', $2f+version
+        defb    'FLASH   ZX', $2f+version
+        defb    'SPECTRUMZX', $2f+version
+fileco  defb    'CORE    ZX', $2f+version
       ENDIF
+    ENDIF
 cad83   defb    'Input', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, 0
         defb    'Keyb Layout', 0
