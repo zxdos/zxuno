@@ -2353,11 +2353,15 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
 erfnf   ld      ix, cad78
 terror  jp      ferror
 saba
-      IF  version=3
+    IF  version=3
         sub     'D'
-      ELSE
+    ELSE
+      IF version<3
         sub     $30+version
+      ELSE
+        sub     $2f+version
       ENDIF
+    ENDIF
         jr      nz, erfnf
         call    testl
         jr      nz, erfnf             ; wrong length
@@ -2440,11 +2444,15 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
-      IF  version=3
+    IF  version=3
         sub     'D'
-      ELSE
+    ELSE
+      IF version<3
         sub     $30+version
+      ELSE
+        sub     $2f+version
       ENDIF
+    ENDIF
         jr      nz, erfnf2
         call    testl
         jr      nz, erfnf2
@@ -4664,9 +4672,6 @@ easter  di
 ; Load flash structures from $06000 to $9000  
 ; ------------------------
 loadch  
-;      IF  version=2
-;        and     a
-;      ENDIF
         wreg    flash_cs, 1
         ld      de, config
         ld      hl, $0060   ;old $0aa0
