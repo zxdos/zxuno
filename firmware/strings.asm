@@ -336,6 +336,7 @@ fileco  defb    'CORE    ZX', $30+version
 fileco  defb    'CORE    ZX', $2f+version
       ENDIF
     ENDIF
+cad119  defb    ' Add new core', 0
 cad83   defb    'Input', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, 0
         defb    'Keyb Layout', 0
@@ -395,9 +396,10 @@ cad116  defb    'Disable for', 0
         defb    'better compa-', 0
         defb    'tibility with', 0
         defb    'old games', 0, 0
+      IF  recovery=1
 cad117  defb    'Remove jumpers', 0
         defb    'to continue', 0, 0
-cad119  defb    ' Add new core', 0
+      ENDIF
 
 ;cad199  defb    'af0000 bc0000 de0000 hl0000 sp0000 ix0000 iy0000', 0
 
