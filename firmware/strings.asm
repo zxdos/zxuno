@@ -393,8 +393,6 @@ cad115  defb    'Slot occupied, select', 0
         defb    'another or delete a', 0
         defb    'ROM to free it', 0
 cad116  defb    'Disable for', 0
-        defb    'better compa-', 0
-        defb    'tibility with', 0
         defb    'old games', 0, 0
       IF  recovery=1
 cad117  defb    'Remove jumpers', 0

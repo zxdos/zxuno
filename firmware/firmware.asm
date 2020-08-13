@@ -2352,18 +2352,19 @@ rotp    call    readat0               ; read 512 bytes of entries (16 entries)
         djnz    rotp
 erfnf   ld      ix, cad78
 terror  jp      ferror
-saba
+saba    sub     'N'
+        jr      z, sab2
     IF  version=3
-        sub     'D'
+        sub     'D'-'N'
     ELSE
       IF version<3
-        sub     $30+version
+        sub     $30+version-'N'
       ELSE
-        sub     $2f+version
+        sub     $2f+version-'N'
       ENDIF
     ENDIF
         jr      nz, erfnf
-        call    testl
+sab2    call    testl
         jr      nz, erfnf             ; wrong length
         ld      l, (ix+$1a)           ; first cluster of the file
         ld      h, (ix+$1b)
@@ -2444,17 +2445,19 @@ otve    call    readata
 erfnf2  jp      erfnf
 sabe    pop     bc
         pop     hl
+        sub     'N'
+        jr      z, sab3
     IF  version=3
-        sub     'D'
+        sub     'D'-'N'
     ELSE
       IF version<3
-        sub     $30+version
+        sub     $30+version-'N'
       ELSE
-        sub     $2f+version
+        sub     $2f+version-'N'
       ENDIF
     ENDIF
         jr      nz, erfnf2
-        call    testl
+sab3    call    testl
         jr      nz, erfnf2
         ld      b, (ix+$14)
         ld      l, (ix+$1a)
