@@ -2238,21 +2238,18 @@ tosd3   inc     hl
         ldi
         ldi
 tosd4   sub     3
-        ld      hl, fileco+4
+        ld      hl, fileco+5
 tosd45  inc     b
         sub     10
         jr      nc, tosd45
         add     a, 10+$30
         ld      (hl), a
-        inc     l
-        ld      (hl), ' '
         djnz    tosd46
         cp      '1'
-        jr      nz, tosd5
+        jr      nz, tosd46
         dec     (ix+$1c)
         jr      tosd5
-tosd46  ld      (hl), a
-        dec     l
+tosd46  dec     l
         ld      a, b
         add     a, $30
         ld      (hl), a
@@ -2532,7 +2529,6 @@ calc2   rrca
         pop     bc
         ret
 
-
 buba    push    bc
         push    de
         push    hl
@@ -2543,8 +2539,17 @@ bubi    push    bc
         ld      a, (hl)
         or      a
         jr      z, sali
-        ld      de, (tmpbu2+$1a)
+        cp      'C'
         push    hl
+        jr      nz, noco
+        ld      de, 6
+        add     hl, de
+        ld      (hl), ' '
+        inc     hl
+        ld      (hl), ' '
+        pop     hl
+        push    hl
+noco    ld      de, (tmpbu2+$1a)
 buub    ld      a, (de)
         cp      (hl)
         inc     hl
