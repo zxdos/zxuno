@@ -267,7 +267,7 @@ Durante la ejecución del core principal (ZX Spectrum):
 - `F10` (`` en gomaDOS+, en modo completo): Graph
 - `F12` (`` en gomaDOS+, en modo completo): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
 
-- `Ctrl+Alt+backspace` (`` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter.
+- `Ctrl+Alt+Backspace` (`` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter.
 - `Ctrl+Alt+Supr` (`` en gomaDOS+): Soft reset.
 - `Bloq. Despl.` (`` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
 
@@ -453,19 +453,108 @@ Durante la ejecución del core:
 - `F9`: NMI
 - `F10`: divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
 
+<<<
+
 ==== Guía básica
+
+Al iniciarse la primera vez, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
+
+[.text-center] 
+image::img/next.png[pdfwidth=70%]
+
+Se puede navegar utilizando las teclas de cursor o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
+
+La opción `More...` muestra un segundo menú con más opciones.
+
+[.text-center] 
+image::img/next2.png[pdfwidth=70%]
+
+<<<
+
+Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible navegar por el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80,, Z8, etc.).
+
+[.text-center] 
+image::img/next3.png[pdfwidth=70%]
+
+[WARNING]
+====
+En el momento de escribir estas líneas, el core de ZX Spectrum Next para ZXDOS+ no soporta el uso del acelerador basado en Raspberry Pi, así que no es posible cargar ficheros TZX.
+====
+
+[NOTE]
+====
+Por defecto no es posible cargar ficheros TRD (se debe configurar NextZXOS para cargar una "personalidad" con esxdos).
+====
+
+Para más información, consultar el https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[manual de uso oficial].
 
 <<<
 
 === MSX
 
+MSX1FPGA es un proyecto para clonar MSX1. El desarrollo original es de Fabio Belavenuto y se encuentra disponible https://github.com/fbelavenuto/msx1fpga[en GitHub].
+
+Algunas de sus características son:
+
+- MSX1 a 50Hz o 60Hz;
+- Utiliza Nextor ROM con un controladr para SD
+- Mapa de teclado configurable
+- Simulación de línea de exploración (Scanlines)
+
 ==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16. Es posible utilizar una segunda partición FAT16 para albergar todo el software, dejando la primera sólo para arrancar el sistema.
+
+Obtener lo siguiente:
+
+- Ficheros básicos del proyecto para la SD https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[desde GitHub]
+- Controlador (`NEXTOR.SYS`) y ROM (`NEXTOR.ROM`) de Nextor https://github.com/fbelavenuto/msx1fpga/tree/master/Software/nextor[también desde GitHub]
+- ROM de MSX1 (`MSX_INT.rom`, `MSX_JP.rom` o `MSX_USA.rom`) https://github.com/fbelavenuto/msx1fpga/tree/master/Software/msx1[en el mismo repositorio]
+
+Copiar el contenido del https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[directorio SD] en la raíz de la primera partición de la tarjeta microSD.
+
+Copiar `NEXTOR.SYS` en el mismo lugar.
+
+Copiar `NEXTOR.ROM` en el directorio `MSX1FPGA`.
+
+Copiar la ROM deseada de MSX1 (`MSX_INT.rom`, `MSX_JP.rom` o `MSX_USA.rom`) en el directorio `MSX1FPGA`, pero usando el nombre `MSX1BIOS.ROM`.
+
+Si no estuviera ya, <<_cores,instalar el core de MSX>> en el ZXDOS+.
+
+<<<
 
 ==== Teclado
 
 ==== Teclas especiales y botones
 
+Durante la ejecución del core:
+
+- `Impr Pant`: Cambia el modo VGA
+- `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
+- `F11`: Activa o desactiva el modo turbo
+- `Ctrl+Alt+Supr`: Soft Reset
+- `Ctrl+Alt+F12`: Hard Reset
+- `Ctrl+Alt+Backspace`: Reinicia la FPGA
+- `ALT Izquierdo`: MSX GRAPH 
+- `ALT Derecho`: MSX CODE
+- `Re Pág`: MSX SELECT
+- `Fin`: MSX STOP
+
+[NOTE]
+====
+En BASIC, se puede usar `CTRL + STOP` para detener la ejecución de un programa.
+====
+
+[NOTE]
+====
+Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de programas PAL a través de VGA), se puede usar `DISPLAY.COM`, que se puede obtener https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[en este hilo del foro de MSX].
+====
+
 ==== Guía básica
+
+Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`. 
+
+Para acceeder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
 
 <<<
 
