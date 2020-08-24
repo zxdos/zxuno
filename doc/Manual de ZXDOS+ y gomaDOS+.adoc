@@ -40,7 +40,7 @@ Para poder aprovechar todo su potencial, es útil tener también:
 
 ==== Formato de la tarjeta microSD
 
-Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16 o FAT32 (se recomienda FAT16 para mayor compatibilidad con algunos cores de terceros). 
+Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16 o FAT32 (según el caso, se recomienda uno u otro formato para compatibilidad con algunos cores de terceros). 
 
 [NOTE]
 ====
@@ -49,39 +49,58 @@ El tamaño máximo de una partición FAT16 son 4GB
 
 ===== Windows
 
-Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 4GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
+Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
 
 Para otras configuraciones, y según la versión de sistema operativo de que se disponga, se podrá utilizar la herramienta de línea de comandos `diskpart` o bien la interfaz gráfica de administración de discos del sistema.
 
 ===== MacOS
 
-Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 4GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association] o la Utilidad de Discos incluida con el sistema operativo.
+Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association] o la Utilidad de Discos incluida con el sistema operativo.
 
 Para configuraciones más complejas, será necesario utilizar la línea de comandos.
 
-Por ejemplo, en MacOS, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 4GB o menos de tamaño):
+Por ejemplo, en MacOS, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 2GB o menos de tamaño), que figura como `disk6` en la lista de dispositivos:
 
 [source,shell]
 ----
+diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT16" ZXDOSPLUS R
 ----
 
-Para dividirla en dos particiones iguales (si la tarjeta es de 8GB o menos de tamaño)
+Para dividirla en dos particiones iguales (si la tarjeta es de 4GB o menos de tamaño)
 
 [source,shell]
 ----
+diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT16" ZXDOSPLUS 50% "MS-DOS FAT16" EXTRA 50%
 ----
 
-Para crear dos primeras particiones FAT16 de 4GB y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 8GB)
+Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el core de MSX) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 8GB)
 [source,shell]
 ----
-diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT16" ZXDOSPLUS 4G "MS-DOS FAT16" EXTRA 4G "MS-DOS FAT32" DATA R
+diskutil unmountDisk /dev/disk6
+diskutil partitionDisk /dev/disk6 MBR %DOS_FAT_16% ZXDOSPLUS 4G %DOS_FAT_16% EXTRA 4G "MS-DOS FAT32" DATA R
+sudo newfs_msdos -F 16 -v ZXDOSPLUS -b 4096 -c 128 /dev/rdisk6s1
+sudo newfs_msdos -F 16 -v EXTRA -b 4096 -c 128 /dev/rdisk6s2
+----
+
+[NOTE]
+====
+El comando `diskutil` no permite crear particiones FAT16 de más de 2G de tamaño y formatearlas a la vez. Por eso, en el último caso, se crean primero las particiones y luego se formatean en FAT16.
+====
+
+Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño)
+[source,shell]
+----
+diskutil unmountDisk /dev/disk6
+diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32" EXTRA R
 ----
 
 ===== Linux
 
 Existen multitud de herramientas en Linux que permiten formatear y particionar el contenido de una tarjeta SD (como `fdisk`, `parted`, `cfdisk`, `sfdisk` o `GParted`). Sólo se ha de tener en cuenta que el esquema de particiones a utilizar siempre ha de ser MBR, y la primera partición (la que se utilizará para esxdos) ha de ser primaria.
+
+<<<
 
 ==== esxdos
 
@@ -299,7 +318,7 @@ Los principales comandos "DOT" commands son los siguientes:
 - `chmod`: cambiar los atributos de los ficheros de la tarjeta SD.
 - `cp`: Copiar un archivo.
 - `divideo`: Reproduce un archivo de video DivIDEo (.DVO).
-- `drives`: Cambiar de unidad de disco
+- `drives`: Mostrar las unidades
 - `dskprobe`: Utilidad para ver el contenido a bajo nivel de un dispositivo de almacenamiento
 - `dumpmem`: Permite volcar contenido de la memoria RAM a un fichero
 - `file`: Intenta determinar el tipo de un fichero por su contenido (como el comando de UNIX)
@@ -326,7 +345,17 @@ Los principales comandos "DOT" commands son los siguientes:
 - `tapeout`: Montar un archivo .TAP para poder ser utilizado luego desde BASIC con la sentencia SAVE
 - `vdisk`: Monta una unidad de disquete .TRD para usar en el entorno TR-DOS (Una vez montadas todas las unidades deseadas, se puede entrar en el emulador de TR-DOS escribiendo: `RANDOMIZE USR 15616`)
 
+Algunos comandos extendidos de BASIC son:
+
+- `GO TO` para cambiar de unidad y/o directorio (ej: `GO TO hd1` o `GO TO hd0"juegos"`)
+- `CAT` para mostrar el contenido de una unidad
+- `LOAD` para cargar un fichero desde una unidad (programa en BASIC, pantalla, código, etc.)
+- `SAVE` para guardar datos en un fichero 
+- `ERASE` para borrar un fichero
+
 Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cuando se pulsa NMI (F5) y que facilita la navegación por la tarjeta microSD y la carga de algunos tipos de archivo (TAP, Z80, TRD, etc.). Pulsando la tecla "H" se accede a una pantalla de ayuda, en la que se indican todas las teclas disponibles.
+
+<<<
 
 ==== Comandos para ZXDOS+
 
@@ -471,7 +500,7 @@ image::img/next2.png[pdfwidth=70%]
 
 <<<
 
-Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible navegar por el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80,, Z8, etc.).
+Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80,, Z8, etc.).
 
 [.text-center] 
 image::img/next3.png[pdfwidth=70%]
@@ -519,6 +548,19 @@ Copiar `NEXTOR.ROM` en el directorio `MSX1FPGA`.
 
 Copiar la ROM deseada de MSX1 (`MSX_INT.rom`, `MSX_JP.rom` o `MSX_USA.rom`) en el directorio `MSX1FPGA`, pero usando el nombre `MSX1BIOS.ROM`.
 
+En el fichero `/MSX1FPGA/config.txt` se guarda la configuración del core, según este formato:
+
+----
+11SP01
+||||||
+|||||+-Modo de línea de exploración: 1=Activo, 0=Inactivo
+||||+--Turbo: 1=Arrancar con el modo turbo activo
+|||+---Sistema de color: N=NTSC, P=PAL
+||+----Mapa de Teclado: E=Inglés, B=Brasileño, F=Francés, S=Castellano
+|+-----Scandoubler(VGA): 1=Activo, 0=Inactivo
++------Nextor: 1=Activo, 0=Inactivo 
+----
+
 Si no estuviera ya, <<_cores,instalar el core de MSX>> en el ZXDOS+.
 
 <<<
@@ -538,7 +580,9 @@ Durante la ejecución del core:
 - `ALT Izquierdo`: MSX GRAPH 
 - `ALT Derecho`: MSX CODE
 - `Re Pág`: MSX SELECT
+- `Inicio` MSX HOME (`Mayús+ HOME`: CLS)
 - `Fin`: MSX STOP
+- `Ñ` o `Windows`: MSX DEAD
 
 [NOTE]
 ====
@@ -555,6 +599,90 @@ Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de pr
 Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`. 
 
 Para acceeder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
+
+<<<
+
+===== MSXCTRL
+
+Se trata de una utilidad exclusiva del core MSX1FPGA, que permite controlar todas las opciones del core que antes solo eran accesibles a través del fichero de configuración o pulsando determinadas teclas.
+
+Al ejecutar `MSXCTRL` se muestran los parámetros de uso:
+
+----
+MSXCTRL.COM - Utility to manipulate MSX1FPGA core.
+HW ID = 06 - ZX-Uno Board
+Version 1.3
+Mem config = 82
+Has HWDS = FALSE
+
+Use:
+
+MSXCTRL -h -i -r -b -[5|6] -m<0-2> 
+        -c<0-1> -d<0-1> -t<0-1>
+        [-w<filename> | -l<filename>]
+        -k<0-255> -e<0-255> -p<0-255>
+        -s<0-255> -o<0-255> -a<0-255>
+----
+
+`MSXCTRL -h` muestra ayuda para cada parámetro. Así, `MSXCTRL -i` presenta la configuración actual, los parámetros `-t 1` encienden el modo turbo, etc.
+
+----
+** PENDIENTE **
+
+Definición 1.4 de teclado en español (http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897)
+
+Distintos sistemas para cargar los juegos dependiendo del tipo de archivo: .CAS, .DSK o ROM (http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080)
+----
+
+<<<
+
+=== Amstrad CPC
+
+El core para ZXDOS+ de Amstrad CPC está basado en el proyecto http://www.cpcwiki.eu/index.php/FPGAmstrad[FPGAmstrad] de Renaud Hélias.
+
+Algunas de sus características son:
+
+- VGA: 640x480 VGA centrado a 60Hz
+- Selección de discos: El primer disco detectado se inserta en el arranque y la pulsación de una tecla hace reset y carga el siguiente
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT32, de 4GB de tamaño y 4096 bytes por cluster.
+
+Además son necesarios los ficheros ROM siguientes (se pueden obtener http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[en la wiki oficial del proyecto original]) o en el https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[repositorio de GitHub]:
+- `OS6128.ROM`
+- `BASIC1-1.ROM`
+- `AMSDOS.ROM`
+- `MAXAM.ROM`
+
+También es recomendable incluir uno o más ficheros con imágenes de disco (`DSK`) con el software que se quiera ejecutar.
+
+Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32.
+
+==== Teclado
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Re Pág`: Hace un Reset del Amstrad y carga el siguiente archivo `DSK` en orden alfabético.
+- Sólo funciona la tecla mayúsculas del lado izquierdo del teclado
+
+<<<
+
+==== Guía básica
+
+Escribir el comando `CAT` para ver el contenido del fichero DSK cargado actualmente.
+
+[.text-center] 
+image::img/cpc.png[pdfwidth=70%]
+
+Escribir el comando `RUN"<nombre>` para cargar un programa del disco
+
+[.text-center] 
+image::img/cpc2.png[pdfwidth=70%]
+
+Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en orden alfabético.
 
 <<<
 
