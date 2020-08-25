@@ -85,7 +85,7 @@ cad10   defb    'Hardware tests', 0
         defb    ' ', 0
         defb    'Options', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, 0
-        defb    'Quiet Boot', 0
+        defb    'Boot Timer', 0
         defb    'Check CRC', 0
         defb    'Keyboard', 0
         defb    'Timing', 0
@@ -129,7 +129,7 @@ cad16   defb    'Performs a', 0
         defb    'joystick test', 0, 0
 cad17   defb    'Hide the whole', 0
         defb    'boot screen', 0
-        defb    'when enabled', 0, 0
+        defb    'when disabled', 0, 0
 cad18   defb    'Enable RAM and', 0
         defb    'ROM on DivMMC ', 0
         defb    'interface.', 0
@@ -173,10 +173,6 @@ cad33   defb    'Set Active', 0
 cad34   defb    'Move Down  a', 0
 cad35   defb    'Rename', 0
 cad36   defb    'Delete', 0
-cad120   defb    'Timeout 1X', 0
-cad122   defb    'Timeout 2X', 0
-cad123   defb    'Timeout 4X', 0
-cad124   defb    'Timeout 8X', 0
       IF  vertical=0
         defb    ' ', $12, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    ' Rename ', $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $13, 0

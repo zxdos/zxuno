@@ -299,17 +299,18 @@ start2  ld      a, (hl)
         jr      nc, start1
         dec     e
       IF  recovery=0
-        ld      a, 0
+        ld      a, 1
         out     ($fe), a
-        ld      a, (quietb)        
-        cp      1
+        ld      a, (quietb)
+        or      a
         jr      nz, start3
-        out     ($fe), a
         ld      h, l
         ld      d, $20
         call    window
         jr      start8
-start3  ld      hl, finlog-1
+start3  xor     a
+        out     ($fe), a
+        ld      hl, finlog-1
         ld      d, $7a
         call    dzx7b           ; descomprimir
         call    drcs
@@ -438,17 +439,15 @@ star13  ld      de, $cfff
 star14  inc     b
         outi
         bit     4, h              ; compruebo si la direccion es D000 (final)
-        jr      z, star14         ; repito si no lo es	
-star15  ld      d, 4              ; temporizador general (1-2 seg en 1X)        
-		call    chktmo    ; aplicamos multiplicador
-start25 pop     af
+        jr      z, star14         ; repito si no lo es
+star15  ld      a, (quietb)
+        or      1
+        rlca
+        rlca
+        ld      d, a
+        pop     af
         jr      nz, star16
-        ld      d, 16             ; temporizador inicial (2-3 seg en 1X)
-        call    chktmo            ; aplicamos multiplicador
-        ld      a, d
-        cp      33
-        jr      c, star16
-        ld      d, 32             ; timeout inicial maximo (7-8 segundos)
+        ld      d, 16
 star16  djnz    star18
         dec     de
         ld      a, d
@@ -1156,16 +1155,15 @@ main
         ld      iy, quietb
         ld      bc, $0f0b
 main1   call    showop
-        defw    cad120
-        defw    cad29
-        defw    cad122
-        defw    cad123
-        defw    cad124
-        defw    $ffff
-main1b  call    showop
         defw    cad28
-        defw    cad29		
+        defw    cad110
+        defw    cad111
+        defw    cad112
+        defw    cad113
         defw    $ffff
+        ld      a, iyl
+        rrca
+        jr      c, main1
 main2   call    showop
         defw    cad30
         defw    cad31
@@ -1213,30 +1211,21 @@ main4   call    showop
         defw    cad19
         defw    cad116
         jr      c, main9
-        ld      (menuop+1), a		
-        cp      4        
+        ld      (menuop+1), a
+        cp      4
+        ld      h, active >> 8
         jr      c, main8        ; c->tests, nc->options
-        ld      e, a
-        add     hl, de
-        jr      nz, main44		
-        ld      hl, quietb
-        call    popupw          ; Boot timeout
-        defw    cad120
-        defw    cad29
-        defw    cad122
-        defw    cad123
-        defw    cad124
-        defw    $ffff
-        ret
-main44  ld      h, active >> 8
-        add     a, bitstr-3&$ff 
+        add     a, bitstr-3&$ff
         ld      l, a
         sub     keyiss&$ff
         jr      z, main5
         jr      nc, main6
         call    popupw          ; quiet or crc (enabled or disabled)
         defw    cad28
-        defw    cad29
+        defw    cad110
+        defw    cad111
+        defw    cad112
+        defw    cad113
         defw    $ffff
         ret
 main5   call    popupw          ; keyboard issue
@@ -3779,20 +3768,6 @@ combo9  dec     a               ; $1d
 comboa  ld      a, h
         pop     de
         pop     hl
-        ret
-		
-; --------------------------------------
-; Bitshift left 'D' according to timeout
-; --------------------------------------
-chktmo  push    af
-        ld      a, (quietb)
-        cp      2
-        jr      c, chk2
-        dec     a
-chk1    sla     d
-        dec     a
-        jr      nz, chk1
-chk2    pop     af
         ret
 
 ; -------------------------------------
