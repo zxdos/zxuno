@@ -280,23 +280,23 @@ Durante la ejecución del core principal (ZX Spectrum):
 
 - `Esc`: BREAK
 - `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+, en modo completo): Edit
-- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+, en modo completo): NMI
+- `F5` (`NMI` en gomaDOS+): NMI
 - `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+, en modo completo): Reproducir o Pausa en la reproducción de archivos .PZX
 - `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+, en modo completo): Rebobinar el archivo .PZX hasta la marca anterior
-- `F10` (`` en gomaDOS+, en modo completo): Graph
-- `F12` (`` en gomaDOS+, en modo completo): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
+- `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+, en modo completo): Graph
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
 
-- `Ctrl+Alt+Backspace` (`` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter.
-- `Ctrl+Alt+Supr` (`` en gomaDOS+): Soft reset.
-- `Bloq. Despl.` (`` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
 
 Durante el arranque:
 
-- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+, en modo completo) Entrar en la BIOS
-- `Bloq. Mayús` o `Cursor abajo` (`` en gomaDOS+): Menú de selección de cores
-- `Esc` (`` en gomaDOS+): Menú de selección de roms del core de Spectrum
+- `F2` (`Caps Shift+1` en gomaDOS+, en modo completo) Entrar en la BIOS
+- `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2 en gomaDOS+): Menú de selección de cores
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): Menú de selección de roms del core de Spectrum
 - `R`: Carga la rom del core de Spectrum en modo «real» deshabilitando esxdos, nuevos modos gráficos, etc.
-- `/` (`` en gomaDOS+) (del teclado numérico): Carga la rom del core de Spectrum en modo «root»
+- `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+): Carga la rom del core de Spectrum en modo «root»
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
 === ROMs
@@ -573,6 +573,7 @@ Durante la ejecución del core:
 
 - `Impr Pant`: Cambia el modo VGA
 - `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
+- `Pausa`: Cambia entre 50Hz y 60Hz
 - `F11`: Activa o desactiva el modo turbo
 - `Ctrl+Alt+Supr`: Soft Reset
 - `Ctrl+Alt+F12`: Hard Reset
@@ -696,6 +697,172 @@ Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en 
 
 ==== Guía básica
 
+== Solución de problemas
+
+=== Recuperación del firmware
+
+En algunos casos (por ejemplo al instalar un core experimental o hacer una actualización del core de ZX Spectrum o la BIOS) puede suceder que el ZXDOS+ deje de arrancar. Se encienden los LEDs pero no hay imagen ni responde a las distintas combinaciones de teclado para acceder a la BIOS, etc.
+
+En esta situación, existen diferentes métodos de recuperación que permiten volver a instalar el firmware.
+
+==== Recuperación usando una Raspberry Pi
+
+*Material necesario*:
+
+- Raspberry Pi (con tarjeta SD, teclado, monitor, fuente de alimentación, etc.) y con conexión a internet
+- 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos)
+- Una https://es.wikipedia.org/wiki/Llave_Allen[llave Allen] del tamaño adecuado para poder retirar la tapa del ZXDOS+
+- Tarjeta microSD para el ZXDOS+ con la primera partición en formato FAT16 o FAT32
+- Teclado y monitor para conectar el ZXDOS+
+
+*Software necesario*:
+
+- Imagen Flash y recovery para ZXDOS+ (LX25), del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial, en este enlace]
+
+<<<<
+
+*Pasos a seguir*:
+
+. Si no estuviera ya, instalar Raspberry Pi OS (antes llamado Raspbian) en la Raspberry Pi (usando https://www.raspberrypi.org/downloads/raspberry-pi-os/[la descarga oficial], https://www.raspberrypi.org/downloads/noobs/[NOOBS], https://github.com/procount/pinn[PINN], etc.)
+. Instalar Open OCD en la Raspberry Pi:
+
+[source,shell]
+----
+sudo apt-get update
+sudo apt-get install git autoconf libtool make pkg-config
+sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev telnet
+git clone git://git.code.sf.net/p/openocd/code openocd-code
+cd openocd-code/
+./bootstrap
+./configure --enable-sysfsgpio --enable-bcm2835gpio
+make
+sudo make install
+cd ..
+rm -rf ./openocd-code
+----
+
+[start=3]
+. Abrir la carcasa del ZXDOS+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+
+[.text-center] 
+image::img/jtag.jpg[pdfwidth=50%]
+
+[WARNING]
+====
+*NO* se ha de conectar la línea de 3V
+====
+
+<<<<
+
+Tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
+
+[.text-center] 
+image::img/gpio.jpg[pdfwidth=70%]
+
+En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (correspondientes a `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` y `GND`), de la siguiente manera:
+
+[%header,cols=3*] 
+|===
+|JTAG ZXDOS+
+|GPIO
+|Pin Raspberry Pi
+|`TMS`
+|GPIO#6
+|`31`
+|`TDI`
+|GPIO#13
+|`33`
+|`TDO`
+|GPIO#19
+|`35`
+|`TCK`
+|GPIO#26
+|`37`
+|`GND`
+|GND
+|`39` 
+|===
+
+[start=4]
+. Copiar en la Raspberry Pi el fichero `recovery.zxd.bit` obtenido anteriormente del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial]. En nuestro ejemplo, se dejará en `/home/pi/zxdosplus/unbrick/`
+
+. Realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está `recovery.zxd.bit`.
+
+[source,shell]
+----
+cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxdosplus/unbrick/
+----
+
+<<<<
+
+[start=6]
+. Editar la copia de `raspberrypi2-native.cfg` actualizando `bcm2835gpio_jtag_nums` (y descomentando, si fuera necesario), según como se haya hecho la conexión entre JTAG y GPIO en la línea `bcm2835gpio_jtag_nums`. En nuestro ejemplo:
+
+[source]
+----
+# Header pin numbers: 37 31 33 35
+bcm2835gpio_jtag_nums 26 6 13 19
+----
+
+[start=7]
+. Comentar, si no lo está, la línea `bcm2835gpio_swd_nums`:
+
+[source]
+----
+#bcm2835gpio_swd_nums 11 25
+----
+
+[start=8]
+. Añadir, al final, la línea `adapter_khz 250`:
+
+[source]
+----
+adapter_khz 250
+----
+
+[start=9]
+. Encender el ZXDOS+
+
+. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.zxd.bit`, y lanzar el comando que carga la BIOS en modo recuperación, indicando la ruta al archivo `raspberrypi2-native.cfg` que habíamos editado anteriormente.
+
+[source,shell]
+----
+cd /home/pi/zxdosplus/unbrick
+sudo openocd -f /home/pi/zxdosplus/unbrick/raspberrypi2-native.cfg -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.zxd.bit ; exit"
+----
+
+Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
+
+<<<<
+
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+
+[.text-center] 
+image::img/recovery.png[pdfwidth=70%]
+
+[start=11]
+. Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZXD` https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[descargado anteriormente].
+
+<<<<
+
+[start=12]
+. Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
+
+[WARNING]
+====
+Este proceso eliminará todos los cores instalados, así como las ROMs de ZX Spectrum.
+====
+
+[.text-center] 
+image::img/recovery2.png[pdfwidth=70%]
+
+Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXDOS+ vuelve a arrancar correctamente.
+
+[NOTE]
+====
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
 == Referencias
 
 http://zxuno.speccy.org/index.shtml[ZX-Uno]
@@ -725,3 +892,7 @@ https://www.konamiman.com/msx/msx-s.html#nextor[Nextor para MSX]
 https://www.konamiman.com/msx/nextor/docs/Nextor%202.0%20User%20Manual.pdf[Nextor User Manual]
 
 https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter3.html[MSX-DOS]
+
+https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
+
+http://www.zxuno.com/forum/viewtopic.php?f=25&t=375[Tutorial para desbriquear el ZX-Uno con una Raspberry]
