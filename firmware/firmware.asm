@@ -441,13 +441,14 @@ star14  inc     b
         bit     4, h              ; compruebo si la direccion es D000 (final)
         jr      z, star14         ; repito si no lo es
 star15  ld      a, (quietb)
-        or      1
-        rlca
-        rlca
-        ld      d, a
+        inc     a
+        ld      d, 1
+star1a  rlc     d
+        dec     a
+        jr      nz, star1a
         pop     af
         jr      nz, star16
-        ld      d, 16
+        set     4, d
 star16  djnz    star18
         dec     de
         ld      a, d
@@ -3003,7 +3004,7 @@ exit4   djnz    exit5
 exit5   djnz    exit6
         jp      alto loadch
 exit6   call    savech
-exit7   jp      star11
+exit7   jp      star17
 
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
