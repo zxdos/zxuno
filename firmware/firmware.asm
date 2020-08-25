@@ -1231,8 +1231,8 @@ main4   call    showop
 main44  ld      h, active >> 8
         add     a, bitstr-3&$ff 
         ld      l, a
-        sub     keyiss&$ff		
-        jr      z, main5        ; main5
+        sub     keyiss&$ff
+        jr      z, main5
         jr      nc, main6
         call    popupw          ; quiet or crc (enabled or disabled)
         defw    cad28
