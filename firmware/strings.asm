@@ -174,7 +174,6 @@ cad34   defb    'Move Down  a', 0
 cad35   defb    'Rename', 0
 cad36   defb    'Delete', 0
 cad120   defb    'Timeout 1X', 0
-cad121   defb    'Enabled', 0
 cad122   defb    'Timeout 2X', 0
 cad123   defb    'Timeout 4X', 0
 cad124   defb    'Timeout 8X', 0

@@ -1157,7 +1157,7 @@ main
         ld      bc, $0f0b
 main1   call    showop
         defw    cad120
-        defw    cad121
+        defw    cad29
         defw    cad122
         defw    cad123
         defw    cad124
@@ -1222,7 +1222,7 @@ main4   call    showop
         ld      hl, quietb
         call    popupw          ; Boot timeout
         defw    cad120
-        defw    cad121
+        defw    cad29
         defw    cad122
         defw    cad123
         defw    cad124
