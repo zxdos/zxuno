@@ -387,8 +387,12 @@ Copiar el fichero en la raíz de la tarjeta MicroSD, encender y pulsar F2 para e
 
 === ROMs
 
-Para actualizar las ROM instaladas para ZX Spectrum se ha de obtener un fichero del tipo `ROMS.ZX1`, que se tiene que copiar en la tarjeta MicroSD. Arrancar el ZX-Uno usando una ROM «rooted». Entonces basta con introducir e comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso. 
- Existe un comando de esxdos llamado
+Para actualizar las ROM instaladas para ZX Spectrum se ha de obtener un fichero del tipo `ROMS.ZX1`, que se tiene que copiar en la tarjeta MicroSD. Arrancar el ZX-Uno usando una ROM «rooted». Entonces basta con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+
+[NOTE]
+====
+Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+), entonces se cargará la ROM por defecto del core de Spectrum en modo «root».
+====
 
 Para hacer el proceso contrario (guardar las ROM en un fichero `ROMS.ZX1`), se puede usar el comando `.romsback`.
 
@@ -450,7 +454,7 @@ El core para ZXDOS+ no tiene, por el momento, implementada ninguna de las siguie
 - Flasheo de cores adicionales o actualización del propio core Next desde el core Next
 - Salida MIC
 - Video HDMI
-- Utilización de port de conexión joystick para comunicación UART
+- Utilización de puerto de conexión joystick para comunicación UART
 
 El manual de uso se puede descargar desde https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[la página oficial].
 
@@ -581,7 +585,7 @@ Durante la ejecución del core:
 - `ALT Izquierdo`: MSX GRAPH 
 - `ALT Derecho`: MSX CODE
 - `Re Pág`: MSX SELECT
-- `Inicio` MSX HOME (`Mayús+ HOME`: CLS)
+- `Inicio` MSX HOME (`Mayús+HOME`: CLS)
 - `Fin`: MSX STOP
 - `Ñ` o `Windows`: MSX DEAD
 
@@ -627,13 +631,11 @@ MSXCTRL -h -i -r -b -[5|6] -m<0-2>
 
 `MSXCTRL -h` muestra ayuda para cada parámetro. Así, `MSXCTRL -i` presenta la configuración actual, los parámetros `-t 1` encienden el modo turbo, etc.
 
-----
-** PENDIENTE **
+===== Otros
 
-Definición 1.4 de teclado en español (http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897)
+Existen múltiples sistemas para cargar los juegos dependiendo del tipo de archivo: .CAS, .DSK o ROM (ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[este hilo del foro de ZX-Uno] para más información).
 
-Distintos sistemas para cargar los juegos dependiendo del tipo de archivo: .CAS, .DSK o ROM (http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080)
-----
+El mapeo de para teclado español disponible con la distribución oficial se puede cambiar por otro más completo ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[aquí] para más información.
 
 <<<
 
@@ -687,15 +689,179 @@ Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en 
 
 <<<
 
-=== C64
+=== Acorn Atom
+
+El https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] era un computador casero hecho por Acorn Computers. El core para ZXDOS+ (basado en el de ZX-Uno realizado por Quest) es una adaptación del proyecto https://github.com/hoglet67/AtomFpga[AtomFPGA]. Se puede ver más información en http://zxuno.com/forum/viewtopic.php?f=16&t=4[el foro de ZX-Uno].
 
 ==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16.
+
+Descargar la última versión de Atom Software Archive https://github.com/hoglet67/AtomSoftwareArchive/releases/latest[desde GitHub].
+
+Descomprimir todo el contenido del archivo en la raíz de la tarjeta. El contenido del directorio `SYS` es compatible con el directorio `SYS` de esxdos, siendo posible combinar los dos en uno solo.
 
 ==== Teclado
 
 ==== Teclas especiales y botones
 
+Durante la ejecución del core:
+
+- `Mayús+F10`: Muestra el menú de Atom Software Archive
+- `F10`: Soft Reset
+- `F1`: Modo turbo 1Mhz
+- `F2`: Modo turbo 2Mhz
+- `F3`: Modo turbo 4Mhz
+- `F4`: Modo turbo 8Mhz
+
+El teclado está mapeado en inglés.
+
+<<<
+
 ==== Guía básica
+
+Tras iniciar el core, en algunos casos, puede suceder que se muestre una pantalla llena de `@`. Basta con retirar e insertar, o simplemente insertar, la tarjeta microSD, para que empiece a funcionar.
+
+[.text-center] 
+image::img/acorn.jpg[pdfwidth=70%]
+
+Una vez iniciado, pulsar `Mayús+F10` para mostrar el menú desde el que se pueden cargar los programas de Atom Software Archive de la tarjeta.
+
+<<<
+
+=== Commodore 64
+
+Commodore 64 (C64, CBM 64/CBM64, C=64,C-64, VIC-641​) es una https://es.wikipedia.org/wiki/Commodore_64[computadora doméstica de 8 bits] desarrollada por Commodore International.
+
+El core para ZXDOS+ está siendo desarrollado por Neuro.
+
+==== Formato de Tarjeta microSD
+
+Se puede utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32. Es posible cargar desde la misma tanto archivos de imagen de disco (`D64`) como ficheros de cinta (`TAP`).
+
+Si no estuviera ya, <<_cores,instalar el core de Commodore 64>> en el ZXDOS+.
+
+==== Teclado
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Muestra menú de opciones
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
+- `Esc`: RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
+
+<<<
+
+==== Guía básica
+
+Tras pulsar `F12`, aparece el menú de opciones.
+
+[.text-center] 
+image::img/c64.jpg[pdfwidth=70%]
+
+Desde dicho menú se puede 
+
+- Hacer reset del core
+- Activar o desactivar la simulación de línea de exploración (Scanlines)
+- Cambiar la paleta de color
+- Cambiar entre modo video compuesto y modo VGA
+- Activar o desactivar el sonido de carga de cinta
+- Encender o apagar un filtro de audio
+- Cargar imagen de disco D64
+- Cargar fichero de cinta TAP
+
+Para cargar desde un disco, habitualmente, se ha de escribir `LOAD "*",8,1` y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa.
+
+Si el disco tuviera varios programas para ejecutar, escribir `LOAD "$"` y pulsar `Enter`. A continuación, escribir `LIST`, y pulsar `Enter`, para ver una lista con los archivos dentro del disco. Ahora, para cargar el archivo deseado, escribir `LOAD "<nombre>",8` (donde `<nombre>` es el nombre del archivo a cargar) y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa. Si esto no funcionase, probar con el comando `LOAD "<nombre>",8,1`. 
+
+Para cargar desde cinta, se puede escribir `LOAD` y pulsar `Enter`, o bien pulsar `Mayús+Esc` (`Mayús+RUN/STOP`).
+
+<<<
+
+=== Phoenix
+
+Core del videojuego arcade de estilo matamarcianos diseñado por la empresa Amstar Electronics.
+
+Algunas de sus características son:
+
+- Dos modos de vídeo seleccionables: RGB/PAL60Hz y VGA 60Hz
+- Simulación de línea de exploración (Scanlines) en VGA
+- Conmutación opcional para el giro de 90º en las direcciones de los controles
+
+==== Formato de Tarjeta microSD
+
+Este core no utiliza la tarjeta microSD.
+
+==== Teclado
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Q` y `A` o `Cursor Izquierdo` y `Cursor Derecho`  (o un joystick): Control de movimiento
+- `Z` o `X` `Tecla Windows Izquierda` y `Espacio` (o botones 1 y 2 del joystick): Disparos 1 y 2, así como inserción de moneda y botón `Start`
+- `F2`: Cambia el modo de vídeo entre RGB y VGA
+- `-` (del teclado numérico): Activa o desactiva la simulación de línea de exploración (Scanlines)
+- `Tab`: Activa o desactiva giro de 90º en las direcciones de los controles
+
+==== Guía básica
+
+Por defecto se inicia con los controles normales, para el uso de pantallas verticales. Si se tiene la pantalla en horizontal (lo más habitual), la imagen se ve de lado, pero para ayudar en el control, y que sea más natural y acorde con lo que se ve, pulsando `Tab` se consigue que las direcciones arriba-abajo estén intercambiadas con izquierda-derecha. Afecta por igual al joystick y al teclado.
+
+<<<
+
+=== Pong
+
+Pong https://es.wikipedia.org/wiki/Pong[fue un videojuego] de la primera generación de videoconsolas publicado por Atari.
+
+Algunas las características del core son:
+
+- Dos modos de vídeo seleccionables: RGB/PAL60Hz y VGA 60Hz
+- 7 tipos de juego
+- Soporte 2 o 4 jugadores
+- Compatible con joystick(s)
+
+==== Formato de Tarjeta microSD
+
+Este core no utiliza la tarjeta microSD.
+
+==== Teclado
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+): Mostrar u ocultar el menú de configuración
+- `Ctrl+Alt+Backspace` (CS+SS+F y G): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa
+- `F3` o `F12`: Reinicio del juego
+- Número del `1` al `7`: Cambiar el tipo de juego
+- `Cursor arriba` y `Cursor abajo`: Control de paleta de la izquierda (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
+- Joystick 1: Control de paleta de la derecha (Jugador 1)
+- `Q` y `A`: Control de paleta de la derecha (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)
+- Joystick 2: Control de paleta de la derecha (Jugador 2).
+- `Z`, `M` o botón de joystick 1: Saque manual
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) se muestra el menú de configuración.
+
+[.text-center] 
+image::img/pong.jpg[pdfwidth=70%]
+
+En él se pueden activar o desactivar las siguientes opciones:
+
+- Servicio manual (Manual Serve)
+- Ángulo de la bola (Ball Angle)
+- Velocidad de la bola (Ball Speed)
+- Tamaño de las palas (Paddle Size)
+- Sonido (Sound)
+- Cuatro jugadores (Four players)
+- Duplicar el tamaño del menún (Double OSD Window)
+- Salir del menú (Exit)
 
 == Solución de problemas
 
@@ -719,7 +885,7 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 
 - Imagen Flash y recovery para ZXDOS+ (LX25), del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial, en este enlace]
 
-<<<<
+<<<
 
 *Pasos a seguir*:
 
@@ -752,7 +918,7 @@ image::img/jtag.jpg[pdfwidth=50%]
 *NO* se ha de conectar la línea de 3V
 ====
 
-<<<<
+<<<
 
 Tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
@@ -793,7 +959,7 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxdosplus/unbrick/
 ----
 
-<<<<
+<<<
 
 [start=6]
 . Editar la copia de `raspberrypi2-native.cfg` actualizando `bcm2835gpio_jtag_nums` (y descomentando, si fuera necesario), según como se haya hecho la conexión entre JTAG y GPIO en la línea `bcm2835gpio_jtag_nums`. En nuestro ejemplo:
@@ -813,11 +979,11 @@ bcm2835gpio_jtag_nums 26 6 13 19
 ----
 
 [start=8]
-. Añadir, al final, la línea `adapter_khz 250`:
+. Añadir, al final, la línea `adapter speed 250`:
 
 [source]
 ----
-adapter_khz 250
+adapter speed 250
 ----
 
 [start=9]
@@ -833,7 +999,7 @@ sudo openocd -f /home/pi/zxdosplus/unbrick/raspberrypi2-native.cfg -f /usr/local
 
 Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-<<<<
+<<<
 
 En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
@@ -843,7 +1009,7 @@ image::img/recovery.png[pdfwidth=70%]
 [start=11]
 . Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZXD` https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[descargado anteriormente].
 
-<<<<
+<<<
 
 [start=12]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
