@@ -1155,16 +1155,17 @@ main
         call    prnmul          ; Harward tests ...
         ld      iy, quietb
         ld      bc, $0f0b
-main1   call    showop
+        call    showop
         defw    cad28
         defw    cad110
         defw    cad111
         defw    cad112
         defw    cad113
         defw    $ffff
-        ld      a, iyl
-        rrca
-        jr      c, main1
+        call    showop
+        defw    cad28
+        defw    cad29
+        defw    $ffff
 main2   call    showop
         defw    cad30
         defw    cad31
@@ -1221,6 +1222,8 @@ main4   call    showop
         sub     keyiss&$ff
         jr      z, main5
         jr      nc, main6
+        inc     a
+        jp      z, advana
         call    popupw          ; quiet or crc (enabled or disabled)
         defw    cad28
         defw    cad110
@@ -2915,7 +2918,7 @@ advan4  djnz    advan5
         defw    $ffff
         ret
 advan5  djnz    advan6
-        call    popupw          ; Scanlines
+advana  call    popupw          ; Scanlines
         defw    cad28
         defw    cad29
         defw    $ffff
@@ -3004,7 +3007,7 @@ exit4   djnz    exit5
 exit5   djnz    exit6
         jp      alto loadch
 exit6   call    savech
-exit7   jp      star17
+exit7   jp      star11
 
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
