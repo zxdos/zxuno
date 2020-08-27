@@ -2192,23 +2192,11 @@ tosd    ld      ix, cad75
         inc     c
         call_prnstr
         di
-        ;wreg    master_conf, 2        ; enable divmmc
-;        ld      hl, SET_BLOCKLEN<<8 | 2
-;        call    cs_low
-;        out     (c), h
-;        out     (c), 0
-;        out     (c), 0
-;        out     (c), l
-;        call    send1z
-
         call    mmcinit
         jp      nz, errsd
-
-        ;sbc     hl, hl                ; read MBR
-        ld   hl, 0
+        ld      hl, 0
         ld      ix, tmpbu2
         call    readat0
-
         ld      a, (tmpbu2)           ; read first type
         sub     $e0
         cp      $0b
@@ -2407,7 +2395,7 @@ bucop   push    hl                    ; save current cluster
         inc     a                     ; cluster==FFFF
         pop     ix
         jr      nz, bucop
-enbur   
+enbur   call    alto loadch
       IF  vertical=0
         ld      bc, $090a
       ELSE
@@ -3007,7 +2995,7 @@ exit4   djnz    exit5
 exit5   djnz    exit6
         jp      alto loadch
 exit6   call    savech
-exit7   jp      star11
+exit7   jp      star17
 
 ;++++++++++++++++++++++++++++++++++
 ;++++++++     Boot list    ++++++++
