@@ -17,6 +17,8 @@
 
 ZXDOS+ y gomaDOS+ son la continuación de http://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
+Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXDOs+ con la configuración que se desee de entre todas las instaladas.
+
 La página oficial de ZXDOS+ y gomaDOS+ es http://zxdos.forofpga.es.
 
 La mayoría de las funciones y características de ZXDOS+ y gomaDOS+ son las mismas, así que, en este documento, se hablará, en general, de ZXDOS+, indicando las diferencias con gomaDOS+ donde sea necesario.
@@ -40,7 +42,7 @@ Para poder aprovechar todo su potencial, es útil tener también:
 
 ==== Formato de la tarjeta microSD
 
-Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16 o FAT32 (según el caso, se recomienda uno u otro formato para compatibilidad con algunos cores de terceros). 
+Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16 o FAT32 (según el caso, se recomienda uno u otro formato para compatibilidad con distintos cores de terceros). 
 
 [NOTE]
 ====
@@ -152,7 +154,7 @@ image::img/bios.png[pdfwidth=70%]
 
 En la primera pantalla de configuración, además de poder ejecutar distintas pruebas, se puede definir el comportamiento por defecto para lo siguiente:
 
-- Arranque silencioso (Quiet Boot): Para ocultar (o no) la pantalla que aparece al encender
+- Espera en el arranque (Boot Timer). Indica el tiempo que está la pantalla de arranque disponible (o la oculta por completo)
 - Comprobar CRC de las ROMs (Check CRC): Para comprobar la integridad de las ROMs al cargarlas (más seguro) u omitirla (más rápido)
 - Tipo de teclado (Keyboard)
 - Timing: Para definir el comportamiento de la ULA (Modo 48K, Modo 128K, Modo Pentagon)
@@ -168,7 +170,7 @@ Se puede consultar información más tecnica en http://www.zxuno.com/wiki/index.
 [.text-center] 
 image::img/bios2.png[pdfwidth=70%]
 
-La segunda pantalla muestra las ROM de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
+La segunda pantalla muestra las ROMs de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
 
 ==== Upgrade
 
@@ -193,7 +195,7 @@ image::img/bios5.png[pdfwidth=70%]
 
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
 
-- Distribución del teclado (Keyb Layout): Ver <<_tecado,el apartado correspondiente >> para más información)
+- Distribución del teclado (Keyb Layout): Ver <<_teclado,el apartado correspondiente >> para más información)
 - Comportamiento del joystick emulado con el teclado numérico (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek o Fuller
 - Comportamiento de un joystick conectado al puerto (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
 - Salida de vídeo (Video): PAL, NTSC o VGA
@@ -218,7 +220,9 @@ Finalmente, desde la última pantalla se puede:
 
 == ZX Spectrum
 
-El core principal es el que implementa un ordenador ZX Spectrum. Estas son algunas de sus principales características:
+El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustibuir por otro que no sea de ZX Spectrum, ya que el ZXDOS+ lo utiliza para su funcionamiento.
+
+Estas son algunas de sus principales características:
 
 - Implementación ZX Spectrum 48K, 128K, Pentagon y Chloe 280SE
 - ULA con modos ULAplus, Timex y modo Radastan (incluyendo scroll por hardware y grupo de paleta seleccionable)
@@ -230,8 +234,7 @@ El core principal es el que implementa un ordenador ZX Spectrum. Estas son algun
 - Interrupción ráster programable en número de línea, para cualquier linea de TV.
 - Posibilidad de activar/desactivar los registros de manejo de bancos de memoria, para mejor compatibilidad con cada modelo implementado
 - Posibilidad de activar/desactivar los dispositivos incorporados al core para mejorar la compatibilidad con ciertos programas
-- Soporte ZXMMC para +3e
-- Soporte DIVMMC para esxdos y firmwares compatibles
+- Soporte ZXMMC para +3e y soporte DIVMMC para esxdos y firmwares compatibles
 - Soporte Turbo Sound
 - Soporte de SpecDrum
 - Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la - implementación de configuraciones tales como ACB, ABC, etc.
@@ -245,7 +248,7 @@ El core principal es el que implementa un ordenador ZX Spectrum. Estas son algun
 
 === Teclado
 
-El mapa se cambia desde el menú `Advanced` de la BIOS. Existen tres mapas distintos a elegir: Español (por defecto), inglés, y Spectrum (avanzado).
+El mapa de teclado (asignación de las teclas físicas del teclado con las pulsaciones que se presentan a los distinto cores) se cambia desde el menú `Advanced` de la BIOS. Existen tres mapas distintos a elegir: Español (por defecto), inglés, y Spectrum (avanzado).
 
 También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que crear un directorio llamado keymaps y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
 
@@ -299,9 +302,13 @@ Durante el arranque:
 - `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+): Carga la rom del core de Spectrum en modo «root»
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
+<<<
+
 === ROMs
 
-El core de ZX Spectrum tiene la capacidad de inicializar utilizando diferentes versiones de ROM. Estas se almacenan en la memoria flash del ZXDOS+, y se puede elegir cuál cargar, pulsando la tecla `Esc` durante el arranque. También es posible definir desde la configuración de BIOS, cuál es la ROM que se desea que se cargue por defecto.
+El core de ZX Spectrum tiene la capacidad de inicializar utilizando diferentes versiones de ROM (48K, 128K, Plus 2, etc.). Estas se almacenan en la memoria flash del ZXDOS+, y se puede elegir cuál cargar, pulsando la tecla `Esc` durante el arranque. También es posible definir desde la configuración de BIOS, cuál es la ROM que se desea que se cargue por defecto.
+
+Véase el <<_roms_3,apartado de actualizaciones>> para más información sobre cómo ampliar o modificar las ROMs almacenadas en la memoria flash.
 
 <<<
 
@@ -400,7 +407,7 @@ Los ficheros `ROMS.ZX1` se pueden editar fácilmente con la utilidad http://gues
 
 === Cores
 
-Hay xx slots para cores disponibles (depende del tamaño de la SPI Flash del modelo de ZXDOS), estando reservado el primer slot para el de Spectrum.
+Hay un número de slots disponibles para almacenar cores (el número depende del tamaño de la SPI Flash del modelo de ZXDOS), estando reservado el primer slot para el de ZX Spectrum principal (esto no impide tener más cores de ZX Spectrum en otros slot además del primero).
 
 Para actualizar o instalar un nuevo core hay varias alternativas. 
 
@@ -415,7 +422,7 @@ Copiar el fichero en la raíz de la tarjeta microSD, encender y pulsar F2 para e
 
 [WARNING]
 ====
-La actualización del core de Spectrum es exactamente igual que los otros cores, pero en lugar del fichero `CORE1.ZX2` o `CORE1.ZXD`, ha de ser un fichero llamado `SPECTRUM.ZX2` o `SPECTRUM.ZXD`.
+La actualización del core de ZX Spectrum es exactamente igual que los otros cores, pero en lugar del fichero `CORE1.ZX2` o `CORE1.ZXD`, ha de ser un fichero llamado `SPECTRUM.ZX2` o `SPECTRUM.ZXD`.
 ====
 
 === esxdos
@@ -445,10 +452,8 @@ Principalmente gracias a avlixa, existe una versión del core de ZX Spectrum Nex
 El core para ZXDOS+ no tiene, por el momento, implementada ninguna de las siguientes caracteristicas:
 
 - Raspberry Pi
-- Módulo ESP
 - Beeper interno
 - Conector de expansión EDGE
-- Memoria superior a 1Mb
 - Módulo RTC
 - Teclado de membrana
 - Flasheo de cores adicionales o actualización del propio core Next desde el core Next
@@ -699,7 +704,36 @@ Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT
 
 Descargar la última versión de Atom Software Archive https://github.com/hoglet67/AtomSoftwareArchive/releases/latest[desde GitHub].
 
-Descomprimir todo el contenido del archivo en la raíz de la tarjeta. El contenido del directorio `SYS` es compatible con el directorio `SYS` de esxdos, siendo posible combinar los dos en uno solo.
+Ahora, se puede organizar la información en la tarjeta microSD de dos maneras distintas:
+
+. Descomprimir todo el contenido del archivo en la raíz de la tarjeta. El contenido del directorio `SYS` es compatible con el directorio `SYS` de esxdos, siendo posible combinar los dos en uno solo.
+
+. Organizar la información de una manera más reducida en la raíz, utilizando sólo dos directorios. Crear un directorio `ATOM` en la raíz de la tarjeta, y copiar en su interior todo el contenido del archivo, excepto el directorio `MANPAGES` que se tendrá que poner también en  la raíz de la microSD. Luego, copiar los ficheros del archivo `trick_ATOM_folder` (disponible http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[en el foro de ZX-Uno]), reemplazando todos los que se encuentren con el mismo nombre. Así, quedará una estructura como la siguiente:
+
+----
+        /
+        +-ATOM/
+        |  +-AA/
+        |  (...)
+        |  +-AGD/
+        |  | +-SHOW2
+        |  | +-SHOW3
+        |  (...)
+        |  +-MENU
+        |  (...)
+        |  +-TUBE/
+        |  | +-BOOT6502
+        |  (..)
+        |
+        +-MANPAGES/
+        |  +-CPM.MAN
+        |  +-FLEX.MAN
+        |  (...)
+        |
+        +-MENU
+----
+
+<<<
 
 ==== Teclado
 
@@ -714,7 +748,10 @@ Durante la ejecución del core:
 - `F3`: Modo turbo 4Mhz
 - `F4`: Modo turbo 8Mhz
 
-El teclado está mapeado en inglés.
+El teclado está mapeado en inglés, según el siguiente esquema
+
+[.text-center] 
+image::img/keyboardAtom.jpg[pdfwidth=90%]
 
 <<<
 
@@ -1058,6 +1095,10 @@ https://www.konamiman.com/msx/msx-s.html#nextor[Nextor para MSX]
 https://www.konamiman.com/msx/nextor/docs/Nextor%202.0%20User%20Manual.pdf[Nextor User Manual]
 
 https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter3.html[MSX-DOS]
+
+http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
+
+http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
