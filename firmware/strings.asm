@@ -4,7 +4,7 @@ cad1    defb    'http://zxuno.speccy.org', 0
       ELSE
 cad1    defb    'http://zxdos.forofpga.es', 0
       ENDIF
-        defb    'ZX-Uno BIOS v0.81', 0
+        defb    'ZX-Uno BIOS v0.82', 0
         defb    'Copyleft ', 127, ' 2020 ZX-Uno Team', 0
         defb    'Processor: Z80 3.5MHz', 0
         defb    'Memory:    '
@@ -41,7 +41,7 @@ cad8    defb    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.81    ', $7f, '2020 ZX-Uno Team', 0
+        defb    '   BIOS v0.82    ', $7f, '2020 ZX-Uno Team', 0
       ELSE
         defb    'Press <Edit> to Setup',0
         defb    '      <Break> Boot Menu', 0
@@ -72,7 +72,7 @@ cad8    defb    $10, '                              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    ' BIOS v0.81 ', $7f, '2020 ZX1 Team', 0
+        defb    ' BIOS v0.82 ', $7f, '2020 ZX1 Team', 0
         defs    $66
       ENDIF
 cad10   defb    'Hardware tests', 0

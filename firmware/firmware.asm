@@ -1922,7 +1922,7 @@ roms20  push    ix
         call_prnstr
       IF  vertical=0
         ld      bc, $040c
-        ld      hl, $20ff
+        ld      hl, $1fff
         call    inputs
         ld      hl, $1708
         ld      de, $0708
@@ -2295,7 +2295,7 @@ twaitk  jp      nz, waitky
         ld      de, $1201
         call    window
         ld      bc, $080b
-        ld      hl, $20ff
+        ld      hl, $1fff
         call    inputs
         ld      a, (items)
         add     a, empstr&$ff
