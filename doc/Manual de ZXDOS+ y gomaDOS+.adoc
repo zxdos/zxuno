@@ -17,7 +17,7 @@
 
 ZXDOS+ y gomaDOS+ son la continuación de http://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
-Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXDOs+ con la configuración que se desee de entre todas las instaladas.
+Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXDOS+ con la configuración que se desee de entre todas las instaladas.
 
 La página oficial de ZXDOS+ y gomaDOS+ es http://zxdos.forofpga.es.
 
@@ -69,7 +69,7 @@ diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT16" ZXDOSPLUS R
 ----
 
-Para dividirla en dos particiones iguales (si la tarjeta es de 4GB o menos de tamaño)
+Para dividirla en dos particiones iguales (si la tarjeta es de 4GB o menos de tamaño):
 
 [source,shell]
 ----
@@ -77,7 +77,8 @@ diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT16" ZXDOSPLUS 50% "MS-DOS FAT16" EXTRA 50%
 ----
 
-Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el core de MSX) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 8GB)
+Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el core de MSX) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 8GB):
+
 [source,shell]
 ----
 diskutil unmountDisk /dev/disk6
@@ -91,7 +92,8 @@ sudo newfs_msdos -F 16 -v EXTRA -b 4096 -c 128 /dev/rdisk6s2
 El comando `diskutil` no permite crear particiones FAT16 de más de 2G de tamaño y formatearlas a la vez. Por eso, en el último caso, se crean primero las particiones y luego se formatean en FAT16.
 ====
 
-Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño)
+Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
+
 [source,shell]
 ----
 diskutil unmountDisk /dev/disk6
@@ -121,11 +123,14 @@ image::./img/esxdos.png[pdfwidth=70%]
 
 <<<
 
-Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. Estos se pueden obtener en la https://github.com/zxdos/zxuno/tree/master/SD[página con el código fuente del proyecto], y son los siguientes:
+Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. Estos se pueden obtener en la página con el código fuente del proyecto (https://github.com/zxdos/zxuno/tree/master/SD[aquí] y https://github.com/zxdos/zxuno/tree/master/[aquí]), y son los siguientes:
 
+    back16m
     back32m
-    core
+    corebios
     dmaplayw
+    esprst
+    iwconfig
     joyconf
     keymap
     loadpzx
@@ -133,11 +138,12 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. 
     playrmov
     romsback
     romsupgr
+    upgr16m
     upgr32m
     zxuc
     zxunocfg
 
-<<#_comandos_para_zx_uno_y_zxdos,Más adelante>> se explica lo que hace cada uno de ellos.
+<<#_comandos_para_zxdos+,Más adelante>> se explica lo que hace cada uno de ellos.
 
 <<<
 
@@ -154,7 +160,7 @@ image::img/bios.png[pdfwidth=70%]
 
 En la primera pantalla de configuración, además de poder ejecutar distintas pruebas, se puede definir el comportamiento por defecto para lo siguiente:
 
-- Espera en el arranque (Boot Timer). Indica el tiempo que está la pantalla de arranque disponible (o la oculta por completo)
+- Espera en el arranque (Boot Timer): Indica el tiempo que está la pantalla de arranque disponible (o la oculta por completo)
 - Comprobar CRC de las ROMs (Check CRC): Para comprobar la integridad de las ROMs al cargarlas (más seguro) u omitirla (más rápido)
 - Tipo de teclado (Keyboard)
 - Timing: Para definir el comportamiento de la ULA (Modo 48K, Modo 128K, Modo Pentagon)
@@ -229,7 +235,7 @@ Estas son algunas de sus principales características:
 - Posibilidad de desactivar la contención de memoria (para compatibilidad con Pentagon 128)
 - Posibilidad de elegir el comportamiento del teclado (issue 2 o issue 3)
 - Posibilidad de elegir el timing de la ULA (48K, 128K o Pentagon)
-- Control del encuadre de pantalla configurable para tipo de timing, y posibilidad de elegir entre sincronismos originales de Spectrum o sincronismos - estándar PAL progresivo.
+- Control del encuadre de pantalla configurable para tipo de timing, y posibilidad de elegir entre sincronismos originales de Spectrum o sincronismos estándar PAL progresivo.
 - Soporte de la MMU horizontal del Timex con bancos HOME, DOC y EXT en RAM.
 - Interrupción ráster programable en número de línea, para cualquier linea de TV.
 - Posibilidad de activar/desactivar los registros de manejo de bancos de memoria, para mejor compatibilidad con cada modelo implementado
@@ -237,7 +243,7 @@ Estas son algunas de sus principales características:
 - Soporte ZXMMC para +3e y soporte DIVMMC para esxdos y firmwares compatibles
 - Soporte Turbo Sound
 - Soporte de SpecDrum
-- Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la - implementación de configuraciones tales como ACB, ABC, etc.
+- Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la implementación de configuraciones tales como ACB, ABC, etc.
 - Soporte de joystick real y joystick en teclado con protocolo Kempston, Sinclair 1 y 2, Cursor, Fuller y QAOPSpcM.
 - Soporte de modo turbo a 7MHz, 14MHz, 28MHz
 - Soporte de teclado con protocolo PS/2 y mapeado configurable por el usuario desde el propio Spectrum.
@@ -250,11 +256,11 @@ Estas son algunas de sus principales características:
 
 El mapa de teclado (asignación de las teclas físicas del teclado con las pulsaciones que se presentan a los distinto cores) se cambia desde el menú `Advanced` de la BIOS. Existen tres mapas distintos a elegir: Español (por defecto), inglés, y Spectrum (avanzado).
 
-También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que crear un directorio llamado keymaps y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
+También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que crear un directorio llamado `keymaps` y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
 
 Para que el mapa se conserve después de un master reset, hay que tener seleccionado `Default` en la configuración de BIOS.
 
-Para más información, consultar http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro].
+Para más información, consultar http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
 
 ==== Español
 
@@ -279,7 +285,7 @@ El teclado de gomaDOS+ al ser similar al teclado del ZX Spectrum original, carec
 
 Para cambiar entre los dos modos de teclado se utiliza la combinación de teclas `Caps Shift+Symbol Shift+F` y luego pulsar `D`.
 
-Durante la ejecución del core principal (ZX Spectrum):
+Teclas especiales que se pueden utilizar la ejecución del core principal (ZX Spectrum):
 
 - `Esc`: BREAK
 - `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+, en modo completo): Edit
@@ -288,8 +294,7 @@ Durante la ejecución del core principal (ZX Spectrum):
 - `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+, en modo completo): Rebobinar el archivo .PZX hasta la marca anterior
 - `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+, en modo completo): Graph
 - `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
-
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
 
@@ -297,9 +302,9 @@ Durante el arranque:
 
 - `F2` (`Caps Shift+1` en gomaDOS+, en modo completo) Entrar en la BIOS
 - `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2 en gomaDOS+): Menú de selección de cores
-- `Esc` (`Caps Shift+Espacio` en gomaDOS+): Menú de selección de roms del core de Spectrum
-- `R`: Carga la rom del core de Spectrum en modo «real» deshabilitando esxdos, nuevos modos gráficos, etc.
-- `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+): Carga la rom del core de Spectrum en modo «root»
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): Menú de selección de ROMS del core de ZX Spectrum
+- `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.
+- `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+): Carga la rom del core de ZX Spectrum en modo "root"
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
 <<<
@@ -321,33 +326,33 @@ Existen dos tipos diferentes de comandos de esxdos, los llamados comandos "DOT",
 Los principales comandos "DOT" commands son los siguientes:
 
 - `128`: Para pasar al modo 128K desde el modo 48K.
-- `cd`: Cambiar de directorio.
+- `cd`: Cambiar el directorio actual de trabajo.
 - `chmod`: cambiar los atributos de los ficheros de la tarjeta SD.
 - `cp`: Copiar un archivo.
 - `divideo`: Reproduce un archivo de video DivIDEo (.DVO).
-- `drives`: Mostrar las unidades
-- `dskprobe`: Utilidad para ver el contenido a bajo nivel de un dispositivo de almacenamiento
-- `dumpmem`: Permite volcar contenido de la memoria RAM a un fichero
-- `file`: Intenta determinar el tipo de un fichero por su contenido (como el comando de UNIX)
-- `gramon`: Monitor para buscar gráficos, sprites, fuentes de texto, etc. en la memoria RAM
-- `hexdump`: Muestra el contenido de un fichero usando notacion hexadecimal
-- `hexview`: Permite ver y navegar por el contenido de un fichero usando notacion hexadecimal
-- `launcher`: Crea un atajo (launcher) para abrir directamente un fichero TAP
+- `drives`: Mostrar las unidades disponibles.
+- `dskprobe`: Utilidad para ver el contenido a bajo nivel de un dispositivo de almacenamiento.
+- `dumpmem`: Permite volcar contenido de la memoria RAM a un fichero.
+- `file`: Intenta determinar el tipo de un fichero por su contenido (como el comando de UNIX).
+- `gramon`: Monitor para buscar gráficos, sprites, fuentes de texto, etc. en la memoria RAM.
+- `hexdump`: Muestra el contenido de un fichero usando notación hexadecimal.
+- `hexview`: Permite ver y navegar por el contenido de un fichero usando notación hexadecimal.
+- `launcher`: Crea un atajo (launcher) para abrir directamente un fichero TAP.
 - `ls`: Ver el contenido de un directorio.
 - `lstap`: Ver el contenido de un fichero .TAP
 - `mkdir`: Crear un directorio.
 - `mktrd`: Crear un fichero imagen de disquete .TRD
-- `more`: Ver el contenido de un archivo de texto
-- `mv`: Mover un archivo
-- `partinfo`: Muestra información sobre las particiones de un dispositivo de almacenamiento
-- `playpt3`: Reproducir un archivo musical .PT3
-- `playsqt`: Reproducir un archivo musical .SQT
-- `playstc`: Reproducir un archivo musical .STC
-- `playtfm`: Reproducir un archivo musical .TFC
-- `playwav`: Reproducir un archivo musical .WAV
-- `rm`: Borrar un archivo o directorio
-- `snapload`: Carga ficheros snapshot
-- `speakcz`: Reproduces texto usando pronunciación checa
+- `more`: Ver el contenido de un archivo de texto.
+- `mv`: Mover un archivo.
+- `partinfo`: Muestra información sobre las particiones de un dispositivo de almacenamiento.
+- `playpt3`: Reproducir un archivo musical .PT3.
+- `playsqt`: Reproducir un archivo musical .SQT.
+- `playstc`: Reproducir un archivo musical .STC.
+- `playtfm`: Reproducir un archivo musical .TFC.
+- `playwav`: Reproducir un archivo de audio .WAV.
+- `rm`: Borrar un archivo o directorio.
+- `snapload`: Carga ficheros snapshot.
+- `speakcz`: Reproduces texto usando pronunciación checa.
 - `tapein`: Montar un archivo .TAP para poder ser utilizado luego desde BASIC con la sentencia LOAD
 - `tapeout`: Montar un archivo .TAP para poder ser utilizado luego desde BASIC con la sentencia SAVE
 - `vdisk`: Monta una unidad de disquete .TRD para usar en el entorno TR-DOS (Una vez montadas todas las unidades deseadas, se puede entrar en el emulador de TR-DOS escribiendo: `RANDOMIZE USR 15616`)
@@ -368,17 +373,21 @@ Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cu
 
 Tal y como se ha explicado en la parte de instalación, existe una serie de comandos que son exclusivos para ZXDOS+, y que se describen a continuación:
 
-- `back32m`: Versión del comando backup exclusivo para memorias SPI Flash de 32 Megas. Tras terminar su ejecución hay que ejecutar el comando .ls para que se termine de grabar la cache en la tarjeta microSD, sino lo haces la longitud del archivo se quedará en 0 de forma errónea.
-- `core`: Carga el core del slot indicado (1 a 9).
+- `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD el contenido de una memoria SPI Flash de 16 Megas. Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
+- `back32m`: Versión del comando backup exclusivo para memorias SPI Flash de 32 Megas. Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
+- `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
 - `dmaplayw`: Reproduce un archivo de audio .WAV,  que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
-- `joyconf`: Configura y prueba los joysticks keyboard y DB9.
-- `keymap`: Sirve para cargar una definición de teclado diferente
-- `loadpzx`: Para cargar un archivo de imagen de cinta .PZX
-- `playmid`: Reproduce archivos musicales .MID en el addon MIDI
-- `playrmov`: Reproduce videos en formato radastaniano (ficheros .RDM)
-- `romsback`: Copia a un fichero ROMS.ZX1 en el directorio raíz de la tarjeta microSD todas las roms del core Spectrum almacenadas en la memoria SPI Flash
-- `romsupgr`: Copia el contenido de un fichero ROMS.ZX1 en el directorio raíz de la tarjeta microSD con todas las roms para el core Spectrum a la memoria SPI Flash.
-- `upgr32m`: Copia el contenido de un fichero FLASH.ZX2 en el directorio raíz de la tarjeta microSD a la memoria SPI Flash.
+- `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
+- `iwconfig`: Configura el módulo WiFi.
+- `joyconf`: Configura y prueba los joysticks de teclado y DB9.
+- `keymap`: Sirve para cargar una definición de teclado diferente.
+- `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
+- `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
+- `playrmov`: Reproduce videos en formato radastaniano (ficheros .RDM).
+- `romsback`: Copia a un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash.
+- `romsupgr`: Copia el contenido de un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash.
+- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. 
+- `upgr32m`: Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas.
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
 
@@ -386,19 +395,22 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 
 === BIOS
 
-Para actualizar BIOS se ha de obtener un fichero del tipo `FIRMWARE.ZX2` (para un ZXDOS+ con placa FPGA LX16) o `FIRMWARE.ZXD` (para un ZXDOS+ con placa FPGA LX25). La última versión de los ficheros de firmware se puede obtener desde https://github.com/zxdos/zxuno/tree/master/firmware[el repositorio oficial]
+Para actualizar BIOS se ha de obtener un fichero llamado `FIRMWARE.ZX2` (para un ZXDOS+ con placa FPGA LX16) o `FIRMWARE.ZXD` (para un ZXDOS+ con placa FPGA LX25). La última versión de los ficheros de firmware se puede descargar desde https://github.com/zxdos/zxuno/tree/master/firmware[el repositorio oficial]
 
-Nota: actualizar el firmware (BIOS) es delicado, no se debe hacer si no es necesario. En el caso de hacerlo, procurar que el ZXDOS+ tenga alimentación ininterumpida (como un SAI o un USB de portatil con batería).
+[WARNING]
+====
+Actualizar el firmware (BIOS) es delicado, no se debe hacer si no es necesario. En el caso de hacerlo, procurar que el ZXDOS+ tenga alimentación ininterumpida (como un SAI o un USB de portatil con batería).
+====
 
-Copiar el fichero en la raíz de la tarjeta MicroSD, encender y pulsar F2 para entrar en la BIOS, seleccionar `Upgrade`, elegir «Upgrade BIOS for ZX», y luego «SDfile». El sistema leerá el fichero `FIRMWARE...` y avisará cuando esté actualizado.
+Copiar el fichero en la raíz de la tarjeta MicroSD, encender y pulsar `F2` para entrar en la BIOS, seleccionar `Upgrade`, elegir __"Upgrade BIOS for ZX"__, y luego __"SDfile"__. El sistema leerá el fichero `FIRMWARE...` y avisará cuando esté actualizado.
 
 === ROMs
 
-Para actualizar las ROM instaladas para ZX Spectrum se ha de obtener un fichero del tipo `ROMS.ZX1`, que se tiene que copiar en la tarjeta MicroSD. Arrancar el ZX-Uno usando una ROM «rooted». Entonces basta con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+Para actualizar las ROM instaladas para ZX Spectrum se ha de obtener un fichero con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
 
 [NOTE]
 ====
-Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+), entonces se cargará la ROM por defecto del core de Spectrum en modo «root».
+Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+), entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".
 ====
 
 Para hacer el proceso contrario (guardar las ROM en un fichero `ROMS.ZX1`), se puede usar el comando `.romsback`.
@@ -418,7 +430,7 @@ La forma más sencilla consiste en obtener la última versión del fichero que l
 A partir de la version 0.80 de BIOS, los ficheros se nombran usando la convención `COREXXy.ZXn` donde XX _siempre_ es un número de dos digitos. Así, un antiguo fichero `CORE4.ZXD` ha de renombrarse como `CORE04.ZXD`. La parte `y` del nombre se ignora, así que se pueden usar nombres más largos y descriptivos (como, por ejemplo, `CORE04_ejemplo.ZXD`).
 ====
 
-Copiar el fichero en la raíz de la tarjeta microSD, encender y pulsar F2 para entrar en la BIOS. Elegir `Upgrade`, seleccionar la fila correspondiente al número de core elegido (por ejemplo, la 2 – justo después de la de Spectrum), pulsar enter y luego «SD file». El sistema leerá el fichero `COREnn...` y avisará cuando esté actualizado, aunque antes preguntará el nombre (con el que se verá en la lista para elegir el arranque y en el listado de la BIOS). Una vez instalado, se podrá acceder a él al arrancar.
+Copiar el fichero en la raíz de la tarjeta microSD, encender y pulsar `F2` para entrar en la BIOS. Elegir `Upgrade`, seleccionar la fila correspondiente al número de core elegido (por ejemplo, la 2 – justo después de la de Spectrum), pulsar enter y luego __"SD file"__. El sistema leerá el fichero `COREnn...` y avisará cuando esté actualizado, aunque antes preguntará el nombre (con el que se verá en la lista para elegir en el arranque y en el listado de la BIOS). Una vez instalado, se podrá utilizar al arrancar.
 
 [WARNING]
 ====
@@ -431,9 +443,9 @@ Para actualizar esxdos a una nueva versión, se ha de obtener la distribución d
 
 Una vez descargado y descomprimido, se ha de copiar, a la raíz de la tarjeta, el contenido de los directorios `BIN` y `SYS` sobreescribiendo los existentes (para preservar los comandos exclusivos de ZXDOS+).
 
-Copiar `ESXMMC.BIN` en la raíz de la tarjeta microSD, renombrándolo como `ESXDOS.ZX2` (para un ZXDOS+ con placa FPGA LX16) o `ESXDOS.ZXD` (para un ZXDOS+ con placa FPGA LX25),.
+Copiar `ESXMMC.BIN` en la raíz de la tarjeta microSD, renombrándolo como `ESXDOS.ZX2` (para un ZXDOS+ con placa FPGA LX16) o `ESXDOS.ZXD` (para un ZXDOS+ con placa FPGA LX25).
 
-Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir «Upgrade esxdos for ZX». En el diálogo que aparece elegir «SD file» y, cuando pregunte «Load from SD» contestar «Yes»  a la pregunta «Are you sure?». Se leerá el contenido del fichero `ESXDOS...` y avisará cuando esté actualizado.
+Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade esxdos for ZX"__. En el diálogo que aparece elegir __"SD file"__ y, cuando pregunte __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `ESXDOS...`, se grabará en la flash y avisará cuando esté actualizado.
 
 Realizar un Hard-reset, o apagar y encender.
 
@@ -1078,7 +1090,15 @@ http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
 http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
+https://github.com/ManuFerHi/ZX-GO-/blob/master/ZXUNOPS2/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B%20V30052019.pdf[Nuevo firmware de teclado ZX-GO+]
+
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
+
+http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p200075671[WiFi (RetroWiki)]
+
+http://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
+
+http://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
 
 http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
