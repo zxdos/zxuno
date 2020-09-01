@@ -453,6 +453,7 @@ Si todo se ha hecho correctamente, al encender el ZXDOS+ se verá cómo esxdos d
 
 <<<
 
+
 == Otros cores
 
 === ZX Spectrum Next
@@ -483,7 +484,7 @@ Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT
 
 Obtener la distribución de NextZXOS https://www.specnext.com/latestdistro/[en la página oficial].
 
-Descomprimir el contenido en la tarjeta microSD, pero modificando el archivo `config.ini` en `/machines/next` para que contenga (si no existiera ya) la línea `ps2=0` (para asegurar que se utiliza correctamente el puerto del teclado) y la línea `intbeep=0` para apagar el zumbador interno.
+Descomprimir el contenido de NextZXOS en la tarjeta microSD, pero modificando el archivo `config.ini` en `/machines/next` para que contenga (si no existiera ya) la línea `ps2=0` (para asegurar que se utiliza correctamente el puerto del teclado) y la línea `intbeep=0` para apagar el zumbador interno (este último paso no es necesario en el caso de un gomaDOS+).
 
 Si no estuviera ya, <<_cores,instalar el core de ZX Spectrum Next>> en el ZXDOS+.
 
@@ -521,7 +522,7 @@ image::img/next2.png[pdfwidth=70%]
 
 <<<
 
-Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80,, Z8, etc.).
+Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
 
 [.text-center] 
 image::img/next3.png[pdfwidth=70%]
@@ -592,7 +593,7 @@ Si no estuviera ya, <<_cores,instalar el core de MSX>> en el ZXDOS+.
 
 Durante la ejecución del core:
 
-- `Impr Pant`: Cambia el modo VGA
+- `Impr Pant`: Cambia el modo entre VGA y RGB
 - `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
 - `Pausa`: Cambia entre 50Hz y 60Hz
 - `F11`: Activa o desactiva el modo turbo
@@ -652,7 +653,7 @@ MSXCTRL -h -i -r -b -[5|6] -m<0-2>
 
 Existen múltiples sistemas para cargar los juegos dependiendo del tipo de archivo: .CAS, .DSK o ROM (ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[este hilo del foro de ZX-Uno] para más información).
 
-El mapeo de para teclado español disponible con la distribución oficial se puede cambiar por otro más completo ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[aquí] para más información.
+El mapeo de para teclado español disponible con la distribución oficial se puede cambiar por otro más completo. Ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[aquí] para más información.
 
 <<<
 
@@ -686,7 +687,7 @@ Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32
 Durante la ejecución del core:
 
 - `Re Pág`: Hace un Reset del Amstrad y carga el siguiente archivo `DSK` en orden alfabético.
-- Sólo funciona la tecla mayúsculas del lado izquierdo del teclado
+- Sólo funciona la tecla mayúsculas del lado izquierdo del teclado.
 
 <<<
 
@@ -760,7 +761,7 @@ Durante la ejecución del core:
 - `F3`: Modo turbo 4Mhz
 - `F4`: Modo turbo 8Mhz
 
-El teclado está mapeado en inglés, según el siguiente esquema
+El teclado está mapeado en inglés, según el siguiente esquema:
 
 [.text-center] 
 image::img/keyboardAtom.jpg[pdfwidth=90%]
@@ -882,12 +883,12 @@ Este core no utiliza la tarjeta microSD.
 Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+): Mostrar u ocultar el menú de configuración
-- `Ctrl+Alt+Backspace` (CS+SS+F y G): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y `G`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 - `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa
 - `F3` o `F12`: Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
 - `Cursor arriba` y `Cursor abajo`: Control de paleta de la izquierda (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
-- Joystick 1: Control de paleta de la derecha (Jugador 1)
+- Joystick 1: Control de paleta de la izquierda (Jugador 1)
 - `Q` y `A`: Control de paleta de la derecha (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)
 - Joystick 2: Control de paleta de la derecha (Jugador 2).
 - `Z`, `M` o botón de joystick 1: Saque manual
