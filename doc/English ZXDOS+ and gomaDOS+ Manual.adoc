@@ -1,12 +1,13 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.0.0
+:revnumber: 1.0.1
 :doctype: book
 :email: kounch@users.noreply.github.com
 :Revision: 1.0
 :description: English Manual of ZXDOS+ and gomaDOS+
 :keywords: Manual, English, ZXDOS+, gomaDOS+
-:icons: font 
+:icons: font
+:source-highlighter: rouge
 :toc: left
 :toc-title: Index
 :toclevels: 4
@@ -393,6 +394,64 @@ As explained in the installation part, there are a series of commands that are e
 - `upgr32m`: Version of the upgrade command for 32 Meg SPI Flash memories
 - `zxuc`: Utility to configure al options of BIOS, which also can be stored in the microSD in configuration files that can be loaded later
 - `zxunocfg`: Configuration utillity for certain features of ZX-Uno such as timings, contention, keyboard type, CPU speed, video type or vertical frequency
+
+<<<
+
+=== Wi-Fi
+
+Each gomaDOS+, and some models of ZXDOS+, include inside an ESP-12 module with an https://es.wikipedia.org/wiki/ESP8266[ESP8266] Wi-Fi chip, that can be easily used with a ZX Spectrum core (e.g., EXP27 160820 core) which has synthesized an https://es.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART] device, that allows communication with the module.
+
+There are two "DOT" commands for configuring software access to the module. Then can be downloaded from https://github.com/zxdos/zxuno/tree/master/utils[GitHub official repository]:
+
+- `esprst`, which restarts the module
+- `iwconfig`, to register the Wi-Fi network name (SSID) and password, keeping them in the file `/sys/config/iw.cfg`.
+
+For example:
+[source,shell]
+----
+.iwconfig mywifi mypassword
+----
+
+==== Network tools for ZX-Uno pack
+
+These are programs, developed by Nihirash and that are available to https://nihirash.net/network-tools-for-zx-uno-pack/[download from his web].
+
+- `uGophy`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode.
+- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz.
+- `wget`: Utility to download files with HTTP (does not work with HTTPS)
+- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/#about[IRATA.ONLINE] web.
+
+==== FTP-Uno
+
+FTP cliente developed by Yombo, available https://github.com/yomboprime/FTP_Uno[at GitHub].
+
+Configuration steps:
+
+. Edit `FTP.CFG` file with all the required information (SSID and password, FTP server, etc.)
+. Copy `FTP.CFG` inside `/SYS/CONFIG/` in microSD card
+. Also copy `ftpUno.tap` to any place in the card
+. Start up ZXDOS+ y load the tape file `ftpUno.tap`
+
+<<<
+
+==== UART Terminal
+
+Program example included with https://github.com/yomboprime/ZXYLib[ZXYLib] C library, developed by yombo, that let's you send directly typed characters using the UART, and also see the result. Available to download https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[at this link].
+
+Once the file `UARTTERM.tap` is in the card and loaded, you can type several specific commands for ESP8266 chip. For example:
+
+- `AT`. To check if ther is communication. `OK` would be the result if everything is fine
+- `AT+RST`. To restart the chip. Exactly what <<#_wi_fi,`esprst`>> command does
+- `AT+GMR`. To see some information, like firmware version, etc.
+- `AT+CWMODE_CUR=1`. Put temporarily the chip into Wi-Fi client mode, until next restart
+- `AT+CWMODE_DEF=1`. Put temporarily the chip into Wi-Fi client mode, and save it as default
+- `AT+CWJAP_CUR="<WiFiNetwork>","<WiFiPassword>"`, where `<WiFiNetwork>` Wi-Fi ID of the network to connect to, and `<WiFiPassword>` the access password, connects temporarily to that network
+- `AT+CWJAP_DEF="<WiFiNetwork>","<WiFiPassword>"`, connects to the network, and saves the settings as default in the chip flash memory
+- `AT+CWAUTOCONN=1` sets the chip to connect automatically on boot to the default network (`AT+CWAUTOCONN=0` disables it)
+
+You can see all the available commands reading the https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[official documentation].
+
+<<<
 
 == Upgrade 
 
@@ -1102,6 +1161,10 @@ http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p20007
 http://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
 
 http://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
+
+https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
+
+https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
 
 http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
