@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.0.1
+:revnumber: 1.0.2
 :doctype: book
 :email: kounch@users.noreply.github.com
 :Revision: 1.0
@@ -365,8 +365,8 @@ Some BASIC extended commands are:
 
 - `GO TO` to change the current drive and/or directory (e.g.: `GO TO hd1` or `GO TO hd0"games"`)
 - `CAT` to show the content of a drive
-- `LOAD` to lad a file from a drive (BASIC Program, SCREEN, CODE, etc.)
-- `SAVE` to save data in a file
+- `LOAD` to lad a file from a drive (BASIC Program, SCREEN, CODE, etc. for example `LOAD *"Screen.scr" SCREEN$`)
+- `SAVE` to save data in a file (e.g: `SAVE *"Program.bas"`)
 - `ERASE` to delete a file
 
 In addition, esxdos also has an NMI manager, an application that loads when NMI (F5) is pressed, and lets you browse the microSD card and load easily files (TAP, Z80, TRD, etc.). Pressing the "H" key invokes a help screen, which shows all the available keys.
@@ -387,7 +387,7 @@ As explained in the installation part, there are a series of commands that are e
 - `keymap`: Used to load a different keyboard map definition
 - `loadpzx`: To load a .PZX tape file
 - `playmid`: Plays .MID music files using the MIDI addon
-- `playrmov`: Plays radastanian format video files (.RDM)
+- `playrmov`: Plays <<#_making_rdm_radastan_movie_files,radastanian format video files `.RDM`)>>. This command does not work on 48K mode.
 - `romsback`: Dumps to a `ROMS.ZX1` file, in the root directory of the microSD card, all ZX Spectrum core ROMS which are stored in SPI flash memory
 - `romsupgr`: Load from a `ROMS.ZX1` file, in the root directory of the microSD card, all ZX Spectrum core ROMS into SPI flash memory
 - `upgr16m`: Load the conent of a `FLASH.ZX1` file, in the root directory of the microSD card, to a 16 Meg SPI Flash memory
@@ -414,12 +414,13 @@ For example:
 
 ==== Network tools for ZX-Uno pack
 
-These are programs, developed by Nihirash and that are available to https://nihirash.net/network-tools-for-zx-uno-pack/[download from his web].
+These are programs, developed by Nihirash and that are available to https://nihirash.net/network-tools-for-zx-uno-pack/[download] https://nihirash.net/ugophy-1-0-and-nettools-for-zx-spectrum/#more-71[from his web].
 
-- `uGophy`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode.
-- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz.
+- `netman`: Utility to configure the ESP Wi-Fi chip for other programs from Nihirash. Does not work in 48K mode
+- `uGophy`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode
+- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz
 - `wget`: Utility to download files with HTTP (does not work with HTTPS)
-- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/#about[IRATA.ONLINE] web.
+- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/#about[IRATA.ONLINE] web
 
 ==== FTP-Uno
 
@@ -450,6 +451,47 @@ Once the file `UARTTERM.tap` is in the card and loaded, you can type several spe
 - `AT+CWAUTOCONN=1` sets the chip to connect automatically on boot to the default network (`AT+CWAUTOCONN=0` disables it)
 
 You can see all the available commands reading the https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[official documentation].
+
+<<<
+
+=== Making RDM (RaDastan Movie) files
+
+The `PLAYRMOV` "DOT" command plays radastanian format video files. To convert your own videos, you need `makevideoradas`, a utility that is available at http://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository]. 
+
+If using Windows, there is already an executable file (`makevideoras.exe`). For Linux or MacOS, you must have installed command line developer utilities in order to compile an executable
+
+[source,shell]
+----
+gcc makevideoradas.c -o makevideoradas
+----
+
+Apart from `makevdideoradas`, you need another two tools: https://ffmpeg.org[`ffmpeg`] and https://imagemagick.org/index.php[`imagemagick`]. These can be installed with a package manager (`apt`, `yum`, `pacmam`, `brew`, etc.) or downloading the source code and compiling.
+
+Now, the first step to convert our video (for example `myvideo.mp4`), is exporting the frames as 128x96 pixel BMP image files. We create a temporary file  (`img` for this example), to store them.
+
+[source,shell]
+----
+mkdir img
+(...)/ffmpeg -i myvideo.mp4 -vf "scale=128:96,fps=25" -start_number 0 img/output%05d.bmp
+----
+
+Now we transform the `BMP` files to 16 colours (v3) `BMP` files.
+
+[source,shell]
+----
+(...)/magick mogrify -colors 16 -format bmp -define bmp:format=bmp3 img/*.bmp
+----
+
+Finally, we assemble the `.RDM` file (in this example `myvideo.rdm`) and cleanup the temporary files and directory.
+
+[source,shell]
+----
+(...)/makevideoradas img/output
+mv img/output.rdm ../myvideo.rdm
+rm -rf img
+----
+
+There is more information about all this process at https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[this thread in Zona de Pruebas forums].
 
 <<<
 

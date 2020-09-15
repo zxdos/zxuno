@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.0.1
+:revnumber: 1.0.2
 :doctype: book
 :email: kounch@users.noreply.github.com
 :Revision: 1.0
@@ -362,8 +362,8 @@ Algunos comandos extendidos de BASIC son:
 
 - `GO TO` para cambiar de unidad y/o directorio (ej: `GO TO hd1` o `GO TO hd0"juegos"`)
 - `CAT` para mostrar el contenido de una unidad
-- `LOAD` para cargar un fichero desde una unidad (programa en BASIC, pantalla, código, etc.)
-- `SAVE` para guardar datos en un fichero 
+- `LOAD` para cargar un fichero desde una unidad (programa en BASIC, pantalla, código, etc. por ejemplo `LOAD *"Pantalla.scr" SCREEN$`)
+- `SAVE` para guardar datos en un fichero  (Ej: `SAVE *"Programa.bas"`)
 - `ERASE` para borrar un fichero
 
 Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cuando se pulsa NMI (F5) y que facilita la navegación por la tarjeta microSD y la carga de algunos tipos de archivo (TAP, Z80, TRD, etc.). Pulsando la tecla "H" se accede a una pantalla de ayuda, en la que se indican todas las teclas disponibles.
@@ -384,7 +384,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `keymap`: Sirve para cargar una definición de teclado diferente.
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
-- `playrmov`: Reproduce videos en formato radastaniano (ficheros .RDM).
+- `playrmov`: Reproduce videos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsback`: Copia a un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash.
 - `romsupgr`: Copia el contenido de un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash.
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. 
@@ -411,11 +411,12 @@ Por ejemplo:
 
 ==== Network tools for ZX-Uno pack
 
-Se trata de un conjunto de programas, desarrollados por Nihirash y que se pueden https://nihirash.net/network-tools-for-zx-uno-pack/[descargar de su web].
+Se trata de un conjunto de programas, desarrollados por Nihirash y que se pueden https://nihirash.net/network-tools-for-zx-uno-pack/[descargar] https://nihirash.net/ugophy-1-0-and-nettools-for-zx-spectrum/#more-71[de su web].
 
+- `netman`: Utilidad sencilla para configurar la conexión Wi-Fi para el resto de programas. No funciona en modo 48K.
 - `uGophy`: Cliente de https://es.wikipedia.org/wiki/Gopher[Gopher]. No funciona en modo 48K.
 - `irc`: Cliente de https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat]. Funciona mejor a 14 Mhz.
-- `wget`: Utilidad para descargar ficheros vía HTTP (no funciona con HTTPS)
+- `wget`: Utilidad para descargar ficheros vía HTTP (no funciona con HTTPS).
 - `platoUNO`: Cliente de https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO]. También funciona mejor a 14 Mhz. Para más información sobre el uso moderno de PLATO, es interesante la web de https://www.irata.online/#about[IRATA.ONLINE].
 
 ==== FTP-Uno
@@ -447,6 +448,47 @@ Una vez copiado el fichero de cinta `UARTTERM.tap` y cargado, se pueden teclear 
 - `AT+CWAUTOCONN=1` configura el chip para conectarse a la red Wi-Fi por defecto al encenderse (`AT+CWAUTOCONN=0` desactiva esta opción)
 
 Se pueden consultar todos los comandos disponibles en https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[la documentación oficial del fabricante].
+
+<<<
+
+=== Creación de vídeos RDM (RaDastan Movie)
+
+El comando `PLAYRMOV` reproduce videos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el http://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN]. 
+
+En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o MacOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
+
+[source,shell]
+----
+gcc makevideoradas.c -o makevideoradas
+----
+
+Una vez dispongamos de `makevideoradas`, necesitaremos otras dos herramientas: https://ffmpeg.org[`ffmpeg`] e https://imagemagick.org/index.php[`imagemagick`]. Estas se pueden instalar con el gestor de paquetes corespondiente (`apt`, `yum`, `pacmam`, `brew`, etc.) o descargando el código fuente y compilándolo también.
+
+Ahora, el primer paso para convertir nuestro vídeo (por ejemplo, `mivideo.mp4`), es exportar los fotogramas como imágenes BMP de 128x96 píxeles de tamaño. Crearemos un directorio temporal (`img` en este ejemplo), donde guardar dichas imágenes.
+
+[source,shell]
+----
+mkdir img
+(...)/ffmpeg -i mivideo.mp4 -vf "scale=128:96,fps=25" -sws_flags lanczos -sws_dither ed -pix_fmt rgb4 -start_number 0 img/output%05d.bmp
+----
+
+Ahora transformaremos los ficheros `BMP` a `BMP` (v3) de 16 colores.
+
+[source,shell]
+----
+(...)/magick mogrify -colors 16 -format bmp -define bmp:format=bmp3 img/*.bmp
+----
+
+Finalmente, creamos el fichero `.RDM` (en este ejemplo `mivideo.rdm`) y borramos las imágenes y el directorio temporal.
+
+[source,shell]
+----
+(...)/makevideoradas img/output
+mv img/output.rdm ../mivideo.rdm
+rm -rf img
+----
+
+En https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[este hilo del foro Zona de Pruebas] hay más información sobre todo este proceso.
 
 <<<
 
@@ -1162,6 +1204,8 @@ http://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Cor
 https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
 
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
+
+https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Vídeos Radastanianos]
 
 http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
