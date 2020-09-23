@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.0.2
+:revnumber: 1.0.3
 :doctype: book
 :email: kounch@users.noreply.github.com
 :Revision: 1.0
@@ -290,7 +290,7 @@ Teclas especiales que se pueden utilizar la ejecución del core principal (ZX Sp
 
 - `Esc`: BREAK
 - `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+, en modo completo): Edit
-- `F5` (`NMI` en gomaDOS+): NMI
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+, en modo completo - o bien `Caps Shift+Symbol Shift+F` y luego `Y` -): NMI
 - `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+, en modo completo): Reproducir o Pausa en la reproducción de archivos .PZX
 - `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+, en modo completo): Rebobinar el archivo .PZX hasta la marca anterior
 - `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+, en modo completo): Graph
@@ -521,6 +521,8 @@ Los ficheros `ROMS.ZX1` se pueden editar fácilmente con la utilidad http://gues
 === Cores
 
 Hay un número de slots disponibles para almacenar cores (el número depende del tamaño de la SPI Flash del modelo de ZXDOS), estando reservado el primer slot para el de ZX Spectrum principal (esto no impide tener más cores de ZX Spectrum en otros slot además del primero).
+
+Los cores oficiales están https://github.com/zxdos/zxdos-plus/tree/master/cores[disponibles para descargar] en el repositorio en GitHub.
 
 Para actualizar o instalar un nuevo core hay varias alternativas. 
 
@@ -1012,6 +1014,59 @@ En él se pueden activar o desactivar las siguientes opciones:
 - Cuatro jugadores (Four players)
 - Duplicar el tamaño del menún (Double OSD Window)
 - Salir del menú (Exit)
+
+<<<
+
+=== NES
+
+Nintendo Entertainment System (también conocida como Nintendo NES o simplemente NES) es la https://es.wikipedia.org/wiki/Nintendo_Entertainment_System[segunda consola de sobremesa de Nintendo].
+
+La versión para ZXDOS+ ha sido creada por Nihirash, basándose en la http://www.zxuno.com/forum/viewtopic.php?t=1245[anterior para ZX-Uno] de DistWave y Quest.
+
+Algunas de las características del core son:
+
+- Filtro HQ2X que "despixeliza" la imagen
+- Simulación de línea de exploración (Scanlines)
+- Utiliza el reloj de la NES NTSC, por tanto funcionan correctamente las ROMs USA. Las ROMs PAL van más rápido de lo que deberían
+- Permite cargar ROMS desde la SD
+- Necesita, al menos, un mando o joystick conectado y que tenga varios botones de disparo
+- Sólo soporta salida VGA y utiliza timings poco rigurosos, por lo que es posible que de problemas en algunos monitores
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM (extensión `.NES`) de los juegos que se desee cargar. Los ficheros pueden estar en subdirectorios.
+
+Si no estuviera ya, <<_cores,instalar el core de NES>> en el ZXDOS+.
+
+==== Teclado
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+): Mostrar u ocultar el menú de configuración
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y `G`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` se muestra el menú de configuración. Para desplazarse por el menú y activar o elegir alguna opción, se utilizan las teclas de cursor y `Enter`.
+
+[.text-center] 
+image::img/nes.jpg[pdfwidth=70%]
+
+En él se pueden activar o desactivar las siguientes opciones:
+
+- Reiniciar la NES (Reset NES)
+- Activar o desactivar línea de exploración (Scanlines)
+- Encender o apagar el filtro que suaviza la imagen (HQ2X Filter)
+- Simular la pulsación del botón Select del mando 1 (P1 Select)
+- Simular la pulsación del botón Start del mando 1 (P1 Start)
+- Elegir un ROM para cargar desde la SD (Load ROM)
+- Salir del menú (Exit)
+
+<<<
 
 == Solución de problemas
 

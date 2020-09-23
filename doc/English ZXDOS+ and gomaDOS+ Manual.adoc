@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.0.2
+:revnumber: 1.0.3
 :doctype: book
 :email: kounch@users.noreply.github.com
 :Revision: 1.0
@@ -293,7 +293,7 @@ Special keys that can be used while running the main core (ZX Spectrum):
 
 - `Esc`: BREAK
 - `F2` (`Caps Shift+Symbol Shift+2` on gomaDOS+, Full Mode): Edit
-- `F5` (`NMI` en gomaDOS+): NMI
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+, Full Mode - or `Caps Shift+Symbol Shift+F` and then `Y` -): NMI
 - `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+, Full Mode): Play or pause when playing .PZX files
 - `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+, Full Mode): Rewind .PZX file to the previous mark
 - `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+, Full Mode): Graph
@@ -524,6 +524,8 @@ To do the opposite process (save the ROMs in a `ROMS.ZX1` file), you can use the
 === Cores
 
 There are a number of available slots whre you can store cores (the number depends on the size of the SPI Flash of the ZXDOS+ model), the first slot being reserved for the main ZX Spectrum (this does not prevent having more ZX Spectrum cores in other slots as well of the first).
+
+Official cores are https://github.com/zxdos/zxdos-plus/tree/master/cores[available to download] from GitHub repository.
 
 To update or install a new core there are several possibilities. 
 
@@ -1015,6 +1017,59 @@ The following options are available:
 - Four players
 - Double OSD Window size
 - Exit
+
+<<<
+
+=== NES
+
+Nintendo Entertainment System (also known as Nintendo NES or just NES) is the https://en.wikipedia.org/wiki/Nintendo_Entertainment_System[second home video game console produced by Nintendo].
+
+The ZXDOS+ core has been made by Nihirash, based on http://www.zxuno.com/forum/viewtopic.php?t=1245[the previous version for ZX-Uno] by DistWave y Quest.
+
+Some features of this core are:
+
+- HQ2X filters that "removes pixels" from the image
+- Scanlines simulation
+- Made with NES NTSC clock timings, so only USA ROMs run fine. PAL ROMs run faster than they sould
+- You can load ROMs from the SD
+- You need, at least, one gamepad or joystick connected, and it must have several buttons
+- Only VGA video mode is supported, with non-accurate timings, so it may not work with some displays
+
+==== microSD card format
+
+You need a microSD card with the first partition in FAT16 format to store ROM image files of the games to load. ROM files can be inside subdirectories.
+
+See the <<_cores,corresponding section>> for instructions of how to install the NES core in ZXDOS+.
+
+==== Keyboard
+
+==== Special keys and buttons
+
+While the core is running:
+
+- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+): Show or hide configuration menu
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` and `G`): Hard reset
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+) shows or hides the configuration menu.
+
+[.text-center] 
+image::img/nes.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Reset NES
+- Scanlines
+- HQ2X Filter
+- P1 Select
+- P1 Start
+- Load ROM
+- Exit
+
+<<<
 
 == Troubleshooting
 
