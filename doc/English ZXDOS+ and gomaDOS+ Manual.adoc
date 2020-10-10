@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.2
+:revnumber: 1.1.3
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -24,21 +24,6 @@ Over time, the project has been growing, and now it is possible to install diffe
 ZXDOS+ and gomaDOS+ official web page is http://zxdos.forofpga.es.
 
 Most of the functions and features of ZXDOS+ and gomaDOS+ are the same, so this document will generally talk about ZXDOS+, indicating the differences with gomaDOS+ where necessary.
-
-=== Initial Setup
-
-In order to be able to set up and use a ZXDOS+ or gomaDOS+ you need, at least, the following:
-
-- A USB charger or a TV or other device that offers USB power
-- VGA cable and monitor
-- PS/2 keyboard (in the case of ZXDOS +)
-
-In order to take advantage of its full potential, you should also have:
-
-- A microSD card, not necessarily very large
-- PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
-- A standard Atari joystick, such as a Megadrive DB9 gamepad (gomadOS+ needs a joystick adapter)
-- A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
 
 <<<
 
@@ -89,6 +74,21 @@ image::img/gomaDosBack.jpg[pdfwidth=70%]
 |===
 
 <<<
+
+=== Initial Setup
+
+In order to be able to set up and use a ZXDOS+ or gomaDOS+ you need, at least, the following:
+
+- A USB charger or a TV or other device that offers USB power
+- VGA cable and monitor
+- PS/2 keyboard (in the case of ZXDOS +)
+
+In order to take advantage of its full potential, you should also have:
+
+- A microSD card, not necessarily very large
+- PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
+- A standard Atari joystick, such as a Megadrive DB9 gamepad (gomadOS+ needs a joystick adapter)
+- A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
 
 ==== microSD card formatting
 
