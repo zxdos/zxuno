@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.1.1
+:revnumber: 1.1.2
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -29,7 +29,7 @@ La mayoría de las funciones y características de ZXDOS+ y gomaDOS+ son las mis
 
 Para poder poner en marcha un ZXDOS+ o gomaDOS+ hace falta, al menos, lo siguiente:
 
-- Un cargador USB, o una TV u otro dispositivo que ofrezca alimentación USB
+- Un cargador USB, una TV u otro dispositivo que ofrezca alimentación USB
 - Un cable y un monitor VGA
 - Un teclado PS/2 (en el caso de ZXDOS+)
 
@@ -39,6 +39,54 @@ Para poder aprovechar todo su potencial, es útil tener también:
 - Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV (opcional en gomaDOS+, ya que tiene beeper incorporado)
 - Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive (se necesita el adaptador de joystick en el caso de gomaDOS+)
 - Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)
+
+<<<
+
+=== Puertos y Conectores
+
+==== ZXDOS+
+
+image::img/ZXDOSfront.jpg[pdfwidth=70%]
+
+image::img/ZXDOSback.jpg[pdfwidth=70%]
+
+<<<
+
+==== gomaDOS+
+
+image::img/gomaDosBack.jpg[pdfwidth=70%]
+
+==== Descripción
+
+[cols=2*] 
+|===
+|1
+|Interruptor
+|2
+|Ranura microSD
+|3
+|JTAG y Joystick
+|4
+|Salida de Sonido
+|5
+|Entrada de Sonido
+|6
+|Salida RGB/VGA
+|7
+|Enchufe de Alimentación
+|8
+|Puerto de expansión
+|9
+|Puerto de Joystick Izquierdo
+|10
+|Puerto de Joystick Derecho
+|11
+|Puerto de Teclado PS/2
+|12
+|Puerto de Ratón PS/2
+|0
+|Puerto USB (PS/2)
+|===
 
 <<<
 

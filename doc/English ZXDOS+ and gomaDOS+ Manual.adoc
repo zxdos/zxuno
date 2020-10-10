@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.1
+:revnumber: 1.1.2
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -29,10 +29,9 @@ Most of the functions and features of ZXDOS+ and gomaDOS+ are the same, so this 
 
 In order to be able to set up and use a ZXDOS+ or gomaDOS+ you need, at least, the following:
 
-- USB charger, a TV or other device that offers USB power
+- A USB charger or a TV or other device that offers USB power
 - VGA cable and monitor
 - PS/2 keyboard (in the case of ZXDOS +)
-
 
 In order to take advantage of its full potential, you should also have:
 
@@ -40,6 +39,54 @@ In order to take advantage of its full potential, you should also have:
 - PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
 - A standard Atari joystick, such as a Megadrive DB9 gamepad (gomadOS+ needs a joystick adapter)
 - A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
+
+<<<
+
+=== Ports and Connectors
+
+==== ZXDOS+
+
+image::img/ZXDOSfront.jpg[pdfwidth=70%]
+
+image::img/ZXDOSback.jpg[pdfwidth=70%]
+
+<<<
+
+==== gomaDOS+
+
+image::img/gomaDosBack.jpg[pdfwidth=70%]
+
+==== Description
+
+[cols=2*] 
+|===
+|1
+|Power Switch
+|2
+|microSD Card Slot
+|3
+|JTAG and Joystick
+|4
+|Audio Out
+|5
+|Audio In
+|6
+|RGB/VGA Out
+|7
+|Power Socket
+|8
+|Expansion Port
+|9
+|Left Joystick Port
+|10
+|Right Joystick Port
+|11
+|PS/2 Keyboard Port
+|12
+|PS/2 Mouse Port
+|0
+|USB (PS/2) Port
+|===
 
 <<<
 
