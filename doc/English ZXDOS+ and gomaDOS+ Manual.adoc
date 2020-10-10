@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.0
+:revnumber: 1.1.1
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -922,7 +922,7 @@ While running the core:
 - `F11` (`Caps Shift+Symbol Shift+Q` on gomaDOS+): Enables and disables turbo mode
 - `Ctrl+Alt+Supr`: Soft Reset
 - `Ctrl+Alt+F12`: Hard Reset
-- `Ctrl+Alt+Backspace`: Restarts the FPGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+, `ZX Spectrum` keyboard mode): Restarts the FPGA
 - `Left ALT`: MSX GRAPH 
 - `Right ALT`: MSX CODE
 - `Page Up`: MSX SELECT
@@ -1182,9 +1182,9 @@ While the core is running:
 
 - `Q` and `A` or `Left Cursor` and `Right Cursor`  (or a joystick): Movement control
 - `Z` or `X` `Left Windows Key` and `Space` (or joystick buttons 1 and 2): Fire 1 and 2, also to insert coin and `Start`
-- `F2`: Switches between VGA and RGB modes
+- `F2`  (`Caps Shift+Symbol Shift+B` on gomaDOS+): Switches between VGA and RGB modes
 - `-` (numeric keyboard): Enable or disable scanlines
-- `Tab`: Enables or disables 90º rotation of the direction of controls
+- `Tab`  (`Caps Shift+Enter` on gomaDOS+, `PC XT` keyboard mode): Enables or disables 90º rotation of the direction of controls
 
 ==== Basic Guide
 
@@ -1213,10 +1213,10 @@ This core does not use the microSD card.
 
 While the core is running:
 
-- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+): Show or hide configuration menu
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` and `G`): Hard reset
-- `Scroll Lock`: switch between VGA and RGB mode
-- `F3` o `F12`: Restart game
+- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `Ctrl+Alt+Backspace`  (`Caps Shift+Symbol Shift+B` on gomaDOS+, `ZX Spectrum` keyboard mode): Hard reset
+- `Scroll Lock`  (`Caps Shift+Symbol Shift+G` on gomaDOS+, `ZX Spectrum` keyboard mode): switch between VGA and RGB mode
+- `F3` o `F12`  (`Caps Shift+Symbol Shift+3` or `Caps Shift+Symbol Shift+W` on gomaDOS+): Restart game
 - Number betwee `1` and `7`: Change the game variant
 - `Cursor up` and `Cursor down`: Control left pad (Player 1 in 2 player mode and player 3 in 4 player mode)
 - Joystick 1: Control left pad (Player 1)
@@ -1228,7 +1228,7 @@ While the core is running:
 
 ==== Basic Guide
 
-Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+) shows or hides the configuration menu.
+Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu.
 
 [.text-center] 
 image::img/pong.jpg[pdfwidth=70%]
@@ -1273,14 +1273,14 @@ See the <<_cores,corresponding section>> for instructions of how to install the 
 
 While the core is running:
 
-- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+): Show or hide configuration menu
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` and `G`): Hard reset
+- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+, `ZX Spectrum` keyboard mode): Hard reset
 
 <<<
 
 ==== Basic Guide
 
-Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+) shows or hides the configuration menu.
+Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+) shows or hides the configuration menu. To navigate the menu and activate or choose any option, use the cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` in gomaDOS+, `PC XT` keyboard mode) and `Enter`.
 
 [.text-center] 
 image::img/nes.jpg[pdfwidth=70%]
