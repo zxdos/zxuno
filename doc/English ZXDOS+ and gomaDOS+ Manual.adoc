@@ -1,9 +1,10 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.0.3
+:revnumber: 1.1.0
 :doctype: book
+:front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.0
+:Revision: 1.1
 :description: English Manual of ZXDOS+ and gomaDOS+
 :keywords: Manual, English, ZXDOS+, gomaDOS+
 :icons: font
@@ -36,9 +37,9 @@ In order to be able to set up and use a ZXDOS+ or gomaDOS+ you need, at least, t
 In order to take advantage of its full potential, you should also have:
 
 - A microSD card, not necessarily very large
-- PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV
-- A standard Atari joystick, such as a Megadrive DB9 gamepad
-- A PS/2 mouse
+- PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
+- A standard Atari joystick, such as a Megadrive DB9 gamepad (gomadOS+ needs a joystick adapter)
+- A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
 
 <<<
 
@@ -149,11 +150,226 @@ It is also recommended to add the specific esxdos commands for ZXDOS+. These can
 
 <<<
 
+=== GomaDOS+ keyboard modes
+
+gomaDOS+ keyboard, being similar to the original ZX Spectrum keyboard, lacks some of the existing keys on a modern PC keyboard. The keyboard membrane is connected to an Arduino board, which manages the transformation key presses to PS/2 keyboard protocol. The board is programmed so it can behave in different modes according to your needs.
+
+The default is ZX Spectrum mode. To change to a different mode, you must press `Caps Shift+Symbol Shift+U` and then the key for the desired mode. After doing that, some text is automatically typed, to show the selected mode (for example `.zx` if you press `Caps Shift+Symbol Shift+U` and theno `0`).
+
+This table shows the available modes and activation keys:
+
+[%header,cols=2*] 
+|===
+|Mode
+|Key
+|ZX Spectrum
+|`0`
+|Amstrad CPC
+|`1`
+|MSX
+|`2`
+|Commodore 64
+|`3`
+|Atari 800XL
+|`4`
+|BBC Micro
+|`5`
+|Acorn Electron
+|`6`
+|Apple (I and II)
+|`7`
+|Commodore VIC 20
+|`8`
+|PC XT
+|`9`
+|Oric Atmos
+|`A`
+|SAM Coupé
+|`B`
+|Jupiter ACE
+|`C`
+|===
+
+<<<
+
+ZX Spectrum mode key assignment, with the corresponding keypress when used simultaneouly with `Caps Shift+Symbol Shift`:
+
+[cols=10*] 
+|===
+^|**1**
+^|**2**
+^|**3**
+^|**4**
+^|**5**
+^|**6**
+^|**7**
+^|**8**
+^|**9**
+^|**0**
+^|`F1`
+^|`F2`
+^|`F3`
+^|`F4`
+^|`F5`
+^|`F6`
+^|`F7`
+^|`F8`
+^|`F9`
+^|`F1`
+^|**Q**
+^|**W**
+^|**E**
+^|**R**
+^|**T**
+^|**Y**
+^|**U**
+^|**I**
+^|**O**
+^|**P**
+^|`F11`
+^|`F12`
+^|
+^|
+^|
+^|
+^|`Mode`
+^|
+^|
+^|
+^|**A**
+^|**S**
+^|**D**
+^|**F**
+^|**G**
+^|**H**
+^|**J**
+^|**K**
+^|**L**
+^|**Enter**
+^|
+^|
+^|
+^|
+^|`SckLk`
+^|
+^|
+^|
+^|
+^|
+^|**CShift**
+^|**Z**
+^|**X**
+^|**C**
+^|**V**
+^|**B**
+^|**N**
+^|**M**
+^|**SShift**
+^|**Space**
+^|
+^|
+^|`Save`
+^|
+^|`Vers`
+^|`hRes`
+^|`sRes`
+^|
+^|
+^|
+|===
+
+Where:
+
+- `ScrLk`: `Scroll Lock` changes betweein composite and VGA video mode (on Next Core, you must use `Caps Shift+Symbol Shift+2` or`F2` instead)
+- `Save`: Sets the current mode as the default one
+- `Vers`: Shows (types) current firmware version
+- `hRes`: Hard Reset
+- `sRes`: Soft Reset
+
+<<<
+
+The full list of key combinations (and compatible modes) is as follows:
+
+[%header,cols=3*] 
+|===
+|Caps S.+Symbol S.
+|Mode
+|Action
+|1
+|All
+|`F1`
+|2
+|All
+|`F2`
+|3
+|All
+|`F3`
+|4
+|All
+|`F4`
+|5
+|All
+|`F5`
+|6
+|All
+|`F6`
+|7
+|All
+|`F7`
+|8
+|All
+|`F8`
+|9
+|All
+|`F9`
+|0
+|All
+|`F10`
+|Q
+|All
+|`F11`
+|W
+|All
+|`F12`
+|S
+|C64
+|`Ctrl+F12`
+|E
+|Acorn/CPC
+|`Re Pág`
+|R
+|Acorn
+|`PgDown`
+|U
+|All
+|`Mode`
+|G
+|ZX/MSX/C64
+|`ScrLk`
+|X
+|All
+|`Save`
+|C
+|PC
+|`OPQA`
+|V
+|All
+|`Version`
+|B
+|ZX
+|`Ctrl+Alt+Bcksp`
+|N
+|ZX
+|`Ctrl+Alt+Supr`
+|===
+
+<<<
+
 === BIOS
 
-Pressing the `F2` key during boot will access the BIOS setup. The BIOS firmware is the first program that runs when the ZXDOS+ is turned on. The main purpose of BIOS is to start and test the hardware and load one of the installed cores.
+Pressing the `F2` key (`Caps Shift+1` on gomaDOS+) during boot will access the BIOS setup. The BIOS firmware is the first program that runs when the ZXDOS+ is turned on. The main purpose of BIOS is to start and test the hardware and load one of the installed cores.
 
-Using cursor keys (left and right), you can navigate through the BIOS setup screens. With up and down keys you can choose the different elements of each screen and, with the `Enter` key, it is possible to activate and choose the options for each of these. `Esc` key is used to close open option windows without applying any action.
+Using left and right cursor keys (`Caps Shift+5` and `Caps Shift+8` on gomaDOS+), you can navigate through the BIOS setup screens. With up and down keys (`Caps Shift+7` and `Caps Shift+6` on gomaDOS+) you can choose the different elements of each screen and, with the `Enter` key, it is possible to activate and choose the options for each of these. `Esc` key (`Caps Shift+Espacio` ongomaDOS+) is used to close open option windows without applying any action.
 
 ==== Main
 
@@ -285,31 +501,29 @@ image::./img/keyboardAV.png[pdfwidth=70%]
 
 === Special keys and buttons
 
-gomaDOS+ keyboard, being similar to the original ZX Spectrum keyboard, lacks some of the existing keys on a modern PC keyboard. To correct this, you can change the way the Spectrum keyboard is interpreted between two different modes: Conventional Mode (which is the default mode) and Full Mode.
+The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations (like `Caps Shift+Symbol Shift+2` instead of `Caps Shift+1`).
 
-To switch between the two keyboard modes, use the key combination `Caps Shift+Symbol Shift+F` and then press `D`.
+Special keys which can be used during startup:
 
-Special keys that can be used while running the main core (ZX Spectrum):
-
-- `Esc`: BREAK
-- `F2` (`Caps Shift+Symbol Shift+2` on gomaDOS+, Full Mode): Edit
-- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+, Full Mode - or `Caps Shift+Symbol Shift+F` and then `Y` -): NMI
-- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+, Full Mode): Play or pause when playing .PZX files
-- `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+, Full Mode): Rewind .PZX file to the previous mark
-- `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+, Full Mode): Graph
-- `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+, Full Mode): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
-- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+): Soft reset.
-- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switches between compositve and VGA video modes.
-
-During startup:
-
-- `F2` (`Caps Shift+1` on gomaDOS+, Full Mode) Enter BIOS setup
-- `Caps Shift` or `Cursor down` (`Caps Shift+2 on gomaDOS+): Core selection menu
-- `Esc` (`Caps Shift+Espacio` on gomaDOS+): ZX Spectrum core ROM selection menu
+- `F2` (`Caps Shift+1` on gomaDOS+) Enter BIOS setup
+- `Caps Lock` or `Cursor down` (`Caps Shift+2 on gomaDOS+): Core selection menu
+- `Esc` (`Caps Shift+Space` on gomaDOS+): ZX Spectrum core ROM selection menu
 - `R`: Loads the Spectrum core ROM in "real" mode, disabling esxdos, new graphics modes, etc.
 - `/` (numeric keyboard) (`Symbol Shift+V` on gomaDOS+): Load ZX Spectrum core ROM in "root" mode
 - Number from `1` to `9`: Load the core in the flash location corresponding to that number
+
+Special keys that can be used while running the main core (ZX Spectrum):
+
+- `Esc` (`Caps Shift+Space` on gomaDOS+): BREAK
+- `F2` (`Caps Shift+1` on gomaDOS+): Edit
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+): NMI
+- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Play or pause when playing .PZX files
+- `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+): Rewind .PZX file to the previous mark
+- `F10` (`Caps Shift+9` on gomaDOS+): Graph
+- `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+): Soft reset.
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switches between compositve and VGA video modes.
 
 <<<
 
@@ -597,17 +811,19 @@ If it wasn't already, <<_cores,install ZX Spectrum Next core>> into ZXDOS+.
  
 ==== Special keys and buttons
 
+The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
+
 Take into account that `Ctrl+Alt+backspace` does not work with the ZX Spectrum Next core. You have to power cycle if you want to use another core. Also, there is no Reset or Drive button.
 
 While the core is running:
 
-- `F1`: Hard Reset
-- `F2`: Scandoubler. Doubles the resolution. Should be of for SCART
-- `F3`: Change vertical frequency between 50Hz and 60Hz
-- `F5`: Soft Reset
-- `F7`: Scanlines
-- `F9`: NMI
-- `F10`: divMMC NMI. Simulates Drive button. If used with Caps Shift it forces a rescan of drives and a reload of the boot screen under esxDOS
+- `F1` (`Caps Shift+Symbol Shift+1` on gomaDOS+): Hard Reset
+- `F2` (`Caps Shift+Symbol Shift+2` on gomaDOS+): Scandoubler. Doubles the resolution. Should be of for SCART
+- `F3` (`Caps Shift+Symbol Shift+3` on gomaDOS+): Change vertical frequency between 50Hz and 60Hz
+- `F4` (`Caps Shift+Symbol Shift+4` on gomaDOS+): Soft Reset
+- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Scanlines
+- `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+): NMI
+- `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+): divMMC NMI. Simulates Drive button. If used with Caps Shift it forces a rescan of drives and a reload of the boot screen under esxDOS
 
 <<<
 
@@ -618,7 +834,7 @@ On first boot, some help screens will show up. After pressing `Space` key, NextZ
 [.text-center] 
 image::img/next.png[pdfwidth=70%]
 
-You can navigate the menu with the cursor keys or a joystick (if configured as Kempston, MD or cursor). `Enter` or the joystick button chooses one element.
+You can navigate the menu with the cursor keys, `5`, `6`, `7` and `8` keys, or a joystick (if configured as Kempston, MD or cursor). `Enter` or the joystick button chooses one element.
 
 `More...` shows a second menu with more options.
 
@@ -639,7 +855,7 @@ At the time of writing, the ZX Spectrum Next core for ZXDOS+ does not support th
 
 [NOTE]
 ====
-It is not possible to load TRD files from the Browser (NextZXOS must be configured to load a "personality" with esxdos).
+It is not possible to load TRD files directly from the Browser (NextZXOS must be configured to load a "personality" with esxdos).
 ====
 
 For more information, see the https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[official user manual].
@@ -696,12 +912,14 @@ If it wasn't already, <<_cores,install MSX core>> into ZXDOS+.
 
 ==== Special keys and buttons
 
+The following gomaDOS+ key combinations are in `MSX` keyboard mode. Please check <<_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
+
 While running the core:
 
 - `Print Scr`: Changes between VGA and RGB mode
-- `Scroll Lock`: Enables or disables scanlines
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Enables or disables scanlines
 - `Pause`: Changes between 50Hz and 60Hz
-- `F11`: Enables and disables turbo mode
+- `F11` (`Caps Shift+Symbol Shift+Q` on gomaDOS+): Enables and disables turbo mode
 - `Ctrl+Alt+Supr`: Soft Reset
 - `Ctrl+Alt+F12`: Hard Reset
 - `Ctrl+Alt+Backspace`: Restarts the FPGA
@@ -714,13 +932,15 @@ While running the core:
 
 [NOTE]
 ====
-In BASIC use `CTRL+STOP` keys to stop the execution of a program.
+In BASIC use `CTRL+STOP` (`Ctrl+End`) keys to stop the execution of a program.
 ====
 
 [NOTE]
 ====
-To change the video mode between 50Hz and 60Hz (and thus play at correct speed PAL games), you can use `DISPLAY.COM`, which can be downloaded https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[here].
+To change the video mode between 50Hz and 60Hz (and thus play at correct speed PAL games), you can use also use `DISPLAY.COM`, which can be downloaded https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[here].
 ====
+
+<<<
 
 ==== Basic Guide
 
@@ -789,10 +1009,12 @@ Copy all `ROM` and `DSK` files to the root directory of the FAT32 partition.
 
 ==== Special keys and buttons
 
+The following gomaDOS+ key combinations are in `Amstrad CPC` keyboard mode. Please check <<_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
+
 During core execution:
 
-- `Page Up`: Reset the Amstrad computer and loads the next `DSK` file alphabetically
-- Only the left shift key works properly
+- `Page Up` (`Caps Shift+Symbol Shift+E` on gomaDOS+): Reset the Amstrad computer and load the next `DSK` file alphabetically
+- On a PS/2 keyboard, only the left shift key works properly
 
 <<<
 
@@ -857,14 +1079,16 @@ You can set up the files in the microSD in two different ways:
 
 ==== Special keys and buttons
 
+The following gomaDOS+ key combinations are in `Acorn Electron` keyboard mode. Please check <<_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
+
 While the core is running:
 
 - `Shift+F10`: Shows Atom Software Archive Menu
-- `F10`: Soft Reset
-- `F1`: Turbo mode 1Mhz
-- `F2`: Turbo mode 2Mhz
-- `F3`: Turbo mode 4Mhz
-- `F4`: Turbo mode 8Mhz
+- `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+): Soft Reset
+- `F1` (`Caps Shift+Symbol Shift+1` on gomaDOS+): Turbo mode 1Mhz
+- `F2` (`Caps Shift+Symbol Shift+2` on gomaDOS+): Turbo mode 2Mhz
+- `F3` (`Caps Shift+Symbol Shift+3` on gomaDOS+): Turbo mode 4Mhz
+- `F4` (`Caps Shift+Symbol Shift+4` on gomaDOS+): Turbo mode 8Mhz
 
 The keyboard uses the following mapping:
 
@@ -900,6 +1124,8 @@ See the <<_cores,corresponding section>> for instructions of how to install the 
 
 ==== Special keys and buttons
 
+The following gomaDOS+ key combinations are in `Commodore 64` keyboard mode. Please check <<_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
+
 While the core is running:
 
 - `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Shows options menu
@@ -910,7 +1136,7 @@ While the core is running:
 
 ==== Basic Guide
 
-After pressing `F12`, the option menu is shown.
+After pressing `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+), the option menu is shown.
 
 [.text-center] 
 image::img/c64.jpg[pdfwidth=70%]
@@ -1115,11 +1341,16 @@ cd ..
 rm -rf ./openocd-code
 ----
 
+<<<
+
 [start=3]
-. Open the ZXDOS+ case and connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
+. Open the ZXDOS+ or gomaDOS+ case and connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
 
 [.text-center] 
 image::img/jtag.jpg[pdfwidth=50%]
+
+[.text-center] 
+image::img/jtaggomados.jpg[pdfwidth=50%]
 
 [WARNING]
 ====
@@ -1227,6 +1458,11 @@ image::img/recovery.png[pdfwidth=70%]
 This will erase all the previously installed cores and ZX Spectrum ROMs.
 ====
 
+[NOTE]
+====
+The recovery image is set to use a PS/2 keyboard so, for a gomaDOS+, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+====
+
 [.text-center] 
 image::img/recovery2.png[pdfwidth=70%]
 
@@ -1235,6 +1471,23 @@ After some minutes, the process will end, and, after turning the ZXDOS+ off and 
 [NOTE]
 ====
 If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<_advanced, the right advanced setting>> that matches your display.
+====
+
+[NOTE]
+====
+Since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
+
+. If you see no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
+. Reboot gomaDOS+ without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
+. Quickly, press `Caps Shift + 1`
+. Again, if there's no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Navigate through BIOS and turno on these options:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (only if there was no image)
+. Save changes:
+- `Exit` -> `Save changes and exit`
+. Completely turn off gomaDOS` and turn it on again
 ====
 
 == References
@@ -1249,7 +1502,9 @@ http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
 http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
-https://github.com/ManuFerHi/ZX-GO-/blob/master/ZXUNOPS2/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B%20V30052019.pdf[Nuevo firmware de teclado ZX-GO+]
+https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
+
+https://github.com/zxdos/zxdos-plus/tree/master/zxunops2[zxunops2]
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
 
@@ -1282,6 +1537,8 @@ https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter3.html[MSX-DOS]
 http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
 
 http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
+
+http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 

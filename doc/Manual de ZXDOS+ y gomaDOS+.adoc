@@ -1,9 +1,10 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.0.3
+:revnumber: 1.1.0
 :doctype: book
+:front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.0
+:Revision: 1.1
 :description: Manual en castellano de ZXDOS+ y gomaDOS+
 :keywords: Manual, Castellano, ZXDOS+, gomaDOS+
 :icons: font
@@ -35,9 +36,9 @@ Para poder poner en marcha un ZXDOS+ o gomaDOS+ hace falta, al menos, lo siguien
 Para poder aprovechar todo su potencial, es útil tener también:
 
 - Una tarjeta microSD, no necesariamente muy grande
-- Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV
-- Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive
-- Un ratón PS/2
+- Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV (opcional en gomaDOS+, ya que tiene beeper incorporado)
+- Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive (se necesita el adaptador de joystick en el caso de gomaDOS+)
+- Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)
 
 <<<
 
@@ -148,11 +149,226 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. 
 
 <<<
 
+=== Modos de teclado en gomaDOS+
+
+El teclado de gomaDOS+ al ser similar al teclado del ZX Spectrum original, carece de algunas de teclas existentes en un teclado moderno de PC. Internamente, el teclado de membrana está conectado a una placa Arduino, que se encarga de transformar las pulsaciones al protocolo PS/2 de teclado. Esta placa está programada de manera que pueda comportarse de distintas maneras según nos interese.
+
+Por defecto, está configurado en modo ZX Spectrum. Para cambiar a otro modo, se debe pulsar `Caps Shift+Symbol Shift+U` y luego la tecla correspondiente. Al hacerlo, se tecleará automáticamente un texto indicando el modo seleccionado (por ejemplo: `.zx` si se pulsa `Caps Shift+Symbol Shift+U` y luego `0`).
+
+La siguiente tabla indica los distintos modos y la tecla de activación asociada:
+
+[%header,cols=2*] 
+|===
+|Modo
+|Tecla
+|ZX Spectrum
+|`0`
+|Amstrad CPC
+|`1`
+|MSX
+|`2`
+|Commodore 64
+|`3`
+|Atari 800XL
+|`4`
+|BBC Micro
+|`5`
+|Acorn Electron
+|`6`
+|Apple (I y II)
+|`7`
+|Commodore VIC 20
+|`8`
+|PC XT
+|`9`
+|Oric Atmos
+|`A`
+|SAM Coupé
+|`B`
+|Jupiter ACE
+|`C`
+|===
+
+<<<
+
+La distribución del teclado en modo ZX Spectrum, con la pulsación asociada al combinar junto con `Caps Shift+Symbol Shift`, se puede resumir según el siguiente esquema:
+
+[cols=10*] 
+|===
+^|**1**
+^|**2**
+^|**3**
+^|**4**
+^|**5**
+^|**6**
+^|**7**
+^|**8**
+^|**9**
+^|**0**
+^|`F1`
+^|`F2`
+^|`F3`
+^|`F4`
+^|`F5`
+^|`F6`
+^|`F7`
+^|`F8`
+^|`F9`
+^|`F1`
+^|**Q**
+^|**W**
+^|**E**
+^|**R**
+^|**T**
+^|**Y**
+^|**U**
+^|**I**
+^|**O**
+^|**P**
+^|`F11`
+^|`F12`
+^|
+^|
+^|
+^|
+^|`Modo`
+^|
+^|
+^|
+^|**A**
+^|**S**
+^|**D**
+^|**F**
+^|**G**
+^|**H**
+^|**J**
+^|**K**
+^|**L**
+^|**Enter**
+^|
+^|
+^|
+^|
+^|`BlqDs`
+^|
+^|
+^|
+^|
+^|
+^|**CShift**
+^|**Z**
+^|**X**
+^|**C**
+^|**V**
+^|**B**
+^|**N**
+^|**M**
+^|**SShift**
+^|**Space**
+^|
+^|
+^|`Guarda`
+^|
+^|`Vers`
+^|`hRes`
+^|`sRes`
+^|
+^|
+^|
+|===
+
+Donde:
+
+- `BlqDs`: `Bloq. Despl.` cambia de modo video compuesto a VGA y viceversa (en el core de Next, se debe usar `Caps Shift+Symbol Shift+2` o `F2`)
+- `Guarda`: Define el modo actual como el modo por defecto
+- `Vers`: Muestra (teclea) la versión actual del firmware
+- `hRes`: Hard Reset
+- `sRes`: Soft Reset
+
+<<<
+
+La lista completa de combinaciones de teclado (y el modo en que se pueden utilizar) es la siguiente:
+
+[%header,cols=3*] 
+|===
+|Caps S.+Symbol S.
+|Modo
+|Acción
+|1
+|Todos
+|`F1`
+|2
+|Todos
+|`F2`
+|3
+|Todos
+|`F3`
+|4
+|Todos
+|`F4`
+|5
+|Todos
+|`F5`
+|6
+|Todos
+|`F6`
+|7
+|Todos
+|`F7`
+|8
+|Todos
+|`F8`
+|9
+|Todos
+|`F9`
+|0
+|Todos
+|`F10`
+|Q
+|Todos
+|`F11`
+|W
+|Todos
+|`F12`
+|S
+|C64
+|`Ctrl+F12`
+|E
+|Acorn/CPC
+|`Re Pág`
+|R
+|Acorn
+|`PgAbajo`
+|U
+|Todos
+|`Modo`
+|G
+|ZX/MSX/C64
+|`BlqDs`
+|X
+|Todos
+|`Guarda`
+|C
+|PC
+|`OPQA`
+|V
+|Todos
+|`Versión`
+|B
+|ZX
+|`Ctrl+Alt+Bcksp`
+|N
+|ZX
+|`Ctrl+Alt+Supr`
+|===
+
+<<<
+
 === BIOS
 
-Si se pulsa la tecla `F2` durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXDOS+. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
+Si se pulsa la tecla `F2` (`Caps Shift+1` en gomaDOS+) durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXDOS+. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
 
-Usando las teclas de cursor (izquierda y derecha), se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
+Usando las teclas de cursor izquierda y derecha (`Caps Shift+5` y `Caps Shift+8` en gomaDOS+), se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo (`Caps Shift+7` y `Caps Shift+6` en gomaDOS+) se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` (`Caps Shift+Espacio` en gomaDOS+) sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
 
 ==== Main
 
@@ -282,31 +498,29 @@ image::./img/keyboardAV.png[pdfwidth=70%]
 
 === Teclas especiales y botones
 
-El teclado de gomaDOS+ al ser similar al teclado del ZX Spectrum original, carece de algunas de teclas existentes en un teclado moderno de PC. Para subsanarlo, se puede cambiar el modo en que se interpreta el teclado de Spectrum entre dos distintos: Modo Convencional (que es el modo por defecto) y Modo Completo. 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT` (Por ejemplo, `Caps Shift+Symbol Shift+2` en vez de `Caps Shift+1`).
 
-Para cambiar entre los dos modos de teclado se utiliza la combinación de teclas `Caps Shift+Symbol Shift+F` y luego pulsar `D`.
+Teclas especiales durante el arranque:
 
-Teclas especiales que se pueden utilizar la ejecución del core principal (ZX Spectrum):
-
-- `Esc`: BREAK
-- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+, en modo completo): Edit
-- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+, en modo completo - o bien `Caps Shift+Symbol Shift+F` y luego `Y` -): NMI
-- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+, en modo completo): Reproducir o Pausa en la reproducción de archivos .PZX
-- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+, en modo completo): Rebobinar el archivo .PZX hasta la marca anterior
-- `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+, en modo completo): Graph
-- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
-
-Durante el arranque:
-
-- `F2` (`Caps Shift+1` en gomaDOS+, en modo completo) Entrar en la BIOS
-- `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2 en gomaDOS+): Menú de selección de cores
+- `F2` (`Caps Shift+1` en gomaDOS+) Entrar en la BIOS
+- `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2` en gomaDOS+): Menú de selección de cores
 - `Esc` (`Caps Shift+Espacio` en gomaDOS+): Menú de selección de ROMS del core de ZX Spectrum
 - `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.
 - `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+): Carga la rom del core de ZX Spectrum en modo "root"
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
+
+Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
+
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): BREAK
+- `F2` (`Caps Shift+1` en gomaDOS+): Edit
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): NMI
+- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Reproducir o Pausa en la reproducción de archivos .PZX
+- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+): Rebobinar el archivo .PZX hasta la marca anterior
+- `F10` (`Caps Shift+9` en gomaDOS+): Graph
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
 
 <<<
 
@@ -594,17 +808,19 @@ Si no estuviera ya, <<_cores,instalar el core de ZX Spectrum Next>> en el ZXDOS+
  
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Notar que `Ctrl+Alt+backspace` no funciona con el core de Spectrum Next. Hay que apagar manualmente y volver a encender si se desea cambiar a otro core. Tampoco hay botón físico de Reset o Drive.
 
 Durante la ejecución del core:
 
-- `F1`: Hard Reset
-- `F2`: Scandoubler. Dobla la resolución. Debería estar apagado para conexiones vía SCART
-- `F3`: Alternar la frecuencia vertical entre 50Hz y 60Hz
-- `F5`: Soft Reset
-- `F7`: Scanlines
-- `F9`: NMI
-- `F10`: divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Hard Reset
+- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Scandoubler. Dobla la resolución. Debería estar apagado para conexiones vía SCART
+- `F3` (`Caps Shift+Symbol Shift+3` en gomaDOS+): Alternar la frecuencia vertical entre 50Hz y 60Hz
+- `F4` (`Caps Shift+Symbol Shift+4` en gomaDOS+): Soft Reset
+- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Scanlines
+- `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+): NMI
+- `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+): divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
 
 <<<
 
@@ -615,7 +831,7 @@ Al iniciarse la primera vez, aparecerán una serie de pantallas de ayuda. Tras p
 [.text-center] 
 image::img/next.png[pdfwidth=70%]
 
-Se puede navegar utilizando las teclas de cursor o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
+Se puede navegar utilizando las teclas de cursor, las teclas `5`, `6`, `7` y `8`, o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
 
 La opción `More...` muestra un segundo menú con más opciones.
 
@@ -636,7 +852,7 @@ En el momento de escribir estas líneas, el core de ZX Spectrum Next para ZXDOS+
 
 [NOTE]
 ====
-Por defecto no es posible cargar ficheros TRD (se debe configurar NextZXOS para cargar una "personalidad" con esxdos).
+Por defecto, no es posible cargar ficheros TRD dede el navegador (se debe configurar NextZXOS para cargar una "personalidad" con esxdos).
 ====
 
 Para más información, consultar el https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[manual de uso oficial].
@@ -693,12 +909,14 @@ Si no estuviera ya, <<_cores,instalar el core de MSX>> en el ZXDOS+.
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `MSX`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Durante la ejecución del core:
 
 - `Impr Pant`: Cambia el modo entre VGA y RGB
-- `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
+- `Bloq Desp` (`Caps Shift+Symbol Shift+G` en gomaDOS+): Cambia el modo de línea de exploración (Scanlines)
 - `Pausa`: Cambia entre 50Hz y 60Hz
-- `F11`: Activa o desactiva el modo turbo
+- `F11` (`Caps Shift+Symbol Shift+Q` en gomaDOS+): : Activa o desactiva el modo turbo
 - `Ctrl+Alt+Supr`: Soft Reset
 - `Ctrl+Alt+F12`: Hard Reset
 - `Ctrl+Alt+Backspace`: Reinicia la FPGA
@@ -711,13 +929,15 @@ Durante la ejecución del core:
 
 [NOTE]
 ====
-En BASIC, se puede usar `CTRL + STOP` para detener la ejecución de un programa.
+En BASIC, se puede usar `CTRL + STOP` (`Ctrl+Fin`) para detener la ejecución de un programa.
 ====
 
 [NOTE]
 ====
-Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de programas PAL a través de VGA), se puede usar `DISPLAY.COM`, que se puede obtener https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[en este hilo del foro de MSX].
+Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de programas PAL a través de VGA), se puede usar también `DISPLAY.COM`, que se puede obtener https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[en este hilo del foro de MSX].
 ====
+
+<<<
 
 ==== Guía básica
 
@@ -786,10 +1006,12 @@ Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Amstrad CPC`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Durante la ejecución del core:
 
-- `Re Pág`: Hace un Reset del Amstrad y carga el siguiente archivo `DSK` en orden alfabético.
-- Sólo funciona la tecla mayúsculas del lado izquierdo del teclado.
+- `Re Pág` (`Caps Shift+Symbol Shift+E` en gomaDOS+): Hace un Reset del Amstrad y carga el siguiente archivo `DSK` en orden alfabético.
+- En un teclado PS/2, sólo funciona la tecla mayúsculas del lado izquierdo del teclado.
 
 <<<
 
@@ -854,14 +1076,16 @@ Ahora, se puede organizar la información en la tarjeta microSD de dos maneras d
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Acorn Electron`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Durante la ejecución del core:
 
 - `Mayús+F10`: Muestra el menú de Atom Software Archive
-- `F10`: Soft Reset
-- `F1`: Modo turbo 1Mhz
-- `F2`: Modo turbo 2Mhz
-- `F3`: Modo turbo 4Mhz
-- `F4`: Modo turbo 8Mhz
+- `F10`  (`Caps Shift+Symbol Shift+0` en gomaDOS+): Soft Reset
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Modo turbo 1Mhz
+- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Modo turbo 2Mhz
+- `F3` (`Caps Shift+Symbol Shift+3` en gomaDOS+): Modo turbo 4Mhz
+- `F4` (`Caps Shift+Symbol Shift+4` en gomaDOS+): Modo turbo 8Mhz
 
 El teclado está mapeado en inglés, según el siguiente esquema:
 
@@ -897,9 +1121,11 @@ Si no estuviera ya, <<_cores,instalar el core de Commodore 64>> en el ZXDOS+.
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Commodore 64`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de tecldo `PC XT`.
+
 Durante la ejecución del core:
 
-- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Muestra menú de opciones
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Muestra menú de opciones
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
 - `Esc`: RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
 
@@ -907,7 +1133,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Tras pulsar `F12`, aparece el menú de opciones.
+Tras pulsar `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+), aparece el menú de opciones.
 
 [.text-center] 
 image::img/c64.jpg[pdfwidth=70%]
@@ -1112,8 +1338,10 @@ cd ..
 rm -rf ./openocd-code
 ----
 
+<<<
+
 [start=3]
-. Abrir la carcasa del ZXDOS+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+. Abrir la carcasa del ZXDOS+ o el gomaDOS+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 [.text-center] 
 image::img/jtag.jpg[pdfwidth=50%]
@@ -1122,6 +1350,9 @@ image::img/jtag.jpg[pdfwidth=50%]
 ====
 *NO* se ha de conectar la línea de 3V
 ====
+
+[.text-center] 
+image::img/jtaggomados.jpg[pdfwidth=50%]
 
 <<<
 
@@ -1224,6 +1455,11 @@ image::img/recovery.png[pdfwidth=70%]
 Este proceso eliminará todos los cores instalados, así como las ROMs de ZX Spectrum.
 ====
 
+[NOTE]
+====
+La imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`), para que funcionen de nuevo temporalmente.
+====
+
 [.text-center] 
 image::img/recovery2.png[pdfwidth=70%]
 
@@ -1232,6 +1468,25 @@ Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar 
 [NOTE]
 ====
 Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
+[NOTE]
+====
+En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2.
+
+Seguir los siguientes pasos para configurar la BIOS correctamente:
+
+. Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift + Symbol Shift + U` y luego `9`)
+. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift + Symbol Shift + B`)
+. Rápidamente, pulsar `Caps Shift + 1`
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
+. Navegar por la BIOS y configurar las siguientes opciones:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (sólo si no teníamos imagen)
+. Guardar los cambios de la BIOS:
+- `Exit` -> `Save changes and exit`
+.Apagar completamente el gomaDOS+ y volver a encenderlo
 ====
 
 == Referencias
@@ -1246,7 +1501,9 @@ http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
 http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
-https://github.com/ManuFerHi/ZX-GO-/blob/master/ZXUNOPS2/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B%20V30052019.pdf[Nuevo firmware de teclado ZX-GO+]
+https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
+
+https://github.com/zxdos/zxdos-plus/tree/master/zxunops2[zxunops2]
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
 
@@ -1281,6 +1538,8 @@ https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter3.html[MSX-DOS]
 http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
 
 http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
+
+http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
