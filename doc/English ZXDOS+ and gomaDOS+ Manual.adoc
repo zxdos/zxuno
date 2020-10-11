@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.3
+:revnumber: 1.1.4
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -31,9 +31,9 @@ Most of the functions and features of ZXDOS+ and gomaDOS+ are the same, so this 
 
 ==== ZXDOS+
 
-image::img/ZXDOSfront.jpg[pdfwidth=70%]
+image::img/ZXDOSfront.jpg[pdfwidth=90%]
 
-image::img/ZXDOSback.jpg[pdfwidth=70%]
+image::img/ZXDOSback.jpg[pdfwidth=90%]
 
 <<<
 
@@ -973,7 +973,7 @@ While running the core:
 - `Left ALT`: MSX GRAPH 
 - `Right ALT`: MSX CODE
 - `Page Up`: MSX SELECT
-- `Start` MSX HOME (`Shift+HOME`: CLS)
+- `Start`: MSX HOME (`Shift+HOME`: CLS)
 - `End`: MSX STOP
 - `Ñ` or `Windows`: MSX DEAD
 
@@ -1177,7 +1177,7 @@ While the core is running:
 
 - `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Shows options menu
 - `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): switches between VGA and RGB modes
-- `Esc`: RUN/STOP (`Shift+RUN/STOP`: Load from tape)
+- `Esc` (`Caps Shift+Space` on gomaDOS+): RUN/STOP (`Shift+RUN/STOP`: Load from tape)
 
 <<<
 
@@ -1264,18 +1264,19 @@ While the core is running:
 - `Ctrl+Alt+Backspace`  (`Caps Shift+Symbol Shift+B` on gomaDOS+, `ZX Spectrum` keyboard mode): Hard reset
 - `Scroll Lock`  (`Caps Shift+Symbol Shift+G` on gomaDOS+, `ZX Spectrum` keyboard mode): switch between VGA and RGB mode
 - `F3` o `F12`  (`Caps Shift+Symbol Shift+3` or `Caps Shift+Symbol Shift+W` on gomaDOS+): Restart game
-- Number betwee `1` and `7`: Change the game variant
-- `Cursor up` and `Cursor down`: Control left pad (Player 1 in 2 player mode and player 3 in 4 player mode)
-- Joystick 1: Control left pad (Player 1)
-- `Q` y `A`: Control right pad (Player 2 in 2 player mode and player 4 in 4 player mode)
-- Joystick 2: Control right pad (Player 2).
+- Number between `1` and `7`: Change the game variant
+- Joystick 2 (right): Control right pad (Player 1).
+- Joystick 1 (left): Control left pad (Player 2)
+- `Cursor up` and `Cursor down` or `O` and `K`: Control right pad (Player 1 in 2 player mode and player 3 in 4 player mode)
+- `Q` and `A`: Control left pad (Player 2 in 2 player mode and player 4 in 4 player mode)
 - `Z`, `M` or joystick button 1: Manual serve
+- Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to use the menu
 
 <<<
 
 ==== Basic Guide
 
-Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu.
+Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
 
 [.text-center] 
 image::img/pong.jpg[pdfwidth=70%]
@@ -1321,6 +1322,7 @@ See the <<_cores,corresponding section>> for instructions of how to install the 
 While the core is running:
 
 - `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode), and `Enter` to use the menu
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+, `ZX Spectrum` keyboard mode): Hard reset
 
 <<<

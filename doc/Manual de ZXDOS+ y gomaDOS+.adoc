@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.1.3
+:revnumber: 1.1.4
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -31,15 +31,15 @@ La mayoría de las funciones y características de ZXDOS+ y gomaDOS+ son las mis
 
 ==== ZXDOS+
 
-image::img/ZXDOSfront.jpg[pdfwidth=70%]
+image::img/ZXDOSfront.jpg[pdfwidth=90%]
 
-image::img/ZXDOSback.jpg[pdfwidth=70%]
+image::img/ZXDOSback.jpg[pdfwidth=90%]
 
 <<<
 
 ==== gomaDOS+
 
-image::img/gomaDosBack.jpg[pdfwidth=70%]
+image::img/gomaDosBack.jpg[pdfwidth=90%]
 
 ==== Descripción
 
@@ -971,7 +971,7 @@ Durante la ejecución del core:
 - `ALT Izquierdo`: MSX GRAPH 
 - `ALT Derecho`: MSX CODE
 - `Re Pág`: MSX SELECT
-- `Inicio` MSX HOME (`Mayús+HOME`: CLS)
+- `Inicio`: MSX HOME (`Mayús+HOME`: CLS)
 - `Fin`: MSX STOP
 - `Ñ` o `Windows`: MSX DEAD
 
@@ -1175,7 +1175,7 @@ Durante la ejecución del core:
 
 - `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Muestra menú de opciones
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
-- `Esc`: RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
 
 <<<
 
@@ -1263,17 +1263,18 @@ Durante la ejecución del core:
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+, en modo de teclado `ZX Spectrum`): cambia de modo video compuesto a VGA y viceversa
 - `F3` o `F12` (`Caps Shift+Symbol Shift+3` o `Caps Shift+Symbol Shift+W`  en gomaDOS+): Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
-- `Cursor arriba` y `Cursor abajo`: Control de paleta de la izquierda (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
-- Joystick 1: Control de paleta de la izquierda (Jugador 1)
-- `Q` y `A`: Control de paleta de la derecha (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)
-- Joystick 2: Control de paleta de la derecha (Jugador 2).
+- Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).   
+- Joystick 1 (izquierda): Control de paleta de la izquierda (Jugador 2)  
+- `Cursor arriba` y `Cursor abajo` o `O` y `K`: Control de paleta de la derecha (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
+- `Q` y `A`: Control de paleta de la izquierda (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)  
 - `Z`, `M` o botón de joystick 1: Saque manual
+- Teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para navegar por el menú
 
 <<<
 
 ==== Guía básica
 
-Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración.
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center] 
 image::img/pong.jpg[pdfwidth=70%]
@@ -1319,6 +1320,7 @@ Si no estuviera ya, <<_cores,instalar el core de NES>> en el ZXDOS+.
 Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Mostrar u ocultar el menú de configuración
+- Teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`), y `Enter` para usar el menú
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+, en modo de teclado `ZX Spectrum`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 
 <<<
