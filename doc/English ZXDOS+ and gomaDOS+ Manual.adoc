@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.4
+:revnumber: 1.1.5
 :doctype: book
 :front-cover-image: image::img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -810,7 +810,7 @@ To update esxdos to a new version, the distribution must be obtained from http:/
 
 Once downloaded and extracted, the contents of `BIN` and `SYS` directories have to be copied to the root of the card, merging the existing ones (to preserve the exclusive ZXDOS+ commands).
 
-Copy `ESXMMC.BIN` in the root of the microSD card, renaming it as `ESXDOS.ZX2` (for a ZXDOS+ with FPGA LX16 board) or `ESXDOS.ZXD` (for a ZXDOS+ with LX25 board).
+Copy `ESXMMC.BIN` (or `ESXMMC.ROM`, depending on version) to the root of the microSD card, renaming it as `ESXDOS.ZX2` (for a ZXDOS+ with FPGA LX16 board) or `ESXDOS.ZXD` (for a ZXDOS+ with LX25 board).
 
 Start ZXDOS + with the card inserted and press `F2` to access BIOS setup. Select the `Upgrade` menu and choose __"Upgrade esxdos for ZX"__. In the dialog that appears choose __"SD file"__ and, when it asks __"Load from SD"__ answer __"Yes"__ to the question __"Are you sure?"__. The content of the file `ESXDOS...` will be read, written to the flash storage and you will be notified when it is updated.
 
@@ -1346,6 +1346,53 @@ The following options are available:
 
 <<<
 
+=== ColecoVision
+
+https://en.wikipedia.org/wiki/ColecoVision[ColecoVision] is Coleco Industries' home video-game console that was released in August 1982.
+
+ZXDOS+ core is based on https://github.com/fbelavenuto/colecofpga[ZX-Uno version] by Fabio Belavenuto.
+
+Some features of this core are:
+
+- BIOS ROM is loaded from microSD card
+- Supports multicart ROM, also loaded from microSD
+- Only works with VGA
+
+==== microSD card format
+
+You need a microSD card with the first partition in FAT16 format to store ROM image files of the games to load and other needed files. These can be downloaded from https://github.com/fbelavenuto/colecofpga/tree/master/SD_Card[the original project in GitHub].
+
+See the <<_cores,corresponding section>> for instructions of how to install the ColecoVision core in ZXDOS+.
+
+==== Keyboard
+
+==== Special keys and buttons
+
+While the core is running:
+
+- Cursor or `Q`, `A`, `E`, `R` or joystick 1: Directional controls for player 1
+- `Z` or joystick 1 main fire button: Fire Button 1 for player 1
+- `U`, `J`, `O`, `P` or joystick 2: Directional controls for player 2
+- `M` or joystick 2 main fire button: Fire button 1 for player 2
+- `X` or joystick 1 secondary fire button: Fire button 1 for player 1 and player 2
+- `0` to `9`:  Button 0 to 9 for player 1 and player 2
+- `T`: Button '*'
+- `Y`: Button '#'
+- 'Esc' (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Soft Reset
+
+<<<
+
+==== Basic Guide
+
+On startup, BIOS ROM is loaded from the card, and then the multicart ROM. 
+
+[.text-center] 
+image::img/coleco.jpg[pdfwidth=70%]
+
+At multicart menu, use the directional controls to choose one ROM, and then fire button 1 to load. Pressing 'Esc' (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) restarts the core and loads the ROM selection menu again.
+
+<<<
+
 == Troubleshooting
 
 === Firmware recovery
@@ -1588,6 +1635,8 @@ http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en ca
 http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
 
 http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
+
+https://github.com/fbelavenuto/colecofpga[ColecoFPGA on GitHub]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
