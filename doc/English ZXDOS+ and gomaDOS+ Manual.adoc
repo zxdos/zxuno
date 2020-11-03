@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.6
+:revnumber: 1.1.7
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -17,9 +17,9 @@
 
 == Introduction
 
-ZXDOS+ y gomaDOS+ are the continuation of http://zxuno.speccy.org[ZX-Uno] a hardware and software project based on an FPGA board programmed to work like a ZX Spectrum computer, and created by the ZX-Uno team: Superfo, AVillena, McLeod, Quest and Hark0.
+ZXDOS+ and gomaDOS+ are the continuation of http://zxuno.speccy.org[ZX-Uno] a hardware and software project based on an FPGA board programmed to work like a ZX Spectrum computer, and created by the ZX-Uno team: Superfo, AVillena, McLeod, Quest and Hark0.
 
-Over time, the project has been growing, and now it is possible to install different software configurations (cores) in the flash memory of the FPGA, which work like different systems than the ZX Spectrum, being able to choose to start the ZXDOS+ with the desired configuration among all those installed.
+Over time, the project has been growing, and now it is possible to install different software configurations (cores) in the flash memory of the FPGA, which work like different systems than the ZX Spectrum, and you can choose to start the ZXDOS+ with the desired configuration among all those installed.
 
 ZXDOS+ and gomaDOS+ official web page is http://zxdos.forofpga.es.
 
@@ -31,14 +31,17 @@ Most of the functions and features of ZXDOS+ and gomaDOS+ are the same, so this 
 
 ==== ZXDOS+
 
+[.text-center] 
 image:img/ZXDOSfront.jpg[pdfwidth=90%]
 
+[.text-center] 
 image:img/ZXDOSback.jpg[pdfwidth=90%]
 
 <<<
 
 ==== gomaDOS+
 
+[.text-center] 
 image:img/gomaDosBack.jpg[pdfwidth=70%]
 
 ==== Description
