@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.1.7
+:revnumber: 1.1.8
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1249,7 +1249,8 @@ Algunas las características del core son:
 - Dos modos de vídeo seleccionables: RGB/PAL60Hz y VGA 60Hz
 - 7 tipos de juego
 - Soporte 2 o 4 jugadores
-- Compatible con joystick(s)
+- Compatible con joystick(s), teclado y ratón
+- Varios modos de color
 
 ==== Formato de Tarjeta microSD
 
@@ -1284,14 +1285,18 @@ image:img/pong.jpg[pdfwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
 
-- Servicio manual (Manual Serve)
+- Servicio automático o manual (Serve)
 - Ángulo de la bola (Ball Angle)
 - Velocidad de la bola (Ball Speed)
 - Tamaño de las palas (Paddle Size)
 - Sonido (Sound)
 - Cuatro jugadores (Four players)
-- Duplicar el tamaño del menún (Double OSD Window)
-- Salir del menú (Exit)
+- Velocidad Aleatoria (Random Speed)
+- Ángulo Aleatorio (Random Angle)
+- Control por Joystick, teclado o ratón (Joystick)
+- Precisión de las palas (Paddle Accuracy)
+- Modo de color (Mode)
+- Salir del menú (Exit menu)
 
 <<<
 

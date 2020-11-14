@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.7
+:revnumber: 1.1.8
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -300,7 +300,7 @@ ZX Spectrum mode key assignment, with the corresponding keypress when used simul
 ^|
 ^|
 ^|
-^|`SckLk`
+^|`ScrLk`
 ^|
 ^|
 ^|
@@ -386,7 +386,7 @@ The full list of key combinations (and compatible modes) is as follows:
 |`Ctrl+F12`
 |E
 |Acorn/CPC
-|`Re Pág`
+|`PgUp`
 |R
 |Acorn
 |`PgDown`
@@ -948,7 +948,7 @@ The file `/MSX1FPGA/config.txt` keeps the core configuration, using this format:
 ||||||
 |||||+-Scanlines: 1=Enabled, 0=Disabled
 ||||+--Turbo: 1=Initialize with turbo enabled
-|||+---Color System: N=NTSC, P=PAL
+|||+---Colour System: N=NTSC, P=PAL
 ||+----Keymap: E=English, B=Brazilian, F=Francese, S=Spanish, J=Japanese
 |+-----Scandoubler(VGA): 1=Enabled, 0=Disabled
 +------Nextor: 1=Enabled, 0=Disabled
@@ -1195,7 +1195,7 @@ The menu offers the following options
 
 - Core reset
 - Enable o disable scanlines
-- Change color palette (Colores Payaso MICOLOR)
+- Change colour palette (Colores Payaso MICOLOR)
 - Enable or disable PAL mode
 - Enable or disable tape loading sound (Sonido Carga Cinta)
 - Enable or disable audio filter (Filtro de Audio)
@@ -1251,7 +1251,8 @@ Some features of this core are:
 - Two different video modes: RGB/PAL60Hz and VGA 60Hz
 - 7 game variants
 - Support for 2 or 4 players
-- Support for Joysticks
+- Support for Joysticks, keyboard and/or mouse controls
+- Several colour modes
 
 ==== microSD format
 
@@ -1286,13 +1287,17 @@ image:img/pong.jpg[pdfwidth=70%]
 
 The following options are available:
 
-- Manual Serve
+- Serve mode
 - Ball Angle
 - Ball Speed
 - Paddle Size
 - Sound
-- Four players
-- Double OSD Window size
+- Number of players
+- Speed mode
+- Angle mode
+- Joystick, mouse, etc. controls
+- Paddle accuracy
+- Colour mode
 - Exit
 
 <<<
