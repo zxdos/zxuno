@@ -813,7 +813,7 @@ To update esxdos to a new version, the distribution must be obtained from http:/
 
 Once downloaded and extracted, the contents of `BIN` and `SYS` directories have to be copied to the root of the card, merging the existing ones (to preserve the exclusive ZXDOS+ commands).
 
-Copy `ESXMMC.BIN` (or `ESXMMC.ROM`, depending on version) to the root of the microSD card, renaming it as `ESXDOS.ZX2` (for a ZXDOS+ with FPGA LX16 board) or `ESXDOS.ZXD` (for a ZXDOS+ with LX25 board).
+Copy `ESXMMC.BIN` (or `ESXMMC.ROM`, depending on version) to the root of the microSD card.
 
 Start ZXDOS + with the card inserted and press `F2` to access BIOS setup. Select the `Upgrade` menu and choose __"Upgrade esxdos for ZX"__. In the dialog that appears choose __"SD file"__ and, when it asks __"Load from SD"__ answer __"Yes"__ to the question __"Are you sure?"__. The content of the file `ESXDOS...` will be read, written to the flash storage and you will be notified when it is updated.
 
