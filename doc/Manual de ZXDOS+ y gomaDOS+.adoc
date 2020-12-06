@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.1.8
+:revnumber: 1.1.9
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -652,7 +652,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `playrmov`: Reproduce videos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsback`: Copia a un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
 - `romsupgr`: Copia el contenido de un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
-- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". 
+- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `upgr32m`: Copia el contenido de un fichero `FLASH.ZX2` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root". 
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
@@ -772,7 +772,16 @@ Copiar el fichero en la raíz de la tarjeta MicroSD, encender y pulsar `F2` para
 
 === ROMs
 
-Para actualizar las ROM instaladas para ZX Spectrum se ha de obtener un fichero con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+La memoria flash del ZXDOS+ dispone de 64 "slots", de 16K cada uno, para almacenar imágenes ROM de ZX Spectrum y compatibles. Así, la ROM del ZX Spectrum original (16K) ocuparía un slot del almacenamiento, la del ZX Spectrum 128K (32K) ocuparía dos slots, y la del ZX Spectrum +2A (64K) ocuparía 4 slots.
+
+Se puede añadir una nueva ROM desde <<_roms,la pantalla ROMs>> de la BIOS, pulsando la tecla `N`, conectando un cable de audio a la entrada de sonido de la placa, y reproduciendo una cinta de carga de ROM. Las cintas de carga de ROM se pueden crear desde un archivo `.tap` generado con la utilidad `GenRom`, disponible en el https://github.com/zxdos/zxuno/tree/master/modflash[repositorio de código de ZX-Uno].
+
+Para actualizar las ROM instaladas para ZX Spectrum de forma masiva, se ha de obtener un fichero con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+
+[WARNING]
+====
+La versión actual `romsupgr`, en ZXDOS+, sólo funciona correctamente con ficheros que tengan un máximo de 35 slots de ROM ocupados.
+====
 
 [NOTE]
 ====
@@ -780,6 +789,11 @@ Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numéric
 ====
 
 Para hacer el proceso contrario (guardar las ROM en un fichero `ROMS.ZX1`), se puede usar el comando `.romsback`.
+
+[WARNING]
+====
+La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente los primeros 35 slots de ROM ocupados.
+====
 
 Los ficheros `ROMS.ZX1` se pueden editar fácilmente con la utilidad http://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
 
@@ -818,6 +832,21 @@ Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 para acceder a la configu
 Realizar un Hard-reset, o apagar y encender.
 
 Si todo se ha hecho correctamente, al encender el ZXDOS+ se verá cómo esxdos detecta la tarjeta y carga los componentes necesarios para funcionar, mostrando la nueva versión en la parte superior.
+
+=== Memoria Flash
+
+También es posible actualizar la memoria flash de la FPGA. Por el momento desde el menú de la BIOS sólo es posible utilizar imágenes de 16MiB. Para poder usar una imagen de 32MiB, se ha de usar el comando `UPGR32M` de <<_esxdos,esxdos>> y un fichero con el nombre `FLASH.ZX2`.
+
+Copiar el archivo de imagen (de 16MiB) `FLASH.ZXD` en la raíz de la tarjeta microSD.
+
+Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 (`Caps Shift+1` en gomaDOS+) para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade flash from SD"__. En el diálogo que pregunta __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `FLASH...`, .
+
+Realizar un Hard-reset, o apagar y encender.
+
+[WARNING]
+====
+Este proceso sustituye todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
+====
 
 <<<
 
@@ -920,6 +949,7 @@ Algunas de sus características son:
 - Utiliza Nextor ROM con un controladr para SD
 - Mapa de teclado configurable
 - Simulación de línea de exploración (Scanlines)
+- Soporte para joystick
 
 ==== Formato de Tarjeta microSD
 
@@ -1249,7 +1279,7 @@ Algunas las características del core son:
 - Dos modos de vídeo seleccionables: RGB/PAL60Hz y VGA 60Hz
 - 7 tipos de juego
 - Soporte 2 o 4 jugadores
-- Compatible con joystick(s), teclado y ratón
+- Compatible con joystick(s), teclado, ratón y codificadores (encoders) rotatorios (ver <<_codificadores_rotatorios,aquí>> para más información)
 - Varios modos de color
 
 ==== Formato de Tarjeta microSD
@@ -1294,7 +1324,7 @@ En él se pueden activar o desactivar las siguientes opciones:
 - Velocidad Aleatoria (Random Speed)
 - Ángulo Aleatorio (Random Angle)
 - Control por Joystick, teclado o ratón (Joystick)
-- Precisión de las palas (Paddle Accuracy)
+- Precisión del movimiento (Paddle Accuracy)
 - Modo de color (Mode)
 - Salir del menú (Exit menu)
 
@@ -1366,7 +1396,7 @@ Algunas de las características del core son:
 
 ==== Formato de Tarjeta microSD
 
-Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM y otros archivos necesarios. Los archivos se pueden descargar desde la https://github.com/fbelavenuto/colecofpga/tree/master/SD_Card[web del proyecto original en GitHub]
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM y otros archivos necesarios. Los archivos se pueden descargar desde la https://github.com/fbelavenuto/colecofpga/tree/master/SD_Card[web del proyecto original en GitHub].
 
 Si no estuviera ya, <<_cores,instalar el core de ColecoVision>> en el ZXDOS+.
 
@@ -1396,6 +1426,112 @@ Al iniciar, la ROM de la BIOS se carga desde la tarjeta SD, así como la ROM mul
 image:img/coleco.jpg[pdfwidth=70%]
 
 En el menú multicartucho, usar los controles de dirección para elegir la ROM a cargar, y luego el botón de disparo 1 para cargar la ROM elegida. Pulsando `Esc` (`Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se reinicia el core y se vuelve a cargar el menú de selección de ROM.
+
+<<<
+
+=== Atari 2600
+
+La https://es.wikipedia.org/wiki/Atari_2600[Atari 2600] es una videoconsola lanzada al mercado bajo el nombre de Atari VCS (Video Computer System).
+
+La versión para ZXDOS+ está desarrollada por avlixa.
+
+Algunas de las características del core son:
+
+- Dos modos de vídeo seleccionables: RGB y VGA
+- Compatible con joystick(s), teclado, ratón y codificadores (encoders) rotatorios (ver <<_codificadores_rotatorios,aquí>> para más información)
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM que se deseen cargar.
+
+Si no estuviera ya, <<_cores,instalar el core de Atari 2600>> en el ZXDOS+.
+
+==== Teclado
+
+En gomaDOS+, se recomienda cambiar el modo de teclado a `Atari 800` (`Caps Shift + Symbol Shift + U` y luego `4`) o `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `W`, `A`, `S`, `D` o el joystick 1: Controles de dirección del jugador 1
+- `F` o el botón de disparo del joystick 1: Disparo del jugador 1
+- `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
+- `H` o el botón de disparo del joystick 2: Disparo del jugador 2
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `Atari800`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `Atari800`) y `Enter` para elegir y seleccionar en el menú.
+
+[.text-center] 
+image:img/a2600.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Línea de exploración (Scanlines)
+- Modo RGB (PAL/NTSC)
+- Tamaño de las palas (Paddle Size)
+- Sonido (Sound)
+- Color (Color)
+- Dificultad A (Difficulty A)
+- Dificultad B (Difficulty B)
+- Select
+- Start
+- Cargar ROM (Load ROM)
+- Joystick
+- Precisión de paddle (Paddle Accuracy)
+- Salir del menú (Exit)
+
+<<<
+
+== Otro Hardware
+
+=== Codificadores rotatorios
+
+Los cores de Pong y Atari 2600 están también preparados para usar https://es.wikipedia.org/wiki/Codificador_rotatorio[codificadores rotatorios] (encoders), de tipo cuadratura, conectados al puerto de joystick. Está probado con codificadores de 600 ppr (pulsos por revolución), pero teóricamente deberían servir también de menor ppr, como de 400 o 300.
+
+También se puede utilizar con https://es.wikipedia.org/wiki/Paddle_(controlador_de_videojuegos)[paddle] del tipo volante de Atari 2600, pero **no** con los paddle del tipo raqueta. Eso sí, la experiencia en este caso es pobre, ya que son de muy pocos ppr y se deben hacer varios giros completos. Si se utilizan, se recomienda ajustar la precisión(accuracy) al valor 8 para conseguir una velocidad aceptable.
+
+==== Conexión
+
+Tanto el ZXDOS+ como el gomaDOS+ tienen conectado el pin 5 del joystick a voltaje positivo, que se utiliza para alimentación, y el pin 8 como GND. Los codificadores utilizados deben admitir voltajes de 3,4v a 5v.
+
+Los codificadores tienen 5 cables: Tierra (no conectada), Vcc (`+`), GND (`0V`ó `-`), `A` y `B`.
+
+Las conexiones `A` y `B` se conectan en los pines 1 y 2 para el primer codificador, y 3 y 4 para el segundo. Así se pueden tener hasta 4 codificadores conectados entre los 2 puertos de joystick.
+
+[.text-center] 
+image:img/db9joy.png[pdfwidth=40%]
+
+De esta manera, las conexiones serían:
+
+. Línea `A` codificador 1
+. Línea `B` codificador 1
+. Línea `A` codificador 2
+. Línea `B` codificador 2
+. Vcc(`+`)
+. Disparo 1
+. NC
+. `GND`
+. Disparo 2
+
+<<<
+
+==== Configuración del Core de Pong
+
+La forma de elegir la configuración es la siguiente:
+
+- Para 1 o 2 codificadores en el puerto 2 de joystick, seleccionar la opción `1/2 Paddle in J2`.
+- Para 2 codificadores, uno en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`. Esta opción también sirve para conectar 2 paddle tipo driving de Atari 2600.
+- Para  4 codificadores, dos en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`.
+- Para 1 o 2 codificadores en el puerto 2 de joystick junto con el ratón (en este caso los codificadores se asocian para los jugadores 2 y 4), seleccionar la opción `Mouse PS/2`.
+
+Se recomienda no realizar la conexión hasta haber seleccionado la opción deseada, ya que los codificadores actúan sobre el botón arriba/abajo del joystick y por tanto no permiten manejar el menú. Otra opción sería añadir un interruptor on/off en el codificador que deshabilite la alimentación y así no emita señal mientras se realiza la selección de menú.
 
 <<<
 
@@ -1573,7 +1709,7 @@ image:img/recovery2.png[pdfwidth=70%]
 
 [WARNING]
 ====
-Este proceso sustituirá todos los cores instalados por los que haya en la imagen, así como las ROMs de ZX Spectrum.
+Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
 ====
 
 [NOTE]

@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.1.8
+:revnumber: 1.1.9
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -774,7 +774,16 @@ Copy the file to the root of the MicroSD card, turn on and press `F2` to enter B
 
 === ROMs
 
-To update the ROMs installed for ZX Spectrum, a file named `ROMS.ZX1` must be obtained, which must be copied to the MicroSD card. Boot the ZXDOS+ using a "rooted" ROM, and then just enter the command `.romsupgr`. This will burn all the ROMs, which will be available for use.
+The flash memory of a ZXDOS+ has reserved 64 slots, 16K each, to store ZX Spectrum ROM images. Thus, an original ZX Spectrum ROM (16K) will take one slot, a ZX Spectrum 128K ROM (32K) will be two slots, and a ZX Spectrum +2A ROM (64K) will need 4 slots.
+
+You can add a new ROM pressing the key `N` at the BIOS <<_roms,ROMs screen>>, connecting an audio cable to the board, and playing a ROM audio tape. ROM audio tapes can be made from a `.tap` file built with the `GenRom` utility, available at https://github.com/zxdos/zxuno/tree/master/modflash[ZX-Uno Code Repository].
+
+To update at once all the ROMs installed for ZX Spectrum, a file named `ROMS.ZX1` must be obtained, which must be copied to the MicroSD card. Boot the ZXDOS+ using a "rooted" ROM, and then just enter the command `.romsupgr`. This will burn all the ROMs, which will be available for use.
+
+[WARNING]
+====
+At this moment, `romsupgr`, only works correctly with files using a maximum of 35 slots.
+====
 
 [NOTE]
 ====
@@ -782,6 +791,11 @@ Remember that if the ZXDOS+ is started by pressing the `/` key (on the numeric k
 ====
 
 To do the opposite process (save the ROMs in a `ROMS.ZX1` file), you can use the` .romsback` command.
+
+[WARNING]
+====
+At this moment, `romsback`, only stores correctly the first 35 used slots.
+====
 
 `ROMS.ZX1` files can be easily edited with the http: // guest: zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack] utility. Although it is a Windows program, it works perfectly, for example using https://www.winehq.org[Wine] or similar programs, either on MacOS or Linux.  
 
@@ -820,6 +834,21 @@ Start ZXDOS + with the card inserted and press `F2` to access BIOS setup. Select
 Do a Hard-reset, or turn it off and on.
 
 If everything has been done correctly, when you turn on the ZXDOS+ you will see how esxdos detects the card and loads the necessary components to work, showing the new version at the top.
+
+=== Flash Memory
+
+You also can update all the FPGA flash memory. At this moment, from the BIOS you can only use 16MiB image files. To use a 32MiB image, you must use <<_esxdos,esxdos>> `UPGR32M` command and a file named `FLASH.ZX2`.
+
+Copy the image file (16MiB) `FLASH.ZXD` to the root of the microSD card.
+
+Turn on the ZXDOS+ and press the `F2` key (`Caps Shift+1` on gomaDOS+) during boot to access the BIOS setup. Select the menu `Upgrade` and then choos the option __"Upgrade flash from SD"__. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
+
+Do a Hard-Reset or turn of and on again.
+
+[WARNING]
+====
+This process can't be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file. 
+====
 
 <<<
 
@@ -922,6 +951,7 @@ Some of its features are:
 - 128K Nextor (MSX-DOS2 evolution) ROM with SD driver
 - Reconfigurable keyboard map
 - Scanlines
+- Joystick support
 
 ==== microSD format
 
@@ -1251,7 +1281,7 @@ Some features of this core are:
 - Two different video modes: RGB/PAL60Hz and VGA 60Hz
 - 7 game variants
 - Support for 2 or 4 players
-- Support for Joysticks, keyboard and/or mouse controls
+- Support for Joysticks, keyboard, mouse and rotary encoder controls (see <<_rotary_enoders,here>> for more information)
 - Several colour modes
 
 ==== microSD format
@@ -1398,6 +1428,112 @@ On startup, BIOS ROM is loaded from the card, and then the multicart ROM.
 image:img/coleco.jpg[pdfwidth=70%]
 
 At multicart menu, use the directional controls to choose one ROM, and then fire button 1 to load. Pressing 'Esc' (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) restarts the core and loads the ROM selection menu again.
+
+<<<
+
+=== Atari 2600
+
+https://en.wikipedia.org/wiki/Atari_2600[Atari 2600]  is a home video game console originally branded as the Atari Video Computer System (Atari VCS).
+
+ZXDOS+ core version is developed by avlixa.
+
+Some of the features of the core are:
+
+- RGB and VGA support
+- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<_rotary_enoders,here>> for more information)
+
+==== microSD card format
+
+You need a microSD card with the first partition in FAT16 format to store ROM image files of the games to load.
+
+See the <<_cores,corresponding section>> for instructions of how to install the Atari 2600 core in ZXDOS+.
+
+==== Keyboard
+
+For gomaDOS+, it is recommended to change the keyboard mode to `Atari 800` (`Caps Shift + Symbol Shift + U` and then `4`) o `PC XT` (`Caps Shift + Symbol Shift + U` and then `9`).
+
+==== Special keys and buttons
+
+During the core exeution:
+
+- `W`, `A`, `S`, `D` or joystick 1: Directional controls for player 1
+- `F` or joystick 1 fire button: Player 1 fire button
+- `I`, `J`, `K`, `L` or joystick 2: Directional controls for player 2
+- `H` oor joystick 2 fire button: Player 2 fire button
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): change between RGB and VGA video mode
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset.
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `Atari800` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `Atari800` keyboard mode) and `Enter` to select and choose menu options.
+
+[.text-center] 
+image:img/a2600.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Reset core
+- Scanlines
+- RGB Mode (PAL/NTSC)
+- Paddle Size
+- Sound
+- Color
+- Difficulty A
+- Difficulty B
+- Select
+- Start
+- Load ROM
+- Joystick
+- Paddle Accuracy
+- Exit
+
+<<<
+
+== Other Hardware
+
+=== Rotary Encoders
+
+Pong and Atari 2600 cores support the use of quadrature https://en.wikipedia.org/wiki/Rotary_encoder[rotary encoders] as control devices. They can be connected to the joystick ports. Although the testing has been done with 600 ppr encoders, lower ppr encoders, like 400 or 300, should also work.
+
+You can also use an Atari 2600 https://en.wikipedia.org/wiki/Paddle_(game_controller)[paddle] driving controller. In this case the playing experience is bad, since they have few ppr and you must do several full rotations. When using them, it's recommended to set the accuracy setting to 8, to have enough speed.
+
+==== Connection
+
+Both ZXDOS+ and gomaDOS+ have joystick pin 5 connected to positive VCC, used as main power, and pin 8 as GND. The rotary encoders to use must support voltage from 3,4v to 5v.
+
+A rotary encoder has 5 wires: Earth Ground (not connected), Vcc (`+`), GND (`0V`or `-`), `A` and `B`.
+
+`A` y `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the seconde one. This way you can have up to 4 encoders connected using both joystick ports.
+
+[.text-center] 
+image:img/db9joy.png[pdfwidth=40%]
+
+This way, the connections should be:
+
+. Line `A` encoder 1
+. Line `B` encoder 1
+. Line `A` encoder 2
+. Line `B` encoder 2
+. Vcc(`+`)
+. Fire 1
+. NC
+. `GND`
+. Fire 2
+
+<<<
+
+==== Pong Core Configuration
+
+Follow these directions to choose the configuration:
+
+- For 1 or 2 endoders on joystick port 2 de joystick, select `1/2 Paddle in J2` option
+- For 2 encoders, one for each joystick port, select `2/4 Paddle in J1&J2` option. This is also valid to connect two Atari 2600 driving paddles
+- For 4 encoders, two for each joystick port, select `2/4 Paddle in J1&J2` option
+- For 1 or 2 encoders on joystick port 2 along with a mouse (in this case the encoders are for players 2 and 4), select `Mouse PS/2` option
+
+It is recommended to wait, and make the connection after selecting the chosen option, since the encoders interfere with the up/down directions of the joystick, blocking access to the menu. Another option is to add a on/off switch for the encoder that will disable the power.
 
 <<<
 
@@ -1575,7 +1711,7 @@ image:img/recovery2.png[pdfwidth=70%]
 
 [WARNING]
 ====
-This will replace all the previously installed cores and ZX Spectrum ROMs.
+This process can't be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
 ====
 
 [NOTE]
