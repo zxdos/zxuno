@@ -1,10 +1,10 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.1.9
+:revnumber: 1.2.0
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.1
+:Revision: 1.2
 :description: Manual en castellano de ZXDOS+ y gomaDOS+
 :keywords: Manual, Castellano, ZXDOS+, gomaDOS+
 :icons: font
@@ -650,8 +650,8 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
 - `playrmov`: Reproduce videos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
-- `romsback`: Copia a un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
-- `romsupgr`: Copia el contenido de un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
+- `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
+- `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `upgr32m`: Copia el contenido de un fichero `FLASH.ZX2` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root". 
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
@@ -776,11 +776,11 @@ La memoria flash del ZXDOS+ dispone de 64 "slots", de 16K cada uno, para almacen
 
 Se puede añadir una nueva ROM desde <<_roms,la pantalla ROMs>> de la BIOS, pulsando la tecla `N`, conectando un cable de audio a la entrada de sonido de la placa, y reproduciendo una cinta de carga de ROM. Las cintas de carga de ROM se pueden crear desde un archivo `.tap` generado con la utilidad `GenRom`, disponible en el https://github.com/zxdos/zxuno/tree/master/modflash[repositorio de código de ZX-Uno].
 
-Para actualizar las ROM instaladas para ZX Spectrum de forma masiva, se ha de obtener un fichero con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+Para actualizar las ROM instaladas para ZX Spectrum de forma masiva, se ha de obtener un fichero RomPack con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
 
 [WARNING]
 ====
-La versión actual `romsupgr`, en ZXDOS+, sólo funciona correctamente con ficheros que tengan un máximo de 35 slots de ROM ocupados.
+La versión actual `romsupgr`, en ZXDOS+, sólo funciona correctamente con ficheros RomPack que tengan un máximo de 35 slots de ROM ocupados.
 ====
 
 [NOTE]
@@ -788,14 +788,14 @@ La versión actual `romsupgr`, en ZXDOS+, sólo funciona correctamente con fiche
 Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+), entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".
 ====
 
-Para hacer el proceso contrario (guardar las ROM en un fichero `ROMS.ZX1`), se puede usar el comando `.romsback`.
+Para hacer el proceso contrario (guardar las ROM en un fichero RomPack llamado `ROMS.ZX1`), se puede usar el comando `.romsback`.
 
 [WARNING]
 ====
-La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente los primeros 35 slots de ROM ocupados.
+La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente en RomPack los primeros 35 slots de ROM ocupados.
 ====
 
-Los ficheros `ROMS.ZX1` se pueden editar fácilmente con la utilidad http://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
+Los ficheros RomPack se pueden editar fácilmente con la utilidad http://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
 
 === Cores
 
@@ -1489,6 +1489,56 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 
 <<<
 
+=== Videopac
+
+La https://es.wikipedia.org/wiki/Magnavox_Odyssey²[Philips Videopac], también conocida como Magnavox Odyssey², Philips Videopac G7000 o Philips Odyssey² es una videoconsola lanzada en 1978.
+
+La versión para ZXDOS+ está desarrollada por avlixa, basada en el core de ZXDOS de yomboprime.
+
+Algunas de las características del core son:
+
+- Dos modos de vídeo seleccionables: RGB y VGA
+- Necesita Joystick(s) para funcionar
+- Modos de color incluyendo monocromo o fósforo verde/naranja
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM que se deseen cargar.
+
+Si no estuviera ya, <<_cores,instalar el core de Videopac>> en el ZXDOS+.
+
+==== Teclado
+
+En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar en el menú.
+
+[.text-center] 
+image:img/videopac.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Línea de exploración (Scanlines)
+- Intercambiar el orden de los joysticks (Swap joysticks)
+- Cargar ROM (Load ROM)
+- Modo de vídeo (PAL Videopac/NTSC Odyssey2)
+- Modo de color (Color Mode)
+- Salir del menú (Exit) 
+
+<<<
+
 == Otro Hardware
 
 === Codificadores rotatorios
@@ -1797,6 +1847,12 @@ http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
 http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
 
 https://github.com/fbelavenuto/colecofpga[ColecoFPGA en GitHub]
+
+http://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
+
+https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
+
+https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox Odyssey 2 (2012-04-23)]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
