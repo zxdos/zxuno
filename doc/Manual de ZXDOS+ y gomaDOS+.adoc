@@ -1234,7 +1234,7 @@ Para cargar desde un disco, habitualmente, se ha de escribir `LOAD "*",8,1` y pu
 
 Si el disco tuviera varios programas para ejecutar, escribir `LOAD "$"` y pulsar `Enter`. A continuación, escribir `LIST`, y pulsar `Enter`, para ver una lista con los archivos dentro del disco. Ahora, para cargar el archivo deseado, escribir `LOAD "<nombre>",8` (donde `<nombre>` es el nombre del archivo a cargar) y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa. Si esto no funcionase, probar con el comando `LOAD "<nombre>",8,1`. 
 
-Para cargar desde cinta, se puede escribir `LOAD` y pulsar `Enter`, o bien pulsar `Mayús+Esc` (`Mayús+RUN/STOP`).
+Para cargar desde cinta, abrimos el menú de opciones con `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+), y seleccionamos la opción cargar fichero de cinta TAP, navegando hasta el archivo deseado. Lo seleccionamos con `ENTER` y volveremos al basic. Ahora escribimos `LOAD` y pulsamos `Enter`, o bien pulsamos `Mayús+Esc` (`Mayús+RUN/STOP`). En ese momento pulsamos `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+) y comenzará la reproducción del archivo. Para monitorizar la carga, se puede activar la opción del menú de activar el sonido de carga de la cinta. Una vez finalizada la carga, escribir `RUN` si es necesario. 
 
 <<<
 
