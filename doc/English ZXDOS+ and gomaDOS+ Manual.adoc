@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.2.0
+:revnumber: 1.2.1
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1208,6 +1208,7 @@ The following gomaDOS+ key combinations are in `Commodore 64` keyboard mode. Ple
 
 While the core is running:
 
+- `F9` `Caps Shift+Symbol Shift+9` on gomaDOS+): Play/Pause a TAP file
 - `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Shows options menu
 - `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): switches between VGA and RGB modes
 - `Esc` (`Caps Shift+Space` on gomaDOS+): RUN/STOP (`Shift+RUN/STOP`: Load from tape)
@@ -1236,7 +1237,7 @@ After a disk is inserted, normally, you can use `LOAD "*",8,1` and press `Enter`
 
 If there was more than one program in the disk, type `LOAD "$"` and press `Enter`. Then, type `LIST`, and press `Enter`, to see a list with the files in the disk. Now, to load one of them, type `LOAD "<name>",8` (where `<name>` is the name of the file to load) and press `Enter`. Once `READY` is shown on screen, type `RUN` and press `Enter` to execute it. If this didn't work try again with the command `LOAD "<name>",8,1`. 
 
-To load from tape, you can type `LOAD` and press `Enter`, or just press `Shift+Esc` (`Shift+RUN/STOP`).
+To load from tape, Select "Carga Tap" option from the menu. Then, browse the microSD and select the TAP file to load, press `ENTER` and close the options menu. After that, type `LOAD` and press `Enter`, or press `Shift+Esc` (`Shift+RUN/STOP`). Finally, when pressing `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+) the tape file will start playing (you can enable the tape loading sound selecting "Sonido Carga Cinta" in the options menu). Once the loading finishes, type `RUN` and press `ENTER` if needed. 
 
 <<<
 
