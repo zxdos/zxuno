@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.2.1
+:revnumber: 1.2.2
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -851,6 +851,36 @@ Este proceso sustituye todos los cores instalados, la BIOS, así como las ROMs d
 <<<
 
 == Otros cores
+
+=== ZX Spectrum 48K (Kyp)
+
+https://github.com/Kyp069/zx48.zxdosplus/releases/[Core alternativo], cuyo objetivo es ser una implementación de un Spectrum 48K que sea lo más exacta posible en cuanto a la configuración de los tiempos (timing), contención de memoria, etc.
+
+Sus características principales son:
+
+- Sólo funciona con RGB
+- Specdrum
+- Turbosound (dos chips AY) con posibilidad de elegir mix ACB/ABC
+- DivMMC con esxdos 0.8.8
+- Joystick Kempston en el puerto 1
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la distribución de esxdos 0.8.8 (ver <<_esxdos,el apartado correspondiente de esxdos>> para más información).
+
+==== Teclado
+ 
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): BREAK
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+): Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+) o `F11` (`Caps Shift+Symbol Shift+Q` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+) o `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Soft reset.
+
+<<<
 
 === ZX Spectrum Next
 
@@ -1826,6 +1856,10 @@ https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pac
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
 
 https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Vídeos Radastanianos]
+
+https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234&hilit=kyp#p28234[Nuevo core zx48]
+
+https://github.com/Kyp069/zx48.zxdosplus/releases/[ZX 48 para ZXDOS+ (Kyp)]
 
 http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 

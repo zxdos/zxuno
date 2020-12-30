@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.2.1
+:revnumber: 1.2.2
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -854,13 +854,43 @@ This process can't be undone, and it will replace all the previously installed c
 
 == Other cores
 
+=== ZX Spectrum 48K (Kyp)
+
+https://github.com/Kyp069/zx48.zxdosplus/releases/[Alternative core], whose objective is to be the most accurate implementation in timings, memory contention, etc.
+
+Main features:
+
+- Only working on RGB (no VGA)
+- Specdrum
+- Turbosound (two AY chips) with mix selection ACB/ABC
+- DivMMC with esxdos 0.8.8
+- Kempston joystick in port 1
+
+==== microSD card format
+
+You need a microSD card with the first partition formatted as FAT16 or FAT32, and inside, the standard esxDOS 0.8.8 (see <<_esxdos,esxdos corresponding section>> for more info).
+
+==== Keyboard
+ 
+==== Special keys and buttons
+
+While the core is running:
+
+- `Esc` (`Caps Shift+Space` on gomaDOS+): BREAK
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+): Change Turbosound mixer configuration between ACB and ABC.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+) or `F11` (`Caps Shift+Symbol Shift+Q` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+) or `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Soft reset.
+
+<<<
+
 === ZX Spectrum Next
 
 https://www.specnext.com[ZX Spectrum Next] is an FPGA based project, which wants to be the evolution of the Sinclair ZX Spectrum line of computers. It brings new features while keeping hardware and software compatibility with previous ZX Spectrum computers.
 
-Specially thanks to avlixa, ther exists a ZX Spectrum Next core synthesized for ZXDOS+.
+Specially thanks to avlixa, there exists a ZX Spectrum Next core synthesized for ZXDOS+.
 
-The core, for the moment does not havd any of these features:
+The core, for the moment does not have any of these features:
 
 - Raspberry Pi
 - Internal beeper
@@ -1823,6 +1853,12 @@ http://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Cor
 https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
 
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
+
+https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Vídeos Radastanianos]
+
+https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234&hilit=kyp#p28234[Nuevo core zx48]
+
+https://github.com/Kyp069/zx48.zxdosplus/releases/[ZX 48 for ZXDOS+ (Kyp)]
 
 http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
