@@ -1,9 +1,10 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.0.3
+:revnumber: 1.2.2
 :doctype: book
+:front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.0
+:Revision: 1.2
 :description: Manual en castellano de ZXDOS+ y gomaDOS+
 :keywords: Manual, Castellano, ZXDOS+, gomaDOS+
 :icons: font
@@ -24,22 +25,73 @@ La página oficial de ZXDOS+ y gomaDOS+ es http://zxdos.forofpga.es.
 
 La mayoría de las funciones y características de ZXDOS+ y gomaDOS+ son las mismas, así que, en este documento, se hablará, en general, de ZXDOS+, indicando las diferencias con gomaDOS+ donde sea necesario.
 
+<<<
+
+=== Puertos y Conectores
+
+==== ZXDOS+
+
+[.text-center] 
+image:img/ZXDOSfront.jpg[pdfwidth=90%]
+
+[.text-center] 
+image:img/ZXDOSback.jpg[pdfwidth=90%]
+
+<<<
+
+==== gomaDOS+
+
+[.text-center] 
+image:img/gomaDosBack.jpg[pdfwidth=90%]
+
+==== Descripción
+
+[cols=2*] 
+|===
+|1
+|Interruptor
+|2
+|Ranura microSD
+|3
+|JTAG y Joystick
+|4
+|Salida de Sonido
+|5
+|Entrada de Sonido
+|6
+|Salida RGB/VGA
+|7
+|Enchufe de Alimentación
+|8
+|Puerto de expansión
+|9
+|Puerto de Joystick Izquierdo
+|10
+|Puerto de Joystick Derecho
+|11
+|Puerto de Teclado PS/2
+|12
+|Puerto de Ratón PS/2
+|0
+|Puerto USB (PS/2)
+|===
+
+<<<
+
 === Configuración Inicial
 
 Para poder poner en marcha un ZXDOS+ o gomaDOS+ hace falta, al menos, lo siguiente:
 
-- Un cargador USB, o una TV u otro dispositivo que ofrezca alimentación USB
+- Un cargador USB, una TV u otro dispositivo que ofrezca alimentación USB
 - Un cable y un monitor VGA
 - Un teclado PS/2 (en el caso de ZXDOS+)
 
 Para poder aprovechar todo su potencial, es útil tener también:
 
 - Una tarjeta microSD, no necesariamente muy grande
-- Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV
-- Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive
-- Un ratón PS/2
-
-<<<
+- Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV (opcional en gomaDOS+, ya que tiene beeper incorporado)
+- Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive (se necesita el adaptador de joystick en el caso de gomaDOS+)
+- Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)
 
 ==== Formato de la tarjeta microSD
 
@@ -120,7 +172,7 @@ Una vez descargado y descomprimido, se han de copiar, a la raíz de la tarjeta, 
 Si todo se ha hecho correctamente, al encender el core Spectrum de ZXDOS+ se verá cómo esxdos detecta la tarjeta y carga los componentes necesarios para funcionar.
 
 [.text-center] 
-image::./img/esxdos.png[pdfwidth=70%]
+image:./img/esxdos.png[pdfwidth=70%]
 
 <<<
 
@@ -148,16 +200,231 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. 
 
 <<<
 
+=== Modos de teclado en gomaDOS+
+
+El teclado de gomaDOS+ al ser similar al teclado del ZX Spectrum original, carece de algunas de teclas existentes en un teclado moderno de PC. Internamente, el teclado de membrana está conectado a una placa Arduino, que se encarga de transformar las pulsaciones al protocolo PS/2 de teclado. Esta placa está programada de manera que pueda comportarse de distintas maneras según nos interese.
+
+Por defecto, está configurado en modo ZX Spectrum. Para cambiar a otro modo, se debe pulsar `Caps Shift+Symbol Shift+U` y luego la tecla correspondiente. Al hacerlo, se tecleará automáticamente un texto indicando el modo seleccionado (por ejemplo: `.zx` si se pulsa `Caps Shift+Symbol Shift+U` y luego `0`).
+
+La siguiente tabla indica los distintos modos y la tecla de activación asociada:
+
+[%header,cols=2*] 
+|===
+|Modo
+|Tecla
+|ZX Spectrum
+|`0`
+|Amstrad CPC
+|`1`
+|MSX
+|`2`
+|Commodore 64
+|`3`
+|Atari 800XL
+|`4`
+|BBC Micro
+|`5`
+|Acorn Electron
+|`6`
+|Apple (I y II)
+|`7`
+|Commodore VIC 20
+|`8`
+|PC XT
+|`9`
+|Oric Atmos
+|`A`
+|SAM Coupé
+|`B`
+|Jupiter ACE
+|`C`
+|===
+
+<<<
+
+La distribución del teclado en modo ZX Spectrum, con la pulsación asociada al combinar junto con `Caps Shift+Symbol Shift`, se puede resumir según el siguiente esquema:
+
+[cols=10*] 
+|===
+^|**1**
+^|**2**
+^|**3**
+^|**4**
+^|**5**
+^|**6**
+^|**7**
+^|**8**
+^|**9**
+^|**0**
+^|`F1`
+^|`F2`
+^|`F3`
+^|`F4`
+^|`F5`
+^|`F6`
+^|`F7`
+^|`F8`
+^|`F9`
+^|`F1`
+^|**Q**
+^|**W**
+^|**E**
+^|**R**
+^|**T**
+^|**Y**
+^|**U**
+^|**I**
+^|**O**
+^|**P**
+^|`F11`
+^|`F12`
+^|
+^|
+^|
+^|
+^|`Modo`
+^|
+^|
+^|
+^|**A**
+^|**S**
+^|**D**
+^|**F**
+^|**G**
+^|**H**
+^|**J**
+^|**K**
+^|**L**
+^|**Enter**
+^|
+^|
+^|
+^|
+^|`BlqDs`
+^|
+^|
+^|
+^|
+^|
+^|**CShift**
+^|**Z**
+^|**X**
+^|**C**
+^|**V**
+^|**B**
+^|**N**
+^|**M**
+^|**SShift**
+^|**Space**
+^|
+^|
+^|`Guarda`
+^|
+^|`Vers`
+^|`hRes`
+^|`sRes`
+^|
+^|
+^|
+|===
+
+Donde:
+
+- `BlqDs`: `Bloq. Despl.` cambia de modo video compuesto a VGA y viceversa (en el core de Next, se debe usar `Caps Shift+Symbol Shift+2` o `F2`)
+- `Guarda`: Define el modo actual como el modo por defecto
+- `Vers`: Muestra (teclea) la versión actual del firmware
+- `hRes`: Hard Reset
+- `sRes`: Soft Reset
+
+<<<
+
+La lista completa de combinaciones de teclado (y el modo en que se pueden utilizar) es la siguiente:
+
+[%header,cols=3*] 
+|===
+|Caps S.+Symbol S.
+|Modo
+|Acción
+|1
+|Todos
+|`F1`
+|2
+|Todos
+|`F2`
+|3
+|Todos
+|`F3`
+|4
+|Todos
+|`F4`
+|5
+|Todos
+|`F5`
+|6
+|Todos
+|`F6`
+|7
+|Todos
+|`F7`
+|8
+|Todos
+|`F8`
+|9
+|Todos
+|`F9`
+|0
+|Todos
+|`F10`
+|Q
+|Todos
+|`F11`
+|W
+|Todos
+|`F12`
+|S
+|C64
+|`Ctrl+F12`
+|E
+|Acorn/CPC
+|`Re Pág`
+|R
+|Acorn
+|`PgAbajo`
+|U
+|Todos
+|`Modo`
+|G
+|ZX/MSX/C64
+|`BlqDs`
+|X
+|Todos
+|`Guarda`
+|C
+|PC
+|`OPQA`
+|V
+|Todos
+|`Versión`
+|B
+|ZX
+|`Ctrl+Alt+Bcksp`
+|N
+|ZX
+|`Ctrl+Alt+Supr`
+|===
+
+<<<
+
 === BIOS
 
-Si se pulsa la tecla `F2` durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXDOS+. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
+Si se pulsa la tecla `F2` (`Caps Shift+1` en gomaDOS+) durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXDOS+. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
 
-Usando las teclas de cursor (izquierda y derecha), se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
+Usando las teclas de cursor izquierda y derecha (`Caps Shift+5` y `Caps Shift+8` en gomaDOS+), se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo (`Caps Shift+7` y `Caps Shift+6` en gomaDOS+) se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` (`Caps Shift+Espacio` en gomaDOS+) sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
 
 ==== Main
 
 [.text-center] 
-image::img/bios.png[pdfwidth=70%]
+image:img/bios.png[pdfwidth=70%]
 
 En la primera pantalla de configuración, además de poder ejecutar distintas pruebas, se puede definir el comportamiento por defecto para lo siguiente:
 
@@ -175,21 +442,21 @@ Se puede consultar información más tecnica en http://www.zxuno.com/wiki/index.
 ==== ROMs
 
 [.text-center] 
-image::img/bios2.png[pdfwidth=70%]
+image:img/bios2.png[pdfwidth=70%]
 
 La segunda pantalla muestra las ROMs de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
 
 ==== Upgrade
 
 [.text-center] 
-image::img/bios3.png[pdfwidth=70%]
+image:img/bios3.png[pdfwidth=70%]
 
 La pantalla _Upgrade_ se utiliza para realizar las distintas actualizaciones del contenido de la memoria Flash: esxdos, BIOS, Cores, etc. (véase <<_actualizaciones,el apartado correspondiente a actualizaciones>> para más información).
 
 ==== Boot
 
 [.text-center] 
-image::img/bios4.png[pdfwidth=70%]
+image:img/bios4.png[pdfwidth=70%]
 
 En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que cargue por defecto en el arranque.
 
@@ -198,7 +465,7 @@ En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que c
 ==== Advanced
 
 [.text-center] 
-image::img/bios5.png[pdfwidth=70%]
+image:img/bios5.png[pdfwidth=70%]
 
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
 
@@ -216,7 +483,7 @@ La pantalla de configuración avanzada sirve para modificar los siguientes ajust
 ==== Exit
 
 [.text-center] 
-image::img/bios6.png[pdfwidth=70%]
+image:img/bios6.png[pdfwidth=70%]
 
 Finalmente, desde la última pantalla se puede:
 
@@ -266,47 +533,45 @@ Para más información, consultar http://www.zxuno.com/forum/viewtopic.php?f=37&
 ==== Español
 
 [.text-center] 
-image::./img/keyboardEsp.png[pdfwidth=70%]
+image:./img/keyboardEsp.png[pdfwidth=70%]
 
 ==== Inglés
 
 [.text-center] 
-image::./img/keyboardEng.png[pdfwidth=70%]
+image:./img/keyboardEng.png[pdfwidth=70%]
 
 ==== Spectrum   
 
 [.text-center] 
-image::./img/keyboardAV.png[pdfwidth=70%]
+image:./img/keyboardAV.png[pdfwidth=70%]
 
 <<<
 
 === Teclas especiales y botones
 
-El teclado de gomaDOS+ al ser similar al teclado del ZX Spectrum original, carece de algunas de teclas existentes en un teclado moderno de PC. Para subsanarlo, se puede cambiar el modo en que se interpreta el teclado de Spectrum entre dos distintos: Modo Convencional (que es el modo por defecto) y Modo Completo. 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT` (Por ejemplo, `Caps Shift+Symbol Shift+2` en vez de `Caps Shift+1`).
 
-Para cambiar entre los dos modos de teclado se utiliza la combinación de teclas `Caps Shift+Symbol Shift+F` y luego pulsar `D`.
+Teclas especiales durante el arranque:
 
-Teclas especiales que se pueden utilizar la ejecución del core principal (ZX Spectrum):
+- `F2` (`Caps Shift+1` en gomaDOS+) Entrar en la BIOS
+- `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2` en gomaDOS+): Menú de selección de cores
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): Menú de selección de ROMS del core de ZX Spectrum
+- `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.
+- `/` (del teclado numérico): Carga la ROM del core de ZX Spectrum en modo "root"
+- Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
-- `Esc`: BREAK
-- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+, en modo completo): Edit
-- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+, en modo completo - o bien `Caps Shift+Symbol Shift+F` y luego `Y` -): NMI
-- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+, en modo completo): Reproducir o Pausa en la reproducción de archivos .PZX
-- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+, en modo completo): Rebobinar el archivo .PZX hasta la marca anterior
-- `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+, en modo completo): Graph
-- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
+Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
+
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): BREAK
+- `F2` (`Caps Shift+1` en gomaDOS+): Edit
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): NMI
+- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Reproducir o Pausa en la reproducción de archivos .PZX
+- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+): Rebobinar el archivo .PZX hasta la marca anterior
+- `F10` (`Caps Shift+9` en gomaDOS+): Graph
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
-
-Durante el arranque:
-
-- `F2` (`Caps Shift+1` en gomaDOS+, en modo completo) Entrar en la BIOS
-- `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2 en gomaDOS+): Menú de selección de cores
-- `Esc` (`Caps Shift+Espacio` en gomaDOS+): Menú de selección de ROMS del core de ZX Spectrum
-- `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.
-- `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+): Carga la rom del core de ZX Spectrum en modo "root"
-- Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
 <<<
 
@@ -374,8 +639,8 @@ Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cu
 
 Tal y como se ha explicado en la parte de instalación, existe una serie de comandos que son exclusivos para ZXDOS+, y que se describen a continuación:
 
-- `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD el contenido de una memoria SPI Flash de 16 Megas. Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
-- `back32m`: Versión del comando backup exclusivo para memorias SPI Flash de 32 Megas. Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
+- `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
+- `back32m`: Genera un fichero `FLASH.ZX2` en el directorio raíz de la tarjeta SD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
 - `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
 - `dmaplayw`: Reproduce un archivo de audio .WAV,  que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
 - `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
@@ -385,10 +650,10 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
 - `playrmov`: Reproduce videos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
-- `romsback`: Copia a un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash.
-- `romsupgr`: Copia el contenido de un fichero `ROMS.ZX1` en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash.
-- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. 
-- `upgr32m`: Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas.
+- `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
+- `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
+- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
+- `upgr32m`: Copia el contenido de un fichero `FLASH.ZX2` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root". 
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
 
@@ -507,16 +772,30 @@ Copiar el fichero en la raíz de la tarjeta MicroSD, encender y pulsar `F2` para
 
 === ROMs
 
-Para actualizar las ROM instaladas para ZX Spectrum se ha de obtener un fichero con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+La memoria flash del ZXDOS+ dispone de 64 "slots", de 16K cada uno, para almacenar imágenes ROM de ZX Spectrum y compatibles. Así, la ROM del ZX Spectrum original (16K) ocuparía un slot del almacenamiento, la del ZX Spectrum 128K (32K) ocuparía dos slots, y la del ZX Spectrum +2A (64K) ocuparía 4 slots.
+
+Se puede añadir una nueva ROM desde <<_roms,la pantalla ROMs>> de la BIOS, pulsando la tecla `N`, conectando un cable de audio a la entrada de sonido de la placa, y reproduciendo una cinta de carga de ROM. Las cintas de carga de ROM se pueden crear desde un archivo `.tap` generado con la utilidad `GenRom`, disponible en el https://github.com/zxdos/zxuno/tree/master/modflash[repositorio de código de ZX-Uno].
+
+Para actualizar las ROM instaladas para ZX Spectrum de forma masiva, se ha de obtener un fichero RomPack con el nombre `ROMS.ZX1`, y se tiene que copiar en la tarjeta MicroSD. Arrancar el ZXDOS+ usando una ROM "rooted", y entonces bastará con introducir el comando `.romsupgr`. Esto grabará todas las ROM, que quedarán disponibles para su uso.
+
+[WARNING]
+====
+La versión actual `romsupgr`, en ZXDOS+, sólo funciona correctamente con ficheros RomPack que tengan un máximo de 35 slots de ROM ocupados.
+====
 
 [NOTE]
 ====
 Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numérico) (`Symbol Shift+V` en gomaDOS+), entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".
 ====
 
-Para hacer el proceso contrario (guardar las ROM en un fichero `ROMS.ZX1`), se puede usar el comando `.romsback`.
+Para hacer el proceso contrario (guardar las ROM en un fichero RomPack llamado `ROMS.ZX1`), se puede usar el comando `.romsback`.
 
-Los ficheros `ROMS.ZX1` se pueden editar fácilmente con la utilidad http://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
+[WARNING]
+====
+La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente en RomPack los primeros 35 slots de ROM ocupados.
+====
+
+Los ficheros RomPack se pueden editar fácilmente con la utilidad http://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
 
 === Cores
 
@@ -546,7 +825,7 @@ Para actualizar esxdos a una nueva versión, se ha de obtener la distribución d
 
 Una vez descargado y descomprimido, se ha de copiar, a la raíz de la tarjeta, el contenido de los directorios `BIN` y `SYS` sobreescribiendo los existentes (para preservar los comandos exclusivos de ZXDOS+).
 
-Copiar `ESXMMC.BIN` en la raíz de la tarjeta microSD, renombrándolo como `ESXDOS.ZX2` (para un ZXDOS+ con placa FPGA LX16) o `ESXDOS.ZXD` (para un ZXDOS+ con placa FPGA LX25).
+Copiar `ESXMMC.BIN` (o `ESXMMC.ROM`, según la versión) en la raíz de la tarjeta microSD.
 
 Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade esxdos for ZX"__. En el diálogo que aparece elegir __"SD file"__ y, cuando pregunte __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `ESXDOS...`, se grabará en la flash y avisará cuando esté actualizado.
 
@@ -554,9 +833,54 @@ Realizar un Hard-reset, o apagar y encender.
 
 Si todo se ha hecho correctamente, al encender el ZXDOS+ se verá cómo esxdos detecta la tarjeta y carga los componentes necesarios para funcionar, mostrando la nueva versión en la parte superior.
 
+=== Memoria Flash
+
+También es posible actualizar la memoria flash de la FPGA. Por el momento desde el menú de la BIOS sólo es posible utilizar imágenes de 16MiB. Para poder usar una imagen de 32MiB, se ha de usar el comando `UPGR32M` de <<_esxdos,esxdos>> y un fichero con el nombre `FLASH.ZX2`.
+
+Copiar el archivo de imagen (de 16MiB) `FLASH.ZXD` en la raíz de la tarjeta microSD.
+
+Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 (`Caps Shift+1` en gomaDOS+) para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade flash from SD"__. En el diálogo que pregunta __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `FLASH...`, .
+
+Realizar un Hard-reset, o apagar y encender.
+
+[WARNING]
+====
+Este proceso sustituye todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
+====
+
 <<<
 
 == Otros cores
+
+=== ZX Spectrum 48K (Kyp)
+
+https://github.com/Kyp069/zx48.zxdosplus/releases/[Core alternativo], cuyo objetivo es ser una implementación de un Spectrum 48K que sea lo más exacta posible en cuanto a la configuración de los tiempos (timing), contención de memoria, etc.
+
+Sus características principales son:
+
+- Sólo funciona con RGB
+- Specdrum
+- Turbosound (dos chips AY) con posibilidad de elegir mix ACB/ABC
+- DivMMC con esxdos 0.8.8
+- Joystick Kempston en el puerto 1
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la distribución de esxdos 0.8.8 (ver <<_esxdos,el apartado correspondiente de esxdos>> para más información).
+
+==== Teclado
+ 
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): BREAK
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+): Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+) o `F11` (`Caps Shift+Symbol Shift+Q` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+) o `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Soft reset.
+
+<<<
 
 === ZX Spectrum Next
 
@@ -594,17 +918,19 @@ Si no estuviera ya, <<_cores,instalar el core de ZX Spectrum Next>> en el ZXDOS+
  
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Notar que `Ctrl+Alt+backspace` no funciona con el core de Spectrum Next. Hay que apagar manualmente y volver a encender si se desea cambiar a otro core. Tampoco hay botón físico de Reset o Drive.
 
 Durante la ejecución del core:
 
-- `F1`: Hard Reset
-- `F2`: Scandoubler. Dobla la resolución. Debería estar apagado para conexiones vía SCART
-- `F3`: Alternar la frecuencia vertical entre 50Hz y 60Hz
-- `F5`: Soft Reset
-- `F7`: Scanlines
-- `F9`: NMI
-- `F10`: divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Hard Reset
+- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Scandoubler. Dobla la resolución. Debería estar apagado para conexiones vía SCART
+- `F3` (`Caps Shift+Symbol Shift+3` en gomaDOS+): Alternar la frecuencia vertical entre 50Hz y 60Hz
+- `F4` (`Caps Shift+Symbol Shift+4` en gomaDOS+): Soft Reset
+- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Scanlines
+- `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+): NMI
+- `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+): divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
 
 <<<
 
@@ -613,21 +939,21 @@ Durante la ejecución del core:
 Al iniciarse la primera vez, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
 
 [.text-center] 
-image::img/next.png[pdfwidth=70%]
+image:img/next.png[pdfwidth=70%]
 
-Se puede navegar utilizando las teclas de cursor o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
+Se puede navegar utilizando las teclas de cursor, las teclas `5`, `6`, `7` y `8`, o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
 
 La opción `More...` muestra un segundo menú con más opciones.
 
 [.text-center] 
-image::img/next2.png[pdfwidth=70%]
+image:img/next2.png[pdfwidth=70%]
 
 <<<
 
 Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
 
 [.text-center] 
-image::img/next3.png[pdfwidth=70%]
+image:img/next3.png[pdfwidth=70%]
 
 [WARNING]
 ====
@@ -636,7 +962,7 @@ En el momento de escribir estas líneas, el core de ZX Spectrum Next para ZXDOS+
 
 [NOTE]
 ====
-Por defecto no es posible cargar ficheros TRD (se debe configurar NextZXOS para cargar una "personalidad" con esxdos).
+Por defecto, no es posible cargar ficheros TRD dede el navegador (se debe configurar NextZXOS para cargar una "personalidad" con esxdos).
 ====
 
 Para más información, consultar el https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[manual de uso oficial].
@@ -653,6 +979,7 @@ Algunas de sus características son:
 - Utiliza Nextor ROM con un controladr para SD
 - Mapa de teclado configurable
 - Simulación de línea de exploración (Scanlines)
+- Soporte para joystick
 
 ==== Formato de Tarjeta microSD
 
@@ -693,31 +1020,35 @@ Si no estuviera ya, <<_cores,instalar el core de MSX>> en el ZXDOS+.
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `MSX`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Durante la ejecución del core:
 
 - `Impr Pant`: Cambia el modo entre VGA y RGB
-- `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
+- `Bloq Desp` (`Caps Shift+Symbol Shift+G` en gomaDOS+): Cambia el modo de línea de exploración (Scanlines)
 - `Pausa`: Cambia entre 50Hz y 60Hz
-- `F11`: Activa o desactiva el modo turbo
+- `F11` (`Caps Shift+Symbol Shift+Q` en gomaDOS+): : Activa o desactiva el modo turbo
 - `Ctrl+Alt+Supr`: Soft Reset
 - `Ctrl+Alt+F12`: Hard Reset
-- `Ctrl+Alt+Backspace`: Reinicia la FPGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+, en modo de teclado `ZX Spectrum`): Reinicia la FPGA
 - `ALT Izquierdo`: MSX GRAPH 
 - `ALT Derecho`: MSX CODE
 - `Re Pág`: MSX SELECT
-- `Inicio` MSX HOME (`Mayús+HOME`: CLS)
+- `Inicio`: MSX HOME (`Mayús+HOME`: CLS)
 - `Fin`: MSX STOP
 - `Ñ` o `Windows`: MSX DEAD
 
 [NOTE]
 ====
-En BASIC, se puede usar `CTRL + STOP` para detener la ejecución de un programa.
+En BASIC, se puede usar `CTRL + STOP` (`Ctrl+Fin`) para detener la ejecución de un programa.
 ====
 
 [NOTE]
 ====
-Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de programas PAL a través de VGA), se puede usar `DISPLAY.COM`, que se puede obtener https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[en este hilo del foro de MSX].
+Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de programas PAL a través de VGA), se puede usar también `DISPLAY.COM`, que se puede obtener https://www.msx.org/forum/msx-talk/software/dos-tool-to-switch-from-50-to-60hz[en este hilo del foro de MSX].
 ====
+
+<<<
 
 ==== Guía básica
 
@@ -786,10 +1117,12 @@ Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Amstrad CPC`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Durante la ejecución del core:
 
-- `Re Pág`: Hace un Reset del Amstrad y carga el siguiente archivo `DSK` en orden alfabético.
-- Sólo funciona la tecla mayúsculas del lado izquierdo del teclado.
+- `Re Pág` (`Caps Shift+Symbol Shift+E` en gomaDOS+): Hace un Reset del Amstrad y carga el siguiente archivo `DSK` en orden alfabético.
+- En un teclado PS/2, sólo funciona la tecla mayúsculas del lado izquierdo del teclado.
 
 <<<
 
@@ -798,12 +1131,12 @@ Durante la ejecución del core:
 Escribir el comando `CAT` para ver el contenido del fichero DSK cargado actualmente.
 
 [.text-center] 
-image::img/cpc.png[pdfwidth=70%]
+image:img/cpc.png[pdfwidth=70%]
 
 Escribir el comando `RUN"<nombre>` para cargar un programa del disco
 
 [.text-center] 
-image::img/cpc2.png[pdfwidth=70%]
+image:img/cpc2.png[pdfwidth=70%]
 
 Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en orden alfabético.
 
@@ -854,19 +1187,21 @@ Ahora, se puede organizar la información en la tarjeta microSD de dos maneras d
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Acorn Electron`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+
 Durante la ejecución del core:
 
 - `Mayús+F10`: Muestra el menú de Atom Software Archive
-- `F10`: Soft Reset
-- `F1`: Modo turbo 1Mhz
-- `F2`: Modo turbo 2Mhz
-- `F3`: Modo turbo 4Mhz
-- `F4`: Modo turbo 8Mhz
+- `F10`  (`Caps Shift+Symbol Shift+0` en gomaDOS+): Soft Reset
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Modo turbo 1Mhz
+- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Modo turbo 2Mhz
+- `F3` (`Caps Shift+Symbol Shift+3` en gomaDOS+): Modo turbo 4Mhz
+- `F4` (`Caps Shift+Symbol Shift+4` en gomaDOS+): Modo turbo 8Mhz
 
 El teclado está mapeado en inglés, según el siguiente esquema:
 
 [.text-center] 
-image::img/keyboardAtom.jpg[pdfwidth=90%]
+image:img/keyboardAtom.jpg[pdfwidth=90%]
 
 <<<
 
@@ -875,7 +1210,7 @@ image::img/keyboardAtom.jpg[pdfwidth=90%]
 Tras iniciar el core, en algunos casos, puede suceder que se muestre una pantalla llena de `@`. Basta con retirar e insertar, o simplemente insertar, la tarjeta microSD, para que empiece a funcionar.
 
 [.text-center] 
-image::img/acorn.jpg[pdfwidth=70%]
+image:img/acorn.jpg[pdfwidth=70%]
 
 Una vez iniciado, pulsar `Mayús+F10` para mostrar el menú desde el que se pueden cargar los programas de Atom Software Archive de la tarjeta.
 
@@ -897,20 +1232,23 @@ Si no estuviera ya, <<_cores,instalar el core de Commodore 64>> en el ZXDOS+.
 
 ==== Teclas especiales y botones
 
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Commodore 64`. Véase el <<_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de tecldo `PC XT`.
+
 Durante la ejecución del core:
 
-- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+, en modo completo): Muestra menú de opciones
+- `F9` `Caps Shift+Symbol Shift+9` en gomaDOS+): Reproducir un archivo TAP de cinta
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Muestra menú de opciones
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
-- `Esc`: RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
+- `Esc` (`Caps Shift+Espacio` en gomaDOS+): RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
 
 <<<
 
 ==== Guía básica
 
-Tras pulsar `F12`, aparece el menú de opciones.
+Tras pulsar `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+), aparece el menú de opciones.
 
 [.text-center] 
-image::img/c64.jpg[pdfwidth=70%]
+image:img/c64.jpg[pdfwidth=70%]
 
 Desde dicho menú se puede 
 
@@ -923,11 +1261,13 @@ Desde dicho menú se puede
 - Cargar imagen de disco D64
 - Cargar fichero de cinta TAP
 
+<<<
+
 Para cargar desde un disco, habitualmente, se ha de escribir `LOAD "*",8,1` y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa.
 
 Si el disco tuviera varios programas para ejecutar, escribir `LOAD "$"` y pulsar `Enter`. A continuación, escribir `LIST`, y pulsar `Enter`, para ver una lista con los archivos dentro del disco. Ahora, para cargar el archivo deseado, escribir `LOAD "<nombre>",8` (donde `<nombre>` es el nombre del archivo a cargar) y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa. Si esto no funcionase, probar con el comando `LOAD "<nombre>",8,1`. 
 
-Para cargar desde cinta, se puede escribir `LOAD` y pulsar `Enter`, o bien pulsar `Mayús+Esc` (`Mayús+RUN/STOP`).
+Para cargar desde una cinta, seleccionar la opción "Cargar fichero de cinta TAP" del menú de opciones. A continuación navegar por la tarjeta microSD y elegir el archivo de cinta a cargar, pulsar `ENTER` y cerrar el menú de opciones. Entonces escribir `LOAD` y pulsar `Enter`, o bien pulsar `Mayús+Esc` (`Mayús+RUN/STOP`). Finalmente, tras pulsar `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+) comenzará la reproducción del archivo de cinta (se puede usar la opción de activar el sonido de carga de la cinta del menú si se desea). Una vez finalizadada la carga, escribir `RUN` y pulsar `ENTER` si fuese necesario. 
 
 <<<
 
@@ -953,9 +1293,9 @@ Durante la ejecución del core:
 
 - `Q` y `A` o `Cursor Izquierdo` y `Cursor Derecho`  (o un joystick): Control de movimiento
 - `Z` o `X` `Tecla Windows Izquierda` y `Espacio` (o botones 1 y 2 del joystick): Disparos 1 y 2, así como inserción de moneda y botón `Start`
-- `F2`: Cambia el modo de vídeo entre RGB y VGA
+- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Cambia el modo de vídeo entre RGB y VGA
 - `-` (del teclado numérico): Activa o desactiva la simulación de línea de exploración (Scanlines)
-- `Tab`: Activa o desactiva giro de 90º en las direcciones de los controles
+- `Tab` (`Caps Shift+Enter` en gomaDOS+, en modo de teclado `PC XT`): Activa o desactiva giro de 90º en las direcciones de los controles
 
 ==== Guía básica
 
@@ -972,7 +1312,8 @@ Algunas las características del core son:
 - Dos modos de vídeo seleccionables: RGB/PAL60Hz y VGA 60Hz
 - 7 tipos de juego
 - Soporte 2 o 4 jugadores
-- Compatible con joystick(s)
+- Compatible con joystick(s), teclado, ratón y codificadores (encoders) rotatorios (ver <<_codificadores_rotatorios,aquí>> para más información)
+- Varios modos de color
 
 ==== Formato de Tarjeta microSD
 
@@ -984,36 +1325,41 @@ Este core no utiliza la tarjeta microSD.
 
 Durante la ejecución del core:
 
-- `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+): Mostrar u ocultar el menú de configuración
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y `G`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
-- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa
-- `F3` o `F12`: Reinicio del juego
+- `Esc` o botón 2 del joystick (`Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Mostrar u ocultar el menú de configuración
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+, en modo de teclado `ZX Spectrum`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+, en modo de teclado `ZX Spectrum`): cambia de modo video compuesto a VGA y viceversa
+- `F3` o `F12` (`Caps Shift+Symbol Shift+3` o `Caps Shift+Symbol Shift+W`  en gomaDOS+): Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
-- `Cursor arriba` y `Cursor abajo`: Control de paleta de la izquierda (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
-- Joystick 1: Control de paleta de la izquierda (Jugador 1)
-- `Q` y `A`: Control de paleta de la derecha (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)
-- Joystick 2: Control de paleta de la derecha (Jugador 2).
+- Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).   
+- Joystick 1 (izquierda): Control de paleta de la izquierda (Jugador 2)  
+- `Cursor arriba` y `Cursor abajo` o `O` y `K`: Control de paleta de la derecha (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
+- `Q` y `A`: Control de paleta de la izquierda (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)  
 - `Z`, `M` o botón de joystick 1: Saque manual
+- Teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para navegar por el menú
 
 <<<
 
 ==== Guía básica
 
-Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) se muestra el menú de configuración.
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center] 
-image::img/pong.jpg[pdfwidth=70%]
+image:img/pong.jpg[pdfwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
 
-- Servicio manual (Manual Serve)
+- Servicio automático o manual (Serve)
 - Ángulo de la bola (Ball Angle)
 - Velocidad de la bola (Ball Speed)
 - Tamaño de las palas (Paddle Size)
 - Sonido (Sound)
 - Cuatro jugadores (Four players)
-- Duplicar el tamaño del menún (Double OSD Window)
-- Salir del menú (Exit)
+- Velocidad Aleatoria (Random Speed)
+- Ángulo Aleatorio (Random Angle)
+- Control por Joystick, teclado o ratón (Joystick)
+- Precisión del movimiento (Paddle Accuracy)
+- Modo de color (Mode)
+- Salir del menú (Exit menu)
 
 <<<
 
@@ -1044,17 +1390,18 @@ Si no estuviera ya, <<_cores,instalar el core de NES>> en el ZXDOS+.
 
 Durante la ejecución del core:
 
-- `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+): Mostrar u ocultar el menú de configuración
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y `G`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Esc` o botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Mostrar u ocultar el menú de configuración
+- Teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`), y `Enter` para usar el menú
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+, en modo de teclado `ZX Spectrum`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 
 <<<
 
 ==== Guía básica
 
-Pulsando `Esc` se muestra el menú de configuración. Para desplazarse por el menú y activar o elegir alguna opción, se utilizan las teclas de cursor y `Enter`.
+Pulsando `Esc` se muestra el menú de configuración. Para desplazarse por el menú y activar o elegir alguna opción, se utilizan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`), y `Enter`.
 
 [.text-center] 
-image::img/nes.jpg[pdfwidth=70%]
+image:img/nes.jpg[pdfwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
 
@@ -1065,6 +1412,209 @@ En él se pueden activar o desactivar las siguientes opciones:
 - Simular la pulsación del botón Start del mando 1 (P1 Start)
 - Elegir un ROM para cargar desde la SD (Load ROM)
 - Salir del menú (Exit)
+
+<<<
+
+=== ColecoVision
+
+https://es.wikipedia.org/wiki/ColecoVision[ColecoVision] es una consola de videojuegos lanzada al mercado por la empresa Coleco.
+
+La versión para ZXDOS+ está basada en la https://github.com/fbelavenuto/colecofpga[versión para ZX-Uno] de Fabio Belavenuto.
+
+Algunas de las características del core son:
+
+- La ROM de la BIOS se carga desde la tarjeta microSD
+- Soporta ROM multicartucho, que también se carga desde la microSD
+- Sólo funciona en VGA ¿?
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM y otros archivos necesarios. Los archivos se pueden descargar desde la https://github.com/fbelavenuto/colecofpga/tree/master/SD_Card[web del proyecto original en GitHub].
+
+Si no estuviera ya, <<_cores,instalar el core de ColecoVision>> en el ZXDOS+.
+
+==== Teclado
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- Cursor o `Q`, `A`, `E`, `R` o el joystick 1: Controles de dirección del jugador 1
+- `Z` o el botón de joystick 1: Botón de disparo 1 del jugador 1
+- `U`, `J`, `O`, `P` o el joystick 2: Controles de dirección del jugador 2
+- `M` o el botón de joystick 2: Botón de disparo 1 del jugador 2
+- `X` o el botón secundario de joystick 1: Botón de disparo 2 del jugador 1 y del jugador 2
+- `0` a `9`:  Botones del 0 al 9 del jugador 1 y el jugador 2
+- `T`: Botón '*'
+- `Y`: Botón '#'
+- 'Esc' (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Soft Reset
+
+<<<
+
+==== Guía básica
+
+Al iniciar, la ROM de la BIOS se carga desde la tarjeta SD, así como la ROM multicartucho. 
+
+[.text-center] 
+image:img/coleco.jpg[pdfwidth=70%]
+
+En el menú multicartucho, usar los controles de dirección para elegir la ROM a cargar, y luego el botón de disparo 1 para cargar la ROM elegida. Pulsando `Esc` (`Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se reinicia el core y se vuelve a cargar el menú de selección de ROM.
+
+<<<
+
+=== Atari 2600
+
+La https://es.wikipedia.org/wiki/Atari_2600[Atari 2600] es una videoconsola lanzada al mercado bajo el nombre de Atari VCS (Video Computer System).
+
+La versión para ZXDOS+ está desarrollada por avlixa.
+
+Algunas de las características del core son:
+
+- Dos modos de vídeo seleccionables: RGB y VGA
+- Compatible con joystick(s), teclado, ratón y codificadores (encoders) rotatorios (ver <<_codificadores_rotatorios,aquí>> para más información)
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM que se deseen cargar.
+
+Si no estuviera ya, <<_cores,instalar el core de Atari 2600>> en el ZXDOS+.
+
+==== Teclado
+
+En gomaDOS+, se recomienda cambiar el modo de teclado a `Atari 800` (`Caps Shift + Symbol Shift + U` y luego `4`) o `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `W`, `A`, `S`, `D` o el joystick 1: Controles de dirección del jugador 1
+- `F` o el botón de disparo del joystick 1: Disparo del jugador 1
+- `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
+- `H` o el botón de disparo del joystick 2: Disparo del jugador 2
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `Atari800`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `Atari800`) y `Enter` para elegir y seleccionar en el menú.
+
+[.text-center] 
+image:img/a2600.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Línea de exploración (Scanlines)
+- Modo RGB (PAL/NTSC)
+- Tamaño de las palas (Paddle Size)
+- Sonido (Sound)
+- Color (Color)
+- Dificultad A (Difficulty A)
+- Dificultad B (Difficulty B)
+- Select
+- Start
+- Cargar ROM (Load ROM)
+- Joystick
+- Precisión de paddle (Paddle Accuracy)
+- Salir del menú (Exit)
+
+<<<
+
+=== Videopac
+
+La https://es.wikipedia.org/wiki/Magnavox_Odyssey²[Philips Videopac], también conocida como Magnavox Odyssey², Philips Videopac G7000 o Philips Odyssey² es una videoconsola lanzada en 1978.
+
+La versión para ZXDOS+ está desarrollada por avlixa, basada en el core de ZXDOS de yomboprime.
+
+Algunas de las características del core son:
+
+- Dos modos de vídeo seleccionables: RGB y VGA
+- Necesita Joystick(s) para funcionar
+- Modos de color incluyendo monocromo o fósforo verde/naranja
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM que se deseen cargar.
+
+Si no estuviera ya, <<_cores,instalar el core de Videopac>> en el ZXDOS+.
+
+==== Teclado
+
+En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
+
+==== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar en el menú.
+
+[.text-center] 
+image:img/videopac.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Línea de exploración (Scanlines)
+- Intercambiar el orden de los joysticks (Swap joysticks)
+- Cargar ROM (Load ROM)
+- Modo de vídeo (PAL Videopac/NTSC Odyssey2)
+- Modo de color (Color Mode)
+- Salir del menú (Exit) 
+
+<<<
+
+== Otro Hardware
+
+=== Codificadores rotatorios
+
+Los cores de Pong y Atari 2600 están también preparados para usar https://es.wikipedia.org/wiki/Codificador_rotatorio[codificadores rotatorios] (encoders), de tipo cuadratura, conectados al puerto de joystick. Está probado con codificadores de 600 ppr (pulsos por revolución), pero teóricamente deberían servir también de menor ppr, como de 400 o 300.
+
+También se puede utilizar con https://es.wikipedia.org/wiki/Paddle_(controlador_de_videojuegos)[paddle] del tipo volante de Atari 2600, pero **no** con los paddle del tipo raqueta. Eso sí, la experiencia en este caso es pobre, ya que son de muy pocos ppr y se deben hacer varios giros completos. Si se utilizan, se recomienda ajustar la precisión(accuracy) al valor 8 para conseguir una velocidad aceptable.
+
+==== Conexión
+
+Tanto el ZXDOS+ como el gomaDOS+ tienen conectado el pin 5 del joystick a voltaje positivo, que se utiliza para alimentación, y el pin 8 como GND. Los codificadores utilizados deben admitir voltajes de 3,4v a 5v.
+
+Los codificadores tienen 5 cables: Tierra (no conectada), Vcc (`+`), GND (`0V`ó `-`), `A` y `B`.
+
+Las conexiones `A` y `B` se conectan en los pines 1 y 2 para el primer codificador, y 3 y 4 para el segundo. Así se pueden tener hasta 4 codificadores conectados entre los 2 puertos de joystick.
+
+[.text-center] 
+image:img/db9joy.png[pdfwidth=40%]
+
+De esta manera, las conexiones serían:
+
+. Línea `A` codificador 1
+. Línea `B` codificador 1
+. Línea `A` codificador 2
+. Línea `B` codificador 2
+. Vcc(`+`)
+. Disparo 1
+. NC
+. `GND`
+. Disparo 2
+
+<<<
+
+==== Configuración del Core de Pong
+
+La forma de elegir la configuración es la siguiente:
+
+- Para 1 o 2 codificadores en el puerto 2 de joystick, seleccionar la opción `1/2 Paddle in J2`.
+- Para 2 codificadores, uno en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`. Esta opción también sirve para conectar 2 paddle tipo driving de Atari 2600.
+- Para  4 codificadores, dos en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`.
+- Para 1 o 2 codificadores en el puerto 2 de joystick junto con el ratón (en este caso los codificadores se asocian para los jugadores 2 y 4), seleccionar la opción `Mouse PS/2`.
+
+Se recomienda no realizar la conexión hasta haber seleccionado la opción deseada, ya que los codificadores actúan sobre el botón arriba/abajo del joystick y por tanto no permiten manejar el menú. Otra opción sería añadir un interruptor on/off en el codificador que deshabilite la alimentación y así no emita señal mientras se realiza la selección de menú.
 
 <<<
 
@@ -1081,10 +1631,10 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 *Material necesario*:
 
 - Raspberry Pi (con tarjeta SD, teclado, monitor, fuente de alimentación, etc.) y con conexión a internet
-- 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos)
-- Una https://es.wikipedia.org/wiki/Llave_Allen[llave Allen] del tamaño adecuado para poder retirar la tapa del ZXDOS+
-- Tarjeta microSD para el ZXDOS+ con la primera partición en formato FAT16 o FAT32
-- Teclado y monitor para conectar el ZXDOS+
+- 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos), o bien, en vez de los cables puente, un adaptador USB blaster
+- Una https://es.wikipedia.org/wiki/Llave_Allen[llave Allen] del tamaño adecuado para poder retirar la tapa del ZXDOS+ o bien un destornillador de estrella adecuado si se va abrir un gomadDOS+ (esto no es necesario si se utiliza USB Blaster)
+- Tarjeta microSD para el ZXDOS+/gomaDOS+ con la primera partición en formato FAT16 o FAT32
+- Teclado (no necesario en gomaDOS+) y monitor para conectar el ZXDOS+
 
 *Software necesario*:
 
@@ -1102,10 +1652,11 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 sudo apt-get update
 sudo apt-get install git autoconf libtool make pkg-config
 sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev telnet
+sudo apt-get install libusb-dev libftdi-dev
 git clone git://git.code.sf.net/p/openocd/code openocd-code
 cd openocd-code/
 ./bootstrap
-./configure --enable-sysfsgpio --enable-bcm2835gpio
+./configure --enable-usb_blaster --enable-sysfsgpio --enable-bcm2835gpio
 make
 sudo make install
 cd ..
@@ -1113,22 +1664,27 @@ rm -rf ./openocd-code
 ----
 
 [start=3]
-. Abrir la carcasa del ZXDOS+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+. Conectar el USB Blaster o los cables puente para GPIO. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXDOS+ o el gomaDOS+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 [.text-center] 
-image::img/jtag.jpg[pdfwidth=50%]
+image:img/jtag.jpg[pdfwidth=25%] image:img/jtaggomados.jpg[pdfwidth=40%]
 
 [WARNING]
 ====
 *NO* se ha de conectar la línea de 3V
 ====
 
+[NOTE]
+====
+En el caso de utilizar USB Blaster, el gomaDOS+ tiene la distribución adecuada para conectar directamente el conector 2x5 incluido. Para ZXDOS+, será necesario preparar el cableado adecuado, comparando las dos imágenes anteriores.
+====
+
 <<<
 
-Tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
+Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
 [.text-center] 
-image::img/gpio.jpg[pdfwidth=70%]
+image:img/gpio.jpg[pdfwidth=70%]
 
 En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (correspondientes a `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` y `GND`), de la siguiente manera:
 
@@ -1157,7 +1713,7 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 [start=4]
 . Copiar en la Raspberry Pi el fichero `recovery.zxd.bit` obtenido anteriormente del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial]. En nuestro ejemplo, se dejará en `/home/pi/zxdosplus/unbrick/`
 
-. Realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está `recovery.zxd.bit`.
+. Para la conexión usando GPIO, realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está `recovery.zxd.bit`. Este paso no es necesario si se usa USB Blaster.
 
 [source,shell]
 ----
@@ -1167,7 +1723,7 @@ cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/z
 <<<
 
 [start=6]
-. Editar la copia de `raspberrypi2-native.cfg` actualizando `bcm2835gpio_jtag_nums` (y descomentando, si fuera necesario), según como se haya hecho la conexión entre JTAG y GPIO en la línea `bcm2835gpio_jtag_nums`. En nuestro ejemplo:
+. Para la conexión vía GPIO, editar la copia de `raspberrypi2-native.cfg` actualizando `bcm2835gpio_jtag_nums` (y descomentando, si fuera necesario), según como se haya hecho la conexión entre JTAG y GPIO en la línea `bcm2835gpio_jtag_nums`. En nuestro ejemplo:
 
 [source]
 ----
@@ -1176,7 +1732,7 @@ bcm2835gpio_jtag_nums 26 6 13 19
 ----
 
 [start=7]
-. Comentar, si no lo está, la línea `bcm2835gpio_swd_nums`:
+. Comentar, si no lo está, la línea `bcm2835gpio_swd_nums` (de nuevo, no necesario si la conexión es con USB Blaster):
 
 [source]
 ----
@@ -1184,7 +1740,7 @@ bcm2835gpio_jtag_nums 26 6 13 19
 ----
 
 [start=8]
-. Añadir, al final, la línea `adapter speed 250`:
+. Añadir, al final, la línea `adapter speed 250` (no necesario para uso con USB Blaster):
 
 [source]
 ----
@@ -1192,9 +1748,11 @@ adapter speed 250
 ----
 
 [start=9]
-. Encender el ZXDOS+
+. Encender el ZXDOS+ o el gomaDOS+
 
 . Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.zxd.bit`, y lanzar el comando que carga la BIOS en modo recuperación, indicando la ruta al archivo `raspberrypi2-native.cfg` que habíamos editado anteriormente.
+
+Para conexión vía GPIO:
 
 [source,shell]
 ----
@@ -1202,36 +1760,71 @@ cd /home/pi/zxdosplus/unbrick
 sudo openocd -f /home/pi/zxdosplus/unbrick/raspberrypi2-native.cfg -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.zxd.bit ; exit"
 ----
 
-Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
+Con USB blaster:
+
+[source,shell]
+----
+sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg  -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.zxd.bit ; exit"
+----
 
 <<<
+        
+[start=11]
+. Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
 En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center] 
-image::img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[pdfwidth=70%]
 
-[start=11]
+[start=12]
 . Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZXD` https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[descargado anteriormente].
+
+. Si se está utilizando USB Blaster, desconectar el cable. 
 
 <<<
 
-[start=12]
+[start=14]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
+
+[.text-center] 
+image:img/recovery2.png[pdfwidth=70%]
 
 [WARNING]
 ====
-Este proceso eliminará todos los cores instalados, así como las ROMs de ZX Spectrum.
+Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
 ====
 
-[.text-center] 
-image::img/recovery2.png[pdfwidth=70%]
+[NOTE]
+====
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`), para que funcionen de nuevo temporalmente.
+====
 
-Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXDOS+ vuelve a arrancar correctamente.
+<<<
+
+[start=15]
+. Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXDOS+ (o el gomaDOS+) vuelve a arrancar correctamente.
 
 [NOTE]
 ====
 Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
+[NOTE]
+====
+En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
+
+. Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift + Symbol Shift + U` y luego `9`)
+. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift + Symbol Shift + B`)
+. Rápidamente, pulsar `Caps Shift + 1`
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
+. Navegar por la BIOS y configurar las siguientes opciones:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (sólo si no teníamos imagen)
+. Guardar los cambios de la BIOS:
+- `Exit` -> `Save changes and exit`
+.Apagar completamente el gomaDOS+ y volver a encenderlo
 ====
 
 == Referencias
@@ -1246,7 +1839,9 @@ http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
 http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
-https://github.com/ManuFerHi/ZX-GO-/blob/master/ZXUNOPS2/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B%20V30052019.pdf[Nuevo firmware de teclado ZX-GO+]
+https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
+
+https://github.com/zxdos/zxdos-plus/tree/master/zxunops2[zxunops2]
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
 
@@ -1261,6 +1856,10 @@ https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pac
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
 
 https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Vídeos Radastanianos]
+
+https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234&hilit=kyp#p28234[Nuevo core zx48]
+
+https://github.com/Kyp069/zx48.zxdosplus/releases/[ZX 48 para ZXDOS+ (Kyp)]
 
 http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
@@ -1282,6 +1881,18 @@ http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en ca
 
 http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
 
+http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
+
+https://github.com/fbelavenuto/colecofpga[ColecoFPGA en GitHub]
+
+http://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
+
+https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
+
+https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox Odyssey 2 (2012-04-23)]
+
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
 http://www.zxuno.com/forum/viewtopic.php?f=25&t=375[Tutorial para desbriquear el ZX-Uno con una Raspberry]
+
+http://www.forofpga.es/viewtopic.php?t=175[Como programar un UnAmiga con la Raspberry Pi (o Linux) con el USB-Blaster y OpenOCD]
