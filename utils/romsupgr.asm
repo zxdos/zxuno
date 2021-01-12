@@ -52,12 +52,27 @@ FileFound       wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 in      a, (c)
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 sub     $19
-                jr      nz, ZX1
+                jp      nz, ZX1
+                ld      de, $8000
+                ld      hl, $0980
+                ld      a, 1
+                call    rdflsh
+                ld      a, ($8000)
+                inc     a
+                jr      nz, ZX2P
                 call    Print
                 db      'Upgrading ROMS.ZX1 from SD', 13
                 dz      '[           ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
+                jr      ZX2PC
+ZX2P            call    Print
+                db      'Upgrading ROMS.ZX1 from SD', 13
+                dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
+ZX2PC           ld      a, ($8000)
+                inc     a
                 ld      ix, $0a2c
                 ld      iy, $0000
+                jr      z, ZX2cont
+                ld      ix, $1840
                 jr      ZX2cont
 ZX1             call    Print
                 db      'Upgrading ROMS.ZX1 from SD', 13
