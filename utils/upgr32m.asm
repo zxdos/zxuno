@@ -1,4 +1,10 @@
-                output  UPGR32M
+                define  zxdos 1
+
+              IF zxdos=1
+                output  UPGRZX2
+              ELSE
+                output  UPGRZXD
+              ENDIF
 
                 include zxuno.inc
 
@@ -54,10 +60,18 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
+              IF zxdos=1
                 dz      'Can\'t open FLASH.ZX2'
+              ELSE
+                dz      'Can\'t open FLASH.ZXD'
+              ENDIF
                 ret
 FileFound       call    Print
+              IF zxdos=1
                 dz      'Upgrading FLASH.ZX2 from SD', 13
+              ELSE
+                dz      'Upgrading FLASH.ZXD from SD', 13
+              ENDIF
                 call    read16m
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
@@ -200,4 +214,8 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
+              IF zxdos=1
 FileName        dz      'FLASH.ZX2'
+              ELSE
+FileName        dz      'FLASH.ZXD'
+              ENDIF

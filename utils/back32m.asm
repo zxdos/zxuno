@@ -1,4 +1,10 @@
-                output  BACK32M
+                define  zxdos 1
+
+              IF zxdos=1
+                output  BACKZX2
+              ELSE
+                output  BACKZXD
+              ENDIF
 
                 include zxuno.inc
 
@@ -54,10 +60,18 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
+              IF zxdos=1
                 dz      'Can\'t open FLASH.ZX2'
+              ELSE
+                dz      'Can\'t open FLASH.ZXD'
+              ENDIF
                 ret
 FileFound       call    Print
+              IF zxdos=1
                 dz      'Backing up FLASH.ZX2 to SD', 13
+              ELSE
+                dz      'Backing up FLASH.ZXD to SD', 13
+              ENDIF
                 call    write16m
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
@@ -167,4 +181,8 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
+              IF zxdos=1
 FileName        dz      'FLASH.ZX2'
+              ELSE
+FileName        dz      'FLASH.ZXD'
+              ENDIF
