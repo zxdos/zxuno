@@ -4229,7 +4229,7 @@ wrfls2  call    waits5
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
       IF  version>1
         wreg    flash_spi, $12  ; envío page program
-        ld      hl, (highb)
+        ld      hl, (alto highb)
         out     (c), h
       ELSE
         wreg    flash_spi, 2    ; envío page program
@@ -4465,10 +4465,15 @@ finav
 finlog  incbin  strings.bin.zx7b
       ELSE
         incbin  bezel.rcs.zx7b
+finbez
         IF version=1
-finbez    incbin  logo192x256.rcs.zx7b
+          incbin  logo192x256.rcs.zx7b
         ELSE
-finbez    incbin  logo192x256d.rcs.zx7b
+          IF version=2
+            incbin  logo192x256d.rcs.zx7b
+          ELSE
+            incbin  logo192x256dp.rcs.zx7b
+          ENDIF
         ENDIF
 finlog  incbin  strings.bin.zx7b
       ENDIF
@@ -4879,15 +4884,21 @@ sloti   ld      l, a
        ELSE
         and     $3f
         ld      h, d
-        ld      l, a
         cp      41
         jr      c, slot2b
         sub     41
+        ld      l, a
         ld      e, d
        ENDIF
       ENDIF
     ENDIF
-slot2b  add     hl, de          ; $00c0 y 2f80
+slot2b  
+      IF version=2 OR version=3
+        sbc     a, a
+        inc     a
+        ld      (alto highb+1), a
+      ENDIF
+        add     hl, de          ; $00c0 y 2f80
         add     hl, hl
         add     hl, hl
 slot2c  add     hl, hl
