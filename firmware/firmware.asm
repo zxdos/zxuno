@@ -424,7 +424,8 @@ star10  add     hl, hl
         ld      (alto fllen), hl
       ENDIF
     IF  recovery=0
-star11  ld      a, (layout)
+        wreg    mouse_data, $f4 ; $f4 = init Kmouse
+        ld      a, (layout)
         srl     a
         ld      hl, fines-1
         jr      z, star12
@@ -460,8 +461,6 @@ star16  djnz    star18
         wreg    scan_code, $ed  ; $ed + 2 = kb set leds + numlock
         halt
         wreg    scan_code, $02
-        halt
-        wreg    mouse_data, $f4 ; $f4 = init Kmouse
       IF  vertical=0
         ld      hl, $0017       ; Si se acaba el temporizador borrar
         ld      de, $2001       ; lo de presione Break
