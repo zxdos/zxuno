@@ -1839,6 +1839,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 
 *Software necesario*:
 
+- https://brew.sh[Homebrew para Mac OS]
 - UrJTAG: seguidas las instrucciones de https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[este enlace]:
 
 
@@ -1871,6 +1872,8 @@ pld load recovery.zxd.bit
 ----
 
 En el comando detect es importante que aparezca el dispositivo detectado. En el caso de mis pruebas, a veces he tenido que lanzar el comando detect de manera repetida hasta que ha aparecido.
+
+Nota: En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se deberia hacer mediante apt, yum o similar
 
 
 [.text-center]
