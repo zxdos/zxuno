@@ -1873,7 +1873,6 @@ pld load recovery.zxd.bit
 
 En el comando detect es importante que aparezca el dispositivo detectado. En el caso de mis pruebas, a veces he tenido que lanzar el comando detect de manera repetida hasta que ha aparecido.
 
-Nota: En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se deberia hacer mediante apt, yum o similar
 
 
 [.text-center]
@@ -1885,6 +1884,7 @@ Si todo funciona correctamente, deberia aparecer en el monitor conectado al zxdo
 [.text-center] 
 image:img/recovery2.png[pdfwidth=70%]
 
+Nota: En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se deberia hacer mediante apt, yum o similar
 
 == Referencias
 
