@@ -1,4 +1,5 @@
         include version.asm
+        define  chloe           0
         define  recovery        0
         define  recodire        0
         define  zesarux         0
@@ -5110,11 +5111,15 @@ crctab  incbin  crctable.bin
 ; -----------------------------------------------------------------------------
 ; 6x8 character set (128 characters x 1 rotation)
 ; -----------------------------------------------------------------------------
-      IF  vertical=0
-        incbin  fuente6x8.bin
+    IF  vertical=0
+      IF  chloe=1
+        incbin  chloe6x8.bin
       ELSE
-        incbin  fuente8x6.bin
+        incbin  fuente6x8.bin
       ENDIF
+    ELSE
+        incbin  fuente8x6.bin
+    ENDIF
 
 chrend
 
