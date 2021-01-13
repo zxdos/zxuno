@@ -1851,7 +1851,6 @@ cd urjtag
 
 En este paso hay que copiar la carpeta data adicional para UrJTAG, dentro de la carpeta data de urjtag. Lanzamos el proceso de compilacion:
 
-----
 
 [source,shell]
 ----
