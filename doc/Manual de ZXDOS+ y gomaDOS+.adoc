@@ -1827,6 +1827,64 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 .Apagar completamente el gomaDOS+ y volver a encenderlo
 ====
 
+
+==== Recuperación usando Mac OS y Cable USB blaster
+
+*Material necesario*:
+
+- Cable USB blaster. Preparado con el pineo adecuado para zxdos+
+- Imagen Flash y recovery para ZXDOS+ (LX25). El mismo comentado en el paso anterior de Raspberry pi
+- Sistema Mac OS
+- Carpeta data adicional para UrJTAG, obtenido desde https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[aqui]
+
+*Software necesario*:
+
+- UrJTAG: seguidas las instrucciones de https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[este enlace]:
+
+
+[source,shell]
+----
+brew install libftdi libusb pkg-config
+git clone https://github.com/C-Elegans/urjtag.git
+cd urjtag
+----
+
+En este paso hay que copiar la carpeta data adicional para UrJTAG, dentro de la carpeta data de urjtag. Lanzamos el proceso de compilacion:
+
+----
+
+[source,shell]
+----
+./configure --with-libftdi --with-libusb --with-ftd2xx --with-inpout32 --enable-python=no
+make -j4
+sudo make install     
+
+----
+
+De la imagen flash, el archivo FLASH.ZXD se ha copiado a la SD que hay en el zxdos+. 
+
+Con el archivo recovery.zxd.bit obtenido de la Imagen Flash, en la ruta actual, cable usb blaster conectado al zxdos+ y al Mac, pulsamos el boton de inicio de zxdos+, y ejecutamos el comando jtag. Aparecera una consola y lanzamos los comandos:
+
+[source,shell]
+----
+cable usbblaster
+detect
+pld load recovery.zxd.bit
+
+----
+
+En el comando detect es importante que aparezca el dispositivo detectado. En el caso de mis pruebas, a veces he tenido que lanzar el comando detect de manera repetida hasta que ha aparecido.
+
+
+[.text-center]
+image:img/recovery_mac_1.png[pdfwidth=90%]
+
+
+Si todo funciona correctamente, deberia aparecer en el monitor conectado al zxdos+, la bios en modo recovery, donde podremos hacer upgrade de la flash
+
+image:img/recovery_mac_2.jpg[pdfwidth=90%]
+
+
 == Referencias
 
 http://zxuno.speccy.org/index.shtml[ZX-Uno]
