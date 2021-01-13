@@ -1858,7 +1858,6 @@ En este paso hay que copiar la carpeta data adicional para UrJTAG, dentro de la 
 ./configure --with-libftdi --with-libusb --with-ftd2xx --with-inpout32 --enable-python=no
 make -j4
 sudo make install     
-
 ----
 
 De la imagen flash, el archivo FLASH.ZXD se ha copiado a la SD que hay en el zxdos+. 
@@ -1870,7 +1869,6 @@ Con el archivo recovery.zxd.bit obtenido de la Imagen Flash, en la ruta actual, 
 cable usbblaster
 detect
 pld load recovery.zxd.bit
-
 ----
 
 En el comando detect es importante que aparezca el dispositivo detectado. En el caso de mis pruebas, a veces he tenido que lanzar el comando detect de manera repetida hasta que ha aparecido.
@@ -1882,7 +1880,8 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 
 Si todo funciona correctamente, deberia aparecer en el monitor conectado al zxdos+, la bios en modo recovery, donde podremos hacer upgrade de la flash
 
-image:img/recovery_mac_2.jpg[pdfwidth=90%]
+[.text-center] 
+image:img/recovery2.png[pdfwidth=70%]
 
 
 == Referencias
