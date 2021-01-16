@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.0
+:revnumber: 1.3.1
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -96,7 +96,7 @@ In order to take advantage of its full potential, you may also have:
 
 ==== microSD card formatting
 
-In order to use a microSD card, it has to be formmatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can use the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format.
+In order to use a microSD card, it has to be formmatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_microsd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
 
 [NOTE]
 ====
@@ -524,6 +524,270 @@ These are some of its main characteristics:
 - Possibility of video output in composite video mode, RGB 15kHz, or VGA.
 - User selectable vertical refresh rate to improve compatibility with VGA monitors.
 - Multicore boot support: from the Spectrum you can select an address of the SPI Flash and the FPGA will load a core from there.
+
+<<<<
+
+=== microSD advanced format (+3e)
+
+ZX Spectrum +3e is one ROM that can be used with ZX Spectrum core. This is an improved Sinclair ZX Spectrum +3, wich can use hard disks or memory cards.
+
++3e uses its own partition format (called IDEDOS), to split de hard disk into several partitions to store data. ROM version 1.28 and later can share IDEDOS partitions with MBR partitions. In other case, you must reserve the whole card for IDEDOS partitions.
+
+[WARNING]
+====
+The following partition scheme can only be used with ZX Spectrum core.
+====
+
+[TIP]
+====
+Each partition in IDEDOS can be between 1 and 16 Megabytes (1 million bytes) in size, and each disk can have between 1 and 65535 partitions. This means that the maximum space used in a card is about 1GB.
+====
+
+This is one method to split a card into two or three parts, with the first partition IDEDOS (1GB), the second one FAT16 (4GB) and the third one FAT32 (using the remaining space in the card).
+
+exsdos and other programs can be installed into the second partition <<#_esxdos,as explained earlier>>.
+
+==== Windows
+
+You can use Windows Disk Management utility. The steps are:
+
+. Remove all partitions from the card
+
+. Create a new extended partition, using the desired space for IDEDOS
+
+. Create a primary partition, 4GB in size, and format as FAT16
+
+. Optionally, create another primary partition using the remaining space and format as FAT32
+
+==== MacOS
+
+You will have to use the command line. The first task is to find out which device is the disk to format:
+
+[source,shell]
+----
+diskutil list
+----
+
+For this example, it will be disk 6:
+
+[source]
+----
+(...)
+/dev/disk6 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *15.9 GB    disk6
+   1:                 DOS_FAT_32 UNKNOWN                 15.9 GB    disk6s1
+----
+
+<<<<
+
+Instruction steps:
+
+. Unmount the disk and edit the partition sceme (the second step requires admin privileges):
+
+[source,shell]
+----
+diskutil unmountDisk /dev/disk6
+sudo fdisk -e /dev/rdisk6
+----
+
+[source]
+----
+fdisk: could not open MBR file /usr/standalone/i386/boot0: No such file or directory
+Enter 'help' for information
+fdisk: 1> erase
+fdisk:*1> edit 1
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 7F
+Do you wish to edit in CHS mode? [n] 
+Partition offset [0 - 31116288]: [63] 128
+Partition size [1 - 31116287]: [31116287] 2017152
+
+fdisk:*1> edit 2
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0E
+Do you wish to edit in CHS mode? [n] 
+Partition offset [0 - 31116288]: [2017280]  
+Partition size [1 - 29099135]: [29099135] 7812504
+
+fdisk:*1> flag 2
+
+fdisk:*1> edit 3
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0B
+Do you wish to edit in CHS mode? [n] 
+Partition offset [0 - 31116288]: [9829784] 
+Partition size [1 - 21286504]: [21286504] 
+
+fdisk:*1> print
+         Starting       Ending
+ #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
+------------------------------------------------------------------------
+ 1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
+ 2: 0E 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS FAT-16  
+ 3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
+ 4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
+
+fdisk:*1> write
+fdisk: 1> quit
+----
+
+[start=2]
+. Format the FAT partitions (admin privileges required)
+
+[source,shell]
+----
+diskutil unmountDisk /dev/disk6
+sudo newfs_msdos -F 16 -v ZXDOSPLUS -b 4096 -c 128 /dev/rdisk6s2
+sudo newfs_msdos -F 32 -v EXTRA -b 4096 -c 128 /dev/rdisk6s3
+----
+
+[start=3]
+. Confirm that the new partition scheme has been applied:
+
+[source,shell]
+----
+diskutil list
+----
+
+[source]
+----
+(...)
+/dev/disk6 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *15.9 GB    disk6
+   1:                       0x7F                         1.0 GB     disk6s1
+   2:             Windows_FAT_16 ZXDOSPLUS               4.0 GB     disk6s2
+   3:                 DOS_FAT_32 EXTRA                   10.9 GB    disk6s3
+----
+
+==== Linux
+
+You can use the command line. First, find out the device to erase:
+
+[source,shell]
+----
+lsblk
+----
+
+For this example, it will be `sdc`:
+
+[source]
+----
+NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+(..)
+sdc          179:0    0 15,8G  0 disk 
+└─sdc1       179:1    0 15,8G  0 part 
+----
+
+<<<<
+
+Instructions:
+
+. Verify that the disk isn't mounted and edit the partition scheme (this step requires root privileges):
+
+[source,shell]
+----
+sudo fdisk -e /dev/sdc
+----
+
+[source]
+----
+Enter 'help' for information
+fdisk: 1> erase
+fdisk:*1> edit 1
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 7F
+Do you wish to edit in CHS mode? [n] 
+Partition offset [0 - 31116288]: [63] 128
+Partition size [1 - 31116287]: [31116287] 2017152
+
+fdisk:*1> edit 2
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0E
+Do you wish to edit in CHS mode? [n] 
+Partition offset [0 - 31116288]: [2017280]  
+Partition size [1 - 29099135]: [29099135] 7812504
+
+fdisk:*1> flag 2
+
+fdisk:*1> edit 3
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0B
+Do you wish to edit in CHS mode? [n] 
+Partition offset [0 - 31116288]: [9829784] 
+Partition size [1 - 21286504]: [21286504] 
+
+fdisk:*1> print
+         Starting       Ending
+ #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
+------------------------------------------------------------------------
+ 1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
+ 2: 0E 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS FAT-16  
+ 3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
+ 4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
+
+fdisk:*1> write
+fdisk: 1> quit
+----
+
+[start=2]
+. Format both FAT partitions (requires root privileges)
+
+[source,shell]
+----
+sudo mkfs.fat -F 16 /dev/sdc2
+sudo mkfs.fat -F 32 /dev/sdc3
+----
+
+<<<<
+
+[start=3]
+. Confirm that the partition scheme has been changed:
+
+[source,shell]
+----
+lsblk
+----
+
+[source]
+----
+NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+(...)
+sda      179:0    0 15,8G  0 disk 
+├─sda1   179:1    0    1G  0 part 
+├─sda2   179:2    0    4G  0 part 
+├─sda3   179:3    0 10,8G  0 part 
+----
+
+==== +3e
+
+Once the microSD card is ready to use, you can start Spectrum core with a +3e ROM and format the IDEDOS part.
+
+The first step is determine the disk geometry. With the cart inserted into the ZXDOS+, type the command:
+
+[source,basic]
+----
+CAT TAB
+----
+
+This will give a result showing the number of https://en.wikipedia.org/wiki/Cylinder-head-sector[cylinders, heads and sectors].
+
+Whith this info, we estimate the size of our partition, using cylinders. For example, if the number of cylinders is 32768, and we want to use 1GB of a 16GB card, the number of cylinders needes would be 32768/16=2048. This way, the IDEDOS partition can be formatted using that number:
+
+[source,basic]
+----
+FORMAT TO 0,100,2048
+----
+
+The first value (`0`) is the drive to use (the first one), the second value is the maximum number of IDEDOS partitions, and the third one yis the number of cylinders to use.
+
+Once formatted, you can create new partitions. For example, to create a 16MB partition with the name "Software", another 4GB partition named "Swap" (to use as swap) and another one name "Utils", 8MB in size:
+
+[source,basic]
+----
+NEW DATA "Software",16
+NEW EXP "Swap1",4
+NEW DATA "Utils",8
+----
+
+For more information about the different +3e disk commands , you can check https://worldofspectrum.org/zxplus3e/index.html[this page at World of Spectrum].
+
+<<<
 
 === Keyboard
 
@@ -2304,6 +2568,10 @@ http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[ZX-Uno FAQ]
 https://docs.google.com/document/d/1NI0zgCDRk7c-5CVi-lfZEK6q8Lnpnco7PhpsEEdxD60/edit[Guía rápida del ZX-Uno]
 
 http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
+
+https://worldofspectrum.org/zxplus3e/index.html[The ZX Spectrum +3e Homepage]
+
+https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with PC (FAT) partitions]
 
 http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
