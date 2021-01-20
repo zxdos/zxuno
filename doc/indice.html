@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">kounch</span><br>
 <span id="email" class="email"><a href="mailto:kounch@users.noreply.github.com">kounch@users.noreply.github.com</a></span><br>
-<span id="revnumber">version 1.3.1</span>
+<span id="revnumber">version 1.3.2</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Índice</div>
@@ -665,8 +665,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_recuperación_del_firmware">Recuperación del firmware</a>
 <ul class="sectlevel3">
+<li><a href="#_preparación_del_cableado">Preparación del cableado</a></li>
 <li><a href="#_recuperación_usando_una_raspberry_pi">Recuperación usando una Raspberry Pi</a></li>
 <li><a href="#_recuperación_usando_macos_y_cable_usb_blaster">Recuperación usando MacOS y Cable USB-Blaster</a></li>
+<li><a href="#_recuperación_usando_windows_y_cable_usb_blaster">Recuperación usando Windows y Cable USB-Blaster</a></li>
 </ul>
 </li>
 </ul>
@@ -1929,7 +1931,7 @@ NEW DATA "Utils",8</code></pre>
 <p><code>R</code>: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.</p>
 </li>
 <li>
-<p><code>/</code> (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root"</p>
+<p><code>/</code> (del teclado numérico, <code>Symbol Shift+V</code> en gomaDOS+): Carga la ROM por defecto del core de ZX Spectrum en modo "root"</p>
 </li>
 <li>
 <p>Número del <code>1</code> al <code>9</code>: Cargar el core en la ubicación de la Flash correspondiente a dicho número</p>
@@ -2410,7 +2412,7 @@ NEW DATA "Utils",8</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Recordar que, si se inicia el ZXDOS+ pulsando la tecla <code>/</code> (del teclado numérico) (<code>Symbol Shift+V</code> en gomaDOS+), entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".</p>
+<p>Recordar que, si se inicia el ZXDOS+ pulsando la tecla <code>/</code> (del teclado numérico, <code>Symbol Shift+V</code> en gomaDOS+), entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".</p>
 </div>
 </td>
 </tr>
@@ -4464,6 +4466,50 @@ Puerto: &lt;Puerto identificado antes&gt;</code></pre>
 <p>En esta situación, existen diferentes métodos de recuperación que permiten volver a instalar el firmware.</p>
 </div>
 <div class="sect3">
+<h4 id="_preparación_del_cableado">Preparación del cableado</h4>
+<div class="paragraph">
+<p>En los siguientes pasos de recuperación se habla de conectar cables puente o USB-Blaster a la placa de ZXDOS+ o gomaDOS+. Para ello, usar las siguientes imágenes como referencia.</p>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/jtag.jpg" alt="jtag"></span> <span class="image"><img src="img/jtaggomados.jpg" alt="jtaggomados"></span></p>
+</div>
+<div class="paragraph">
+<p>Notar que, en algunos modelos, el conector de JTAG está con los pines por la parte de debajo.</p>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/jtag02.jpg" alt="jtag02"></span> <span class="image"><img src="img/jtag03.jpg" alt="jtag03"></span> <span class="image"><img src="img/jtag04.jpg" alt="jtag04"></span></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>NO</strong> se ha de conectar la línea de 3V</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>En el caso de utilizar USB-Blaster, el gomaDOS+ tiene la distribución adecuada para conectar directamente el conector 2x5 incluido. Para ZXDOS+, podría ser necesario preparar el cableado adecuado, comparando las imágenes anteriores.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
 <h4 id="_recuperación_usando_una_raspberry_pi">Recuperación usando una Raspberry Pi</h4>
 <div class="paragraph">
 <p><strong>Material necesario</strong>:</p>
@@ -4497,7 +4543,6 @@ Puerto: &lt;Puerto identificado antes&gt;</code></pre>
 </li>
 </ul>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>Pasos a seguir</strong>:</p>
 </div>
@@ -4527,45 +4572,14 @@ cd</span> ..
 <span class="nb">rm</span> <span class="nt">-rf</span> ./openocd-code</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="olist arabic">
 <ol class="arabic" start="3">
 <li>
-<p>Conectar el USB-Blaster o los cables puente para GPIO. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXDOS+ o el gomaDOS+ y conectar las líneas de JTAG de la FPGA (<code>TMS</code>, <code>TDI</code>, <code>TDO</code>, <code>TCK</code> y <code>GND</code>) con los cables a los pines <a href="https://es.wikipedia.org/wiki/GPIO">GPIO</a> de la Raspberry Pi.</p>
+<p>Conectar el USB-Blaster o los cables puente para GPIO <a href="#_preparación_del_cableado">tal y como se explica anterioremente</a>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXDOS+ o el gomaDOS+ y conectar las líneas de JTAG de la FPGA (<code>TMS</code>, <code>TDI</code>, <code>TDO</code>, <code>TCK</code> y <code>GND</code>) con los cables a los pines <a href="https://es.wikipedia.org/wiki/GPIO">GPIO</a> de la Raspberry Pi.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph text-center">
-<p><span class="image"><img src="img/jtag.jpg" alt="jtag"></span> <span class="image"><img src="img/jtaggomados.jpg" alt="jtaggomados"></span></p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p><strong>NO</strong> se ha de conectar la línea de 3V</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>En el caso de utilizar USB-Blaster, el gomaDOS+ tiene la distribución adecuada para conectar directamente el conector 2x5 incluido. Para ZXDOS+, será necesario preparar el cableado adecuado, comparando las dos imágenes anteriores.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar <code>GND</code> con <code>GND</code>.</p>
 </div>
@@ -4621,6 +4635,11 @@ cd</span> ..
 <li>
 <p>Copiar en la Raspberry Pi el fichero <code>recovery.zxd.bit</code> obtenido anteriormente del <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">repositorio oficial</a>. En nuestro ejemplo, se dejará en <code>/home/pi/zxdosplus/unbrick/</code></p>
 </li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="olist arabic">
+<ol class="arabic" start="5">
 <li>
 <p>Para la conexión usando GPIO, realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está <code>recovery.zxd.bit</code>. Este paso no es necesario si se usa USB-Blaster.</p>
 </li>
@@ -4631,7 +4650,6 @@ cd</span> ..
 <pre class="rouge highlight"><code data-lang="shell"><span class="nb">cp</span> /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxdosplus/unbrick/</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="olist arabic">
 <ol class="arabic" start="6">
 <li>
@@ -4848,16 +4866,10 @@ bcm2835gpio_jtag_nums 26 6 13 19</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Cable USB-Blaster. Preparado con las conexiones adecuadas para ZXDOS+</p>
+<p>Cable USB-Blaster <a href="#_preparación_del_cableado">preparado con las conexiones adecuadas para ZXDOS+</a></p>
 </li>
 <li>
 <p>Imagen Flash y recovery para ZXDOS+ (LX25). Los mismos que se indican para Raspberry pi, del <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">repositorio oficial, en este enlace</a></p>
-</li>
-<li>
-<p>Sistema MacOS</p>
-</li>
-<li>
-<p>Carpeta data adicional para UrJTAG, obtenido desde <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">aqui</a></p>
 </li>
 </ul>
 </div>
@@ -4866,6 +4878,12 @@ bcm2835gpio_jtag_nums 26 6 13 19</code></pre>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p>Sistema MacOS</p>
+</li>
+<li>
+<p>Carpeta data adicional para UrJTAG, obtenido desde <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">aqui</a></p>
+</li>
 <li>
 <p><a href="https://brew.sh">Homebrew para MacOS</a></p>
 </li>
@@ -4911,7 +4929,7 @@ make <span class="nt">-j4</span>
 <div class="olist arabic">
 <ol class="arabic" start="4">
 <li>
-<p>Copiar el archivo FLASH.ZXD en la raiz de la tarjeta microSD para el ZXDOS+.</p>
+<p>Copiar el archivo <code>FLASH.ZXD</code> en la raiz de la tarjeta microSD para el ZXDOS+.</p>
 </li>
 <li>
 <p>Conectar el cable USB-Blaster al ZXDOS+ y al Mac</p>
@@ -5108,6 +5126,213 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
+<div class="sect3">
+<h4 id="_recuperación_usando_windows_y_cable_usb_blaster">Recuperación usando Windows y Cable USB-Blaster</h4>
+<div class="paragraph">
+<p><strong>Material necesario</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cable USB-Blaster. &lt;&lt;<a href="#_preparación_del_cableado">preparado con las conexiones adecuadas para ZXDOS+</a></p>
+</li>
+<li>
+<p>Imagen Flash y recovery para ZXDOS+ (LX25). Los mismos que se indican para Raspberry pi, del <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">repositorio oficial, en este enlace</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Software necesario</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Sistema Windows</p>
+</li>
+<li>
+<p>Drivers de USB-Blaster para Windows, disponible en <a href="https://www.zxuno.com/forum/viewtopic.php?f=25&amp;t=432">el foro de ZX-Uno</a></p>
+</li>
+<li>
+<p>UrJTAG, para Windows, disponible en <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">el repositorio oficial</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Pasos a seguir</strong>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Descomprimir el fichero ZIP con los drivers (obtenido en <a href="https://www.zxuno.com/forum/download/file.php?id=889">el foro de ZX-Uno</a>)</p>
+</li>
+<li>
+<p>Conectar el cable USB-Blaster al PC con Windows e instalar el driver eligiendo la opción de añadir ficheros manualmente y seleccionado la carpeta <code>drivers</code> que se ha obtenido al descomprimir el fichero anterior</p>
+</li>
+<li>
+<p>Descomprimir el software de UrJTAG, obtenido en <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">el repositorio oficial</a></p>
+</li>
+<li>
+<p>Copiar el archivo <code>FLASH.ZXD</code> en la raiz de la tarjeta microSD para el ZXDOS+.</p>
+</li>
+<li>
+<p>Conectar el cable USB-Blaster al ZXDOS+ y al PC con Windows</p>
+</li>
+<li>
+<p>Encender el ZXDOS+ o el gomaDOS+</p>
+</li>
+<li>
+<p>Asegurarnos de que estamos en el directorio donde se encuentra el archivo <code>recovery.zxd.bit</code>, y lanzar  <code>jtag.exe</code>.</p>
+</li>
+<li>
+<p>Aparecerá una consola donde se han de escribir los comandos:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cable usbblaster
+detect
+pld load recovery.zxd.bit</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="olist arabic">
+<ol class="arabic" start="9">
+<li>
+<p>Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>En el caso de que no se vea imagen, pulsar <code>Bloq. Despl.</code> (<code>Caps Shift+Symbol Shift+G</code> en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.</p>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/recovery.png" alt="recovery"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="10">
+<li>
+<p>Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero <code>FLASH.ZXD</code> <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">descargado anteriormente</a>.</p>
+</li>
+<li>
+<p>Desconectar el cable USB-Blaster.</p>
+</li>
+<li>
+<p>Elegir la opción <code>Upgrade Flash from SD</code>. Pulsar Enter, elegir <code>Yes</code>, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/recovery2.png" alt="recovery2"></span></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como <code>Caps Shift + 5</code>, etc. En este caso, se ha de cambiar el modo de teclado a <code>PC XT</code> (<code>Caps Shift + Symbol Shift + U</code> y luego <code>9</code>), para que funcionen de nuevo temporalmente.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="13">
+<li>
+<p>Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXDOS+ (o el gomaDOS+) vuelve a arrancar correctamente.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Si no se obtiene imagen, pulsar de nuevo <code>Bloq. Despl.</code> (<code>Caps Shift+Symbol Shift+G</code> en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <a href="#_advanced">ajuste avanzado correspondiente</a> para indicar la configuración de nuestro monitor.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Si no hay imagen, cambiar entre modo video compuesto y modo VGA (<code>Caps Shift+Symbol Shift+G</code>)</p>
+</li>
+<li>
+<p>Cambiar al modo <code>PC XT</code> de teclado (<code>Caps Shift + Symbol Shift + U</code> y luego <code>9</code>)</p>
+</li>
+<li>
+<p>Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (<code>Caps Shift + Symbol Shift + B</code>)</p>
+</li>
+<li>
+<p>Rápidamente, pulsar <code>Caps Shift + 1</code></p>
+</li>
+<li>
+<p>De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (<code>Caps Shift+Symbol Shift+G</code>)</p>
+</li>
+<li>
+<p>Navegar por la BIOS y configurar las siguientes opciones:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Advanced</code> &#8594; <code>Keyboard Layout</code>: <code>Spectrum</code></p>
+</li>
+<li>
+<p><code>Advanced</code> &#8594; <code>Video</code>: <code>VGA</code>  (sólo si no teníamos imagen)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Guardar los cambios de la BIOS:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Exit</code> &#8594; <code>Save changes and exit</code>
+.Apagar completamente el gomaDOS+ y volver a encenderlo</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -5233,8 +5458,8 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.1<br>
-Last updated 2021-01-16 16:18:42 +0100
+Version 1.3.2<br>
+Last updated 2021-01-20 22:08:44 +0100
 </div>
 </div>
 <style>

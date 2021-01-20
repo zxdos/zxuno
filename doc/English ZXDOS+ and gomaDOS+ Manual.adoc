@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.1
+:revnumber: 1.3.2
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -826,7 +826,7 @@ Special keys which can be used during startup:
 - `Caps Lock` or `Cursor down` (`Caps Shift+2 on gomaDOS+): Core selection menu
 - `Esc` (`Caps Shift+Space` on gomaDOS+): ZX Spectrum core ROM selection menu
 - `R`: Loads the Spectrum core ROM in "real" mode, disabling esxdos, new graphics modes, etc.
-- `/` (numeric keyboard): Load the default ZX Spectrum core ROM in "root" mode
+- `/` (numeric keyboard, `Symbol Shift+V` on gomaDOS+): Load the default ZX Spectrum core ROM in "root" mode
 - Number from `1` to `9`: Load the core in the flash location corresponding to that number
 
 Special keys that can be used while running the main core (ZX Spectrum):
@@ -1059,7 +1059,7 @@ At this moment, `romsupgr`, only works correctly with RomPack files using a maxi
 
 [NOTE]
 ====
-Remember that if the ZXDOS+ is started by pressing the `/` key (on the numeric keyboard) (`Symbol Shift+V` in gomaDOS+), then the default ROM of the ZX Spectrum core will be loaded in" root "mode.
+Remember that if the ZXDOS+ is started by pressing the `/` key (on the numeric keyboard, `Symbol Shift+V` in gomaDOS+), then the default ROM of the ZX Spectrum core will be loaded in" root "mode.
 ====
 
 To do the opposite process (save the ROMs in a RomPack file named `ROMS.ZX1`), you can use the` .romsback` command.
@@ -2228,6 +2228,30 @@ Sometimes (e.g. when installing an experimental core or when upgrading the ZX Sp
 
 When this happens, there are several recovery methods that let you install again the firmware.
 
+==== JTAG cable connections
+
+Later, in some of the recovery steps, when talking about jump wires or USB-Blaster connections to ZXDOS, you can use these images as reference.
+
+[.text-center] 
+image:img/jtag.jpg[pdfwidth=25%] image:img/jtaggomados.jpg[pdfwidth=40%]
+
+Take note, that on some models, the JTAG pins are at the under the board.
+
+[.text-center] 
+image:img/jtag02.jpg[pdfwidth=25%] image:img/jtag03.jpg[pdfwidth=25%] image:img/jtag04.jpg[pdfwidth=25%]
+
+[WARNING]
+====
+*DO NOT* connect the 3V line
+====
+
+[NOTE]
+====
+When using USB-Blaster, a gomaDOS+ is ready to connect directly the 2x5 connector. For a ZXDOS+, it may be necessary to prepare the cables, looking at the previous images.
+====
+
+<<<<
+
 ==== Recovery using a Raspberry Pi
 
 *Hardware required*:
@@ -2241,8 +2265,6 @@ When this happens, there are several recovery methods that let you install again
 *Software required*:
 
 - Flash image and recovery file for ZXDOS+ (LX25), from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
-
-<<<
 
 *Instruction Steps*:
 
@@ -2265,23 +2287,10 @@ cd ..
 rm -rf ./openocd-code
 ----
 
+<<<<
+
 [start=3]
-. Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
-
-[.text-center] 
-image:img/jtag.jpg[pdfwidth=25%] image:img/jtaggomados.jpg[pdfwidth=40%]
-
-[WARNING]
-====
-*DO NOT* connect the 3V line
-====
-
-[NOTE]
-====
-When using USB-Blaster, a gomaDOS+ is ready to connect directly the 2x5 connector. For a ZXDOS+, it will be necessary to prepare the cables, comparing those last two images.
-====
-
-<<<
+. Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and, <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
 
 Is using a GPIO connection, take note of the chosen pins, making sure that `GND` is connected with `GND`.
 
@@ -2435,13 +2444,13 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 
 *Hardware required*:
 
-- USB-Blaster cable. Using the right pins for ZXDOS+
+- USB-Blaster cable. Using the right pins for ZXDOS+, <<#_jtag_cable_connections,as explained earlier>>
 - Flash Image file and y recovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
-- Mac OS
-- Extra data folder for UrJTAG, obtained from https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[here]
 
 *Software required*:
 
+- Mac OS
+- Extra data folder for UrJTAG, obtained from https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[here]
 - https://brew.sh[Homebrew for Mac OS]
 - UrJTAG: following instructions from https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[here]:
 
@@ -2555,6 +2564,101 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 [NOTE]
 ====
 When using Linux with `urjtag`, the process should be quite similar, although the dependencies (libftdi libusb pkg-config) would have to be installed with the appropiate package manager (apt, yum, pacman, etc.)
+====
+
+<<<<
+
+==== Recovery using Windows and USB-Blaster cable
+
+*Hardware required*:
+
+- USB-Blaster cable. Using the right pins for ZXDOS+, <<#_jtag_cable_connections,as explained earlier>>
+- Flash Image file and y recovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
+
+*Software required*:
+
+- Windows
+- USB-Blaster drivers for Windows, available at https://www.zxuno.com/forum/viewtopic.php?f=25&t=432[ZX-Uno forums]
+- UrJTAG, for Windows, available at https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[the official repository]
+
+*Instruction Steps*:
+
+. Extract the ZIP file with drivers (obtained from the https://www.zxuno.com/forum/download/file.php?id=889[ZX-Uno forums])
+
+. Plug USB-Blaster to the Windows PC and install the driver choosing to select manually installation files and using the folder `drivers` obtained after extracting the ZIP
+
+. Extract UrJTAG Windows software, obtained at the https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[official repository]
+
+. Copy `FLASH.ZXD` file to the root of the ZXDOS+ microSD card. 
+
+. Connect USB-Blaster cable to ZXDOS+ and the PC
+
+. Make sure that you are in the directory where `recovery.zxd.bit` is, and execute `jtag` command.
+
+. Turn on the ZXDOS+ or gomaDOS+.
+
+. A new shell appears. Now type the commands:
+
+[source,shell]
+----
+cable usbblaster
+detect
+pld load recovery.zxd.bit
+----
+
+<<<<
+
+[start=9]
+. If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
+
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+
+[.text-center] 
+image:img/recovery.png[pdfwidth=70%]
+
+[start=10]
+. Insert in the ZXDOS+ the microSD card formatted as FAT16 o FAT32, and with the `FLASH.ZXD` file https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[downloaded previously].
+
+. Unplug the USB-Blaster.
+
+. Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
+
+[.text-center] 
+image:img/recovery2.png[pdfwidth=70%]
+
+[WARNING]
+====
+This process can't be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
+====
+
+[NOTE]
+====
+Ususally, the recovery image is set to use a PS/2 keyboard so, for a gomaDOS+, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+====
+
+[start=13]
+. After some minutes, the process will end, and, after turning the ZXDOS+ off and on, it should start fine.
+
+[NOTE]
+====
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+====
+
+[NOTE]
+====
+For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
+
+. If you see no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
+. Reboot gomaDOS+ without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
+. Quickly, press `Caps Shift + 1`
+. Again, if there's no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Navigate through BIOS and turno on these options:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (only if there was no image)
+. Save changes:
+- `Exit` -> `Save changes and exit`
+. Completely turn off gomaDOS` and turn it on again
 ====
 
 <<<<

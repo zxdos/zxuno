@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">kounch</span><br>
 <span id="email" class="email"><a href="mailto:kounch@users.noreply.github.com">kounch@users.noreply.github.com</a></span><br>
-<span id="revnumber">version 1.3.1</span>
+<span id="revnumber">version 1.3.2</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Index</div>
@@ -665,8 +665,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_firmware_recovery">Firmware recovery</a>
 <ul class="sectlevel3">
+<li><a href="#_jtag_cable_connections">JTAG cable connections</a></li>
 <li><a href="#_recovery_using_a_raspberry_pi">Recovery using a Raspberry Pi</a></li>
 <li><a href="#_recovery_using_macos_and_usb_blaster_cable">Recovery using MacOS and USB-Blaster cable</a></li>
+<li><a href="#_recovery_using_windows_and_usb_blaster_cable">Recovery using Windows and USB-Blaster cable</a></li>
 </ul>
 </li>
 </ul>
@@ -1927,7 +1929,7 @@ NEW DATA "Utils",8</code></pre>
 <p><code>R</code>: Loads the Spectrum core ROM in "real" mode, disabling esxdos, new graphics modes, etc.</p>
 </li>
 <li>
-<p><code>/</code> (numeric keyboard): Load the default ZX Spectrum core ROM in "root" mode</p>
+<p><code>/</code> (numeric keyboard, <code>Symbol Shift+V</code> on gomaDOS+): Load the default ZX Spectrum core ROM in "root" mode</p>
 </li>
 <li>
 <p>Number from <code>1</code> to <code>9</code>: Load the core in the flash location corresponding to that number</p>
@@ -2422,7 +2424,7 @@ NEW DATA "Utils",8</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Remember that if the ZXDOS+ is started by pressing the <code>/</code> key (on the numeric keyboard) (<code>Symbol Shift+V</code> in gomaDOS+), then the default ROM of the ZX Spectrum core will be loaded in" root "mode.</p>
+<p>Remember that if the ZXDOS+ is started by pressing the <code>/</code> key (on the numeric keyboard, <code>Symbol Shift+V</code> in gomaDOS+), then the default ROM of the ZX Spectrum core will be loaded in" root "mode.</p>
 </div>
 </td>
 </tr>
@@ -4457,6 +4459,50 @@ Port: &lt;Previously identified port&gt;</code></pre>
 <p>When this happens, there are several recovery methods that let you install again the firmware.</p>
 </div>
 <div class="sect3">
+<h4 id="_jtag_cable_connections">JTAG cable connections</h4>
+<div class="paragraph">
+<p>Later, in some of the recovery steps, when talking about jump wires or USB-Blaster connections to ZXDOS, you can use these images as reference.</p>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/jtag.jpg" alt="jtag"></span> <span class="image"><img src="img/jtaggomados.jpg" alt="jtaggomados"></span></p>
+</div>
+<div class="paragraph">
+<p>Take note, that on some models, the JTAG pins are at the under the board.</p>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/jtag02.jpg" alt="jtag02"></span> <span class="image"><img src="img/jtag03.jpg" alt="jtag03"></span> <span class="image"><img src="img/jtag04.jpg" alt="jtag04"></span></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>DO NOT</strong> connect the 3V line</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When using USB-Blaster, a gomaDOS+ is ready to connect directly the 2x5 connector. For a ZXDOS+, it may be necessary to prepare the cables, looking at the previous images.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
 <h4 id="_recovery_using_a_raspberry_pi">Recovery using a Raspberry Pi</h4>
 <div class="paragraph">
 <p><strong>Hardware required</strong>:</p>
@@ -4490,7 +4536,6 @@ Port: &lt;Previously identified port&gt;</code></pre>
 </li>
 </ul>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>Instruction Steps</strong>:</p>
 </div>
@@ -4520,45 +4565,14 @@ cd</span> ..
 <span class="nb">rm</span> <span class="nt">-rf</span> ./openocd-code</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="olist arabic">
 <ol class="arabic" start="3">
 <li>
-<p>Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and connect the FPGA JTAG lines (<code>TMS</code>, <code>TDI</code>, <code>TDO</code>, <code>TCK</code> y <code>GND</code>), using the wires, to the Raspberry Pi <a href="https://es.wikipedia.org/wiki/GPIO">GPIO</a> pins.</p>
+<p>Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and, <a href="#_jtag_cable_connections">as explained before</a> connect the FPGA JTAG lines (<code>TMS</code>, <code>TDI</code>, <code>TDO</code>, <code>TCK</code> y <code>GND</code>), using the wires, to the Raspberry Pi <a href="https://es.wikipedia.org/wiki/GPIO">GPIO</a> pins.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph text-center">
-<p><span class="image"><img src="img/jtag.jpg" alt="jtag"></span> <span class="image"><img src="img/jtaggomados.jpg" alt="jtaggomados"></span></p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p><strong>DO NOT</strong> connect the 3V line</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>When using USB-Blaster, a gomaDOS+ is ready to connect directly the 2x5 connector. For a ZXDOS+, it will be necessary to prepare the cables, comparing those last two images.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Is using a GPIO connection, take note of the chosen pins, making sure that <code>GND</code> is connected with <code>GND</code>.</p>
 </div>
@@ -4843,16 +4857,10 @@ bcm2835gpio_jtag_nums 26 6 13 19</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>USB-Blaster cable. Using the right pins for ZXDOS+</p>
+<p>USB-Blaster cable. Using the right pins for ZXDOS+, <a href="#_jtag_cable_connections">as explained earlier</a></p>
 </li>
 <li>
 <p>Flash Image file and y recovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">official repository</a></p>
-</li>
-<li>
-<p>Mac OS</p>
-</li>
-<li>
-<p>Extra data folder for UrJTAG, obtained from <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">here</a></p>
 </li>
 </ul>
 </div>
@@ -4861,6 +4869,12 @@ bcm2835gpio_jtag_nums 26 6 13 19</code></pre>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p>Mac OS</p>
+</li>
+<li>
+<p>Extra data folder for UrJTAG, obtained from <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">here</a></p>
+</li>
 <li>
 <p><a href="https://brew.sh">Homebrew for Mac OS</a></p>
 </li>
@@ -5105,6 +5119,215 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
+<div class="sect3">
+<h4 id="_recovery_using_windows_and_usb_blaster_cable">Recovery using Windows and USB-Blaster cable</h4>
+<div class="paragraph">
+<p><strong>Hardware required</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>USB-Blaster cable. Using the right pins for ZXDOS+, <a href="#_jtag_cable_connections">as explained earlier</a></p>
+</li>
+<li>
+<p>Flash Image file and y recovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">official repository</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Software required</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Windows</p>
+</li>
+<li>
+<p>USB-Blaster drivers for Windows, available at <a href="https://www.zxuno.com/forum/viewtopic.php?f=25&amp;t=432">ZX-Uno forums</a></p>
+</li>
+<li>
+<p>UrJTAG, for Windows, available at <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">the official repository</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Instruction Steps</strong>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Extract the ZIP file with drivers (obtained from the <a href="https://www.zxuno.com/forum/download/file.php?id=889">ZX-Uno forums</a>)</p>
+</li>
+<li>
+<p>Plug USB-Blaster to the Windows PC and install the driver choosing to select manually installation files and using the folder <code>drivers</code> obtained after extracting the ZIP</p>
+</li>
+<li>
+<p>Extract UrJTAG Windows software, obtained at the <a href="https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip">official repository</a></p>
+</li>
+<li>
+<p>Copy <code>FLASH.ZXD</code> file to the root of the ZXDOS+ microSD card.</p>
+</li>
+<li>
+<p>Connect USB-Blaster cable to ZXDOS+ and the PC</p>
+</li>
+<li>
+<p>Make sure that you are in the directory where <code>recovery.zxd.bit</code> is, and execute <code>jtag</code> command.</p>
+</li>
+<li>
+<p>Turn on the ZXDOS+ or gomaDOS+.</p>
+</li>
+<li>
+<p>A new shell appears. Now type the commands:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cable usbblaster
+detect
+pld load recovery.zxd.bit</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="olist arabic">
+<ol class="arabic" start="9">
+<li>
+<p>If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If there is no image on the display, press <code>Scroll Lock</code> (<code>Caps Shift+Symbol Shift+G</code> on gomaDOS+): to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.</p>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/recovery.png" alt="recovery"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="10">
+<li>
+<p>Insert in the ZXDOS+ the microSD card formatted as FAT16 o FAT32, and with the <code>FLASH.ZXD</code> file <a href="https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip">downloaded previously</a>.</p>
+</li>
+<li>
+<p>Unplug the USB-Blaster.</p>
+</li>
+<li>
+<p>Select the option <code>Upgrade Flash from SD</code>. Press Enter, choose <code>Yes</code>, and press Enter again to start the Flash writing process.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph text-center">
+<p><span class="image"><img src="img/recovery2.png" alt="recovery2"></span></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This process can&#8217;t be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Ususally, the recovery image is set to use a PS/2 keyboard so, for a gomaDOS+, some key combinations, like <code>Caps Shift + 5</code>, etc may not work. In this case, you have to change the keyboard mode to <code>PC XT</code>(<code>Caps Shift + Symbol Shift + U</code> and then <code>9</code>), to make them work temporarily.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="13">
+<li>
+<p>After some minutes, the process will end, and, after turning the ZXDOS+ off and on, it should start fine.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If no image is shown, press again <code>Scroll Lock</code> (<code>Caps Shift+Symbol Shift+G</code> on gomaDOS+): to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <a href="#_advanced">the right advanced setting</a> that matches your display.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you see no image, switch between composite and VGA mode (<code>Caps Shift+Symbol Shift+G</code>)</p>
+</li>
+<li>
+<p>Change to <code>PC XT</code> keyboard mode (<code>Caps Shift + Symbol Shift + U</code> and then <code>9</code>)</p>
+</li>
+<li>
+<p>Reboot gomaDOS+ without losing the temporary keyboard mode (<code>Caps Shift + Symbol Shift + B</code>)</p>
+</li>
+<li>
+<p>Quickly, press <code>Caps Shift + 1</code></p>
+</li>
+<li>
+<p>Again, if there&#8217;s no image, switch between composite and VGA mode (<code>Caps Shift+Symbol Shift+G</code>)</p>
+</li>
+<li>
+<p>Navigate through BIOS and turno on these options:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Advanced</code> &#8594; <code>Keyboard Layout</code>: <code>Spectrum</code></p>
+</li>
+<li>
+<p><code>Advanced</code> &#8594; <code>Video</code>: <code>VGA</code>  (only if there was no image)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Save changes:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Exit</code> &#8594; <code>Save changes and exit</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Completely turn off gomaDOS` and turn it on again</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -5224,8 +5447,8 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.1<br>
-Last updated 2021-01-16 16:20:06 +0100
+Version 1.3.2<br>
+Last updated 2021-01-20 22:12:15 +0100
 </div>
 </div>
 <style>
