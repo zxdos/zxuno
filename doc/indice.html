@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">kounch</span><br>
 <span id="email" class="email"><a href="mailto:kounch@users.noreply.github.com">kounch@users.noreply.github.com</a></span><br>
-<span id="revnumber">version 1.3.2</span>
+<span id="revnumber">version 1.3.3</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Índice</div>
@@ -628,7 +628,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_formato_de_tarjeta_microsd_12">Formato de Tarjeta microSD</a></li>
 <li><a href="#_teclado_13">Teclado</a></li>
 <li><a href="#_teclas_especiales_y_botones_13">Teclas especiales y botones</a></li>
-<li><a href="#_guía_básica_12">Guía básica</a></li>
+<li><a href="#_guía_básica_12">Guía básica</a>
+<ul class="sectlevel4">
+<li><a href="#_cambio_del_charset_de_la_rom_de_vdc">Cambio del charset de la ROM de VDC</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -641,15 +645,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_configuración_del_core_de_pong">Configuración del Core de Pong</a></li>
 </ul>
 </li>
-<li><a href="#_miniduino">Miniduino</a>
+<li><a href="#_carga_desde_cinta">Carga desde cinta</a>
 <ul class="sectlevel3">
+<li><a href="#_reproductor_de_cassette">Reproductor de cassette</a></li>
+<li><a href="#_ordenador">Ordenador</a>
+<ul class="sectlevel4">
+<li><a href="#_playtzx">PlayTZX</a></li>
+</ul>
+</li>
+<li><a href="#_teléfono_móvil_tableta_reproductor_de_sonido_mp3_etc">Teléfono móvil, tableta, reproductor de sonido MP3, etc.</a>
+<ul class="sectlevel4">
+<li><a href="#_conversión_a_fichero_de_audio">Conversión a fichero de audio</a></li>
+</ul>
+</li>
+<li><a href="#_miniduino">Miniduino</a>
+<ul class="sectlevel4">
 <li><a href="#_puertos_y_botones">Puertos y Botones</a></li>
 <li><a href="#_preparación">Preparación</a></li>
 <li><a href="#_uso">Uso</a></li>
-<li><a href="#_actualización_de_firmware_maxduino">Actualización de firmware Maxduino</a>
-<ul class="sectlevel4">
-<li><a href="#_preparación_del_entorno">Preparación del entorno</a></li>
-<li><a href="#_actualización">Actualización</a></li>
+<li><a href="#_actualización_de_firmware_maxduino">Actualización de firmware Maxduino</a></li>
 </ul>
 </li>
 </ul>
@@ -818,7 +832,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)</p>
 </li>
 <li>
-<p>Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<a href="#_miniduino">ver la sección correspondiente más adelante</a>) o un reproductor/grabador de <a href="https://es.wikipedia.org/wiki/Casete">cassette</a>. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).</p>
+<p>Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<a href="#_miniduino">ver la sección correspondiente más adelante</a>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de <a href="https://es.wikipedia.org/wiki/Casete">cassette</a>. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).</p>
 </li>
 </ul>
 </div>
@@ -3829,6 +3843,12 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <li>
 <p>Modos de color incluyendo monocromo o fósforo verde/naranja</p>
 </li>
+<li>
+<p>Soporte para modificar el tipo de letra (charset) de la ROM de VDC</p>
+</li>
+<li>
+<p>Módulo de efectos de sonido y voz (The Voice)</p>
+</li>
 </ul>
 </div>
 <div class="sect3">
@@ -3854,10 +3874,22 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <div class="ulist">
 <ul>
 <li>
+<p><code>F1</code> (<code>Caps Shift+Symbol Shift+5</code> en gomaDOS+): Carga una ROM de prueba.</p>
+</li>
+<li>
 <p><code>Bloq. Despl.</code> (<code>Caps Shift+Symbol Shift+G</code> en gomaDOS+): para cambiar entre modo de video compuesto y VGA</p>
 </li>
 <li>
 <p><code>Ctrl+Alt+Backspace</code> (<code>Caps Shift+Symbol Shift+B</code> en gomaDOS+): Hard reset.</p>
+</li>
+<li>
+<p>Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre <code>0</code> y <code>9</code> o el botón del joystick para jugar.</p>
+</li>
+<li>
+<p><code>Esc</code> o el botón 2 del joystick (o <code>Caps Shift+Espacio</code> en gomaDOS+) para mostrar u ocultar el menú.</p>
+</li>
+<li>
+<p><code>W</code>, <code>A</code>, <code>S</code>, <code>D</code> o las teclas de cursor (<code>Caps Shift+5</code>, <code>Caps Shift+6</code>, <code>Caps Shift+7</code> y <code>Caps Shift+8</code> en gomaDOS+, en modo de teclado <code>PC XT</code>) y luego <code>Enter</code> para elegir y seleccionar en el menú.</p>
 </li>
 </ul>
 </div>
@@ -3865,6 +3897,26 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div class="sect3">
 <h4 id="_guía_básica_12">Guía básica</h4>
+<div class="paragraph">
+<p>No suele haber información en pantalla de las opciones, así que es interesante consultar las instrucciones de cada juego (por ejemplo en <a href="https://videopac.weebly.com/">este enlace</a>) para saber qué hacer para jugar.</p>
+</div>
+<div class="paragraph">
+<p>Notar también que el sistema no tiene claramente definido qué joystick se corresponde al cada jugador, e incluso pueden ir alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador ) usar la opción del menú que unifica los dos joysticks.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Si, al navegar por el directorio donde están las ROMS, no se ven todas, se puede dividir el contenido en varios subdirectorios con menos ficheros por directorio (por ejemplo, clasificando por letras) para solucionarlo.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Pulsando <code>Esc</code> o el botón 2 del joystick (o <code>Caps Shift+Espacio</code> en gomaDOS+, en modo de teclado <code>PC XT</code>) se muestra el menú de configuración. Se usan las teclas de cursor (<code>Caps Shift+5</code>, <code>Caps Shift+6</code>, <code>Caps Shift+7</code> y <code>Caps Shift+8</code> en gomaDOS+, en modo de teclado <code>PC XT</code>) y <code>Enter</code> para elegir y seleccionar en el menú.</p>
 </div>
@@ -3883,10 +3935,16 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <p>Línea de exploración (Scanlines)</p>
 </li>
 <li>
-<p>Intercambiar el orden de los joysticks (Swap joysticks)</p>
+<p>Intercambiar el orden de los joysticks (Swap Joysticks)</p>
 </li>
 <li>
-<p>Cargar ROM (Load ROM)</p>
+<p>Unir los joysticks (Join Joysticks). Útil para ROMs que alternan el joystick en las partidas</p>
+</li>
+<li>
+<p>Cargar ROM (Load Cartridge ROM)</p>
+</li>
+<li>
+<p>Cargar un tipo de letra alternativo (Load VDC Font)</p>
 </li>
 <li>
 <p>Modo de vídeo (PAL Videopac/NTSC Odyssey2)</p>
@@ -3895,11 +3953,23 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <p>Modo de color (Color Mode)</p>
 </li>
 <li>
+<p>Activar o desactivar el módulo sintetizador (<a href="http://www.videopac.org/manuals/voice.pdf">The Voice</a>)</p>
+</li>
+<li>
 <p>Salir del menú (Exit)</p>
 </li>
 </ul>
 </div>
+<div class="sect4">
+<h5 id="_cambio_del_charset_de_la_rom_de_vdc">Cambio del charset de la ROM de VDC</h5>
+<div class="paragraph">
+<p>Es posible, para algunas ROM, cargar un archivo <code>CHR</code> con una fuente modificada, en vez de la original incluida en el chip Intel 8244/8245.</p>
+</div>
+<div class="paragraph">
+<p>Estos archivos se pueden crear siguiendo las instrucciones y utilizando el editor disponible en el repositorio del proyecto, siguiendo <a href="https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit">este enlace</a>.</p>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -3993,15 +4063,177 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 </div>
 <div class="sect2">
-<h3 id="_miniduino">Miniduino</h3>
+<h3 id="_carga_desde_cinta">Carga desde cinta</h3>
+<div class="paragraph">
+<p>Para algunos cores como, por ejemplo, el de Spectrum o el de MSX, es posible cargar, igual que se hacía en las máquinas originales, desde un dispositivo externo de audio como un reproductor de cassette u otro que lo simule.</p>
+</div>
+<div class="paragraph">
+<p>Normalmente, se debe utilizar un cable adecuado para la <a href="#_puertos_y_conectores">entrada de sonido del ZXDOS+</a>, concretamente, ha de ser un cable con un jack estéreo de 3,5 mm en un extremo dos salidas mono en el otro (una para cada canal de audio), conectando el extremo del canal mono derecho al dispositivo de reproducción de cintas (esto no es necesario en Miniduino, ya que este automáticamente utiliza sólo el canal derecho de sonido al reproducir).</p>
+</div>
+<div class="sect3">
+<h4 id="_reproductor_de_cassette">Reproductor de cassette</h4>
+<div class="paragraph">
+<p>El funcionamiento es exactamente igual que se hacía con los equipos originales:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Conectar el cable de audio</p>
+</li>
+<li>
+<p>Ejecutar en el equipo o elegir la opción correspondiente a la carga desde cinta. Por ejemplo, en ZX Spectrum 48K, pulsando <code>J</code>, a continuación, dos veces, <code>"</code> (<code>Symbol Shift + P</code> en gomaDOS+) y luego <code>Enter</code> para ejecutar el clásico <code>LOAD "" + Enter</code></p>
+</li>
+<li>
+<p>Iniciar la reproducción de la cinta (es posible que haya que hacer distintos intentos ajustando el volumen del reproductor)</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ordenador">Ordenador</h4>
+<div class="paragraph">
+<p>Según el sistema operativo (Windows, MacOS, Linux) existen múltiples alternativas de programas que pueden, o bien reproducir directamente un archivo de cinta (<code>TAP</code>, <code>TZX</code>, <code>PZX</code>, etc.) y emitir el sonido por la salida de auriculares, o bien crear un fichero de sonido (<code>WAV</code>, <code>VOC</code>, <code>AU</code>, etc.) que se puede reproducir también con programas de música o sonido.</p>
+</div>
+<div class="sect4">
+<h5 id="_playtzx">PlayTZX</h5>
+<div class="paragraph">
+<p>Este programa para Windows, MacOS o Linux, permite reproducir un fichero de cinta <code>TZX</code> a través de la salida de sonido del ordenador.</p>
+</div>
+<div class="paragraph">
+<p>Se puede descargar el fichero binario (por ejemplo, para Windows desde <a href="https://worldofspectrum.net/utilities/#tzxtools">World of Spectrum Classic</a> y para Mac desde <a href="https://github.com/kounch/playtzx/releases">este repositorio de GitHub</a>) o compilar el código fuente como se explica <a href="#_compilar_código_fuente_macos_o_linux">a continuación</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Conectar el cable de audio entre la salida del ordenador y la entrada de audio del ZXDOS+ (recordar conectar únicamente el extremo del canal mono derecho al extremo del PC/Mac, etc.)</p>
+</li>
+<li>
+<p>Ejecutar en el equipo o elegir la opción correspondiente a la carga desde cinta. Por ejemplo, en ZX Spectrum 48K pulsando <code>J</code> a continuación, dos veces, <code>"</code> (<code>Symbol Shift + P</code> en gomaDOS+) y luego <code>Enter</code> para ejecutar el clásico <code>LOAD "" + Enter</code></p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Iniciar la reproducción de un fichero de cinta con el siguiente comando (es posible que haya que hacer distintos intentos ajustando el volumen de salida del equipo)</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">./playtzx &lt;fichero de cinta&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Si todo va bien, se irá viendo en la consola los distintos bloque de carga de la cinta, mientras el sonido se produce y el core del ZXDOS+ carga el programa.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>En Linux, el programa utiliza como salida el dispositivo <code>/dev/dsp</code>, así que, en versiones más modernas, es posible, por ejemplo, que haya que cargar módulos como <code>snd_pcm_oss</code> (en el caso de sistemas que utilicen ALSA), para que funcione correctamente.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_compilar_código_fuente_macos_o_linux">Compilar código fuente (MacOS o Linux)</h6>
+<div class="paragraph">
+<p>Verificar que están instaladas las herramientas de desarrollo, incluyendo un compilador de C (<code>gcc</code>, <code>clang</code> herramientas de desarrollaor de línea de comandos en Mac, etc.) y <a href="https://es.wikipedia.org/wiki/GNU_build_system">GNU Autotools</a>.</p>
+</div>
+<div class="paragraph">
+<p>Descargar el código fuente <a href="https://github.com/kounch/playtzx">desde este repositorio</a>), descomprimirlo y acceder en una consola al directorio, y ejecutar los comandos:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">aclocal <span class="o">&amp;&amp;</span> autoconf <span class="o">&amp;&amp;</span> autoheader <span class="o">&amp;&amp;</span> automake <span class="nt">--add-missing</span>
+./configure
+make</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Si todo se ha hecho correctamente, se habrá generado el fichero <code>tzplay</code> que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_teléfono_móvil_tableta_reproductor_de_sonido_mp3_etc">Teléfono móvil, tableta, reproductor de sonido MP3, etc.</h4>
+<div class="paragraph">
+<p>En general, existen muy pocas alternativas (o ninguna) alternativas de programas que puedan reproducir directamente un archivo de cinta en un dispositivo móvil, así que, normalmente, será necesario convertir a un fichero de audio el contenido de la cinta antes de intentar cargarla con uno de estos aparatos.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes">PlayZX</a> es una App para sistemas Android que es capaz de reproducir directamente a través de la salida de auriculares.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Los dispositivos con salida de auriculares modernos, suelen estar pensados para manejar impedancias el orden de unas pocas decenas de ohmios. Esto, a veces, puede ser insuficiente para la entrada del ZXDOS+.</p>
+</div>
+<div class="paragraph">
+<p>En esos casos, se recomienda (si es posible) desactivar las limitaciones de volumen máximo de auriculares y/o utilizar un dispositivo amplificador de auriculares, que eleve la impedancia.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Los pasos a seguir en este caso son:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Conectar el cable de audio entre la salida del dispositivo móvil y la entrada de audio del ZXDOS+ (recordar conectar únicamente el extremo del canal mono derecho al extremo del PC/Mac, etc.)</p>
+</li>
+<li>
+<p>Ejecutar en el equipo o elegir la opción correspondiente a la carga desde cinta. Por ejemplo, en ZX Spectrum 48K pulsando <code>J</code> a continuación, dos veces, <code>"</code> (<code>Symbol Shift + P</code> en gomaDOS+) y luego <code>Enter</code> para ejecutar el clásico <code>LOAD "" + Enter</code></p>
+</li>
+<li>
+<p>Iniciar la reproducción del fichero de audio (o del fichero de cinta en el caso de PlayZX). Es posible que haya que hacer distintos intentos ajustando el volumen del reproductor/amplificador.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_conversión_a_fichero_de_audio">Conversión a fichero de audio</h5>
+<div class="paragraph">
+<p>A continuación se indican algunos de los muchos programas que existen para distintos sistemas operativos, y que pueden exportar ficheros de cinta a ficheros de audio.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.alessandrogrussu.it/tapir/index.html">Tapir</a> es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite cargar ficheros <code>TZX</code> y <code>TAP</code> y exportarlos como <code>WAV</code> de audio</p>
+</div>
+<div class="paragraph">
+<p><code>tape2wav</code> de <a href="http://fuse-emulator.sourceforge.net/">Fuse Utilities</a> es una utilidad de línea de comandos que exporta desde ficheros <code>TZX</code> <code>PZX</code> y <code>TAP</code> a <code>WAV</code>. Disponibles para muchos sistemas operativos distintos.</p>
+</div>
+<div class="paragraph">
+<p><code>pzx2wav</code> en <a href="http://zxds.raxoft.cz/pzx.html">PZX Tools</a> es otra utilidad de comandos que exporta desde ficheros <code>PZX</code> a <code>WAV</code>. Disponible como ejecutable para Windows, y con el código fuente disponible para compilar en otros sistemas.</p>
+</div>
+<div class="paragraph">
+<p><code>tsx2wav</code> en <a href="https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass">TSXphpclass</a> es una utilidad en PHP y que sirve para exportar desde ficheros <code>TSX</code> a <code>WAV</code>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_miniduino">Miniduino</h4>
 <div class="paragraph">
 <p><a href="https://www.antoniovillena.es/store/product/miniduino/">Miniduino</a> es un sistema reproductor de archivos de cinta, basado en un microcontrolador STM32F103C8T6 con 64KB de flash, y que trae instalado de serie el firmware <a href="https://github.com/rcmolina/MaxDuino_BETA">Maxduino</a>.</p>
 </div>
 <div class="paragraph">
 <p>Maxduino permite la reproducción, de una forma similar a como se manejaban las cintas de <a href="https://es.wikipedia.org/wiki/Casete">cassette</a> originales, de archivos digitales de cinta en múltiples formatos como <code>TAP</code> y <code>TZX</code> (ZX Spectrum), <code>O</code> (ZX80), <code>P</code> (ZX81), <code>CDT</code> (Amstrad CPC), <code>CAS</code>(MSX) <code>TSX</code> (MSX, Acorn, etc). También es posible reproducir como cinta archivos de sonido AY, para cargarlos en <a href="http://www.specay.co.uk">SpecAY</a> desde ZX Spectrum.</p>
 </div>
-<div class="sect3">
-<h4 id="_puertos_y_botones">Puertos y Botones</h4>
+<div class="sect4">
+<h5 id="_puertos_y_botones">Puertos y Botones</h5>
 <div class="paragraph text-center">
 <p><span class="image"><img src="img/MiniduinoBack.jpg" alt="MiniduinoBack"></span></p>
 </div>
@@ -4042,8 +4274,8 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </table>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="_preparación">Preparación</h4>
+<div class="sect4">
+<h5 id="_preparación">Preparación</h5>
 <div class="paragraph">
 <p>Se necesita una tarjeta microSD para almacenar los archivos de cinta que se quiere reproducir. Se recomienda que no sea de alta velocidad (Clase 10 o superior) porque puede haber problemas durante la lectura, ni de alta capacidad (SDXC o superior).</p>
 </div>
@@ -4051,7 +4283,7 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <p>La tarjeta debe estar formateada con con la primera partición en formato FAT16 o FAT32.</p>
 </div>
 <div class="paragraph">
-<p>Además de la tarjeta, se debe utilizar un cable adecuado para la <a href="#_puertos_y_conectores">entrada de sonido del ZXDOS+</a>, concretamente, ha de ser un cable con un jack estéreo de 3,5 mm en un extremo dos salidas mono en el otro (una para cada canal de audio), conectando el extremo del canal mono derecho al Miniduino.</p>
+<p>Además de la tarjeta, recordar utilizar un cable adecuado para la <a href="#_puertos_y_conectores">entrada de sonido del ZXDOS+</a>, conectando el Miniduino.</p>
 </div>
 <div class="paragraph">
 <p>Para los equipos que soporten control por motor, también se puede utilizar un cable con un jack de 2,6 mm.</p>
@@ -4075,8 +4307,8 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="_uso">Uso</h4>
+<div class="sect4">
+<h5 id="_uso">Uso</h5>
 <div class="paragraph">
 <p>Una vez insertada la tarjeta microSD con ficheros de datos, el Miniduino se enciende conectando el cable de alimentación USB incluido.</p>
 </div>
@@ -4166,13 +4398,13 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="_actualización_de_firmware_maxduino">Actualización de firmware Maxduino</h4>
+<div class="sect4">
+<h5 id="_actualización_de_firmware_maxduino">Actualización de firmware Maxduino</h5>
 <div class="paragraph">
 <p>El firmware Maxduino es actualizado y mejorado periódicamente. Se puede hacer un seguimiento de los cambios y mejoras en el <a href="https://www.va-de-retro.com/foros/viewtopic.php?t=5541&amp;start=9999">foro</a> o bien en la <a href="https://github.com/rcmolina/MaxDuino_BETA">página del proyecto en GitHub</a>. Para poder aprovechar estas mejoras se ha de actualizar la memoria flash del Miniduino con la versión de firmware correspondiente.</p>
 </div>
-<div class="sect4">
-<h5 id="_preparación_del_entorno">Preparación del entorno</h5>
+<div class="sect5">
+<h6 id="_preparación_del_entorno">Preparación del entorno</h6>
 <div class="paragraph">
 <p>Para poder instalar el firmware, se ha de hacer desde un ordenador (Windows, Mac, Linux) con el entorno <a href="https://www.arduino.cc/en/software">Arduino IDE</a>.</p>
 </div>
@@ -4239,8 +4471,8 @@ Instalar "Arduino SAM boards (Cortex-M3)"</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect4">
-<h5 id="_actualización">Actualización</h5>
+<div class="sect5">
+<h6 id="_actualización">Actualización</h6>
 <div class="paragraph">
 <p>Una vez preparado el entorno, descargar la versión deseada del proyecto desde el <a href="https://github.com/rcmolina/MaxDuino_BETA">repositorio oficial en GitHub</a></p>
 </div>
@@ -4299,6 +4531,7 @@ Puerto: &lt;Puerto identificado antes&gt;</code></pre>
 <p>Si todo se ha hecho correctamente se verá cómo el Miniduino se reinicia y en la pantalla aparece la versión correspondiente de firmware.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -5439,6 +5672,12 @@ pld load recovery.zxd.bit</code></pre>
 <p><a href="https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23">TOSEC: Magnavox Odyssey 2 (2012-04-23)</a></p>
 </div>
 <div class="paragraph">
+<p><a href="https://github.com/RW-FPGA-devel-Team/Videopac-G7000">Videopac G7000 / Odyssey2 for FPGA</a></p>
+</div>
+<div class="paragraph">
+<p><a href="http://www.videopac.org/manuals/voice.pdf">Odtyssey Speech And Sound Effects Module Manual</a></p>
+</div>
+<div class="paragraph">
 <p><a href="https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf">Maxduino - guía de uso</a></p>
 </div>
 <div class="paragraph">
@@ -5458,8 +5697,8 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.2<br>
-Last updated 2021-01-20 22:08:44 +0100
+Version 1.3.3<br>
+Last updated 2021-02-01 22:35:00 +0100
 </div>
 </div>
 <style>

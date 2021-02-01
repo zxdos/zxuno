@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.3.2
+:revnumber: 1.3.3
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -92,7 +92,7 @@ Para poder aprovechar todo su potencial, es útil tener también:
 - Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV (opcional en gomaDOS+, ya que tiene beeper incorporado)
 - Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive (se necesita el adaptador de joystick en el caso de gomaDOS+)
 - Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)
-- Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>) o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
+- Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
 
 ==== Formato de la tarjeta microSD
 
@@ -1812,6 +1812,8 @@ Algunas de las características del core son:
 - Dos modos de vídeo seleccionables: RGB y VGA
 - Necesita Joystick(s) para funcionar
 - Modos de color incluyendo monocromo o fósforo verde/naranja
+- Soporte para modificar el tipo de letra (charset) de la ROM de VDC
+- Módulo de efectos de sonido y voz (The Voice)
 
 ==== Formato de Tarjeta microSD
 
@@ -1827,12 +1829,25 @@ En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift + S
 
 Durante la ejecución del core:
 
+- `F1` (`Caps Shift+Symbol Shift+5` en gomaDOS+): Carga una ROM de prueba.
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
+- Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar. 
+- `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
+- `W`, `A`, `S`, `D` o las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y luego `Enter` para elegir y seleccionar en el menú.
 
 <<<
 
 ==== Guía básica
+
+No suele haber información en pantalla de las opciones, así que es interesante consultar las instrucciones de cada juego (por ejemplo en https://videopac.weebly.com/[este enlace]) para saber qué hacer para jugar.
+
+Notar también que el sistema no tiene claramente definido qué joystick se corresponde al cada jugador, e incluso pueden ir alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador ) usar la opción del menú que unifica los dos joysticks.
+
+[TIP]
+====
+Si, al navegar por el directorio donde están las ROMS, no se ven todas, se puede dividir el contenido en varios subdirectorios con menos ficheros por directorio (por ejemplo, clasificando por letras) para solucionarlo.
+====
 
 Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar en el menú.
 
@@ -1843,11 +1858,20 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 
 - Reiniciar el core (Reset)
 - Línea de exploración (Scanlines)
-- Intercambiar el orden de los joysticks (Swap joysticks)
-- Cargar ROM (Load ROM)
+- Intercambiar el orden de los joysticks (Swap Joysticks)
+- Unir los joysticks (Join Joysticks). Útil para ROMs que alternan el joystick en las partidas
+- Cargar ROM (Load Cartridge ROM)
+- Cargar un tipo de letra alternativo (Load VDC Font)
 - Modo de vídeo (PAL Videopac/NTSC Odyssey2)
 - Modo de color (Color Mode)
+- Activar o desactivar el módulo sintetizador (http://www.videopac.org/manuals/voice.pdf[The Voice])
 - Salir del menú (Exit) 
+
+===== Cambio del charset de la ROM de VDC
+
+Es posible, para algunas ROM, cargar un archivo `CHR` con una fuente modificada, en vez de la original incluida en el chip Intel 8244/8245.
+
+Estos archivos se pueden crear siguiendo las instrucciones y utilizando el editor disponible en el repositorio del proyecto, siguiendo https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit[este enlace].
 
 <<<
 
@@ -1897,13 +1921,105 @@ Se recomienda no realizar la conexión hasta haber seleccionado la opción desea
 
 <<<
 
-=== Miniduino
+=== Carga desde cinta
+
+Para algunos cores como, por ejemplo, el de Spectrum o el de MSX, es posible cargar, igual que se hacía en las máquinas originales, desde un dispositivo externo de audio como un reproductor de cassette u otro que lo simule.
+
+Normalmente, se debe utilizar un cable adecuado para la <<#_puertos_y_conectores,entrada de sonido del ZXDOS+>>, concretamente, ha de ser un cable con un jack estéreo de 3,5 mm en un extremo dos salidas mono en el otro (una para cada canal de audio), conectando el extremo del canal mono derecho al dispositivo de reproducción de cintas (esto no es necesario en Miniduino, ya que este automáticamente utiliza sólo el canal derecho de sonido al reproducir).
+
+==== Reproductor de cassette
+
+El funcionamiento es exactamente igual que se hacía con los equipos originales:
+
+. Conectar el cable de audio
+. Ejecutar en el equipo o elegir la opción correspondiente a la carga desde cinta. Por ejemplo, en ZX Spectrum 48K, pulsando `J`, a continuación, dos veces, `"` (`Symbol Shift + P` en gomaDOS+) y luego `Enter` para ejecutar el clásico `LOAD "" + Enter`
+. Iniciar la reproducción de la cinta (es posible que haya que hacer distintos intentos ajustando el volumen del reproductor)
+
+==== Ordenador
+
+Según el sistema operativo (Windows, MacOS, Linux) existen múltiples alternativas de programas que pueden, o bien reproducir directamente un archivo de cinta (`TAP`, `TZX`, `PZX`, etc.) y emitir el sonido por la salida de auriculares, o bien crear un fichero de sonido (`WAV`, `VOC`, `AU`, etc.) que se puede reproducir también con programas de música o sonido.
+
+===== PlayTZX
+
+Este programa para Windows, MacOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador. 
+
+Se puede descargar el fichero binario (por ejemplo, para Windows desde https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] y para Mac desde https://github.com/kounch/playtzx/releases[este repositorio de GitHub]) o compilar el código fuente como se explica <<#_compilar_código_fuente_macos_o_linux,a continuación>>.
+
+. Conectar el cable de audio entre la salida del ordenador y la entrada de audio del ZXDOS+ (recordar conectar únicamente el extremo del canal mono derecho al extremo del PC/Mac, etc.)
+. Ejecutar en el equipo o elegir la opción correspondiente a la carga desde cinta. Por ejemplo, en ZX Spectrum 48K pulsando `J` a continuación, dos veces, `"` (`Symbol Shift + P` en gomaDOS+) y luego `Enter` para ejecutar el clásico `LOAD "" + Enter`
+
+<<<
+
+[start=3]
+. Iniciar la reproducción de un fichero de cinta con el siguiente comando (es posible que haya que hacer distintos intentos ajustando el volumen de salida del equipo)
+
+[source,shell]
+----
+./playtzx <fichero de cinta>
+----
+
+Si todo va bien, se irá viendo en la consola los distintos bloque de carga de la cinta, mientras el sonido se produce y el core del ZXDOS+ carga el programa.
+
+[TIP]
+====
+En Linux, el programa utiliza como salida el dispositivo `/dev/dsp`, así que, en versiones más modernas, es posible, por ejemplo, que haya que cargar módulos como `snd_pcm_oss` (en el caso de sistemas que utilicen ALSA), para que funcione correctamente.
+====
+
+====== Compilar código fuente (MacOS o Linux)
+
+Verificar que están instaladas las herramientas de desarrollo, incluyendo un compilador de C (`gcc`, `clang` herramientas de desarrollaor de línea de comandos en Mac, etc.) y https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
+
+Descargar el código fuente https://github.com/kounch/playtzx[desde este repositorio]), descomprimirlo y acceder en una consola al directorio, y ejecutar los comandos:
+
+[source,shell]
+----
+aclocal && autoconf && autoheader && automake --add-missing
+./configure
+make
+----
+
+Si todo se ha hecho correctamente, se habrá generado el fichero `tzplay` que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.
+
+==== Teléfono móvil, tableta, reproductor de sonido MP3, etc.
+
+En general, existen muy pocas alternativas (o ninguna) alternativas de programas que puedan reproducir directamente un archivo de cinta en un dispositivo móvil, así que, normalmente, será necesario convertir a un fichero de audio el contenido de la cinta antes de intentar cargarla con uno de estos aparatos.
+
+https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX] es una App para sistemas Android que es capaz de reproducir directamente a través de la salida de auriculares.
+
+[WARNING]
+====
+Los dispositivos con salida de auriculares modernos, suelen estar pensados para manejar impedancias el orden de unas pocas decenas de ohmios. Esto, a veces, puede ser insuficiente para la entrada del ZXDOS+.
+
+En esos casos, se recomienda (si es posible) desactivar las limitaciones de volumen máximo de auriculares y/o utilizar un dispositivo amplificador de auriculares, que eleve la impedancia.
+====
+
+Los pasos a seguir en este caso son:
+
+. Conectar el cable de audio entre la salida del dispositivo móvil y la entrada de audio del ZXDOS+ (recordar conectar únicamente el extremo del canal mono derecho al extremo del PC/Mac, etc.)
+. Ejecutar en el equipo o elegir la opción correspondiente a la carga desde cinta. Por ejemplo, en ZX Spectrum 48K pulsando `J` a continuación, dos veces, `"` (`Symbol Shift + P` en gomaDOS+) y luego `Enter` para ejecutar el clásico `LOAD "" + Enter`
+. Iniciar la reproducción del fichero de audio (o del fichero de cinta en el caso de PlayZX). Es posible que haya que hacer distintos intentos ajustando el volumen del reproductor/amplificador.
+
+===== Conversión a fichero de audio
+
+A continuación se indican algunos de los muchos programas que existen para distintos sistemas operativos, y que pueden exportar ficheros de cinta a ficheros de audio.
+
+https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite cargar ficheros `TZX` y `TAP` y exportarlos como `WAV` de audio
+
+`tape2wav` de http://fuse-emulator.sourceforge.net/[Fuse Utilities] es una utilidad de línea de comandos que exporta desde ficheros `TZX` `PZX` y `TAP` a `WAV`. Disponibles para muchos sistemas operativos distintos.
+
+`pzx2wav` en http://zxds.raxoft.cz/pzx.html[PZX Tools] es otra utilidad de comandos que exporta desde ficheros `PZX` a `WAV`. Disponible como ejecutable para Windows, y con el código fuente disponible para compilar en otros sistemas.
+
+`tsx2wav` en https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] es una utilidad en PHP y que sirve para exportar desde ficheros `TSX` a `WAV`.
+
+<<<<
+
+==== Miniduino
 
 https://www.antoniovillena.es/store/product/miniduino/[Miniduino] es un sistema reproductor de archivos de cinta, basado en un microcontrolador STM32F103C8T6 con 64KB de flash, y que trae instalado de serie el firmware https://github.com/rcmolina/MaxDuino_BETA[Maxduino].
 
 Maxduino permite la reproducción, de una forma similar a como se manejaban las cintas de https://es.wikipedia.org/wiki/Casete[cassette] originales, de archivos digitales de cinta en múltiples formatos como `TAP` y `TZX` (ZX Spectrum), `O` (ZX80), `P` (ZX81), `CDT` (Amstrad CPC), `CAS`(MSX) `TSX` (MSX, Acorn, etc). También es posible reproducir como cinta archivos de sonido AY, para cargarlos en http://www.specay.co.uk[SpecAY] desde ZX Spectrum.
 
-==== Puertos y Botones
+===== Puertos y Botones
 
 [.text-center] 
 image:img/MiniduinoBack.jpg[pdfwidth=50%]
@@ -1929,13 +2045,13 @@ image:img/MiniduinoFront.jpg[pdfwidth=50%]
 
 <<<<
 
-==== Preparación
+===== Preparación
 
 Se necesita una tarjeta microSD para almacenar los archivos de cinta que se quiere reproducir. Se recomienda que no sea de alta velocidad (Clase 10 o superior) porque puede haber problemas durante la lectura, ni de alta capacidad (SDXC o superior).
 
 La tarjeta debe estar formateada con con la primera partición en formato FAT16 o FAT32.
 
-Además de la tarjeta, se debe utilizar un cable adecuado para la <<#_puertos_y_conectores,entrada de sonido del ZXDOS+>>, concretamente, ha de ser un cable con un jack estéreo de 3,5 mm en un extremo dos salidas mono en el otro (una para cada canal de audio), conectando el extremo del canal mono derecho al Miniduino.
+Además de la tarjeta, recordar utilizar un cable adecuado para la <<#_puertos_y_conectores,entrada de sonido del ZXDOS+>>, conectando el Miniduino.
 
 Para los equipos que soporten control por motor, también se puede utilizar un cable con un jack de 2,6 mm.
 
@@ -1948,7 +2064,7 @@ El reproductor muestra las entradas de archivos y directorios en el orden de la 
 
 <<<<
 
-==== Uso
+===== Uso
 
 Una vez insertada la tarjeta microSD con ficheros de datos, el Miniduino se enciende conectando el cable de alimentación USB incluido.
 
@@ -1994,11 +2110,11 @@ Para obtener información mucho más detallada, se puede consultar el manual ofi
 
 <<<<
 
-==== Actualización de firmware Maxduino
+===== Actualización de firmware Maxduino
 
 El firmware Maxduino es actualizado y mejorado periódicamente. Se puede hacer un seguimiento de los cambios y mejoras en el https://www.va-de-retro.com/foros/viewtopic.php?t=5541&start=9999[foro] o bien en la https://github.com/rcmolina/MaxDuino_BETA[página del proyecto en GitHub]. Para poder aprovechar estas mejoras se ha de actualizar la memoria flash del Miniduino con la versión de firmware correspondiente.
 
-===== Preparación del entorno
+====== Preparación del entorno
 
 Para poder instalar el firmware, se ha de hacer desde un ordenador (Windows, Mac, Linux) con el entorno https://www.arduino.cc/en/software[Arduino IDE].
 
@@ -2056,7 +2172,7 @@ dfuse_addr=""
 
 <<<<
 
-===== Actualización
+====== Actualización
 
 Una vez preparado el entorno, descargar la versión deseada del proyecto desde el https://github.com/rcmolina/MaxDuino_BETA[repositorio oficial en GitHub]
 
@@ -2737,6 +2853,10 @@ http://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
 https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
 
 https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox Odyssey 2 (2012-04-23)]
+
+https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 for FPGA]
+
+http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Module Manual]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
 

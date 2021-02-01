@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">kounch</span><br>
 <span id="email" class="email"><a href="mailto:kounch@users.noreply.github.com">kounch@users.noreply.github.com</a></span><br>
-<span id="revnumber">version 1.3.2</span>
+<span id="revnumber">version 1.3.3</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Index</div>
@@ -628,7 +628,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_microsd_card_format_9">microSD card format</a></li>
 <li><a href="#_keyboard_13">Keyboard</a></li>
 <li><a href="#_special_keys_and_buttons_13">Special keys and buttons</a></li>
-<li><a href="#_basic_guide_12">Basic Guide</a></li>
+<li><a href="#_basic_guide_12">Basic Guide</a>
+<ul class="sectlevel4">
+<li><a href="#_change_vdc_rom_charset">Change VDC ROM charset</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -641,15 +645,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_pong_core_configuration">Pong Core Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_miniduino">Miniduino</a>
+<li><a href="#_loading_from_tape">Loading from tape</a>
 <ul class="sectlevel3">
+<li><a href="#_cassette_player">Cassette Player</a></li>
+<li><a href="#_computer">Computer</a>
+<ul class="sectlevel4">
+<li><a href="#_playtzx">PlayTZX</a></li>
+</ul>
+</li>
+<li><a href="#_mobile_phone_tablet_mp3_player_etc">Mobile phone, tablet, MP3 player, etc.</a>
+<ul class="sectlevel4">
+<li><a href="#_audio_file_conversion">Audio file conversion</a></li>
+</ul>
+</li>
+<li><a href="#_miniduino">Miniduino</a>
+<ul class="sectlevel4">
 <li><a href="#_ports_and_buttons">Ports and buttons</a></li>
 <li><a href="#_configuration">Configuration</a></li>
 <li><a href="#_use">Use</a></li>
-<li><a href="#_maxduino_firmware_upgrade">Maxduino firmware upgrade</a>
-<ul class="sectlevel4">
-<li><a href="#_environment_setup">Environment setup</a></li>
-<li><a href="#_upgrade_3">Upgrade</a></li>
+<li><a href="#_maxduino_firmware_upgrade">Maxduino firmware upgrade</a></li>
 </ul>
 </li>
 </ul>
@@ -818,14 +832,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)</p>
 </li>
 <li>
-<p>An audio cable with a stereo 3.5 mm jack on one side, and both audio channels split into two mono outputs on the other side, if you want to use an audio player and/or recorder, like, for example, a Miniduino (<a href="#_miniduino">see more info later</a>) or a <a href="https://en.wikipedia.org/wiki/Cassette_tape">cassette tape</a> recorder/player. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).</p>
+<p>An audio cable with a stereo 3.5 mm jack on one side, and both audio channels split into two mono outputs on the other side, if you want to use an audio player and/or recorder, like, for example, a Miniduino (<a href="#_miniduino">see more info later</a>)., a PC/Mac/Raspberry PI, etc. or a <a href="https://en.wikipedia.org/wiki/Cassette_tape">cassette tape</a> recorder/player. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).</p>
 </li>
 </ul>
 </div>
 <div class="sect3">
 <h4 id="_microsd_card_formatting">microSD card formatting</h4>
 <div class="paragraph">
-<p>In order to use a microSD card, it has to be formmatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <a href="#_microsd_advanced_format_3e">the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format</a> to use with a +3e ROM.</p>
+<p>In order to use a microSD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <a href="#_microsd_advanced_format_3e">the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format</a> to use with a +3e ROM.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2822,7 +2836,7 @@ NEW DATA "Utils",8</code></pre>
 <div class="sect3">
 <h4 id="_microsd_format">microSD format</h4>
 <div class="paragraph">
-<p>You have to use a microSD card with the first partition in FAT16 format. You can also use a second FAT16 partition for MSX software, and leaving the firt one only for the system startup.</p>
+<p>You have to use a microSD card with the first partition in FAT16 format. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.</p>
 </div>
 <div class="paragraph">
 <p>You need to get:</p>
@@ -3837,6 +3851,15 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <li>
 <p>Needs at least one joystick to be used</p>
 </li>
+<li>
+<p>Different colour modes including monochrome</p>
+</li>
+<li>
+<p>loadable VDC ROM charset for some custom roms</p>
+</li>
+<li>
+<p>"The Voice" peripheral</p>
+</li>
 </ul>
 </div>
 <div class="sect3">
@@ -3862,10 +3885,22 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <div class="ulist">
 <ul>
 <li>
+<p><code>F1</code> (<code>Caps Shift+Symbol Shift+5</code> on gomaDOS+): Loads a test ROM</p>
+</li>
+<li>
 <p><code>Scroll Lock</code> (<code>Caps Shift+Symbol Shift+G</code> on gomaDOS+): change between RGB and VGA video mode</p>
 </li>
 <li>
-<p><code>Ctrl+Alt+Backspace</code> (<code>Caps Shift+Symbol Shift+B</code> on gomaDOS+): Hard reset.</p>
+<p><code>Ctrl+Alt+Backspace</code> (<code>Caps Shift+Symbol Shift+B</code> on gomaDOS+): Hard reset</p>
+</li>
+<li>
+<p>After loading a ROM, most games will prompt the user with "SELECT GAME". Press <code>0</code>-<code>9</code> on the keyboard or mapped controller button to play the game.</p>
+</li>
+<li>
+<p><code>Esc</code> or joystick button 2 (or <code>Caps Shift+Espacio</code> on gomaDOS+) to show or hide the options menu</p>
+</li>
+<li>
+<p><code>W</code>, <code>A</code>, <code>S</code>, <code>D</code> or cursor keys (<code>Caps Shift+5</code>, <code>Caps Shift+6</code>, <code>Caps Shift+7</code> and <code>Caps Shift+8</code> on gomaDOS+, with <code>PC XT</code> keyboard mode) and then <code>Enter</code> to choose and select menu options</p>
 </li>
 </ul>
 </div>
@@ -3873,6 +3908,26 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div class="sect3">
 <h4 id="_basic_guide_12">Basic Guide</h4>
+<div class="paragraph">
+<p>Usually, there is no on-screen display of the game options, so looking at the instruction manuals (for example following <a href="https://videopac.weebly.com/">this link</a>) may be helpful in selecting a game.</p>
+</div>
+<div class="paragraph">
+<p>Note also that the system did not have a well defined player 1 or player 2 controller, and some games may alternate on a game-to-game basis. You may need to swap controllers to use the input or (for one player games) use the join joystick option of the menu</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If, when browsing the ROM directory, you can&#8217;t see all of them, try to split the content into several subdirectories with less files per directory.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Pressing <code>Esc</code> or joystick button 2 (<code>Caps Shift+Space</code> on gomaDOS+, <code>PC XT</code> keyboard mode) shows or hides the configuration menu. Cursor keys (<code>Caps Shift+5</code>, <code>Caps Shift+6</code>, <code>Caps Shift+7</code> and <code>Caps Shift+8</code> on gomaDOS+, <code>PC XT</code> keyboard mode) and <code>Enter</code> to select and choose menu options.</p>
 </div>
@@ -3891,10 +3946,16 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <p>Scanlines</p>
 </li>
 <li>
-<p>Swap joysticks</p>
+<p>Swap Joysticks</p>
 </li>
 <li>
-<p>Load ROM</p>
+<p>Join Joysticks</p>
+</li>
+<li>
+<p>Load Cartridge ROM</p>
+</li>
+<li>
+<p>Load VDC Font</p>
 </li>
 <li>
 <p>Video mode: PAL/Videopac or NTSC/Odyssey2</p>
@@ -3903,11 +3964,23 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <p>Color Mode</p>
 </li>
 <li>
+<p>The Voice</p>
+</li>
+<li>
 <p>Exit</p>
 </li>
 </ul>
 </div>
+<div class="sect4">
+<h5 id="_change_vdc_rom_charset">Change VDC ROM charset</h5>
+<div class="paragraph">
+<p>You can, for some ROMs, load a <code>CHR</code> file including a custom font, instead of the original one which was included with the Intel 8244/8245 chip.</p>
+</div>
+<div class="paragraph">
+<p>Those files can be made following the instructions and using the editor available at the project repository, following <a href="https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit">this link</a>.</p>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -4001,15 +4074,156 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 </div>
 <div class="sect2">
-<h3 id="_miniduino">Miniduino</h3>
+<h3 id="_loading_from_tape">Loading from tape</h3>
+<div class="paragraph">
+<p>Some cores can load, as the original machines could, from a external audio device like a cassette player or something else simulating it.</p>
+</div>
+<div class="paragraph">
+<p>Besides the card, you have to plug an appropriate audio cable to <a href="#_ports_and_connectors">ZXDOS+ audio input</a>. It must have a 3.5 mm stero jack on one side, and two mono outputs on the other side (one for each audio channel). The right audio mono is connected to the audio player (this is not necessary with a miniduino, since it already uses only the right audio channel when playing).</p>
+</div>
+<div class="sect3">
+<h4 id="_cassette_player">Cassette Player</h4>
+<div class="paragraph">
+<p>The use is exactly the same as when using the original computers:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Plug the audio cable</p>
+</li>
+<li>
+<p>Type on the computer or select the tape loading option. For examle, for ZX Spectrum 48K, typing <code>J</code>, then, twice, <code>"</code> (<code>Symbol Shift + P</code> on gomaDOS+) and then <code>Enter</code> to do the classic <code>LOAD "" + Enter</code></p>
+</li>
+<li>
+<p>Start playing the tape (you may have to try several times adjusting the player volume)</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_computer">Computer</h4>
+<div class="paragraph">
+<p>Depending on the operating system (Windows, MacOS, Linux) there are several programs that can either play a tape file (<code>TAP</code>, <code>TZX</code>, <code>PZX</code>, etc.) and output the sound through a headphone output, or create an audio file (<code>WAV</code>, <code>VOC</code>, <code>AU</code>, etc.) that can be played using a music or audio program.</p>
+</div>
+<div class="sect4">
+<h5 id="_playtzx">PlayTZX</h5>
+<div class="paragraph">
+<p>This program for Windows, MacOS or Linux, can play directly a <code>TZX</code> tape file through the audio output of the computer.</p>
+</div>
+<div class="paragraph">
+<p>You can download the binary file (for example), for Windows from <a href="https://worldofspectrum.net/utilities/#tzxtools">World of Spectrum Classic</a> and for Mac from <a href="https://github.com/kounch/playtzx/releases">this GitHub repository</a>) or compile the source code as <a href="#_compile_source_code_macos_or_linux">explained later</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Plug the audio cable between the computer audio output and ZXDOS+ audio input (remember to use only the right mono channel to the PC, Mac, etc. output)</p>
+</li>
+<li>
+<p>Type on the computer or select the tape loading option. For examle, for ZX Spectrum 48K, typing <code>J</code>, then, twice, <code>"</code> (<code>Symbol Shift + P</code> on gomaDOS+) and then <code>Enter</code> to do the classic <code>LOAD "" + Enter</code></p>
+</li>
+<li>
+<p>Start playing a tape file with this command (you may have to try several times adjusting the player volume)</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">./playtzx &lt;tape file path&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If everything works fine, you will see at the shell the name of the different tape data blocks, while the sound is played and the ZXDOS+ core loads the program.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>On Linux, the program uses as output the device <code>/dev/dsp</code>, this may require to load a module like <code>snd_pcm_oss</code> (on systems using ALSA).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_compile_source_code_macos_or_linux">Compile source code (MacOS or Linux)</h6>
+<div class="paragraph">
+<p>To compile, the first thing is checking that the developer tools are installed on the system, including a C compiler (<code>gcc</code>, <code>clang</code>, command line developer tools for Mac, etc.) and <a href="https://es.wikipedia.org/wiki/GNU_build_system">GNU Autotools</a>.</p>
+</div>
+<div class="paragraph">
+<p>Download the source code <a href="https://github.com/kounch/playtzx">from this repository</a>), extract the contents if needed and access from a terminal to the directory and type the commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">aclocal <span class="o">&amp;&amp;</span> autoconf <span class="o">&amp;&amp;</span> autoheader <span class="o">&amp;&amp;</span> automake <span class="nt">--add-missing</span>
+./configure
+make</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If all goes well, a new file named <code>tzxplay</code> will be created, which you can copy anywhere and then use. You can delete the compilation directory.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mobile_phone_tablet_mp3_player_etc">Mobile phone, tablet, MP3 player, etc.</h4>
+<div class="paragraph">
+<p>There are a very few apps (or none) that can directly play a tape file on a mobile device so, in many cases, the only option is to convert it to an audio file before playing it.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes">PlayZX</a> is an App for Android which can play tape files through the headphone output.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The latest devices with headphone output are normally designed to work with impedances of only a few ohmis. This may, sometimes, not be enouth for the ZXDOS+ audio input.</p>
+</div>
+<div class="paragraph">
+<p>In these cases, it&#8217;s recommended (if possible) to disable headphone volume limitations and/or use a headphone amplifier that can give a higher impedance.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_audio_file_conversion">Audio file conversion</h5>
+<div class="paragraph">
+<p>These are some of the many programas that exist and which can export tape files to audio files.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.alessandrogrussu.it/tapir/index.html">Tapir</a> is a GUI program for Windows (but which can also run with Wine on Linux or Mac) that can load <code>TZX</code> and <code>TAP</code> files and export to <code>WAV</code> audio</p>
+</div>
+<div class="paragraph">
+<p><code>tape2wav</code> from <a href="http://fuse-emulator.sourceforge.net/">Fuse Utilities</a> is a command line utility that can export from <code>TZX</code> <code>PZX</code> and <code>TAP</code> to <code>WAV</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>pzx2wav</code> in <a href="http://zxds.raxoft.cz/pzx.html">PZX Tools</a> is another command line utility which exports to <code>WAV</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>tsx2wav</code> in <a href="https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass">TSXphpclass</a> is made wiwth PHP and that can export from <code>TSX</code> to <code>WAV</code>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_miniduino">Miniduino</h4>
 <div class="paragraph">
 <p><a href="https://www.antoniovillena.es/store/product/miniduino/">Miniduino</a> is a tape file audio player, based on a STM32F103C8T6 microcontroller with 64KB flash memory, and <a href="https://github.com/rcmolina/MaxDuino_BETA">Maxduino</a> firmware preinstalled.</p>
 </div>
 <div class="paragraph">
 <p>Maxduino plays, in a very similar way to how <a href="https://es.wikipedia.org/wiki/Casete">cassette tape</a> players worked, digital tape files in format as like <code>TAP</code> and <code>TZX</code> (ZX Spectrum), <code>O</code> (ZX80), <code>P</code> (ZX81), <code>CDT</code> (Amstrad CPC), <code>CAS</code>(MSX) <code>TSX</code> (MSX, Acorn, etc). It is also possible to play AY music files as if they wer tapes, in order to load the from <a href="http://www.specay.co.uk">SpecAY</a> in a ZX Spectrum.</p>
 </div>
-<div class="sect3">
-<h4 id="_ports_and_buttons">Ports and buttons</h4>
+<div class="sect4">
+<h5 id="_ports_and_buttons">Ports and buttons</h5>
 <div class="paragraph text-center">
 <p><span class="image"><img src="img/MiniduinoBack.jpg" alt="MiniduinoBack"></span></p>
 </div>
@@ -4050,8 +4264,8 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </table>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="_configuration">Configuration</h4>
+<div class="sect4">
+<h5 id="_configuration">Configuration</h5>
 <div class="paragraph">
 <p>A microSD is needed in order to store the tape files to play. Fast cards (Class 10 or greater) aren&#8217;t recommended because there can be problems while reading the data. High capacity (SDXC or greater) cards aren&#8217;t recommended too.</p>
 </div>
@@ -4059,7 +4273,7 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <p>The card must have the first partition formatted as FAT16 or FAT32.</p>
 </div>
 <div class="paragraph">
-<p>Besides the card, you have to plug an appropriate audio cable to <a href="#_ports_and_connectors">ZXDOS+ audio input</a>. It must have a 3.5 mm stero jack on one side, and two mono output on the other side (one for each audio channel). The left audio mono is connected to the Miniduino.</p>
+<p>Besides the card, you have to plug an appropriate audio cable to <a href="#_ports_and_connectors">ZXDOS+ audio input</a>. It must have a 3.5 mm stero jack on one side, and two mono output on the other side (one for each audio channel). The right audio mono is connected to the Miniduino.</p>
 </div>
 <div class="paragraph">
 <p>If you hava a device that can use motor control, you can also use a cable with a 2.6 mm jack.</p>
@@ -4083,8 +4297,8 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="_use">Use</h4>
+<div class="sect4">
+<h5 id="_use">Use</h5>
 <div class="paragraph">
 <p>Once the microSD card with the data files is inserted, it&#8217;s turned on plugging in the included USB power cable.</p>
 </div>
@@ -4160,13 +4374,13 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="_maxduino_firmware_upgrade">Maxduino firmware upgrade</h4>
+<div class="sect4">
+<h5 id="_maxduino_firmware_upgrade">Maxduino firmware upgrade</h5>
 <div class="paragraph">
 <p>Maxduino firmwar is periodically updated and improved. You can track the changes and improvements either at the  <a href="https://www.va-de-retro.com/foros/viewtopic.php?t=5541&amp;start=9999">forums</a> or at the <a href="https://github.com/rcmolina/MaxDuino_BETA">GitHub project page</a>. To take advantage of this improvements, the Miniduino flash image must be flased with the updated firmware version.</p>
 </div>
-<div class="sect4">
-<h5 id="_environment_setup">Environment setup</h5>
+<div class="sect5">
+<h6 id="_environment_setup">Environment setup</h6>
 <div class="paragraph">
 <p>Firmware flashing is done from a computer (Windows, Mac, Linux) with <a href="https://www.arduino.cc/en/software">Arduino IDE</a> installed.</p>
 </div>
@@ -4232,8 +4446,8 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-<div class="sect4">
-<h5 id="_upgrade_3">Upgrade</h5>
+<div class="sect5">
+<h6 id="_upgrade_3">Upgrade</h6>
 <div class="paragraph">
 <p>Once you have the environemnt ready, download the software from the <a href="https://github.com/rcmolina/MaxDuino_BETA">official repository in GitHub</a></p>
 </div>
@@ -4292,6 +4506,7 @@ Port: &lt;Previously identified port&gt;</code></pre>
 <p>If everything has been done correctly the Miniduino will restart and show on the screen the new firmware version.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -5434,6 +5649,12 @@ pld load recovery.zxd.bit</code></pre>
 <p><a href="https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23">TOSEC: Magnavox Odyssey 2 (2012-04-23)</a></p>
 </div>
 <div class="paragraph">
+<p><a href="https://github.com/RW-FPGA-devel-Team/Videopac-G7000">Videopac G7000 / Odyssey2 for FPGA</a></p>
+</div>
+<div class="paragraph">
+<p><a href="http://www.videopac.org/manuals/voice.pdf">Odtyssey Speech And Sound Effects Module Manual</a></p>
+</div>
+<div class="paragraph">
 <p><a href="https://catleytech.com/?p=2679">Programming a Spartan 6 with a Raspberry Pi</a></p>
 </div>
 <div class="paragraph">
@@ -5447,8 +5668,8 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.2<br>
-Last updated 2021-01-20 22:12:15 +0100
+Version 1.3.3<br>
+Last updated 2021-02-01 22:35:53 +0100
 </div>
 </div>
 <style>
