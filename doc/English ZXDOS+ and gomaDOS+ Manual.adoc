@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.2
+:revnumber: 1.3.3
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -92,11 +92,11 @@ In order to take advantage of its full potential, you may also have:
 - PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
 - A standard Atari joystick, such as a Megadrive DB9 gamepad (gomadOS+ needs a joystick adapter)
 - A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
-- An audio cable with a stereo 3.5 mm jack on one side, and both audio channels split into two mono outputs on the other side, if you want to use an audio player and/or recorder, like, for example, a Miniduino (<<#_miniduino,see more info later>>) or a https://en.wikipedia.org/wiki/Cassette_tape[cassette tape] recorder/player. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).
+- An audio cable with a stereo 3.5 mm jack on one side, and both audio channels split into two mono outputs on the other side, if you want to use an audio player and/or recorder, like, for example, a Miniduino (<<#_miniduino,see more info later>>)., a PC/Mac/Raspberry PI, etc. or a https://en.wikipedia.org/wiki/Cassette_tape[cassette tape] recorder/player. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).
 
 ==== microSD card formatting
 
-In order to use a microSD card, it has to be formmatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_microsd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
+In order to use a microSD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_microsd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
 
 [NOTE]
 ====
@@ -1262,7 +1262,7 @@ Some of its features are:
 
 ==== microSD format
 
-You have to use a microSD card with the first partition in FAT16 format. You can also use a second FAT16 partition for MSX software, and leaving the firt one only for the system startup.
+You have to use a microSD card with the first partition in FAT16 format. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.
 
 You need to get:
 
@@ -1813,6 +1813,9 @@ Some features of the core are:
 
 - RGB and VGA support
 - Needs at least one joystick to be used
+- Different colour modes including monochrome
+- loadable VDC ROM charset for some custom roms
+- "The Voice" peripheral
 
 ==== microSD card format
 
@@ -1828,12 +1831,25 @@ For gomaDOS+, it is recommended to change the keyboard mode to `PC XT` (`Caps Sh
 
 During the core execution:
 
+- `F1` (`Caps Shift+Symbol Shift+5` on gomaDOS+): Loads a test ROM
 - `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): change between RGB and VGA video mode
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset
+- After loading a ROM, most games will prompt the user with "SELECT GAME". Press `0`-`9` on the keyboard or mapped controller button to play the game. 
+- `Esc` or joystick button 2 (or `Caps Shift+Espacio` on gomaDOS+) to show or hide the options menu
+- `W`, `A`, `S`, `D` or cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, with `PC XT` keyboard mode) and then `Enter` to choose and select menu options
 
 <<<
 
 ==== Basic Guide
+
+Usually, there is no on-screen display of the game options, so looking at the instruction manuals (for example following https://videopac.weebly.com/[this link]) may be helpful in selecting a game.
+
+Note also that the system did not have a well defined player 1 or player 2 controller, and some games may alternate on a game-to-game basis. You may need to swap controllers to use the input or (for one player games) use the join joystick option of the menu
+
+[TIP]
+====
+If, when browsing the ROM directory, you can't see all of them, try to split the content into several subdirectories with less files per directory.
+====
 
 Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
 
@@ -1844,11 +1860,20 @@ The following options are available:
 
 - Reset core
 - Scanlines
-- Swap joysticks
-- Load ROM
+- Swap Joysticks
+- Join Joysticks
+- Load Cartridge ROM
+- Load VDC Font
 - Video mode: PAL/Videopac or NTSC/Odyssey2
 - Color Mode
+- The Voice
 - Exit
+
+===== Change VDC ROM charset
+
+You can, for some ROMs, load a `CHR` file including a custom font, instead of the original one which was included with the Intel 8244/8245 chip.
+
+Those files can be made following the instructions and using the editor available at the project repository, following https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit[this link].
 
 <<<
 
@@ -1898,13 +1923,95 @@ It is recommended to wait, and make the connection after selecting the chosen op
 
 <<<
 
-=== Miniduino
+=== Loading from tape
+
+Some cores can load, as the original machines could, from a external audio device like a cassette player or something else simulating it.
+
+Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXDOS+ audio input>>. It must have a 3.5 mm stero jack on one side, and two mono outputs on the other side (one for each audio channel). The right audio mono is connected to the audio player (this is not necessary with a miniduino, since it already uses only the right audio channel when playing).
+
+==== Cassette Player
+
+The use is exactly the same as when using the original computers:
+
+. Plug the audio cable
+. Type on the computer or select the tape loading option. For examle, for ZX Spectrum 48K, typing `J`, then, twice, `"` (`Symbol Shift + P` on gomaDOS+) and then `Enter` to do the classic `LOAD "" + Enter`
+. Start playing the tape (you may have to try several times adjusting the player volume)
+
+==== Computer
+
+Depending on the operating system (Windows, MacOS, Linux) there are several programs that can either play a tape file (`TAP`, `TZX`, `PZX`, etc.) and output the sound through a headphone output, or create an audio file (`WAV`, `VOC`, `AU`, etc.) that can be played using a music or audio program.
+
+===== PlayTZX
+
+This program for Windows, MacOS or Linux, can play directly a `TZX` tape file through the audio output of the computer.
+
+You can download the binary file (for example), for Windows from https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository]) or compile the source code as <<#_compile_source_code_macos_or_linux,explained later>>.
+
+. Plug the audio cable between the computer audio output and ZXDOS+ audio input (remember to use only the right mono channel to the PC, Mac, etc. output)
+. Type on the computer or select the tape loading option. For examle, for ZX Spectrum 48K, typing `J`, then, twice, `"` (`Symbol Shift + P` on gomaDOS+) and then `Enter` to do the classic `LOAD "" + Enter`
+. Start playing a tape file with this command (you may have to try several times adjusting the player volume)
+
+[source,shell]
+----
+./playtzx <tape file path>
+----
+
+If everything works fine, you will see at the shell the name of the different tape data blocks, while the sound is played and the ZXDOS+ core loads the program.
+
+[TIP]
+====
+On Linux, the program uses as output the device `/dev/dsp`, this may require to load a module like `snd_pcm_oss` (on systems using ALSA).
+====
+
+====== Compile source code (MacOS or Linux)
+
+To compile, the first thing is checking that the developer tools are installed on the system, including a C compiler (`gcc`, `clang`, command line developer tools for Mac, etc.) and https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
+
+Download the source code https://github.com/kounch/playtzx[from this repository]), extract the contents if needed and access from a terminal to the directory and type the commands:
+
+[source,shell]
+----
+aclocal && autoconf && autoheader && automake --add-missing
+./configure
+make
+----
+
+If all goes well, a new file named `tzxplay` will be created, which you can copy anywhere and then use. You can delete the compilation directory.
+
+==== Mobile phone, tablet, MP3 player, etc.
+
+There are a very few apps (or none) that can directly play a tape file on a mobile device so, in many cases, the only option is to convert it to an audio file before playing it.
+
+https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX] is an App for Android which can play tape files through the headphone output. 
+
+[WARNING]
+====
+The latest devices with headphone output are normally designed to work with impedances of only a few ohmis. This may, sometimes, not be enouth for the ZXDOS+ audio input.
+
+In these cases, it's recommended (if possible) to disable headphone volume limitations and/or use a headphone amplifier that can give a higher impedance.
+====
+
+===== Audio file conversion
+
+These are some of the many programas that exist and which can export tape files to audio files.
+
+https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Windows (but which can also run with Wine on Linux or Mac) that can load `TZX` and `TAP` files and export to `WAV` audio
+
+`tape2wav` from http://fuse-emulator.sourceforge.net/[Fuse Utilities] is a command line utility that can export from `TZX` `PZX` and `TAP` to `WAV`.
+
+`pzx2wav` in http://zxds.raxoft.cz/pzx.html[PZX Tools] is another command line utility which exports to `WAV`.
+
+`tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made wiwth PHP and that can export from `TSX` to `WAV`.
+
+<<<<
+
+==== Miniduino
 
 https://www.antoniovillena.es/store/product/miniduino/[Miniduino] is a tape file audio player, based on a STM32F103C8T6 microcontroller with 64KB flash memory, and https://github.com/rcmolina/MaxDuino_BETA[Maxduino] firmware preinstalled.
 
 Maxduino plays, in a very similar way to how https://es.wikipedia.org/wiki/Casete[cassette tape] players worked, digital tape files in format as like `TAP` and `TZX` (ZX Spectrum), `O` (ZX80), `P` (ZX81), `CDT` (Amstrad CPC), `CAS`(MSX) `TSX` (MSX, Acorn, etc). It is also possible to play AY music files as if they wer tapes, in order to load the from http://www.specay.co.uk[SpecAY] in a ZX Spectrum.
 
-==== Ports and buttons
+===== Ports and buttons
 
 [.text-center] 
 image:img/MiniduinoBack.jpg[pdfwidth=50%]
@@ -1930,13 +2037,13 @@ image:img/MiniduinoFront.jpg[pdfwidth=50%]
 
 <<<<
 
-==== Configuration
+===== Configuration
 
 A microSD is needed in order to store the tape files to play. Fast cards (Class 10 or greater) aren't recommended because there can be problems while reading the data. High capacity (SDXC or greater) cards aren't recommended too.
 
 The card must have the first partition formatted as FAT16 or FAT32.
 
-Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXDOS+ audio input>>. It must have a 3.5 mm stero jack on one side, and two mono output on the other side (one for each audio channel). The left audio mono is connected to the Miniduino.
+Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXDOS+ audio input>>. It must have a 3.5 mm stero jack on one side, and two mono output on the other side (one for each audio channel). The right audio mono is connected to the Miniduino.
 
 If you hava a device that can use motor control, you can also use a cable with a 2.6 mm jack.
 
@@ -1949,7 +2056,7 @@ The player shows file and directory entries in the order stored in the internal 
 
 <<<<
 
-==== Use
+===== Use
 
 Once the microSD card with the data files is inserted, it's turned on plugging in the included USB power cable.
 
@@ -1990,11 +2097,11 @@ When in pause (tape block browser:
 
 <<<<
 
-==== Maxduino firmware upgrade
+===== Maxduino firmware upgrade
 
 Maxduino firmwar is periodically updated and improved. You can track the changes and improvements either at the  https://www.va-de-retro.com/foros/viewtopic.php?t=5541&start=9999[forums] or at the https://github.com/rcmolina/MaxDuino_BETA[GitHub project page]. To take advantage of this improvements, the Miniduino flash image must be flased with the updated firmware version.
 
-===== Environment setup
+====== Environment setup
 
 Firmware flashing is done from a computer (Windows, Mac, Linux) with https://www.arduino.cc/en/software[Arduino IDE] installed.
 
@@ -2051,7 +2158,7 @@ dfuse_addr=""
 
 <<<
 
-===== Upgrade
+====== Upgrade
 
 Once you have the environemnt ready, download the software from the https://github.com/rcmolina/MaxDuino_BETA[official repository in GitHub]
 
@@ -2730,6 +2837,10 @@ http://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
 https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
 
 https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox Odyssey 2 (2012-04-23)]
+
+https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 for FPGA]
+
+http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Module Manual]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
