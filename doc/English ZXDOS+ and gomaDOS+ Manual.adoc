@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.3
+:revnumber: 1.3.4
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -846,9 +846,122 @@ Special keys that can be used while running the main core (ZX Spectrum):
 
 === ROMs
 
-The ZX Spectrum core has can be initialized using different ROM versions (48K, 128K, Plus 2, etc.). These are stored in the flash memory of the ZXDOS+, and you can choose which one to load by pressing the `Esc` key during boot. You can also define the ROM that you want to load by default using the BIOS setup.
+The ZX Spectrum core can be initialized using different ROM versions (48K, 128K, Plus 2, etc.). These are stored in the flash memory of the ZXDOS+, and you can choose which one to load by pressing the `Esc` (`Caps Shift+Space` on gomaDOS+) key during boot. You can also define the ROM that you want to load by default using the BIOS setup.
 
 See the <<#_roms_3,updates section>> for more information on how to expand or modify the ROMs stored in flash memory.
+
+==== DerbyPro
+
+https://www.facebook.com/groups/DerbyPro[DerbyPro or Derby{pp}] is an enhanced firmware ROM for the ZX Spectrum, based on v1.4 of the Derby development ROM. The Spectrum 128 (codename "Derby") was a Spanish machine commissioned by Investronica and launched in 1985. It came with a keypad that provided additional editing keys. In 1986, the UK version came out with a simplified version of 128 BASIC and no keypad. Derby++ is developed from the Spanish ROM to include the benefits of both versions, without the drawbacks, and support for new hardware developments.
+
+You can download the ROM, a user manual and other files from the https://www.facebook.com/groups/DerbyPro[official Facebook Public Group].
+
+Since it is a 64K ROM with support for new hardware, these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
+
+[%header,cols=2*] 
+|===
+|Flag
+|Meaning
+|`d`
+|Enable DivMMC
+|`n`
+|Enable NMI DivMMC (esxdos Menu)
+|`t`
+|Use 128K timings
+|===
+
+<<<<
+
+==== CargandoLeches
+
+CargandoLeches is a set of ZX Spectrum ROMs that startetd as a project to load games in any Spectrum model 15-20x faster. No tape is needed, but a digital audio source, as a computer, mobile device, MP3 player, etc. The new ROM detects the loading method and reverts to the original ROM code if needed. This is handled transparently, with no user or program intervention.
+
+Since version 2.0 the project changed from a single ROM to more, each one with different options. This way, you can choose a different mix of options that may include:
+
+- Ultrafast loading
+- Reset & Play (After a sofware reset of the core, the system is ready to load from tape)
+- POKE editor
+- Enable or disable Sinclair BASIC token expansion
+
+The whole ROM set is available to download from the repository in GitHub https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[here].
+
+Depending on which ROM you choose, the flags when <<#_zx123_tool,adding to the SPI flash>> may vary. For example, for the ROM `48le_ea_re_po` (with all features enabled), these flags can be used (we cannot enable NMI DivMMC since the POKE editor will use it):
+
+[%header,cols=2*] 
+|===
+|Flag
+|Meaning
+|`d`
+|Enable DivMMC
+|`h`
+|Disable ROM high bit (1FFD bit 2)
+|`l`
+|Disable ROM low bit (7FFD bit 4)
+|`x`
+|Disable Timex mode
+|===
+
+===== POKEs
+
+When using a ROM with POKE option enabled:
+
+. Once the game is loaded, after pressing NMI (`F5` or `Caps Shift+Symbol Shift+5` on gomaDOS+) a field will appear in the upper left corner of the screen
+. Enter the POKE address and press `Enter`
+. Enter the POKE value and press `Enter` again
+. Repeat steps 2. and 3. until all the desired POKEs are entered. To finish and return to the game, press `Enter` twice
+
+<<<<
+
+===== Preparing ultrafast loading tapes
+
+The ROMs with ultrafast loading enabled, need special tape audio data which is made from normal loading `TAP` files, without protections or turbo loading.
+
+In order to create an ultrafast loading tape you need  `leches` and `CgLeches` command line utilities. Those can be obtained, for Windows, from the
+https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[official repository]. You can also obtain an unofficial version for MacOS from  https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[this other repository].
+
+In any other case, you can compile from the https://github.com/antoniovillena/CargandoLeches[source code at the official repository]. For example, in Linux, to compile using `gcc` you only need these commands:
+
+[source,shell]
+----
+gcc leches.c -o leches
+gcc CgLeches.c -o CgLeches
+----
+
+To create an ultrafast loading tape you have to use the `CgLeches` command from a terminal, giving, at least, the path to the original `TAP` file and also to the new file to create (`WAV` or `TZX`). There are also some other optional parameters, like the loading speed, between 0 and 7 (where 0 is fastest but also more incompatible), if you want to create a mono or stereo file (when making a `WAV`), and more.
+
+Thus, to make a `WAV` file with an ultrafast loading tape from the file `Valley.tap`, with loading speed 5, you could type:
+
+[source,shell]
+----
+(...) CgLeches Valley.tap Valley.wav 5
+----
+
+This way, the file `Valley.wav` can be played from a computer or another device and load using the ROM (see the section about <<#_loading_from_tape,loading from tape>> for more info).
+
+[WARNING]
+====
+Due to hardware limitations, `TZX` files made with `CgLeches` do not work with a <<#_miniduino,Miniduino>>, although they usually work with <<#_playtzx,`PlayTZX`>>.
+====
+
+==== Other ROMs
+
+Here are flag settings which work when <<#_zx123_tool,adding to the SPI flash>> some other known custom ROMs:
+
+[%header,cols=2*] 
+|===
+|ROM Name
+|Flags 
+|Gosh Wonderful ROM v1.33
+|dnhl17x
+|Looking Glass 1.07
+|dnhl17x
+|ZX82 by Daniel A. Nagy
+|dnhl17
+|ZX85 by Daniel A. Nagy
+|dntmh1
+|Arcade Game Designer 0.1
+|thl17x
+|===
 
 <<<
 
@@ -900,7 +1013,7 @@ Some BASIC extended commands are:
 - `SAVE` to save data in a file (e.g: `SAVE *"Program.bas"`)
 - `ERASE` to delete a file
 
-In addition, esxdos also has an NMI manager, an application that loads when NMI (F5) is pressed, and lets you browse the microSD card and load easily files (TAP, Z80, TRD, etc.). Pressing the "H" key invokes a help screen, which shows all the available keys.
+In addition, esxdos also has an NMI manager, an application that loads when NMI (`F5` or `Caps Shift+Symbol Shift+5` on gomaDOS+) is pressed, and lets you browse the microSD card and load easily files (TAP, Z80, TRD, etc.). Pressing the "H" key invokes a help screen, which shows all the available keys.
 
 [NOTE]
 ====
@@ -2009,7 +2122,7 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 
 https://www.antoniovillena.es/store/product/miniduino/[Miniduino] is a tape file audio player, based on a STM32F103C8T6 microcontroller with 64KB flash memory, and https://github.com/rcmolina/MaxDuino_BETA[Maxduino] firmware preinstalled.
 
-Maxduino plays, in a very similar way to how https://es.wikipedia.org/wiki/Casete[cassette tape] players worked, digital tape files in format as like `TAP` and `TZX` (ZX Spectrum), `O` (ZX80), `P` (ZX81), `CDT` (Amstrad CPC), `CAS`(MSX) `TSX` (MSX, Acorn, etc). It is also possible to play AY music files as if they wer tapes, in order to load the from http://www.specay.co.uk[SpecAY] in a ZX Spectrum.
+Maxduino plays, in a very similar way to how https://es.wikipedia.org/wiki/Casete[cassette tape] players worked, digital tape files in format as like `TAP` and `TZX` (ZX Spectrum), `O` (ZX80), `P` (ZX81), `CDT` (Amstrad CPC), `CAS`(MSX) `TSX` (MSX, Acorn, etc). It is also possible to play AY music files as if they were tapes, in order to load the from http://www.specay.co.uk[SpecAY] in a ZX Spectrum.
 
 ===== Ports and buttons
 
@@ -2280,6 +2393,8 @@ This way to change the BIOS of a file named `FLASH.ZXD`, using the BIOS file `FI
 
 There are also options to set the BIOS boot delay time, the default core or the default Spectrum ROM. See the  https://github.com/kounch/zx123_tool/[documentation] for more info.
 
+<<<<
+
 *Add a Spectrum ROM to an image*
 
 To add a Spectrum ROM file named `48.rom`, with the name `Spec48` and using the slot number 5, you can use a command like:
@@ -2290,6 +2405,46 @@ To add a Spectrum ROM file named `48.rom`, with the name `Spec48` and using the 
 ----
 
 See the  https://github.com/kounch/zx123_tool/[documentation] for all the possible options when adding a Spectrum ROM.
+
+Amongst the information you give when adding a ROM, there are some flags used to tell wich hardware options, etc, you want to have enabled or disabled when loading the ROM, as shown in this table:
+
+[%header,cols=2*] 
+|===
+|`i`
+|Keyboard issue 3 enabled (instead of issue 2)
+|`c`
+|Disable memory contention
+|`d`
+|Enable DivMMC
+|`n`
+|Enable NMI DivMMC (esxdos Menu)
+|`p`
+|Use Pentagon Timings
+|`t`
+|Use 128K timings
+|`s`
+|Disable DivMMC and ZXMMC ports
+|`m`
+|Enable Timex Horizontal MMU
+|`h`
+|Disable ROM high bit (1FFD bit 2)
+|`l`
+|Disable ROM low bit (7FFD bit 4)
+|`1`
+|Disable 1FFD port (+2A/3 paging)
+|`7`
+|Disable 7FFD port (128K paging)
+|`2`
+|Disable TurboSound (secondary AY chip)
+|`a`
+|Disable AY chip
+|`r`
+|Disable Radastanian mode
+|`x`
+|Disable Timex mode
+|`u`
+|Disable ULAPlus
+|===
 
 <<<<
 
@@ -2793,6 +2948,8 @@ https://github.com/zxdos/zxdos-plus/tree/master/zxunops2[zxunops2]
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
 
 http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p200075671[WiFi (RetroWiki)]
+
+https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10#p25076[Cargando Leches 2.0]
 
 http://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
 

@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">kounch</span><br>
 <span id="email" class="email"><a href="mailto:kounch@users.noreply.github.com">kounch@users.noreply.github.com</a></span><br>
-<span id="revnumber">version 1.3.3</span>
+<span id="revnumber">version 1.3.4</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Index</div>
@@ -503,7 +503,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_special_keys_and_buttons">Special keys and buttons</a></li>
-<li><a href="#_roms_2">ROMs</a></li>
+<li><a href="#_roms_2">ROMs</a>
+<ul class="sectlevel3">
+<li><a href="#_derbypro">DerbyPro</a></li>
+<li><a href="#_cargandoleches">CargandoLeches</a>
+<ul class="sectlevel4">
+<li><a href="#_pokes">POKEs</a></li>
+<li><a href="#_preparing_ultrafast_loading_tapes">Preparing ultrafast loading tapes</a></li>
+</ul>
+</li>
+<li><a href="#_other_roms">Other ROMs</a></li>
+</ul>
+</li>
 <li><a href="#_esxdos_2">esxdos</a>
 <ul class="sectlevel3">
 <li><a href="#_basic_guide">Basic Guide</a></li>
@@ -1992,12 +2003,222 @@ NEW DATA "Utils",8</code></pre>
 <div class="sect2">
 <h3 id="_roms_2">ROMs</h3>
 <div class="paragraph">
-<p>The ZX Spectrum core has can be initialized using different ROM versions (48K, 128K, Plus 2, etc.). These are stored in the flash memory of the ZXDOS+, and you can choose which one to load by pressing the <code>Esc</code> key during boot. You can also define the ROM that you want to load by default using the BIOS setup.</p>
+<p>The ZX Spectrum core can be initialized using different ROM versions (48K, 128K, Plus 2, etc.). These are stored in the flash memory of the ZXDOS+, and you can choose which one to load by pressing the <code>Esc</code> (<code>Caps Shift+Space</code> on gomaDOS+) key during boot. You can also define the ROM that you want to load by default using the BIOS setup.</p>
 </div>
 <div class="paragraph">
 <p>See the <a href="#_roms_3">updates section</a> for more information on how to expand or modify the ROMs stored in flash memory.</p>
 </div>
+<div class="sect3">
+<h4 id="_derbypro">DerbyPro</h4>
+<div class="paragraph">
+<p><a href="https://www.facebook.com/groups/DerbyPro">DerbyPro or Derby&#43;&#43;</a> is an enhanced firmware ROM for the ZX Spectrum, based on v1.4 of the Derby development ROM. The Spectrum 128 (codename "Derby") was a Spanish machine commissioned by Investronica and launched in 1985. It came with a keypad that provided additional editing keys. In 1986, the UK version came out with a simplified version of 128 BASIC and no keypad. Derby++ is developed from the Spanish ROM to include the benefits of both versions, without the drawbacks, and support for new hardware developments.</p>
+</div>
+<div class="paragraph">
+<p>You can download the ROM, a user manual and other files from the <a href="https://www.facebook.com/groups/DerbyPro">official Facebook Public Group</a>.</p>
+</div>
+<div class="paragraph">
+<p>Since it is a 64K ROM with support for new hardware, these flags can be used when <a href="#_zx123_tool">adding it to the SPI flash</a>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>d</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable DivMMC</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>n</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable NMI DivMMC (esxdos Menu)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>t</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use 128K timings</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="_cargandoleches">CargandoLeches</h4>
+<div class="paragraph">
+<p>CargandoLeches is a set of ZX Spectrum ROMs that startetd as a project to load games in any Spectrum model 15-20x faster. No tape is needed, but a digital audio source, as a computer, mobile device, MP3 player, etc. The new ROM detects the loading method and reverts to the original ROM code if needed. This is handled transparently, with no user or program intervention.</p>
+</div>
+<div class="paragraph">
+<p>Since version 2.0 the project changed from a single ROM to more, each one with different options. This way, you can choose a different mix of options that may include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ultrafast loading</p>
+</li>
+<li>
+<p>Reset &amp; Play (After a sofware reset of the core, the system is ready to load from tape)</p>
+</li>
+<li>
+<p>POKE editor</p>
+</li>
+<li>
+<p>Enable or disable Sinclair BASIC token expansion</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The whole ROM set is available to download from the repository in GitHub <a href="https://github.com/antoniovillena/CargandoLeches/tree/master/binaries">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Depending on which ROM you choose, the flags when <a href="#_zx123_tool">adding to the SPI flash</a> may vary. For example, for the ROM <code>48le_ea_re_po</code> (with all features enabled), these flags can be used (we cannot enable NMI DivMMC since the POKE editor will use it):</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>d</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable DivMMC</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>h</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ROM high bit (1FFD bit 2)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>l</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ROM low bit (7FFD bit 4)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable Timex mode</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_pokes">POKEs</h5>
+<div class="paragraph">
+<p>When using a ROM with POKE option enabled:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Once the game is loaded, after pressing NMI (<code>F5</code> or <code>Caps Shift+Symbol Shift+5</code> on gomaDOS+) a field will appear in the upper left corner of the screen</p>
+</li>
+<li>
+<p>Enter the POKE address and press <code>Enter</code></p>
+</li>
+<li>
+<p>Enter the POKE value and press <code>Enter</code> again</p>
+</li>
+<li>
+<p>Repeat steps 2. and 3. until all the desired POKEs are entered. To finish and return to the game, press <code>Enter</code> twice</p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="_preparing_ultrafast_loading_tapes">Preparing ultrafast loading tapes</h5>
+<div class="paragraph">
+<p>The ROMs with ultrafast loading enabled, need special tape audio data which is made from normal loading <code>TAP</code> files, without protections or turbo loading.</p>
+</div>
+<div class="paragraph">
+<p>In order to create an ultrafast loading tape you need  <code>leches</code> and <code>CgLeches</code> command line utilities. Those can be obtained, for Windows, from the
+<a href="https://github.com/antoniovillena/CargandoLeches/tree/master/binaries">official repository</a>. You can also obtain an unofficial version for MacOS from  <a href="https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS">this other repository</a>.</p>
+</div>
+<div class="paragraph">
+<p>In any other case, you can compile from the <a href="https://github.com/antoniovillena/CargandoLeches">source code at the official repository</a>. For example, in Linux, to compile using <code>gcc</code> you only need these commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">gcc leches.c <span class="nt">-o</span> leches
+gcc CgLeches.c <span class="nt">-o</span> CgLeches</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create an ultrafast loading tape you have to use the <code>CgLeches</code> command from a terminal, giving, at least, the path to the original <code>TAP</code> file and also to the new file to create (<code>WAV</code> or <code>TZX</code>). There are also some other optional parameters, like the loading speed, between 0 and 7 (where 0 is fastest but also more incompatible), if you want to create a mono or stereo file (when making a <code>WAV</code>), and more.</p>
+</div>
+<div class="paragraph">
+<p>Thus, to make a <code>WAV</code> file with an ultrafast loading tape from the file <code>Valley.tap</code>, with loading speed 5, you could type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="o">(</span>...<span class="o">)</span> CgLeches Valley.tap Valley.wav 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This way, the file <code>Valley.wav</code> can be played from a computer or another device and load using the ROM (see the section about <a href="#_loading_from_tape">loading from tape</a> for more info).</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Due to hardware limitations, <code>TZX</code> files made with <code>CgLeches</code> do not work with a <a href="#_miniduino">Miniduino</a>, although they usually work with <a href="#_playtzx"><code>PlayTZX</code></a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_roms">Other ROMs</h4>
+<div class="paragraph">
+<p>Here are flag settings which work when <a href="#_zx123_tool">adding to the SPI flash</a> some other known custom ROMs:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ROM Name</th>
+<th class="tableblock halign-left valign-top">Flags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gosh Wonderful ROM v1.33</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dnhl17x</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Looking Glass 1.07</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dnhl17x</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZX82 by Daniel A. Nagy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dnhl17</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZX85 by Daniel A. Nagy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dntmh1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arcade Game Designer 0.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">thl17x</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_esxdos_2">esxdos</h3>
@@ -2129,7 +2350,7 @@ NEW DATA "Utils",8</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>In addition, esxdos also has an NMI manager, an application that loads when NMI (F5) is pressed, and lets you browse the microSD card and load easily files (TAP, Z80, TRD, etc.). Pressing the "H" key invokes a help screen, which shows all the available keys.</p>
+<p>In addition, esxdos also has an NMI manager, an application that loads when NMI (<code>F5</code> or <code>Caps Shift+Symbol Shift+5</code> on gomaDOS+) is pressed, and lets you browse the microSD card and load easily files (TAP, Z80, TRD, etc.). Pressing the "H" key invokes a help screen, which shows all the available keys.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -4220,7 +4441,7 @@ make</code></pre>
 <p><a href="https://www.antoniovillena.es/store/product/miniduino/">Miniduino</a> is a tape file audio player, based on a STM32F103C8T6 microcontroller with 64KB flash memory, and <a href="https://github.com/rcmolina/MaxDuino_BETA">Maxduino</a> firmware preinstalled.</p>
 </div>
 <div class="paragraph">
-<p>Maxduino plays, in a very similar way to how <a href="https://es.wikipedia.org/wiki/Casete">cassette tape</a> players worked, digital tape files in format as like <code>TAP</code> and <code>TZX</code> (ZX Spectrum), <code>O</code> (ZX80), <code>P</code> (ZX81), <code>CDT</code> (Amstrad CPC), <code>CAS</code>(MSX) <code>TSX</code> (MSX, Acorn, etc). It is also possible to play AY music files as if they wer tapes, in order to load the from <a href="http://www.specay.co.uk">SpecAY</a> in a ZX Spectrum.</p>
+<p>Maxduino plays, in a very similar way to how <a href="https://es.wikipedia.org/wiki/Casete">cassette tape</a> players worked, digital tape files in format as like <code>TAP</code> and <code>TZX</code> (ZX Spectrum), <code>O</code> (ZX80), <code>P</code> (ZX81), <code>CDT</code> (Amstrad CPC), <code>CAS</code>(MSX) <code>TSX</code> (MSX, Acorn, etc). It is also possible to play AY music files as if they were tapes, in order to load the from <a href="http://www.specay.co.uk">SpecAY</a> in a ZX Spectrum.</p>
 </div>
 <div class="sect4">
 <h5 id="_ports_and_buttons">Ports and buttons</h5>
@@ -4606,6 +4827,7 @@ Port: &lt;Previously identified port&gt;</code></pre>
 <div class="paragraph">
 <p>There are also options to set the BIOS boot delay time, the default core or the default Spectrum ROM. See the  <a href="https://github.com/kounch/zx123_tool/">documentation</a> for more info.</p>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>Add a Spectrum ROM to an image</strong></p>
 </div>
@@ -4620,6 +4842,87 @@ Port: &lt;Previously identified port&gt;</code></pre>
 <div class="paragraph">
 <p>See the  <a href="https://github.com/kounch/zx123_tool/">documentation</a> for all the possible options when adding a Spectrum ROM.</p>
 </div>
+<div class="paragraph">
+<p>Amongst the information you give when adding a ROM, there are some flags used to tell wich hardware options, etc, you want to have enabled or disabled when loading the ROM, as shown in this table:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><code>i</code></th>
+<th class="tableblock halign-left valign-top">Keyboard issue 3 enabled (instead of issue 2)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>c</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable memory contention</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>d</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable DivMMC</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>n</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable NMI DivMMC (esxdos Menu)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>p</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use Pentagon Timings</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>t</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use 128K timings</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>s</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable DivMMC and ZXMMC ports</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>m</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Timex Horizontal MMU</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>h</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ROM high bit (1FFD bit 2)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>l</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ROM low bit (7FFD bit 4)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable 1FFD port (+2A/3 paging)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>7</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable 7FFD port (128K paging)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable TurboSound (secondary AY chip)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable AY chip</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>r</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable Radastanian mode</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable Timex mode</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>u</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ULAPlus</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>Install a Core to an image</strong></p>
@@ -5583,6 +5886,9 @@ pld load recovery.zxd.bit</code></pre>
 <p><a href="http://retrowiki.es/viewtopic.php?f=83&amp;t=200032578&amp;p=200075671&amp;hilit=wifi#p200075671">WiFi (RetroWiki)</a></p>
 </div>
 <div class="paragraph">
+<p><a href="https://www.va-de-retro.com/foros/viewtopic.php?t=1718&amp;start=10#p25076">Cargando Leches 2.0</a></p>
+</div>
+<div class="paragraph">
 <p><a href="http://www.zxuno.com/forum/viewtopic.php?f=35&amp;t=44">WiFi en ZX-Uno</a></p>
 </div>
 <div class="paragraph">
@@ -5668,8 +5974,8 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.3<br>
-Last updated 2021-02-01 22:35:53 +0100
+Version 1.3.4<br>
+Last updated 2021-02-03 19:53:41 +0100
 </div>
 </div>
 <style>

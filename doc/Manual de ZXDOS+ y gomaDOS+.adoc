@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.3.3
+:revnumber: 1.3.4
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -847,9 +847,121 @@ Teclas especiales que se pueden utilizar durante la ejecución del core principa
 
 === ROMs
 
-El core de ZX Spectrum tiene la capacidad de inicializar utilizando diferentes versiones de ROM (48K, 128K, Plus 2, etc.). Estas se almacenan en la memoria flash del ZXDOS+, y se puede elegir cuál cargar, pulsando la tecla `Esc` durante el arranque. También es posible definir desde la configuración de BIOS, cuál es la ROM que se desea que se cargue por defecto.
+El core de ZX Spectrum tiene la capacidad de inicializar utilizando diferentes versiones de ROM (48K, 128K, Plus 2, etc.). Estas se almacenan en la memoria flash del ZXDOS+, y se puede elegir cuál cargar, pulsando la tecla `Esc` (`Caps Shift+Espacio` en gomaDOS+) durante el arranque. También es posible definir desde la configuración de BIOS, cuál es la ROM que se desea que se cargue por defecto.
 
 Véase el <<#_roms_3,apartado de actualizaciones>> para más información sobre cómo ampliar o modificar las ROMs almacenadas en la memoria flash.
+
+==== DerbyPro
+
+https://www.facebook.com/groups/DerbyPro[DerbyPro o Derby{pp}] es una ROM mejorada para el ZX Spectrum, basada en la versión 1.4 de la ROM de desarrollo Derby. El Spectrum 128 (nombre en código "Derby") fue una máquina española, encargada por Investronica y lanzada en 1985. Incluía un teclado aparte que añadía varias teclas de edición extra. En 1986 se lanzó la versión para Reino Unido con una versión simplificada de 128 BASIC y sin teclado extra. Derby++ se basa en la ROM española para incluir lo mejor de las dos versiones, sin sus inconvenientes, y con soporte para nuevo hardware.
+
+Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.facebook.com/groups/DerbyPro[grupo púbilco oficial de Facebook].
+
+Puesto que se trata de una ROM de 64K con soporte para nuevo hardware, se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
+
+[%header,cols=2*] 
+|===
+|Ajuste
+|Significado
+|`d`
+|Habilitar DivMMC
+|`n`
+|Habilitar NMI DivMMC (menú de esxdos)
+|`t`
+|Usar timings de 128K
+|===
+
+<<<<
+
+==== CargandoLeches
+
+https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
+
+Desde la versión 2.0, el proyecto pasó de ser una única ROM a varias, cada una con distintas opciones. Así, es posible elegir diferentes combinaciones que pueden incluir:
+
+- Carga ultrarrápida
+- Reset & Play (es decir, que al hacer un reset automáticamente se ponga en modo carga de cinta)
+- Introducción de POKEs
+- Desactivar o activar la expansión de tokens (palabras clave) de Sinclair BASIC
+
+El conjunto completo de ROMs está disponible para descargar desde el repositorio en GitHub https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[aquí].
+
+Dependiendo de la ROM elegida, los ajustes a indicar cuando se <<#_zx123_tool,añada a la SPI flash>> pueden variar. Por ejemplo, para la ROM `48le_ea_re_po` (que tiene habilitadas todas las opciones), se pueden usar estos ajustes  (no hay que habilitar NMI DivMMC porque el editor de POKEs ya lo utiliza):
+
+[%header,cols=2*] 
+|===
+|Ajuste
+|Significado
+|`d`
+|Habilitar DivMMC
+|`h`
+|Deshabilitar bit alto de ROM (bitd 2 de 1FFD)
+|`l`
+|Deshabilitar bit bajo de ROM (bit 4 de 7FFD)
+|`x`
+|Deshabilitar modo Timex
+|===
+
+===== POKEs
+
+En el caso de usar una ROM con la opción de introducir POKEs, se hace de la siguiente manera:
+
+. Una vez el juego ha cargado, pulsando NMI (`F5` o `Caps Shift+Symbol Shift+5` en gomaDOS+), aparecerá un campo en la parte superior izquierda de la pantlla
+. Escribir la dirección del POKE a introducir y pulsar `Enter`
+. Escribir el valor del POKE y pulsar `Enter`
+. Repetir los pasos 2. y 3. todas las veces que se desee. Para terminar y volver al juego, pulsar `Enter` dos veces seguidas
+
+<<<<
+
+===== Preparación de cintas de carga ultrarrápida
+
+Las ROMs con la opción de carga ultrarrápida necesitan archivos de cinta especiales que se generan desde ficheros `TAP` de carga normal, de juegos que no tengan protección de carga o modo turbo.
+
+Para crear una cinta de carga ultrarrápida se necesitan las utilidates de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para MacOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
+
+En otro caso, es posible compilar desde https://github.com/antoniovillena/CargandoLeches[el código fuente disponible en el repositorio oficial]. Por ejemplo, para compilar en Linux usando `gcc` basta con usar estos comandos:
+
+[source,shell]
+----
+gcc leches.c -o leches
+gcc CgLeches.c -o CgLeches
+----
+
+Para generar una cinta de carga ultarrápida se ha de invocar desde una consola al comando `CgLeches` indicando, al menos, el fichero `TAP` de origen, y el fichero (`WAV` o `TZX`) de destino. Existen otros parámetros como el nivel de velocidad de la carga, entre 0 y 7 (donde 0 es la más rápida pero posiblemente más incompatible), si se desea un fichero mono, estéreo, etc. (en el caso de `WAV`) y más.
+
+Así, para producir un fichero `WAV` de audio con una cinta de carga ultrarrápida desde el fichero de cinta `Valley.tap` con velocidad de carga 5, se haría así:
+
+[source,shell]
+----
+(...) CgLeches Valley.tap Valley.wav 5
+----
+
+Ahora el fichero `Valley.wav` se puede reproducir desde un ordenador u otro dispositivo y cargarlo usando la ROM (véase la sección dedicada a la <<#_carga_desde_cinta,carga desde cinta>> para más detalles).
+
+[WARNING]
+====
+Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches` no funcionan correctamente con <<#_miniduino,Miniduino>>, aunque sí que suelen funcionar con <<#_playtzx,`PlayTZX`>>.
+====
+
+==== Otras ROMs
+
+Estos son algunos ajustes válidos para <<#_zx123_tool,añadir a la SPI flash>> algunas otras ROM personalizadas:
+
+[%header,cols=2*] 
+|===
+|Nombre de la ROM
+|Ajustes
+|Gosh Wonderful ROM v1.33
+|dnhl17x
+|Looking Glass 1.07
+|dnhl17x
+|ZX82 by Daniel A. Nagy
+|dnhl17
+|ZX85 by Daniel A. Nagy
+|dntmh1
+|Arcade Game Designer 0.1
+|thl17x
+|===
 
 <<<
 
@@ -2294,6 +2406,8 @@ Así, para modificar la BIOS de un fichero llamado `FLASH.ZXD`, usando la BIOS e
 
 Existen también opciones para ajustar el tiempo de espera inicial de la BIOS, el core a ejecutar por defecto, o la ROM de Spectrum a utilizar por defecto. Véase la https://github.com/kounch/zx123_tool/#castellano[documentación de la herramienta] para más información.
 
+<<<<
+
 *Añadir una ROM de Spectrum a una imagen*
 
 Para añadir una ROM de Spectrum llamada `48.rom`, poniendo el nombre `Spec48` y ocupando el slot 5, se puede usar un comando como:
@@ -2304,6 +2418,46 @@ Para añadir una ROM de Spectrum llamada `48.rom`, poniendo el nombre `Spec48` y
 ----
 
 Véase la https://github.com/kounch/zx123_tool/#castellano[documentación de la herramienta] para ver todas las posibles opciones a la hora de añadir una ROM de Spectrum.
+
+Entre los datos que se indican al añadir una ROM, hay una serie de indicadores para definir qué opciones de hardware, etc. se desean habilitar o deshabilitar al cargar esa ROM en concreto, según se puede ver en esta tabla:
+
+[%header,cols=2*] 
+|===
+|`i`
+|Habilitar teclado issue 3 (en vez de issue 2)
+|`c`
+|Deshabilitar la contención de memoria
+|`d`
+|Habilitar DivMMC
+|`n`
+|Habilitar NMI DivMMC (menú de esxdos)
+|`p`
+|Usar timings de Pentagon
+|`t`
+|Usar timings de 128K
+|`s`
+|Deshabilitar puertos de DivMMC y ZXMMC
+|`m`
+|Habilitar MMU horizontal de Timex
+|`h`
+|Deshabilitar bit alto de ROM (bitd 2 de 1FFD)
+|`l`
+|Deshabilitar bit bajo de ROM (bit 4 de 7FFD)
+|`1`
+|Deshabilitar puerto 1FFD (paginado de +2A/3)
+|`7`
+|Deshabilitar puerto 7FFD (paginado de 128K)
+|`2`
+|Deshabilitar TurboSound (chip AY secundario)
+|`a`
+|Deshabilitar chip AY
+|`r`
+|Deshabilitar modo Radastaniano
+|`x`
+|Deshabilitar modo Timex
+|`u`
+|Deshabilitar ULAPlus
+|===
 
 <<<<
 
@@ -2807,6 +2961,8 @@ https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%2
 https://github.com/zxdos/zxdos-plus/tree/master/zxunops2[zxunops2]
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
+
+https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10#p25076[Cargando Leches 2.0]
 
 http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p200075671[WiFi (RetroWiki)]
 
