@@ -4877,8 +4877,8 @@ sloti   ld      l, a
         sub     44              ;-44, -1 -> 0, 43
         jr      nc, sloti
         ld      h, d
-        add     a, 9
-        jr      nc, slot2b
+        sub     -9
+        jr      c, slot2b
         ld      hl, $0400
         ld      e, a
        ELSE
