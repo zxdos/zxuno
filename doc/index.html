@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">kounch</span><br>
 <span id="email" class="email"><a href="mailto:kounch@users.noreply.github.com">kounch@users.noreply.github.com</a></span><br>
-<span id="revnumber">version 1.3.4</span>
+<span id="revnumber">version 1.3.5</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Index</div>
@@ -908,7 +908,7 @@ diskutil partitionDisk /dev/disk6 MBR <span class="s2">"MS-DOS FAT16"</span> ZXD
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR %DOS_FAT_16% ZXDOSPLUS 4G %DOS_FAT_16% EXTRA 4G <span class="s2">"MS-DOS FAT32"</span> DATA R
-<span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 16 <span class="nt">-v</span> ZXDOSPLUS <span class="nt">-b</span> 4096 <span class="nt">-c</span> 128 /dev/rdisk6s1
+<span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 16 <span class="nt">-v</span> ZXDOSPLUS <span class="nt">-c</span> 128 /dev/rdisk6s1
 <span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 16 <span class="nt">-v</span> EXTRA <span class="nt">-b</span> 4096 <span class="nt">-c</span> 128 /dev/rdisk6s2</code></pre>
 </div>
 </div>
@@ -1679,7 +1679,7 @@ Partition offset [0 - 31116288]: [63] 128
 Partition size [1 - 31116287]: [31116287] 2017152
 
 fdisk:*1&gt; edit 2
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0E
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
 Do you wish to edit in CHS mode? [n]
 Partition offset [0 - 31116288]: [2017280]
 Partition size [1 - 29099135]: [29099135] 7812504
@@ -1697,7 +1697,7 @@ fdisk:*1&gt; print
  #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
 ------------------------------------------------------------------------
  1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] &lt;Unknown ID&gt;
- 2: 0E 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS FAT-16
+ 2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS &gt; 32MB
  3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
  4: 00    0   0   0 -    0   0   0 [         0 -          0] unused
 
@@ -1715,8 +1715,8 @@ fdisk: 1&gt; quit</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">diskutil unmountDisk /dev/disk6
-<span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 16 <span class="nt">-v</span> ZXDOSPLUS <span class="nt">-b</span> 4096 <span class="nt">-c</span> 128 /dev/rdisk6s2
-<span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 32 <span class="nt">-v</span> EXTRA <span class="nt">-b</span> 4096 <span class="nt">-c</span> 128 /dev/rdisk6s3</code></pre>
+<span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 16 <span class="nt">-v</span> ZXDOSPLUS <span class="nt">-c</span> 128 /dev/rdisk6s2
+<span class="nb">sudo </span>newfs_msdos <span class="nt">-F</span> 32 <span class="nt">-v</span> EXTRA <span class="nt">-c</span> 128 /dev/rdisk6s3</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -1738,7 +1738,7 @@ fdisk: 1&gt; quit</code></pre>
    #:                       TYPE NAME                    SIZE       IDENTIFIER
    0:     FDisk_partition_scheme                        *15.9 GB    disk6
    1:                       0x7F                         1.0 GB     disk6s1
-   2:             Windows_FAT_16 ZXDOSPLUS               4.0 GB     disk6s2
+   2:                 DOS_FAT_16 ZXDOSPLUS               4.0 GB     disk6s2
    3:                 DOS_FAT_32 EXTRA                   10.9 GB    disk6s3</code></pre>
 </div>
 </div>
@@ -1791,7 +1791,7 @@ Partition offset [0 - 31116288]: [63] 128
 Partition size [1 - 31116287]: [31116287] 2017152
 
 fdisk:*1&gt; edit 2
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0E
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
 Do you wish to edit in CHS mode? [n]
 Partition offset [0 - 31116288]: [2017280]
 Partition size [1 - 29099135]: [29099135] 7812504
@@ -1809,7 +1809,7 @@ fdisk:*1&gt; print
  #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
 ------------------------------------------------------------------------
  1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] &lt;Unknown ID&gt;
- 2: 0E 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS FAT-16
+ 2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS &gt; 32MB
  3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
  4: 00    0   0   0 -    0   0   0 [         0 -          0] unused
 
@@ -1945,10 +1945,10 @@ NEW DATA "Utils",8</code></pre>
 <p><code>F2</code> (<code>Caps Shift+1</code> on gomaDOS+) Enter BIOS setup</p>
 </li>
 <li>
-<p><code>Caps Lock</code> or <code>Cursor down</code> (`Caps Shift+2 on gomaDOS+): Core selection menu</p>
+<p><code>Caps Lock</code> or <code>Cursor down</code> (<code>Caps Shift+2</code> on gomaDOS+) or, if a joystick is connected, pressing <code>down</code>: Core selection menu</p>
 </li>
 <li>
-<p><code>Esc</code> (<code>Caps Shift+Space</code> on gomaDOS+): ZX Spectrum core ROM selection menu</p>
+<p><code>Esc</code> (<code>Caps Shift+Space</code> on gomaDOS+), or if a joystick with two or more fire buttons is connected, pressing the 2nd fire button: ZX Spectrum core ROM selection menu</p>
 </li>
 <li>
 <p><code>R</code>: Loads the Spectrum core ROM in "real" mode, disabling esxdos, new graphics modes, etc.</p>
@@ -3057,7 +3057,7 @@ gcc CgLeches.c <span class="nt">-o</span> CgLeches</code></pre>
 <div class="sect3">
 <h4 id="_microsd_format">microSD format</h4>
 <div class="paragraph">
-<p>You have to use a microSD card with the first partition in FAT16 format. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.</p>
+<p>You have to use a microSD card with the first partition in FAT16 format with <a href="https://en.wikipedia.org/wiki/Partition_type">code <code>0x06</code> (16-bit FAT)</a>. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.</p>
 </div>
 <div class="paragraph">
 <p>You need to get:</p>
@@ -3269,7 +3269,7 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <div class="sect3">
 <h4 id="_microsd_card_format_3">microSD card format</h4>
 <div class="paragraph">
-<p>You have to use a microSD card with the first partition in FAT32 format, 4GB in size, and with 4096 bytes per cluster.</p>
+<p>You have to use a microSD card with the first partition in FAT32 format, with a maximum of 4GB in size, and 4096 bytes per cluster.</p>
 </div>
 <div class="paragraph">
 <p>You also need the following ROM files (they are available <a href="http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it">at the original project Wiki</a>) or from the <a href="https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip">GitHub repository</a>:
@@ -3529,8 +3529,23 @@ MSXCTRL -h -i -r -b -[5|6] -m&lt;0-2&gt;
 <div class="paragraph">
 <p>If there was more than one program in the disk, type <code>LOAD "$"</code> and press <code>Enter</code>. Then, type <code>LIST</code>, and press <code>Enter</code>, to see a list with the files in the disk. Now, to load one of them, type <code>LOAD "&lt;name&gt;",8</code> (where <code>&lt;name&gt;</code> is the name of the file to load) and press <code>Enter</code>. Once <code>READY</code> is shown on screen, type <code>RUN</code> and press <code>Enter</code> to execute it. If this didn&#8217;t work try again with the command <code>LOAD "&lt;name&gt;",8,1</code>.</p>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>To load from tape, Select "Carga Tap" option from the menu. Then, browse the microSD and select the TAP file to load, press <code>ENTER</code> and close the options menu. After that, type <code>LOAD</code> and press <code>Enter</code>, or press <code>Shift+Esc</code> (<code>Shift+RUN/STOP</code>). Finally, when pressing <code>F9</code> (<code>Caps Shift+Symbol Shift+9</code> on gomaDOS+) the tape file will start playing (you can enable the tape loading sound selecting "Sonido Carga Cinta" in the options menu). Once the loading finishes, type <code>RUN</code> and press <code>ENTER</code> if needed.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For this core, the right joystick port is mapped to joystick port 1 and the left port is mapped to joystick port 2. This is the opposite of what happens in other cores.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -5974,8 +5989,8 @@ pld load recovery.zxd.bit</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.4<br>
-Last updated 2021-02-03 19:53:41 +0100
+Version 1.3.5<br>
+Last updated 2021-02-11 22:58:50 +0100
 </div>
 </div>
 <style>

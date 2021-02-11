@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.4
+:revnumber: 1.3.5
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -137,7 +137,7 @@ To create two FAT 16 partitions (e.g. to use MSX core) and have the rest of spac
 ----
 diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR %DOS_FAT_16% ZXDOSPLUS 4G %DOS_FAT_16% EXTRA 4G "MS-DOS FAT32" DATA R
-sudo newfs_msdos -F 16 -v ZXDOSPLUS -b 4096 -c 128 /dev/rdisk6s1
+sudo newfs_msdos -F 16 -v ZXDOSPLUS -c 128 /dev/rdisk6s1
 sudo newfs_msdos -F 16 -v EXTRA -b 4096 -c 128 /dev/rdisk6s2
 ----
 
@@ -603,7 +603,7 @@ Partition offset [0 - 31116288]: [63] 128
 Partition size [1 - 31116287]: [31116287] 2017152
 
 fdisk:*1> edit 2
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0E
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
 Do you wish to edit in CHS mode? [n] 
 Partition offset [0 - 31116288]: [2017280]  
 Partition size [1 - 29099135]: [29099135] 7812504
@@ -621,7 +621,7 @@ fdisk:*1> print
  #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
 ------------------------------------------------------------------------
  1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
- 2: 0E 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS FAT-16  
+ 2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS > 32MB
  3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
  4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
 
@@ -635,8 +635,8 @@ fdisk: 1> quit
 [source,shell]
 ----
 diskutil unmountDisk /dev/disk6
-sudo newfs_msdos -F 16 -v ZXDOSPLUS -b 4096 -c 128 /dev/rdisk6s2
-sudo newfs_msdos -F 32 -v EXTRA -b 4096 -c 128 /dev/rdisk6s3
+sudo newfs_msdos -F 16 -v ZXDOSPLUS -c 128 /dev/rdisk6s2
+sudo newfs_msdos -F 32 -v EXTRA -c 128 /dev/rdisk6s3
 ----
 
 [start=3]
@@ -654,7 +654,7 @@ diskutil list
    #:                       TYPE NAME                    SIZE       IDENTIFIER
    0:     FDisk_partition_scheme                        *15.9 GB    disk6
    1:                       0x7F                         1.0 GB     disk6s1
-   2:             Windows_FAT_16 ZXDOSPLUS               4.0 GB     disk6s2
+   2:                 DOS_FAT_16 ZXDOSPLUS               4.0 GB     disk6s2
    3:                 DOS_FAT_32 EXTRA                   10.9 GB    disk6s3
 ----
 
@@ -699,7 +699,7 @@ Partition offset [0 - 31116288]: [63] 128
 Partition size [1 - 31116287]: [31116287] 2017152
 
 fdisk:*1> edit 2
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0E
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
 Do you wish to edit in CHS mode? [n] 
 Partition offset [0 - 31116288]: [2017280]  
 Partition size [1 - 29099135]: [29099135] 7812504
@@ -717,7 +717,7 @@ fdisk:*1> print
  #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
 ------------------------------------------------------------------------
  1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
- 2: 0E 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS FAT-16  
+ 2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS > 32MB  
  3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
  4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
 
@@ -823,8 +823,8 @@ The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check 
 Special keys which can be used during startup:
 
 - `F2` (`Caps Shift+1` on gomaDOS+) Enter BIOS setup
-- `Caps Lock` or `Cursor down` (`Caps Shift+2 on gomaDOS+): Core selection menu
-- `Esc` (`Caps Shift+Space` on gomaDOS+): ZX Spectrum core ROM selection menu
+- `Caps Lock` or `Cursor down` (`Caps Shift+2` on gomaDOS+) or, if a joystick is connected, pressing `down`: Core selection menu
+- `Esc` (`Caps Shift+Space` on gomaDOS+), or if a joystick with two or more fire buttons is connected, pressing the 2nd fire button: ZX Spectrum core ROM selection menu
 - `R`: Loads the Spectrum core ROM in "real" mode, disabling esxdos, new graphics modes, etc.
 - `/` (numeric keyboard, `Symbol Shift+V` on gomaDOS+): Load the default ZX Spectrum core ROM in "root" mode
 - Number from `1` to `9`: Load the core in the flash location corresponding to that number
@@ -1375,7 +1375,7 @@ Some of its features are:
 
 ==== microSD format
 
-You have to use a microSD card with the first partition in FAT16 format. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.
+You have to use a microSD card with the first partition in FAT16 format with https://en.wikipedia.org/wiki/Partition_type[code `0x06` (16-bit FAT)]. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.
 
 You need to get:
 
@@ -1497,7 +1497,7 @@ Some of its features are:
 
 ==== microSD card format
 
-You have to use a microSD card with the first partition in FAT32 format, 4GB in size, and with 4096 bytes per cluster.
+You have to use a microSD card with the first partition in FAT32 format, with a maximum of 4GB in size, and 4096 bytes per cluster.
 
 You also need the following ROM files (they are available http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[at the original project Wiki]) or from the https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[GitHub repository]:
 - `OS6128.ROM`
@@ -1661,7 +1661,14 @@ After a disk is inserted, normally, you can use `LOAD "*",8,1` and press `Enter`
 
 If there was more than one program in the disk, type `LOAD "$"` and press `Enter`. Then, type `LIST`, and press `Enter`, to see a list with the files in the disk. Now, to load one of them, type `LOAD "<name>",8` (where `<name>` is the name of the file to load) and press `Enter`. Once `READY` is shown on screen, type `RUN` and press `Enter` to execute it. If this didn't work try again with the command `LOAD "<name>",8,1`. 
 
+<<<
+
 To load from tape, Select "Carga Tap" option from the menu. Then, browse the microSD and select the TAP file to load, press `ENTER` and close the options menu. After that, type `LOAD` and press `Enter`, or press `Shift+Esc` (`Shift+RUN/STOP`). Finally, when pressing `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+) the tape file will start playing (you can enable the tape loading sound selecting "Sonido Carga Cinta" in the options menu). Once the loading finishes, type `RUN` and press `ENTER` if needed. 
+
+[WARNING]
+====
+For this core, the right joystick port is mapped to joystick port 1 and the left port is mapped to joystick port 2. This is the opposite of what happens in other cores.
+====
 
 <<<
 
