@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.3.5
+:revnumber: 1.3.6
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -101,6 +101,11 @@ Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partici�
 [NOTE]
 ====
 El tamaño máximo de una partición FAT16 son 4GB
+====
+
+[WARNING]
+====
+A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos, es importante no utilizar el mismo que el de cualquiera de los directorios dentro, o se producirá un error de acceso a ese directorio. (Ej: No llamar a la partición `BIN`, `SYS` o `TMP`).
 ====
 
 ===== Windows
@@ -511,7 +516,7 @@ Estas son algunas de sus principales características:
 - Interrupción ráster programable en número de línea, para cualquier linea de TV.
 - Posibilidad de activar/desactivar los registros de manejo de bancos de memoria, para mejor compatibilidad con cada modelo implementado
 - Posibilidad de activar/desactivar los dispositivos incorporados al core para mejorar la compatibilidad con ciertos programas
-- Soporte ZXMMC para +3e y soporte DIVMMC para esxdos y firmwares compatibles
+- Soporte ZXMMC y DIVMMC para para +3e, esxdos y firmwares compatibles
 - Soporte Turbo Sound
 - Soporte de SpecDrum
 - Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la implementación de configuraciones tales como ACB, ABC, etc.
@@ -523,7 +528,7 @@ Estas son algunas de sus principales características:
 - Frecuencia de refresco vertical seleccionable por el usuario para mejorar la compatibilidad con monitores VGA.
 - Soporte de arranque multicore: desde el Spectrum se puede seleccionar una dirección de la SPI Flash y la FPGA cargará un core desde ahí.
 
-<<<<
+<<<
 
 === Formato avanzado de la tarjeta microSD (+3e)
 
@@ -538,7 +543,7 @@ El esquema de particionado que se presentará a continuación sólo se podrá ut
 
 [TIP]
 ====
-En IDEDOS, cada partición puede tener un tamaño entre 1 y 16 Megabytes (un millón de bytes), y cada disco puede tener entre 1 y 65535 particiones. Por tanto, lo máximo que se puede ocupar de una tarjeta será alrededor de 1GB de espacio.
+En IDEDOS, cada partición puede tener un tamaño entre 1 y 16 Megabytes (16 millones de bytes), y cada disco puede tener entre 1 y 65535 particiones. Por tanto, lo máximo que se puede ocupar de una tarjeta será alrededor de 1 TB de espacio.
 ====
 
 A continuación se explica una forma de dividir una tarjeta en dos o tres partes, con la primera partición IDEDOS (1GB de tamaño), la segunda FAT16 (4GB) y la tercera FAT32 (resto del espacio de la tarjeta).
@@ -557,7 +562,7 @@ Se puede utilizar el administrador de discos de Windows. Los pasos a seguir ser�
 
 . Opcionalmente, crear otra partición primaria ocupando el resto del espacio y formatear como FAT32
 
-<<<<
+<<<
 
 ==== MacOS
 
@@ -668,7 +673,7 @@ Será necesario utilizar la línea de comandos. Lo primero es determinar el disc
 lsblk
 ----
 
-<<<<
+<<<
 
 En este ejemplo sería `sdc`:
 
@@ -686,44 +691,79 @@ Pasos a seguir:
 
 [source,shell]
 ----
-sudo fdisk -e /dev/sdc
+sudo fdisk --compatibility=dos /dev/sdc
 ----
 
 [source]
 ----
-Enter 'help' for information
-fdisk: 1> erase
-fdisk:*1> edit 1
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 7F
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [63] 128
-Partition size [1 - 31116287]: [31116287] 2017152
+Welcome to fdisk
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
 
-fdisk:*1> edit 2
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [2017280]  
-Partition size [1 - 29099135]: [29099135] 7812504
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (62-31116288, default 62): 128
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (128-31116288, default 31116288): 2017152
 
-fdisk:*1> flag 2
+Created a new partition 1 of type 'Linux'
 
-fdisk:*1> edit 3
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0B
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [9829784] 
-Partition size [1 - 21286504]: [21286504] 
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 7f
+Changed type of partition 'Linux' to 'unknown'.
 
-fdisk:*1> print
-         Starting       Ending
- #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
-------------------------------------------------------------------------
- 1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
- 2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS > 32MB 
- 3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
- 4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 2): 
+First sector (45-31116288, default 45): 2017280     .
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 7812504
 
-fdisk:*1> write
-fdisk: 1> quit
+Created a new partition 2 of type 'Linux'
+
+Command (m for help): t
+Partition number (1,2, default 2): 2
+Hex code (type L to list all codes): 6
+
+Changed type of partition 'Linux' to 'FAT16'.
+
+Command (m for help): a
+Partition number (1,2, default 2): 2
+
+The bootable flag on partition 2 is enabled now.
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 3): 3 
+First sector (45-31116288, default 45): 9829784     .
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 31116288
+
+Created a new partition 2 of type 'Linux'
+
+Command (m for help): t
+Partition number (1,2, default 2): 2
+Hex code (type L to list all codes): b
+
+Changed type of partition 'Linux' to 'W95 FAT32'.
+
+Command (m for help): p
+Disk /dev/sda
+Disklabel type: dos
+Disk identifier
+
+Device     Boot   Start     End  Sectors   Size Id Type
+/dev/sda1           128 2017152  2017025 984,9M 7f unknown
+/dev/sda2  *    2017280 7626751  7812504   2,7G  b FAT16
+/dev/sda3       9829784 7626751 21286504    21G  b W95 FAT32
 ----
 
 [start=2]
@@ -731,8 +771,8 @@ fdisk: 1> quit
 
 [source,shell]
 ----
-sudo mkfs.fat -F 16 /dev/sdc2
-sudo mkfs.fat -F 32 /dev/sdc3
+sudo mkfs.fat -F 16 -n ZXDOSPLUS -s 128 /dev/sdc2
+sudo mkfs.fat -F 32 -n EXTRA -s 128 /dev/sdc3
 ----
 
 [start=3]
@@ -775,7 +815,7 @@ FORMAT TO 0,100,2048
 
 El primer valor (`0`) indica el disco a utilizar (el primero), el segundo valor es el número máximo de particiones IDEDOS que se podrán usar, y el tercer valor es el número de cilindros a utilizar.
 
-<<<<
+<<<
 
 Una vez hecho el formato, ya será posible crear nuevas particiones. Por ejemplo, para crear una partición llamada "Software" de 16MB, una llamada "Swap1", de 4MB (para usar como espacio swap) y otra llamada "Utils" de 8MB:
 
@@ -817,7 +857,7 @@ image:./img/keyboardAV.png[pdfwidth=70%]
 
 <<<
 
-=== Teclas especiales y botones
+==== Teclas especiales y botones
 
 Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT` (Por ejemplo, `Caps Shift+Symbol Shift+2` en vez de `Caps Shift+1`).
 
@@ -871,7 +911,7 @@ Puesto que se trata de una ROM de 64K con soporte para nuevo hardware, se pueden
 |Usar timings de 128K
 |===
 
-<<<<
+<<<
 
 ==== CargandoLeches
 
@@ -911,7 +951,7 @@ En el caso de usar una ROM con la opción de introducir POKEs, se hace de la sig
 . Escribir el valor del POKE y pulsar `Enter`
 . Repetir los pasos 2. y 3. todas las veces que se desee. Para terminar y volver al juego, pulsar `Enter` dos veces seguidas
 
-<<<<
+<<<
 
 ===== Preparación de cintas de carga ultrarrápida
 
@@ -1252,7 +1292,7 @@ Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT
 
 ==== Teclado
  
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1298,7 +1338,7 @@ Si no estuviera ya, <<#_cores,instalar el core de ZX Spectrum Next>> en el ZXDOS
 
 ==== Teclado
  
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
@@ -1405,7 +1445,7 @@ Si no estuviera ya, <<#_cores,instalar el core de MSX>> en el ZXDOS+.
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `MSX`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
@@ -1506,7 +1546,7 @@ Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Amstrad CPC`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
@@ -1576,7 +1616,7 @@ Ahora, se puede organizar la información en la tarjeta microSD de dos maneras d
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Acorn Electron`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
@@ -1621,7 +1661,7 @@ Si no estuviera ya, <<#_cores,instalar el core de Commodore 64>> en el ZXDOS+.
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Commodore 64`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de tecldo `PC XT`.
 
@@ -1683,7 +1723,7 @@ Este core no utiliza la tarjeta microSD.
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1717,7 +1757,7 @@ Este core no utiliza la tarjeta microSD.
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1782,7 +1822,7 @@ Si no estuviera ya, <<#_cores,instalar el core de NES>> en el ZXDOS+.
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1831,7 +1871,7 @@ Si no estuviera ya, <<#_cores,instalar el core de ColecoVision>> en el ZXDOS+.
 
 ==== Teclado
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1879,7 +1919,7 @@ Si no estuviera ya, <<#_cores,instalar el core de Atari 2600>> en el ZXDOS+.
 
 En gomaDOS+, se recomienda cambiar el modo de teclado a `Atari 800` (`Caps Shift + Symbol Shift + U` y luego `4`) o `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1942,7 +1982,7 @@ Si no estuviera ya, <<#_cores,instalar el core de Videopac>> en el ZXDOS+.
 
 En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
 
-==== Teclas especiales y botones
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -2128,7 +2168,7 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con inter
 
 `tsx2wav` en https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] es una utilidad en PHP y que sirve para exportar desde ficheros `TSX` a `WAV`.
 
-<<<<
+<<<
 
 ==== Miniduino
 
@@ -2160,7 +2200,7 @@ image:img/MiniduinoFront.jpg[pdfwidth=50%]
 |Pantalla
 |===
 
-<<<<
+<<<
 
 ===== Preparación
 
@@ -2179,7 +2219,7 @@ En la primera partición de la tarjeta se han de copiar los archivos de cinta (`
 El reproductor muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
-<<<<
+<<<
 
 ===== Uso
 
@@ -2206,7 +2246,7 @@ Con la reproducción detenida (navegación por archivos y directorios):
 - Izquierda (Stop) retrocede un nivel en el árbol de direcotorios
 - Derecha (Play/Pause) accede al contenido de un directorio o, si lo que hay seleccionado es un archivo, intenta reproducirlo
 
-<<<<
+<<<
 
 Una vez un archivo está en reproducción, el botón izquierda (Stop), la detiene, y el botón derecho (Play/Pause) la pone en pausa.
 
@@ -2225,7 +2265,7 @@ Con la reproducción en pausa (navegación por bloques de cinta):
 Para obtener información mucho más detallada, se puede consultar el manual oficial del firmware Maxduino, disponible en el https://github.com/rcmolina/MaxDuino_BETA/tree/master/MANUAL%20por%20desUBIKado[repositorio oficial].
 ====
 
-<<<<
+<<<
 
 ===== Actualización de firmware Maxduino
 
@@ -2267,7 +2307,7 @@ En Linux instalar con privilegios de root las reglas de `udev` necesarias:
 
 En MacOS, si no apareciese el Miniduino como dispositivo USB en Arduino IDE al conectarlo, puede que sea necesario instalar https://github.com/libusb/libusb/wiki[libusb].
 
-<<<<
+<<<
 
 Finalmente, en el caso de Mac o Linux, el fichero `maple_upload` dentro de `Arduino_STM32` tiene que modificarse con un editor de texto. Estas líneas no funcionan bien:
 
@@ -2287,7 +2327,7 @@ Y se tienen que cambiar por
 dfuse_addr=""
 ----
 
-<<<<
+<<<
 
 ====== Actualización
 
@@ -2411,7 +2451,7 @@ Así, para modificar la BIOS de un fichero llamado `FLASH.ZXD`, usando la BIOS e
 
 Existen también opciones para ajustar el tiempo de espera inicial de la BIOS, el core a ejecutar por defecto, o la ROM de Spectrum a utilizar por defecto. Véase la https://github.com/kounch/zx123_tool/#castellano[documentación de la herramienta] para más información.
 
-<<<<
+<<<
 
 *Añadir una ROM de Spectrum a una imagen*
 
@@ -2464,7 +2504,7 @@ Entre los datos que se indican al añadir una ROM, hay una serie de indicadores 
 |Deshabilitar ULAPlus
 |===
 
-<<<<
+<<<
 
 *Instalar un Core en una imagen*
 
@@ -2500,7 +2540,7 @@ Notar que se pueden acumular varias órdenes en una única línea de comandos. P
 ... zx123_tool.py -i FLASH.ZXD -w -o FLASHnew.ZXD -a BIOS,FIRMWARE.ZXD -m 2 -k 3 -a ROM,5,xdnlh17,Spec48,48.rom -a 'CORE,3,Spectrum Next,NEXT.ZXD' -c 3
 ----
 
-<<<<
+<<<
 
 === Recuperación del firmware
 
@@ -2539,7 +2579,7 @@ En el caso de utilizar USB-Blaster, el gomaDOS+ tiene la distribución adecuada 
 
 - Raspberry Pi (con tarjeta SD, teclado, monitor, fuente de alimentación, etc.) y con conexión a internet
 - 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos), o bien, en vez de los cables puente, un adaptador USB-Blaster
-- Una https://es.wikipedia.org/wiki/Llave_Allen[llave Allen] del tamaño adecuado para poder retirar la tapa del ZXDOS+ o bien un destornillador de estrella adecuado si se va abrir un gomadDOS+ (esto no es necesario si se utiliza USB-Blaster)
+- Una https://es.wikipedia.org/wiki/Llave_Allen[llave Allen] del tamaño adecuado para poder retirar la tapa del ZXDOS+ o bien un destornillador de estrella adecuado si se va abrir un gomaDOS+ (esto no es necesario si se utiliza USB-Blaster)
 - Tarjeta microSD para el ZXDOS+/gomaDOS+ con la primera partición en formato FAT16 o FAT32
 - Teclado (no necesario en gomaDOS+) y monitor para conectar el ZXDOS+
 
@@ -2568,7 +2608,7 @@ cd ..
 rm -rf ./openocd-code
 ----
 
-<<<<
+<<<
 
 [start=3]
 . Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anterioremente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXDOS+ o el gomaDOS+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
@@ -2605,7 +2645,7 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 [start=4]
 . Copiar en la Raspberry Pi el fichero `recovery.zxd.bit` obtenido anteriormente del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial]. En nuestro ejemplo, se dejará en `/home/pi/zxdosplus/unbrick/`
 
-<<<<
+<<<
 
 [start=5]
 . Para la conexión usando GPIO, realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está `recovery.zxd.bit`. Este paso no es necesario si se usa USB-Blaster.
@@ -2660,7 +2700,7 @@ Con USB-Blaster:
 sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg  -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.zxd.bit ; exit"
 ----
 
-<<<<
+<<<
 
 [start=11]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
@@ -2720,7 +2760,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 .Apagar completamente el gomaDOS+ y volver a encenderlo
 ====
 
-<<<<
+<<<
 
 ==== Recuperación usando MacOS y Cable USB-Blaster
 
@@ -2768,7 +2808,7 @@ sudo make install
 
 . Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.zxd.bit`, y lanzar el comando `jtag`.
 
-<<<<
+<<<
 
 [start=8]
 . Aparecerá una consola donde se han de escribir los comandos:
@@ -2788,7 +2828,7 @@ En el comando detect es importante que aparezca el dispositivo detectado. Puede 
 [.text-center]
 image:img/recovery_mac_1.png[pdfwidth=90%]
 
-<<<<
+<<<
 
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
@@ -2848,13 +2888,13 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se deberia hacer mediante apt, yum o similar
 ====
 
-<<<<
+<<<
 
 ==== Recuperación usando Windows y Cable USB-Blaster
 
 *Material necesario*:
 
-- Cable USB-Blaster. <<<<#_preparación_del_cableado,preparado con las conexiones adecuadas para ZXDOS+>>
+- Cable USB-Blaster. <<<#_preparación_del_cableado,preparado con las conexiones adecuadas para ZXDOS+>>
 - Imagen Flash y recovery para ZXDOS+ (LX25). Los mismos que se indican para Raspberry pi, del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial, en este enlace]
 
 *Software necesario*:
@@ -2888,7 +2928,7 @@ detect
 pld load recovery.zxd.bit
 ----
 
-<<<<
+<<<
 
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
@@ -2943,7 +2983,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 .Apagar completamente el gomaDOS+ y volver a encenderlo
 ====
 
-<<<<
+<<<
 
 == Referencias
 

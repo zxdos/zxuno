@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.5
+:revnumber: 1.3.6
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -89,7 +89,7 @@ In order to be able to set up and use a ZXDOS+ or gomaDOS+ you need, at least, t
 In order to take advantage of its full potential, you may also have:
 
 - A microSD card, not necessarily very large
-- PC speakers to connect to the audio output, or a stereo jack cable to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
+- PC speakers to connect to the audio output, or a stereo jack converter to two red/white RCA connectors to connect to the TV (this is optional on gomaDOS+, as it has a beeper inside)
 - A standard Atari joystick, such as a Megadrive DB9 gamepad (gomadOS+ needs a joystick adapter)
 - A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
 - An audio cable with a stereo 3.5 mm jack on one side, and both audio channels split into two mono outputs on the other side, if you want to use an audio player and/or recorder, like, for example, a Miniduino (<<#_miniduino,see more info later>>)., a PC/Mac/Raspberry PI, etc. or a https://en.wikipedia.org/wiki/Cassette_tape[cassette tape] recorder/player. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).
@@ -101,6 +101,11 @@ In order to use a microSD card, it has to be formatted with, at least, one FAT16
 [NOTE]
 ====
 FAT16 partitions have a maximum size of 4GB
+====
+
+[WARNING]
+====
+When naming a partition which will be used with esxdos, it's important not to use the same of any directory inside, or an access error will happen when trying to see the contents (e.g. do not name the partition as `BIN`, `SYS` or `TMP`).
 ====
 
 ===== Windows
@@ -478,7 +483,7 @@ The Advanced configuration screen is used to edit the following settings:
 - Joystick behavior when emulated with the numeric keypad (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek or Fuller
 - Behavior of a joystick connected to the port (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller or simulate the keys `Q`,` A`, `O`,` P`, `Space` and `M`
 - Video output: PAL, NTSC or VGA
-- Scanline simulation: Enabled Disabled
+- Scanline simulation: Enabled or Disabled
 - VGA horizontal frequency: 50, 51, etc.
 - CPU speed: Normal (1x) or accelerated (2X, 3X, etc.)
 - Csync: Spectrum or PAL
@@ -492,14 +497,14 @@ image:img/bios6.png[pdfwidth=70%]
 
 Finally, from the last screen you can:
 
-- Exit BIOS configuration saving changes
+- Exit BIOS configuration saving changes (in some cases a power reset is also neeeded)
 - Discard changes and exit
 - Save changes without exiting
 - Discard Changes
 
 == ZX Spectrum
 
-The main core is the one implementing a ZX Spectrum computer. This core is special, and it cannot be substituted for another that is not a ZX Spectrum, since the ZXDOS+ uses it for its operation.
+The main core is the one implementing a ZX Spectrum computer. This core is special, and it cannot be replaced for another that is not a ZX Spectrum, since the ZXDOS+ uses it for its operation.
 
 These are some of its main characteristics:
 
@@ -513,7 +518,7 @@ These are some of its main characteristics:
 - Programmable raster interruption in line number, for any TV line.
 - Possibility of activating/deactivating memory bank management registers, for better compatibility with each implemented model
 - Ability to activate / deactivate the devices incorporated into the core to improve compatibility with certain programs
-- ZXMMC support for + 3e and DIVMMC support for esxdos and compatible firmwares
+- ZXMMC and DIVMMC support for + 3e, esxdos and compatible firmwares
 - Turbo Sound support
 - SpecDrum support
 - Each channel A, B, C of the two AY-3-8912, beeper and SpecDrum chips can be directed to the left, right, both or neither outputs, allowing the implementation of configurations such as ACB, ABC, etc.
@@ -525,7 +530,7 @@ These are some of its main characteristics:
 - User selectable vertical refresh rate to improve compatibility with VGA monitors.
 - Multicore boot support: from the Spectrum you can select an address of the SPI Flash and the FPGA will load a core from there.
 
-<<<<
+<<<
 
 === microSD advanced format (+3e)
 
@@ -540,7 +545,7 @@ The following partition scheme can only be used with ZX Spectrum core.
 
 [TIP]
 ====
-Each partition in IDEDOS can be between 1 and 16 Megabytes (1 million bytes) in size, and each disk can have between 1 and 65535 partitions. This means that the maximum space used in a card is about 1GB.
+Each partition in IDEDOS can be between 1 and 16 Megabytes (16 million bytes) in size, and each disk can have between 1 and 65535 partitions. This means that the maximum space used in a card is about 1 TB.
 ====
 
 This is one method to split a card into two or three parts, with the first partition IDEDOS (1GB), the second one FAT16 (4GB) and the third one FAT32 (using the remaining space in the card).
@@ -579,7 +584,7 @@ For this example, it will be disk 6:
    1:                 DOS_FAT_32 UNKNOWN                 15.9 GB    disk6s1
 ----
 
-<<<<
+<<<
 
 Instruction steps:
 
@@ -677,7 +682,7 @@ sdc          179:0    0 15,8G  0 disk
 └─sdc1       179:1    0 15,8G  0 part 
 ----
 
-<<<<
+<<<
 
 Instructions:
 
@@ -685,44 +690,79 @@ Instructions:
 
 [source,shell]
 ----
-sudo fdisk -e /dev/sdc
+sudo fdisk --compatibility=dos /dev/sdc
 ----
 
 [source]
 ----
-Enter 'help' for information
-fdisk: 1> erase
-fdisk:*1> edit 1
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 7F
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [63] 128
-Partition size [1 - 31116287]: [31116287] 2017152
+Welcome to fdisk
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
 
-fdisk:*1> edit 2
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [2017280]  
-Partition size [1 - 29099135]: [29099135] 7812504
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (62-31116288, default 62): 128
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (128-31116288, default 31116288): 2017152
 
-fdisk:*1> flag 2
+Created a new partition 1 of type 'Linux'
 
-fdisk:*1> edit 3
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0B
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [9829784] 
-Partition size [1 - 21286504]: [21286504] 
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 7f
+Changed type of partition 'Linux' to 'unknown'.
 
-fdisk:*1> print
-         Starting       Ending
- #: id  cyl  hd sec -  cyl  hd sec [     start -       size]
-------------------------------------------------------------------------
- 1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
- 2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS > 32MB  
- 3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
- 4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 2): 
+First sector (45-31116288, default 45): 2017280     .
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 7812504
 
-fdisk:*1> write
-fdisk: 1> quit
+Created a new partition 2 of type 'Linux'
+
+Command (m for help): t
+Partition number (1,2, default 2): 2
+Hex code (type L to list all codes): 6
+
+Changed type of partition 'Linux' to 'FAT16'.
+
+Command (m for help): a
+Partition number (1,2, default 2): 2
+
+The bootable flag on partition 2 is enabled now.
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 3): 3 
+First sector (45-31116288, default 45): 9829784     .
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 31116288
+
+Created a new partition 2 of type 'Linux'
+
+Command (m for help): t
+Partition number (1,2, default 2): 2
+Hex code (type L to list all codes): b
+
+Changed type of partition 'Linux' to 'W95 FAT32'.
+
+Command (m for help): p
+Disk /dev/sda
+Disklabel type: dos
+Disk identifier
+
+Device     Boot   Start     End  Sectors   Size Id Type
+/dev/sda1           128 2017152  2017025 984,9M 7f unknown
+/dev/sda2  *    2017280 7626751  7812504   2,7G  b FAT16
+/dev/sda3       9829784 7626751 21286504    21G  b W95 FAT32
 ----
 
 [start=2]
@@ -730,11 +770,11 @@ fdisk: 1> quit
 
 [source,shell]
 ----
-sudo mkfs.fat -F 16 /dev/sdc2
-sudo mkfs.fat -F 32 /dev/sdc3
+sudo mkfs.fat -F 16 -n ZXDOSPLUS -s 128 /dev/sdc2
+sudo mkfs.fat -F 32 -n EXTRA -s 128 /dev/sdc3
 ----
 
-<<<<
+<<<
 
 [start=3]
 . Confirm that the partition scheme has been changed:
@@ -816,7 +856,7 @@ image:./img/keyboardAV.png[pdfwidth=70%]
 
 <<<
 
-=== Special keys and buttons
+==== Special keys and buttons
 
 The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations (like `Caps Shift+Symbol Shift+2` instead of `Caps Shift+1`).
 
@@ -840,7 +880,7 @@ Special keys that can be used while running the main core (ZX Spectrum):
 - `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+): Soft reset.
-- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switches between compositve and VGA video modes.
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switches between composite and VGA video modes.
 
 <<<
 
@@ -870,11 +910,11 @@ Since it is a 64K ROM with support for new hardware, these flags can be used whe
 |Use 128K timings
 |===
 
-<<<<
+<<<
 
 ==== CargandoLeches
 
-CargandoLeches is a set of ZX Spectrum ROMs that startetd as a project to load games in any Spectrum model 15-20x faster. No tape is needed, but a digital audio source, as a computer, mobile device, MP3 player, etc. The new ROM detects the loading method and reverts to the original ROM code if needed. This is handled transparently, with no user or program intervention.
+CargandoLeches is a set of ZX Spectrum ROMs that started as a project to load games in any Spectrum model 15-20x faster. No tape is needed, but a digital audio source, as a computer, mobile device, MP3 player, etc. The new ROM detects the loading method and reverts to the original ROM code if needed. This is handled transparently, with no user or program intervention.
 
 Since version 2.0 the project changed from a single ROM to more, each one with different options. This way, you can choose a different mix of options that may include:
 
@@ -910,7 +950,7 @@ When using a ROM with POKE option enabled:
 . Enter the POKE value and press `Enter` again
 . Repeat steps 2. and 3. until all the desired POKEs are entered. To finish and return to the game, press `Enter` twice
 
-<<<<
+<<<
 
 ===== Preparing ultrafast loading tapes
 
@@ -1257,7 +1297,7 @@ You need a microSD card with the first partition formatted as FAT16 or FAT32, an
 
 ==== Keyboard
  
-==== Special keys and buttons
+===== Special keys and buttons
 
 While the core is running:
 
@@ -1303,7 +1343,7 @@ If it wasn't already, <<#_cores,install ZX Spectrum Next core>> into ZXDOS+.
 
 ==== Keyboard
  
-==== Special keys and buttons
+===== Special keys and buttons
 
 The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
 
@@ -1410,7 +1450,7 @@ If it wasn't already, <<#_cores,install MSX core>> into ZXDOS+.
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 The following gomaDOS+ key combinations are in `MSX` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
 
@@ -1511,7 +1551,7 @@ Copy all `ROM` and `DSK` files to the root directory of the FAT32 partition.
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 The following gomaDOS+ key combinations are in `Amstrad CPC` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
 
@@ -1552,7 +1592,7 @@ You can set up the files in the microSD in two different ways:
 
 . Extract all the contents of the archive to the root of the SD card. `SYS` directory contents are compatible with esxdos `SYS` directory, so you can merge both into one.
 
-. Have less files an directorios in the root directory. Create a directory named `ATOM` in the SD root, and copy inside all the uncompressed archive content, except for the directory `MANPAGES` which must also be in root. Then, extract and the files from `trick_ATOM_folder` archive (available http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[at ZX-Uno Forum]), replacing any file with the same name. You will get a file and directory structure like this:
+. Have less files an directories in the root directory. Create a directory named `ATOM` in the SD root, and copy inside all the uncompressed archive content, except for the directory `MANPAGES` which must also be in root. Then, extract and the files from `trick_ATOM_folder` archive (available http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[at ZX-Uno Forum]), replacing any file with the same name. You will get a file and directory structure like this:
 
 ----
         /
@@ -1581,7 +1621,7 @@ You can set up the files in the microSD in two different ways:
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 The following gomaDOS+ key combinations are in `Acorn Electron` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
 
@@ -1626,7 +1666,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 The following gomaDOS+ key combinations are in `Commodore 64` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
 
@@ -1688,7 +1728,7 @@ This core does not use the microSD card.
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 While the core is running:
 
@@ -1722,7 +1762,7 @@ This core does not use the microSD card.
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 While the core is running:
 
@@ -1787,7 +1827,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 While the core is running:
 
@@ -1836,7 +1876,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 ==== Keyboard
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 While the core is running:
 
@@ -1884,7 +1924,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 For gomaDOS+, it is recommended to change the keyboard mode to `Atari 800` (`Caps Shift + Symbol Shift + U` and then `4`) o `PC XT` (`Caps Shift + Symbol Shift + U` and then `9`).
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 During the core execution:
 
@@ -1947,7 +1987,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 For gomaDOS+, it is recommended to change the keyboard mode to `PC XT` (`Caps Shift + Symbol Shift + U` and then `9`).
 
-==== Special keys and buttons
+===== Special keys and buttons
 
 During the core execution:
 
@@ -2121,9 +2161,9 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 
 `pzx2wav` in http://zxds.raxoft.cz/pzx.html[PZX Tools] is another command line utility which exports to `WAV`.
 
-`tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made wiwth PHP and that can export from `TSX` to `WAV`.
+`tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made with PHP and that can export from `TSX` to `WAV`.
 
-<<<<
+<<<
 
 ==== Miniduino
 
@@ -2155,7 +2195,7 @@ image:img/MiniduinoFront.jpg[pdfwidth=50%]
 |Screen
 |===
 
-<<<<
+<<<
 
 ===== Configuration
 
@@ -2174,7 +2214,7 @@ Copy the tape files (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX`, etc) to the first par
 The player shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, yo have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
-<<<<
+<<<
 
 ===== Use
 
@@ -2201,7 +2241,7 @@ When the player is stopped (file and directories browser):
 - Left (Stop) goes one level up in the directory tree
 - Right (Play/Pause) enters into a directory or, if the selection is a file, tries to play it
 
-<<<<
+<<<
 
 Once a file is being played, stop playing it with the left button (Stop) or pause using the right button (Play/Pause).
 
@@ -2215,11 +2255,11 @@ When in pause (tape block browser:
 - Right (Play/Pause) continues playing from the selected block
 - Press down the control butto to enable or disable turbo mode for MSX
 
-<<<<
+<<<
 
 ===== Maxduino firmware upgrade
 
-Maxduino firmwar is periodically updated and improved. You can track the changes and improvements either at the  https://www.va-de-retro.com/foros/viewtopic.php?t=5541&start=9999[forums] or at the https://github.com/rcmolina/MaxDuino_BETA[GitHub project page]. To take advantage of this improvements, the Miniduino flash image must be flased with the updated firmware version.
+Maxduino firmware is periodically updated and improved. You can track the changes and improvements either at the  https://www.va-de-retro.com/foros/viewtopic.php?t=5541&start=9999[forums] or at the https://github.com/rcmolina/MaxDuino_BETA[GitHub project page]. To take advantage of this improvements, the Miniduino flash image must be flashed with the updated firmware version.
 
 ====== Environment setup
 
@@ -2229,7 +2269,7 @@ You have to install SDFat (1.1.4) software library selecting the menu option Pro
 
 Minidiuno microcontroller support must also be added. This is done in two steps:
 
-First, adding ARXM Cortex M3 support from menu Tools -> borad -> board manager, and installing "Arduino SAM boards (Cortex-M3)"
+First, adding ARM Cortex M3 support from menu Tools -> board -> board manager, and installing "Arduino SAM boards (Cortex-M3)"
 
 Then, you have to add STM32 microcontroller support, downloading the file available at https://github.com/rogerclarkmelbourne/Arduino_STM32/archive/master.zip[this link].
 
@@ -2256,7 +2296,7 @@ On Linux, install with root privileeges the necessary `udev` rules:
 
 On MacOS, if Miniduino does not appear as USB device in Arduino ID when plugged, it may be necessary to install https://github.com/libusb/libusb/wiki[libusb].
 
-<<<<
+<<<
 
 Finaly, when on Mac or Linux, the file `maple_upload` inside `Arduino_STM32` has to be changed with a text editor. Those lines do not work:
 
@@ -2280,7 +2320,7 @@ dfuse_addr=""
 
 ====== Upgrade
 
-Once you have the environemnt ready, download the software from the https://github.com/rcmolina/MaxDuino_BETA[official repository in GitHub]
+Once you have the environment ready, download the software from the https://github.com/rcmolina/MaxDuino_BETA[official repository in GitHub]
 
 [NOTE]
 ====
@@ -2317,7 +2357,7 @@ Optimize: Smallest (default)
 Port: <Previously identified port>
 ----
 
-Finall, clic on the firmware load button and wait for a few seconds while the project is compiled and loaded into the device.
+Finall, click on the firmware load button and wait for a few seconds while the project is compiled and loaded into the device.
 
 If everything has been done correctly the Miniduino will restart and show on the screen the new firmware version.
 
@@ -2362,7 +2402,7 @@ You also need a SPI flash image file. This can be obtained from within the Spect
 
 Where `FLASH.ZXD` is the path to the original file and `FLASHempty.ZXD` is the path to the new "clean" file.
 
-<<<<
+<<<
 
 *List the contents of an image*
 
@@ -2400,7 +2440,7 @@ This way to change the BIOS of a file named `FLASH.ZXD`, using the BIOS file `FI
 
 There are also options to set the BIOS boot delay time, the default core or the default Spectrum ROM. See the  https://github.com/kounch/zx123_tool/[documentation] for more info.
 
-<<<<
+<<<
 
 *Add a Spectrum ROM to an image*
 
@@ -2413,7 +2453,7 @@ To add a Spectrum ROM file named `48.rom`, with the name `Spec48` and using the 
 
 See the  https://github.com/kounch/zx123_tool/[documentation] for all the possible options when adding a Spectrum ROM.
 
-Amongst the information you give when adding a ROM, there are some flags used to tell wich hardware options, etc, you want to have enabled or disabled when loading the ROM, as shown in this table:
+Amongst the information you give when adding a ROM, there are some flags used to tell which hardware options, etc, you want to have enabled or disabled when loading the ROM, as shown in this table:
 
 [%header,cols=2*] 
 |===
@@ -2453,7 +2493,7 @@ Amongst the information you give when adding a ROM, there are some flags used to
 |Disable ULAPlus
 |===
 
-<<<<
+<<<
 
 *Install a Core to an image*
 
@@ -2489,11 +2529,11 @@ Please do note that you can add several actions in one command line. For example
 ... zx123_tool.py -i FLASH.ZXD -w -o FLASHnew.ZXD -a BIOS,FIRMWARE.ZXD -m 2 -k 3 -a ROM,5,xdnlh17,Spec48,48.rom -a CORE,3,SpecNext,NEXT.ZXD -c 3
 ----
 
-<<<<
+<<<
 
 === Firmware recovery
 
-Sometimes (e.g. when installing an experimental core or when upgrading the ZX Spectrum Next or the BIOS) it may happen that the ZXDOS+ stops booting. The board LEDs are on, but there is no display, and it doesn't do anything when trying the different key combinations to access BIOS setup, etc.
+Sometimes (e.g. when installing an experimental core or when upgrading the ZX Spectrum Core or the BIOS) it may happen that the ZXDOS+ stops booting. The board LEDs are on, but there is no display, and it doesn't do anything when trying the different key combinations to access BIOS setup, etc.
 
 When this happens, there are several recovery methods that let you install again the firmware.
 
@@ -2519,7 +2559,7 @@ image:img/jtag02.jpg[pdfwidth=25%] image:img/jtag03.jpg[pdfwidth=25%] image:img/
 When using USB-Blaster, a gomaDOS+ is ready to connect directly the 2x5 connector. For a ZXDOS+, it may be necessary to prepare the cables, looking at the previous images.
 ====
 
-<<<<
+<<<
 
 ==== Recovery using a Raspberry Pi
 
@@ -2556,7 +2596,7 @@ cd ..
 rm -rf ./openocd-code
 ----
 
-<<<<
+<<<
 
 [start=3]
 . Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and, <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
@@ -2652,7 +2692,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 [start=11]
 . If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
 
-If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center] 
 image:img/recovery.png[pdfwidth=70%]
@@ -2687,7 +2727,7 @@ Ususally, the recovery image is set to use a PS/2 keyboard so, for a gomaDOS+, s
 
 [NOTE]
 ====
-If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
 ====
 
 [NOTE]
@@ -2707,7 +2747,7 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 . Completely turn off gomaDOS` and turn it on again
 ====
 
-<<<<
+<<<
 
 ==== Recovery using MacOS and USB-Blaster cable
 
@@ -2755,7 +2795,7 @@ sudo make install
 
 . Make sure that, we are in the directory where `recovery.zxd.bit` is, and execute `jtag` command.
 
-<<<<
+<<<
 
 [start=8]
 . A new shell appears. Now type the commands:
@@ -2775,7 +2815,7 @@ Make sure, when using `detect`, that the device is shown as detected. You may ne
 [.text-center]
 image:img/recovery_mac_1.png[pdfwidth=90%]
 
-<<<<
+<<<
 
 [start=9]
 . If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
@@ -2835,7 +2875,7 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 When using Linux with `urjtag`, the process should be quite similar, although the dependencies (libftdi libusb pkg-config) would have to be installed with the appropiate package manager (apt, yum, pacman, etc.)
 ====
 
-<<<<
+<<<
 
 ==== Recovery using Windows and USB-Blaster cable
 
@@ -2875,7 +2915,7 @@ detect
 pld load recovery.zxd.bit
 ----
 
-<<<<
+<<<
 
 [start=9]
 . If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
@@ -2930,7 +2970,7 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 . Completely turn off gomaDOS` and turn it on again
 ====
 
-<<<<
+<<<
 
 == References
 
