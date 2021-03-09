@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.3.6
+:revnumber: 1.3.7
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -17,11 +17,11 @@
 
 == Introducción
 
-ZXDOS+ y gomaDOS+ son la continuación de http://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
+ZXDOS+ y gomaDOS+ son la continuación de https://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
 Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXDOS+ con la configuración que se desee de entre todas las instaladas.
 
-La página oficial de ZXDOS+ y gomaDOS+ es http://zxdos.forofpga.es.
+La página oficial de ZXDOS+ y gomaDOS+ es https://zxdos.forofpga.es.
 
 La mayoría de las funciones y características de ZXDOS+ y gomaDOS+ son las mismas, así que, en este documento, se hablará, en general, de ZXDOS+, indicando las diferencias con gomaDOS+ donde sea necesario.
 
@@ -151,13 +151,15 @@ sudo newfs_msdos -F 16 -v EXTRA -c 128 /dev/rdisk6s2
 El comando `diskutil` no permite crear particiones FAT16 de más de 2G de tamaño y formatearlas a la vez. Por eso, en el último caso, se crean primero las particiones y luego se formatean en FAT16.
 ====
 
-Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
+Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC 6128) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
 
 [source,shell]
 ----
 diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32" EXTRA R
 ----
+
+<<<
 
 ===== Linux
 
@@ -171,7 +173,7 @@ https://esxdos.org/index.html[esxdos] es un firmware para la interfaz the DivIDE
 
 Para poder utilizarlo es necesario incluir los ficheros correspondientes en la primera partición de la tarjeta microSD.
 
-En el momento de escribir este documento, la versión incluida con ZXDOS+ es la 0.8.6, y se puede descargar desde la página oficial http://www.esxdos.org/files/esxdos086.zip[en este enlace].
+En el momento de escribir este documento, la versión incluida con ZXDOS+ es la 0.8.6, y se puede descargar desde la página oficial https://www.esxdos.org/files/esxdos086.zip[en este enlace].
 
 Una vez descargado y descomprimido, se han de copiar, a la raíz de la tarjeta, los directorios `BIN`, `SYS` y `TMP` con todo su contenido. 
 
@@ -429,6 +431,8 @@ Si se pulsa la tecla `F2` (`Caps Shift+1` en gomaDOS+) durante el arranque, se t
 
 Usando las teclas de cursor izquierda y derecha (`Caps Shift+5` y `Caps Shift+8` en gomaDOS+), se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo (`Caps Shift+7` y `Caps Shift+6` en gomaDOS+) se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` (`Caps Shift+Espacio` en gomaDOS+) sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
 
+<<<
+
 ==== Main
 
 [.text-center] 
@@ -445,7 +449,9 @@ En la primera pantalla de configuración, además de poder ejecutar distintas pr
 - Soporte NMI para DivMMC
 - Soporte para nuevos modos gráficos (ULAPlus, Timex, Radastan)
 
-Se puede consultar información más tecnica en http://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
+Se puede consultar información más tecnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
+
+<<<
 
 ==== ROMs
 
@@ -664,6 +670,8 @@ diskutil list
    3:                 DOS_FAT_32 EXTRA                   10.9 GB    disk6s3
 ----
 
+<<<
+
 ==== Linux
 
 Será necesario utilizar la línea de comandos. Lo primero es determinar el disco a formatear:
@@ -672,8 +680,6 @@ Será necesario utilizar la línea de comandos. Lo primero es determinar el disc
 ----
 lsblk
 ----
-
-<<<
 
 En este ejemplo sería `sdc`:
 
@@ -793,6 +799,8 @@ sda      179:0    0 15,8G  0 disk
 ├─sda3   179:3    0 10,8G  0 part 
 ----
 
+<<<
+
 ==== +3e
 
 Una vez preparada la tarjeta para su uso, se puede arrancar el core de Spectrum con una ROM de +3e, y formatear la parte de IDEDOS según se desee.
@@ -813,9 +821,7 @@ Teniendo esto en cuenta, calculamos el espacio que ocupa nuestra partición, en 
 FORMAT TO 0,100,2048
 ----
 
-El primer valor (`0`) indica el disco a utilizar (el primero), el segundo valor es el número máximo de particiones IDEDOS que se podrán usar, y el tercer valor es el número de cilindros a utilizar.
-
-<<<
+El primer valor (`0`) indica el disco a utilizar (el primero), el segundo valor es el número máximo de particiones IDEDOS que se podrán usar, y el tercer valor es el número de cilindros a utilizar. 
 
 Una vez hecho el formato, ya será posible crear nuevas particiones. Por ejemplo, para crear una partición llamada "Software" de 16MB, una llamada "Swap1", de 4MB (para usar como espacio swap) y otra llamada "Utils" de 8MB:
 
@@ -838,7 +844,7 @@ También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que cre
 
 Para que el mapa se conserve después de un master reset, hay que tener seleccionado `Default` en la configuración de BIOS.
 
-Para más información, consultar http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
+Para más información, consultar https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
 
 ==== Español
 
@@ -982,6 +988,45 @@ Ahora el fichero `Valley.wav` se puede reproducir desde un ordenador u otro disp
 ====
 Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches` no funcionan correctamente con <<#_miniduino,Miniduino>>, aunque sí que suelen funcionar con <<#_playtzx,`PlayTZX`>>.
 ====
+
+<<<
+
+==== SE Basic IV
+
+https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto. SE Basic IV se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también lo hace en ZX-Uno y similares.
+
+SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrurm, pero posteriormente se ha reescrito basándose en la  https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81]. 
+
+La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC], todavía se mantiene como un firmware de código abierto para el Spectrum. Se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
+
+La versión IV es una nueva rama de la versión anterior, creada principalmente porque no quedaba espacio para añadir nuevas características a la ROM de 16K. La primera versión (4.0 Anya) añadió una segunda ROM de 16K con soporte para el modo hi-res de Timex. La sintaxis era aún bastante compatible con Sinclair BASIC. La versión 4.2 fue reconstruida específicamente para el Chloe 280SE, eliminó el soporte para dispositivos antiguos como las cintas, añadió soporte integrado y compatibilidad total con el kernel de esxdos, y migró a la sintaxis de Microsoft BASIC.
+
+Aunque guarda una base comúnde código con muchas versiones de Sinclair BASIC (la ROM TS1000), hay varias diferencias significativas:
+
+- Soporte para páginas de códigos(8-bit ASCII).
+- Traducción de los mensajes de error.
+- 38 tokens nuevos.
+- Presentación en una terminal estándar (80 x 24).
+- Introducción de caracteres de terminal (CTRL, META).
+- Buffer de teclado.
+- Soporte para teclados completos.
+
+Las principales diferencias con Microsoft BASIC son:
+
+- Abreviación de tokens.
+- Comprobación de sintaxis en cada entrada.
+- Normalmente los paréntesis son opcionales.
+- Introducció de número con el estilo Motorola:
+  % – binario
+  @ – octal
+  $ – hexadecimal
+- Evaluación de expresiones siempre activa.
+- Operadores lógicos y bit a bit separados.
+- Tipado automático de datos. 
+
+Se puede encontrar mucha más información, incluyendo el manual de usuario, etc. en https://github.com/cheveron/sebasic4/wiki[la wiki oficial].
+
+<<<
 
 ==== Otras ROMs
 
@@ -1145,7 +1190,7 @@ Se pueden consultar todos los comandos disponibles en https://www.espressif.com/
 
 === Creación de vídeos RDM (RaDastan Movie)
 
-El comando `PLAYRMOV` reproduce videos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el http://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN]. 
+El comando `PLAYRMOV` reproduce videos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN]. 
 
 En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o MacOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
 
@@ -1217,7 +1262,7 @@ Para hacer el proceso contrario (guardar las ROMs en un fichero RomPack llamado 
 La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente en RomPack los primeros 35 slots de ROM ocupados.
 ====
 
-Los ficheros RomPack se pueden editar fácilmente con la utilidad http://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
+Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
 
 === Cores
 
@@ -1241,9 +1286,11 @@ Copiar el fichero en la raíz de la tarjeta microSD, encender y pulsar `F2` para
 La actualización del core de ZX Spectrum es exactamente igual que los otros cores, pero en lugar del fichero `CORE1.ZX2` o `CORE1.ZXD`, ha de ser un fichero llamado `SPECTRUM.ZX2` o `SPECTRUM.ZXD`.
 ====
 
+<<<
+
 === esxdos
 
-Para actualizar esxdos a una nueva versión, se ha de obtener la distribución desde http://www.esxdos.org[la página oficial].
+Para actualizar esxdos a una nueva versión, se ha de obtener la distribución desde https://www.esxdos.org[la página oficial].
 
 Una vez descargado y descomprimido, se ha de copiar, a la raíz de la tarjeta, el contenido de los directorios `BIN` y `SYS` sobreescribiendo los existentes (para preservar los comandos exclusivos de ZXDOS+).
 
@@ -1483,11 +1530,12 @@ Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`.
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos `RUN"CAS:"`, `BLOAD"CAS:",R` o `CLOAD`.
 
-Notar
+[WARNING]
+====
+Para que la carga desde audio funcione, el modo turbo tiene que estar desactivado.
+====
 
 Para acceder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
-
-<<<
 
 ===== MSXCTRL
 
@@ -1515,15 +1563,15 @@ MSXCTRL -h -i -r -b -[5|6] -m<0-2>
 
 ===== Otros
 
-Existen múltiples sistemas para cargar los juegos dependiendo del tipo de archivo: .CAS, .DSK o ROM (ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[este hilo del foro de ZX-Uno] para más información).
+Existen múltiples sistemas para cargar los juegos dependiendo del tipo de archivo: .CAS, .DSK o ROM (ver https://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[este hilo del foro de ZX-Uno] para más información).
 
-El mapeo de para teclado español disponible con la distribución oficial se puede cambiar por otro más completo. Ver http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[aquí] para más información.
+El mapeo de para teclado español disponible con la distribución oficial se puede cambiar por otro más completo. Ver https://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[aquí] para más información.
 
 <<<
 
-=== Amstrad CPC
+=== Amstrad CPC 6128
 
-El core para ZXDOS+ de Amstrad CPC está basado en el proyecto http://www.cpcwiki.eu/index.php/FPGAmstrad[FPGAmstrad] de Renaud Hélias.
+El core para ZXDOS+ de Amstrad CPC 6128 está basado en el proyecto http://www.cpcwiki.eu/index.php/FPGAmstrad[FPGAmstrad] de Renaud Hélias.
 
 Algunas de sus características son:
 
@@ -1575,7 +1623,7 @@ Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en 
 
 === Acorn Atom
 
-El https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] era un computador casero hecho por Acorn Computers. El core para ZXDOS+ (basado en el de ZX-Uno realizado por Quest) es una adaptación del proyecto https://github.com/hoglet67/AtomFpga[AtomFPGA]. Se puede ver más información en http://zxuno.com/forum/viewtopic.php?f=16&t=4[el foro de ZX-Uno].
+El https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] era un computador casero hecho por Acorn Computers. El core para ZXDOS+ (basado en el de ZX-Uno realizado por Quest) es una adaptación del proyecto https://github.com/hoglet67/AtomFpga[AtomFPGA]. Se puede ver más información en https://zxuno.com/forum/viewtopic.php?f=16&t=4[el foro de ZX-Uno].
 
 ==== Formato de Tarjeta microSD
 
@@ -1587,7 +1635,7 @@ Ahora, se puede organizar la información en la tarjeta microSD de dos maneras d
 
 . Descomprimir todo el contenido del archivo en la raíz de la tarjeta. El contenido del directorio `SYS` es compatible con el directorio `SYS` de esxdos, siendo posible combinar los dos en uno solo.
 
-. Organizar la información de una manera más reducida en la raíz, utilizando sólo dos directorios. Crear un directorio `ATOM` en la raíz de la tarjeta, y copiar en su interior todo el contenido del archivo, excepto el directorio `MANPAGES` que se tendrá que poner también en  la raíz de la microSD. Luego, copiar los ficheros del archivo `trick_ATOM_folder` (disponible http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[en el foro de ZX-Uno]), reemplazando todos los que se encuentren con el mismo nombre. Así, quedará una estructura como la siguiente:
+. Organizar la información de una manera más reducida en la raíz, utilizando sólo dos directorios. Crear un directorio `ATOM` en la raíz de la tarjeta, y copiar en su interior todo el contenido del archivo, excepto el directorio `MANPAGES` que se tendrá que poner también en  la raíz de la microSD. Luego, copiar los ficheros del archivo `trick_ATOM_folder` (disponible https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[en el foro de ZX-Uno]), reemplazando todos los que se encuentren con el mismo nombre. Así, quedará una estructura como la siguiente:
 
 ----
         /
@@ -1803,7 +1851,7 @@ En él se pueden activar o desactivar las siguientes opciones:
 
 Nintendo Entertainment System (también conocida como Nintendo NES o simplemente NES) es la https://es.wikipedia.org/wiki/Nintendo_Entertainment_System[segunda consola de sobremesa de Nintendo].
 
-La versión para ZXDOS+ ha sido creada por Nihirash, basándose en la http://www.zxuno.com/forum/viewtopic.php?t=1245[anterior para ZX-Uno] de DistWave y Quest.
+La versión para ZXDOS+ ha sido creada por Nihirash, basándose en la https://www.zxuno.com/forum/viewtopic.php?t=1245[anterior para ZX-Uno] de DistWave y Quest.
 
 Algunas de las características del core son:
 
@@ -1917,7 +1965,7 @@ Si no estuviera ya, <<#_cores,instalar el core de Atari 2600>> en el ZXDOS+.
 
 ==== Teclado
 
-En gomaDOS+, se recomienda cambiar el modo de teclado a `Atari 800` (`Caps Shift + Symbol Shift + U` y luego `4`) o `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
+En gomaDOS+, se recomienda cambiar el modo de teclado a `Atari 800` (`Caps Shift+Symbol Shift+U` y luego `4`) o `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`).
 
 ===== Teclas especiales y botones
 
@@ -1980,7 +2028,7 @@ Si no estuviera ya, <<#_cores,instalar el core de Videopac>> en el ZXDOS+.
 
 ==== Teclado
 
-En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`).
+En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`).
 
 ===== Teclas especiales y botones
 
@@ -1997,19 +2045,10 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-No suele haber información en pantalla de las opciones, así que es interesante consultar las instrucciones de cada juego (por ejemplo en https://videopac.weebly.com/[este enlace]) para saber qué hacer para jugar.
-
-Notar también que el sistema no tiene claramente definido qué joystick se corresponde al cada jugador, e incluso pueden ir alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador ) usar la opción del menú que unifica los dos joysticks.
-
-[TIP]
-====
-Si, al navegar por el directorio donde están las ROMS, no se ven todas, se puede dividir el contenido en varios subdirectorios con menos ficheros por directorio (por ejemplo, clasificando por letras) para solucionarlo.
-====
-
 Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar en el menú.
 
 [.text-center] 
-image:img/videopac.jpg[pdfwidth=70%]
+image:img/videopac.jpg[pdfwidth=80%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -2024,11 +2063,79 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 - Activar o desactivar el módulo sintetizador (http://www.videopac.org/manuals/voice.pdf[The Voice])
 - Salir del menú (Exit) 
 
+[WARNING]
+====
+El sistema no tiene claramente definido qué joystick se corresponde a cada jugador, e incluso puede irse alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador ) usar la opción del menú que unifica los dos joysticks.
+====
+
+[TIP]
+====
+No suele haber información en pantalla de las opciones, así que es interesante consultar las instrucciones de cada juego (por ejemplo en https://videopac.weebly.com/[este enlace]) para saber qué hacer para jugar.
+====
+
+[TIP]
+====
+Si, al navegar por el directorio donde están las ROMS, no se ven todas, se puede dividir el contenido en varios subdirectorios con menos ficheros por directorio (por ejemplo, clasificando por letras) para solucionarlo.
+====
+
 ===== Cambio del charset de la ROM de VDC
 
 Es posible, para algunas ROM, cargar un archivo `CHR` con una fuente modificada, en vez de la original incluida en el chip Intel 8244/8245.
 
 Estos archivos se pueden crear siguiendo las instrucciones y utilizando el editor disponible en el repositorio del proyecto, siguiendo https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit[este enlace].
+
+<<<
+
+=== ZX81
+
+El computador personal https://es.wikipedia.org/wiki/ZX81[Sinclair ZX81], lanzado por Sinclair Research en 1981, fue el de menor precio de la época.
+
+La versión para ZXUNO+ ha sido creada por avlixa.
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con archivos de cinta que se deseen cargar.
+
+==== Teclado
+
+El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la distribución de la máquina original. Así, por ejemplo, para obtener `"` se ha de pulsar `Mayús+P` o para borrar, `Mayús+0`.
+
+[.text-center] 
+image:img/keyboardZX81.jpg[pdfwidth=90%]
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
+- `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): Inicia la reproducción de un archivo de cinta cargado
+- `F6` (`Caps Shift+Symbol Shift+6` en gomaDOS+): Detiene la reproducción de cinta
+- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Desconecta la cinta (se olvida del último fichero cargado)
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
+
+[.text-center] 
+image:img/zx81.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Duplicar el tamaño de la ventana de menú (Double OSD Window)
+- Cargar un archivo de cinta (Load Tape)
+- Salir del menú (Exit)
+
+Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado desde el menú, con el comando `LOAD""` y pulsando a continuación `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+). Notar que, durante la carga, se desactiva la señal de vídeo y, al contrario que en la máquina original, se puede escuchar el audio de la cinta.
+
+[WARNING]
+====
+Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+====
 
 <<<
 
@@ -2162,7 +2269,7 @@ A continuación se indican algunos de los muchos programas que existen para dist
 
 https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite cargar ficheros `TZX` y `TAP` y exportarlos como `WAV` de audio
 
-`tape2wav` de http://fuse-emulator.sourceforge.net/[Fuse Utilities] es una utilidad de línea de comandos que exporta desde ficheros `TZX` `PZX` y `TAP` a `WAV`. Disponibles para muchos sistemas operativos distintos.
+`tape2wav` de https://fuse-emulator.sourceforge.net/[Fuse Utilities] es una utilidad de línea de comandos que exporta desde ficheros `TZX` `PZX` y `TAP` a `WAV`. Disponibles para muchos sistemas operativos distintos.
 
 `pzx2wav` en http://zxds.raxoft.cz/pzx.html[PZX Tools] es otra utilidad de comandos que exporta desde ficheros `PZX` a `WAV`. Disponible como ejecutable para Windows, y con el código fuente disponible para compilar en otros sistemas.
 
@@ -2730,7 +2837,7 @@ Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs
 
 [NOTE]
 ====
-Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`), para que funcionen de nuevo temporalmente.
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`), para que funcionen de nuevo temporalmente.
 ====
 
 <<<
@@ -2748,8 +2855,8 @@ Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shif
 En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
 . Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
-. Cambiar al modo `PC XT` de teclado (`Caps Shift + Symbol Shift + U` y luego `9`)
-. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift + Symbol Shift + B`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
 . Rápidamente, pulsar `Caps Shift + 1`
 . De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
@@ -2843,6 +2950,9 @@ image:img/recovery.png[pdfwidth=70%]
 
 . Desconectar el cable USB-Blaster. 
 
+<<<
+
+[start=12]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
 [.text-center] 
@@ -2855,8 +2965,10 @@ Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs
 
 [NOTE]
 ====
-Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`), para que funcionen de nuevo temporalmente.
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`), para que funcionen de nuevo temporalmente.
 ====
+
+<<<
 
 [start=13]
 . Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXDOS+ (o el gomaDOS+) vuelve a arrancar correctamente.
@@ -2871,8 +2983,8 @@ Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shif
 En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
 . Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
-. Cambiar al modo `PC XT` de teclado (`Caps Shift + Symbol Shift + U` y luego `9`)
-. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift + Symbol Shift + B`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
 . Rápidamente, pulsar `Caps Shift + 1`
 . De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
@@ -2943,6 +3055,9 @@ image:img/recovery.png[pdfwidth=70%]
 
 . Desconectar el cable USB-Blaster. 
 
+<<<
+
+[start=12]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
 [.text-center] 
@@ -2955,8 +3070,10 @@ Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs
 
 [NOTE]
 ====
-Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift + Symbol Shift + U` y luego `9`), para que funcionen de nuevo temporalmente.
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de gomaDOS+, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`), para que funcionen de nuevo temporalmente.
 ====
+
+<<<
 
 [start=13]
 . Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXDOS+ (o el gomaDOS+) vuelve a arrancar correctamente.
@@ -2971,8 +3088,8 @@ Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shif
 En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
 . Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
-. Cambiar al modo `PC XT` de teclado (`Caps Shift + Symbol Shift + U` y luego `9`)
-. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift + Symbol Shift + B`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
 . Rápidamente, pulsar `Caps Shift + 1`
 . De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
@@ -2987,19 +3104,19 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 
 == Referencias
 
-http://zxuno.speccy.org/index.shtml[ZX-Uno]
+https://zxuno.speccy.org/index.shtml[ZX-Uno]
 
 http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[ZX-Uno FAQ]
 
 https://docs.google.com/document/d/1NI0zgCDRk7c-5CVi-lfZEK6q8Lnpnco7PhpsEEdxD60/edit[Guía rápida del ZX-Uno]
 
-http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
+https://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
 https://worldofspectrum.org/zxplus3e/index.html[The ZX Spectrum +3e Homepage]
 
 https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with PC (FAT) partitions]
 
-http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
+https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
 https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
 
@@ -3011,9 +3128,9 @@ https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10#p25076[Cargando 
 
 http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p200075671[WiFi (RetroWiki)]
 
-http://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
+https://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
 
-http://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
+https://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
 
 https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
 
@@ -3025,15 +3142,15 @@ https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234&hilit=kyp#p28234[N
 
 https://github.com/Kyp069/zx48.zxdosplus/releases/[ZX 48 para ZXDOS+ (Kyp)]
 
-http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
+https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
 https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next en ZXDOS]
 
-http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[Core MSX]
+https://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[Core MSX]
 
 https://github.com/fbelavenuto/msx1fpga[MSX1FPGA]
 
-http://www.forofpga.es/viewtopic.php?t=316[MSX Pack]
+https://www.forofpga.es/viewtopic.php?t=316[MSX Pack]
 
 https://www.konamiman.com/msx/msx-s.html#nextor[Nextor para MSX]
 
@@ -3041,15 +3158,15 @@ https://www.konamiman.com/msx/nextor/docs/Nextor%202.0%20User%20Manual.pdf[Nexto
 
 https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter3.html[MSX-DOS]
 
-http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
+https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
 
-http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
+https://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
 
-http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
+https://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
 
 https://github.com/fbelavenuto/colecofpga[ColecoFPGA en GitHub]
 
-http://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
+https://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
 
 https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
 
@@ -3065,6 +3182,6 @@ https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation[Hardware 
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
-http://www.zxuno.com/forum/viewtopic.php?f=25&t=375[Tutorial para desbriquear el ZX-Uno con una Raspberry]
+https://www.zxuno.com/forum/viewtopic.php?f=25&t=375[Tutorial para desbriquear el ZX-Uno con una Raspberry]
 
-http://www.forofpga.es/viewtopic.php?t=175[Como programar un UnAmiga con la Raspberry Pi (o Linux) con el USB-Blaster y OpenOCD]
+https://www.forofpga.es/viewtopic.php?t=175[Como programar un UnAmiga con la Raspberry Pi (o Linux) con el USB-Blaster y OpenOCD]

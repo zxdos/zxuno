@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.3.6
+:revnumber: 1.3.7
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -17,11 +17,11 @@
 
 == Introduction
 
-ZXDOS+ and gomaDOS+ are the continuation of http://zxuno.speccy.org[ZX-Uno] a hardware and software project based on an FPGA board programmed to work like a ZX Spectrum computer, and created by the ZX-Uno team: Superfo, AVillena, McLeod, Quest and Hark0.
+ZXDOS+ and gomaDOS+ are the continuation of https://zxuno.speccy.org[ZX-Uno] a hardware and software project based on an FPGA board programmed to work like a ZX Spectrum computer, and created by the ZX-Uno team: Superfo, AVillena, McLeod, Quest and Hark0.
 
 Over time, the project has been growing, and now it is possible to install different software configurations (cores) in the flash memory of the FPGA, which work like different systems than the ZX Spectrum, and you can choose to start the ZXDOS+ with the desired configuration among all those installed.
 
-ZXDOS+ and gomaDOS+ official web page is http://zxdos.forofpga.es.
+ZXDOS+ and gomaDOS+ official web page is https://zxdos.forofpga.es.
 
 Most of the functions and features of ZXDOS+ and gomaDOS+ are the same, so this document will generally talk about ZXDOS+, indicating the differences with gomaDOS+ where necessary.
 
@@ -151,13 +151,15 @@ sudo newfs_msdos -F 16 -v EXTRA -b 4096 -c 128 /dev/rdisk6s2
 `diskutil` cannot create FAT16 partitions which are bigger than 2G and also format them. That's why, in this example, after only creating the partitions, we have to format them.
 ====
 
-To create one FAT32 4GB partition (e.g. to use with Amstrad CPC core), and then have the rest of space available as a second FAT32 partition (for cards of more than 4GB):
+To create one FAT32 4GB partition (e.g. to use with Amstrad CPC 6128 core), and then have the rest of space available as a second FAT32 partition (for cards of more than 4GB):
 
 [source,shell]
 ----
 diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32" EXTRA R
 ----
+
+<<<
 
 ===== Linux
 
@@ -171,7 +173,7 @@ https://esxdos.org/index.html[esxdos] is a firmware for the DivIDE/DivMMC hardwa
 
 For it to work, it is necessary to include the corresponding files in the first partition of the microSD card.
 
-At the time of writing this document, the version included with ZXDOS+ is 0.8.6, and it can be downloaded from the official website http://www.esxdos.org/files/esxdos086.zip[at this link].
+At the time of writing this document, the version included with ZXDOS+ is 0.8.6, and it can be downloaded from the official website https://www.esxdos.org/files/esxdos086.zip[at this link].
 
 Once downloaded and extracted, you have to copy the directories `BIN`, `SYS` and `TMP`, and all of their content, to the root of first partition of the microSD card. 
 
@@ -427,7 +429,7 @@ The full list of key combinations (and compatible modes) is as follows:
 
 Pressing the `F2` key (`Caps Shift+1` on gomaDOS+) during boot will access the BIOS setup. The BIOS firmware is the first program that runs when the ZXDOS+ is turned on. The main purpose of BIOS is to start and test the hardware and load one of the installed cores.
 
-Using left and right cursor keys (`Caps Shift+5` and `Caps Shift+8` on gomaDOS+), you can navigate through the BIOS setup screens. With up and down keys (`Caps Shift+7` and `Caps Shift+6` on gomaDOS+) you can choose the different elements of each screen and, with the `Enter` key, it is possible to activate and choose the options for each of these. `Esc` key (`Caps Shift+Espacio` ongomaDOS+) is used to close open option windows without applying any action.
+Using left and right cursor keys (`Caps Shift+5` and `Caps Shift+8` on gomaDOS+), you can navigate through the BIOS setup screens. With up and down keys (`Caps Shift+7` and `Caps Shift+6` on gomaDOS+) you can choose the different elements of each screen and, with the `Enter` key, it is possible to activate and choose the options for each of these. `Esc` key (`Caps Shift+Space` on gomaDOS+) is used to close open option windows without applying any action.
 
 ==== Main
 
@@ -445,7 +447,7 @@ In the first configuration screen, in addition to being able to run several test
 - DivMMC NMI Support
 - New Graphic Modes Support (ULAPlus, Timex, Radastan)
 
-More technical information can be found on http://www.zxuno.com/wiki/index.php/ZX_Spectrum[de ZX-Uno Wiki].
+More technical information can be found on https://www.zxuno.com/wiki/index.php/ZX_Spectrum[de ZX-Uno Wiki].
 
 ==== ROMs
 
@@ -564,6 +566,8 @@ You can use Windows Disk Management utility. The steps are:
 
 . Optionally, create another primary partition using the remaining space and format as FAT32
 
+<<<
+
 ==== MacOS
 
 You will have to use the command line. The first task is to find out which device is the disk to format:
@@ -583,8 +587,6 @@ For this example, it will be disk 6:
    0:     FDisk_partition_scheme                        *15.9 GB    disk6
    1:                 DOS_FAT_32 UNKNOWN                 15.9 GB    disk6s1
 ----
-
-<<<
 
 Instruction steps:
 
@@ -663,6 +665,8 @@ diskutil list
    3:                 DOS_FAT_32 EXTRA                   10.9 GB    disk6s3
 ----
 
+<<<
+
 ==== Linux
 
 You can use the command line. First, find out the device to erase:
@@ -681,8 +685,6 @@ NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sdc          179:0    0 15,8G  0 disk 
 └─sdc1       179:1    0 15,8G  0 part 
 ----
-
-<<<
 
 Instructions:
 
@@ -837,7 +839,7 @@ You can also change it using the `keymap` utility. Inside `/bin` you have to cre
 
 For the map to be preserved after a master reset, it has to be selected as `Default` in the BIOS.
 
-For more information, see http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[this message in the ZX-Uno forum].
+For more information, see https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[this message in the ZX-Uno forum].
 
 ==== Spanish
 
@@ -983,6 +985,45 @@ This way, the file `Valley.wav` can be played from a computer or another device 
 Due to hardware limitations, `TZX` files made with `CgLeches` do not work with a <<#_miniduino,Miniduino>>, although they usually work with <<#_playtzx,`PlayTZX`>>.
 ====
 
+<<<
+
+==== SE Basic IV
+
+https://github.com/cheveron/sebasic4[SE Basic IV] is a free open-source Z80 interpreter for Microsoft BASIC. SE Basic IV is designed to run on the https://www.patreon.com/chloe280se[Chloe 280SE] but it can also run on ZX-Uno and similar computers.
+
+SE Basic was originally conceived as a new firmware for the https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. The earliest versions of SE Basic were patches applied to the original ZX Spectrum ROM, but later versions have been rewritten based on the https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[open source TS1000 / ZX81 improved ROM]. 
+
+Version 3, also known as https://zxdesign.itch.io/opense[OpenSE BASIC], is still maintained as an open source replacement firmware for the Spectrum. It’s https://tracker.debian.org/pkg/opense-basic[included in the main Debian repository] for use with emulators.
+
+Version IV is a fork of the previous version, done because there was no room left to add new features to the 16K ROM. The initial release (4.0 Anya) added another 16K ROM with support for Timex hi-res mode. The syntax was still largely Sinclair BASIC compatible at this point. Version 4.2 was rebuilt specifically for the Chloe 280SE, dropping support for legacy devices such as tape, adding full compatibility and integrated support for the esxdos kernel, and migrating to Microsoft BASIC syntax.
+
+While it shares a common code base with many versions of Sinclair BASIC (the TS1000 ROM), it differs from them in significant ways:
+
+- Code page (8-bit ASCII) support.
+- Error message localization.
+- 38 additional tokens.
+- Standard terminal display (80 x 24).
+- Terminal character entry (CTRL, META).
+- Keyboard buffer.
+- Full sized keyboard support.
+
+The main differences from Microsoft BASIC are:
+
+- Token abbreviation.
+- On-entry syntax checking.
+- Typically, brackets are optional.
+- Motorola style number entry:
+  % – binary
+  @ – octal
+  $ – hexadecimal
+- Always-on expression evaluation.
+- Separate logical and bitwise operators.
+- Automatic data typing. 
+
+You can find much more information, including the user manual, etc. at https://github.com/cheveron/sebasic4/wiki[the official wiki page].
+
+<<<
+
 ==== Other ROMs
 
 Here are flag settings which work when <<#_zx123_tool,adding to the SPI flash>> some other known custom ROMs:
@@ -1057,7 +1098,7 @@ In addition, esxdos also has an NMI manager, an application that loads when NMI 
 
 [NOTE]
 ====
-The esxdos manager shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, yo have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
+The esxdos manager shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
 <<<
@@ -1069,7 +1110,7 @@ As explained in the installation part, there are a series of commands that are e
 - `back16m`: Dumps to a `FLASH.ZX1` file, in the root directory of the SD card, the contents of a 16 Meg SPI Flash memory. It must be run while using a "root" mode ROM. After finishing, it is necessary to execute the command `.ls` so that the cache is written to the card
 - `backzx2` or `backzxd`: Creates a `FLASH.ZX2` o `FLASH.ZXD` file, in the root directory of the SD card, with the contents of a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.After finishing its execution, you must execute the command `.ls` to finish recording the cache on the microSD card. If not, the length of the file will be wrongly set to 0
 - `corebios`: To upddate simultaneously ZX Spectrum core and BIOS
-- `dmaplayw`: Plays .WAV file, which has to be 8 bits, unsigned y mand sampled at 15625 Hz
+- `dmaplayw`: Plays .WAV file, which has to be 8 bits, unsigned and sampled at 15625 Hz
 - `esprst`: Resets the WiFi ESP8266(ESP-12) module
 - `iwconfig`: To configure the WiFi module
 - `joyconf`: Configuration and tests for keyboard and DB joysticks
@@ -1120,7 +1161,7 @@ Configuration steps:
 . Edit `FTP.CFG` file with all the required information (SSID and password, FTP server, etc.)
 . Copy `FTP.CFG` inside `/SYS/CONFIG/` in microSD card
 . Also copy `ftpUno.tap` to any place in the card
-. Start up ZXDOS+ y load the tape file `ftpUno.tap`
+. Start up ZXDOS+ andload the tape file `ftpUno.tap`
 
 <<<
 
@@ -1145,7 +1186,7 @@ You can see all the available commands reading the https://www.espressif.com/sit
 
 === Making RDM (RaDastan Movie) files
 
-The `PLAYRMOV` "DOT" command plays radastanian format video files. To convert your own videos, you need `makevideoradas`, a utility that is available at http://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository]. 
+The `PLAYRMOV` "DOT" command plays radastanian format video files. To convert your own videos, you need `makevideoradas`, a utility that is available at https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository]. 
 
 If using Windows, there is already an executable file (`makevideoras.exe`). For Linux or MacOS, you must have installed command line developer utilities in order to compile an executable
 
@@ -1248,7 +1289,7 @@ The ZX Spectrum core update is exactly the same as other cores, but instead of t
 
 === esxdos
 
-To update esxdos to a new version, the distribution must be obtained from http://www.esxdos.org[the official website].
+To update esxdos to a new version, the distribution must be obtained from https://www.esxdos.org[the official website].
 
 Once downloaded and extracted, the contents of `BIN` and `SYS` directories have to be copied to the root of the card, merging the existing ones (to preserve the exclusive ZXDOS+ commands).
 
@@ -1486,13 +1527,14 @@ To change the video mode between 50Hz and 60Hz (and thus play at correct speed P
 
 To go to BASIC from MSX-DOS you must execute `BASIC` command.
 
-From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the commansds `RUN"CAS:"`, `BLOAD"CAS:",R` or `CLOAD`.
+From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the commands `RUN"CAS:"`, `BLOAD"CAS:",R` or `CLOAD`.
 
-Para acceder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
+[WARNING]
+====
+Loading from audio sources only works if turbo mode is disabled.
+====
 
 To go to MSX-DOS from BASIC, execute `CALL SYSTEM`.
-
-<<<
 
 ===== MSXCTRL
 
@@ -1520,15 +1562,15 @@ MSXCTRL -h -i -r -b -[5|6] -m<0-2>
 
 ===== Other
 
-There are different ways to load games depending on the kind of file: .CAS, .DSK o ROM (see http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[this ZX-Uno forums thread] for more info).
+There are different ways to load games depending on the kind of file: .CAS, .DSK o ROM (see https://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[this ZX-Uno forums thread] for more info).
 
-The spanish keymap officially available can be replaced with a better one. See http://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[here] for more information.
+The spanish keymap officially available can be replaced with a better one. See https://www.zxuno.com/forum/viewtopic.php?f=53&t=2897[here] for more information.
 
 <<<
 
-=== Amstrad CPC
+=== Amstrad CPC 6128
 
-ZXDOS+ Amstrad CPC core is based on the http://www.cpcwiki.eu/index.php/FPGAmstrad[FPGAmstrad] project by Renaud Hélias.
+ZXDOS+ Amstrad CPC 6128 core is based on the http://www.cpcwiki.eu/index.php/FPGAmstrad[FPGAmstrad] project by Renaud Hélias.
 
 Some of its features are:
 
@@ -1580,7 +1622,7 @@ Press `Page Up` key to reset and load the next `DSK` file.
 
 === Acorn Atom
 
-https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] was  a home computer made by Acorn Computers Ltd. The ZXDOS+ core (based on the ZX-Uno core made by Quest) is an adaptation of the https://github.com/hoglet67/AtomFpga[AtomFPGA] project. You can get more information at http://zxuno.com/forum/viewtopic.php?f=16&t=4[ZX-Uno Forums].
+https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] was  a home computer made by Acorn Computers Ltd. The ZXDOS+ core (based on the ZX-Uno core made by Quest) is an adaptation of the https://github.com/hoglet67/AtomFpga[AtomFPGA] project. You can get more information at https://zxuno.com/forum/viewtopic.php?f=16&t=4[ZX-Uno Forums].
 
 ==== microSD card format
 
@@ -1592,7 +1634,7 @@ You can set up the files in the microSD in two different ways:
 
 . Extract all the contents of the archive to the root of the SD card. `SYS` directory contents are compatible with esxdos `SYS` directory, so you can merge both into one.
 
-. Have less files an directories in the root directory. Create a directory named `ATOM` in the SD root, and copy inside all the uncompressed archive content, except for the directory `MANPAGES` which must also be in root. Then, extract and the files from `trick_ATOM_folder` archive (available http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[at ZX-Uno Forum]), replacing any file with the same name. You will get a file and directory structure like this:
+. Have less files an directories in the root directory. Create a directory named `ATOM` in the SD root, and copy inside all the uncompressed archive content, except for the directory `MANPAGES` which must also be in root. Then, extract and the files from `trick_ATOM_folder` archive (available https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[at ZX-Uno Forum]), replacing any file with the same name. You will get a file and directory structure like this:
 
 ----
         /
@@ -1808,7 +1850,7 @@ The following options are available:
 
 Nintendo Entertainment System (also known as Nintendo NES or just NES) is the https://en.wikipedia.org/wiki/Nintendo_Entertainment_System[second home video game console produced by Nintendo].
 
-The ZXDOS+ core has been made by Nihirash, based on http://www.zxuno.com/forum/viewtopic.php?t=1245[the previous version for ZX-Uno] by DistWave y Quest.
+The ZXDOS+ core has been made by Nihirash, based on https://www.zxuno.com/forum/viewtopic.php?t=1245[the previous version for ZX-Uno] by DistWave andQuest.
 
 Some features of this core are:
 
@@ -1995,21 +2037,12 @@ During the core execution:
 - `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): change between RGB and VGA video mode
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset
 - After loading a ROM, most games will prompt the user with "SELECT GAME". Press `0`-`9` on the keyboard or mapped controller button to play the game. 
-- `Esc` or joystick button 2 (or `Caps Shift+Espacio` on gomaDOS+) to show or hide the options menu
+- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode)) to show or hide the options menu
 - `W`, `A`, `S`, `D` or cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, with `PC XT` keyboard mode) and then `Enter` to choose and select menu options
 
 <<<
 
 ==== Basic Guide
-
-Usually, there is no on-screen display of the game options, so looking at the instruction manuals (for example following https://videopac.weebly.com/[this link]) may be helpful in selecting a game.
-
-Note also that the system did not have a well defined player 1 or player 2 controller, and some games may alternate on a game-to-game basis. You may need to swap controllers to use the input or (for one player games) use the join joystick option of the menu
-
-[TIP]
-====
-If, when browsing the ROM directory, you can't see all of them, try to split the content into several subdirectories with less files per directory.
-====
 
 Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
 
@@ -2029,11 +2062,83 @@ The following options are available:
 - The Voice
 - Exit
 
+[WARNING]
+====
+Note also that the system did not have a well defined player 1 or player 2 controller, and some games may alternate on a game-to-game basis. You may need to swap controllers to use the input or (for one player games) use the join joystick option of the menu
+====
+
+[TIP]
+====
+Usually, there is no on-screen display of the game options, so looking at the instruction manuals (for example following https://videopac.weebly.com/[this link]) may be helpful in selecting a game.
+====
+
+[TIP]
+====
+If, when browsing the ROM directory, you can't see all of them, try to split the content into several subdirectories with less files per directory.
+====
+
+<<<
+
 ===== Change VDC ROM charset
 
 You can, for some ROMs, load a `CHR` file including a custom font, instead of the original one which was included with the Intel 8244/8245 chip.
 
 Those files can be made following the instructions and using the editor available at the project repository, following https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit[this link].
+
+<<<
+
+=== ZX81
+
+The https://en.wikipedia.org/wiki/ZX81[ZX81] was a home computer produced by Sinclair Research,designed to be a low-cost introduction to home computing for the general public.
+
+The ZXUNO+ version has been made by avlixa.
+
+==== SD card format
+
+You can use a microSD card with the first partition in FAT16 or FAT32 format to store tape files.
+
+See the <<#_cores,corresponding section>> for instructions of how to install the ZX81 core in ZXDOS+.
+
+==== Keyboard
+
+The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For example, to obtain a `"` you have to type `Shift+P` or `Shift+0` to delete.
+
+[.text-center] 
+image:img/keyboardZX81.jpg[pdfwidth=90%]
+
+===== Special keys and buttons
+
+During the core execution:
+
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): change between RGB and VGA video mode
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset
+- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+): Starts playing a tape file previously loaded
+- `F6` (`Caps Shift+Symbol Shift+6` on gomaDOS+): Stops playing the tape
+- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Ejects the tape (resets the info about the latest loaded file)
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
+
+[.text-center] 
+image:img/zx81.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Reset
+- Double OSD Window
+- Load Tape
+- Exit
+
+You can load a tape file (previously selected from the menu) with the command `LOAD""` and then press `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) to start the tape. Take note, that, while loading, the video output is disables and, unlike the original machine, you can hear the loading sound.
+
+[WARNING]
+====
+Some monitors stop playing audio if the video signal is lost. It's recommended to plug headphones or a external speaker if you want to hear the sound while loading a tape. On a gomaDOS+, the internal speaker will play the sound if nothing is connected to the audio out port. 
+====
 
 <<<
 
@@ -2051,7 +2156,7 @@ Both ZXDOS+ and gomaDOS+ have joystick pin 5 connected to positive VCC, used as 
 
 A rotary encoder has 5 wires: Earth Ground (not connected), Vcc (`+`), GND (`0V`or `-`), `A` and `B`.
 
-`A` y `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the seconde one. This way you can have up to 4 encoders connected using both joystick ports.
+`A` and `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the seconde one. This way you can have up to 4 encoders connected using both joystick ports.
 
 [.text-center] 
 image:img/db9joy.png[pdfwidth=40%]
@@ -2157,7 +2262,7 @@ These are some of the many programas that exist and which can export tape files 
 
 https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Windows (but which can also run with Wine on Linux or Mac) that can load `TZX` and `TAP` files and export to `WAV` audio
 
-`tape2wav` from http://fuse-emulator.sourceforge.net/[Fuse Utilities] is a command line utility that can export from `TZX` `PZX` and `TAP` to `WAV`.
+`tape2wav` from https://fuse-emulator.sourceforge.net/[Fuse Utilities] is a command line utility that can export from `TZX` `PZX` and `TAP` to `WAV`.
 
 `pzx2wav` in http://zxds.raxoft.cz/pzx.html[PZX Tools] is another command line utility which exports to `WAV`.
 
@@ -2211,7 +2316,7 @@ Copy the tape files (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX`, etc) to the first par
 
 [TIP]
 ====
-The player shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, yo have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
+The player shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
 <<<
@@ -2599,7 +2704,7 @@ rm -rf ./openocd-code
 <<<
 
 [start=3]
-. Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and, <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
+. Connect USB-Blaster or jump wires if using GPIO. In this case, open the ZXDOS+ or gomaDOS+ case and, <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS`, `TDI`, `TDO`, `TCK` and `GND`), using the wires, to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
 
 Is using a GPIO connection, take note of the chosen pins, making sure that `GND` is connected with `GND`.
 
@@ -2754,7 +2859,7 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 *Hardware required*:
 
 - USB-Blaster cable. Using the right pins for ZXDOS+, <<#_jtag_cable_connections,as explained earlier>>
-- Flash Image file and y recovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
+- Flash Image file and andrecovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
 
 *Software required*:
 
@@ -2830,6 +2935,9 @@ image:img/recovery.png[pdfwidth=70%]
 
 . Unplug the USB-Blaster.
 
+<<<
+
+[start=12]
 . Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
 
 [.text-center] 
@@ -2882,7 +2990,7 @@ When using Linux with `urjtag`, the process should be quite similar, although th
 *Hardware required*:
 
 - USB-Blaster cable. Using the right pins for ZXDOS+, <<#_jtag_cable_connections,as explained earlier>>
-- Flash Image file and y recovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
+- Flash Image file and andrecovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
 
 *Software required*:
 
@@ -2930,6 +3038,9 @@ image:img/recovery.png[pdfwidth=70%]
 
 . Unplug the USB-Blaster.
 
+<<<
+
+[start=12]
 . Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
 
 [.text-center] 
@@ -2974,19 +3085,19 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 
 == References
 
-http://zxuno.speccy.org/index.shtml[ZX-Uno]
+https://zxuno.speccy.org/index.shtml[ZX-Uno]
 
 http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[ZX-Uno FAQ]
 
 https://docs.google.com/document/d/1NI0zgCDRk7c-5CVi-lfZEK6q8Lnpnco7PhpsEEdxD60/edit[Guía rápida del ZX-Uno]
 
-http://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
+https://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
 https://worldofspectrum.org/zxplus3e/index.html[The ZX Spectrum +3e Homepage]
 
 https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with PC (FAT) partitions]
 
-http://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
+https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
 https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
 
@@ -2998,9 +3109,9 @@ http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p20007
 
 https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10#p25076[Cargando Leches 2.0]
 
-http://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
+https://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
 
-http://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
+https://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
 
 https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
 
@@ -3012,15 +3123,15 @@ https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234&hilit=kyp#p28234[N
 
 https://github.com/Kyp069/zx48.zxdosplus/releases/[ZX 48 for ZXDOS+ (Kyp)]
 
-http://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
+https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
 https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next en ZXDOS]
 
-http://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[Core MSX]
+https://www.zxuno.com/forum/viewtopic.php?f=53&t=2080[Core MSX]
 
 https://github.com/fbelavenuto/msx1fpga[MSX1FPGA]
 
-http://www.forofpga.es/viewtopic.php?t=316[MSX Pack]
+https://www.forofpga.es/viewtopic.php?t=316[MSX Pack]
 
 https://www.konamiman.com/msx/msx-s.html#nextor[Nextor para MSX]
 
@@ -3028,15 +3139,15 @@ https://www.konamiman.com/msx/nextor/docs/Nextor%202.0%20User%20Manual.pdf[Nexto
 
 https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter3.html[MSX-DOS]
 
-http://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
+https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[Atom Software Archive en carpeta ATOM]
 
-http://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
+https://www.zxuno.com/forum/viewtopic.php?f=16&t=4005[Teclado Core Atom]
 
-http://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
+https://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
 
 https://github.com/fbelavenuto/colecofpga[ColecoFPGA on GitHub]
 
-http://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
+https://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
 
 https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
 
@@ -3048,6 +3159,6 @@ http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Modu
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 
-http://www.zxuno.com/forum/viewtopic.php?f=25&t=375[Tutorial para desbriquear el ZX-Uno con una Raspberry]
+https://www.zxuno.com/forum/viewtopic.php?f=25&t=375[Tutorial para desbriquear el ZX-Uno con una Raspberry]
 
-http://www.forofpga.es/viewtopic.php?t=175[Como programar un UnAmiga con la Raspberry Pi (o Linux) con el USB-Blaster y OpenOCD]
+https://www.forofpga.es/viewtopic.php?t=175[Como programar un UnAmiga con la Raspberry Pi (o Linux) con el USB-Blaster y OpenOCD]
