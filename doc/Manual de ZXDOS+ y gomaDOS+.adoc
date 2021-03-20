@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.3.7
+:revnumber: 1.4.0
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -103,7 +103,7 @@ Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partici�
 El tamaño máximo de una partición FAT16 son 4GB
 ====
 
-[WARNING]
+[CAUTION]
 ====
 A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos, es importante no utilizar el mismo que el de cualquiera de los directorios dentro, o se producirá un error de acceso a ese directorio. (Ej: No llamar a la partición `BIN`, `SYS` o `TMP`).
 ====
@@ -542,7 +542,7 @@ Una de las ROM que se pueden cargar con el core de ZX Spectrum es la de ZX Spect
 
 El +3e usa su propio esquema de particionado (llamado IDEDOS) para dividir el disco duro en diferentes particiones donde se pueden almacenar datos. Se necesita una version 1.28 o superior de la ROM para poder compartir particiones IDEDOS con particiones MBR. En otro caso, se ha dedicar la tarjeta completa al particionado IDEDOS.
 
-[WARNING]
+[IMPORTANT]
 ====
 El esquema de particionado que se presentará a continuación sólo se podrá utilizar con el core de Spectrum.
 ====
@@ -1235,7 +1235,7 @@ En https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[este hilo del fo
 
 Para actualizar BIOS se ha de obtener un fichero llamado `FIRMWARE.ZX2` (para un ZXDOS+ con placa FPGA LX16) o `FIRMWARE.ZXD` (para un ZXDOS+ con placa FPGA LX25). La última versión de los ficheros de firmware se puede descargar desde https://github.com/zxdos/zxuno/tree/master/firmware[el repositorio oficial]
 
-[WARNING]
+[CAUTION]
 ====
 Actualizar el firmware (BIOS) es delicado, no se debe hacer si no es necesario. En el caso de hacerlo, procurar que el ZXDOS+ tenga alimentación ininterumpida (como un SAI o un USB de portatil con batería).
 ====
@@ -1257,7 +1257,7 @@ Recordar que, si se inicia el ZXDOS+ pulsando la tecla `/` (del teclado numéric
 
 Para hacer el proceso contrario (guardar las ROMs en un fichero RomPack llamado `ROMS.ZX1`), se puede usar el comando `.romsback`.
 
-[WARNING]
+[NOTE]
 ====
 La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente en RomPack los primeros 35 slots de ROM ocupados.
 ====
@@ -1359,17 +1359,21 @@ Principalmente gracias a avlixa, existe una versión del core de ZX Spectrum Nex
 
 El core para ZXDOS+ no tiene, por el momento, implementada ninguna de las siguientes caracteristicas:
 
-- Raspberry Pi
 - Beeper interno
 - Conector de expansión EDGE
 - Módulo RTC
 - Teclado de membrana
-- Flasheo de cores adicionales o actualización del propio core Next desde el core Next
+- Grabación de cores adicionales o actualización del propio core Next desde el core Next
 - Salida MIC
 - Video HDMI
 - Utilización de puerto de conexión joystick para comunicación UART
 
 El manual de uso se puede descargar desde https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[la página oficial].
+
+[TIP]
+====
+Para poder utilizar una Raspberry Pi, se necesita una versión del Core con el soporte necesario, y el addon RTC+I2S+Pizero. Ver la <<#_addon_rtci2spizero,sección correspondiente>> de otro hardware para más detalles.
+====
 
 <<<
 
@@ -1429,9 +1433,9 @@ El navegador muestra las entradas de archivos y directorios en el orden de la ta
 [.text-center] 
 image:img/next3.png[pdfwidth=70%]
 
-[WARNING]
+[INFO]
 ====
-En el momento de escribir estas líneas, el core de ZX Spectrum Next para ZXDOS+ no soporta el uso del acelerador basado en Raspberry Pi, así que no es posible cargar ficheros TZX.
+El core de ZX Spectrum Next para ZXDOS+ necesita el <<#_addon_rtci2spizero,acelerador basado en Raspberry Pi>> para cargar ficheros TZX.
 ====
 
 [NOTE]
@@ -1530,7 +1534,7 @@ Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`.
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos `RUN"CAS:"`, `BLOAD"CAS:",R` o `CLOAD`.
 
-[WARNING]
+[IMPORTANT]
 ====
 Para que la carga desde audio funcione, el modo turbo tiene que estar desactivado.
 ====
@@ -2090,7 +2094,7 @@ Estos archivos se pueden crear siguiendo las instrucciones y utilizando el edito
 
 El computador personal https://es.wikipedia.org/wiki/ZX81[Sinclair ZX81], lanzado por Sinclair Research en 1981, fue el de menor precio de la época.
 
-La versión para ZXUNO+ ha sido creada por avlixa.
+La versión para ZXDOS+ ha sido creada por avlixa.
 
 ==== Formato de Tarjeta SD
 
@@ -2110,9 +2114,12 @@ Durante la ejecución del core:
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
 - `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Asignar teclas simuladas al joystick 1 (por defecto: `5`, `6`, `7`, `8` y `0`)
+- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Asignar teclas simuladas al joystick 2 (por defecto: `Q`, `A`, `O`, `P` y `Espacio`)
 - `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): Inicia la reproducción de un archivo de cinta cargado
 - `F6` (`Caps Shift+Symbol Shift+6` en gomaDOS+): Detiene la reproducción de cinta
 - `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Desconecta la cinta (se olvida del último fichero cargado)
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Reset
 
 <<<
 
@@ -2132,7 +2139,7 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 
 Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado desde el menú, con el comando `LOAD""` y pulsando a continuación `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+). Notar que, durante la carga, se desactiva la señal de vídeo y, al contrario que en la máquina original, se puede escuchar el audio de la cinta.
 
-[WARNING]
+[TIP]
 ====
 Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
 ====
@@ -2481,6 +2488,110 @@ Si todo se ha hecho correctamente se verá cómo el Miniduino se reinicia y en l
 
 <<<
 
+=== Addon RTC+I2S+PIzero
+
+Este complemento de hardware, compatible con ZXDOS+, GomaDOS+ y neptUNO, incorpora un https://es.wikipedia.org/wiki/Reloj_en_tiempo_real[reloj en tiempo real (RTC)], un https://es.wikipedia.org/wiki/I%C2%B2S[chip I2S] UDA1334A y una cabecera de 40 pines donde se puede conectar una Raspberry Pi que, con el software adecuado, se puede utilizar como placa aceleradora del <<#_zx_spectrum_next,core de ZX Spectrum Next>>.
+
+==== Raspberry Pi
+
+===== NextPI
+
+La distribución NextPI, basada en dietPI, incluye todo lo necesario para que la Raspberry Pi se comunique con el core de ZX Spectrum Next. La versión más reciente se puede https://zx.xalior.com/NextPi/[descargar aquí].
+
+Una vez obtenida, se ha de instalar en una tarjeta microSD de, al menos, 1GB de tamaño, que luego se utilizará con la Raspberry Pi.
+
+[TIP]
+====
+Es posible, usando https://github.com/procount/pinn[una solución como PINN], instalar varios sistemas operativos en la tarjeta, y así utilizar la Raspberry Pi para otros usos distintos cuando no se quiera tener como aceleradora.
+====
+
+[NOTE]
+====
+La distribución NextPI sólo está probada para usarse con Raspberry Pi Zero. No obstante, se ha podido comprobar que funciona, aparentemente, bien también con otros modelos (como Raspberry Pi 3, Raspberry Pi Zero W, etc.).
+====
+
+===== Conexión
+
+A pesar de usar el mismo conector  *la conexión con este addon no es compatible con las Raspberry PI Zero para ZX Spectrum Next*.
+
+Como se puede ver en el esquema de más adelante, una Raspberry Pi Zero compatible con el addon se sitúa, entre otras cosas, con la parte de la placa donde están los puertos y el adaptador de microSD en la parte de abajo, mientras que la versión para ZX Spectrum Next, se encuentran en la parte de arriba.
+
+[.text-center] 
+image:img/pizero.jpg[pdfwidth=40%] image:img/pi_no.jpg[pdfwidth=40%]
+
+[CAUTION]
+====
+Una conexión incorrecta de alguno de los pines (5V o 3,3V) con alimentación eléctrica a un punto equivocado puede provocar un daño irreversible y dejar una o más conexiones de la placa inservibles.
+====
+
+[.text-center] 
+image:img/pizeroaddon.jpg[pdfwidth=70%]
+
+[NOTE]
+====
+Para la versión de NextPI disponible al escribir estas líneas (0.99D RTM), no es necesario utilizar todas conexiones, siendo suficiente utilizar:
+
+[%header,cols=3*] 
+|===
+|Nombre
+|Pin
+|Uso
+|`5V`
+|`2` ó `4`
+|Alimentación (opcional)
+|`GND`
+|`6`
+|Tierra
+|`UART TX (GPIO 14)`
+|`8`
+|Conexión Serie
+|`UART RX (GPIO 15)`
+|`10`
+|Conexión Serie
+|`PCM CLK  (GPIO 18)`
+|`12`
+|Conexión de audio
+|`PCM FS  (GPIO 19)`
+|`35`
+|Conexión de audio
+|`PCM DIN  (GPIO 20)`
+|`38`
+|Conexión de audio
+|`PCM DOUT  (GPIO 21)`
+|`40`
+|Conexión de audio
+|===
+====
+
+[CAUTION]
+====
+En el caso de que se conecte alguno de los pines de alimentación, **no se debe hacer simultáneamente a la Raspberry Pi y al ZXDOS+**.
+
+Se ha de tener cuidado de utilizar una fuente únicamente con uno de los dos, el ZXDOS+ o la Raspberry Pi conectada al addon. Aquel dispositivo que esté alimentado, suministrará energía al otro. Es decir, si se alimenta el ZXDOS+, este proveerá energía a la Raspberry Pi, o bien, si se alimenta la Raspberry Pi, esta proveerá de energía al ZXDOS+.
+====
+
+<<<
+
+===== Uso desde NextZXOS
+
+Para comprobar que la comunicación serie con la Raspberry Pi funciona, se puede utilizar el programa `Terminex`, que está disponible en la distribución de Next en `/DEMOS/UART/TERMINEX/TERMINEX.SNX`. Aparecerá una pantalla como la siguiente
+
+[.text-center] 
+image:img/terminex.png[pdfwidth=60%]
+
+Si la conexión es correcta y la Raspberry Pi está completamente encendida (desde que se enciende, puede llegar a tardar entre 1 y 2 minutos en estar disponible), debería aparecer una consola con el texto:
+
+[source,shell]
+----
+SUP>
+----
+
+Si aparecieran mensajes `Waiting for connection..` o `Waiting for DietPi..` podría ser que aún se estuviera iniciando la Raspberry Pi, o bien la conexión no es correcta.
+
+Para comprobar la conexión de audio, se puede intentar cargar un archivo `.TZX` desde el navegador o bien elegir un fichero de audio (por ejemplo `.MOD`, `XM`, `SND` o `SID`) y comprobar que, tras ser copiado en la Raspberry Pi, podemos escuchar el sonido (bien de carga de cinta, bien de música).
+
+<<<
+
 == Solución de problemas
 
 === Gestión de imágenes de firmware
@@ -2668,7 +2779,7 @@ Notar que, en algunos modelos, el conector de JTAG está con los pines por la pa
 image:img/jtag02.jpg[pdfwidth=25%] image:img/jtag03.jpg[pdfwidth=25%] image:img/jtag04.jpg[pdfwidth=25%]
 
 
-[WARNING]
+[CAUTION]
 ====
 *NO* se ha de conectar la línea de 3V
 ====
@@ -2705,7 +2816,7 @@ sudo apt-get update
 sudo apt-get install git autoconf libtool make pkg-config
 sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev telnet
 sudo apt-get install libusb-dev libftdi-dev
-git clone, git://git.code.sf.net/p/openocd/code openocd-code
+git clone git://git.code.sf.net/p/openocd/code openocd-code
 cd openocd-code/
 ./bootstrap
 ./configure --enable-usb_blaster --enable-sysfsgpio --enable-bcm2835gpio
@@ -2927,7 +3038,7 @@ detect
 pld load recovery.zxd.bit
 ----
 
-[WARNING]
+[NOTE]
 ====
 En el comando detect es importante que aparezca el dispositivo detectado. Puede que sea necesario lanzar el comando `detect` de manera repetida hasta que aparezca.
 ====
