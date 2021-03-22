@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.0
+:revnumber: 1.4.1
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -24,6 +24,16 @@ Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible in
 La página oficial de ZXDOS+ y gomaDOS+ es https://zxdos.forofpga.es.
 
 La mayoría de las funciones y características de ZXDOS+ y gomaDOS+ son las mismas, así que, en este documento, se hablará, en general, de ZXDOS+, indicando las diferencias con gomaDOS+ donde sea necesario.
+
+=== Agradecimientos
+
+Gran parte del contenido de este documento se basa en información compartida anteriormente:
+
+- En https://www.forofpga.es/[foroFPGA]
+- En el https://www.zxuno.com/forum/[foro de ZX-Uno]
+- En los varios FAQ existentes, principalmente la versión original https://uto.speccy.org/zxunofaq.html[de @uto_dev], y la versión más moderna http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[de @desUBIKado]
+
+Sin el trabajo previo de todas estas personas (y más), ese manual no podría existir.
 
 <<<
 
@@ -1372,7 +1382,7 @@ El manual de uso se puede descargar desde https://www.specnext.com/zx-spectrum-n
 
 [TIP]
 ====
-Para poder utilizar una Raspberry Pi, se necesita una versión del Core con el soporte necesario, y el addon RTC+I2S+Pizero. Ver la <<#_addon_rtci2spizero,sección correspondiente>> de otro hardware para más detalles.
+Para poder utilizar una Raspberry Pi, se necesita una versión del Core con el soporte necesario, y el addon RTC+I^2^S+Pizero. Ver la <<#_addon_rtci2spizero,sección correspondiente>> de otro hardware para más detalles.
 ====
 
 <<<
@@ -1404,6 +1414,7 @@ Durante la ejecución del core:
 - `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Scanlines
 - `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+): NMI
 - `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+): divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
+- `F12` (`Caps Shift+Symbol Shift+W en gomaDOS+): Alternar entre la salida audio estándar y la salida I^2^S, si está conectado el <<#_addon_rtci2spizero,addon RTC+I^2^S+PI0>>. Notar que activar la salida I^2^S inhabilita parcialmente el sonido de la Raspberry Pi.
 
 <<<
 
@@ -2488,9 +2499,27 @@ Si todo se ha hecho correctamente se verá cómo el Miniduino se reinicia y en l
 
 <<<
 
-=== Addon RTC+I2S+PIzero
+=== Addon RTC+I^2^S+PIzero
 
-Este complemento de hardware, compatible con ZXDOS+, GomaDOS+ y neptUNO, incorpora un https://es.wikipedia.org/wiki/Reloj_en_tiempo_real[reloj en tiempo real (RTC)], un https://es.wikipedia.org/wiki/I%C2%B2S[chip I2S] UDA1334A y una cabecera de 40 pines donde se puede conectar una Raspberry Pi que, con el software adecuado, se puede utilizar como placa aceleradora del <<#_zx_spectrum_next,core de ZX Spectrum Next>>.
+Este complemento de hardware, compatible con ZXDOS+, GomaDOS+ y neptUNO, incorpora un https://es.wikipedia.org/wiki/Reloj_en_tiempo_real[reloj en tiempo real (RTC)], un chip I^2^S UDA1334A y una cabecera de 40 pines donde se puede conectar una Raspberry Pi que, con el software adecuado, se puede utilizar como placa aceleradora del <<#_zx_spectrum_next,core de ZX Spectrum Next>>.
+
+==== I^2^S
+
+https://es.wikipedia.org/wiki/I%C2%B2S[I^2^S], conocido también como Inter-IC Sound, Integrated Interchip Sound, o IIS, es un estándar que se utiliza para transmitir audio digital entre circuitos. En el caso del ZXDOS+, esto permite enviar el sonido de forma digital desde un core al addon, ofreciendo así una mejor calidad en la reproducción.
+
+===== Cores con soporte
+
+En el momento de escribirse estas líneas, hay los siguientes cores con soporte para I^2^S:
+
+- <<#_msx,MSX>> (desde la versión 1.3)
+- <<#_zx_spectrum_next,ZX Spectrum Next>>
+
+[NOTE]
+====
+En el core de ZX Spectrum Next, debido a que se comparte la línea I^2^S con el audio de la Raspberry Pi, no es posible utilizar simultáneamente las dos, y se ha de conmutar una u otra usando la tecla `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+).
+====
+
+<<<
 
 ==== Raspberry Pi
 
