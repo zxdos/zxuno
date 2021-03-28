@@ -1,6 +1,6 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.4
+:revnumber: 0.5
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -387,7 +387,7 @@ https://www.facebook.com/groups/DerbyPro[DerbyPro o Derby{pp}] es una ROM mejora
 
 Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.facebook.com/groups/DerbyPro[grupo púbilco oficial de Facebook].
 
-Puesto que se trata de una ROM de 64K con soporte para nuevo hardware, se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
+Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos de esxdos desde 128 BASIC, así que se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
 
 [%header,cols=2*] 
 |===
@@ -494,6 +494,7 @@ Aunque guarda una base comúnde código con muchas versiones de Sinclair BASIC (
 - Introducción de caracteres de terminal (CTRL, META).
 - Buffer de teclado.
 - Soporte para teclados completos.
+- Soporte completo de las características adicionales del core de Spectrum de ZX-Uno
 
 Las principales diferencias con Microsoft BASIC son:
 
@@ -1832,6 +1833,151 @@ Ahora, para cargar el archivo deseado, escribir `LOAD "<nombre>",8` (donde `<nom
 
 <<<
 
+=== Commodore PET
+
+El https://en.wikipedia.org/wiki/Commodore_PET[Commodore PET (Personal Electronic Transactor)] fue una línea de ordenadores domésticos producida por Commodore a partir de 1977. 
+
+La versión para ZX-Uno ha sido https://www.zxuno.com/forum/viewtopic.php?f=50&t=683&start=20[desarrollada por Jepalza], basada en el proyecto https://www.skibo.net/projects/pet2001fpga/[pet2001fpga].
+
+Características:
+
+- Carga usando la entrada de audio
+- Sólo funciona en VGA
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+==== Teclado
+
+El teclado está con la distribución en inglés.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F1`: Cancelar carga desde cinta
+- `Alt`: Permite escribir en modo gráfico
+
+==== Guía básica
+
+Se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `LOAD`. Una vez finalizadada la carga, normalmente, se ha de escribir `RUN` y pulsar `ENTER`.
+
+[NOTE]
+====
+El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore PET.
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap>> con los ficheros `TAP` de cinta de Commodore.
+====
+
+<<<
+
+=== Commodore VIC-20
+
+El https://es.wikipedia.org/wiki/Commodore_VIC-20[Commodore VIC-20] (Commodore VC20 en Alemania, VIC-1001 en Japón) fue un ordenador doméstico de 8 bits fabricado y diseñado por Commodore Business Machines, lanzado en junio de 1980, cerca de 3 años después del Commodore PET.
+
+La versión para ZX-Uno ha sido desarrollada por McLeod y Quest
+
+Características principales:
+
+- Expansión de 32K de RAM. Para mayor compatibilidad se puede desactivar.
+- Carga usando la entrada de audio
+- Soporte para video compuesto y VGA
+- Soporte de joystick
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F9` a `F11`: Cargar cartuchos incorporados al core
+- `-` del teclado numérico: Cambiar la polaridad de la entrada de audio. El LED rojo se enciende cuando la polaridad está invertida
+- `Bloq. Desp`: para cambiar entre modo de video compuesto y VGA
+- `F11`: Seleccionar la asignación del joystick al puerto 0 o al puerto 1
+- `Bloq. Num`: Reset desactivando la ampliación de memoria de 32K (activa por defecto)
+- `F12`: Reset activando la ampliación de memoria
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+
+==== Guía básica
+
+Se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `LOAD`. Una vez finalizadada la carga, normalmente, se ha de escribir `RUN` y pulsar `ENTER`.
+
+[NOTE]
+====
+El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore VIC-20.
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap>> con los ficheros `TAP` de cinta de Commodore.
+====
+
+<<<
+
+=== Jupiter ACE
+
+El https://es.wikipedia.org/wiki/Jupiter_Ace[Jupiter ACE] fue un microordenador británico lanzado al mercado en 1982 por la empresa Jupiter Cantab.
+
+El core para ZX-Uno ha sido desarrollado por McLeod y mejorado por Azesmbog, y tiene, entre otras, las siguientes características:
+
+- Soporte para carga desde dispositivos de audio externo
+- Soporte de acceso a la tarjeta SD (implementando https://zx-pk.ru/threads/29892-sd-karta-i-sdos-dlya-8i-bitnykh-pk.html[SDOS])
+
+==== Formato de Tarjeta SD
+
+Se puede utilizar una tarjeta SD, con la primera partición en formato FAT16, para almacenar ficheros en formato `.TAP` de Jupiter ACE. Estos se pueden conseguir, por ejemplo, en la web de https://www.jupiter-ace.co.uk/index.html[Jupiter ACE Archive].
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F1` a `F4`: Modos Turbo
+- `F12`: Soft Reset
+- `Ctrl+Alt+Supr`: Reset
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+
+==== Guía básica
+
+Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD <nombre>`.
+
+[CAUTION]
+====
+Los ficheros `TAP` de Jupiter ACE son diferentes de los de ZX Spectrum, y, para poder utilizarse con miniduino, han de ser convertidos previamente a `TZX` con la utilidad `acetap2zx` disponible en el https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/jupiter_ace/utils[repositorio de ZX-Uno] (Usuario `guest`, contraseña `zxuno`).
+====
+
+Para cargar ficheros de cinta desde la tarjeta SD, se debe acceder a SDOS escribiendo
+
+[source]
+----
+61440 call
+----
+
+Ahora, con instrucciones como `CD`, `DIR` se puede llegar hasta el directorio donde se encuentre el fichero `TAP` a cargar. Para cargar un fichero de cinta `.TAP` se tiene que escribir sólo el nombre, sin la extensión (por ejemplo, para un fichero `JUEGO.TAP` se debe escribir `JUEGO`).
+
+[TIP]
+====
+Todos los comandos de SDOS se deben escribir en letras mayúsculas.
+====
+
+Una vez la cinta ha cargado, escribir el comando necesario para iniciar el programa.
+
+[NOTE]
+====
+En lugar de BASIC como otros sistemas, el Jupiter ACE utiliza https://es.wikipedia.org/wiki/Forth[Forth]. Para ver los comandos disponibles (incluyendo los que inician un programa cargado desde cinta), se tiene que utilizar `vlist`.
+====
+
+<<<
+
 === MSX
 
 MSX1FPGA es un proyecto para clonar MSX1 en una FPGA. El desarrollo original es de Fabio Belavenuto y se encuentra disponible https://github.com/fbelavenuto/msx1fpga[en GitHub].
@@ -2053,7 +2199,7 @@ Si no estuviera ya, <<#_cores,instalar el core smartROM>> en el ZXUNO+.
 
 El computador personal https://es.wikipedia.org/wiki/ZX81[Sinclair ZX81], lanzado por Sinclair Research en 1981, fue el de menor precio de la época.
 
-La versión para ZXUNO+ ha sido https://www.zxuno.com/forum/viewtopic.php?f=54&t=703[creada por jepalza] y está basada en la http://zxgate.sourceforge.net/[implementación anterior de un ZX97].
+La versión para ZXUNO+ ha sido https://www.zxuno.com/forum/viewtopic.php?f=54&t=703[creada por Jepalza] y está basada en la http://zxgate.sourceforge.net/[implementación anterior de un ZX97].
 
 ==== Formato de Tarjeta SD
 
@@ -2161,13 +2307,15 @@ Los pasos a seguir en este caso son:
 
 A continuación se indican algunos de los muchos programas que existen para distintos sistemas operativos, y que pueden exportar ficheros de cinta a ficheros de audio.
 
-https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite cargar ficheros `TZX` y `TAP` y exportarlos como `WAV` de audio
+https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite cargar ficheros `TZX` y `TAP` y exportarlos como `WAV` de audio.
 
 `tape2wav` de https://fuse-emulator.sourceforge.net/[Fuse Utilities] es una utilidad de línea de comandos que exporta desde ficheros `TZX` `PZX` y `TAP` a `WAV`. Disponibles para muchos sistemas operativos distintos.
 
 `pzx2wav` en http://zxds.raxoft.cz/pzx.html[PZX Tools] es otra utilidad de comandos que exporta desde ficheros `PZX` a `WAV`. Disponible como ejecutable para Windows, y con el código fuente disponible para compilar en otros sistemas.
 
 `tsx2wav` en https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] es una utilidad en PHP y que sirve para exportar desde ficheros `TSX` a `WAV`.
+
+https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite convertir ficheros `TAP` de Commodore como `WAV` de audio.
 
 <<<
 
@@ -2588,7 +2736,7 @@ sudo apt-get update
 sudo apt-get install git autoconf libtool make pkg-config
 sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev telnet
 sudo apt-get install libusb-dev libftdi-dev
-git clone, git://git.code.sf.net/p/openocd/code openocd-code
+git clone git://git.code.sf.net/p/openocd/code openocd-code
 cd openocd-code/
 ./bootstrap
 ./configure --enable-usb_blaster --enable-sysfsgpio --enable-bcm2835gpio

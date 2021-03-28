@@ -1,6 +1,6 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 0.4
+:revnumber: 0.5
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -683,7 +683,7 @@ https://www.facebook.com/groups/DerbyPro[DerbyPro or Derby{pp}] is an enhanced f
 
 You can download the ROM, a user manual and other files from the https://www.facebook.com/groups/DerbyPro[official Facebook Public Group].
 
-Since it is a 64K ROM with support for new hardware, these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
+This 64K ROM has support for new hardware, including the use of esxdos commands from 128 BASIC, so these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
 
 [%header,cols=2*] 
 |===
@@ -791,6 +791,7 @@ While it shares a common code base with many versions of Sinclair BASIC (the TS1
 - Terminal character entry (CTRL, META).
 - Keyboard buffer.
 - Full sized keyboard support.
+- Designed to take full advantage of the additional features of ZX-Uno Spectrum core
 
 The main differences from Microsoft BASIC are:
 
@@ -972,22 +973,12 @@ You can add a new ROM pressing the key `N` at the BIOS <<#_roms,ROMs screen>>, c
 
 To update at once all the ROMs installed for ZX Spectrum, a RomPack file named `ROMS.ZX1` must be obtained, which must be copied to the SD card. Boot the ZXUNO+ using a "rooted" ROM, and then just enter the command `.romsupgr`. This will burn all the ROMs, which will be available for use.
 
-[WARNING]
-====
-At this moment, `romsupgr`, only works correctly with RomPack files using a maximum of 35 slots.
-====
-
 [NOTE]
 ====
 Remember that if the ZXUNO+ is started by pressing the `/` key, then the default ROM of the ZX Spectrum core will be loaded in" root "mode.
 ====
 
 To do the opposite process (save the ROMs in a RomPack file named `ROMS.ZX1`), you can use the` .romsback` command.
-
-[WARNING]
-====
-At this moment, `romsback`, only stores correctly the first 35 used slots.
-====
 
 RomPack files can be easily edited with the https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack] utility. Although it is a Windows program, it works perfectly, for example using https://www.winehq.org[Wine] or similar programs, either on MacOS or Linux.
 
@@ -1835,6 +1826,150 @@ Now, to load a specific file, use the command `LOAD "<name>",8` (where `<name>` 
 
 <<<
 
+=== Commodore PET
+
+The https://es.wikipedia.org/wiki/Commodore_PET[Commodore PET (Personal Electronic Transactor)] was a line of personal computers produced starting in 1977 by Commodore International. 
+
+The ZX-Uno version has been https://www.zxuno.com/forum/viewtopic.php?f=50&t=683&start=20[made by Jepalza], based on the https://www.skibo.net/projects/pet2001fpga/[pet2001fpga] project.
+
+Features:
+
+- Tape loading using the audio input
+- Only works on VGA
+
+==== SD card format
+
+This core does not use the SD card
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While running the core:
+
+- `F1`: Cancel tape loading
+- `Alt`: Type using graphic mode
+
+==== Basic Guide
+
+You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `ENTER` if needed. 
+
+[NOTE]
+====
+Maxduino, which is used in <<<<#_miniduino,miniduino>> does not, at this moment, support for Commodore PET tape files.
+====
+
+[TIP]
+====
+You can use programs like <<#_audio_file_conversion,Audiotap>> with Commodore `TAP` files.
+====
+
+<<<
+
+=== Commodore VIC-20
+
+The https://en.wikipedia.org/wiki/Commodore_VIC-20[Commodore VIC-20] (VC-20 in Germany and VIC-1001 in Japan) was an 8-bit home computer sold by Commodore Business Machines. The VIC-20 was announced in 1980, roughly three years after the Commodore PET. 
+
+The ZX-Uno version has been made by McLeod and Quest
+
+Main features:
+
+- 32K RAM expansion. It can be disabled for greater compatibility
+- Tape loading using the audio input
+- Audio input signal polarity change support
+- Composite video and VGA support
+- Joystick support
+
+==== SD card format
+
+This core does not use the SD card
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `F9` to `F11`: Load cartridges embedded in the core
+- Numeric keyboard `-`: Change audio input polarity. The red LED is enable when inverted.
+- `Scroll Lock`: To switch between composite video and VGA
+- `F11`: Swtich the joystick mapping between port 0 or port 1
+- `Num Lock`: Reset disabling the 32K memory expansion (enabled by default)
+- `F12`: Reset enabling the memory expansion
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+
+==== Basic Guide
+
+You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `ENTER` if needed. 
+
+[NOTE]
+====
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore VIC-20 tape files.
+====
+
+[TIP]
+====
+You can use programs like <<#_audio_file_conversion,Audiotap>> with Commodore `TAP` files.
+====
+
+<<<
+
+=== Jupiter ACE
+
+The https://en.wikipedia.org/wiki/Jupiter_Ace[Jupiter ACE]  was a british micro computer produced by Jupiter Cantab in the early 1980s.
+
+The ZX-Uno core has been developed by McLeod and enhanced by Azesmbog, and has, amongst others, the following features:
+
+- Tape loading using the audio input
+- Tape loading from the SD card (with https://zx-pk.ru/threads/29892-sd-karta-i-sdos-dlya-8i-bitnykh-pk.html[SDOS])
+
+==== SD card format
+
+You can use a SD card with the first partition in FAT16 format, where you can store Jupiter ACE `.TAP` files, which you can get, for exampel at the https://www.jupiter-ace.co.uk/index.html[Jupiter ACE Archive] website.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `F1` ti `F4`: Turbo Modes
+- `F12`: Soft Reset
+- `Ctrl+Alt+Supr`: Reset
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+
+==== Basic Guide
+
+From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the comand `LOAD <nombre>`.
+
+[CAUTION]
+====
+Jupiter ACE `TAP` files are different from the ZX Spectrum ones, so, to use then with a miniduino, they have to be converted previously to `TZX` with the `acetap2zx` utility available at https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/jupiter_ace/utils[ZX-Uno repository] (User `guest`, password `zxuno`).
+====
+
+To load tape files from the SD card, you have to acces first to SDOS typing
+
+[source]
+----
+61440 call
+----
+
+After that, with instructions like `CD` and `DIR` you can access where the `TAP` file to load is located. Then, to load a `.TAP` file, you only have to type the name, without extension (for example, for a file named `GAME.TAP` you have to type `GAME`).
+
+[TIP]
+====
+All SDOS commands have to be typed in uppercase.
+====
+
+Once the tape has finished loading, type the corresponding command to start the program.
+
+[NOTE]
+====
+Instead of BASIC like other systems, Jupiter ACE uses https://en.wikipedia.org/wiki/Forth[Forth]. To see the commands currently available (including those that will start a program loaded from tape, you have to type `vlist`.
+====
+
+<<<
+
 === MSX
 
 MSX1FPGA is a project to clone MSX1 in FPGA. The original development is by Fabio Belavenuto and is available https://github.com/fbelavenuto/msx1fpga[at GitHub].
@@ -2056,7 +2191,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 The https://en.wikipedia.org/wiki/ZX81[ZX81] was a home computer produced by Sinclair Research,designed to be a low-cost introduction to home computing for the general public.
 
-The ZXUNO+ version has been https://www.zxuno.com/forum/viewtopic.php?f=54&t=703[made by jepalza] based on http://zxgate.sourceforge.net/[a previos ZX97 implementation].
+The ZXUNO+ version has been https://www.zxuno.com/forum/viewtopic.php?f=54&t=703[made by Jepalza] based on http://zxgate.sourceforge.net/[a previous ZX97 implementation].
 
 ==== SD card format
 
@@ -2154,13 +2289,15 @@ In these cases, it's recommended (if possible) to disable headphone volume limit
 
 These are some of the many programas that exist and which can export tape files to audio files.
 
-https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Windows (but which can also run with Wine on Linux or Mac) that can load `TZX` and `TAP` files and export to `WAV` audio
+https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Windows (but which can also run with Wine on Linux or Mac) that can load `TZX` and `TAP` files and export to `WAV` audio.
 
 `tape2wav` from https://fuse-emulator.sourceforge.net/[Fuse Utilities] is a command line utility that can export from `TZX` `PZX` and `TAP` to `WAV`.
 
 `pzx2wav` in http://zxds.raxoft.cz/pzx.html[PZX Tools] is another command line utility which exports to `WAV`.
 
 `tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made with PHP and that can export from `TSX` to `WAV`.
+
+https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] is a graphical interface program made for Windows (but also working on Wine) that can convert Commodore `TAP` files to `WAV` audio files.
 
 <<<
 
