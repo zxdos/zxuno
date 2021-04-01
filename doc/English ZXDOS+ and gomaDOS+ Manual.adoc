@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.1
+:revnumber: 1.4.2
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -539,8 +539,10 @@ These are some of its main characteristics:
 - Keyboard support (PS/2 protocol) and user-configurable mapping from within Spectrum itself.
 - PS/2 mouse support emulating the Kempston Mouse protocol.
 - Possibility of video output in composite video mode, RGB 15kHz, or VGA.
-- User selectable vertical refresh rate to improve compatibility with VGA monitors.
-- Multicore boot support: from the Spectrum you can select an address of the SPI Flash and the FPGA will load a core from there.
+- User selectable vertical refresh rate to improve compatibility with VGA monitors
+- Multicore boot support: from the Spectrum you can select an address of the SPI Flash and the FPGA will load a core from there
+- Different colour modes including monochrome
+- I^2^S audio output (with the <<#_rtci2spizero_addon,RTC+I^2^S+Pizero addon>>)
 
 <<<
 
@@ -884,6 +886,7 @@ Special keys which can be used during startup:
 Special keys that can be used while running the main core (ZX Spectrum):
 
 - `Esc` (`Caps Shift+Space` on gomaDOS+): BREAK
+- `F1`: (`Caps Shift+Symbol Shift+1` on gomaDOS+): Select one of the monochrome color modes
 - `F2` (`Caps Shift+1` on gomaDOS+): Edit
 - `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+): NMI
 - `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Play or pause when playing .PZX files
@@ -1377,6 +1380,11 @@ The core, for the moment does not have any of these features:
 - HDMI Video
 - UART communication using the joystick port
 
+It can also have these features, which do not exist in the original core:
+
+- Different colour modes including monochrome
+- I^2^S audio output (with the <<#_rtci2spizero_addon,RTC+I^2^S+Pizero addon>>)
+
 The user manual is available to download at https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[the official web page].
 
 [TIP]
@@ -1413,7 +1421,8 @@ While the core is running:
 - `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Scanlines
 - `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+): NMI
 - `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+): divMMC NMI. Simulates Drive button. If used with Caps Shift it forces a rescan of drives and a reload of the boot screen under esxDOS
-- `F12` (`Caps Shift+Symbol Shift+W in gomaDOS+): Switch between standard audio and I^2^S output, if the <<#_addon_rtci2spizero,RTC+I^2^S+PI0 addon>> is connected. Take note that enabling I^2^S disables partially the Raspberry Pi audio.
+- `F11`: (`Caps Shift+Symbol Shift+Q` on gomaDOS+): Select one of the monochrome color modes
+- `F12` (`Caps Shift+Symbol Shift+W in gomaDOS+): Switch between standard audio and I^2^S output, if the <<#_rtci2spizero_addon,RTC+I^2^S+PI0 addon>> is connected. Take note that enabling I^2^S disables partially the Raspberry Pi audio.
 
 <<<
 
@@ -1468,6 +1477,7 @@ Some of its features are:
 - Reconfigurable keyboard map
 - Scanlines
 - Joystick support
+- I^2^S audio output (with the <<#_rtci2spizero_addon,RTC+I^2^S+Pizero addon>>)
 
 ==== microSD format
 
@@ -2498,8 +2508,9 @@ https://en.wikipedia.org/wiki/I2S[I^2^S], also known as Inter-IC Sound, Integrat
 
 When writing this, the following cores have I^2^S support:
 
+- <<#_zx_spectrum,ZX Spectrum>> (latest EXP27 core versions)
 - <<#_msx,MSX>> (since version 1.3)
-- <<#_zx_spectrum_next,ZX Spectrum Next>>
+- <<#_zx_spectrum_next,ZX Spectrum Next>> (latest versions)
 
 [NOTE]
 ====
@@ -2534,6 +2545,9 @@ As you can see later, an addon compatible Raspbery Pi Zero has, among other thin
 
 [.text-center] 
 image:img/pizero.jpg[pdfwidth=40%] image:img/pi_no.jpg[pdfwidth=40%]
+
+[.text-center] 
+image:img/pizeroback.jpg[pdfwidth=40%] image:img/pi_no_back.jpg[pdfwidth=40%]
 
 [CAUTION]
 ====
