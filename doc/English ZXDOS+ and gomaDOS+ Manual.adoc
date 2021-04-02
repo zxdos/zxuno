@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.2
+:revnumber: 1.4.3
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1923,6 +1923,55 @@ The following options are available:
 
 <<<
 
+=== Camputers Lynx
+
+https://en.wikipedia.org/wiki/Camputers_Lynx[The Lynx] was an 8-bit British home computer that was first released in early 1983 as a 48kB model.Several models were available with 48kB, 96kB or 128 kB RAM. 
+
+The ZXDOS+ core has these features:
+
+- Only RGB/Composite Video out
+
+==== SD card format
+
+This core does not use the SD card
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While running the core:
+
+- `Ctrl+Alt+Del`: Reset.
+
+<<<
+
+==== Basic Guide
+
+From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with commands like:
+
+[source]
+----
+TAPE n
+LOAD "NAME"
+----
+
+Where `n` is a number (usually 3 or 5), and `NAME` is mandatory, and the name of the program to load.
+
+If you don't know the name to load, you can guess with the same command sequence, but writing `LOAD ""`.
+
+Binary files are loaded with `MLOAD` instead of `LOAD`.
+
+[NOTE]
+====
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, native support for Lynx tape files.
+====
+
+You can use programs like  <<#_audio_file_conversion,Lynx2Wav>> with Lynx `TAP` files. The resulting audio files can be embedded inside of TSX or TZX with tools like <<#_creación_de_ficheros_tzx_o_tsx_desde_otros_formatos,MakeTSX or RetroConverter>>.
+
+The http://retrowiki.es/viewtopic.php?f=31&t=200036835[lince] script makes all this process easier, creating directly Maxduino `TZX` compatible files from Lynx `TAP` files.
+
+<<<
+
 === ColecoVision
 
 https://en.wikipedia.org/wiki/ColecoVision[ColecoVision] is Coleco Industries' home video-game console that was released in August 1982.
@@ -2296,6 +2345,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 
 `tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made with PHP and that can export from `TSX` to `WAV`.
 
+https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] is a program that can convert Camputers Lynx `TAP` files to `WAV` audio.
+
 <<<
 
 ==== Miniduino
@@ -2387,6 +2438,30 @@ When in pause (tape block browser:
 - Left (Stop) cancels the player and goes back to file and directory browser mode
 - Right (Play/Pause) continues playing from the selected block
 - Press down the control butto to enable or disable turbo mode for MSX
+
+<<<
+
+===== Making TZX or TSX files from other formats
+
+While there are same tape file formats (Commodore, Camputers Lynx, etc.) not supported by Maxduino, there are some programs that can, wich can, more or less successfully, embed <<#_audio_file_conversion,audio data>> in a `TSX` or `TZX` file, which then can be used with Miniduino.
+
+====== MakeTSX
+
+You can use the following command with NataliaPC's https://github.com/nataliapc/makeTSX/releases[MakeTSX] to create a `TSX` file with embedded audio:
+
+[source,shell]
+----
+...MakeTSX -b15 -wav audio_file.wav -tsx new_file.tsx
+----
+
+====== RetroConverter
+
+Jorge Fuertes https://github.com/jorgefuertes/retroconverter/releases[RetroConverter] can create a `TZX` file with a command like this:
+
+[source,shell]
+----
+...retroconv audio_file.wav new_file.tzx
+----
 
 <<<
 
@@ -3310,6 +3385,14 @@ https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox 
 https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 for FPGA]
 
 http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Module Manual]
+
+https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
+
+https://github.com/nataliapc/makeTSX/releases[MakeTSX]
+
+https://github.com/jorgefuertes/retroconverter/releases[RetroConverter]
+
+http://retrowiki.es/viewtopic.php?f=31&t=200036835[Lince Script]
 
 https://catleytech.com/?p=2679[Programming a Spartan 6 with a Raspberry Pi]
 

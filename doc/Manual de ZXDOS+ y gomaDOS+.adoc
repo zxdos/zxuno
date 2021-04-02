@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.2
+:revnumber: 1.4.3
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1924,6 +1924,56 @@ En él se pueden activar o desactivar las siguientes opciones:
 
 <<<
 
+=== Camputers Lynx
+
+
+El https://es.wikipedia.org/wiki/Camputers_Lynx[Lynx] fue un ordenador doméstico británico de 8 bits lanzado a principios de 1983 por la compañía Camputers. Se lanzaron en total tres modelos, con 48kB, 96kB o 128kB de RAM. 
+
+La versión para ZXDOS+ tiene estas características:
+
+- Sólo funciona con RGB/Vídeo Compuesto
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Ctrl+Alt+Supr`: Reset
+
+<<<
+
+==== Guía básica
+
+Desde BASIC, se suele cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con la secuencia de comandos:
+
+[source]
+----
+TAPE n
+LOAD "NOMBRE"
+----
+
+Donde `n` es un número que suele ser 3 o 5, según como se haya realizado la grabación, y `NOMBRE` es, obligatoriamente el nombre a cargar desde la cinta.
+
+Si no se sabe el nombre a cargar, se puede averiguar con la misma secuencia de comandos, pero escribiendo `LOAD ""`.
+
+Para ficheros binarios, se debe usar `MLOAD` en vez de `LOAD`.
+
+[NOTE]
+====
+El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta `TAP` de Lynx.
+====
+
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Lynx2Wav>> con los ficheros `TAP` de cinta de Lynx. Los ficheros de audio obtenidos se pueden embeber a su vez dentro de ficheros TSX o TZX con herramientas como <<#_creación_de_ficheros_tzx_o_tsx_desde_otros_formatos,MakeTSX o RetroConverter>>.
+
+El script http://retrowiki.es/viewtopic.php?f=31&t=200036835[lince] facilita todo este proceso, permitiendo crear directamente ficheros `TZX` compatibles con Maxduino desde ficheros `TAP` de Lynx.
+
+<<<
+
 === ColecoVision
 
 https://es.wikipedia.org/wiki/ColecoVision[ColecoVision] es una consola de videojuegos lanzada al mercado por la empresa Coleco.
@@ -2303,6 +2353,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con inter
 
 `tsx2wav` en https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] es una utilidad en PHP y que sirve para exportar desde ficheros `TSX` a `WAV`.
 
+https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] es un programa que permite convertir ficheros `TAP` de Camputers Lynx como `WAV` de audio.
+
 <<<
 
 ==== Miniduino
@@ -2399,6 +2451,30 @@ Con la reproducción en pausa (navegación por bloques de cinta):
 ====
 Para obtener información mucho más detallada, se puede consultar el manual oficial del firmware Maxduino, disponible en el https://github.com/rcmolina/MaxDuino_BETA/tree/master/MANUAL%20por%20desUBIKado[repositorio oficial].
 ====
+
+<<<
+
+===== Creación de ficheros TZX o TSX desde otros formatos
+
+Existen algunos formatos de cinta (Commodore, Camputers Lynx, etc.) que, por el momento, no están directamente soportados por Maxduino. No obstante, existen algunos programas que pueden permitir, con mayor o menor éxito, transformar ficheros de cinta desde <<#_conversión_a_fichero_de_audio,formato de audio>> a `TSX` o `TZX`, y así poder utilizarlos con Miniduino.
+
+====== MakeTSX
+
+Para usar https://github.com/nataliapc/makeTSX/releases[MakeTSX] de NataliaPC y crear un fichero `TSX` con audio embebido, se ha de usar un comando como el siguiente:
+
+[source,shell]
+----
+...MakeTSX -b15 -wav fichero_audio.wav -tsx fichero_nuevo.tsx
+----
+
+====== RetroConverter
+
+Para utilizar https://github.com/jorgefuertes/retroconverter/releases[RetroConverter] de Jorge Fuertes, para crear un fichero `TZX` con audio embebido, usar un comando como:
+
+[source,shell]
+----
+...retroconv fichero_audio.wav fichero_nuevo.tzx
+----
 
 <<<
 
@@ -3331,6 +3407,13 @@ https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 f
 http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Module Manual]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
+
+
+https://github.com/nataliapc/makeTSX/releases[MakeTSX]
+
+https://github.com/jorgefuertes/retroconverter/releases[RetroConverter]
+
+http://retrowiki.es/viewtopic.php?f=31&t=200036835[Lince Script]
 
 https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation[Hardware files to support STM32 based boards on Arduino version 1.8.x]
 
