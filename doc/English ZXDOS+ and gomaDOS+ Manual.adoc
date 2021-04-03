@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.3
+:revnumber: 1.4.4
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -350,7 +350,7 @@ ZX Spectrum mode key assignment, with the corresponding keypress when used simul
 
 Where:
 
-- `ScrLk`: `Scroll Lock` changes betweein composite and VGA video mode (on Next Core, you must use `Caps Shift+Symbol Shift+2` or`F2` instead)
+- `ScrLk`: `Scroll Lock` changes betweein RGB and VGA video mode (on Next Core, you must use `Caps Shift+Symbol Shift+2` or`F2` instead)
 - `Save`: Sets the current mode as the default one
 - `Vers`: Shows (types) current firmware version
 - `hRes`: Hard Reset
@@ -538,7 +538,7 @@ These are some of its main characteristics:
 - Turbo mode support at 7MHz, 14MHz, 28MHz
 - Keyboard support (PS/2 protocol) and user-configurable mapping from within Spectrum itself.
 - PS/2 mouse support emulating the Kempston Mouse protocol.
-- Possibility of video output in composite video mode, RGB 15kHz, or VGA.
+- Possibility of video output in RGB 15kHz, or VGA.
 - User selectable vertical refresh rate to improve compatibility with VGA monitors
 - Multicore boot support: from the Spectrum you can select an address of the SPI Flash and the FPGA will load a core from there
 - Different colour modes including monochrome
@@ -895,7 +895,7 @@ Special keys that can be used while running the main core (ZX Spectrum):
 - `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+): Soft reset.
-- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switches between composite and VGA video modes.
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switches between RGB and VGA video modes.
 
 <<<
 
@@ -1339,11 +1339,12 @@ https://github.com/Kyp069/zx48.zxdosplus/releases/[Alternative core], whose obje
 
 Main features:
 
-- Only working on RGB (no VGA)
+- RGB and VGA video out
 - Specdrum
 - Turbosound (two AY chips) with mix selection ACB/ABC
 - DivMMC with esxdos 0.8.8
 - Kempston joystick in port 1
+- I^2^S audio output (with the <<#_rtci2spizero_addon,RTC+I^2^S+Pizero addon>>)
 
 ==== microSD card format
 
@@ -1552,6 +1553,9 @@ To change the video mode between 50Hz and 60Hz (and thus play at correct speed P
 
 To go to BASIC from MSX-DOS you must execute `BASIC` command.
 
+[.text-center] 
+image:img/msx.png[pdfwidth=70%]
+
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the commands `RUN"CAS:"`, `BLOAD"CAS:",R` or `CLOAD`.
 
 [IMPORTANT]
@@ -1560,6 +1564,8 @@ Loading from audio sources only works if turbo mode is disabled.
 ====
 
 To go to MSX-DOS from BASIC, execute `CALL SYSTEM`.
+
+<<<
 
 ===== MSXCTRL
 
@@ -1805,7 +1811,12 @@ While the core is running:
 - `-` (numeric keyboard): Enable or disable scanlines
 - `Tab`  (`Caps Shift+Enter` on gomaDOS+, `PC XT` keyboard mode): Enables or disables 90º rotation of the direction of controls
 
+<<<
+
 ==== Basic Guide
+
+[.text-center] 
+image:img/phoenix.png[pdfwidth=70%]
 
 By default, the core starts with normal controls, configured for vertical displays. If you have an horizontal display, the image will be rotated. To ease the control, and make it more natural and according to what you see, when typing `Tab`, up-down directions are switched with left-right. This is both for joystick and keyboard controls.
 
@@ -1929,7 +1940,11 @@ https://en.wikipedia.org/wiki/Camputers_Lynx[The Lynx] was an 8-bit British home
 
 The ZXDOS+ core has these features:
 
-- Only RGB/Composite Video out
+- 48kB and 96 kB modes
+- Optional Scorpion ROM
+- Carga usando la entrada de audio
+- Load from a external audio device
+- RGB video and VGA Support
 
 ==== SD card format
 
@@ -1942,10 +1957,21 @@ This core does not use the SD card
 While running the core:
 
 - `Ctrl+Alt+Del`: Reset.
+- `F6` (`Caps Shift+Symbol Shift+6` on gomaDOS+): Switch between 48kB mode and 96kB mode (default)
+- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Enable or disable Scorpio ROM
+- `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+): Switch the option to consider port $80 bits 2 and 3, so that Level 9 games are displayed properly.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switch between RGB and VGA video output
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+
+<<<
 
 <<<
 
 ==== Basic Guide
+
+[.text-center] 
+image:img/lynx.png[pdfwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with commands like:
 
@@ -1955,7 +1981,7 @@ TAPE n
 LOAD "NAME"
 ----
 
-Where `n` is a number (usually 3 or 5), and `NAME` is mandatory, and the name of the program to load.
+Where `n` is a number (between 1 and 5), and `NAME` is mandatory, and the name of the program to load.
 
 If you don't know the name to load, you can guess with the same command sequence, but writing `LOAD ""`.
 
@@ -2180,6 +2206,8 @@ The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For
 [.text-center] 
 image:img/keyboardZX81.jpg[pdfwidth=90%]
 
+<<<
+
 ===== Special keys and buttons
 
 During the core execution:
@@ -2346,6 +2374,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 `tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made with PHP and that can export from `TSX` to `WAV`.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] is a program that can convert Camputers Lynx `TAP` files to `WAV` audio.
+
+https://github.com/rcmolina/CamputersLYNX[2lynx2wav] also can convert Camputers Lynx `TAP` files to audio files.
 
 <<<
 
@@ -2583,7 +2613,7 @@ https://en.wikipedia.org/wiki/I2S[I^2^S], also known as Inter-IC Sound, Integrat
 
 When writing this, the following cores have I^2^S support:
 
-- <<#_zx_spectrum,ZX Spectrum>> (latest EXP27 core versions)
+- <<#_zx_spectrum,ZX Spectrum>> (latest EXP27 and and Kyp 48K core versions)
 - <<#_msx,MSX>> (since version 1.3)
 - <<#_zx_spectrum_next,ZX Spectrum Next>> (latest versions)
 
@@ -3068,11 +3098,11 @@ If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on 
 ====
 For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
 
-. If you see no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. If you see no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
 . Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
 . Reboot gomaDOS+ without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
 . Quickly, press `Caps Shift + 1`
-. Again, if there's no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
 . Navigate through BIOS and turno on these options:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
@@ -3194,11 +3224,11 @@ If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on 
 ====
 For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
 
-. If you see no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. If you see no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
 . Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
 . Reboot gomaDOS+ without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
 . Quickly, press `Caps Shift + 1`
-. Again, if there's no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
 . Navigate through BIOS and turno on these options:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
@@ -3297,11 +3327,11 @@ If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on 
 ====
 For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
 
-. If you see no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. If you see no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
 . Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
 . Reboot gomaDOS+ without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
 . Quickly, press `Caps Shift + 1`
-. Again, if there's no image, switch between composite and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
 . Navigate through BIOS and turno on these options:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)

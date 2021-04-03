@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.3
+:revnumber: 1.4.4
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -350,7 +350,7 @@ La distribución del teclado en modo ZX Spectrum, con la pulsación asociada al 
 
 Donde:
 
-- `BlqDs`: `Bloq. Despl.` cambia de modo video compuesto a VGA y viceversa (en el core de Next, se debe usar `Caps Shift+Symbol Shift+2` o `F2`)
+- `BlqDs`: `Bloq. Despl.` cambia de modo vídeo RGB a VGA y viceversa (en el core de Next, se debe usar `Caps Shift+Symbol Shift+2` o `F2`)
 - `Guarda`: Define el modo actual como el modo por defecto
 - `Vers`: Muestra (teclea) la versión actual del firmware
 - `hRes`: Hard Reset
@@ -496,7 +496,7 @@ La pantalla de configuración avanzada sirve para modificar los siguientes ajust
 - Distribución del teclado (Keyb Layout): Ver <<#_teclado,el apartado correspondiente >> para más información)
 - Comportamiento del joystick emulado con el teclado numérico (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek o Fuller
 - Comportamiento de un joystick conectado al puerto (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
-- Salida de vídeo (Video): PAL, NTSC o VGA
+- Salida de vídeo (video): PAL, NTSC o VGA
 - Simulación de línea de exploración (Scanlines): Activas (Enabled) o inactivas (Disabled)
 - Frecuencia horizontal de VGA (Frequency): 50, 51, etc.
 - Velocidad de la CPU: Normal (1x) o acelerada (2X, 3X, etc.)
@@ -540,7 +540,7 @@ Estas son algunas de sus principales características:
 - Soporte de modo turbo a 7MHz, 14MHz, 28MHz
 - Soporte de teclado con protocolo PS/2 y mapeado configurable desde el propio Spectrum.
 - Soporte de ratón PS/2 emulando el protocolo Kempston Mouse.
-- Posibilidad de salida de video en modo de video compuesto, RGB 15kHz, o VGA
+- Posibilidad de salida de vídeo en modo RGB 15kHz, o VGA
 - Frecuencia de refresco vertical seleccionable para la compatibilidad con monitores VGA
 - Soporte de arranque multicore: desde el Spectrum se puede seleccionar una dirección de la SPI Flash y la FPGA cargará un core desde ahí
 - Modos de color incluyendo monocromo o fósforo verde/naranja
@@ -900,7 +900,7 @@ Teclas especiales que se pueden utilizar durante la ejecución del core principa
 - `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo vídeo RGB a VGA y viceversa.
 
 <<<
 
@@ -1075,7 +1075,7 @@ Los principales comandos "DOT" commands son los siguientes:
 - `cd`: Cambiar el directorio actual de trabajo.
 - `chmod`: cambiar los atributos de los ficheros de la tarjeta SD.
 - `cp`: Copiar un archivo.
-- `divideo`: Reproduce un archivo de video DivIDEo (.DVO).
+- `divideo`: Reproduce un archivo de vídeo Divideo (.DVO).
 - `drives`: Mostrar las unidades disponibles.
 - `dskprobe`: Utilidad para ver el contenido a bajo nivel de un dispositivo de almacenamiento.
 - `dumpmem`: Permite volcar contenido de la memoria RAM a un fichero.
@@ -1134,7 +1134,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `keymap`: Sirve para cargar una definición de teclado diferente.
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
-- `playrmov`: Reproduce videos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
+- `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Sólo funciona correctamente en ZX-Uno y ZXDOS (no utilizar en ZXDOS+ o gomaDOS+). Se debe ejecutar desde una ROM en modo "root". 
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
@@ -1203,7 +1203,7 @@ Se pueden consultar todos los comandos disponibles en https://www.espressif.com/
 
 === Creación de vídeos RDM (RaDastan Movie)
 
-El comando `PLAYRMOV` reproduce videos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN]. 
+El comando `PLAYRMOV` reproduce vídeos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN]. 
 
 En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o MacOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
 
@@ -1340,11 +1340,12 @@ https://github.com/Kyp069/zx48.zxdosplus/releases/[Core alternativo], cuyo objet
 
 Sus características principales son:
 
-- Sólo funciona con RGB
+- Salida de vídeo RGB y VGA
 - Specdrum
 - Turbosound (dos chips AY) con posibilidad de elegir mix ACB/ABC
 - DivMMC con esxdos 0.8.8
 - Joystick Kempston en el puerto 1
+- Salida de audio I^2^S (con el <<#_addon_rtci2spizero,addon RTC+I^2^S+Pizero>>)
 
 ==== Formato de Tarjeta microSD
 
@@ -1378,7 +1379,7 @@ El core para ZXDOS+ no tiene, por el momento, implementada ninguna de las siguie
 - Teclado de membrana
 - Grabación de cores adicionales o actualización del propio core Next desde el core Next
 - Salida MIC
-- Video HDMI
+- vídeo HDMI
 - Utilización de puerto de conexión joystick para comunicación UART
 
 Por otra parte, puede disponer de las siguientes características, que no existen en el core original:
@@ -1553,6 +1554,9 @@ Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de pr
 
 Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`.
 
+[.text-center] 
+image:img/msx.png[pdfwidth=70%]
+
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos `RUN"CAS:"`, `BLOAD"CAS:",R` o `CLOAD`.
 
 [IMPORTANT]
@@ -1561,6 +1565,8 @@ Para que la carga desde audio funcione, el modo turbo tiene que estar desactivad
 ====
 
 Para acceder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
+
+<<<
 
 ===== MSXCTRL
 
@@ -1742,7 +1748,7 @@ Durante la ejecución del core:
 
 - `F9` `Caps Shift+Symbol Shift+9` en gomaDOS+): Reproducir un archivo TAP de cinta
 - `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Muestra menú de opciones
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo video compuesto a VGA y viceversa.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): cambia de modo vídeo RGB a VGA y viceversa.
 - `Esc` (`Caps Shift+Espacio` en gomaDOS+): RUN/STOP (`Mayús+RUN/STOP`: Carga desde cinta)
 
 <<<
@@ -1759,7 +1765,7 @@ Desde dicho menú se puede
 - Hacer reset del core
 - Activar o desactivar la simulación de línea de exploración (Scanlines)
 - Cambiar la paleta de color
-- Cambiar entre modo video compuesto y modo VGA
+- Cambiar entre modo vídeo RGB y modo VGA
 - Activar o desactivar el sonido de carga de cinta
 - Encender o apagar un filtro de audio
 - Cargar imagen de disco D64
@@ -1806,9 +1812,16 @@ Durante la ejecución del core:
 - `-` (del teclado numérico): Activa o desactiva la simulación de línea de exploración (Scanlines)
 - `Tab` (`Caps Shift+Enter` en gomaDOS+, en modo de teclado `PC XT`): Activa o desactiva giro de 90º en las direcciones de los controles
 
+<<<
+
 ==== Guía básica
 
-Por defecto se inicia con los controles normales, para el uso de pantallas verticales. Si se tiene la pantalla en horizontal (lo más habitual), la imagen se ve de lado, pero para ayudar en el control, y que sea más natural y acorde con lo que se ve, pulsando `Tab` se consigue que las direcciones arriba-abajo estén intercambiadas con izquierda-derecha. Afecta por igual al joystick y al teclado.
+Por defecto se inicia con los controles normales, para el uso de pantallas verticales.
+
+[.text-center] 
+image:img/phoenix.png[pdfwidth=70%]
+
+Si se tiene la pantalla en horizontal (lo más habitual), la imagen se ve de lado, pero para ayudar en el control, y que sea más natural y acorde con lo que se ve, pulsando `Tab` se consigue que las direcciones arriba-abajo estén intercambiadas con izquierda-derecha. Afecta por igual al joystick y al teclado.
 
 <<<
 
@@ -1836,7 +1849,7 @@ Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick (`Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Mostrar u ocultar el menú de configuración
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+, en modo de teclado `ZX Spectrum`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+, en modo de teclado `ZX Spectrum`): cambia de modo video compuesto a VGA y viceversa
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+, en modo de teclado `ZX Spectrum`): cambia de modo vídeo RGB a VGA y viceversa
 - `F3` o `F12` (`Caps Shift+Symbol Shift+3` o `Caps Shift+Symbol Shift+W`  en gomaDOS+): Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
 - Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).   
@@ -1931,7 +1944,10 @@ El https://es.wikipedia.org/wiki/Camputers_Lynx[Lynx] fue un ordenador doméstic
 
 La versión para ZXDOS+ tiene estas características:
 
-- Sólo funciona con RGB/Vídeo Compuesto
+- Modos 48kB y 96 kB
+- ROM Scorpion opcional
+- Carga usando la entrada de audio
+- Soporte para vídeo RGB y VGA
 
 ==== Formato de Tarjeta SD
 
@@ -1943,11 +1959,19 @@ Este core no utiliza la tarjeta SD.
 
 Durante la ejecución del core:
 
-- `Ctrl+Alt+Supr`: Reset
+- `F6` (`Caps Shift+Symbol Shift+6` en gomaDOS+): Alterna entre el modo 48kB y el modo 96kB (por defecto)
+- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Alterna entre activar o desactivar la ROM Scorpio
+- `F8` (`Caps Shift+Symbol Shift+8` en gomaDOS+): Activar o desactivar el tener en cuenta los bits 2 y 3 del puerto $80 (señal CAS del banco 2), para que se vean bien los juegos de Level 9.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo RGB y VGA
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 
 <<<
 
 ==== Guía básica
+
+[.text-center] 
+image:img/lynx.png[pdfwidth=70%]
 
 Desde BASIC, se suele cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con la secuencia de comandos:
 
@@ -1957,7 +1981,7 @@ TAPE n
 LOAD "NOMBRE"
 ----
 
-Donde `n` es un número que suele ser 3 o 5, según como se haya realizado la grabación, y `NOMBRE` es, obligatoriamente el nombre a cargar desde la cinta.
+Donde `n` es un número (entre 1 y 5), según como se haya realizado la grabación, y `NOMBRE` es, obligatoriamente el nombre a cargar desde la cinta.
 
 Si no se sabe el nombre a cargar, se puede averiguar con la misma secuencia de comandos, pero escribiendo `LOAD ""`.
 
@@ -2050,7 +2074,7 @@ Durante la ejecución del core:
 - `F` o el botón de disparo del joystick 1: Disparo del jugador 1
 - `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
 - `H` o el botón de disparo del joystick 2: Disparo del jugador 2
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
 
 <<<
@@ -2110,7 +2134,7 @@ En gomaDOS+, se recomienda cambiar el modo de teclado a `PC XT` (`Caps Shift+Sym
 Durante la ejecución del core:
 
 - `F1` (`Caps Shift+Symbol Shift+5` en gomaDOS+): Carga una ROM de prueba.
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
 - Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar. 
 - `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
@@ -2133,7 +2157,7 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 - Unir los joysticks (Join Joysticks). Útil para ROMs que alternan el joystick en las partidas
 - Cargar ROM (Load Cartridge ROM)
 - Cargar un tipo de letra alternativo (Load VDC Font)
-- Modo de vídeo (PAL Videopac/NTSC Odyssey2)
+- Modo de vídeo (PAL VideoPac/NTSC Odyssey2)
 - Modo de color (Color Mode)
 - Activar o desactivar el módulo sintetizador (http://www.videopac.org/manuals/voice.pdf[The Voice])
 - Salir del menú (Exit) 
@@ -2157,7 +2181,7 @@ Si, al navegar por el directorio donde están las ROMS, no se ven todas, se pued
 
 Es posible, para algunas ROM, cargar un archivo `CHR` con una fuente modificada, en vez de la original incluida en el chip Intel 8244/8245.
 
-Estos archivos se pueden crear siguiendo las instrucciones y utilizando el editor disponible en el repositorio del proyecto, siguiendo https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit[este enlace].
+Estos archivos se pueden crear siguiendo las instrucciones y utilizando el editor disponible en el repositorio del proyecto, siguiendo https://github.com/RW-FPGA-devel-Team/videopac-G7000/tree/main/doc/Charset%20Edit[este enlace].
 
 <<<
 
@@ -2178,11 +2202,13 @@ El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la dis
 [.text-center] 
 image:img/keyboardZX81.jpg[pdfwidth=90%]
 
+<<<
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
 - `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
 - `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Asignar teclas simuladas al joystick 1 (por defecto: `5`, `6`, `7`, `8` y `0`)
@@ -2354,6 +2380,9 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con inter
 `tsx2wav` en https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] es una utilidad en PHP y que sirve para exportar desde ficheros `TSX` a `WAV`.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] es un programa que permite convertir ficheros `TAP` de Camputers Lynx como `WAV` de audio.
+
+https://github.com/rcmolina/CamputersLYNX[2lynx2wav] también permite convertir ficheros `TAP` de Camputers Lynx a ficheros `WAV` de audio.
+
 
 <<<
 
@@ -2597,7 +2626,7 @@ https://es.wikipedia.org/wiki/I%C2%B2S[I^2^S], conocido también como Inter-IC S
 
 En el momento de escribirse estas líneas, hay los siguientes cores con soporte para I^2^S:
 
-- <<#_zx_spectrum,ZX Spectrum>> (versiones más recientes del core EXP27)
+- <<#_zx_spectrum,ZX Spectrum>> (versiones más recientes del core EXP27 y 48K de Kyp)
 - <<#_msx,MSX>> (desde la versión 1.3)
 - <<#_zx_spectrum_next,ZX Spectrum Next>> (versiones más recientes)
 
@@ -3042,7 +3071,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 [start=11]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center] 
 image:img/recovery.png[pdfwidth=70%]
@@ -3077,21 +3106,21 @@ Habitualmente, la imagen de recuperación está configurada para usar un teclado
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 [NOTE]
 ====
 En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
-. Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Si no hay imagen, cambiar entre modo vídeo RGB y modo VGA (`Caps Shift+Symbol Shift+G`)
 . Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
 . Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
 . Rápidamente, pulsar `Caps Shift + 1`
-. De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
-- `Advanced` -> `Video`: `VGA`  (sólo si no teníamos imagen)
+- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
 . Guardar los cambios de la BIOS:
 - `Exit` -> `Save changes and exit`
 .Apagar completamente el gomaDOS+ y volver a encenderlo
@@ -3170,7 +3199,7 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center] 
 image:img/recovery.png[pdfwidth=70%]
@@ -3205,21 +3234,21 @@ Habitualmente, la imagen de recuperación está configurada para usar un teclado
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 [NOTE]
 ====
 En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
-. Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Si no hay imagen, cambiar entre modo vídeo RGB y modo VGA (`Caps Shift+Symbol Shift+G`)
 . Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
 . Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
 . Rápidamente, pulsar `Caps Shift + 1`
-. De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
-- `Advanced` -> `Video`: `VGA`  (sólo si no teníamos imagen)
+- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
 . Guardar los cambios de la BIOS:
 - `Exit` -> `Save changes and exit`
 .Apagar completamente el gomaDOS+ y volver a encenderlo
@@ -3275,7 +3304,7 @@ pld load recovery.zxd.bit
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center] 
 image:img/recovery.png[pdfwidth=70%]
@@ -3310,21 +3339,21 @@ Habitualmente, la imagen de recuperación está configurada para usar un teclado
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 [NOTE]
 ====
 En el caso de gomaDOS+, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
-. Si no hay imagen, cambiar entre modo video compuesto y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Si no hay imagen, cambiar entre modo vídeo RGB y modo VGA (`Caps Shift+Symbol Shift+G`)
 . Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
 . Reiniciar el gomaDOS+ sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
 . Rápidamente, pulsar `Caps Shift + 1`
-. De nuevo, si no hay imagen, cambiar entre modo VGA y modo video compuesto (`Caps Shift+Symbol Shift+G`)
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
-- `Advanced` -> `Video`: `VGA`  (sólo si no teníamos imagen)
+- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
 . Guardar los cambios de la BIOS:
 - `Exit` -> `Save changes and exit`
 .Apagar completamente el gomaDOS+ y volver a encenderlo
@@ -3398,13 +3427,13 @@ https://github.com/fbelavenuto/colecofpga[ColecoFPGA en GitHub]
 
 https://www.forofpga.es/viewtopic.php?f=167&t=24[Core de Videopac para ZXDOS]
 
-https://github.com/yomboprime/VideoPac-ZXDOS[VideoPac-ZXDOS]
+https://github.com/yomboprime/videopac-ZXDOS[VideoPac-ZXDOS]
 
 https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox Odyssey 2 (2012-04-23)]
 
-https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 for FPGA]
+https://github.com/RW-FPGA-devel-Team/videopac-G7000[Videopac G7000 / Odyssey2 for FPGA]
 
-http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Module Manual]
+http://www.videopac.org/manuals/voice.pdf[Odyssey Speech And Sound Effects Module Manual]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
 
