@@ -1,6 +1,6 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.6
+:revnumber: 0.7
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1054,6 +1054,7 @@ Sus características principales son:
 - Specdrum
 - Turbosound (dos chips AY) con posibilidad de elegir mix ACB/ABC
 - DivMMC con esxdos 0.8.8
+- Salida de vídeo compuesto/RGB y VGA 50Hz seleccionables vía teclado
 
 ==== Formato de Tarjeta SD
 
@@ -1068,6 +1069,7 @@ Durante la ejecución del core:
 - `Esc`: BREAK
 - `F5`: NMI
 - `F8`: Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
+- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa.
 - `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `Ctrl+Alt+Supr` o `F12`: Soft reset.
 
@@ -1578,7 +1580,9 @@ El https://es.wikipedia.org/wiki/Camputers_Lynx[Lynx] fue un ordenador doméstic
 
 La versión para ZXUNO+ tiene estas características:
 
-- Memoria de 96K
+- Modos 48kB y 96 kB
+- ROM Scorpion opcional
+- Carga usando la entrada de audio
 - Soporte para joystick
 - Sólo funciona con RGB/Vídeo Compuesto
 
@@ -1592,13 +1596,17 @@ Este core no utiliza la tarjeta SD.
 
 Durante la ejecución del core:
 
-- `F8`: Activar o desactivar el tener en cuenta los bits 2 y 3 del puerto $80, para que se vean bien los juegos de Level 9.
-- `Ctrl+Alt+Supr`: Reset
+- `F6`: Alterna entre el modo 48kB y el modo 96kB (por defecto)
+- `F7`: Alterna entre activar o desactivar la ROM Scorpio (activa por defecto)
+- `F8`: Activar o desactivar el tener en cuenta los bits 2 y 3 del puerto $80 (señal CAS del banco 2), para que se vean bien los juegos de Level 9.- `Ctrl+Alt+Supr`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 
 <<<
 
 ==== Guía básica
+
+[.text-center] 
+image:img/lynx.png[pdfwidth=70%]
 
 Desde BASIC, se suele cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con la secuencia de comandos:
 
@@ -1608,7 +1616,7 @@ TAPE n
 LOAD "NOMBRE"
 ----
 
-Donde `n` es un número que suele ser 3 o 5, según como se haya realizado la grabación, y `NOMBRE` es, obligatoriamente el nombre a cargar desde la cinta.
+Donde `n` es un número (entre 1 y 5), según como se haya realizado la grabación, y `NOMBRE` es, obligatoriamente el nombre a cargar desde la cinta.
 
 Si no se sabe el nombre a cargar, se puede averiguar con la misma secuencia de comandos, pero escribiendo `LOAD ""`.
 
@@ -2115,6 +2123,9 @@ Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de pr
 
 Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`.
 
+[.text-center] 
+image:img/msx.png[pdfwidth=70%]
+
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos `RUN"CAS:"`, `BLOAD"CAS:",R` o `CLOAD`.
 
 [WARNING]
@@ -2123,6 +2134,8 @@ Para que la carga desde audio funcione, el modo turbo tiene que estar desactivad
 ====
 
 Para acceder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
+
+<<<
 
 ===== MSXCTRL
 
@@ -2372,6 +2385,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con inter
 https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite convertir ficheros `TAP` de Commodore como `WAV` de audio.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] es un programa que permite convertir ficheros `TAP` de Camputers Lynx como `WAV` de audio.
+
+https://github.com/rcmolina/CamputersLYNX[2lynx2wav] también permite convertir ficheros `TAP` de Camputers Lynx a ficheros `WAV` de audio.
 
 <<<
 

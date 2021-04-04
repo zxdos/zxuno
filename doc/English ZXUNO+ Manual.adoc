@@ -1,6 +1,6 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 0.6
+:revnumber: 0.7
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1046,6 +1046,7 @@ Main features:
 - Specdrum
 - Turbosound (two AY chips) with mix selection ACB/ABC
 - DivMMC with esxdos 0.8.8
+- Composite video/RGB and VGA video output
 
 ==== SD card format
 
@@ -1060,6 +1061,7 @@ While the core is running:
 - `Esc`: BREAK
 - `F5`: NMI
 - `F8`: Change Turbosound mixer configuration between ACB and ABC.
+- `Scroll Lock`: Switches between composite and VGA video modes.
 - `Ctrl+Alt+Backspace` or `F11`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Supr` or `F12`: Soft reset.
 
@@ -1568,7 +1570,9 @@ https://en.wikipedia.org/wiki/Camputers_Lynx[The Lynx] was an 8-bit British home
 
 The ZXUNO+ core has these features:
 
-- 96K RAM
+- 48kB and 96 kB modes
+- Optional Scorpion ROM
+- Load from a external audio device
 - Joystick support
 - Only RGB/Composite Video out
 
@@ -1582,6 +1586,8 @@ This core does not use the SD card
 
 While running the core:
 
+- `F6`: Switch between 48kB mode and 96kB mode (default)
+- `F7`: Enable or disable Scorpio ROM
 - `F8`: Switch the option to consider port $80 bits 2 and 3, so that Level 9 games are displayed properly.
 - `Ctrl+Alt+Del`: Reset.
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
@@ -1589,6 +1595,9 @@ While running the core:
 <<<
 
 ==== Basic Guide
+
+[.text-center] 
+image:img/lynx.png[pdfwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with commands like:
 
@@ -1598,7 +1607,7 @@ TAPE n
 LOAD "NAME"
 ----
 
-Where `n` is a number (usually 3 or 5), and `NAME` is mandatory, and the name of the program to load.
+Where `n` is a number (between 1 and 5), and `NAME` is mandatory, and the name of the program to load.
 
 If you don't know the name to load, you can guess with the same command sequence, but writing `LOAD ""`.
 
@@ -2107,6 +2116,9 @@ To change the video mode between 50Hz and 60Hz (and thus play at correct speed P
 
 To go to BASIC from MSX-DOS you must execute `BASIC` command.
 
+[.text-center] 
+image:img/msx.png[pdfwidth=70%]
+
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the commands `RUN"CAS:"`, `BLOAD"CAS:",R` or `CLOAD`.
 
 [WARNING]
@@ -2115,6 +2127,8 @@ Loading from audio sources only works if turbo mode is disabled.
 ====
 
 To go to MSX-DOS from BASIC, execute `CALL SYSTEM`.
+
+<<<
 
 ===== MSXCTRL
 
@@ -2354,6 +2368,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] is a graphical interface program made for Windows (but also working on Wine) that can convert Commodore `TAP` files to `WAV` audio files.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] is a program that can convert Camputers Lynx `TAP` files to `WAV` audio.
+
+https://github.com/rcmolina/CamputersLYNX[2lynx2wav] also can convert Camputers Lynx `TAP` files to audio files.
 
 <<<
 
