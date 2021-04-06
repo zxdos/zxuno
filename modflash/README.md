@@ -1,6 +1,6 @@
 # Target
 
-File `FLASH.ZX1` - .
+File `FLASH.ZX1`.
 
 # Windows
 
