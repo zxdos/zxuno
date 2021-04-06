@@ -11,7 +11,7 @@ ADDITEM	= AddItem
 endif
 
 .PHONY: all
-all: | FLASHempty.ZX1 $(GENROM) $(ADDITEM) ./addroms.sh ./addcores.sh
+all: | FLASHempty.ZX1 $(GENROM) $(ADDITEM) ./addroms.sh ./addcores.sh roms.txt cores.txt
 	cp FLASHempty.ZX1 FLASH.ZX1
 	./addroms.sh
 	./addcores.sh
@@ -27,7 +27,11 @@ endif
 .PHONY: clean
 clean:
 ifeq ($(OS),Windows_NT)
-	rm -f FLASH.ZX1
+	@rem
 else
-	rm -f $(GENROM) $(ADDITEM) FLASH.ZX1
+	rm -f $(GENROM) $(ADDITEM)
 endif
+
+.PHONY: dist-clean
+dist-clean: clean
+	rm -f FLASH.ZX1

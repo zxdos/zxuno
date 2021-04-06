@@ -23,3 +23,9 @@ make
 ```bash
 make clean
 ```
+
+or even to remove `FLASH.ZX1` file:
+
+```bash
+make dist-clean
+```
