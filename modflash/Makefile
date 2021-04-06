@@ -27,7 +27,7 @@ endif
 .PHONY: clean
 clean:
 ifeq ($(OS),Windows_NT)
-	@rem
+	# Nothing to do
 else
 	rm -f $(GENROM) $(ADDITEM)
 endif
