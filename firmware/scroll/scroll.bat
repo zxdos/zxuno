@@ -1,3 +1,4 @@
+@call ..\..\sdk\setvars.bat
 FuenteABin
 Png2Rcs fondo.png fondo.rcs -a fondo.atr
 sjasmplus scroll.asm

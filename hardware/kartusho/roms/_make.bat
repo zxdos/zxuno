@@ -1,3 +1,4 @@
+@call ..\..\..\sdk\setvars.bat
 genMenu
 rcs screen.scr screen.rcs
 fcut screen.rcs 0 1800 screen.cut
