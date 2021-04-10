@@ -1,0 +1,17 @@
+SPDX-FileName: sjasmplus.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 0fea7c17d5e83c03466ab99141add32551f16714
+
+SPDX-LicenseConcluded: Zlib
+
+SPDX-LicenseComments: The concluded license is taken from external sources showed in program's banner after program was started.
+
+SPDX-FileCopyrightText: Copyright 2004-2008 by Aprisobal / http://sjasmplus.sf.net / my@aprisobal.by /
+
+SPDX-FileComment: SjASMPlus Z80 Cross-Assembler v1.08 (build 07-04-2016)
+
+SPDX-FileNotice: based on code of SjASM by Sjoerd Mastijn / http://www.xl2s.tk /
+
+SPDX-FileContributor: Modified 2016 AntonioVillena
