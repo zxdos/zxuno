@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 if [[ "x$ZXUNOSDK" == x ]]; then
-	ZXUNOSDK=$(dirname $(realpath "$0"))
+	ZXUNOSDK=$(dirname $(realpath "$BASH_SOURCE"))
 	PATH=$ZXUNOSDK/bin:$PATH
 	export ZXUNOSDK
 fi
