@@ -1,3 +1,15 @@
+# Authors
+
+2021 Ivan Tatarinov <ivan-tat@ya.ru>
+
+# Contributors
+
+No one yet.
+
+# License
+
+This document is under [GNU FDL-1.3 or later](http://www.gnu.org/licenses/fdl-1.3.html) license.
+
 # Target
 
 File `FLASH.ZX1`.

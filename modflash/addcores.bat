@@ -1,4 +1,10 @@
 @echo off
+rem SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+rem
+rem SPDX-FileNotice: Based on code by Antonio Villena <_@antoniovillena.es>
+rem
+rem SPDX-License-Identifier: GPL-3.0-or-later
+
 set /a i=2
 for /f "eol=# tokens=1,2,3 delims=;" %%a in (cores.txt) do call :AddCore %%a %%b %%c
 exit /b
@@ -15,4 +21,4 @@ exit /b
 
 :Error
 echo ERROR: Exit status %ERRORLEVEL%. Stopped.
-exit %ERRORLEVEL% /b
+exit /b %ERRORLEVEL%
