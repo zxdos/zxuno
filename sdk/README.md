@@ -24,17 +24,11 @@ Check it out by using this [reuse-tool](https://github.com/fsfe/reuse-tool).
 
 ## 2.1. Build tools
 
-To build all tools type:
-
-```bash
-make
-```
-
-To build only **sjasmplus** type:
-
-```bash
-make bin/sjasmplus
-```
+Command | Target
+----|----
+`make` | all tools
+`make bin/sjasmplus` | **sjasmplus**
+`make bin/zx7b` | **zx7b**
 
 ## 2.2. Clean tools
 
@@ -86,30 +80,17 @@ This has the same behavior as the inclusion of `common.mk` file in a Makefile.
 **NOTE**: compilation of the following tools:
 
 * sjasmplus
+* zx7b
 
 on Windows platform is disabled right now because of presence of precompiled binaries of them in repository. They are not deleted when cleaning.
 
 ## 3.1. Build tools
 
-To build all tools type:
-
-```bash
-make
-```
-
-To build only **sjasmplus** type:
-
-```
-make bin/sjasmplus.exe
-```
+The building process is similar to one for GNU on Linux, FreeBSD etc. See [2.1](#21-build-tools).
 
 ## 3.2. Clean tools
 
-To clean everything type:
-
-```bash
-make clean
-```
+The cleaning process is similar to one for GNU on Linux, FreeBSD etc. See [2.2](#22-clean-tools).
 
 ## 3.3. Tools usage
 
