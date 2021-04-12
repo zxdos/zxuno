@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.4
+:revnumber: 1.4.5
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -56,7 +56,7 @@ image:img/gomaDosBack.jpg[pdfwidth=90%]
 
 ==== Descripción
 
-[cols=2*] 
+[align="center",width="80%",cols=2*] 
 |===
 |1
 |Interruptor
@@ -173,7 +173,7 @@ diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32"
 
 ===== Linux
 
-Existen multitud de herramientas en Linux que permiten formatear y particionar el contenido de una tarjeta SD (como `fdisk`, `parted`, `cfdisk`, `sfdisk` o `GParted`). Sólo se ha de tener en cuenta que el esquema de particiones a utilizar siempre ha de ser MBR, y la primera partición (la que se utilizará para esxdos) ha de ser primaria.
+Existen multitud de herramientas en Linux que permiten formatear y particionar el contenido de una tarjeta microSD (como `fdisk`, `parted`, `cfdisk`, `sfdisk` o `GParted`). Sólo se ha de tener en cuenta que el esquema de particiones a utilizar siempre ha de ser MBR, y la primera partición (la que se utilizará para esxdos) ha de ser primaria.
 
 <<<
 
@@ -228,7 +228,7 @@ Por defecto, está configurado en modo ZX Spectrum. Para cambiar a otro modo, se
 
 La siguiente tabla indica los distintos modos y la tecla de activación asociada:
 
-[%header,cols=2*] 
+[align="center",width="40%",%header,cols=2*] 
 |===
 |Modo
 |Tecla
@@ -264,7 +264,7 @@ La siguiente tabla indica los distintos modos y la tecla de activación asociada
 
 La distribución del teclado en modo ZX Spectrum, con la pulsación asociada al combinar junto con `Caps Shift+Symbol Shift`, se puede resumir según el siguiente esquema:
 
-[cols=10*] 
+[align="center",width="80%",cols=10*] 
 |===
 ^|**1**
 ^|**2**
@@ -360,7 +360,7 @@ Donde:
 
 La lista completa de combinaciones de teclado (y el modo en que se pueden utilizar) es la siguiente:
 
-[%header,cols=3*] 
+[align="center",width="75%",%header,cols=3*] 
 |===
 |Caps S.+Symbol S.
 |Modo
@@ -918,7 +918,7 @@ Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.
 
 Puesto que se trata de una ROM de 64K con soporte para nuevo hardware, se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
 
-[%header,cols=2*] 
+[align="center",width="60%",%header,cols=2*] 
 |===
 |Ajuste
 |Significado
@@ -947,7 +947,7 @@ El conjunto completo de ROMs está disponible para descargar desde el repositori
 
 Dependiendo de la ROM elegida, los ajustes a indicar cuando se <<#_zx123_tool,añada a la SPI flash>> pueden variar. Por ejemplo, para la ROM `48le_ea_re_po` (que tiene habilitadas todas las opciones), se pueden usar estos ajustes  (no hay que habilitar NMI DivMMC porque el editor de POKEs ya lo utiliza):
 
-[%header,cols=2*] 
+[align="center",width="60%",%header,cols=2*] 
 |===
 |Ajuste
 |Significado
@@ -1045,7 +1045,7 @@ Se puede encontrar mucha más información, incluyendo el manual de usuario, etc
 
 Estos son algunos ajustes válidos para <<#_zx123_tool,añadir a la SPI flash>> algunas otras ROM personalizadas:
 
-[%header,cols=2*] 
+[align="center",width="60%",%header,cols=2*] 
 |===
 |Nombre de la ROM
 |Ajustes
@@ -1073,7 +1073,7 @@ Los principales comandos "DOT" commands son los siguientes:
 
 - `128`: Para pasar al modo 128K desde el modo 48K.
 - `cd`: Cambiar el directorio actual de trabajo.
-- `chmod`: cambiar los atributos de los ficheros de la tarjeta SD.
+- `chmod`: cambiar los atributos de los ficheros de la tarjeta microSD.
 - `cp`: Copiar un archivo.
 - `divideo`: Reproduce un archivo de vídeo Divideo (.DVO).
 - `drives`: Mostrar las unidades disponibles.
@@ -1124,8 +1124,8 @@ El gestor de esxdos muestra las entradas de archivos y directorios en el orden d
 
 Tal y como se ha explicado en la parte de instalación, existe una serie de comandos que son exclusivos para ZXDOS+, y que se describen a continuación:
 
-- `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
-- `backzx2` o `backzxd`: Genera un fichero `FLASH.ZX2` o `FLASH.ZXD` en el directorio raíz de la tarjeta SD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
+- `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
+- `backzx2` o `backzxd`: Genera un fichero `FLASH.ZX2` o `FLASH.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
 - `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
 - `dmaplayw`: Reproduce un archivo de audio .WAV,  que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
 - `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
@@ -1137,7 +1137,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Sólo funciona correctamente en ZX-Uno y ZXDOS (no utilizar en ZXDOS+ o gomaDOS+). Se debe ejecutar desde una ROM en modo "root". 
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
-- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
+- `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH.ZX2` o `FLASH.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root". 
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
@@ -1475,7 +1475,7 @@ MSX1FPGA es un proyecto para clonar MSX1. El desarrollo original es de Fabio Bel
 Algunas de sus características son:
 
 - MSX1 a 50Hz o 60Hz;
-- Utiliza Nextor ROM con un controladr para SD
+- Utiliza Nextor ROM con un controlador para SD
 - Mapa de teclado configurable
 - Simulación de línea de exploración (Scanlines)
 - Soporte para joystick
@@ -1487,7 +1487,7 @@ Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT
 
 Obtener lo siguiente:
 
-- Ficheros básicos del proyecto para la SD https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[desde GitHub]
+- Ficheros básicos del proyecto para la microSD https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[desde GitHub]
 - Controlador (`NEXTOR.SYS`) y ROM (`NEXTOR.ROM`) de Nextor https://github.com/fbelavenuto/msx1fpga/tree/master/Software/nextor[también desde GitHub]
 - ROM de MSX1 (`MSX_INT.rom`, `MSX_JP.rom` o `MSX_USA.rom`) https://github.com/fbelavenuto/msx1fpga/tree/master/Software/msx1[en el mismo repositorio]
 
@@ -1611,7 +1611,7 @@ Algunas de sus características son:
 
 ==== Formato de Tarjeta microSD
 
-Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT32, de 4GB de tamaño máximo y 4096 bytes por cluster.
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT32 (Tipo de partición `0B` Win95 FAT-32), de 4GB de tamaño máximo y 4096 bytes por cluster.
 
 Además son necesarios los ficheros ROM siguientes (se pueden obtener http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[en la wiki oficial del proyecto original]) o en el https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[repositorio de GitHub]:
 - `OS6128.ROM`
@@ -1896,7 +1896,7 @@ Algunas de las características del core son:
 - Filtro HQ2X que "despixeliza" la imagen
 - Simulación de línea de exploración (Scanlines)
 - Utiliza el reloj de la NES NTSC, por tanto funcionan correctamente las ROMs USA. Las ROMs PAL van más rápido de lo que deberían
-- Permite cargar ROMS desde la SD
+- Permite cargar ROMS desde la microSD
 - Necesita, al menos, un mando o joystick conectado y que tenga varios botones de disparo
 - Sólo soporta salida VGA y utiliza timings poco rigurosos, por lo que es posible que de problemas en algunos monitores
 
@@ -1932,7 +1932,7 @@ En él se pueden activar o desactivar las siguientes opciones:
 - Encender o apagar el filtro que suaviza la imagen (HQ2X Filter)
 - Simular la pulsación del botón Select del mando 1 (P1 Select)
 - Simular la pulsación del botón Start del mando 1 (P1 Start)
-- Elegir un ROM para cargar desde la SD (Load ROM)
+- Elegir una ROM para cargar desde la microSD (Load ROM)
 - Salir del menú (Exit)
 
 <<<
@@ -1949,9 +1949,9 @@ La versión para ZXDOS+ tiene estas características:
 - Carga usando la entrada de audio
 - Soporte para vídeo RGB y VGA
 
-==== Formato de Tarjeta SD
+==== Formato de tarjeta microSD
 
-Este core no utiliza la tarjeta SD.
+Este core no utiliza la tarjeta microSD.
 
 ==== Teclado
 
@@ -2036,7 +2036,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Al iniciar, la ROM de la BIOS se carga desde la tarjeta SD, así como la ROM multicartucho. 
+Al iniciar, la ROM de la BIOS se carga desde la tarjeta microSD, así como la ROM multicartucho. 
 
 [.text-center] 
 image:img/coleco.jpg[pdfwidth=70%]
@@ -2191,7 +2191,7 @@ El computador personal https://es.wikipedia.org/wiki/ZX81[Sinclair ZX81], lanzad
 
 La versión para ZXDOS+ ha sido creada por avlixa.
 
-==== Formato de Tarjeta SD
+==== Formato de Tarjeta microSD
 
 Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con archivos de cinta que se deseen cargar.
 
@@ -2239,6 +2239,164 @@ Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado de
 [TIP]
 ====
 Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+====
+
+<<<
+
+=== PC XT
+
+El https://es.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT], fue el sucesor del IBM PC original. Estaba basado esencialmente en la misma arquitectura que el PC original, pero con algunas mejoras y se acabó convirtió en un estándar.
+
+El core de ZXDOS+ es una implementación adaptada de https://opencores.org/projects/next186_soc_pc[Next186].
+
+Características del sistema implementado:
+
+- Núcleo Next186 con CPU a 30 MHz
+- 64 MB DDR3 RAM
+- DSP a 40 MHz
+- Soporte para OPL3
+- Soporte para teclado y raton PS/2
+
+==== Formato de Tarjeta microSD
+
+Por el momento, se deben reservar los últimos 8KB de la tarjeta para almacenar la BIOS del PC.
+
+Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición FAT16 y con MS-DOS (o similar) instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta microSD como disco.
+
+Una vez formateada y particionada (con la reserva al final), se debe grabar la imagen de BIOS `Next186_BIOS_zxdos_ddr3.COM` en los últimos sectores de la tarjeta.
+
+===== Windows
+
+Se puede utilizar el programa https://mh-nexus.de/en/hxd/[HxD (editor hexadecimal para Windows)]:
+
+. Abrir el programa como administrador y elegir la opción `Abrir disco...` en el menú `Herramientas`
+. Desmarcar la opción para abrir como solo lectura y seleccionar la tarjeta microSD
+. Abrir en otra ventana el fichero con la imagen de BIOS
+. Copiar el contenido de la imagen de BIOS, y pegarlo, reemplazando, en el final de la microSD
+. Guardar los cambios en la SD
+
+<<<
+
+===== Linux
+
+Seguir los siguientes pasos:
+
+. Tras identificar el disco de la tarjeta (en este ejemplo, `sdb`),  invocar `fdisk` para ver el tamaño
+
+[source,shell]
+----
+fdisk -l /dev/sdb
+Disk /dev/sdb: 59.49 GiB, 63864569856 bytes, 124735488 sectors
+Disk model: SD/MMC          
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+(...)
+----
+
+[start=2]
+. Como los sectores son de 512 bytes, restar 16 (en este ejemplo, `124735488-16=124735472`) y usar esta información para inyectar la BIOS al final:
+
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=124735472
+----
+
+===== MacOS
+
+Pasos a seguir:
+
+. Tras identificar el disco de la tarjeta (en este ejemplo, `disk6`),  invocar `fdisk` para ver el tamaño en sectores
+
+[source,shell]
+----
+sudo diskutil unmountDisk /dev/disk6
+sudo fdisk /dev/rdisk6
+
+Disk: /dev/rdisk6   geometry: 15566/255/63 [30535680 sectors]
+(...)
+Enter 'help' for information
+fdisk: 1>q
+----
+
+[start=2]
+. Como los sectores son de 512 bytes, restar 16 (en este ejemplo, `30535680-16=30535664`) y usar esta información para inyectar la BIOS al final:
+
+[source,shell]
+----
+sudo diskutil unmountDisk /dev/disk6
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=30535664
+----
+
+Si no estuviera ya, <<#_cores,instalar el core de PC XT>> en el ZXDOS+.
+
+<<<
+
+==== Teclado
+ 
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en gomaDOS+): Soft reset.
+
+==== Guía Básica
+
+[.text-center] 
+image:img/pcxt.png[pdfwidth=70%]
+
+<<<
+
+=== Chip-8
+
+https://es.wikipedia.org/wiki/CHIP-8[CHIP-8] es un lenguaje de programación interpretado, desarrollado por Joseph Weisbecker. Fue inicialmente usado en los microcomputadores de 8 bits COSMAC VIP y Telmac 1800 a mediados de 1970. CHIP-8 tiene un descendiente llamado SCHIP (Super Chip), presentado por Erik Bryntse.
+
+El core de ZXDOS+ está basada en una implementación ya existente https://bitbucket.org/csoren/fpga-chip8/[para FPGA] de la máquina virtual de SuperChip.
+
+Existen múltiples sitios como https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] o https://github.com/mattmikolay/chip-8[CHIP-8 de Matthew Mikolay] donde se puede obtener software para este tipo de máquinas.
+
+==== Formato de Tarjeta microSD
+
+Se puede utilizar una tarjeta con la primera partición en formato FAT16 o FAT32 para almacenar ficheros ROM en formato `BIN` o `CH8` para usar con el core.
+
+==== Teclado
+
+La máquina CHIP-8 utiliza un teclado hexadecimal como entrada. La asignación en el teclado es la siguiente:
+
+[align="center",width="25%",%header,cols=2*] 
+|===
+|Chip-8|PS/2
+|`1 2 3 C`|`1 2 3 4`
+|`4 5 6 D`|`Q W E R`
+|`7 8 9 E`|`A S D F`
+|`A 0 B F`|`Z X C V`
+|===
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Esc` (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
+- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Reset
+
+<<<
+
+==== Guía Básica
+
+Pulsando `Esc` (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar las distintas opciones.
+
+[.text-center] 
+image:img/chip8.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Cambiar la velocidad de reloj del core (Clock Speed)
+- Cargar un archivo de ROM desde la tarjeta microSD (Load Rom)
+- Salir del menú (Exit)
+
+[CAUTION]
+====
+Después de cargar cualquier ROM, pulsar siempre a continuación la tecla de reset para que funcione correctamente: `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+)
 ====
 
 <<<
@@ -2346,7 +2504,7 @@ aclocal && autoconf && autoheader && automake --add-missing
 make
 ----
 
-Si todo se ha hecho correctamente, se habrá generado el fichero `tzplay` que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.
+Si todo se ha hecho correctamente, se habrá generado el fichero `playtzx` que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.
 
 ==== Teléfono móvil, tableta, reproductor de sonido MP3, etc.
 
@@ -2400,7 +2558,7 @@ image:img/MiniduinoBack.jpg[pdfwidth=50%]
 [.text-center] 
 image:img/MiniduinoFront.jpg[pdfwidth=50%]
 
-[cols=2*] 
+[align="center",width="60%",cols=2*] 
 |===
 |1
 |Alimentación
@@ -2679,7 +2837,7 @@ image:img/pizeroaddon.jpg[pdfwidth=70%]
 ====
 Para la versión de NextPI disponible al escribir estas líneas (0.99D RTM), no es necesario utilizar todas conexiones, siendo suficiente utilizar:
 
-[%header,cols=3*] 
+[align="center",width="90%",%header,cols=3*] 
 |===
 |Nombre
 |Pin
@@ -2832,7 +2990,7 @@ Véase la https://github.com/kounch/zx123_tool/#castellano[documentación de la 
 
 Entre los datos que se indican al añadir una ROM, hay una serie de indicadores para definir qué opciones de hardware, etc. se desean habilitar o deshabilitar al cargar esa ROM en concreto, según se puede ver en esta tabla:
 
-[%header,cols=2*] 
+[align="center",width="70%",%header,cols=2*] 
 |===
 |`i`
 |Habilitar teclado issue 3 (en vez de issue 2)
@@ -2986,7 +3144,7 @@ image:img/gpio.jpg[pdfwidth=70%]
 
 En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (correspondientes a `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` y `GND`), de la siguiente manera:
 
-[%header,cols=3*] 
+[align="center",width="50%",%header,cols=3*] 
 |===
 |JTAG ZXDOS+
 |GPIO
