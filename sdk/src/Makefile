@@ -10,13 +10,16 @@ include ../common.mk
 
 ifeq ($(OS),Windows_NT)
 SJASMPLUS	:= sjasmplus.exe
+ZX7B		:= zx7b.exe
 else
 SJASMPLUS	:= sjasmplus
+ZX7B		:= zx7b
 endif
 
 .PHONY: all
 all: \
- ../bin/$(SJASMPLUS)
+ ../bin/$(SJASMPLUS) \
+ ../bin/$(ZX7B)
 
 ifneq ($(OS),Windows_NT)
 ../bin/$(SJASMPLUS): sjasmplus/build/$(SJASMPLUS)
@@ -33,13 +36,20 @@ sjasmplus:
 	tar -xzf sjasmplus.tgz
 	mv sjasmplus-20190306.1 sjasmplus
 	rm -f sjasmplus.tgz
+
+../bin/$(ZX7B): zx7b/$(ZX7B)
+	cp $< $@
+
+zx7b/$(ZX7B): | zx7b
+	$(MAKE) -w -C $|
 endif
 
 .PHONY: clean
 ifeq ($(OS),Windows_NT)
 clean:;
 else
-clean: | sjasmplus sjasmplus.mk
+clean: | sjasmplus sjasmplus.mk zx7b
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk clean
-	rm -f ../bin/$(SJASMPLUS)
+	$(MAKE) -w -C zx7b clean
+	rm -f ../bin/$(SJASMPLUS) ../bin/$(ZX7B)
 endif

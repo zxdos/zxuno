@@ -10,12 +10,15 @@ include common.mk
 
 ifeq ($(OS),Windows_NT)
 SJASMPLUS	:= sjasmplus.exe
+ZX7B		:= zx7b.exe
 else
 SJASMPLUS	:= sjasmplus
+ZX7B		:= zx7b
 endif
 
 TOOLS:=\
- bin/$(SJASMPLUS)
+ bin/$(SJASMPLUS) \
+ bin/$(ZX7B)
 
 .PHONY: all
 all: $(TOOLS)
