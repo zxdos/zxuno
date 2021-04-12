@@ -3181,10 +3181,10 @@ calbi3    add     hl, de
         ELSE
 calbi1    ld      a, b        ;1-40
           sub     20
+          jr      z, calbi2
           jr      c, calbi2   ;<20 c n
           ld      b, a        ;>=20 nc n-20
 calbi2    ld      hl, $fec0
-          ret     z
           ld      de, $0c40
 calbi3    add     hl, de
           djnz    calbi3
