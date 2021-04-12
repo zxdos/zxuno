@@ -53,9 +53,3 @@ cores/Oric/source/_impact.cmd
 cores/Oric/source/_impact.log
 
 cores/Oric/build/oric.v4_my.bit
-
-sdk/bin/sjasmplus
-sdk/bin/zx7b
-sdk/src/sjasmplus
-sdk/src/zx7b/zx7b
-sdk/src/zx7b/zx7b.exe
