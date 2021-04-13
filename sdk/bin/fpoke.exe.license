@@ -1,0 +1,11 @@
+SPDX-FileName: fpoke.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 59c8b1ea5221e31d7c23573591bdb4bb61878d9a
+
+SPDX-FileCopyrightText: Copyright (C) 2016, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: fpoke version 1.0 (11 May 2016) - tool that overwrites bytes in a file.

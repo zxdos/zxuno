@@ -1,8 +1,10 @@
 /*
- * ZX7b (c) Copyright 2013 by Antonio Villena. All rights reserved.
+ * zx7b - backwards compressor.
+ *
+ * Copyright (c) 2013, 2021 Antonio Villena. All rights reserved.
  *
  * Based on ZX7 <http://www.worldofspectrum.org/infoseekid.cgi?id=0027996>
- * (c) Copyright 2012 by Einar Saukas. All rights reserved.
+ * ZX7 is Copyright (c) 2012 Einar Saukas. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,19 +27,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * SPDX-FileCopyrightText: ZX7b (c) Copyright 2013 by Antonio Villena. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 2013, 2021 Antonio Villena. All rights reserved.
  *
  * SPDX-FileNotice: Based on ZX7 <http://www.worldofspectrum.org/infoseekid.cgi?id=0027996>
- * SPDX-FileNotice: (c) Copyright 2012 by Einar Saukas. All rights reserved.
+ * SPDX-FileNotice: ZX7 is Copyright (c) 2012 Einar Saukas. All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * SPDX-LicenseComments: License's text is equals to one from https://directory.fsf.org/wiki/License:BSD-3-Clause
+ * SPDX-LicenseComments: License's text equals to one from https://directory.fsf.org/wiki/License:BSD-3-Clause
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define PROGRAM "zx7b"
+#define DESCRIPTION "backwards compressor."
+#define VERSION "1.01 (28 Dec 2013)"
+#define COPYRIGHT "Copyright (c) 2013, 2021 Antonio Villena. All rights reserved.\n" \
+"Based on ZX7 <http://www.worldofspectrum.org/infoseekid.cgi?id=0027996>\n" \
+"ZX7 is Copyright (c) 2012 Einar Saukas. All rights reserved."
+#define LICENSE \
+"Distributed under BSD 3-clause license."
+#define HOMEPAGE "https://github.com/antoniovillena/zx7b/"
 
 #define MAX_OFFSET  2176  /* range 1..2176 */
 #define MAX_LEN    65536  /* range 2..65536 */
@@ -52,6 +64,23 @@ typedef struct optimal_t {
   int offset;
   int len;
 } Optimal;
+
+void show_help() {
+  printf(
+    PROGRAM " version " VERSION " - " DESCRIPTION "\n"
+    COPYRIGHT "\n"
+    LICENSE "\n"
+    "Home page: " HOMEPAGE "\n"
+    "\n"
+    "Usage:\n"
+    "  " PROGRAM " <input_file> <output_file>\n"
+    "\n"
+    "  <input_file>    Raw input file\n"
+    "  <output_file>   Compressed output file\n"
+    "\n"
+    "Example: " PROGRAM " Cobra.scr Cobra.zx7b\n"
+  );
+}
 
 Optimal *optimize(unsigned char *input_data, size_t input_size);
 
@@ -70,11 +99,7 @@ int main(int argc, char *argv[]) {
   int i, j;
 
   if( argc==1 )
-    printf("\nZX7 Backwards compressor v1.01 by Einar Saukas/AntonioVillena, 28 Dec 2013\n\n"
-           "  zx7b <input_file> <output_file>\n\n"
-           "  <input_file>    Raw input file\n"
-           "  <output_file>   Compressed output file\n\n"
-           "Example: zx7b Cobra.scr Cobra.zx7b\n"),
+    show_help(),
     exit(0);
   if( argc!=3 )
     printf("\nInvalid number of parameters\n"),

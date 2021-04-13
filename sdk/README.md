@@ -29,6 +29,28 @@ Command | Target
 `make` | all tools
 `make bin/sjasmplus` | **sjasmplus**
 `make bin/zx7b` | **zx7b**
+`make bin/fcut` | **fcut**
+`make bin/fpad` | **fpad**
+`make bin/fpoke` | **fpoke**
+
+To build using MinGW add this parameter for **make** tool:
+
+Parameter | Target system
+----|----
+`BUILD=mingw32` | Windows with i686 architecture (32-bits)
+`BUILD=mingw64` | Windows with AMD64 architecture (64-bits)
+
+Remember to specify proper file extension (".exe") for target when building with MinGW. Example:
+
+```bash
+make BUILD=mingw64 bin/fcut.exe bin/fpad.exe bin/fpoke.exe
+```
+
+Then you may use **strip** tool to strip debug information from file and thus shrink file's size:
+
+```bash
+strip bin/fcut.exe bin/fpad.exe bin/fpoke.exe
+```
 
 ## 2.2. Clean tools
 
@@ -36,6 +58,12 @@ To clean everything type:
 
 ```bash
 make clean
+```
+
+To clean MinGW builds use appropriate `BUILD` parameter as described in [2.1](#21-build-tools). Example:
+
+```bash
+make BUILD=mingw64 clean
 ```
 
 ## 2.3. Tools usage
@@ -77,30 +105,38 @@ This has the same behavior as the inclusion of `common.mk` file in a Makefile.
 
 # 3. Using SDK in GNU environment on Windows
 
-**NOTE**: compilation of the following tools:
+**NOTE**: *by default* compilation of the following tools:
 
 * sjasmplus
 * zx7b
+* fcut
+* fpad
+* fpoke
 
-on Windows platform is disabled right now because of presence of precompiled binaries of them in repository. They are not deleted when cleaning.
+on Windows platform is disabled right now because of presence of precompiled binaries of them in repository.
+*By default* they are not deleted when cleaning.
 
 ## 3.1. Build tools
 
-The building process is similar to one for GNU on Linux, FreeBSD etc. See [2.1](#21-build-tools).
+The building process is similar to one for GNU on Linux, FreeBSD etc.
+See [2.1](#21-build-tools) with addition that you should provide correct target name (specify file extension ".exe") and also specify parameter `FORCEBUILD=1`.
 
 ## 3.2. Clean tools
 
-The cleaning process is similar to one for GNU on Linux, FreeBSD etc. See [2.2](#22-clean-tools).
+The cleaning process is similar to one for GNU on Linux, FreeBSD etc.
+See [2.2](#22-clean-tools) with addition that you should specify parameter `FORCECLEAN=1`.
 
 ## 3.3. Tools usage
 
 ### 3.3.1. In Makefiles
 
-The usage is similar to one for GNU/Linux, FreeBSD etc. See [2.3.1](#231-in-makefiles).
+The usage is similar to one for GNU on Linux, FreeBSD etc.
+See [2.3.1](#231-in-makefiles).
 
 ### 3.3.2. In Bash scripts
 
-The usage is similar to one for GNU/Linux, FreeBSD etc. See [2.3.2](#232-in-bash-scripts).
+The usage is similar to one for GNU on Linux, FreeBSD etc.
+See [2.3.2](#232-in-bash-scripts).
 
 # 4. Using SDK on Windows without GNU environment
 

@@ -3,25 +3,62 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Supported environments:
-#   * GNU/Linux
-#   * Windows NT (using MinGW/MSYS/Cygwin/WSL)
+#   * GNU on Linux, FreeBSD etc.
+#   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
+#
+# Build:
+#   make [BUILD=<BUILD>] [FORCEBUILD=<FB_FLAG>] [<TARGET>]
+# Clean:
+#   make [BUILD=<BUILD>] [FORCECLEAN=<FC_FLAG>] clean
+#
+# where:
+#   <BUILD> is one of: mingw32, mingw64.
+#   <FB_FLAG> is 1 to force build, otherwise do not (default).
+#   <FC_FLAG> is 1 to force clean, otherwise do not (default).
+#   <TARGET> is one of values of TOOLS variable (see below).
+#
+# Notes:
+#   BUILD, FORCEBUILD, FORCECLEAN variables may be set in user's environment.
 
 include ../common.mk
 
-ifeq ($(OS),Windows_NT)
-SJASMPLUS	:= sjasmplus.exe
-ZX7B		:= zx7b.exe
-else
-SJASMPLUS	:= sjasmplus
-ZX7B		:= zx7b
-endif
+SJASMPLUS	:= sjasmplus$(EXECEXT)
+ZX7B		:= zx7b$(EXECEXT)
+FCUT		:= fcut$(EXECEXT)
+FPAD		:= fpad$(EXECEXT)
+FPOKE		:= fpoke$(EXECEXT)
+
+TOOLS:= \
+ ../bin/$(SJASMPLUS) \
+ ../bin/$(ZX7B) \
+ ../bin/$(FCUT) \
+ ../bin/$(FPAD) \
+ ../bin/$(FPOKE)
 
 .PHONY: all
-all: \
- ../bin/$(SJASMPLUS) \
- ../bin/$(ZX7B)
+all: $(TOOLS)
 
-ifneq ($(OS),Windows_NT)
+ifeq ($(OS),Windows_NT)
+ifeq ($(FORCEBUILD),1)
+_DoBuild:=1
+else
+_DoBuild:=0
+endif
+else
+_DoBuild:=1
+endif
+
+ifeq ($(OS),Windows_NT)
+ifeq ($(FORCECLEAN),1)
+_DoClean:=1
+else
+_DoClean:=0
+endif
+else
+_DoClean:=1
+endif
+
+ifeq ($(_DoBuild),1)
 ../bin/$(SJASMPLUS): sjasmplus/build/$(SJASMPLUS)
 	cp $< $@
 
@@ -42,14 +79,29 @@ sjasmplus:
 
 zx7b/$(ZX7B): | zx7b
 	$(MAKE) -w -C $|
+
+../bin/$(FCUT): tools/$(FCUT)
+	cp $< $@
+
+../bin/$(FPAD): tools/$(FPAD)
+	cp $< $@
+
+../bin/$(FPOKE): tools/$(FPOKE)
+	cp $< $@
+
+tools/$(FCUT) \
+tools/$(FPAD) \
+tools/$(FPOKE): | tools
+	$(MAKE) -w -C $|
 endif
 
 .PHONY: clean
-ifeq ($(OS),Windows_NT)
+ifneq ($(_DoClean),1)
 clean:;
 else
-clean: | sjasmplus sjasmplus.mk zx7b
+clean: | sjasmplus sjasmplus.mk zx7b tools
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk clean
 	$(MAKE) -w -C zx7b clean
-	rm -f ../bin/$(SJASMPLUS) ../bin/$(ZX7B)
+	$(MAKE) -w -C tools clean
+	rm -f $(TOOLS)
 endif
