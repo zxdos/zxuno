@@ -1,3 +1,4 @@
+@call ..\sdk\setvars.bat
 set output=\Google Drive\Proyecto ZX-Uno\cores_%2\
 echo  define version %1 > version.asm
 call  make.bat

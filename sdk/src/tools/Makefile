@@ -13,20 +13,34 @@
 #
 # where:
 #   <BUILD> is one of: mingw32, mingw64.
-#   <TARGET> is one of values of TOOLS variable (see below).
+#   <TARGET> is one of values for TOOLS variable (see below).
 #
 # Notes:
 #   BUILD variable may be set in user's environment.
 
 include ../../common.mk
 
-ZX7B	:= zx7b$(EXECEXT)
+FCUT	:= fcut$(EXECEXT)
+FPAD	:= fpad$(EXECEXT)
+FPOKE	:= fpoke$(EXECEXT)
 
-$(ZX7B): zx7b.c
+TOOLS:=\
+ $(FCUT) \
+ $(FPAD) \
+ $(FPOKE)
+
+.PHONY: all
+all: $(TOOLS)
+
+$(FCUT): fcut.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-zx7b.c:
-	wget -c https://github.com/antoniovillena/zx7b/raw/master/zx7b.c
+$(FPAD): fpad.c
+	$(CC) $(CFLAGS) -o $@ $<
 
+$(FPOKE): fpoke.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+.PHONY: clean
 clean:
-	rm -f $(ZX7B)
+	rm -f $(TOOLS)

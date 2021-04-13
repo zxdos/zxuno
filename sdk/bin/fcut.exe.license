@@ -1,0 +1,11 @@
+SPDX-FileName: fcut.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 57dc4b8241477fe9bfdf03b249575b38876da7f2
+
+SPDX-FileCopyrightText: Copyright (C) 2015, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: fcut version 1.00 (20 Jun 2015) - a file hexadecimal cutter.

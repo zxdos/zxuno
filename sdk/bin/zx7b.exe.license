@@ -2,12 +2,15 @@ SPDX-FileName: zx7b.exe
 
 SPDX-FileType: BINARY
 
-SPDX-FileChecksum: SHA1: de47984d9d155eb89153052297caac5ffef5e720
+SPDX-FileChecksum: SHA1: 0068364b1463d8f27c29a8a183ea348af12cf456
 
-SPDX-LicenseConcluded: BSD-3-Clause
+SPDX-FileCopyrightText: Copyright (c) 2013, 2021 Antonio Villena. All rights reserved.
 
-SPDX-LicenseComments: The concluded license is taken from https://github.com/antoniovillena/zx7b/raw/master/zx7b.c
+SPDX-FileNotice: Based on ZX7 <http://www.worldofspectrum.org/infoseekid.cgi?id=0027996>
+SPDX-FileNotice: ZX7 is Copyright (c) 2012 Einar Saukas. All rights reserved.
 
-SPDX-FileCopyrightText: Einar Saukas/AntonioVillena, 28 Dec 2013
+SPDX-License-Identifier: BSD-3-Clause
 
-SPDX-FileComment: ZX7 Backwards compressor v1.01 by Einar Saukas/AntonioVillena, 28 Dec 2013
+SPDX-LicenseComments: License's text equals to one from https://directory.fsf.org/wiki/License:BSD-3-Clause
+
+SPDX-FileComment: zx7b version 1.01 (28 Dec 2013) - backwards compressor.

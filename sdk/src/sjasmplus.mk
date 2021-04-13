@@ -3,29 +3,50 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Supported environments:
-#   * GNU/Linux
-#   * Windows NT (using MinGW/MSYS/Cygwin/WSL)
+#   * GNU on Linux, FreeBSD etc.
+#   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make -w -C sjasmplus -f ../sjasmplus.mk
+#   make [BUILD=<BUILD>] -w -C sjasmplus -f ../sjasmplus.mk
 # Clean:
-#   make -w -C sjasmplus -f ../sjasmplus.mk clean
+#   make [BUILD=<BUILD>] -w -C sjasmplus -f ../sjasmplus.mk clean
+#
+# where:
+#   <BUILD> is one of: mingw32, mingw64.
+#
+# Notes:
+#   BUILD variable may be set in user's environment.
 
-ifeq ($(OS),Windows_NT)
-SJASMPLUS	:= sjasmplus.exe
-else
-SJASMPLUS	:= sjasmplus
+
+include ../../common.mk
+
+CMAKEFLAGS	:=
+
+ifeq ($(BUILD),mingw32)
+CMAKEFLAGS	+= CMAKE_SYSTEM_NAME=Windows
+CMAKEFLAGS	+= CMAKE_SYSTEM_PROCESSOR=x86
+CMAKEFLAGS	+= CMAKE_C_COMPILER=i686-w64-mingw32-gcc
+CMAKEFLAGS	+= CMAKE_CXX_COMPILER=i686-w64-mingw32-g++
+CMAKEFLAGS	:= $(patsubst %,-D%,$(CMAKEFLAGS))
+else ifeq ($(BUILD),mingw64)
+CMAKEFLAGS	+= CMAKE_SYSTEM_NAME=Windows
+CMAKEFLAGS	+= CMAKE_SYSTEM_PROCESSOR=AMD64
+CMAKEFLAGS	+= CMAKE_C_COMPILER=x86_64-w64-mingw32-gcc
+CMAKEFLAGS	+= CMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++
+CMAKEFLAGS	:= $(patsubst %,-D%,$(CMAKEFLAGS))
 endif
+
+SJASMPLUS	:= sjasmplus$(EXECEXT)
 
 build/$(SJASMPLUS): | build/Makefile
 	$(MAKE) -w -C build
 
 build/Makefile: | build
-	cd build && cmake ..
+	cd build && cmake $(CMAKEFLAGS) ..
 
 build:
-	mkdir -p build
+	mkdir $@
 
 .PHONY: clean
-clean: | build/Makefile
-	$(MAKE) -w -C build clean
+clean:
+	rm -rf build
