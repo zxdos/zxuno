@@ -152,3 +152,9 @@ Remember to specify correct relative path to it.
 
 This will set "ZXUNOSDK" environment variable (on first call only) and update your "PATH" environment variable to point to SDK's tools.
 These changes are actual for current invocation of command shell and all child processes.
+
+# Links
+
+* [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
+* [Open-Source FPGA Foundation](https://osfpga.org/) - main site
+* [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub
