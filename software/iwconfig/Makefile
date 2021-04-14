@@ -1,7 +1,15 @@
-all: iwconfig 
+# SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+include ../../sdk/common.mk
+
+.PHONY: all
+all: iwconfig
 
 iwconfig: iwconfig.c
-	zcc +zx -vn -startup=30 -clib=new iwconfig.c -SO3 -o iwconfig -subtype=dot -create-app
+	zcc +zx -vn -startup=30 -clib=new $< -SO3 -o $@ -subtype=dot -create-app
 
+.PHONY: clean
 clean:
-	rm *.bin *.def IWCONFIG
+	rm -f *.bin *.def iwconfig
