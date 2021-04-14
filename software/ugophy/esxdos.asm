@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
+
 ; API methods
 ESX_GETSETDRV = #89
 ESX_FOPEN = #9A

@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
+
 SCANDBLCTRL_REG = #0B
 ZXUNO_ADDR = #FC3B
 ZXUNO_REG = #FD3B

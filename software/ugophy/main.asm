@@ -11,6 +11,11 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+;;
+;; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;;
+;; SPDX-License-Identifier: GPL-3.0-or-later
+
 
     DEVICE ZXSPECTRUM128
     org 24100

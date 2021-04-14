@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
+
 CURKEY = 23560
 
 ; Returns in A key code or zero if key wans't pressed
