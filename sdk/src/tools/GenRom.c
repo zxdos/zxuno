@@ -1,6 +1,38 @@
+/*
+ * GenRom - generates a TAP for loading a ROM in the ZX-Uno.
+ *
+ * Copyright (C) 2016, 2021 Antonio Villena
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-FileCopyrightText: Copyright (C) 2016, 2021 Antonio Villena
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define PROGRAM "GenRom"
+#define DESCRIPTION "generates a TAP for loading a ROM in the ZX-Uno."
+#define VERSION "0.06 (2016-07-04)"
+#define COPYRIGHT "Copyright (C) 2016, 2021 Antonio Villena"
+#define LICENSE \
+"This program is free software: you can redistribute it and/or modify\n" \
+"it under the terms of the GNU General Public License as published by\n" \
+"the Free Software Foundation, version 3."
+#define HOMEPAGE "https://github.com/zxdos/zxuno/"
 
 FILE *fi, *fo;
 int i;
@@ -39,11 +71,16 @@ unsigned short j, k, crc, tab[]= {
 0x1fef, 0x3eff, 0x5dcf, 0x7cdf, 0x9baf, 0xbabf, 0xd98f, 0xf89f,
 0x176e, 0x367e, 0x554e, 0x745e, 0x932e, 0xb23e, 0xd10e, 0xf01e};
 
-int main(int argc, char *argv[]) {
-  if( argc==1 )
-    printf("\n"
-    "GenRom v0.06, generates a TAP for loading a ROM in the ZX-Uno, 2016-07-04\n\n"
-    "  GenRom         <params> <name> <input_file> <output_file>\n\n"
+void show_help() {
+  printf(
+    PROGRAM " version " VERSION " - " DESCRIPTION "\n"
+    COPYRIGHT "\n"
+    LICENSE "\n"
+    "Home page: " HOMEPAGE "\n"
+    "\n"
+    "Usage:\n"
+    "  " PROGRAM "         <params> <name> <input_file> <output_file>\n"
+    "\n"
     "  <params>       Set 13 flags parameters, combinable\n"
     "     0           MODE=00, DI1FFD=DI7FFD=DITAY=DIAY=DIRADAS=DITIMEX=DIULAPLUS=0\n"
     "                 I2KB=DISCONT=DIVEN=DISNMI=DISD=ENMMU=DIROM1F=DIROM7F=0\n"
@@ -66,8 +103,15 @@ int main(int argc, char *argv[]) {
     "     u           Disable Ulaplus\n"
     "  <name>         Name between single quotes up to 32 chars\n"
     "  <input_file>   Input ROM file\n"
-    "  <output_file>  Output TAP file\n\n"
-    "All params are mandatory\n\n"),
+    "  <output_file>  Output TAP file\n"
+    "\n"
+    "All paramaters are mandatory.\n"
+  );
+}
+
+int main(int argc, char *argv[]) {
+  if( argc==1 )
+    show_help(),
     exit(0);
   if( argc!=5 )
     printf("\nInvalid number of parameters\n"),
@@ -159,5 +203,5 @@ int main(int argc, char *argv[]) {
     checksum^= mem[k];
   mem[0x4058]= checksum;
   fwrite(mem+0x4004, 1, 0x55, fo);
-  printf("\nFile generated successfully\n");
+  printf("File `%s' is successfully generated.\n", argv[4]);
 }

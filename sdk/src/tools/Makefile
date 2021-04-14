@@ -23,11 +23,13 @@ include ../../common.mk
 FCUT	:= fcut$(EXECEXT)
 FPAD	:= fpad$(EXECEXT)
 FPOKE	:= fpoke$(EXECEXT)
+GENROM	:= GenRom$(EXECEXT)
 
 TOOLS:=\
  $(FCUT) \
  $(FPAD) \
- $(FPOKE)
+ $(FPOKE) \
+ $(GENROM)
 
 .PHONY: all
 all: $(TOOLS)
@@ -39,6 +41,9 @@ $(FPAD): fpad.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(FPOKE): fpoke.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(GENROM): GenRom.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 .PHONY: clean

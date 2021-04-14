@@ -1,0 +1,11 @@
+SPDX-FileName: GenRom.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 82b861b2de44feeaea9538a33ae23949316581e5
+
+SPDX-FileCopyrightText: Copyright (C) 2016, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: GenRom version 0.06 (2016-07-04) - generates a TAP for loading a ROM in the ZX-Uno.
