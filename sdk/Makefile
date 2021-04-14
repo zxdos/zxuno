@@ -45,6 +45,7 @@ export FORCECLEAN
 
 SJASMPLUS	:= sjasmplus$(EXECEXT)
 ZX7B		:= zx7b$(EXECEXT)
+BIN2HEX		:= bin2hex$(EXECEXT)
 FCUT		:= fcut$(EXECEXT)
 FPAD		:= fpad$(EXECEXT)
 FPOKE		:= fpoke$(EXECEXT)
@@ -54,6 +55,7 @@ ADDITEM		:= AddItem$(EXECEXT)
 TOOLS:=\
  bin/$(SJASMPLUS) \
  bin/$(ZX7B) \
+ bin/$(BIN2HEX) \
  bin/$(FCUT) \
  bin/$(FPAD) \
  bin/$(FPOKE) \

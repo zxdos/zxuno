@@ -29,6 +29,7 @@ Command | Target
 `make` | all tools
 `make bin/sjasmplus` | **sjasmplus**
 `make bin/zx7b` | **zx7b**
+`make bin/bin2hex` | **bin2hex**
 `make bin/fcut` | **fcut**
 `make bin/fpad` | **fpad**
 `make bin/fpoke` | **fpoke**
@@ -111,6 +112,7 @@ This has the same behavior as the inclusion of `common.mk` file in a Makefile.
 
 * sjasmplus
 * zx7b
+* bin2hex
 * fcut
 * fpad
 * fpoke

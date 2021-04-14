@@ -24,6 +24,7 @@ include ../common.mk
 
 SJASMPLUS	:= sjasmplus$(EXECEXT)
 ZX7B		:= zx7b$(EXECEXT)
+BIN2HEX		:= bin2hex$(EXECEXT)
 FCUT		:= fcut$(EXECEXT)
 FPAD		:= fpad$(EXECEXT)
 FPOKE		:= fpoke$(EXECEXT)
@@ -33,6 +34,7 @@ ADDITEM		:= AddItem$(EXECEXT)
 TOOLS:= \
  ../bin/$(SJASMPLUS) \
  ../bin/$(ZX7B) \
+ ../bin/$(BIN2HEX) \
  ../bin/$(FCUT) \
  ../bin/$(FPAD) \
  ../bin/$(FPOKE) \
@@ -84,6 +86,9 @@ sjasmplus:
 zx7b/$(ZX7B): | zx7b
 	$(MAKE) -w -C $|
 
+../bin/$(BIN2HEX): tools/$(BIN2HEX)
+	cp $< $@
+
 ../bin/$(FCUT): tools/$(FCUT)
 	cp $< $@
 
@@ -99,6 +104,7 @@ zx7b/$(ZX7B): | zx7b
 ../bin/$(ADDITEM): tools/$(ADDITEM)
 	cp $< $@
 
+tools/$(BIN2HEX) \
 tools/$(FCUT) \
 tools/$(FPAD) \
 tools/$(FPOKE) \

@@ -20,6 +20,7 @@
 
 include ../../common.mk
 
+BIN2HEX	:= bin2hex$(EXECEXT)
 FCUT	:= fcut$(EXECEXT)
 FPAD	:= fpad$(EXECEXT)
 FPOKE	:= fpoke$(EXECEXT)
@@ -27,6 +28,7 @@ GENROM	:= GenRom$(EXECEXT)
 ADDITEM	:= AddItem$(EXECEXT)
 
 TOOLS:=\
+ $(BIN2HEX) \
  $(FCUT) \
  $(FPAD) \
  $(FPOKE) \
@@ -35,6 +37,9 @@ TOOLS:=\
 
 .PHONY: all
 all: $(TOOLS)
+
+$(BIN2HEX): bin2hex.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 $(FCUT): fcut.c
 	$(CC) $(CFLAGS) -o $@ $<
