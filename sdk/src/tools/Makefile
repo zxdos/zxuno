@@ -24,12 +24,14 @@ FCUT	:= fcut$(EXECEXT)
 FPAD	:= fpad$(EXECEXT)
 FPOKE	:= fpoke$(EXECEXT)
 GENROM	:= GenRom$(EXECEXT)
+ADDITEM	:= AddItem$(EXECEXT)
 
 TOOLS:=\
  $(FCUT) \
  $(FPAD) \
  $(FPOKE) \
- $(GENROM)
+ $(GENROM) \
+ $(ADDITEM)
 
 .PHONY: all
 all: $(TOOLS)
@@ -44,6 +46,9 @@ $(FPOKE): fpoke.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(GENROM): GenRom.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(ADDITEM): AddItem.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 .PHONY: clean

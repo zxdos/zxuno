@@ -49,6 +49,7 @@ FCUT		:= fcut$(EXECEXT)
 FPAD		:= fpad$(EXECEXT)
 FPOKE		:= fpoke$(EXECEXT)
 GENROM		:= GenRom$(EXECEXT)
+ADDITEM		:= AddItem$(EXECEXT)
 
 TOOLS:=\
  bin/$(SJASMPLUS) \
@@ -56,7 +57,8 @@ TOOLS:=\
  bin/$(FCUT) \
  bin/$(FPAD) \
  bin/$(FPOKE) \
- bin/$(GENROM)
+ bin/$(GENROM) \
+ bin/$(ADDITEM)
 
 .PHONY: all
 all: $(TOOLS)

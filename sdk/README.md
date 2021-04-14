@@ -33,6 +33,7 @@ Command | Target
 `make bin/fpad` | **fpad**
 `make bin/fpoke` | **fpoke**
 `make bin/GenRom` | **GenRom**
+`make bin/AddItem` | **AddItem**
 
 To build using MinGW add this parameter for `make` tool:
 
@@ -114,6 +115,7 @@ This has the same behavior as the inclusion of `common.mk` file in a Makefile.
 * fpad
 * fpoke
 * GenRom
+* AddItem
 
 on Windows platform is disabled right now because of presence of precompiled binaries of them in repository.
 *By default* they are not deleted when cleaning.

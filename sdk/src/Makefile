@@ -28,6 +28,7 @@ FCUT		:= fcut$(EXECEXT)
 FPAD		:= fpad$(EXECEXT)
 FPOKE		:= fpoke$(EXECEXT)
 GENROM		:= GenRom$(EXECEXT)
+ADDITEM		:= AddItem$(EXECEXT)
 
 TOOLS:= \
  ../bin/$(SJASMPLUS) \
@@ -35,7 +36,8 @@ TOOLS:= \
  ../bin/$(FCUT) \
  ../bin/$(FPAD) \
  ../bin/$(FPOKE) \
- ../bin/$(GENROM)
+ ../bin/$(GENROM) \
+ ../bin/$(ADDITEM)
 
 .PHONY: all
 all: $(TOOLS)
@@ -94,10 +96,14 @@ zx7b/$(ZX7B): | zx7b
 ../bin/$(GENROM): tools/$(GENROM)
 	cp $< $@
 
+../bin/$(ADDITEM): tools/$(ADDITEM)
+	cp $< $@
+
 tools/$(FCUT) \
 tools/$(FPAD) \
 tools/$(FPOKE) \
-tools/$(GENROM): | tools
+tools/$(GENROM) \
+tools/$(ADDITEM): | tools
 	$(MAKE) -w -C $|
 endif
 
