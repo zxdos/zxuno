@@ -5,7 +5,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-ADDITEM=./AddItem
 i=0
 
 Error() {
@@ -19,7 +18,7 @@ AddROM() {
 	local f=${3%.*}.tap
 	echo "Adding ROM in slots $i-$i1: \"$2\" ($3)..."
 	GenRom $1 "$2" $3 $f || Error $?
-	$ADDITEM ROM $i $f || Error $?
+	AddItem ROM $i $f || Error $?
 	rm -f $f
 	let i=i1+1
 }
