@@ -1,12 +1,15 @@
 All the files for ZX-Uno project repository:
 
 http://zxuno.com
+
 https://svn.zxuno.com/svn/zxuno/
 
 Open Source FPGA Foundation:
 
 https://osfpga.org/osfpga-foundation-launched/
+
 https://osfpga.org/
+
 https://github.com/os-fpga/open-source-fpga-resource
 
 License is Creative Commons by SA, except the cores and ugophy(gopher browser) that has its own license
