@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
+
 showPage:
     xor a : ld (show_offset), a
     inc a :ld (cursor_pos), a
