@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
+
     DEVICE ZXSPECTRUM48
     org #2000
 Start:
