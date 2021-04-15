@@ -7,8 +7,8 @@ include ../../sdk/common.mk
 .PHONY: all
 all: esprst
 
-esprst: *.asm
-	sjasmplus main.asm
+esprst: main.asm uart.asm ring.asm
+	sjasmplus $<
 
 .PHONY: clean
 clean:
