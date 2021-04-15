@@ -1,10 +1,10 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.5
+:revnumber: 1.4.6
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.3
+:Revision: 1.4
 :description: English Manual of ZXDOS+ and gomaDOS+
 :keywords: Manual, English, ZXDOS+, gomaDOS+
 :icons: font
@@ -1114,6 +1114,11 @@ In addition, esxdos also has an NMI manager, an application that loads when NMI 
 The esxdos manager shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
+[CAUTION]
+====
+Ïf the card is also being used with the <<#_pc_xt,PC XT>> core, **do not use any FAT reordering utility** as it may stop DOS from booting.
+====
+
 <<<
 
 ==== ZXDOS+ Commands
@@ -1450,6 +1455,11 @@ If you choose `Browser`, NextZXOS Browser will start, and then you can see the c
 The browser shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, yo have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
+[CAUTION]
+====
+Ïf the card is also being used with the <<#_pc_xt,PC XT>> core, **do not use any FAT reordering utility** as it may stop DOS from booting.
+====
+
 [.text-center] 
 image:img/next3.png[pdfwidth=70%]
 
@@ -1491,6 +1501,11 @@ You need to get:
 - MSX1 ROM (`MSX_INT.rom`, `MSX_JP.rom` or `MSX_USA.rom`) https://github.com/fbelavenuto/msx1fpga/tree/master/Software/msx1[at the same repository]
 
 Copy the contents of the https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[SD directory] in the root of the first partition of the microSD.
+
+[WARNING]
+====
+Because some of DOS directories and files may have the same name, it's not recommended to use the same card for the <<#_pc_xt,PC XT core>> and MSX.
+====
 
 Copy `NEXTOR.SYS` to the same place.
 
@@ -2246,31 +2261,6 @@ Some monitors stop playing audio if the video signal is lost. It's recommended t
 
 <<<
 
-
-=== PC XT
-
-https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, pero adapted and trimmed.
-
-Features:
-
-- Only works on VGA out
-- Next186 core at 25 MHz and 50 MHz system bus. Te processor is 286 equivalent in real mode. There's no protected mode.
-- 504 KB conventional RAM
-- 60 KB VRAM
-- PS/2 keyboard and mouse support
-- 80x25 text mode
-- EGA 320x200x16 and MCGA 320x200x256 graphic modes, partially functional (MCGA mode does not draw the last lines on screen because 2.5 KB video RAM is missing). No graphic card is being emulated
-- Beeper Sound and Tandy 3 voice
-- Parallel DAC port to play digital sound
-
-==== microSD card format
-
-You have to use a SDHC card, with the first partition with MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and connecting directly the microSD card device as a hard disk. You can also find several pre-made images at https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno forum page].
-
-See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXUNO+.
-
-<<<
-
 === PC XT
 
 The https://en.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT] is the second computer in the IBM Personal Computer line. It is very similar to the original IBM PC model 5150 from 1981.
@@ -2279,19 +2269,28 @@ The ZXDOS+ core is an implementation based on https://opencores.org/projects/nex
 
 Features:
 
-- Next186 core with 30 MHz CPU
-- 64 MB DDR3 RAM
+- Next186 core with 30 MHz CPU (166.66Mhz 32 bit bus)
+- 64 MB DDR3 RAM (DDR3-1333 333.33Mhz)
 - 40 MHz DSP
-- OPL3 support
+- OPL3 support (with fix for adlib detection)
 - PS/2 mouse and keyboard support
+- BIOS detection in the first 64 or the las 16 sectors of the microSD card
 
 ==== microSD card format
 
-At this moment, the last 8KB of the SD card have to be reserved in order to store the PC BIOS.
+An SDHC card is required (so it has to be 4GB or more in size), with the first partition in FAT16 and MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and attaching directly the microSD device as a hard disk.
 
-An SDHC card is require (so the size has to be 4GB or more), with the first partition in FAT16 and MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and attaching directly the microSD device as a hard disk.
+Once partitioned and formatted (with the reserved bytes ad the end), the BIOS image file `Next186_BIOS_zxdos_ddr3.COM` (available to download https://github.com/zxdos/sources/raw/master/next186_zxdos_ddr3/software/Next186_BIOS_zxdos_ddr3.COM[at this link]) has to be written somewhere in the first 64 sectors or to the last 16 sectors of the card.
 
-Once partitioned and formatted (with the reserved bytes ad the end), the BIOS image file `Next186_BIOS_zxdos_ddr3.COM` has to be written to the latest sectors of the card.
+[CAUTION]
+====
+**Do not use any FAT reordering utility** as it may stop DOS from booting.
+====
+
+[WARNING]
+====
+Because some of MSXDOS system directories and files may have the same name, it's not recommended to use the same card for the <<#_msx,MSX core>> and PC XT.
+====
 
 ===== Windows
 
@@ -2300,7 +2299,7 @@ You can use the program https://mh-nexus.de/en/hxd/[HxD (Hex editor for Windows)
 . Start the program as administrator and select the option `Open disk...` in the `Tools` menu
 . Disable the option to only read, and select the microSD device
 . Open in another window the file with the BIOS image
-. Copy all the content from the BIOS image, and paste at the end of the microSD
+. Copy all the content from the BIOS image, and paste at the end of the microSD, or, if there is enough freespace before the first partition, somewhere within the first 64 sectors (512 bytes in size each)
 . Save all changes to the card
 
 <<<
@@ -2329,6 +2328,13 @@ Sector size (logical/physical): 512 bytes / 512 bytes
 sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=124735472
 ----
 
+Instead of the end of the card, if there is enough free space before the first partition, you may use the beginning. For example, to write starting at sector 10:
+
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=10
+----
+
 ===== MacOS
 
 Steps to to follow:
@@ -2355,9 +2361,14 @@ sudo diskutil unmountDisk /dev/disk6
 sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=30535664
 ----
 
-See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXDOS+.
+Instead of the end of the card, if there is enough free space before the first partition, you may use the beginning. For example, to write starting at sector 10:
 
-<<<
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=10
+----
+
+See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXDOS+.
 
 ==== Keyboard
 
@@ -2609,6 +2620,11 @@ Copy the tape files (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX`, etc) to the first par
 [TIP]
 ====
 The player shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
+====
+
+[CAUTION]
+====
+Ïf the card is also being used with the <<#_pc_xt,PC XT>> core, **do not use any FAT reordering utility** as it may stop DOS from booting.
 ====
 
 <<<

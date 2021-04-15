@@ -1,10 +1,10 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.5
+:revnumber: 1.4.6
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.3
+:Revision: 1.4
 :description: Manual en castellano de ZXDOS+ y gomaDOS+
 :keywords: Manual, Castellano, ZXDOS+, gomaDOS+
 :icons: font
@@ -1118,6 +1118,11 @@ Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cu
 El gestor de esxdos muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
+[CAUTION]
+====
+En el caso de utilizarse también la tarjeta con el core de <<#_pc_xt,PC XT>>, **no se debe utilizar ninguna utilidad de reordenación de FAT** ya que esto puede provocar que deje de arrancar correctamente DOS en dicho core.
+====
+
 <<<
 
 ==== Comandos para ZXDOS+
@@ -1451,6 +1456,11 @@ Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es pos
 El navegador muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
+[CAUTION]
+====
+En el caso de utilizarse también la tarjeta con el core de <<#_pc_xt,PC XT>>, **no se debe utilizar ninguna utilidad de reordenación de FAT** ya que esto puede provocar que deje de arrancar correctamente DOS en dicho core.
+====
+
 [.text-center] 
 image:img/next3.png[pdfwidth=70%]
 
@@ -1492,6 +1502,11 @@ Obtener lo siguiente:
 - ROM de MSX1 (`MSX_INT.rom`, `MSX_JP.rom` o `MSX_USA.rom`) https://github.com/fbelavenuto/msx1fpga/tree/master/Software/msx1[en el mismo repositorio]
 
 Copiar el contenido del https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[directorio SD] en la raíz de la primera partición de la tarjeta microSD.
+
+[WARNING]
+====
+Como algunos de los directorios y ficheros de sistema de DOS pueden tienen el mismo nombre, no se recomienda utilizar la misma tarjeta para el <<#_pc_xt,core de PC XT>> y el de MSX.
+====
 
 Copiar `NEXTOR.SYS` en el mismo lugar.
 
@@ -2251,19 +2266,28 @@ El core de ZXDOS+ es una implementación adaptada de https://opencores.org/proje
 
 Características del sistema implementado:
 
-- Núcleo Next186 con CPU a 30 MHz
-- 64 MB DDR3 RAM
+- Núcleo Next186 con CPU a 30 MHz (bus de 32 bit a 166.66Mhz)
+- 64 MB DDR3 RAM (DDR3-1333 333.33Mhz)
 - DSP a 40 MHz
-- Soporte para OPL3
+- Soporte para OPL3 (corregido para detección correcta de adlib)
 - Soporte para teclado y raton PS/2
+- Detección de BIOS en la tarjeta microSD en los primeros 64 sectores o en los últimos 16
 
 ==== Formato de Tarjeta microSD
 
-Por el momento, se deben reservar los últimos 8KB de la tarjeta para almacenar la BIOS del PC.
-
 Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición FAT16 y con MS-DOS (o similar) instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta microSD como disco.
 
-Una vez formateada y particionada (con la reserva al final), se debe grabar la imagen de BIOS `Next186_BIOS_zxdos_ddr3.COM` en los últimos sectores de la tarjeta.
+Una vez formateada y particionada (con la reserva al final), se debe grabar la imagen de BIOS `Next186_BIOS_zxdos_ddr3.COM` (disponible https://github.com/zxdos/sources/raw/master/next186_zxdos_ddr3/software/Next186_BIOS_zxdos_ddr3.COM[en este enlace]) en algún lugar de los primeros 64 sectores, o bien en los últimos 16 sectores de la tarjeta microSD.
+
+[CAUTION]
+====
+**No se debe utilizar ninguna utilidad de reordenación de FAT** ya que esto puede provocar que deje de arrancar correctamente DOS.
+====
+
+[WARNING]
+====
+Como algunos de los directorios y ficheros de sistema de MSXDOS pueden tienen el mismo nombre, no se recomienda utilizar la misma tarjeta para el <<#_msx,core de MSX>> y el de PC XT.
+====
 
 ===== Windows
 
@@ -2272,7 +2296,7 @@ Se puede utilizar el programa https://mh-nexus.de/en/hxd/[HxD (editor hexadecima
 . Abrir el programa como administrador y elegir la opción `Abrir disco...` en el menú `Herramientas`
 . Desmarcar la opción para abrir como solo lectura y seleccionar la tarjeta microSD
 . Abrir en otra ventana el fichero con la imagen de BIOS
-. Copiar el contenido de la imagen de BIOS, y pegarlo, reemplazando, en el final de la microSD
+. Copiar el contenido de la imagen de BIOS, y pegarlo, reemplazando, en el final de la microSD, o bien, si hubiera espacio libre antes de la primera partición, en algún lugar dentro de los primeros 64 sectores (de 512 bytes cada uno)
 . Guardar los cambios en la SD
 
 <<<
@@ -2301,6 +2325,13 @@ Sector size (logical/physical): 512 bytes / 512 bytes
 sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=124735472
 ----
 
+En lugar del final de la tarjeta, si hay espacio libre antes de la primera partición, se puede utilizar el principio. Por ejemplo, para hacerlo a partir del sector 10:
+
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=10
+----
+
 ===== MacOS
 
 Pasos a seguir:
@@ -2327,9 +2358,14 @@ sudo diskutil unmountDisk /dev/disk6
 sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=30535664
 ----
 
-Si no estuviera ya, <<#_cores,instalar el core de PC XT>> en el ZXDOS+.
+En lugar del final de la tarjeta, si hay espacio libre antes de la primera partición, se puede utilizar el principio, por ejemplo, para hacerlo a partir del sector 10:
 
-<<<
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=10
+----
+
+Si no estuviera ya, <<#_cores,instalar el core de PC XT>> en el ZXDOS+.
 
 ==== Teclado
  
@@ -2591,6 +2627,11 @@ En la primera partición de la tarjeta se han de copiar los archivos de cinta (`
 [TIP]
 ====
 El reproductor muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
+====
+
+[CAUTION]
+====
+En el caso de utilizarse también la tarjeta con el core de <<#_pc_xt,PC XT>>, **no se debe utilizar ninguna utilidad de reordenación de FAT** ya que esto puede provocar que deje de arrancar correctamente DOS en dicho core.
 ====
 
 <<<
