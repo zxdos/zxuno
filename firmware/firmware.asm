@@ -1068,8 +1068,20 @@ conti   di
         jr      z, ccon0
 runbit  ld      b, h
         call    calbit
-
+      IF  version=2 OR version=3
+        push    hl
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $c5  ; envío wrear
+        out     (c), a
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        dec     b
+        pop     hl
+      ELSE
         ld      bc, zxuno_port
+      ENDIF
         ld      e, core_addr
         out     (c), e
         inc     b
@@ -3173,11 +3185,10 @@ calbi1    ld      a, b        ;1-69
           jr      c, calbi2   ;<35 c n
           ld      b, a        ;>=35 nc n-35
 calbi2    ld      hl, $0240
-          ret     z
+          jr      z, calbi4
           ld      de, $0740
 calbi3    add     hl, de
           djnz    calbi3
-          ret
         ELSE
 calbi1    ld      a, b        ;1-40
           sub     20
@@ -3188,8 +3199,13 @@ calbi2    ld      hl, $fec0
           ld      de, $0c40
 calbi3    add     hl, de
           djnz    calbi3
-          ret
+          dec     a
         ENDIF
+calbi4    rlca
+          sbc     a, a
+          inc     a
+          ld      (alto highb+1), a
+          ret
       ENDIF
     ENDIF
 
