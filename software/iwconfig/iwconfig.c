@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <arch/zx/esxdos.h>
@@ -24,6 +30,6 @@ int main(int argc, char **argv)
     file = esx_f_open("/sys/config/iw.cfg", ESX_MODE_WRITE | ESX_MODE_OPEN_CREAT_TRUNC);
     esx_f_write(file, ssid, 80);
     esx_f_write(file, pass, 80);
-    esx_f_close(file);    
+    esx_f_close(file);
     return 0;
 }

@@ -1,0 +1,11 @@
+SPDX-FileName: AddItem.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 4c0298aa44631d46b241f90471d36775b536d844
+
+SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: AddItem version 0.02 - simulates Machine and ROM addition to the ZX-Uno flash image.

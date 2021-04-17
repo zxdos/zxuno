@@ -1,3 +1,13 @@
+; SPDX-FileCopyrightText: Copyright (C) 2019 Alexander Sharikhin
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
+;
+; SPDX-FileComment: Universal PT2'n'PT3 Turbo Sound player for ZX Spectrum
+;
+; SPDX-FileNotice: Original code is Copyright (C) 2004-2007 S.V.Bulba <vorobey@mail.khstu.ru>
+; SPDX-FileNotice: Specially for AlCo
+; SPDX-FileNotice: http://bulba.untergrund.net/ (http://bulba.at.kz/)
+
 ;Universal PT2'n'PT3 Turbo Sound player for ZX Spectrum
 ;(c)2004-2007 S.V.Bulba <vorobey@mail.khstu.ru>
 ;Specially for AlCo

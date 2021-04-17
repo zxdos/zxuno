@@ -1,10 +1,10 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.4
+:revnumber: 1.4.6
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.3
+:Revision: 1.4
 :description: English Manual of ZXDOS+ and gomaDOS+
 :keywords: Manual, English, ZXDOS+, gomaDOS+
 :icons: font
@@ -56,7 +56,7 @@ image:img/gomaDosBack.jpg[pdfwidth=70%]
 
 ==== Description
 
-[cols=2*] 
+[align="center",width="80%",cols=2*] 
 |===
 |1
 |Power Switch
@@ -173,7 +173,7 @@ diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32"
 
 ===== Linux
 
-There are a lot of tools for Linux that can format and/or partition an SD card (`fdisk`, `parted`, `cfdisk`, `sfdisk` or `GParted` to name a few). It should only be taken into account that the partition scheme must always be MBR, and the first partition (the one that will be used for esxdos) must be primary partition.
+There are a lot of tools for Linux that can format and/or partition a microSD card (`fdisk`, `parted`, `cfdisk`, `sfdisk` or `GParted` to name a few). It should only be taken into account that the partition scheme must always be MBR, and the first partition (the one that will be used for esxdos) must be primary partition.
 
 <<<
 
@@ -228,7 +228,7 @@ The default is ZX Spectrum mode. To change to a different mode, you must press `
 
 This table shows the available modes and activation keys:
 
-[%header,cols=2*] 
+[align="center",width="40%",%header,cols=2*] 
 |===
 |Mode
 |Key
@@ -264,7 +264,7 @@ This table shows the available modes and activation keys:
 
 ZX Spectrum mode key assignment, with the corresponding keypress when used simultaneouly with `Caps Shift+Symbol Shift`:
 
-[cols=10*] 
+[align="center",width="80%",cols=10*] 
 |===
 ^|**1**
 ^|**2**
@@ -360,7 +360,7 @@ Where:
 
 The full list of key combinations (and compatible modes) is as follows:
 
-[%header,cols=3*] 
+[align="center",width="75%",%header,cols=3*] 
 |===
 |Caps S.+Symbol S.
 |Mode
@@ -913,7 +913,7 @@ You can download the ROM, a user manual and other files from the https://www.fac
 
 Since it is a 64K ROM with support for new hardware, these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
 
-[%header,cols=2*] 
+[align="center",width="60%",%header,cols=2*] 
 |===
 |Flag
 |Meaning
@@ -942,7 +942,7 @@ The whole ROM set is available to download from the repository in GitHub https:/
 
 Depending on which ROM you choose, the flags when <<#_zx123_tool,adding to the SPI flash>> may vary. For example, for the ROM `48le_ea_re_po` (with all features enabled), these flags can be used (we cannot enable NMI DivMMC since the POKE editor will use it):
 
-[%header,cols=2*] 
+[align="center",width="60%",%header,cols=2*] 
 |===
 |Flag
 |Meaning
@@ -1041,7 +1041,7 @@ You can find much more information, including the user manual, etc. at https://g
 
 Here are flag settings which work when <<#_zx123_tool,adding to the SPI flash>> some other known custom ROMs:
 
-[%header,cols=2*] 
+[align="center",width="60%",%header,cols=2*] 
 |===
 |ROM Name
 |Flags 
@@ -1114,14 +1114,19 @@ In addition, esxdos also has an NMI manager, an application that loads when NMI 
 The esxdos manager shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
+[CAUTION]
+====
+Ïf the card is also being used with the <<#_pc_xt,PC XT>> core, **do not use any FAT reordering utility** as it may stop DOS from booting.
+====
+
 <<<
 
 ==== ZXDOS+ Commands
 
 As explained in the installation part, there are a series of commands that are exclusive to ZXDOS+:
 
-- `back16m`: Dumps to a `FLASH.ZX1` file, in the root directory of the SD card, the contents of a 16 Meg SPI Flash memory. It must be run while using a "root" mode ROM. After finishing, it is necessary to execute the command `.ls` so that the cache is written to the card
-- `backzx2` or `backzxd`: Creates a `FLASH.ZX2` o `FLASH.ZXD` file, in the root directory of the SD card, with the contents of a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.After finishing its execution, you must execute the command `.ls` to finish recording the cache on the microSD card. If not, the length of the file will be wrongly set to 0
+- `back16m`: Dumps to a `FLASH.ZX1` file, in the root directory of the microSD card, the contents of a 16 Meg SPI Flash memory. It must be run while using a "root" mode ROM. After finishing, it is necessary to execute the command `.ls` so that the cache is written to the card
+- `backzx2` or `backzxd`: Creates a `FLASH.ZX2` o `FLASH.ZXD` file, in the root directory of the microSD card, with the contents of a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.After finishing its execution, you must execute the command `.ls` to finish recording the cache on the microSD card. If not, the length of the file will be wrongly set to 0
 - `corebios`: To upddate simultaneously ZX Spectrum core and BIOS
 - `dmaplayw`: Plays .WAV file, which has to be 8 bits, unsigned and sampled at 15625 Hz
 - `esprst`: Resets the WiFi ESP8266(ESP-12) module
@@ -1450,6 +1455,11 @@ If you choose `Browser`, NextZXOS Browser will start, and then you can see the c
 The browser shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, yo have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
+[CAUTION]
+====
+Ïf the card is also being used with the <<#_pc_xt,PC XT>> core, **do not use any FAT reordering utility** as it may stop DOS from booting.
+====
+
 [.text-center] 
 image:img/next3.png[pdfwidth=70%]
 
@@ -1480,7 +1490,7 @@ Some of its features are:
 - Joystick support
 - I^2^S audio output (with the <<#_rtci2spizero_addon,RTC+I^2^S+Pizero addon>>)
 
-==== microSD format
+==== microSD card format
 
 You have to use a microSD card with the first partition in FAT16 format with https://en.wikipedia.org/wiki/Partition_type[code `0x06` (16-bit FAT)]. You can also use a second FAT16 partition for MSX software, and leaving the first one only for the system startup.
 
@@ -1491,6 +1501,11 @@ You need to get:
 - MSX1 ROM (`MSX_INT.rom`, `MSX_JP.rom` or `MSX_USA.rom`) https://github.com/fbelavenuto/msx1fpga/tree/master/Software/msx1[at the same repository]
 
 Copy the contents of the https://github.com/fbelavenuto/msx1fpga/tree/master/Support/SD[SD directory] in the root of the first partition of the microSD.
+
+[WARNING]
+====
+Because some of DOS directories and files may have the same name, it's not recommended to use the same card for the <<#_pc_xt,PC XT core>> and MSX.
+====
 
 Copy `NEXTOR.SYS` to the same place.
 
@@ -1610,7 +1625,7 @@ Some of its features are:
 
 ==== microSD card format
 
-You have to use a microSD card with the first partition in FAT32 format, with a maximum of 4GB in size, and 4096 bytes per cluster.
+You have to use a microSD card with the first partition in FAT32 format (`0B` Win95 FAT-32 Partition Type), with a maximum of 4GB in size, and 4096 bytes per cluster.
 
 You also need the following ROM files (they are available http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[at the original project Wiki]) or from the https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[GitHub repository]:
 - `OS6128.ROM`
@@ -1663,9 +1678,9 @@ Download the latest version of Atom Software Archive https://github.com/hoglet67
 
 You can set up the files in the microSD in two different ways:
 
-. Extract all the contents of the archive to the root of the SD card. `SYS` directory contents are compatible with esxdos `SYS` directory, so you can merge both into one.
+. Extract all the contents of the archive to the root of the microSD card. `SYS` directory contents are compatible with esxdos `SYS` directory, so you can merge both into one.
 
-. Have less files an directories in the root directory. Create a directory named `ATOM` in the SD root, and copy inside all the uncompressed archive content, except for the directory `MANPAGES` which must also be in root. Then, extract and the files from `trick_ATOM_folder` archive (available https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[at ZX-Uno Forum]), replacing any file with the same name. You will get a file and directory structure like this:
+. Have less files an directories in the root directory. Create a directory named `ATOM` in the microSD root, and copy inside all the uncompressed archive content, except for the directory `MANPAGES` which must also be in root. Then, extract and the files from `trick_ATOM_folder` archive (available https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[at ZX-Uno Forum]), replacing any file with the same name. You will get a file and directory structure like this:
 
 ----
         /
@@ -1733,7 +1748,7 @@ The ZXDOS+ core is developed by Neuro.
 
 ==== microSD card format
 
-You can use a microSD card with the first partition formatted as FAT16 or FAT32. Disk image (`D64`) and tape (`TAP`) files can be loaded from the SD card.
+You can use a microSD card with the first partition formatted as FAT16 or FAT32. Disk image (`D64`) and tape (`TAP`) files can be loaded from the microSD card.
 
 See the <<#_cores,corresponding section>> for instructions of how to install the Commodore 64 core in ZXDOS+.
 
@@ -1767,7 +1782,7 @@ The menu offers the following options
 - Enable or disable PAL mode
 - Enable or disable tape loading sound (Sonido Carga Cinta)
 - Enable or disable audio filter (Filtro de Audio)
-- Load D64 file from SD (Carga D64)
+- Load D64 file from microSD (Carga D64)
 - Load TAP file (Carga Tap)
 
 After a disk is inserted, normally, you can use `LOAD "*",8,1` and press `Enter` to load the software inside. Once `READY` is shown on screen, type `RUN` and press `Enter` to execute it.
@@ -1795,7 +1810,7 @@ Some of the features of the ZXDOS+ core are:
 - Scanlines on VGA mode
 - Controls can be optionally rotated 90º
 
-==== microSD format
+==== microSD card format
 
 This core does not use the microSD card.
 
@@ -1893,7 +1908,7 @@ Some features of this core are:
 - HQ2X filters that "removes pixels" from the image
 - Scanlines simulation
 - Made with NES NTSC clock timings, so only USA ROMs run fine. PAL ROMs run faster than they sould
-- You can load ROMs from the SD
+- You can load ROMs from the microSD
 - You need, at least, one gamepad or joystick connected, and it must have several buttons
 - Only VGA video mode is supported, with non-accurate timings, so it may not work with some displays
 
@@ -1942,13 +1957,13 @@ The ZXDOS+ core has these features:
 
 - 48kB and 96 kB modes
 - Optional Scorpion ROM
-- Carga usando la entrada de audio
 - Load from a external audio device
+- Joystick support
 - RGB video and VGA Support
 
-==== SD card format
+==== microSD card format
 
-This core does not use the SD card
+This core does not use the microSD card
 
 ==== Keyboard
 
@@ -1956,7 +1971,6 @@ This core does not use the SD card
 
 While running the core:
 
-- `Ctrl+Alt+Del`: Reset.
 - `F6` (`Caps Shift+Symbol Shift+6` on gomaDOS+): Switch between 48kB mode and 96kB mode (default)
 - `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Enable or disable Scorpio ROM
 - `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+): Switch the option to consider port $80 bits 2 and 3, so that Level 9 games are displayed properly.
@@ -2193,7 +2207,7 @@ The https://en.wikipedia.org/wiki/ZX81[ZX81] was a home computer produced by Sin
 
 The ZXDOS+ version has been made by avlixa.
 
-==== SD card format
+==== microSD card format
 
 You can use a microSD card with the first partition in FAT16 or FAT32 format to store tape files.
 
@@ -2243,6 +2257,186 @@ You can load a tape file (previously selected from the menu) with the command `L
 [TIP]
 ====
 Some monitors stop playing audio if the video signal is lost. It's recommended to plug headphones or a external speaker if you want to hear the sound while loading a tape. On a gomaDOS+, the internal speaker will play the sound if nothing is connected to the audio out port. 
+====
+
+<<<
+
+=== PC XT
+
+The https://en.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT] is the second computer in the IBM Personal Computer line. It is very similar to the original IBM PC model 5150 from 1981.
+
+The ZXDOS+ core is an implementation based on https://opencores.org/projects/next186_soc_pc[Next186].
+
+Features:
+
+- Next186 core with 30 MHz CPU (166.66Mhz 32 bit bus)
+- 64 MB DDR3 RAM (DDR3-1333 333.33Mhz)
+- 40 MHz DSP
+- OPL3 support (with fix for adlib detection)
+- PS/2 mouse and keyboard support
+- BIOS detection in the first 64 or the las 16 sectors of the microSD card
+
+==== microSD card format
+
+An SDHC card is required (so it has to be 4GB or more in size), with the first partition in FAT16 and MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and attaching directly the microSD device as a hard disk.
+
+Once partitioned and formatted (with the reserved bytes ad the end), the BIOS image file `Next186_BIOS_zxdos_ddr3.COM` (available to download https://github.com/zxdos/sources/raw/master/next186_zxdos_ddr3/software/Next186_BIOS_zxdos_ddr3.COM[at this link]) has to be written somewhere in the first 64 sectors or to the last 16 sectors of the card.
+
+[CAUTION]
+====
+**Do not use any FAT reordering utility** as it may stop DOS from booting.
+====
+
+[WARNING]
+====
+Because some of MSXDOS system directories and files may have the same name, it's not recommended to use the same card for the <<#_msx,MSX core>> and PC XT.
+====
+
+===== Windows
+
+You can use the program https://mh-nexus.de/en/hxd/[HxD (Hex editor for Windows)]:
+
+. Start the program as administrator and select the option `Open disk...` in the `Tools` menu
+. Disable the option to only read, and select the microSD device
+. Open in another window the file with the BIOS image
+. Copy all the content from the BIOS image, and paste at the end of the microSD, or, if there is enough freespace before the first partition, somewhere within the first 64 sectors (512 bytes in size each)
+. Save all changes to the card
+
+<<<
+
+===== Linux
+
+Follow these steps:
+
+. After finding which device belongs to the SD card (`sdb` for this example),  execute `fdisk` to find out the size
+
+[source,shell]
+----
+fdisk -l /dev/sdb
+Disk /dev/sdb: 59.49 GiB, 63864569856 bytes, 124735488 sectors
+Disk model: SD/MMC          
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+(...)
+----
+
+[start=2]
+. As the sector size is 512 bytes, subtract 16 (for this example, `124735488-16=124735472`) and use that info to inject the BIOS at the end:
+
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=124735472
+----
+
+Instead of the end of the card, if there is enough free space before the first partition, you may use the beginning. For example, to write starting at sector 10:
+
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=10
+----
+
+===== MacOS
+
+Steps to to follow:
+
+. After finding out which disk is the card (`disk6` for this example),  open `fdisk` to find out the size in sectors
+
+[source,shell]
+----
+sudo diskutil unmountDisk /dev/disk6
+sudo fdisk /dev/rdisk6
+
+Disk: /dev/rdisk6   geometry: 15566/255/63 [30535680 sectors]
+(...)
+Enter 'help' for information
+fdisk: 1>q
+----
+
+[start=2]
+. As the sectors are 512 bytes in size, substract 16 (for this example, `30535680-16=30535664`) and use that number to inject the data at the end:
+
+[source,shell]
+----
+sudo diskutil unmountDisk /dev/disk6
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=30535664
+----
+
+Instead of the end of the card, if there is enough free space before the first partition, you may use the beginning. For example, to write starting at sector 10:
+
+[source,shell]
+----
+sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=10
+----
+
+See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXDOS+.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+During the core execution:
+
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+): Reset
+
+==== Basic Guide
+
+[.text-center] 
+image:img/pcxt.png[pdfwidth=70%]
+
+<<<
+
+=== Chip-8
+
+https://en.wikipedia.org/wiki/CHIP-8[CHIP-8] CHIP-8 is an interpreted programming language, developed by Joseph Weisbecker. It was initially used on the COSMAC VIP and Telmac 1800 8-bit microcomputers in the mid-1970s. Erik Bryntse later created another interpreter based on CHIP-8, called SCHIP, S-CHIP or Super-Chip which extended the CHIP-8.
+
+The ZXDOS+ core is based on an existing  https://bitbucket.org/csoren/fpga-chip8/[FPGA implementation] of the SuperChip.
+
+There are several sites like https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] ot https://github.com/mattmikolay/chip-8[Matthew Mikolay's CHIP-8] where you can obtain osftware for these machines.
+
+==== microSD card format
+
+You can use a SD card with the first partition in FAT16 or FAT32 formata to store `BIN` or `CH8` ROM files to load with the core.
+
+==== Keyboard
+
+The CHIP-9 machine uses an hexadecimal keyboard as input. This is the key mapping:
+
+[align="center",width="25%",%header,cols=2*] 
+|===
+|Chip-8|PS/2
+|`1 2 3 C`|`1 2 3 4`
+|`4 5 6 D`|`Q W E R`
+|`7 8 9 E`|`A S D F`
+|`A 0 B F`|`Z X C V`
+|===
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Esc` (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Reset
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Use the cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
+
+[.text-center] 
+image:img/chip8.jpg[pdfwidth=70%]
+
+
+The following options are available:
+
+- Reset the core 
+- Change the core clock speed
+- Load a ROM file from the microSD card
+- Exit the menu
+
+[CAUTION]
+====
+After loading a ROM, always press the reset key so that it runs correctly: `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+)
 ====
 
 <<<
@@ -2346,7 +2540,7 @@ aclocal && autoconf && autoheader && automake --add-missing
 make
 ----
 
-If all goes well, a new file named `tzxplay` will be created, which you can copy anywhere and then use. You can delete the compilation directory.
+If all goes well, a new file named `playtzx` has been created, which you can copy anywhere and then use. You can delete the compilation directory.
 
 ==== Mobile phone, tablet, MP3 player, etc.
 
@@ -2393,7 +2587,7 @@ image:img/MiniduinoBack.jpg[pdfwidth=50%]
 [.text-center] 
 image:img/MiniduinoFront.jpg[pdfwidth=50%]
 
-[cols=2*] 
+[align="center",width="60%",cols=2*] 
 |===
 |1
 |Power
@@ -2426,6 +2620,11 @@ Copy the tape files (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX`, etc) to the first par
 [TIP]
 ====
 The player shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the microSD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
+====
+
+[CAUTION]
+====
+Ïf the card is also being used with the <<#_pc_xt,PC XT>> core, **do not use any FAT reordering utility** as it may stop DOS from booting.
 ====
 
 <<<
@@ -2666,7 +2865,7 @@ image:img/pizeroaddon.jpg[pdfwidth=70%]
 ====
 When writing this manual, the latest NextPI version (0.99D RTM), doesn't need all the pins to work. It's enough to use:
 
-[%header,cols=3*] 
+[align="center",width="90%",%header,cols=3*] 
 |===
 |Name
 |Pin
@@ -2819,7 +3018,7 @@ See the  https://github.com/kounch/zx123_tool/[documentation] for all the possib
 
 Amongst the information you give when adding a ROM, there are some flags used to tell which hardware options, etc, you want to have enabled or disabled when loading the ROM, as shown in this table:
 
-[%header,cols=2*] 
+[align="center",width="70%",%header,cols=2*] 
 |===
 |`i`
 |Keyboard issue 3 enabled (instead of issue 2)
@@ -2972,7 +3171,7 @@ image:img/gpio.jpg[pdfwidth=70%]
 
 In this example, the `31`, `33`, `35`, `37` and `39` pins will be used (corresponding to `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` and `GND`), like this:
 
-[%header,cols=3*] 
+[align="center",width="50%",%header,cols=3*] 
 |===
 |ZXDOS+ JTAG
 |GPIO

@@ -22,21 +22,70 @@ Check it out by using this [reuse-tool](https://github.com/fsfe/reuse-tool).
 
 # 2. Using SDK in GNU environment on Linux, FreeBSD etc.
 
-## 2.1. Build tools
+## 2.1. Prepare a build environment
 
-To build all tools type:
+### 2.1.1. On a Debian-based system (Ubuntu etc.)
 
-```bash
-make
-```
-
-To build only **sjasmplus** type:
+Open terminal and type:
 
 ```bash
-make bin/sjasmplus
+# apt install -y build-essential git cmake libboost-all-dev
 ```
 
-## 2.2. Clean tools
+**NOTE**: here the first symbol "#" means that the following command must be run as *root* or using `sudo` utility.
+
+To use cross-compilation for Windows platform install *mingw-w64* package:
+
+```bash
+# apt install -y mingw-w64
+```
+
+### 2.1.2. Clone repository
+
+Choose a directory for project and type:
+
+```bash
+git clone git://github.com/zxdos/zxuno.git zxuno
+```
+
+Now `zxuno` sub-directory is the ZX-Uno project's root directory and all actions we'll make inside it.
+
+## 2.2. Build tools
+
+Go to the project's root directory and type one of the following commands:
+
+Command | Target
+----|----
+`make` | all tools
+`make bin/sjasmplus` | **sjasmplus**
+`make bin/zx7b` | **zx7b**
+`make bin/bin2hex` | **bin2hex**
+`make bin/fcut` | **fcut**
+`make bin/fpad` | **fpad**
+`make bin/fpoke` | **fpoke**
+`make bin/GenRom` | **GenRom**
+`make bin/AddItem` | **AddItem**
+
+To build using MinGW add this parameter for `make` tool:
+
+Parameter | Target system
+----|----
+`BUILD=mingw32` | Windows with i686 architecture (32-bits)
+`BUILD=mingw64` | Windows with AMD64 architecture (64-bits)
+
+Remember to specify proper file extension (`.exe`) for target when building with MinGW. Example:
+
+```bash
+make BUILD=mingw64 bin/fcut.exe bin/fpad.exe bin/fpoke.exe
+```
+
+Then you may use `strip` tool to strip debug information from file and thus shrink file's size:
+
+```bash
+strip bin/fcut.exe bin/fpad.exe bin/fpoke.exe
+```
+
+## 2.3. Clean tools
 
 To clean everything type:
 
@@ -44,11 +93,17 @@ To clean everything type:
 make clean
 ```
 
-## 2.3. Tools usage
+To clean MinGW builds use appropriate `BUILD` parameter as described in [2.2](#22-build-tools). Example:
+
+```bash
+make BUILD=mingw64 clean
+```
+
+## 2.4. Tools usage
 
 These tools are supposed to be used mainly in Makefiles and Bash scripts invoked from Makefiles.
 
-### 2.3.1. In Makefiles
+### 2.4.1. In Makefiles
 
 To use these tools in a Makefile just include `common.mk` file at the beginning of one like this:
 
@@ -58,12 +113,12 @@ include ../sdk/common.mk
 
 Remember to specify correct relative path to it.
 
-This will set "ZXUNOSDK" environment variable (on first inclusion only) and update your "PATH" environment variable to point to SDK's tools.
-These changes are actual for current invocation of "make" utility and all child processes.
+This will set `ZXUNOSDK` environment variable (on first inclusion only) and update your `PATH` environment variable to point to SDK's tools.
+These changes are actual for current invocation of `make` utility and all child processes.
 
-### 2.3.2. In Bash scripts
+### 2.4.2. In Bash scripts
 
-Bash scripts are supposed to be invoked from Makefiles where the correct environment is already prepared by "make" utility so nothing must be done for such scripts.
+Bash scripts are supposed to be invoked from Makefiles where the correct environment is already prepared by `make` utility so nothing must be done for such scripts.
 
 In other cases you must source `setvars.sh` file in a Bash script like this:
 
@@ -83,43 +138,41 @@ This has the same behavior as the inclusion of `common.mk` file in a Makefile.
 
 # 3. Using SDK in GNU environment on Windows
 
-**NOTE**: compilation of the following tools:
+**NOTE**: *by default* compilation of the following tools:
 
 * sjasmplus
+* zx7b
+* bin2hex
+* fcut
+* fpad
+* fpoke
+* GenRom
+* AddItem
 
-on Windows platform is disabled right now because of presence of precompiled binaries of them in repository. They are not deleted when cleaning.
+on Windows platform is disabled right now because of presence of precompiled binaries of them in repository.
+*By default* they are not deleted when cleaning.
 
 ## 3.1. Build tools
 
-To build all tools type:
-
-```bash
-make
-```
-
-To build only **sjasmplus** type:
-
-```
-make bin/sjasmplus.exe
-```
+The building process is similar to one for GNU on Linux, FreeBSD etc.
+See [2.2](#22-build-tools) with addition that you should provide correct target name (specify file extension `.exe`) and also specify parameter `FORCEBUILD=1`.
 
 ## 3.2. Clean tools
 
-To clean everything type:
-
-```bash
-make clean
-```
+The cleaning process is similar to one for GNU on Linux, FreeBSD etc.
+See [2.3](#23-clean-tools) with addition that you should specify parameter `FORCECLEAN=1`.
 
 ## 3.3. Tools usage
 
 ### 3.3.1. In Makefiles
 
-The usage is similar to one for GNU/Linux, FreeBSD etc. See [2.3.1](#231-in-makefiles).
+The usage is similar to one for GNU on Linux, FreeBSD etc.
+See [2.4.1](#241-in-makefiles).
 
 ### 3.3.2. In Bash scripts
 
-The usage is similar to one for GNU/Linux, FreeBSD etc. See [2.3.2](#232-in-bash-scripts).
+The usage is similar to one for GNU on Linux, FreeBSD etc.
+See [2.4.2](#242-in-bash-scripts).
 
 # 4. Using SDK on Windows without GNU environment
 
@@ -133,5 +186,11 @@ call ..\sdk\setvars.bat
 
 Remember to specify correct relative path to it.
 
-This will set "ZXUNOSDK" environment variable (on first call only) and update your "PATH" environment variable to point to SDK's tools.
+This will set `ZXUNOSDK` environment variable (on first call only) and update your `PATH` environment variable to point to SDK's tools.
 These changes are actual for current invocation of command shell and all child processes.
+
+# References
+
+* [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
+* [Open-Source FPGA Foundation](https://osfpga.org/) - main site
+* [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub

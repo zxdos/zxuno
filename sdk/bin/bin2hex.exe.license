@@ -1,0 +1,9 @@
+SPDX-FileName: bin2hex.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: acc480181c0cdc8d5bfce1c633c8eefd8165908c
+
+SPDX-FileCopyrightText: Copyright (C) 2016, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only

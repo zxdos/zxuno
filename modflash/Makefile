@@ -6,35 +6,16 @@
 #   * GNU/Linux
 #   * Windows NT (using MinGW/MSYS/Cygwin/WSL)
 
-ifeq ($(OS),Windows_NT)
-GENROM	= GenRom.exe
-ADDITEM	= AddItem.exe
-else
-GENROM	= GenRom
-ADDITEM	= AddItem
-endif
+include ../sdk/common.mk
 
 .PHONY: all
-all: | FLASHempty.ZX1 $(GENROM) $(ADDITEM) ./addroms.sh ./addcores.sh roms.txt cores.txt
+all: | FLASHempty.ZX1 $(ADDITEM) ./addroms.sh ./addcores.sh roms.txt cores.txt
 	cp FLASHempty.ZX1 FLASH.ZX1
 	./addroms.sh
 	./addcores.sh
 
-ifneq ($(OS),Windows_NT)
-$(GENROM): GenRom.c
-	$(CC) $(CFLAGS) $< -o $@
-
-$(ADDITEM): AddItem.c
-	$(CC) $(CFLAGS) $< -o $@
-endif
-
 .PHONY: clean
-clean:
-ifeq ($(OS),Windows_NT)
-	# Nothing to do
-else
-	rm -f $(GENROM) $(ADDITEM)
-endif
+clean:;
 
 .PHONY: dist-clean
 dist-clean: clean

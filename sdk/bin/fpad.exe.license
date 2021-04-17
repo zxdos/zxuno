@@ -1,0 +1,11 @@
+SPDX-FileName: fpad.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 1aa7d48a742da3ffaff2c29bcb8acceb7eb8042c
+
+SPDX-FileCopyrightText: Copyright (C) 2016, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: fpad version 1.00 (24 Apr 2016) - generate a file with padded values.

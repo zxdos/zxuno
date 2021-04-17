@@ -5,8 +5,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-GENROM=./GenRom
-ADDITEM=./AddItem
 i=2
 
 Error() {
@@ -17,8 +15,8 @@ Error() {
 AddCore() {
 	local f=${3%.*}.tap
 	echo "Adding core $i: \"$2\" ($3)..."
-	$GENROM $1 "$2" $3 $f || Error $?
-	$ADDITEM CORE$i $f || Error $?
+	GenRom $1 "$2" $3 $f || Error $?
+	AddItem CORE$i $f || Error $?
 	rm -f $f
 	let i+=1
 }
