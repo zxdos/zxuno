@@ -5,11 +5,11 @@
 include ../../sdk/common.mk
 
 .PHONY: all
-all: iwconfig
+all: IWCONFIG
 
-iwconfig: iwconfig.c
+IWCONFIG: iwconfig.c
 	zcc +zx -vn -startup=30 -clib=new $< -SO3 -o $@ -subtype=dot -create-app
 
 .PHONY: clean
 clean:
-	rm -f *.bin *.def iwconfig
+	rm -f *.bin *.def IWCONFIG
