@@ -500,14 +500,10 @@ runbit0 ld      a, l
     IF  version=1
         cp      45
     ELSE
-      IF  version=2
+      IF  version=2 OR version=3
         cp      69
       ELSE
-        IF  version=3
-          cp      40
-        ELSE
-          cp      56
-        ENDIF
+        cp      56
       ENDIF
     ENDIF
         jr      z, bios
@@ -2407,7 +2403,12 @@ bucop   push    hl                    ; save current cluster
         inc     a                     ; cluster==FFFF
         pop     ix
         jr      nz, bucop
-enbur   call    alto loadch
+enbur
+      IF  version=2 OR version=3
+        xor     a
+        ld      (alto highb+1), a
+      ENDIF
+        call    alto loadch
       IF  vertical=0
         ld      bc, $090a
       ELSE
