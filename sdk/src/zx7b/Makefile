@@ -13,20 +13,21 @@
 #
 # where:
 #   <BUILD> is one of: mingw32, mingw64.
-#   <TARGET> is one of values of TOOLS variable (see below).
+#   <TARGET> is the value of TARGET variable (see below).
 #
 # Notes:
 #   BUILD variable may be set in user's environment.
 
 include ../../common.mk
 
-ZX7B	:= zx7b$(EXECEXT)
+TARGET	:= zx7b$(EXESUFFIX)
 
-$(ZX7B): zx7b.c
+.PHONY: all
+all: $(TARGET)
+
+%$(EXESUFFIX): %.c Makefile
 	$(CC) $(CFLAGS) -o $@ $<
 
-zx7b.c:
-	wget -c https://github.com/antoniovillena/zx7b/raw/master/zx7b.c
-
+.PHONY: clean
 clean:
-	rm -f $(ZX7B)
+	rm -f $(TARGET)

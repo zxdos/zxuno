@@ -15,7 +15,7 @@
 #   <BUILD> is one of: mingw32, mingw64.
 #   <FB_FLAG> is 1 to force build, otherwise do not (default).
 #   <FC_FLAG> is 1 to force clean, otherwise do not (default).
-#   <TARGET> is one of values of TOOLS variable (see below).
+#   <TARGET> is one of: sjasmplus, z88dk, zx7b, tools
 #
 # Notes:
 #   BUILD, FORCEBUILD, FORCECLEAN variables may be set in user's environment.
@@ -43,31 +43,17 @@ export BUILD
 export FORCEBUILD
 export FORCECLEAN
 
-SJASMPLUS	:= sjasmplus$(EXECEXT)
-ZX7B		:= zx7b$(EXECEXT)
-BIN2HEX		:= bin2hex$(EXECEXT)
-FCUT		:= fcut$(EXECEXT)
-FPAD		:= fpad$(EXECEXT)
-FPOKE		:= fpoke$(EXECEXT)
-GENROM		:= GenRom$(EXECEXT)
-ADDITEM		:= AddItem$(EXECEXT)
-
-TOOLS:=\
- bin/$(SJASMPLUS) \
- bin/$(ZX7B) \
- bin/$(BIN2HEX) \
- bin/$(FCUT) \
- bin/$(FPAD) \
- bin/$(FPOKE) \
- bin/$(GENROM) \
- bin/$(ADDITEM)
-
 .PHONY: all
-all: $(TOOLS)
+all: sjasmplus z88dk zx7b tools
 
-$(TOOLS): | src/Makefile
-	$(MAKE) -w -C src ../bin/$(@F)
+.PHONY: sjasmplus z88dk
+sjasmplus z88dk: | src
+	$(MAKE) -w -C $| external-$@
 
-.PHONY: clean
-clean: | src/Makefile
-	$(MAKE) -w -C src clean
+.PHONY: zx7b tools
+zx7b tools: | src
+	$(MAKE) -w -C $| local-$@
+
+.PHONY: clean dist-clean
+clean dist-clean: | src
+	$(MAKE) -w -C $| $@
