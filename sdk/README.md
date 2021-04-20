@@ -68,8 +68,8 @@ Command | Description
 ----|----
 `make` | Build all tools from sources
 `make <TARGET>` | Build only the TARGET from sources
-`make BUILD=<BUILD>` | Cross-build all tools from sources for Windows platfowm
-`make BUILD=<BUILD> <TARGET>` | Cross-build only the TARGET from sources for Windows platfowm
+`make BUILD=<BUILD>` | Cross-build all tools from sources for Windows platform
+`make BUILD=<BUILD> <TARGET>` | Cross-build only the TARGET from sources for Windows platform
 
 where:
 
