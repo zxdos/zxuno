@@ -220,7 +220,8 @@ dist-clean-z88dk:
 
 # zx7b
 
-.PHONY: local-zx7b
+.PHONY: local-zx7b clean-zx7b
+
 local-zx7b: $(INSTALLDIR)/zx7b$(EXESUFFIX)
 
 ifeq ($(_DoBuild),1)
@@ -231,12 +232,18 @@ $(INSTALLDIR)/zx7b$(EXESUFFIX): zx7b/zx7b$(EXESUFFIX)
 zx7b/zx7b$(EXESUFFIX): | zx7b
 	$(MAKE) -w -C $|
 
-.PHONY: clean-zx7b
 clean-zx7b: | zx7b
 	$(MAKE) -w -C $| clean
 	rm -f $(INSTALLDIR)/zx7b$(EXESUFFIX)
 
+else
+
+clean-zx7b:;
+
 endif
+
+.PHONY: dist-clean-zx7b
+dist-clean-zx7b: clean-zx7b
 
 # tools
 
@@ -248,7 +255,8 @@ INSTALLED_TOOLS:=\
  $(INSTALLDIR)/GenRom$(EXESUFFIX)\
  $(INSTALLDIR)/AddItem$(EXESUFFIX)
 
-.PHONY: local-tools
+.PHONY: local-tools clean-tools
+
 local-tools: $(INSTALLED_TOOLS)
 
 ifeq ($(_DoBuild),1)
@@ -274,12 +282,18 @@ $(INSTALLDIR)/AddItem$(EXESUFFIX): tools/AddItem$(EXESUFFIX)
 tools/%$(EXESUFFIX): | tools
 	$(MAKE) -w -C $| $(@F)
 
-.PHONY: clean-tools
 clean-tools: | tools
 	$(MAKE) -w -C $| clean
 	rm -f $(INSTALLED_TOOLS)
 
+else
+
+clean-tools:;
+
 endif
+
+.PHONY: dist-clean-tools
+dist-clean-tools: clean-tools
 
 .PHONY: clean
 ifeq ($(_DoClean),1)
@@ -290,7 +304,7 @@ endif
 
 .PHONY: dist-clean
 ifeq ($(_DoClean),1)
-dist-clean: dist-clean-sjasmplus dist-clean-z88dk clean-zx7b clean-tools
+dist-clean: dist-clean-sjasmplus dist-clean-z88dk dist-clean-zx7b dist-clean-tools
 else
 dist-clean: dist-clean-sjasmplus dist-clean-z88dk
 endif
