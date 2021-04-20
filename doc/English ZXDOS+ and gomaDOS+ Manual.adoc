@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.6
+:revnumber: 1.4.7
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -224,7 +224,7 @@ It is also recommended to add the specific esxdos commands for ZXDOS+. These can
 
 gomaDOS+ keyboard, being similar to the original ZX Spectrum keyboard, lacks some of the existing keys on a modern PC keyboard. The keyboard membrane is connected to an Arduino board, which manages the transformation key presses to PS/2 keyboard protocol. The board is programmed so it can behave in different modes according to your needs.
 
-The default is ZX Spectrum mode. To change to a different mode, you must press `Caps Shift+Symbol Shift+U` and then the key for the desired mode. After doing that, some text is automatically typed, to show the selected mode (for example `.zx` if you press `Caps Shift+Symbol Shift+U` and theno `0`).
+The default is ZX Spectrum mode. To change to a different mode, you must press `Caps Shift+Symbol Shift+U` and then the key for the desired mode. After doing that, some text is automatically typed, to show the selected mode (for example `.zx` if you press `Caps Shift+Symbol Shift+U` and then `0`).
 
 This table shows the available modes and activation keys:
 
@@ -1305,6 +1305,11 @@ Copy the file to the root of the microSD card, turn on and press `F2` to enter B
 The ZX Spectrum core update is exactly the same as other cores, but instead of the name `CORE1.ZX2` or `CORE1.ZXD`, it has to be a file named `SPECTRUM.ZX2` or `SPECTRUM.ZXD`.
 ====
 
+[TIP]
+====
+Due to some limitations in the FPGA, the cores that are stored in the SPI Flash second half have to be installed without using the space https://github.com/zxdos/zxuno/blob/master/firmware/formato_lx25.txt[at address `0x10B0000`]. https://github.com/zxdos/zxuno/blob/master/firmware/CORE21_special.ZXD[A special core] has to be there, this makes sure that, when another core installed in the upper half of the flash is reset, the main Spectrum core and the BIOS load correctly.
+====
+
 === esxdos
 
 To update esxdos to a new version, the distribution must be obtained from https://www.esxdos.org[the official website].
@@ -1340,7 +1345,38 @@ This process can't be undone, and it will replace all the previously installed c
 
 === ZX Spectrum 48K (Kyp)
 
-https://github.com/Kyp069/zx48.zxdosplus/releases/[Alternative core], whose objective is to be the most accurate implementation in timings, memory contention, etc.
+https://github.com/Kyp069/zx48/releases/[Alternative core], whose objective is to be the most accurate implementation in timings, memory contention, etc.
+
+Main features:
+
+- RGB and VGA video out
+- Specdrum
+- Turbosound (two AY chips) with mix selection ACB/ABC
+- DivMMC with esxdos 0.8.8
+- Kempston joystick in port 1
+- I^2^S audio output (with the <<#_rtci2spizero_addon,RTC+I^2^S+Pizero addon>>)
+
+==== microSD card format
+
+You need a microSD card with the first partition formatted as FAT16 or FAT32, and inside, the standard esxDOS 0.8.8 (see <<#_esxdos,esxdos corresponding section>> for more info).
+
+==== Keyboard
+ 
+===== Special keys and buttons
+
+While the core is running:
+
+- `Esc` (`Caps Shift+Space` on gomaDOS+): BREAK
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+): Change Turbosound mixer configuration between ACB and ABC.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+) or `F11` (`Caps Shift+Symbol Shift+Q` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` on gomaDOS+) or `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Soft reset.
+
+<<<
+
+=== ZX Spectrum 128K (Kyp)
+
+Alternative core, whose objective is to be the most accurate implementation in timings, memory contention, etc.
 
 Main features:
 
@@ -2371,6 +2407,14 @@ sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/rdisk6 bs=512 seek=10
 See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXDOS+.
 
 ==== Keyboard
+
+When using a gomaDOS+, to make the key presses (Spectrum) being similar to a PC keyboard, you can follow these steps:
+
+. Start the gomaDOS+
+. Change the keyboard mode to `PC XT` (`Caps Shift+Symbol Shift+U` and then `9`)
+. Reboot the gomaDOS+ without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
+. Quickly, press `Caps Shift + 2` and select the PC XT core to boot
+. Ensure that the DOS keyboard configuration is in an english mode (`KEYB US,` or `KEYB UK,`)
 
 ===== Special keys and buttons
 

@@ -497,17 +497,13 @@ star17  ld      hl, (joykey)
         jp      conti
 
 runbit0 ld      a, l
-    IF  version=1
+    IF  version=1 OR version=3
         cp      45
     ELSE
       IF  version=2
         cp      69
       ELSE
-        IF  version=3
-          cp      40
-        ELSE
-          cp      56
-        ENDIF
+        cp      56
       ENDIF
     ENDIF
         jr      z, bios
@@ -767,18 +763,7 @@ launch  ld      (tmpbuf+21), a
         call    clrscr          ; borro pantalla
         inc     hl
         inc     de
-      IF  version=1
-        ld      c, $20
-        ld      (hl), %00000111
-        ldir
-        ld      bc, $2e0
-        ld      (hl), %01001111
-        ldir
-        ld      ix, cad118
-        call_prnstr
-        ld      ix, cad62   
-        call_prnstr
-      ELSE
+      IF  version=2
         ld      bc, $300
         ld      (hl), %01001111
         ldir
@@ -793,19 +778,30 @@ launch  ld      (tmpbuf+21), a
         ld      ix, cad118+8
         call_prnstr
         ld      c, 1
+      ELSE
+        ld      c, $20
+        ld      (hl), %00000111
+        ldir
+        ld      bc, $2e0
+        ld      (hl), %01001111
+        ldir
+        ld      ix, cad118
+        call_prnstr
+        ld      ix, cad62   
+        call_prnstr
       ENDIF
         ld      de, bnames
 laun1   ex      de, hl
         push    hl
         push    bc
         ld      de, tmpbuf
-      IF  version=1
-        ld      bc, 21
-        ldir
-      ELSE
+      IF  version=2
         ld      bc, 14
         ldir
         ld      (de), a
+      ELSE
+        ld      bc, 21
+        ldir
       ENDIF
         ld      ix, tmpbuf
         pop     bc
@@ -816,11 +812,7 @@ laun1   ex      de, hl
         ex      de, hl
         ld      hl, $a3c0
         sbc     hl, de
-      IF  version=1
-        jr      nz, laun2
-        ld      bc, $1501
-laun2   ld      hl, $a681
-      ELSE
+      IF  version=2
         jr      nz, laun2
         ld      bc, $0e00
 laun2   ld      hl, $a6a1
@@ -828,6 +820,10 @@ laun2   ld      hl, $a6a1
         jr      nz, laun3
         ld      bc, $1c00
 laun3   ld      hl, $a981
+      ELSE
+        jr      nz, laun2
+        ld      bc, $1501
+laun2   ld      hl, $a681
       ENDIF
         sbc     hl, de
         jr      nz, laun1
@@ -865,74 +861,7 @@ gamup   dec     l
         ret     p
 gamdw   inc     l
         ld      a, l
-      IF  version=1
-        cp      46
-        ret     c
-        dec     l
-        ret
-gamlf   ld      a, l
-        ld      l, 0
-        sub     23
-        ret     c
-        ld      l, a
-        ret
-gamrh   ld      a, l
-        cp      23
-        jr      c, gamrh1
-        ld      a, 22
-gamrh1  add     a, 23
-        ld      l, a
-        ret
-SELEC   push    hl
-        exx
-        pop     hl
-        inc     l
-        ld      a, l
-        cp      24
-        ld      de, 0
-        ld      b, 16
-        jr      c, sel01
-        ld      e, -23
-        add     hl, de
-        ld      e, b
-sel01   add     hl, hl
-        add     hl, hl
-        add     hl, hl
-        ld      h, $16
-        add     hl, hl
-        add     hl, hl
-        add     hl, de
-sel02   ld      a, (hl)
-        xor     %00110110
-        ld      (hl), a
-        inc     l
-        djnz    sel02
-        exx
-        ld      a, l
-        exx
-sel03   sub     23
-        jr      nc, sel03
-        add     a, 24
-        ld      c, a
-        and     %00011000
-        or      %01000000
-        ld      d, a
-        ld      a, c
-        and     %00000111
-        rrca
-        rrca
-        rrca
-        add     a, $0f
-        ld      e, a
-        ld      b, 8
-sel04   ld      a, (de)
-        xor     3
-        ld      (de), a
-        inc     d
-        djnz    sel04
-        exx
-        ret
-      ELSE
+      IF  version=2
         cp      70
         ret     c
         dec     l
@@ -1007,6 +936,73 @@ sel04   ld      a, (de)
         djnz    sel04
 sel05   exx
         ret
+      ELSE
+        cp      46
+        ret     c
+        dec     l
+        ret
+gamlf   ld      a, l
+        ld      l, 0
+        sub     23
+        ret     c
+        ld      l, a
+        ret
+gamrh   ld      a, l
+        cp      23
+        jr      c, gamrh1
+        ld      a, 22
+gamrh1  add     a, 23
+        ld      l, a
+        ret
+SELEC   push    hl
+        exx
+        pop     hl
+        inc     l
+        ld      a, l
+        cp      24
+        ld      de, 0
+        ld      b, 16
+        jr      c, sel01
+        ld      e, -23
+        add     hl, de
+        ld      e, b
+sel01   add     hl, hl
+        add     hl, hl
+        add     hl, hl
+        ld      h, $16
+        add     hl, hl
+        add     hl, hl
+        add     hl, de
+sel02   ld      a, (hl)
+        xor     %00110110
+        ld      (hl), a
+        inc     l
+        djnz    sel02
+        exx
+        ld      a, l
+        exx
+sel03   sub     23
+        jr      nc, sel03
+        add     a, 24
+        ld      c, a
+        and     %00011000
+        or      %01000000
+        ld      d, a
+        ld      a, c
+        and     %00000111
+        rrca
+        rrca
+        rrca
+        add     a, $0f
+        ld      e, a
+        ld      b, 8
+sel04   ld      a, (de)
+        xor     3
+        ld      (de), a
+        inc     d
+        djnz    sel04
+        exx
+        ret
       ENDIF
 
     ELSE
@@ -1068,8 +1064,20 @@ conti   di
         jr      z, ccon0
 runbit  ld      b, h
         call    calbit
-
+      IF  version=2 OR version=3
+        push    hl
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, 6    ; envío write enable
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        wreg    flash_cs, 0     ; activamos spi, enviando un 0
+        wreg    flash_spi, $c5  ; envío wrear
+        out     (c), a
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        dec     b
+        pop     hl
+      ELSE
         ld      bc, zxuno_port
+      ENDIF
         ld      e, core_addr
         out     (c), e
         inc     b
@@ -2395,7 +2403,12 @@ bucop   push    hl                    ; save current cluster
         inc     a                     ; cluster==FFFF
         pop     ix
         jr      nz, bucop
-enbur   call    alto loadch
+enbur
+      IF  version=2 OR version=3
+        xor     a
+        ld      (alto highb+1), a
+      ENDIF
+        call    alto loadch
       IF  vertical=0
         ld      bc, $090a
       ELSE
@@ -3167,29 +3180,31 @@ calbi3  add     hl, de
         ld      (alto highb+1), a
         ret
       ELSE
+          ld      a, b
         IF  version=2
-calbi1    ld      a, b        ;1-69
-          sub     35
-          jr      c, calbi2   ;<35 c n
-          ld      b, a        ;>=35 nc n-35
-calbi2    ld      hl, $0240
-          ret     z
+          cp      35
+          jr      z, calbi1
+          jr      c, calbi2
+calbi1    sub     34
+calbi2    ld      b, a
+          sbc     a, a
+          inc     a
+          ld      hl, $0240
           ld      de, $0740
-calbi3    add     hl, de
-          djnz    calbi3
-          ret
         ELSE
-calbi1    ld      a, b        ;1-40
-          sub     20
-          jr      z, calbi2
-          jr      c, calbi2   ;<20 c n
-          ld      b, a        ;>=20 nc n-20
-calbi2    ld      hl, $fec0
+          cp      21
+          jr      z, calbi1
+          jr      c, calbi2
+calbi1    sub     19
+calbi2    ld      b, a
+          sbc     a, a
+          inc     a
+          ld      hl, $fec0
           ld      de, $0c40
+        ENDIF
 calbi3    add     hl, de
           djnz    calbi3
           ret
-        ENDIF
       ENDIF
     ENDIF
 
