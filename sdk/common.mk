@@ -11,23 +11,33 @@
 ifndef ZXUNOSDK
 
 ZXUNOSDK	:= $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
-PATH		:= $(ZXUNOSDK)/bin:$(PATH)
+Z88DK		:= $(ZXUNOSDK)/src/z88dk
+ZCCCFG		:= $(Z88DK)/lib/config
+PATH		:= $(ZXUNOSDK)/bin:$(Z88DK)/bin:$(PATH)
+
+# Fix paths under Cygwin for z88dk on Windows
+ifeq ($(OS),Windows_NT)
+ifeq ($(shell echo $$OSTYPE),cygwin)
+ZCCCFG		:= $(shell cygpath -m $(ZCCCFG))
+endif
+endif
 
 export ZXUNOSDK
+export ZCCCFG
 export PATH
 
 endif
 
 ifeq ($(OS),Windows_NT)
-EXECEXT		:= .exe
+EXESUFFIX	:= .exe
 else
-EXECEXT		:=
+EXESUFFIX	:=
 endif
 
 ifeq ($(BUILD),mingw32)
 CC		:= i686-w64-mingw32-gcc
-EXECEXT		:= .exe
+EXESUFFIX	:= .exe
 else ifeq ($(BUILD),mingw64)
 CC		:= x86_64-w64-mingw32-gcc
-EXECEXT		:= .exe
+EXESUFFIX	:= .exe
 endif

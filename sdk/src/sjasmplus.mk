@@ -17,7 +17,6 @@
 # Notes:
 #   BUILD variable may be set in user's environment.
 
-
 include ../../common.mk
 
 ifeq ($(BUILD),mingw32)
@@ -28,13 +27,11 @@ else
 CMAKEFLAGS	:=
 endif
 
-SJASMPLUS	:= sjasmplus$(EXECEXT)
-
-build/$(SJASMPLUS): | build/Makefile
+build/sjasmplus$(EXESUFFIX): | build/Makefile
 	$(MAKE) -w -C build
 
 build/Makefile: | build
-	cd build && cmake $(CMAKEFLAGS) ..
+	cd $| && cmake $(CMAKEFLAGS) ..
 
 build:
 	mkdir $@
