@@ -9,7 +9,7 @@ if [[ "x$ZXUNOSDK" == x ]]; then
 	ZCCCFG=$Z88DK/lib/config
 	PATH=$ZXUNOSDK/bin:$Z88DK/bin:$PATH
 	# Fix paths under Cygwin for z88dk on Windows
-	if [[ x$OS == xWindows_NT -a x$OSTYPE == xcygwin ]]; then
+	if [[ x$OS == xWindows_NT && x$OSTYPE == xcygwin ]]; then
 		ZCCCFG=`cygpath -m $ZCCCFG`
 	fi
 	export ZXUNOSDK
