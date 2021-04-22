@@ -236,7 +236,11 @@ See [2.4.2](#242-in-bash-scripts).
 
 # 4. Using SDK on Windows without GNU environment
 
-## 4.1. In batch scripts
+## 4.1. Prepare a build environment
+
+You should manually download precompiled binaries of SJAsmPlus and Z88DK from Internet and put them in their sub-directories as described in [`src/Makefile`](src/Makefile).
+
+## 4.2. In batch scripts
 
 To use these tools in a batch script just call `setvars.bat` file at the beginning of one like this:
 
@@ -251,6 +255,22 @@ These changes are actual for current invocation of command shell and all child p
 
 # References
 
+* [REUSE SOFTWARE](https://reuse.software/) - a set of recommendations to make licensing your Free Software projects easier
+* [The Software Package Data Exchange (SPDX)](https://spdx.dev/) - An open standard for communicating software bill of material information, including components, licenses, copyrights, and security references
+* [GNU Operating System](https://www.gnu.org/)
+* [GNU Standards](http://savannah.gnu.org/projects/gnustandards) - GNU coding and package maintenance standards ([package](https://pkgs.org/download/gnu-standards))
+* [GNU Core Utilities](https://www.gnu.org/software/coreutils/) ([package](https://pkgs.org/download/coreutils))
+* [GNU Bash](https://www.gnu.org/software/bash/) - GNU Bourne Again SHell ([package](https://pkgs.org/download/bash))
+* [GNU Compiler Collection](https://www.gnu.org/software/gcc/) ([package](https://pkgs.org/download/gcc))
+* [GNU Make](https://www.gnu.org/software/make/) - utility for directing compilation ([package](https://pkgs.org/download/make))
+* [Cygwin](https://cygwin.com/) - a large collection of GNU and Open Source tools which provide functionality similar to a Linux distribution on Windows
+* [MSYS2](https://www.msys2.org/) - a collection of tools and libraries providing you with an easy-to-use environment for building, installing and running native Windows software
+* [MinGW](https://osdn.net/projects/mingw/) - Minimalist GNU for Windows
+* [MinGW-w64](http://mingw-w64.org/doku.php) - an advancement of the original mingw.org project, created to support the GCC compiler on Windows systems
+* [cmd](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd) - command interpreter in Windows
+* [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
+* [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
+* [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
 * [Open-Source FPGA Foundation](https://osfpga.org/) - main site
 * [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub
