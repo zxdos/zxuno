@@ -1,3 +1,29 @@
+; upgr32m.asm - write the content of a FLASH.ZX2 or FLASH.ZXD file, in
+; the root directory of the microSD card, to a 32 Meg SPI Flash memory.
+;
+; It must be run while using a "root" mode ROM.
+;
+; Copyright (C) 2019, 2021 Antonio Villena
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, version 3.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see <https://www.gnu.org/licenses/>.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
                 define  zxdos 1
 
               IF zxdos=1
@@ -206,7 +232,7 @@ waits6          in      a, (c)
                 jr      nz, waits6
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 ret
-        
+
 rst28           ld      bc, zxuno_port + $100
                 pop     hl
                 outi

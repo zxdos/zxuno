@@ -1,3 +1,32 @@
+; back32m.asm - creates a file, in the root directory of the microSD
+; card, with the contents of a 32 Meg SPI Flash memory.
+;
+; It must be run while using a "root" mode ROM. After finishing it's
+; execution, you must execute the command .ls to finish recording the
+; cache on the microSD card. If not, the length of the file will be
+; wrongly set to 0.
+;
+; Copyright (C) 2019, 2021 Antonio Villena
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, version 3.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see <https://www.gnu.org/licenses/>.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
                 define  zxdos 1
 
               IF zxdos=1
@@ -173,7 +202,7 @@ rdfls2          ini
                 wreg    flash_cs, 1
                 pop     hl
                 ret
-        
+
 rst28           ld      bc, zxuno_port + $100
                 pop     hl
                 outi
