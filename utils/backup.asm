@@ -66,7 +66,7 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'Can\'t open FLASH.ZX1'
+                dz      'Cannot open FLASH.ZX1'
                 ret
 FileFound       call    Print
                 db      'Backing up FLASH.ZX1 to SD', 13

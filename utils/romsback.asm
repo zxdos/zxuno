@@ -70,7 +70,7 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'Can\'t open ROMS.ZX1'
+                dz      'Cannot open ROMS.ZX1'
                 ret
 FileFound       call    Print
                 db      'Backing up ROMS.ZX1 to SD', 13
