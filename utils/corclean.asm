@@ -25,6 +25,8 @@
 
                 include zxuno.def
 
+;        define  ROMS_FILE "ROMS.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
@@ -200,4 +202,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'ROMS.ZX1'
+;FileName        dz      ROMS_FILE

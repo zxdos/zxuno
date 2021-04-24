@@ -31,6 +31,8 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  ROMS_FILE "ROMS.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
                 call    wrear0
@@ -71,10 +73,10 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'Cannot open ROMS.ZX1'
+                dz      'Cannot open ', ROMS_FILE
                 ret
 FileFound       call    Print
-                db      'Backing up ROMS.ZX1 to SD', 13
+                db      'Backing up ', ROMS_FILE, ' to SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $9f  ; jedec id
@@ -211,4 +213,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'ROMS.ZX1'
+FileName        dz      ROMS_FILE

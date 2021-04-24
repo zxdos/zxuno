@@ -31,6 +31,8 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  FLASH_FILE "FLASH.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
@@ -82,10 +84,10 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'Cannot open FLASH.ZX1'
+                dz      'Cannot open ', FLASH_FILE
                 ret
 FileFound       call    Print
-                db      'Backing up FLASH.ZX1 to SD', 13
+                db      'Backing up ', FLASH_FILE, ' to SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      hl, $0000
 Bucle           push    hl
@@ -177,4 +179,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'FLASH.ZX1'
+FileName        dz      FLASH_FILE

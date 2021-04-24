@@ -26,6 +26,9 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  CORE_FILE "SPECTRUM.ZX1"
+        define  BIOS_FILE "FIRMWARE.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
@@ -56,7 +59,7 @@ SDCard          ld      (drive+1), a
                 esxdos  F_OPEN
                 jr      nc, FileFound
                 call    Print
-                dz      'File SPECTRUM.ZX1 not found'
+                dz      'File ', CORE_FILE, ' not found'
                 ret
 FileFound       ld      (handle2+1), a
 drive:          ld      a, 0
@@ -65,7 +68,7 @@ drive:          ld      a, 0
                 esxdos  F_OPEN
                 jr      nc, FileFound2
                 call    Print
-                dz      'File FIRMWARE.ZX1 not found'
+                dz      'File ', BIOS_FILE, ' not found'
                 ret
 FileFound2      ld      (handle+1), a
                 call    Print
@@ -78,7 +81,7 @@ handle          ld      a, 0
                 esxdos  F_READ
                 jr      nc, GoodRead
                 call    Print
-                dz      'Error reading FIRMWARE.ZX1'
+                dz      'Error reading ', BIOS_FILE
                 ret
 GoodRead        ld      a, (handle+1)
                 esxdos  F_CLOSE
@@ -105,7 +108,7 @@ handle2:        ld      a, 0
                 esxdos  F_READ
                 jr      nc, GoodRead2
                 call    Print
-                dz      'Error reading SPECTRUM.ZX1'
+                dz      'Error reading ', CORE_FILE
                 ret
 GoodRead2       ld      a, $40
                 ld      hl, $8000
@@ -257,5 +260,5 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileCore        dz      'SPECTRUM.ZX1'
-FileBios        dz      'FIRMWARE.ZX1'
+FileCore        dz      CORE_FILE
+FileBios        dz      BIOS_FILE
