@@ -7,6 +7,9 @@
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
+ ifndef esxdos_def_included
+ define esxdos_def_included
+
         define  FA_READ         0x01
         define  FA_WRITE        0x02
         define  FA_OPEN_AL      0x08
@@ -21,3 +24,5 @@
                 rst     $08
                 defb    dato
               endm
+
+ endif  ; !esxdos_def_included

@@ -7,6 +7,9 @@
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
+ ifndef zxuno_def_included
+ define zxuno_def_included
+
         define  zxuno_port      $fc3b
         define  master_conf     0
         define  master_mapper   1
@@ -44,3 +47,5 @@
                 call    rst28
                 defb    dir, dato
               endm
+
+ endif  ; !zxuno_def_included
