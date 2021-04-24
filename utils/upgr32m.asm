@@ -91,9 +91,9 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 jr      nc, FileFound
                 call    Print
               IF zxdos=1
-                dz      'Can\'t open FLASH.ZX2'
+                dz      'Cannot open FLASH.ZX2'
               ELSE
-                dz      'Can\'t open FLASH.ZXD'
+                dz      'Cannot open FLASH.ZXD'
               ENDIF
                 ret
 FileFound       call    Print
