@@ -31,7 +31,7 @@
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
                 ; definition of "zxdos" flag
-		include back32m.def
+                include back32m.def
 
               IF zxdos=1
                 output  BACKZX2
@@ -39,7 +39,8 @@
                 output  BACKZXD
               ENDIF
 
-                include zxuno.inc
+                include zxuno.def
+                include esxdos.def
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
