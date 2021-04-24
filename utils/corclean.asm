@@ -25,6 +25,8 @@
 
                 include zxuno.def
 
+;        define  ROMS_FILE "ROMS.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
@@ -70,14 +72,7 @@ normal          ld      a, 0
                 out     (c), a
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash
@@ -200,4 +195,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'ROMS.ZX1'
+;FileName        dz      ROMS_FILE

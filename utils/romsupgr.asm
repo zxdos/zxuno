@@ -30,6 +30,8 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  ROMS_FILE "ROMS.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
                 call    wrear0
@@ -70,7 +72,7 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'File ROMS.ZX1 not found'
+                dz      'File ', ROMS_FILE, ' not found'
                 ret
 FileFound       wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $9f  ; jedec id
@@ -89,11 +91,11 @@ FileFound       wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 inc     a
                 jr      nz, ZX2P
                 call    Print
-                db      'Upgrading ROMS.ZX1 from SD', 13
+                db      'Upgrading ', ROMS_FILE, ' from SD', 13
                 dz      '[           ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 jr      ZX2PC
 ZX2P            call    Print
-                db      'Upgrading ROMS.ZX1 from SD', 13
+                db      'Upgrading ', ROMS_FILE, ' from SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
 ZX2PC           ld      a, ($8000)
                 inc     a
@@ -103,7 +105,7 @@ ZX2PC           ld      a, ($8000)
                 ld      ix, $1840
                 jr      ZX2cont
 ZX1             call    Print
-                db      'Upgrading ROMS.ZX1 from SD', 13
+                db      'Upgrading ', ROMS_FILE, ' from SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ix, $2e40
                 ld      iy, $34c0
@@ -177,14 +179,7 @@ wrear0          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash
@@ -307,4 +302,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'ROMS.ZX1'
+FileName        dz      ROMS_FILE

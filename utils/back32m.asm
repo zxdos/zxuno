@@ -42,6 +42,12 @@
                 include zxuno.def
                 include esxdos.def
 
+              IF zxdos=1
+        define  FLASH_FILE "FLASH.ZX2"
+              ELSE
+        define  FLASH_FILE "FLASH.ZXD"
+              ENDIF
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
                 call    wrear0
@@ -94,18 +100,10 @@ SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-              IF zxdos=1
-                dz      'Cannot open FLASH.ZX2'
-              ELSE
-                dz      'Cannot open FLASH.ZXD'
-              ENDIF
+                dz      'Cannot open ', FLASH_FILE
                 ret
 FileFound       call    Print
-              IF zxdos=1
-                dz      'Backing up FLASH.ZX2 to SD', 13
-              ELSE
-                dz      'Backing up FLASH.ZXD to SD', 13
-              ENDIF
+                dz      'Backing up ', FLASH_FILE, ' to SD', 13
                 call    write16m
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
@@ -154,14 +152,7 @@ WriteOK         ld      de, $0040
                 jr      nc, Bucle
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash
@@ -215,8 +206,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-              IF zxdos=1
-FileName        dz      'FLASH.ZX2'
-              ELSE
-FileName        dz      'FLASH.ZXD'
-              ENDIF
+FileName        dz      FLASH_FILE

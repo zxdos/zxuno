@@ -29,6 +29,8 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  FLASH_FILE "FLASH.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
@@ -80,10 +82,10 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'File FLASH not found'
+                dz      'File ', FLASH_FILE, ' not found'
                 ret
 FileFound       call    Print
-                db      'Upgrading FLASH.ZX1 from SD', 13
+                db      'Upgrading ', FLASH_FILE, ' from SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ix, $0400
                 ld      de, $0000
@@ -122,14 +124,7 @@ ReadOK          ld      a, $40
                 dz      13, 'Upgrade complete'
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Write to SPI flash
@@ -208,4 +203,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'FLASH.ZX1'
+FileName        dz      FLASH_FILE

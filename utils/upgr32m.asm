@@ -39,6 +39,12 @@
                 include zxuno.def
                 include esxdos.def
 
+              IF zxdos=1
+        define  FLASH_FILE "FLASH.ZX2"
+              ELSE
+        define  FLASH_FILE "FLASH.ZXD"
+              ENDIF
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
                 call    wrear0
@@ -91,18 +97,10 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-              IF zxdos=1
-                dz      'Cannot open FLASH.ZX2'
-              ELSE
-                dz      'Cannot open FLASH.ZXD'
-              ENDIF
+                dz      'Cannot open ', FLASH_FILE
                 ret
 FileFound       call    Print
-              IF zxdos=1
-                dz      'Upgrading FLASH.ZX2 from SD', 13
-              ELSE
-                dz      'Upgrading FLASH.ZXD from SD', 13
-              ENDIF
+                dz      'Upgrading ', FLASH_FILE, ' from SD', 13
                 call    read16m
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
@@ -159,14 +157,7 @@ ReadOK          ld      a, $40
                 jr      nz, Bucle
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Write to SPI flash
@@ -245,8 +236,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-              IF zxdos=1
-FileName        dz      'FLASH.ZX2'
-              ELSE
-FileName        dz      'FLASH.ZXD'
-              ENDIF
+FileName        dz      FLASH_FILE

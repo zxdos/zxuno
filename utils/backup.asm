@@ -26,6 +26,8 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  FLASH_FILE "FLASH.ZX1"
+
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
@@ -54,23 +56,21 @@ normal          ld      a, 0
                 out     (c), a
                 ret
 init            xor     a
-                rst     $08
-                db      M_GETSETDRV     ; A = unidad actual
+                esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
                 dz      'SD card not inserted'
                 ret
 SDCard          ld      b, FA_WRITE | FA_OPEN_AL ; B = modo de apertura
                 ld      hl, FileName    ; HL = Puntero al nombre del fichero (ASCIIZ)
-                rst     $08
-                db      F_OPEN
+                esxdos  F_OPEN
                 ld      (handle+1), a
                 jr      nc, FileFound
                 call    Print
-                dz      'Cannot open FLASH.ZX1'
+                dz      'Cannot open ', FLASH_FILE
                 ret
 FileFound       call    Print
-                db      'Backing up FLASH.ZX1 to SD', 13
+                db      'Backing up ', FLASH_FILE, ' to SD', 13
                 dz      '[', 6, ' ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      hl, $0000
 Bucle           push    hl
@@ -87,8 +87,7 @@ Bucle           push    hl
 punto           ld      hl, $8000
                 ld      bc, $4000
 handle          ld      a, 0
-                rst     $08
-                db      F_WRITE
+                esxdos  F_WRITE
                 pop     hl
                 jr      nc, WriteOK
                 call    Print
@@ -98,20 +97,12 @@ WriteOK         ld      de, $0040
                 add     hl, de
                 bit     6, h
                 jr      z, Bucle
-                rst     $08
-                db      F_CLOSE
+                esxdos  F_CLOSE
                 call    Print
                 dz      13, 'Backup complete'
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash
@@ -165,4 +156,4 @@ rst28           ld      bc, zxuno_port + $100
                 outi
                 jp      (hl)
 
-FileName        dz      'FLASH.ZX1'
+FileName        dz      FLASH_FILE
