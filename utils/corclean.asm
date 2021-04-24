@@ -25,6 +25,7 @@
 
                 include zxuno.def
 
+        define  VERSION "0.1"
 ;        define  ROMS_FILE "ROMS.ZX1"
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS

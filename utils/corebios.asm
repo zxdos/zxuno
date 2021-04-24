@@ -26,6 +26,7 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  VERSION "0.1"
         define  CORE_FILE "SPECTRUM.ZX1"
         define  BIOS_FILE "FIRMWARE.ZX1"
 
