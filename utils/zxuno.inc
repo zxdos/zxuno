@@ -1,3 +1,12 @@
+; zxuno.inc
+;
+; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
         define  zxuno_port      $fc3b
         define  master_conf     0
         define  master_mapper   1
