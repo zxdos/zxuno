@@ -45,8 +45,7 @@ Nonlock         ld      a, scandbl_ctrl
                 or      $80
                 out     (c), a
                 xor     a
-                rst     $08
-                db      M_GETSETDRV     ; A = unidad actual
+                esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
                 dz      'SD card not inserted'
@@ -54,8 +53,7 @@ Nonlock         ld      a, scandbl_ctrl
 SDCard          ld      (drive+1), a
                 ld      b, FA_READ      ; B = modo de apertura
                 ld      hl, FileCore    ; HL = Puntero al nombre del fichero (ASCIIZ)
-                rst     $08
-                db      F_OPEN
+                esxdos  F_OPEN
                 jr      nc, FileFound
                 call    Print
                 dz      'File SPECTRUM.ZX1 not found'
@@ -64,8 +62,7 @@ FileFound       ld      (handle2+1), a
 drive:          ld      a, 0
                 ld      b, FA_READ      ; B = modo de apertura
                 ld      hl, FileBios    ; HL = Puntero al nombre del fichero (ASCIIZ)
-                rst     $08
-                db      F_OPEN
+                esxdos  F_OPEN
                 jr      nc, FileFound2
                 call    Print
                 dz      'File FIRMWARE.ZX1 not found'
@@ -78,15 +75,13 @@ FileFound2      ld      (handle+1), a
                 ld      hl, $8000
                 ld      bc, $4000
 handle          ld      a, 0
-                rst     $08
-                db      F_READ
+                esxdos  F_READ
                 jr      nc, GoodRead
                 call    Print
                 dz      'Error reading FIRMWARE.ZX1'
                 ret
 GoodRead        ld      a, (handle+1)
-                rst     $08
-                db      F_CLOSE
+                esxdos  F_CLOSE
                 ld      a, $40
                 ld      hl, $8000
                 exx
@@ -107,8 +102,7 @@ Bucle           ld      a, ixl
 punto           ld      hl, $8000
                 ld      bc, $4000
 handle2:        ld      a, 0
-                rst     $08
-                db      F_READ
+                esxdos  F_READ
                 jr      nc, GoodRead2
                 call    Print
                 dz      'Error reading SPECTRUM.ZX1'
@@ -122,8 +116,7 @@ GoodRead2       ld      a, $40
                 dec     ixl
                 jr      nz, Bucle
                 ld      a, (handle2+1)
-                rst     $08
-                db      F_CLOSE
+                esxdos  F_CLOSE
                 call    Print
                 dz      13, 'Upgrade complete', 13
                 ld      bc, zxuno_port
