@@ -38,70 +38,81 @@ $(BUILD_DIR):
 	mkdir -p $@
 
 $(BUILD_DIR)/BACK16M: back16m.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/BACKZX2: back32m.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	echo ' define zxdos 1' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f back32m.def
 
 $(BUILD_DIR)/BACKZXD: back32m.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	echo ' define zxdos 0' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f back32m.def
 
 $(BUILD_DIR)/BACKUP: backup.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/CORCLEAN: corclean.asm\
- zxuno.inc\
+ zxuno.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/COREBIOS: corebios.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/ROMSBACK: romsback.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/ROMSUPGR: romsupgr.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/UPGR16M: upgr16m.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/UPGRZX2: upgr32m.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	echo ' define zxdos 1' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f upgr32m.def
 
 $(BUILD_DIR)/UPGRZXD: upgr32m.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	echo ' define zxdos 0' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f upgr32m.def
 
 $(BUILD_DIR)/UPGRADE: upgrade.asm\
- zxuno.inc\
+ zxuno.def\
+ esxdos.def\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 

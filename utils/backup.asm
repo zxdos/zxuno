@@ -23,7 +23,8 @@
 
                 output  BACKUP
 
-                include zxuno.inc
+                include zxuno.def
+                include esxdos.def
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
