@@ -26,6 +26,7 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  VERSION "0.1"
         define  FLASH_FILE "FLASH.ZX1"
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS

@@ -39,6 +39,7 @@
                 include zxuno.def
                 include esxdos.def
 
+        define  VERSION "0.1"
               IF zxdos=1
         define  FLASH_FILE "FLASH.ZX2"
               ELSE
