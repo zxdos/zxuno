@@ -20,6 +20,7 @@ AFLAGS		= --nobanner
 TARGETS=\
  BACK16M\
  BACKZX2\
+ BACKZXD\
  BACKUP\
  CORCLEAN\
  COREBIOS\
@@ -27,6 +28,7 @@ TARGETS=\
  ROMSUPGR\
  UPGR16M\
  UPGRZX2\
+ UPGRZXD\
  UPGRADE
 
 .PHONY: all
@@ -43,7 +45,16 @@ $(BUILD_DIR)/BACK16M: back16m.asm\
 $(BUILD_DIR)/BACKZX2: back32m.asm\
  zxuno.inc\
  | $(BUILD_DIR)
+	echo ' define zxdos 1' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
+	rm -f back32m.def
+
+$(BUILD_DIR)/BACKZXD: back32m.asm\
+ zxuno.inc\
+ | $(BUILD_DIR)
+	echo ' define zxdos 0' >back32m.def
+	$(AS) $(AFLAGS) --raw=$@ $<
+	rm -f back32m.def
 
 $(BUILD_DIR)/BACKUP: backup.asm\
  zxuno.inc\
@@ -78,7 +89,16 @@ $(BUILD_DIR)/UPGR16M: upgr16m.asm\
 $(BUILD_DIR)/UPGRZX2: upgr32m.asm\
  zxuno.inc\
  | $(BUILD_DIR)
+	echo ' define zxdos 1' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
+	rm -f upgr32m.def
+
+$(BUILD_DIR)/UPGRZXD: upgr32m.asm\
+ zxuno.inc\
+ | $(BUILD_DIR)
+	echo ' define zxdos 0' >upgr32m.def
+	$(AS) $(AFLAGS) --raw=$@ $<
+	rm -f upgr32m.def
 
 $(BUILD_DIR)/UPGRADE: upgrade.asm\
  zxuno.inc\
@@ -87,4 +107,5 @@ $(BUILD_DIR)/UPGRADE: upgrade.asm\
 
 .PHONY: clean
 clean:
+	rm -f back32m.def upgr32m.def
 	rm -f $(foreach t,$(TARGETS),$(BUILD_DIR)/$(t))
