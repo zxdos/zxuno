@@ -72,14 +72,7 @@ normal          ld      a, 0
                 out     (c), a
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash

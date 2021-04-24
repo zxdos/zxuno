@@ -102,14 +102,7 @@ WriteOK         ld      de, $0040
                 dz      13, 'Backup complete'
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash

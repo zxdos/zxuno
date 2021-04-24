@@ -152,14 +152,7 @@ wrear0          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Read from SPI flash

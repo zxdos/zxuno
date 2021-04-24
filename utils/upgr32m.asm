@@ -157,14 +157,7 @@ ReadOK          ld      a, $40
                 jr      nz, Bucle
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
 
 ; ------------------------
 ; Write to SPI flash
