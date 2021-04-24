@@ -4,6 +4,7 @@
 ; It must be run while using a "root" mode ROM.
 ;
 ; Copyright (C) 2019, 2021 Antonio Villena
+; Contributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -19,12 +20,15 @@
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
 ;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
 ; SPDX-License-Identifier: GPL-3.0-only
 
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
-                define  zxdos 1
+                ; definition of "zxdos" flag
+                include upgr32m.def
 
               IF zxdos=1
                 output  UPGRZX2
