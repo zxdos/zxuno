@@ -25,11 +25,6 @@
 
                 include zxuno.inc
 
-              macro wreg  dir, dato
-                call    rst28
-                defb    dir, dato
-              endm
-
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      bc, zxuno_port
