@@ -75,12 +75,6 @@ normal          ld      a, 0
                 include Print.inc
                 include rdflsh.inc
                 include wrflsh.inc
-
-rst28           ld      bc, zxuno_port + $100
-                pop     hl
-                outi
-                ld      b, (zxuno_port >> 8)+2
-                outi
-                jp      (hl)
+                include rst28.inc
 
 ;FileName        dz      ROMS_FILE

@@ -42,6 +42,7 @@ $(BUILD_DIR)/BACK16M: back16m.asm\
  esxdos.def\
  Print.inc\
  rdflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -50,6 +51,7 @@ $(BUILD_DIR)/BACKZX2: back32m.asm\
  esxdos.def\
  Print.inc\
  rdflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	echo ' define zxdos 1' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
@@ -60,6 +62,7 @@ $(BUILD_DIR)/BACKZXD: back32m.asm\
  esxdos.def\
  Print.inc\
  rdflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	echo ' define zxdos 0' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
@@ -70,6 +73,7 @@ $(BUILD_DIR)/BACKUP: backup.asm\
  esxdos.def\
  Print.inc\
  rdflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -78,6 +82,7 @@ $(BUILD_DIR)/CORCLEAN: corclean.asm\
  Print.inc\
  rdflsh.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -87,6 +92,7 @@ $(BUILD_DIR)/COREBIOS: corebios.asm\
  Print.inc\
  rdflsh.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -95,6 +101,7 @@ $(BUILD_DIR)/ROMSBACK: romsback.asm\
  esxdos.def\
  Print.inc\
  rdflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -104,6 +111,7 @@ $(BUILD_DIR)/ROMSUPGR: romsupgr.asm\
  Print.inc\
  rdflsh.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -112,6 +120,7 @@ $(BUILD_DIR)/UPGR16M: upgr16m.asm\
  esxdos.def\
  Print.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -120,6 +129,7 @@ $(BUILD_DIR)/UPGRZX2: upgr32m.asm\
  esxdos.def\
  Print.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	echo ' define zxdos 1' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
@@ -130,6 +140,7 @@ $(BUILD_DIR)/UPGRZXD: upgr32m.asm\
  esxdos.def\
  Print.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	echo ' define zxdos 0' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
@@ -140,6 +151,7 @@ $(BUILD_DIR)/UPGRADE: upgrade.asm\
  esxdos.def\
  Print.inc\
  wrflsh.inc\
+ rst28.inc\
  | $(BUILD_DIR)
 	$(AS) $(AFLAGS) --raw=$@ $<
 
