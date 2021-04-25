@@ -13,9 +13,10 @@
 
 include ../sdk/common.mk
 
+INC_DIR		= ../sdk/include
 BUILD_DIR	= build
 AS		= sjasmplus
-AFLAGS		= --nobanner
+AFLAGS		= --nobanner -I$(INC_DIR)
 
 TARGETS=\
  BACK16M\
@@ -38,8 +39,8 @@ $(BUILD_DIR):
 	mkdir -p $@
 
 $(BUILD_DIR)/BACK16M: back16m.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  rst28.inc\
@@ -47,8 +48,8 @@ $(BUILD_DIR)/BACK16M: back16m.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/BACKZX2: back32m.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  rst28.inc\
@@ -58,8 +59,8 @@ $(BUILD_DIR)/BACKZX2: back32m.asm\
 	rm -f back32m.def
 
 $(BUILD_DIR)/BACKZXD: back32m.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  rst28.inc\
@@ -69,8 +70,8 @@ $(BUILD_DIR)/BACKZXD: back32m.asm\
 	rm -f back32m.def
 
 $(BUILD_DIR)/BACKUP: backup.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  rst28.inc\
@@ -78,7 +79,7 @@ $(BUILD_DIR)/BACKUP: backup.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/CORCLEAN: corclean.asm\
- zxuno.def\
+ $(INC_DIR)/zxuno.def\
  Print.inc\
  rdflsh.inc\
  wrflsh.inc\
@@ -87,8 +88,8 @@ $(BUILD_DIR)/CORCLEAN: corclean.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/COREBIOS: corebios.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  wrflsh.inc\
@@ -97,8 +98,8 @@ $(BUILD_DIR)/COREBIOS: corebios.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/ROMSBACK: romsback.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  rst28.inc\
@@ -106,8 +107,8 @@ $(BUILD_DIR)/ROMSBACK: romsback.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/ROMSUPGR: romsupgr.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  rdflsh.inc\
  wrflsh.inc\
@@ -116,8 +117,8 @@ $(BUILD_DIR)/ROMSUPGR: romsupgr.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/UPGR16M: upgr16m.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  wrflsh.inc\
  rst28.inc\
@@ -125,8 +126,8 @@ $(BUILD_DIR)/UPGR16M: upgr16m.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 $(BUILD_DIR)/UPGRZX2: upgr32m.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  wrflsh.inc\
  rst28.inc\
@@ -136,8 +137,8 @@ $(BUILD_DIR)/UPGRZX2: upgr32m.asm\
 	rm -f upgr32m.def
 
 $(BUILD_DIR)/UPGRZXD: upgr32m.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  wrflsh.inc\
  rst28.inc\
@@ -147,8 +148,8 @@ $(BUILD_DIR)/UPGRZXD: upgr32m.asm\
 	rm -f upgr32m.def
 
 $(BUILD_DIR)/UPGRADE: upgrade.asm\
- zxuno.def\
- esxdos.def\
+ $(INC_DIR)/zxuno.def\
+ $(INC_DIR)/esxdos.def\
  Print.inc\
  wrflsh.inc\
  rst28.inc\
