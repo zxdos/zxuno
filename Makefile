@@ -33,9 +33,16 @@ UTILS_TARGETS=\
 
 UTILS_INSTALL_DIR=$(INSTALL_DIR)/BIN
 
+SOFTWARE_TARGETS=\
+ ESPRST\
+ IWCONFIG
+
+SOFTWARE_INSTALL_DIR=$(INSTALL_DIR)/BIN
+
 .PHONY: all
 all:\
- install-utils
+ install-utils\
+ install-software
 	@echo 'Done.'
 
 # utils
@@ -61,7 +68,37 @@ clean-utils: | utils
 uninstall-utils: clean-utils
 	rm -f $(foreach t,$(UTILS_TARGETS),$(UTILS_INSTALL_DIR)/$(t))
 
+# software
+
+.PHONY: install-software
+install-software: $(foreach t,$(SOFTWARE_TARGETS),$(SOFTWARE_INSTALL_DIR)/$(t))
+
+$(SOFTWARE_INSTALL_DIR)/ESPRST: software/esprst/esprst
+	mv $< $@
+
+$(SOFTWARE_INSTALL_DIR)/IWCONFIG: software/iwconfig/IWCONFIG
+	mv $< $@
+
+software/esprst/esprst: | software/esprst
+	$(MAKE) -w -C $|
+
+software/iwconfig/IWCONFIG: | software/iwconfig
+	$(MAKE) -w -C $|
+
+.PHONY: clean-software
+clean-software: |\
+ software/esprst\
+ software/iwconfig
+	$(MAKE) -w -C software/esprst clean
+	$(MAKE) -w -C software/iwconfig clean
+
+.PHONY: uninstall-software
+uninstall-software: clean-software
+	rm -f $(foreach t,$(SOFTWARE_TARGETS),$(SOFTWARE_INSTALL_DIR)/$(t))
+
 # clean
 
 .PHONY: clean
-clean: uninstall-utils
+clean:\
+ uninstall-utils\
+ uninstall-software
