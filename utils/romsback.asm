@@ -6,6 +6,9 @@
 ; on ZX-Uno and ZXDOS (do not use on ZXDOS+ or gomaDOS+).
 ;
 ; Copyright (C) 2019, 2021 Antonio Villena
+; Contributors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;   2021 kounch
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -20,6 +23,9 @@
 ; along with this program. If not, see <https://www.gnu.org/licenses/>.
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+; SPDX-FileContributor: 2021 kounch
 ;
 ; SPDX-License-Identifier: GPL-3.0-only
 
