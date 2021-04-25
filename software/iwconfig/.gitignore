@@ -4,4 +4,4 @@
 
 *.bin
 *.def
-iwconfig
+IWCONFIG

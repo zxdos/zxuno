@@ -13,49 +13,27 @@
 #
 # where:
 #   <BUILD> is one of: mingw32, mingw64.
-#   <TARGET> is one of values for TOOLS variable (see below).
+#   <TARGET> is one of values for TARGETS variable (see below).
 #
 # Notes:
 #   BUILD variable may be set in user's environment.
 
 include ../../common.mk
 
-BIN2HEX	:= bin2hex$(EXECEXT)
-FCUT	:= fcut$(EXECEXT)
-FPAD	:= fpad$(EXECEXT)
-FPOKE	:= fpoke$(EXECEXT)
-GENROM	:= GenRom$(EXECEXT)
-ADDITEM	:= AddItem$(EXECEXT)
-
-TOOLS:=\
- $(BIN2HEX) \
- $(FCUT) \
- $(FPAD) \
- $(FPOKE) \
- $(GENROM) \
- $(ADDITEM)
+TARGETS:=\
+ bin2hex$(EXESUFFIX)\
+ fcut$(EXESUFFIX)\
+ fpad$(EXESUFFIX)\
+ fpoke$(EXESUFFIX)\
+ GenRom$(EXESUFFIX)\
+ AddItem$(EXESUFFIX)
 
 .PHONY: all
-all: $(TOOLS)
+all: $(TARGETS)
 
-$(BIN2HEX): bin2hex.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-$(FCUT): fcut.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-$(FPAD): fpad.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-$(FPOKE): fpoke.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-$(GENROM): GenRom.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-$(ADDITEM): AddItem.c
+%$(EXESUFFIX): %.c Makefile
 	$(CC) $(CFLAGS) -o $@ $<
 
 .PHONY: clean
 clean:
-	rm -f $(TOOLS)
+	rm -f $(TARGETS)

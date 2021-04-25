@@ -5,6 +5,13 @@
 
 if [[ "x$ZXUNOSDK" == x ]]; then
 	ZXUNOSDK=$(dirname $(realpath "$BASH_SOURCE"))
-	PATH=$ZXUNOSDK/bin:$PATH
+	Z88DK=$ZXUNOSDK/src/z88dk
+	ZCCCFG=$Z88DK/lib/config
+	PATH=$ZXUNOSDK/bin:$Z88DK/bin:$PATH
+	# Fix paths under Cygwin for z88dk on Windows
+	if [[ x$OS == xWindows_NT && x$OSTYPE == xcygwin ]]; then
+		ZCCCFG=`cygpath -m $ZCCCFG`
+	fi
 	export ZXUNOSDK
+	export ZCCCFG
 fi

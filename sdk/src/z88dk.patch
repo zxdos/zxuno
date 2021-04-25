@@ -1,0 +1,18 @@
+--- z88dk/build.sh	2021-04-20 00:03:23.742154100 +0300
++++ z88dk/build_Cygwin.sh	2021-04-20 00:04:56.836048400 +0300
+@@ -48,6 +48,7 @@
+ builddir=`pwd $0`
+ ZCCCFG=$builddir/lib/config
+ PATH=$builddir/bin:$PATH
++if test x$OS = xWindows_NT -a x$OSTYPE = xcygwin; then ZCCCFG=`cygpath -m $ZCCCFG`; fi
+ export ZCCCFG
+ export PATH
+ 
+@@ -143,6 +144,7 @@
+ 
+ ZCCCFG=`pwd`/lib/config/                # Set ZCCCFG to the lib config directory
+ mkdir -p $ZCCCFG                        # Guarantee that the directory exists
++if test x$OS = xWindows_NT -a x$OSTYPE = xcygwin; then ZCCCFG=`cygpath -m $ZCCCFG`; fi
+ export ZCCCFG
+ 
+ 

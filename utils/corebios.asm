@@ -1,11 +1,38 @@
+; corebios.asm - update simultaneously ZX Spectrum core and BIOS.
+;
+; Copyright (C) 2019, 2021 Antonio Villena
+; Contributors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, version 3.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see <https://www.gnu.org/licenses/>.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
                 output  COREBIOS
 
-                include zxuno.inc
+                include zxuno.def
+                include esxdos.def
 
-              macro wreg  dir, dato
-                call    rst28
-                defb    dir, dato
-              endm
+        define  VERSION "0.1"
+        define  CORE_FILE "SPECTRUM.ZX1"
+        define  BIOS_FILE "FIRMWARE.ZX1"
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
@@ -26,8 +53,7 @@ Nonlock         ld      a, scandbl_ctrl
                 or      $80
                 out     (c), a
                 xor     a
-                rst     $08
-                db      M_GETSETDRV     ; A = unidad actual
+                esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
                 dz      'SD card not inserted'
@@ -35,21 +61,19 @@ Nonlock         ld      a, scandbl_ctrl
 SDCard          ld      (drive+1), a
                 ld      b, FA_READ      ; B = modo de apertura
                 ld      hl, FileCore    ; HL = Puntero al nombre del fichero (ASCIIZ)
-                rst     $08
-                db      F_OPEN
+                esxdos  F_OPEN
                 jr      nc, FileFound
                 call    Print
-                dz      'File SPECTRUM.ZX1 not found'
+                dz      'File ', CORE_FILE, ' not found'
                 ret
 FileFound       ld      (handle2+1), a
 drive:          ld      a, 0
                 ld      b, FA_READ      ; B = modo de apertura
                 ld      hl, FileBios    ; HL = Puntero al nombre del fichero (ASCIIZ)
-                rst     $08
-                db      F_OPEN
+                esxdos  F_OPEN
                 jr      nc, FileFound2
                 call    Print
-                dz      'File FIRMWARE.ZX1 not found'
+                dz      'File ', BIOS_FILE, ' not found'
                 ret
 FileFound2      ld      (handle+1), a
                 call    Print
@@ -59,15 +83,13 @@ FileFound2      ld      (handle+1), a
                 ld      hl, $8000
                 ld      bc, $4000
 handle          ld      a, 0
-                rst     $08
-                db      F_READ
+                esxdos  F_READ
                 jr      nc, GoodRead
                 call    Print
-                dz      'Error reading FIRMWARE.ZX1'
+                dz      'Error reading ', BIOS_FILE
                 ret
 GoodRead        ld      a, (handle+1)
-                rst     $08
-                db      F_CLOSE
+                esxdos  F_CLOSE
                 ld      a, $40
                 ld      hl, $8000
                 exx
@@ -88,11 +110,10 @@ Bucle           ld      a, ixl
 punto           ld      hl, $8000
                 ld      bc, $4000
 handle2:        ld      a, 0
-                rst     $08
-                db      F_READ
+                esxdos  F_READ
                 jr      nc, GoodRead2
                 call    Print
-                dz      'Error reading SPECTRUM.ZX1'
+                dz      'Error reading ', CORE_FILE
                 ret
 GoodRead2       ld      a, $40
                 ld      hl, $8000
@@ -103,8 +124,7 @@ GoodRead2       ld      a, $40
                 dec     ixl
                 jr      nz, Bucle
                 ld      a, (handle2+1)
-                rst     $08
-                db      F_CLOSE
+                esxdos  F_CLOSE
                 call    Print
                 dz      13, 'Upgrade complete', 13
                 ld      bc, zxuno_port
@@ -115,135 +135,10 @@ normal          ld      a, 0
                 out     (c), a
                 ret
 
-Print           pop     hl
-                db      $3e
-Print1          rst     $10
-                ld      a, (hl)
-                inc     hl
-                or      a
-                jr      nz, Print1
-                jp      (hl)
+                include Print.inc
+                include rdflsh.inc
+                include wrflsh.inc
+                include rst28.inc
 
-; ------------------------
-; Read from SPI flash
-; Parameters:
-;   DE: destination address
-;   HL: source address without last byte
-;    A: number of pages (256 bytes) to read
-; ------------------------
-rdflsh          ex      af, af'
-                xor     a
-                push    hl
-                wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
-                pop     hl
-                push    hl
-                out     (c), h
-                out     (c), l
-                out     (c), a
-                ex      af, af'
-                ex      de, hl
-                in      f, (c)
-rdfls1          ld      e, $20
-rdfls2          ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                dec     e
-                jr      nz, rdfls2
-                dec     a
-                jr      nz, rdfls1
-                wreg    flash_cs, 1
-                pop     hl
-                ret
-
-; ------------------------
-; Write to SPI flash
-; Parameters:
-;    A: number of pages (256 bytes) to write
-;   DE: target address without last byte
-;  HL': source address from memory
-; ------------------------
-wrflsh          ex      af, af'
-                xor     a
-wrfls1          wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, 6    ; envío write enable
-                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, $20  ; envío sector erase
-                out     (c), d
-                out     (c), e
-                out     (c), a
-                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-wrfls2          call    waits5
-                wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, 6    ; envío write enable
-                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, 2    ; page program
-                out     (c), d
-                out     (c), e
-                out     (c), a
-                ld      a, $20
-                exx
-                ld      bc, zxuno_port+$100
-wrfls3          inc     b
-                outi
-                inc     b
-                outi
-                inc     b
-                outi
-                inc     b
-                outi
-                inc     b
-                outi
-                inc     b
-                outi
-                inc     b
-                outi
-                inc     b
-                outi
-                dec     a
-                jr      nz, wrfls3
-                exx
-                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                ex      af, af'
-                dec     a
-                jr      z, waits5
-                ex      af, af'
-                inc     e
-                ld      a, e
-                and     $0f
-                jr      nz, wrfls2
-                ld      hl, wrfls1
-                push    hl
-waits5          wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, 5    ; envío read status
-                in      a, (c)
-waits6          in      a, (c)
-                and     1
-                jr      nz, waits6
-                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                ret
-        
-rst28           ld      bc, zxuno_port + $100
-                pop     hl
-                outi
-                ld      b, (zxuno_port >> 8)+2
-                outi
-                jp      (hl)
-
-FileCore        dz      'SPECTRUM.ZX1'
-FileBios        dz      'FIRMWARE.ZX1'
+FileCore        dz      CORE_FILE
+FileBios        dz      BIOS_FILE

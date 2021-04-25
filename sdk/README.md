@@ -8,11 +8,14 @@ No one yet.
 
 # License
 
-This document is under [GNU FDL-1.3 or later](http://www.gnu.org/licenses/fdl-1.3.html) license.
+This document is under [GNU FDL-1.3 or later](https://spdx.org/licenses/GFDL-1.3-or-later.html) license.  
+SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
+z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.
 
 # 1. General information
 
-The source code of all tools is in `src` directory. All compiled binaries are placed in `bin` directory.
+The source code of local tools is in `src` directory. Compiled binaries of them are placed in `bin` directory.  
+Downloaded tools are placed in sub-directories of `src`. See Makefiles for details.
 
 ## 1.1. Copyright and licensing information for files
 
@@ -28,15 +31,22 @@ Check it out by using this [reuse-tool](https://github.com/fsfe/reuse-tool).
 
 Open terminal and type:
 
-```bash
-# apt install -y build-essential git cmake libboost-all-dev
+```
+# apt install -y build-essential git
 ```
 
 **NOTE**: here the first symbol "#" means that the following command must be run as *root* or using `sudo` utility.
 
+Additional packages for targets:
+
+Target | Packages
+----|----
+`sjasmplus` | cmake libboost-all-dev libxml2-dev
+`z88dk` | dos2unix libboost-all-dev texinfo texi2html libxml2-dev subversion bison flex zlib1g-dev m4
+
 To use cross-compilation for Windows platform install *mingw-w64* package:
 
-```bash
+```
 # apt install -y mingw-w64
 ```
 
@@ -52,48 +62,55 @@ Now `zxuno` sub-directory is the ZX-Uno project's root directory and all actions
 
 ## 2.2. Build tools
 
-Go to the project's root directory and type one of the following commands:
+Go to the project's root directory, enter `sdk` sub-directory and type one of the following commands:
 
-Command | Target
+Command | Description
 ----|----
-`make` | all tools
-`make bin/sjasmplus` | **sjasmplus**
-`make bin/zx7b` | **zx7b**
-`make bin/bin2hex` | **bin2hex**
-`make bin/fcut` | **fcut**
-`make bin/fpad` | **fpad**
-`make bin/fpoke` | **fpoke**
-`make bin/GenRom` | **GenRom**
-`make bin/AddItem` | **AddItem**
+`make` | Build all tools from sources
+`make <TARGET>` | Build only the TARGET from sources
+`make BUILD=<BUILD>` | Cross-build all tools from sources for Windows platform
+`make BUILD=<BUILD> <TARGET>` | Cross-build only the TARGET from sources for Windows platform
 
-To build using MinGW add this parameter for `make` tool:
+where:
 
-Parameter | Target system
+Value of `TARGET` | Origin | Description
+----|----|----
+`sjasmplus` | downloaded | SJAsmPlus Z80 Assembler
+`z88dk` | downloaded | z88dk
+`zx7b` | `src/zx7b` | zx7b
+`tools` | `src/tools` | tools
+
+Value of `BUILD` | Target system
 ----|----
-`BUILD=mingw32` | Windows with i686 architecture (32-bits)
-`BUILD=mingw64` | Windows with AMD64 architecture (64-bits)
+`mingw32` | Windows with i686 architecture (32-bits)
+`mingw64` | Windows with AMD64 architecture (64-bits)
 
-Remember to specify proper file extension (`.exe`) for target when building with MinGW. Example:
+Example:
 
 ```bash
-make BUILD=mingw64 bin/fcut.exe bin/fpad.exe bin/fpoke.exe
+make BUILD=mingw64 tools
 ```
 
-Then you may use `strip` tool to strip debug information from file and thus shrink file's size:
+Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
 
 ```bash
-strip bin/fcut.exe bin/fpad.exe bin/fpoke.exe
+strip bin/*.exe
 ```
 
 ## 2.3. Clean tools
 
-To clean everything type:
+Go to the project's root directory, enter `sdk` sub-directory and type one of the following commands:
 
-```bash
-make clean
-```
+Command | Description
+----|----
+`make clean` | clean after compilation from sources
+`make dist-clean` | acts like `clean` but also removes temporary and downloaded files
+`make BUILD=<BUILD> clean` | clean after compilation from sources for Windows platform
+`make BUILD=<BUILD> dist-clean` | acts like `clean` for Windows platform but also removes temporary and downloaded files
 
-To clean MinGW builds use appropriate `BUILD` parameter as described in [2.2](#22-build-tools). Example:
+Value of `BUILD` is described in [2.2](#22-build-tools).
+
+Example:
 
 ```bash
 make BUILD=mingw64 clean
@@ -138,45 +155,92 @@ This has the same behavior as the inclusion of `common.mk` file in a Makefile.
 
 # 3. Using SDK in GNU environment on Windows
 
-**NOTE**: *by default* compilation of the following tools:
+## 3.1. Prepare a build environment
 
-* sjasmplus
-* zx7b
-* bin2hex
-* fcut
-* fpad
-* fpoke
-* GenRom
-* AddItem
+### 3.1.1. Setup Cygwin
 
-on Windows platform is disabled right now because of presence of precompiled binaries of them in repository.
-*By default* they are not deleted when cleaning.
+Download and run [Cygwin](https://cygwin.com/) GUI installer for Windows, either [32 bit](https://cygwin.com/setup-x86.exe) or [64 bit](https://cygwin.com/setup-x86_64.exe) version. See [Chapter 2. Setting Up Cygwin](https://cygwin.com/cygwin-ug-net/setup-net.html) for more information.
 
-## 3.1. Build tools
+Install the following packages in Cygwin:
 
-The building process is similar to one for GNU on Linux, FreeBSD etc.
-See [2.2](#22-build-tools) with addition that you should provide correct target name (specify file extension `.exe`) and also specify parameter `FORCEBUILD=1`.
+Target | Dependencies
+----|----
+all targets | bash git make wget unzip p7zip
+`sjasmplus` | gcc-g++ cmake libboost-devel
+`z88dk` | mingw64-i686-gcc-core mingw64-i686-libxml2 patch
+`zx7b` | gcc-core
+`tools` | gcc-core
 
-## 3.2. Clean tools
+**HINT**: you can install *Midnight Commander* (`mc` package). It will help you to navigate through filesystem.
 
-The cleaning process is similar to one for GNU on Linux, FreeBSD etc.
-See [2.3](#23-clean-tools) with addition that you should specify parameter `FORCECLEAN=1`.
+To open Cygwin terminal just click on it's icon on desktop. This will open a Bash shell in a GNU environment.
 
-## 3.3. Tools usage
+### 3.1.2. Clone repository
 
-### 3.3.1. In Makefiles
+The cloning is described in [2.1.2](#212-clone-repository).
+
+## 3.2. Build tools
+
+Go to the project's root directory, enter `sdk` sub-directory and type one of the following commands:
+
+Command | Description
+----|----
+`make` | Quick setup of all tools
+`make <TARGET>` | Qucik setup of the TARGET only
+`make FORCEBUILD=1` | Build all tools from sources
+`make FORCEBUILD=1 <TARGET>` | Build only the TARGET from sources
+
+where:
+
+Value of `TARGET` | Origin | Quick setup | Build from sources
+----|----|----|----
+`sjasmplus` | downloaded | available | available
+`z88dk` | downloaded | available | available
+`zx7b` | `src/zx7b` | N/A | available
+`tools` | `src/tools` | N/A | available
+
+Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
+
+```bash
+strip bin/*.exe
+```
+
+## 3.3. Clean tools
+
+Go to the project's root directory, enter `sdk` sub-directory and type one of the following commands:
+
+Command | Description
+----|----
+`make clean` | removes downloaded precompiled binaries only
+`make dist-clean` | acts as `clean` but also removes temporary and downloaded files
+`make FORCECLEAN=1 clean` | clean after compilation from sources
+`make FORCECLEAN=1 dist-clean` | acts as forced `clean` but also removes temporary and downloaded files
+
+Example:
+
+```bash
+make FORCECLEAN=1 clean
+```
+
+## 3.4. Tools usage
+
+### 3.4.1. In Makefiles
 
 The usage is similar to one for GNU on Linux, FreeBSD etc.
 See [2.4.1](#241-in-makefiles).
 
-### 3.3.2. In Bash scripts
+### 3.4.2. In Bash scripts
 
 The usage is similar to one for GNU on Linux, FreeBSD etc.
 See [2.4.2](#242-in-bash-scripts).
 
 # 4. Using SDK on Windows without GNU environment
 
-## 4.1. In batch scripts
+## 4.1. Prepare a build environment
+
+You should manually download precompiled binaries of SJAsmPlus and Z88DK from Internet and put them in their sub-directories as described in [`src/Makefile`](src/Makefile).
+
+## 4.2. In batch scripts
 
 To use these tools in a batch script just call `setvars.bat` file at the beginning of one like this:
 
@@ -191,6 +255,22 @@ These changes are actual for current invocation of command shell and all child p
 
 # References
 
+* [REUSE SOFTWARE](https://reuse.software/) - a set of recommendations to make licensing your Free Software projects easier
+* [The Software Package Data Exchange (SPDX)](https://spdx.dev/) - An open standard for communicating software bill of material information, including components, licenses, copyrights, and security references
+* [GNU Operating System](https://www.gnu.org/)
+* [GNU Standards](http://savannah.gnu.org/projects/gnustandards) - GNU coding and package maintenance standards ([package](https://pkgs.org/download/gnu-standards))
+* [GNU Core Utilities](https://www.gnu.org/software/coreutils/) ([package](https://pkgs.org/download/coreutils))
+* [GNU Bash](https://www.gnu.org/software/bash/) - GNU Bourne Again SHell ([package](https://pkgs.org/download/bash))
+* [GNU Compiler Collection](https://www.gnu.org/software/gcc/) ([package](https://pkgs.org/download/gcc))
+* [GNU Make](https://www.gnu.org/software/make/) - utility for directing compilation ([package](https://pkgs.org/download/make))
+* [Cygwin](https://cygwin.com/) - a large collection of GNU and Open Source tools which provide functionality similar to a Linux distribution on Windows
+* [MSYS2](https://www.msys2.org/) - a collection of tools and libraries providing you with an easy-to-use environment for building, installing and running native Windows software
+* [MinGW](https://osdn.net/projects/mingw/) - Minimalist GNU for Windows
+* [MinGW-w64](http://mingw-w64.org/doku.php) - an advancement of the original mingw.org project, created to support the GCC compiler on Windows systems
+* [cmd](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd) - command interpreter in Windows
+* [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
+* [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
+* [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
 * [Open-Source FPGA Foundation](https://osfpga.org/) - main site
 * [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub
