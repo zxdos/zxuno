@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.7
+:revnumber: 1.4.8
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1149,7 +1149,7 @@ As explained in the installation part, there are a series of commands that are e
 
 Each gomaDOS+, and some models of ZXDOS+, include inside an ESP-12 module with an https://es.wikipedia.org/wiki/ESP8266[ESP8266] Wi-Fi chip, that can be easily used with a ZX Spectrum core (e.g., EXP27 160820 core) which has synthesized an https://es.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART] device, that allows communication with the module.
 
-There are two "DOT" commands for configuring software access to the module. Then can be downloaded from https://github.com/zxdos/zxuno/tree/master/utils[GitHub official repository]:
+There are two "DOT" commands for configuring software access to the module. They can be downloaded from https://github.com/zxdos/zxuno/tree/master/SD/BIN/[GitHub official repository]:
 
 - `esprst`, which restarts the module
 - `iwconfig`, to register the Wi-Fi network name (SSID) and password, keeping them in the file `/sys/config/iw.cfg`.
@@ -2443,7 +2443,7 @@ You can use a SD card with the first partition in FAT16 or FAT32 formata to stor
 
 ==== Keyboard
 
-The CHIP-9 machine uses an hexadecimal keyboard as input. This is the key mapping:
+The CHIP-8 machine uses an hexadecimal keyboard as input. This is the key mapping:
 
 [align="center",width="25%",%header,cols=2*] 
 |===
@@ -2459,6 +2459,7 @@ The CHIP-9 machine uses an hexadecimal keyboard as input. This is the key mappin
 While the core is running:
 
 - `Esc` (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `F11` (`Caps Shift+Symbol Shift+Q` on gomaDOS+): Hard Reset
 - `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Reset
 
 <<<
@@ -2470,18 +2471,14 @@ Pressing `Esc` (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or 
 [.text-center] 
 image:img/chip8.jpg[pdfwidth=70%]
 
-
 The following options are available:
 
 - Reset the core 
 - Change the core clock speed
 - Load a ROM file from the microSD card
+- Enable or disable sound output
+- Help
 - Exit the menu
-
-[CAUTION]
-====
-After loading a ROM, always press the reset key so that it runs correctly: `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+)
-====
 
 <<<
 
