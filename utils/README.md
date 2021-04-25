@@ -14,6 +14,7 @@ This document:
 ## Contributors
 
 ESXDOS utilities:
+* 2021 kounch
 * 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 
 This document:
