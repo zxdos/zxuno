@@ -4,6 +4,8 @@
 ; It must be run while using a "root" mode ROM.
 ;
 ; Copyright (C) 2019, 2021 Antonio Villena
+; Contributors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -18,6 +20,8 @@
 ; along with this program. If not, see <https://www.gnu.org/licenses/>.
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
 ; SPDX-License-Identifier: GPL-3.0-only
 

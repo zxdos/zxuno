@@ -7,7 +7,8 @@
 ; wrongly set to 0.
 ;
 ; Copyright (C) 2019, 2021 Antonio Villena
-; Contributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+; Contributors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
