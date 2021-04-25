@@ -26,7 +26,8 @@ TARGETS:=\
  fpad$(EXESUFFIX)\
  fpoke$(EXESUFFIX)\
  GenRom$(EXESUFFIX)\
- AddItem$(EXESUFFIX)
+ AddItem$(EXESUFFIX)\
+ Bit2Bin$(EXESUFFIX)
 
 .PHONY: all
 all: $(TARGETS)
