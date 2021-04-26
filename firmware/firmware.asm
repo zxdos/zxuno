@@ -3180,30 +3180,31 @@ calbi3  add     hl, de
         ld      (alto highb+1), a
         ret
       ELSE
-          ld      a, b
+calbi1  ld      a, b
         IF  version=2
           cp      35
-          jr      z, calbi1
-          jr      c, calbi2
-calbi1    sub     34
-calbi2    ld      b, a
+          jr      z, calbi2
+          jr      c, calbi3
+calbi2    sub     34
+calbi3    ld      b, a
           sbc     a, a
           inc     a
           ld      hl, $0240
           ld      de, $0740
         ELSE
           cp      21
-          jr      z, calbi1
-          jr      c, calbi2
-calbi1    sub     19
-calbi2    ld      b, a
+          jr      z, calbi2
+          jr      c, calbi3
+calbi2    sub     19
+calbi3    ld      b, a
           sbc     a, a
           inc     a
           ld      hl, $fec0
           ld      de, $0c40
         ENDIF
-calbi3    add     hl, de
-          djnz    calbi3
+calbi4    add     hl, de
+          djnz    calbi4
+          ld      (alto highb+1), a
           ret
       ENDIF
     ENDIF
