@@ -14,8 +14,13 @@ z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArti
 
 # 1. General information
 
-The source code of local tools is in `src` directory. Compiled binaries of them are placed in `bin` directory.  
-Downloaded tools are placed in sub-directories of `src`. See Makefiles for details.
+The structure of `sdk` folder:
+
+Directory | Description
+----|----
+`bin` | Compiled binaries of tools.
+`include` | Header files (`.def`, `.h` etc.) to be included in other sources (assembler, C, etc.).
+`src` | The source code of local and downloadable tools. See Makefiles for details.
 
 ## 1.1. Copyright and licensing information for files
 

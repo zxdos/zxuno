@@ -10,7 +10,11 @@ fpad
 fpad.exe
 fpoke
 fpoke.exe
+rcs
+rcs.exe
 GenRom
 GenRom.exe
 AddItem
 AddItem.exe
+Bit2Bin
+Bit2Bin.exe

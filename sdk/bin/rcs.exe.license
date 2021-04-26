@@ -1,0 +1,11 @@
+SPDX-FileName: rcs.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 49651fa71f9da7cd56c2e3e9bb5af2d4398b1fb6
+
+SPDX-FileCopyrightText: Copyright (C) 2013, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: rcs version 1.03 (18 Jan 2013) - SCR filter to RCS (and inverse).

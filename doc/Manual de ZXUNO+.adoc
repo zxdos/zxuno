@@ -1,6 +1,6 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.7
+:revnumber: 0.9
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1316,7 +1316,7 @@ Algunas de sus características son:
 
 ==== Formato de Tarjeta SD
 
-Se debe de utilizar una tarjeta SD con la primera partición en formato FAT32, de 4GB de tamaño máximo y 4096 bytes por cluster.
+Se debe de utilizar una tarjeta SD con la primera partición en formato FAT32 (Tipo de partición `0B` Win95 FAT-32), de 4GB de tamaño máximo y 4096 bytes por cluster.
 
 Además son necesarios los ficheros ROM siguientes (se pueden obtener http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[en la wiki oficial del proyecto original]) o en el https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[repositorio de GitHub]:
 
@@ -2246,6 +2246,59 @@ Si no estuviera ya, <<#_cores,instalar el core de PC XT>> en el ZXUNO+.
 
 <<<
 
+=== Chip-8
+
+https://es.wikipedia.org/wiki/CHIP-8[CHIP-8] es un lenguaje de programación interpretado, desarrollado por Joseph Weisbecker. Fue inicialmente usado en los microcomputadores de 8 bits COSMAC VIP y Telmac 1800 a mediados de 1970. CHIP-8 tiene un descendiente llamado SCHIP (Super Chip), presentado por Erik Bryntse.
+
+El core de ZXUNO+ está basada en una implementación ya existente https://bitbucket.org/csoren/fpga-chip8/[para FPGA] de la máquina virtual de SuperChip.
+
+Existen múltiples sitios como https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] o https://github.com/mattmikolay/chip-8[CHIP-8 de Matthew Mikolay] donde se puede obtener software para este tipo de máquinas.
+
+==== Formato de Tarjeta microSD
+
+Se puede utilizar una tarjeta con la primera partición en formato FAT16 o FAT32 para almacenar ficheros ROM en formato `BIN` o `CH8` para usar con el core.
+
+==== Teclado
+
+La máquina CHIP-8 utiliza un teclado hexadecimal como entrada. La asignación en el teclado es la siguiente:
+
+[align="center",width="25%",%header,cols=2*] 
+|===
+|Chip-8|PS/2
+|`1 2 3 C`|`1 2 3 4`
+|`4 5 6 D`|`Q W E R`
+|`7 8 9 E`|`A S D F`
+|`A 0 B F`|`Z X C V`
+|===
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Esc`: para mostrar u ocultar el menú.
+- `F11`: Hard Reset
+- `F12`: Reset
+
+<<<
+
+==== Guía Básica
+
+Pulsando `Esc` se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar las distintas opciones.
+
+[.text-center] 
+image:img/chip8uno.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Cambiar la velocidad de reloj del core (Clock Speed)
+- Cargar un archivo de ROM desde la tarjeta microSD (Load Rom)
+- Activar o desactivar el sonido (Sound On/Off)
+- Ayuda sobre el uso del teclado (Keyboard Help)
+- Salir del menú (Exit)
+
+<<<
+
 === SmartROM
 
 https://github.com/Utodev/smartROM[SmartROM] es un nuevo firmware para el core de Spectrum del ZX-UNO pensado para funcionar en placas FPGA que no tengan flash, o en las que no se pueda usar. Está basado en una versión del core de McLeod hay había hecho un core "sin flash", que contiene la ROM y ESXDOS dentro del propio core. El proyecto SmartROM incluye una versión ligeramente modificada de ese core, junto con un fichero que en la SD que permite cargar una ROM de Spectrum distinta y, además, cambiar algunos ajustes.
@@ -2349,7 +2402,7 @@ aclocal && autoconf && autoheader && automake --add-missing
 make
 ----
 
-Si todo se ha hecho correctamente, se habrá generado el fichero `tzplay` que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.
+Si todo se ha hecho correctamente, se habrá generado el fichero `playtzx` que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.
 
 ==== Teléfono móvil, tableta, reproductor de sonido MP3, etc.
 

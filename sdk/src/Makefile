@@ -252,8 +252,10 @@ INSTALLED_TOOLS:=\
  $(INSTALLDIR)/fcut$(EXESUFFIX)\
  $(INSTALLDIR)/fpad$(EXESUFFIX)\
  $(INSTALLDIR)/fpoke$(EXESUFFIX)\
+ $(INSTALLDIR)/rcs$(EXESUFFIX)\
  $(INSTALLDIR)/GenRom$(EXESUFFIX)\
- $(INSTALLDIR)/AddItem$(EXESUFFIX)
+ $(INSTALLDIR)/AddItem$(EXESUFFIX)\
+ $(INSTALLDIR)/Bit2Bin$(EXESUFFIX)
 
 .PHONY: local-tools clean-tools
 
@@ -273,10 +275,16 @@ $(INSTALLDIR)/fpad$(EXESUFFIX): tools/fpad$(EXESUFFIX)
 $(INSTALLDIR)/fpoke$(EXESUFFIX): tools/fpoke$(EXESUFFIX)
 	cp $< $@
 
+$(INSTALLDIR)/rcs$(EXESUFFIX): tools/rcs$(EXESUFFIX)
+	cp $< $@
+
 $(INSTALLDIR)/GenRom$(EXESUFFIX): tools/GenRom$(EXESUFFIX)
 	cp $< $@
 
 $(INSTALLDIR)/AddItem$(EXESUFFIX): tools/AddItem$(EXESUFFIX)
+	cp $< $@
+
+$(INSTALLDIR)/Bit2Bin$(EXESUFFIX): tools/Bit2Bin$(EXESUFFIX)
 	cp $< $@
 
 tools/%$(EXESUFFIX): | tools

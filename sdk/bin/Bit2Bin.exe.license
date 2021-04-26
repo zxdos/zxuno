@@ -1,0 +1,11 @@
+SPDX-FileName: Bit2Bin.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: f1484d968816b72f7c1a246e11a468c175e8822a
+
+SPDX-FileCopyrightText: Copyright (C) 2019-2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: Bit2Bin version 0.05 (2020-02-19) - strip .bit header and align binary to 16K.
