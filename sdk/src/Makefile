@@ -247,61 +247,30 @@ dist-clean-zx7b: clean-zx7b
 
 # tools
 
-INSTALLED_TOOLS:=\
- $(INSTALLDIR)/bin2hex$(EXESUFFIX)\
- $(INSTALLDIR)/fcut$(EXESUFFIX)\
- $(INSTALLDIR)/fpad$(EXESUFFIX)\
- $(INSTALLDIR)/fpoke$(EXESUFFIX)\
- $(INSTALLDIR)/rcs$(EXESUFFIX)\
- $(INSTALLDIR)/GenRom$(EXESUFFIX)\
- $(INSTALLDIR)/AddItem$(EXESUFFIX)\
- $(INSTALLDIR)/Bit2Bin$(EXESUFFIX)
-
-.PHONY: local-tools clean-tools
-
-local-tools: $(INSTALLED_TOOLS)
+.PHONY: local-tools clean-tools distclean-tools
 
 ifeq ($(_DoBuild),1)
 
-$(INSTALLDIR)/bin2hex$(EXESUFFIX): tools/bin2hex$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/fcut$(EXESUFFIX): tools/fcut$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/fpad$(EXESUFFIX): tools/fpad$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/fpoke$(EXESUFFIX): tools/fpoke$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/rcs$(EXESUFFIX): tools/rcs$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/GenRom$(EXESUFFIX): tools/GenRom$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/AddItem$(EXESUFFIX): tools/AddItem$(EXESUFFIX)
-	cp $< $@
-
-$(INSTALLDIR)/Bit2Bin$(EXESUFFIX): tools/Bit2Bin$(EXESUFFIX)
-	cp $< $@
-
-tools/%$(EXESUFFIX): | tools
-	$(MAKE) -w -C $| $(@F)
+local-tools: | tools
+	$(MAKE) -w -C $| prefix=../.. install
 
 clean-tools: | tools
 	$(MAKE) -w -C $| clean
-	rm -f $(INSTALLED_TOOLS)
+	$(MAKE) -w -C $| prefix=../.. uninstall
+
+distclean-tools: | tools
+	$(MAKE) -w -C $| distclean
+	$(MAKE) -w -C $| prefix=../.. uninstall
 
 else
 
+local-tools:;
+
 clean-tools:;
 
-endif
+distclean-tools:;
 
-.PHONY: dist-clean-tools
-dist-clean-tools: clean-tools
+endif
 
 .PHONY: clean
 ifeq ($(_DoClean),1)
@@ -312,7 +281,7 @@ endif
 
 .PHONY: dist-clean
 ifeq ($(_DoClean),1)
-dist-clean: dist-clean-sjasmplus dist-clean-z88dk dist-clean-zx7b dist-clean-tools
+dist-clean: dist-clean-sjasmplus dist-clean-z88dk dist-clean-zx7b distclean-tools
 else
 dist-clean: dist-clean-sjasmplus dist-clean-z88dk
 endif

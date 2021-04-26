@@ -2,19 +2,4 @@
 #
 # SPDX-License-Identifier: CC0-1.0
 
-bin2hex
-bin2hex.exe
-fcut
-fcut.exe
-fpad
-fpad.exe
-fpoke
-fpoke.exe
-rcs
-rcs.exe
-GenRom
-GenRom.exe
-AddItem
-AddItem.exe
-Bit2Bin
-Bit2Bin.exe
+build
