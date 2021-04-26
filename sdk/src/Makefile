@@ -220,30 +220,30 @@ dist-clean-z88dk:
 
 # zx7b
 
-.PHONY: local-zx7b clean-zx7b
-
-local-zx7b: $(INSTALLDIR)/zx7b$(EXESUFFIX)
+.PHONY: local-zx7b clean-zx7b distclean-zx7b
 
 ifeq ($(_DoBuild),1)
 
-$(INSTALLDIR)/zx7b$(EXESUFFIX): zx7b/zx7b$(EXESUFFIX)
-	cp $< $@
-
-zx7b/zx7b$(EXESUFFIX): | zx7b
-	$(MAKE) -w -C $|
+local-zx7b: | zx7b
+	$(MAKE) -w -C $| prefix=../.. install
 
 clean-zx7b: | zx7b
 	$(MAKE) -w -C $| clean
-	rm -f $(INSTALLDIR)/zx7b$(EXESUFFIX)
+	$(MAKE) -w -C $| prefix=../.. uninstall
+
+distclean-zx7b: | zx7b
+	$(MAKE) -w -C $| distclean
+	$(MAKE) -w -C $| prefix=../.. uninstall
 
 else
 
+local-zx7b:;
+
 clean-zx7b:;
 
-endif
+distclean-zx7b:;
 
-.PHONY: dist-clean-zx7b
-dist-clean-zx7b: clean-zx7b
+endif
 
 # tools
 
@@ -281,7 +281,7 @@ endif
 
 .PHONY: dist-clean
 ifeq ($(_DoClean),1)
-dist-clean: dist-clean-sjasmplus dist-clean-z88dk dist-clean-zx7b distclean-tools
+dist-clean: dist-clean-sjasmplus dist-clean-z88dk distclean-zx7b distclean-tools
 else
 dist-clean: dist-clean-sjasmplus dist-clean-z88dk
 endif

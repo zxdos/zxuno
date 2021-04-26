@@ -7,27 +7,55 @@
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make [BUILD=<BUILD>] [<TARGET>]
+#   make [BUILD=<BUILD>] [<TARGET> ...]
+# Install / Uninstall:
+#   make [BUILD=<BUILD>] [prefix=<PREFIX>] install | uninstall
 # Clean:
 #   make [BUILD=<BUILD>] clean
+#   make distclean
 #
 # where:
 #   <BUILD> is one of: mingw32, mingw64.
-#   <TARGET> is the value of TARGET variable (see below).
+#   <TARGET> is one of values for `BINS' variable prefixed with "build/"
+#     (see target `all' below).
+#   <PREFIX> is a prefix directory to install files into.
 #
 # Notes:
-#   BUILD variable may be set in user's environment.
+#   `BUILD', `prefix' variables may be set in user's environment.
 
 include ../../common.mk
 
-TARGET	:= zx7b$(EXESUFFIX)
+srcdir		= .
+prefix		?= /usr/local
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/bin
+
+BINS		= zx7b$(EXESUFFIX)
 
 .PHONY: all
-all: $(TARGET)
+all: $(foreach t,$(BINS),build/$(t))
 
-%$(EXESUFFIX): %.c Makefile
+build\
+$(DESTDIR)$(bindir):
+	mkdir -p $@
+
+build/zx7b$(EXESUFFIX): $(srcdir)/zx7b.c Makefile | build
 	$(CC) $(CFLAGS) -o $@ $<
+
+.PHONY: install
+install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+
+$(DESTDIR)$(bindir)/zx7b$(EXESUFFIX): build/zx7b$(EXESUFFIX) | $(DESTDIR)$(bindir)
+	cp $< $@
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(foreach t,$(BINS),$(DESTDIR)$(exec_prefix)/bin/$(t))
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET)
+	rm -f $(foreach t,$(BINS),build/$(t))
+
+.PHONY: distclean
+distclean:
+	rm -rf build/*
