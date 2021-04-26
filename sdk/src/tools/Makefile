@@ -15,13 +15,10 @@
 #   make distclean
 #
 # where:
-#   <BUILD> is one of: mingw32, mingw64.
+#   <BUILD> - see included `common.mk'.
 #   <TARGET> is one of values for `BINS' variable prefixed with "build/"
 #     (see target `all' below).
 #   <PREFIX> is a prefix directory to install files into.
-#
-# Notes:
-#   `BUILD', `prefix' variables may be set in user's environment.
 
 include ../../common.mk
 
@@ -29,6 +26,9 @@ srcdir		= .
 prefix		?= /usr/local
 exec_prefix	?= $(prefix)
 bindir		?= $(exec_prefix)/bin
+
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL)
 
 BINS:=\
  bin2hex$(EXESUFFIX)\
@@ -56,7 +56,7 @@ install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 # $1 = target
 define install_bin_rule =
 $$(DESTDIR)$$(bindir)/$1: build/$1 | $$(DESTDIR)$$(bindir)
-	cp $$< $$@
+	$$(INSTALL_PROGRAM) $$< $$@
 endef
 
 $(foreach t,$(BINS),$(eval $(call install_bin_rule,$(t))))

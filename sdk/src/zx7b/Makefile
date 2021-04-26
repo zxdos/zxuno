@@ -15,13 +15,10 @@
 #   make distclean
 #
 # where:
-#   <BUILD> is one of: mingw32, mingw64.
+#   <BUILD> - see included `common.mk'.
 #   <TARGET> is one of values for `BINS' variable prefixed with "build/"
 #     (see target `all' below).
 #   <PREFIX> is a prefix directory to install files into.
-#
-# Notes:
-#   `BUILD', `prefix' variables may be set in user's environment.
 
 include ../../common.mk
 
@@ -29,6 +26,9 @@ srcdir		= .
 prefix		?= /usr/local
 exec_prefix	?= $(prefix)
 bindir		?= $(exec_prefix)/bin
+
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL)
 
 BINS		= zx7b$(EXESUFFIX)
 
@@ -46,7 +46,7 @@ build/zx7b$(EXESUFFIX): $(srcdir)/zx7b.c Makefile | build
 install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 $(DESTDIR)$(bindir)/zx7b$(EXESUFFIX): build/zx7b$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	cp $< $@
+	$(INSTALL_PROGRAM) $< $@
 
 .PHONY: uninstall
 uninstall:
