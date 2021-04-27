@@ -1,6 +1,6 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.8
+:revnumber: 0.9
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -2276,6 +2276,7 @@ La máquina CHIP-8 utiliza un teclado hexadecimal como entrada. La asignación e
 Durante la ejecución del core:
 
 - `Esc`: para mostrar u ocultar el menú.
+- `F11`: Hard Reset
 - `F12`: Reset
 
 <<<
@@ -2295,11 +2296,6 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 - Activar o desactivar el sonido (Sound On/Off)
 - Ayuda sobre el uso del teclado (Keyboard Help)
 - Salir del menú (Exit)
-
-[CAUTION]
-====
-Después de cargar cualquier ROM, pulsar siempre a continuación la tecla de reset para que funcione correctamente: `F12`
-====
 
 <<<
 
