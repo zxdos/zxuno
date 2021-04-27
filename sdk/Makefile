@@ -7,17 +7,29 @@
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make [BUILD=<BUILD>] [FORCEBUILD=<FB_FLAG>] [<TARGET>]
+#   make [<FLAGS>] build | build-<TARGET>
+# Install:
+#   make [<FLAGS>] [all | <TARGET> | install-<TARGET>]
+# Uninstall:
+#   make [<FLAGS>] uninstall | uninstall-<TARGET>
 # Clean:
-#   make [BUILD=<BUILD>] [FORCECLEAN=<FC_FLAG>] clean
+#   make [<FLAGS>] clean | clean-<TARGET>
+#   make [<FLAGS>] distclean | distclean-<TARGET>
 #
 # where:
+#   <FLAGS> are these flags:
+#     [BUILD=<BUILD>] [FORCEBUILD=<FB_FLAG>] [FORCECLEAN=<FC_FLAG>]
+# where values are:
 #   <BUILD> - see included `common.mk'.
 #   <FB_FLAG> is 1 to force build, otherwise do not (default).
 #   <FC_FLAG> is 1 to force clean, otherwise do not (default).
-#   <TARGET> is one of: sjasmplus, z88dk, zx7b, tools
+#   <TARGET> is one of the values of `TARGETS' variable.
+#
+# NOTE: `FORCEBUILD' and `FORCECLEAN' are mainly for Windows platform.
 
 include common.mk
+
+prefix	?= .
 
 ifeq ($(BUILD),mingw32)
 FORCEBUILD:=1
@@ -40,13 +52,18 @@ export BUILD
 export FORCEBUILD
 export FORCECLEAN
 
+TARGETS=sjasmplus z88dk zx7b tools
+
 .PHONY: all
-all: sjasmplus z88dk zx7b tools
+all: install
 
-.PHONY: sjasmplus z88dk zx7b tools
-sjasmplus z88dk zx7b tools: | src
-	$(MAKE) -w -C $| install-$@
+.PHONY: $(TARGETS)
+$(TARGETS): | src
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install-$@
 
-.PHONY: clean dist-clean
-clean dist-clean: | src
-	$(MAKE) -w -C $| $@
+.PHONY:\
+ build install uninstall clean distclean\
+ $(foreach t,$(TARGETS),build-$(t) install-$(t) uninstall-$(t) clean-$(t) distclean-$(t))
+build install uninstall clean distclean \
+$(foreach t,$(TARGETS),build-$(t) install-$(t) uninstall-$(t) clean-$(t) distclean-$(t)): | src
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) $@

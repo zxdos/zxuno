@@ -9,13 +9,10 @@
 # Build:
 #   make [BUILD=<BUILD>] -w -C z88dk -f ../z88dk.mk
 # Clean:
-#   make [BUILD=<BUILD>] -w -C z88dk -f ../z88dk.mk clean
+#   make [BUILD=<BUILD>] -w -C z88dk -f ../z88dk.mk clean | distclean
 #
 # where:
 #   <BUILD> is one of: mingw32, mingw64.
-#
-# Notes:
-#   BUILD variable may be set in user's environment.
 
 include ../../common.mk
 
@@ -24,7 +21,10 @@ all: | build.sh
 	chmod 777 $|
 	./build.sh
 
-.PHONY: clean
-clean: | build.sh
+.PHONY: install uninstall
+install uninstall:;
+
+.PHONY: clean distclean
+clean distclean: | build.sh
 	chmod 777 $|
 	./build.sh -C

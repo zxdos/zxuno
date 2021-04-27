@@ -40,6 +40,8 @@ Open terminal and type:
 # apt install -y build-essential git
 ```
 
+to install `build-essential` and `git` packages.
+
 **NOTE**: here the first symbol "#" means that the following command must be run as *root* or using `sudo` utility.
 
 Additional packages for targets:
@@ -49,11 +51,7 @@ Target | Packages
 `sjasmplus` | cmake libboost-all-dev libxml2-dev
 `z88dk` | dos2unix libboost-all-dev texinfo texi2html libxml2-dev subversion bison flex zlib1g-dev m4
 
-To use cross-compilation for Windows platform install *mingw-w64* package:
-
-```
-# apt install -y mingw-w64
-```
+To use cross-compilation for Windows platform install *mingw-w64* package.
 
 ### 2.1.2. Clone repository
 
@@ -71,10 +69,10 @@ Go to the project's root directory, enter `sdk` sub-directory and type one of th
 
 Command | Description
 ----|----
-`make` | Build all tools from sources
-`make <TARGET>` | Build only the TARGET from sources
-`make BUILD=<BUILD>` | Cross-build all tools from sources for Windows platform
-`make BUILD=<BUILD> <TARGET>` | Cross-build only the TARGET from sources for Windows platform
+`make` | Build and install all tools from sources
+`make <TARGET>` | Build and install only the TARGET from sources
+`make BUILD=<BUILD>` | Cross-build and install all tools from sources for Windows platform
+`make BUILD=<BUILD> <TARGET>` | Cross-build and install only the TARGET from sources for Windows platform
 
 where:
 
@@ -90,6 +88,8 @@ Value of `BUILD` | Target system
 `mingw32` | Windows with i686 architecture (32-bits)
 `mingw64` | Windows with AMD64 architecture (64-bits)
 
+Compiled binaries are installed into `bin` sub-directory.
+
 Example:
 
 ```bash
@@ -102,24 +102,24 @@ Then you may use `strip` tool to strip debug information from file and thus shri
 strip bin/*.exe
 ```
 
+For more options see [`Makefile`](Makefile).
+
 ## 2.3. Clean tools
 
 Go to the project's root directory, enter `sdk` sub-directory and type one of the following commands:
 
 Command | Description
 ----|----
+`make uninstall` | remove installed binaries
 `make clean` | clean after compilation from sources
-`make dist-clean` | acts like `clean` but also removes temporary and downloaded files
+`make distclean` | acts like `clean` but also remove temporary and downloaded files
+`make BUILD=<BUILD> uninstall` | remove installed binaries for Windows platform
 `make BUILD=<BUILD> clean` | clean after compilation from sources for Windows platform
-`make BUILD=<BUILD> dist-clean` | acts like `clean` for Windows platform but also removes temporary and downloaded files
+`make BUILD=<BUILD> distclean` | acts like `clean` for Windows platform but also remove temporary and downloaded files
 
 Value of `BUILD` is described in [2.2](#22-build-tools).
 
-Example:
-
-```bash
-make BUILD=mingw64 clean
-```
+For more options see [`Makefile`](Makefile).
 
 ## 2.4. Tools usage
 
@@ -190,19 +190,19 @@ Go to the project's root directory, enter `sdk` sub-directory and type one of th
 
 Command | Description
 ----|----
-`make` | Quick setup of all tools
-`make <TARGET>` | Qucik setup of the TARGET only
-`make FORCEBUILD=1` | Build all tools from sources
-`make FORCEBUILD=1 <TARGET>` | Build only the TARGET from sources
+`make` | **Quick setup** of all tools (download precompiled binaries and install them)
+`make <TARGET>` | **Qucik setup** of the TARGET only
+`make FORCEBUILD=1` | Build and install all tools from sources
+`make FORCEBUILD=1 <TARGET>` | Build and install only the TARGET from sources
 
 where:
 
-Value of `TARGET` | Origin | Quick setup | Build from sources
+Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build from sources
 ----|----|----|----
-`sjasmplus` | downloaded | available | available
-`z88dk` | downloaded | available | available
-`zx7b` | `src/zx7b` | N/A | available
-`tools` | `src/tools` | N/A | available
+`sjasmplus` | downloaded | downloaded (**yes**) | available
+`z88dk` | downloaded | downloaded (**yes**) | available
+`zx7b` | local | precompiled locally (**no**) | available
+`tools` | local | precompiled locally (**no**) | available
 
 Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
 
@@ -210,22 +210,22 @@ Then you may use `strip` tool to strip debug information from file and thus shri
 strip bin/*.exe
 ```
 
+For more options see [`Makefile`](Makefile).
+
 ## 3.3. Clean tools
 
 Go to the project's root directory, enter `sdk` sub-directory and type one of the following commands:
 
 Command | Description
 ----|----
-`make clean` | removes downloaded precompiled binaries only
-`make dist-clean` | acts as `clean` but also removes temporary and downloaded files
-`make FORCECLEAN=1 clean` | clean after compilation from sources
-`make FORCECLEAN=1 dist-clean` | acts as forced `clean` but also removes temporary and downloaded files
+`make FORCECLEAN=1 uninstall` | remove installed binaries from SDK after quick setup
+`make FORCECLEAN=1 clean` | clean sources from downloaded binaries after quick setup
+`make FORCECLEAN=1 distclean` | acts as forced `clean` but also removes temporary and downloaded files
+`make FORCEBUILD=1 FORCECLEAN=1 uninstall` | remove all installed binaries from SDK
+`make FORCEBUILD=1 FORCECLEAN=1 clean` | clean SDK after compilation from sources
+`make FORCEBUILD=1 FORCECLEAN=1 distclean` | acts as forced `clean` after compilation from sources but also removes temporary and downloaded files
 
-Example:
-
-```bash
-make FORCECLEAN=1 clean
-```
+For more options see [`Makefile`](Makefile).
 
 ## 3.4. Tools usage
 
