@@ -63,7 +63,7 @@ $(foreach t,$(BINS),$(eval $(call install_bin_rule,$(t))))
 
 .PHONY: uninstall
 uninstall:
-	rm -f $(foreach t,$(BINS),$(DESTDIR)$(exec_prefix)/bin/$(t))
+	rm -f $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 .PHONY: clean
 clean:

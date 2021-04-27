@@ -50,7 +50,7 @@ $(DESTDIR)$(bindir)/zx7b$(EXESUFFIX): build/zx7b$(EXESUFFIX) | $(DESTDIR)$(bindi
 
 .PHONY: uninstall
 uninstall:
-	rm -f $(foreach t,$(BINS),$(DESTDIR)$(exec_prefix)/bin/$(t))
+	rm -f $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 .PHONY: clean
 clean:

@@ -8,16 +8,29 @@
 #
 # Build:
 #   make [BUILD=<BUILD>] -w -C sjasmplus -f ../sjasmplus.mk
+# Install / Uninstall:
+#   make [BUILD=<BUILD>] [prefix=<PREFIX>] -w -C sjasmplus -f ../sjasmplus.mk install | uninstall
 # Clean:
 #   make [BUILD=<BUILD>] -w -C sjasmplus -f ../sjasmplus.mk clean
 #
 # where:
-#   <BUILD> is one of: mingw32, mingw64.
-#
-# Notes:
-#   BUILD variable may be set in user's environment.
+#   <BUILD> - see included `common.mk'.
+#   <PREFIX> is a prefix directory to install files into.
 
 include ../../common.mk
+
+srcdir		= .
+prefix		?= /usr/local
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/bin
+
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL)
+
+BINS		= sjasmplus$(EXESUFFIX)
+
+.PHONY: all
+all: $(foreach t,$(BINS),build/$(t))
 
 ifeq ($(BUILD),mingw32)
 CMAKEFLAGS	:= -DCMAKE_TOOLCHAIN_FILE=../Toolchain-mingw32.cmake
@@ -27,15 +40,33 @@ else
 CMAKEFLAGS	:=
 endif
 
+.PHONY: all
+all: $(foreach t,$(BINS),build/$(t))
+
+build\
+$(DESTDIR)$(bindir):
+	mkdir -p $@
+
 build/sjasmplus$(EXESUFFIX): | build/Makefile
 	$(MAKE) -w -C build
 
 build/Makefile: | build
 	cd $| && cmake $(CMAKEFLAGS) ..
 
-build:
-	mkdir $@
+.PHONY: install
+install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+
+$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): build/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) $< $@
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 .PHONY: clean
 clean:
-	rm -rf build
+	rm -f $(foreach t,$(BINS),build/$(t))
+
+.PHONY: distclean
+distclean:
+	rm -rf build/*

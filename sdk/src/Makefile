@@ -7,33 +7,35 @@
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make [BUILD=<BUILD>] [FORCEBUILD=<FB_FLAG>] [<TARGET>]
+#   make [BUILD=<BUILD>] [FORCEBUILD=<FB_FLAG>] [install-<TARGET>]
 # Clean:
 #   make [BUILD=<BUILD>] [FORCECLEAN=<FC_FLAG>] clean|dist-clean
 #
 # where:
-#   <BUILD> is one of: mingw32, mingw64.
+#   <BUILD> - see included `common.mk'.
 #   <FB_FLAG> is 1 to force build, otherwise do not (default).
 #   <FC_FLAG> is 1 to force clean, otherwise do not (default).
 #   <TARGET> is one of:
-#     * external-sjasmplus
-#     * external-z88dk
-#     * local-zx7b
-#     * local-tools
-#
-# Notes:
-#   BUILD, FORCEBUILD, FORCECLEAN variables may be set in user's environment.
+#     * sjasmplus
+#     * z88dk
+#     * zx7b
+#     * tools
 
 include ../common.mk
 
-INSTALLDIR=../bin
+prefix		?= ..
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/bin
+
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL)
 
 .PHONY: all
 all:\
- external-sjasmplus\
- external-z88dk\
- local-zx7b\
- local-tools
+ install-sjasmplus\
+ install-z88dk\
+ install-zx7b\
+ install-tools
 
 _DoBuild:=1
 _UsePrecompiledOnWindows:=0
@@ -54,17 +56,12 @@ endif
 
 # sjasmplus
 
-.PHONY: external-sjasmplus clean-sjasmplus
-
-external-sjasmplus: $(INSTALLDIR)/sjasmplus$(EXESUFFIX)
+.PHONY: install-sjasmplus clean-sjasmplus
 
 ifeq ($(_DoBuild),1)
 
-$(INSTALLDIR)/sjasmplus$(EXESUFFIX): sjasmplus/build/sjasmplus$(EXESUFFIX)
-	cp $< $@
-
-sjasmplus/build/sjasmplus$(EXESUFFIX): | sjasmplus/.extracted sjasmplus.mk
-	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk
+install-sjasmplus: | sjasmplus/.extracted sjasmplus.mk
+	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk prefix=$(shell realpath --relative-to=sjasmplus $(prefix)) install
 
 sjasmplus/.extracted: sjasmplus-src.tgz
 	echo 'f3f6d28af19880ed2cb427b6b427e9bd42371929c7d263dac840fb71de1302d6  $<' >$<.sha256
@@ -78,16 +75,18 @@ sjasmplus/.extracted: sjasmplus-src.tgz
 sjasmplus-src.tgz:
 	wget -c https://github.com/sjasmplus/sjasmplus/archive/refs/tags/20190306.1.tar.gz -O $@
 
-clean-sjasmplus:
+clean-sjasmplus: | sjasmplus.mk
 	if test -d sjasmplus; then $(MAKE) -w -C sjasmplus -f ../sjasmplus.mk clean; fi
-	rm -f $(INSTALLDIR)/sjasmplus$(EXESUFFIX)
+	if test -d sjasmplus; then $(MAKE) -w -C sjasmplus -f ../sjasmplus.mk prefix=$(shell realpath --relative-to=sjasmplus $(prefix)) uninstall; fi
 
 endif
 
 ifeq ($(_UsePrecompiledOnWindows),1)
 
-$(INSTALLDIR)/sjasmplus$(EXESUFFIX): sjasmplus/sjasmplus$(EXESUFFIX)
-	cp $< $@
+install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
+
+$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus/sjasmplus$(EXESUFFIX)
+	$(INSTALL_PROGRAM) $< $@
 
 sjasmplus/sjasmplus$(EXESUFFIX): | sjasmplus/.extracted
 
@@ -115,14 +114,14 @@ sjasmplus-win64.7z:
 
 clean-sjasmplus:
 	rm -rf sjasmplus
-	rm -f $(INSTALLDIR)/sjasmplus$(EXESUFFIX)
+	rm -f $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
 endif
 
-.PHONY: dist-clean-sjasmplus
-dist-clean-sjasmplus:
+.PHONY: distclean-sjasmplus
+distclean-sjasmplus:
 	rm -rf sjasmplus
-	rm -f $(INSTALLDIR)/sjasmplus$(EXESUFFIX)
+	rm -f $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 	rm -f\
  sjasmplus-src.tgz\
  sjasmplus-src.tgz.sha256\
@@ -133,7 +132,7 @@ dist-clean-sjasmplus:
 
 # z88dk
 
-.PHONY: external-z88dk clean-z88dk
+.PHONY: install-z88dk clean-z88dk
 
 Z88DK_TARGETS:=\
  asmpp.pl\
@@ -157,7 +156,7 @@ Z88DK_TARGETS:=\
  z88dk-zx7$(EXESUFFIX)\
  zcc$(EXESUFFIX)
 
-external-z88dk: z88dk/.done
+install-z88dk: z88dk/.done
 
 ifeq ($(_DoBuild),1)
 
@@ -220,24 +219,24 @@ dist-clean-z88dk:
 
 # zx7b
 
-.PHONY: local-zx7b clean-zx7b distclean-zx7b
+.PHONY: install-zx7b clean-zx7b distclean-zx7b
 
 ifeq ($(_DoBuild),1)
 
-local-zx7b: | zx7b
-	$(MAKE) -w -C $| prefix=../.. install
+install-zx7b: | zx7b
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
 
 clean-zx7b: | zx7b
 	$(MAKE) -w -C $| clean
-	$(MAKE) -w -C $| prefix=../.. uninstall
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 distclean-zx7b: | zx7b
 	$(MAKE) -w -C $| distclean
-	$(MAKE) -w -C $| prefix=../.. uninstall
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 else
 
-local-zx7b:;
+install-zx7b:;
 
 clean-zx7b:;
 
@@ -247,24 +246,24 @@ endif
 
 # tools
 
-.PHONY: local-tools clean-tools distclean-tools
+.PHONY: install-tools clean-tools distclean-tools
 
 ifeq ($(_DoBuild),1)
 
-local-tools: | tools
-	$(MAKE) -w -C $| prefix=../.. install
+install-tools: | tools
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
 
 clean-tools: | tools
 	$(MAKE) -w -C $| clean
-	$(MAKE) -w -C $| prefix=../.. uninstall
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 distclean-tools: | tools
 	$(MAKE) -w -C $| distclean
-	$(MAKE) -w -C $| prefix=../.. uninstall
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 else
 
-local-tools:;
+install-tools:;
 
 clean-tools:;
 
@@ -281,7 +280,7 @@ endif
 
 .PHONY: dist-clean
 ifeq ($(_DoClean),1)
-dist-clean: dist-clean-sjasmplus dist-clean-z88dk distclean-zx7b distclean-tools
+dist-clean: distclean-sjasmplus dist-clean-z88dk distclean-zx7b distclean-tools
 else
-dist-clean: dist-clean-sjasmplus dist-clean-z88dk
+dist-clean: distclean-sjasmplus dist-clean-z88dk
 endif
