@@ -7,20 +7,30 @@
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make [BUILD=<BUILD>] [<TARGET>]
+#   make [BUILD=<BUILD>] [<TARGET> ...]
+# Install / Uninstall:
+#   make [BUILD=<BUILD>] [prefix=<PREFIX>] install | uninstall
 # Clean:
 #   make [BUILD=<BUILD>] clean
+#   make distclean
 #
 # where:
-#   <BUILD> is one of: mingw32, mingw64.
-#   <TARGET> is one of values for TARGETS variable (see below).
-#
-# Notes:
-#   BUILD variable may be set in user's environment.
+#   <BUILD> - see included `common.mk'.
+#   <TARGET> is one of values for `BINS' variable prefixed with "build/"
+#     (see target `all' below).
+#   <PREFIX> is a prefix directory to install files into.
 
 include ../../common.mk
 
-TARGETS:=\
+srcdir		= .
+prefix		?= /usr/local
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/bin
+
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL)
+
+BINS:=\
  bin2hex$(EXESUFFIX)\
  fcut$(EXESUFFIX)\
  fpad$(EXESUFFIX)\
@@ -31,11 +41,34 @@ TARGETS:=\
  Bit2Bin$(EXESUFFIX)
 
 .PHONY: all
-all: $(TARGETS)
+all: $(foreach t,$(BINS),build/$(t))
 
-%$(EXESUFFIX): %.c Makefile
+build\
+$(DESTDIR)$(bindir):
+	mkdir -p $@
+
+build/%$(EXESUFFIX): $(srcdir)/%.c Makefile | build
 	$(CC) $(CFLAGS) -o $@ $<
+
+.PHONY: install
+install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+
+# $1 = target
+define install_bin_rule =
+$$(DESTDIR)$$(bindir)/$1: build/$1 | $$(DESTDIR)$$(bindir)
+	$$(INSTALL_PROGRAM) $$< $$@
+endef
+
+$(foreach t,$(BINS),$(eval $(call install_bin_rule,$(t))))
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 .PHONY: clean
 clean:
-	rm -f $(TARGETS)
+	rm -f $(foreach t,$(BINS),build/$(t))
+
+.PHONY: distclean
+distclean:
+	rm -rf build/*
