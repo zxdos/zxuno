@@ -1,4 +1,4 @@
-@call ..\sdk\setvars.bat
+@call ..\sdk\setenv.bat
 echo  define version 1 > version.asm
 sjasmplus firmware.asm
 fcut      firmware_strings.rom  7e00 -7e00  strings.bin
