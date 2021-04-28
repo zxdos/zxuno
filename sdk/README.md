@@ -135,23 +135,23 @@ include ../sdk/common.mk
 
 Remember to specify correct relative path to it.
 
-This will set `ZXUNOSDK` environment variable (on first inclusion only) and update your `PATH` environment variable to point to SDK's tools.
+This will set `ZXSDK` environment variable (on first inclusion only) and update your `PATH` environment variable to point to SDK's tools.
 These changes are actual for current invocation of `make` utility and all child processes.
 
 ### 2.4.2. In Bash scripts
 
 Bash scripts are supposed to be invoked from Makefiles where the correct environment is already prepared by `make` utility so nothing must be done for such scripts.
 
-In other cases you must source `setvars.sh` file in a Bash script like this:
+In other cases you must source `setenv.sh` file in a Bash script like this:
 
 ```bash
-source ../sdk/setvars.sh
+source ../sdk/setenv.sh
 ```
 
 or
 
 ```bash
-. ../sdk/setvars.sh
+. ../sdk/setenv.sh
 ```
 
 Remember to specify correct relative path to it.
@@ -247,15 +247,15 @@ You should manually download precompiled binaries of SJAsmPlus and Z88DK from In
 
 ## 4.2. In batch scripts
 
-To use these tools in a batch script just call `setvars.bat` file at the beginning of one like this:
+To use these tools in a batch script just call `setenv.bat` file at the beginning of one like this:
 
 ```batch
-call ..\sdk\setvars.bat
+call ..\sdk\setenv.bat
 ```
 
 Remember to specify correct relative path to it.
 
-This will set `ZXUNOSDK` environment variable (on first call only) and update your `PATH` environment variable to point to SDK's tools.
+This will set `ZXSDK` environment variable (on first call only) and update your `PATH` environment variable to point to SDK's tools.
 These changes are actual for current invocation of command shell and all child processes.
 
 # References

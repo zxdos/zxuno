@@ -8,12 +8,12 @@
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 
-ifndef ZXUNOSDK
+ifndef ZXSDK
 
-ZXUNOSDK	:= $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
-Z88DK		:= $(ZXUNOSDK)/src/z88dk
+ZXSDK		:= $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
+Z88DK		:= $(ZXSDK)/src/z88dk
 ZCCCFG		:= $(Z88DK)/lib/config
-PATH		:= $(ZXUNOSDK)/bin:$(Z88DK)/bin:$(PATH)
+PATH		:= $(ZXSDK)/bin:$(Z88DK)/bin:$(PATH)
 
 # Fix paths under Cygwin for z88dk on Windows
 ifeq ($(OS),Windows_NT)
@@ -22,7 +22,7 @@ ZCCCFG		:= $(shell cygpath -m $(ZCCCFG))
 endif
 endif
 
-export ZXUNOSDK
+export ZXSDK
 export ZCCCFG
 export PATH
 

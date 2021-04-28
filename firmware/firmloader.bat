@@ -1,4 +1,4 @@
-@call ..\sdk\setvars.bat
+@call ..\sdk\setenv.bat
 sjasmplus firmware.asm
 zx7b firmware_strings.rom firmware.rom.zx7b 
 sjasmplus bootloader.asm
