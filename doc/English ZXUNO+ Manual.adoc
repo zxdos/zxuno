@@ -1,10 +1,10 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 0.9
+:revnumber: 0.10
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 0.3
+:Revision: 0.10
 :description: English ZXUNO+ Manual
 :keywords: Manual, English, ZXUNO+
 :icons: font
@@ -2247,7 +2247,7 @@ The ZXUNO+ core is based on an existing  https://bitbucket.org/csoren/fpga-chip8
 
 There are several sites like https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] ot https://github.com/mattmikolay/chip-8[Matthew Mikolay's CHIP-8] where you can obtain osftware for these machines.
 
-==== microSD card format
+==== SD card format
 
 You can use a SD card with the first partition in FAT16 or FAT32 formata to store `BIN` or `CH8` ROM files to load with the core.
 
@@ -2286,7 +2286,7 @@ The following options are available:
 
 - Reset the core 
 - Change the core clock speed
-- Load a ROM file from the microSD card
+- Load a ROM file from the SD card
 - Enable or disable sound output
 - Help
 - Exit the menu
@@ -2306,6 +2306,83 @@ Also, you have to intall <<#_esxdos,instalado esxdos 0.8.8>> into the card, and 
 Finally, if your PS/2 keyboard is not in Spanish, you can copy the coresponding <<#_keyboard,keyboard map file>>, renamed as `KEYMAP.ZX1`.
 
 See the <<#_cores,corresponding section>> for instructions of how to install the SmartROM core in ZXUNO+.
+
+<<<
+
+
+=== Videopac
+
+https://en.wikipedia.org/wiki/Magnavox_Odyssey_2[Philips Videopac], also known as Magnavox Odyssey², Philips Videopac G7000 o Philips Odyssey², is a second generation home video game console that was released in 1978.
+
+The ZXUNO+ core is make by avlixa, and is based on ZXDOS core by yomboprime.
+
+Some features of the core are:
+
+- Needs at least one joystick to be used
+- loadable VDC ROM charset for some custom roms
+- "The Voice" peripheral
+
+==== SD card format
+
+You need a SD card with the first partition in FAT16 format to store ROM image files to load.
+
+See the <<#_cores,corresponding section>> for instructions of how to install the Videopac core in ZXDOS+.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+During the core execution:
+
+- `Ctrl+Alt+Backspace`: Hard reset
+- After loading a ROM, most games will prompt the user with "SELECT GAME". Press `0`-`9` on the keyboard or mapped controller button to play the game. 
+- `Esc` or joystick button 2 to show or hide the options menu
+- `W`, `A`, `S`, `D` or cursor keys and then `Enter` to choose and select menu options
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
+
+[.text-center] 
+image:img/videopac.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Reset core
+- Scanlines
+- Swap Joysticks
+- Join Joysticks
+- Load Cartridge ROM
+- Load VDC Font
+- Video mode: PAL/Videopac or NTSC/Odyssey2
+- Color Mode
+- The Voice
+- Exit
+
+[WARNING]
+====
+Note also that the system did not have a well defined player 1 or player 2 controller, and some games may alternate on a game-to-game basis. You may need to swap controllers to use the input or (for one player games) use the join joystick option of the menu
+====
+
+[TIP]
+====
+Usually, there is no on-screen display of the game options, so looking at the instruction manuals (for example following https://videopac.weebly.com/[this link]) may be helpful in selecting a game.
+====
+
+[TIP]
+====
+If, when browsing the ROM directory, you can't see all of them, try to split the content into several subdirectories with less files per directory.
+====
+
+<<<
+
+===== Change VDC ROM charset
+
+You can, for some ROMs, load a `CHR` file including a custom font, instead of the original one which was included with the Intel 8244/8245 chip.
+
+Those files can be made following the instructions and using the editor available at the project repository, following https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit[this link].
 
 <<<
 

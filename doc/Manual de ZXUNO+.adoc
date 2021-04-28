@@ -1,10 +1,10 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.9
+:revnumber: 0.10
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 0.3
+:Revision: 0.10
 :description: Manual en castellano de ZXUNO+
 :keywords: Manual, Castellano, ZXUNO+
 :icons: font
@@ -2254,7 +2254,7 @@ El core de ZXUNO+ está basada en una implementación ya existente https://bitbu
 
 Existen múltiples sitios como https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] o https://github.com/mattmikolay/chip-8[CHIP-8 de Matthew Mikolay] donde se puede obtener software para este tipo de máquinas.
 
-==== Formato de Tarjeta microSD
+==== Formato de Tarjeta SD
 
 Se puede utilizar una tarjeta con la primera partición en formato FAT16 o FAT32 para almacenar ficheros ROM en formato `BIN` o `CH8` para usar con el core.
 
@@ -2292,7 +2292,7 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 
 - Reiniciar el core (Reset)
 - Cambiar la velocidad de reloj del core (Clock Speed)
-- Cargar un archivo de ROM desde la tarjeta microSD (Load Rom)
+- Cargar un archivo de ROM desde la tarjeta SD (Load Rom)
 - Activar o desactivar el sonido (Sound On/Off)
 - Ayuda sobre el uso del teclado (Keyboard Help)
 - Salir del menú (Exit)
@@ -2312,6 +2312,83 @@ Además, la tarjeta debe tener <<#_esxdos,instalado esxdos 0.8.8>> y debe tener 
 Además, si se está utilizando un teclado PS/2 que no esté en español, se puede copiar el <<#_teclado,fichero de mapa de teclado>> correspondiente, renombrado como `KEYMAP.ZX1`.
 
 Si no estuviera ya, <<#_cores,instalar el core smartROM>> en el ZXUNO+.
+
+<<<
+
+=== Videopac
+
+La https://es.wikipedia.org/wiki/Magnavox_Odyssey²[Philips Videopac], también conocida como Magnavox Odyssey², Philips Videopac G7000 o Philips Odyssey² es una videoconsola lanzada en 1978.
+
+La versión para ZXUNO+ está desarrollada por avlixa, basada en el core de ZXDOS de yomboprime.
+
+Algunas de las características del core son:
+
+- Modo VGA
+- Necesita Joystick(s) para funcionar
+- Soporte para modificar el tipo de letra (charset) de la ROM de VDC
+- Módulo de efectos de sonido y voz (The Voice)
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta SD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes ROM que se deseen cargar.
+
+Si no estuviera ya, <<#_cores,instalar el core de Videopac>> en el ZXUNO+.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Ctrl+Alt+Backspace`: Hard reset.
+- Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar. 
+- `Esc` o el botón 2 del joystick para mostrar u ocultar el menú.
+- `W`, `A`, `S`, `D` o las teclas de cursor y luego `Enter` para elegir y seleccionar en el menú.
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
+
+[.text-center] 
+image:img/videopac.jpg[pdfwidth=80%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Línea de exploración (Scanlines)
+- Intercambiar el orden de los joysticks (Swap Joysticks)
+- Unir los joysticks (Join Joysticks). Útil para ROMs que alternan el joystick en las partidas
+- Cargar ROM (Load Cartridge ROM)
+- Cargar un tipo de letra alternativo (Load VDC Font)
+- Modo de vídeo (PAL VideoPac/NTSC Odyssey2)
+- Modo de color (Color Mode)
+- Activar o desactivar el módulo sintetizador (http://www.videopac.org/manuals/voice.pdf[The Voice])
+- Salir del menú (Exit) 
+
+[WARNING]
+====
+El sistema no tiene claramente definido qué joystick se corresponde a cada jugador, e incluso puede irse alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador ) usar la opción del menú que unifica los dos joysticks.
+====
+
+[TIP]
+====
+No suele haber información en pantalla de las opciones, así que es interesante consultar las instrucciones de cada juego (por ejemplo en https://videopac.weebly.com/[este enlace]) para saber qué hacer para jugar.
+====
+
+[TIP]
+====
+Si, al navegar por el directorio donde están las ROMS, no se ven todas, se puede dividir el contenido en varios subdirectorios con menos ficheros por directorio (por ejemplo, clasificando por letras) para solucionarlo.
+====
+
+<<<
+
+===== Cambio del charset de la ROM de VDC
+
+Es posible, para algunas ROM, cargar un archivo `CHR` con una fuente modificada, en vez de la original incluida en el chip Intel 8244/8245.
+
+Estos archivos se pueden crear siguiendo las instrucciones y utilizando el editor disponible en el repositorio del proyecto, siguiendo https://github.com/RW-FPGA-devel-Team/videopac-G7000/tree/main/doc/Charset%20Edit[este enlace].
 
 <<<
 
