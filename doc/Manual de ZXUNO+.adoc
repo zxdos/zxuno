@@ -1,10 +1,10 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.10
+:revnumber: 0.11
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 0.10
+:Revision: 0.11
 :description: Manual en castellano de ZXUNO+
 :keywords: Manual, Castellano, ZXUNO+
 :icons: font
@@ -2323,10 +2323,10 @@ La versión para ZXUNO+ está desarrollada por avlixa, basada en el core de ZXDO
 
 Algunas de las características del core son:
 
-- Modo VGA
+- Dos modos de vídeo seleccionables: RGB y VGA
 - Necesita Joystick(s) para funcionar
+- Modos de color incluyendo monocromo o fósforo verde/naranja
 - Soporte para modificar el tipo de letra (charset) de la ROM de VDC
-- Módulo de efectos de sonido y voz (The Voice)
 
 ==== Formato de Tarjeta SD
 
@@ -2340,6 +2340,8 @@ Si no estuviera ya, <<#_cores,instalar el core de Videopac>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `F3`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset.
 - Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar. 
 - `Esc` o el botón 2 del joystick para mostrar u ocultar el menú.
@@ -2352,7 +2354,7 @@ Durante la ejecución del core:
 Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
 
 [.text-center] 
-image:img/videopac.jpg[pdfwidth=80%]
+image:img/videopacuno.png[pdfwidth=80%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -2364,7 +2366,6 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 - Cargar un tipo de letra alternativo (Load VDC Font)
 - Modo de vídeo (PAL VideoPac/NTSC Odyssey2)
 - Modo de color (Color Mode)
-- Activar o desactivar el módulo sintetizador (http://www.videopac.org/manuals/voice.pdf[The Voice])
 - Salir del menú (Exit) 
 
 [WARNING]
@@ -3152,8 +3153,6 @@ https://www.zxuno.com/forum/viewtopic.php?t=1245[Core de NES para ZX-Uno]
 https://archive.org/details/Magnavox_Odyssey_2_TOSEC_2012_04_23[TOSEC: Magnavox Odyssey 2 (2012-04-23)]
 
 https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 for FPGA]
-
-http://www.videopac.org/manuals/voice.pdf[Odtyssey Speech And Sound Effects Module Manual]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
 
