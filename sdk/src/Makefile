@@ -39,6 +39,7 @@ INSTALL_PROGRAM	?= $(INSTALL)
 TARGETS=\
  sjasmplus\
  z88dk\
+ lodepng\
  zx7b\
  tools
 
@@ -283,6 +284,41 @@ distclean-z88dk: clean-z88dk
 else	# !_DoClean
 
 distclean-z88dk:;
+
+endif	# !_DoClean
+
+# lodepng
+
+.PHONY: $(foreach a,build install uninstall clean distclean,$(a)-lodepng)
+
+ifeq ($(_DoBuild),1)
+
+build-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix))
+
+install-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
+
+else	# !_DoBuild
+
+build-lodepng install-lodepng:;
+
+endif	# !_DoBuild
+
+ifeq ($(_DoClean),1)
+
+uninstall-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
+
+clean-lodepng: | lodepng
+	$(MAKE) -w -C $| clean
+
+distclean-lodepng: | lodepng
+	$(MAKE) -w -C $| distclean
+
+else	# !_DoClean
+
+uninstall-lodepng clean-lodepng distclean-lodepng:;
 
 endif	# !_DoClean
 

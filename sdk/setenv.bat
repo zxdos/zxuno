@@ -8,4 +8,4 @@ set ZXSDK=%~dp0
 set ZXSDK=%ZXSDK:~0,-1%
 set Z88DK=%ZXSDK%\src\z88dk
 set ZCCCFG=%Z88DK%\lib\config
-set PATH=%ZXSDK%\bin;%Z88DK%\bin;%PATH%
+set PATH=%ZXSDK%\bin;%Z88DK%\bin;%ZXSDK%\lib;%PATH%
