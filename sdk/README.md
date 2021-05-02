@@ -6,11 +6,12 @@
 
 No one yet.
 
-# License
+# Licenses
 
 This document is under [GNU FDL-1.3 or later](https://spdx.org/licenses/GFDL-1.3-or-later.html) license.  
 SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
-z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.
+z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.  
+LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.
 
 # 1. General information
 
@@ -20,6 +21,7 @@ Directory | Description
 ----|----
 `bin` | Compiled binaries of tools.
 `include` | Header files (`.def`, `.h` etc.) to be included in other sources (assembler, C, etc.).
+`lib` | Libraries, needed for executables (mostly in `bin` directory) to function properly.
 `src` | The source code of local and downloadable tools. See Makefiles for details.
 
 ## 1.1. Copyright and licensing information for files
@@ -80,6 +82,7 @@ Value of `TARGET` | Origin | Description
 ----|----|----
 `sjasmplus` | downloaded | SJAsmPlus Z80 Assembler
 `z88dk` | downloaded | z88dk
+`lodepng` | `src/lodepng` | LodePNG library
 `zx7b` | `src/zx7b` | zx7b
 `tools` | `src/tools` | tools
 
@@ -173,6 +176,7 @@ Target | Dependencies
 all targets | bash git make wget unzip p7zip
 `sjasmplus` | gcc-g++ cmake libboost-devel
 `z88dk` | mingw64-i686-gcc-core mingw64-i686-libxml2 patch
+`lodepng` | gcc-core
 `zx7b` | gcc-core
 `tools` | gcc-core
 
@@ -201,6 +205,7 @@ Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build f
 ----|----|----|----
 `sjasmplus` | downloaded | downloaded (**yes**) | available
 `z88dk` | downloaded | downloaded (**yes**) | available
+`lodepng` | local | precompiled locally (**no**) | available
 `zx7b` | local | precompiled locally (**no**) | available
 `tools` | local | precompiled locally (**no**) | available
 
@@ -276,6 +281,7 @@ These changes are actual for current invocation of command shell and all child p
 * [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
 * [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
+* [LodePNG](https://github.com/lvandeve/lodepng) - PNG encoder and decoder in C and C++
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
 * [Open-Source FPGA Foundation](https://osfpga.org/) - main site
 * [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub
