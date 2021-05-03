@@ -1,6 +1,6 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 0.11
+:revnumber: 0.12
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1996,8 +1996,9 @@ You can use a SD card with the first partition in FAT16 format, where you can st
 
 While the core is running:
 
-- `F1` ti `F4`: Turbo Modes
+- `F1` to `F4`: Turbo Modes
 - `F12`: Soft Reset
+- `Ctrl+Alt+F5`: NMI
 - `Ctrl+Alt+Supr`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 
@@ -2096,7 +2097,7 @@ While running the core:
 - `Left ALT`: MSX GRAPH 
 - `Right ALT`: MSX CODE
 - `Page Up`: MSX SELECT
-- `Start`: MSX HOME (`Shift+HOME`: CLS)
+- `Home`: MSX HOME (`Shift+HOME`: CLS)
 - `End`: MSX STOP
 - `Ñ` or `Windows`: MSX DEAD
 
@@ -2215,6 +2216,100 @@ The following options are available:
 
 <<<
 
+=== Oric Atmos
+
+The https://en.wikipedia.org/wiki/Oric#Oric_Atmos[Oric Atmos] was the name used by UK-based Tangerine Computer Systems for one 6502-based home computer sold in the 1980s, primarily in Europe.
+
+The ZX-Uno core has these features:
+
+- VGA / RGB video Out
+- NMI
+- DOS-8D (based on https://en.wikipedia.org/wiki/Pravetz_computers#8-bit_architecture[Pravetz 8d], a bulgarian clone of Oric Atmos)
+
+For more information, see https://zxuno.com/forum/viewtopic.php?f=19&t=7[the ZX-Uno forum].
+
+==== SD card format
+
+The SD card needs an exclusive format, so it cannot be used with other cores. It's based on concatenating `NIB` disk image file data. To convert disk images from other format (`DSK` or `DO`), you can use `dsk2nib` utility (the resulting image files must be 232960 bytes long).
+
+[WARNING]
+====
+This process can't be undone, and it will remove any content that there was previously in the SD card.
+====
+
+===== Windows
+
+Concatenate the disk images (with a maximum of 20) using `COPY`:
+
+[source,shell]
+----
+COPY /B image1.nib + image2.nib + (...) + image20.nib oric_discs.img
+----
+
+Dump the new file to the SD card, for example, using http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
+
+===== MacOS and Linux
+
+Concatenate the disk images (with a maximum of 20) using `cat`:
+
+[source,shell]
+----
+cat imagen.nib image2.nib (...) image20.nib > oric_discs.img
+----
+
+Dump the new file to the SD card, using `dd`:
+
+[source,shell]
+----
+sudo umount /dev/...
+sudo dd if=oric_discs.img of=/dev/...
+----
+
+<<<
+
+==== Keyboard
+
+This is the keyboard layout:
+
+[.text-center] 
+image:img/keyboardoric.png[pdfwidth=80%]
+
+=====  Special keys and buttons   
+
+Durante la ejecución del core:
+
+- `Scroll Lock`: Change between RGB/Composite and VGA video mode
+- `Home`: Show debugging data on screen (Current disk track -two digits-, disk image number -two digit-, and program counter -four digits-)
+- `End`: NMI
+- `Home+End`: Reset
+- `Page Down`: Load the next disk
+- `Page Up`: Load the previous disk
+
+<<<
+
+==== Basic Guide
+
+[.text-center] 
+image:img/oric.png[pdfwidth=70%]
+
+You can load and enable DOS-8D with the command:
+
+[source]
+----
+CALL800
+----
+
+Then, you can show the files in the current disk with the `DIR` command.
+
+Yo load and run a program, you have to type `-` and the name of the file. This way, for a program named `DEFENDER.EXE`:
+
+[source]
+----
+-DEFENDER.EXE
+----
+
+<<<
+
 === PC XT
 
 https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, pero adapted and trimmed.
@@ -2236,6 +2331,91 @@ Features:
 You have to use a SDHC card, with the first partition with MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and connecting directly de SD card device as a hard disk. You can also find several pre-made images at https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno forum page].
 
 See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXUNO+.
+
+<<<
+
+=== SAM Coupé
+
+The https://en.wikipedia.org/wiki/SAM_Coupé[SAM Coupé] was an 8-bit British home computer that was first released in late 1989. It was designed to have compatibility with the Sinclair ZX Spectrum, but in 48K mode only. 
+
+The ZX-Uno cores has these features:
+
+- VGA (con scanlines) and RGB / Composite Video Out
+- Full keyboard support
+- SAA1099 sound
+- Software loading via ZXUNO+ audio in port
+
+==== SD card format
+
+This core does not use the SD card
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Ctrl+Alt+F5`: NMI.
+- `Ctrl+Alt+Supr`: Soft reset.
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+
+<<<
+
+==== Basic Guide
+
+[.text-center] 
+image:img/samcoupe.png[pdfwidth=70%]
+
+You can only load software from a external tape (or from <<#_miniduino,other external audio device>>) with the command `LOAD""` (or pressing `7` of the numeric keyboard, which is like pressing `F7` of the SAM Coupé keyboard).
+
+[TIP]
+====
+At ZX-Uno SVN repository (https://guest:zxuno@svn.zxuno.com/svn.zxuno.com/svn/zxuno/software/SamCoupe/[here] - User `guest`, password `zxuno`) you can find several programs adapted to TZX tape file.
+====
+
+<<<
+
+=== Sega Master System
+
+The https://en.wikipedia.org/wiki/Master_System[Sega Master System] was a video game console manufactured by Sega.
+
+The ZX-Uno core is based on http://forum.gadgetfactory.net/index.php?/topic/1304-sega-master-system-on-the-papilio-plus/[Ben's original work for Papilio Plus].
+
+Some of the core featurers are:
+
+- VGA and Compostite or RGB video output with PAL sync (50Hz)
+- Joysticks support
+- Joystick emulation via keyboard
+- Loading cartridge image files from the SD card
+
+==== SD card format
+
+You need a SD card with the first partition in FAT16 format to store `BIN` or `SMD` image files of the games to load. ROM files can be inside subdirectories.
+
+See the <<#_cores,corresponding section>> for instructions of how to install the Sega Master System core in ZXUNO+.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+Durante la ejecución del core:
+
+- Cursor or `Q`, `A`, `O`, `P` or joystick 1: Directional controls for player 1
+- `Z`, `Windows` or joystick 1 main fire button: Fire Button 1 for player 1
+- `X`. `Space` or joystick 1 secondary fire button: Fire button 1 for player 1
+- `Pause`: Master System pause button
+- `Scroll Lock`: Change between RGB/Composite and VGA video mode
+- `Ctrl+Alt+Backspace`: Hard reset
+- `F12`: Reset and show the file selection menu
+
+<<<
+
+==== Basic Guide
+
+Pressing `F12` shows or hides the file selector. Use the cursor keys and `Enter` to load the selected file.
+
+[.text-center] 
+image:img/sms.png[pdfwidth=70%]
 
 <<<
 
@@ -2335,7 +2515,8 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 During the core execution:
 
-- `Scroll Lock`: Change between RGB and VGA video mode
+- `Scroll Lock`: Change between RGB/Composite and VGA video mode
+- `F2`: Switch between RGB and Composite when not in VGA video mode
 - `F3`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset
 - After loading a ROM, most games will prompt the user with "SELECT GAME". Press `0`-`9` on the keyboard or mapped controller button to play the game. 
