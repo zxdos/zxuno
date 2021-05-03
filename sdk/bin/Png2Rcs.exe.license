@@ -1,0 +1,11 @@
+SPDX-FileName: Png2Rcs.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: b4e6b170505332ac11ddc0e163a3de6a6a4cfd3a
+
+SPDX-FileCopyrightText: Copyright (C) 2014, 2015, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: Png2Rcs version 1.20 (31 May 2015) - Image to ZX Spectrum RCS screen.

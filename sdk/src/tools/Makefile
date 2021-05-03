@@ -36,9 +36,13 @@ BINS:=\
  fpad$(EXESUFFIX)\
  fpoke$(EXESUFFIX)\
  rcs$(EXESUFFIX)\
+ Png2Rcs$(EXESUFFIX)\
  GenRom$(EXESUFFIX)\
  AddItem$(EXESUFFIX)\
  Bit2Bin$(EXESUFFIX)
+
+INCLUDEDIR	= $(ZXSDK)/include
+LIBDIR		= $(ZXSDK)/lib
 
 .PHONY: all
 all: $(foreach t,$(BINS),build/$(t))
@@ -46,6 +50,13 @@ all: $(foreach t,$(BINS),build/$(t))
 build\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
+
+build/Png2Rcs$(EXESUFFIX):\
+ $(srcdir)/Png2Rcs.c\
+ $(INCLUDEDIR)/lodepng.h\
+ $(LIBDIR)/liblodepng$(DLLSUFFIX)\
+ Makefile | build
+	$(CC) -I$(INCLUDEDIR) -L$(LIBDIR) -l:liblodepng$(DLLSUFFIX) $(CFLAGS) -o $@ $<
 
 build/%$(EXESUFFIX): $(srcdir)/%.c Makefile | build
 	$(CC) $(CFLAGS) -o $@ $<
