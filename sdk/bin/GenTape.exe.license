@@ -1,0 +1,11 @@
+SPDX-FileName: GenTape.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: a45dbb2e6ed331da5258f0d1a1d8348a7f9e4868
+
+SPDX-FileCopyrightText: Copyright (C) 2013-2015, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: GenTape version 1.0 (1 Jun 2015) - a Tape File Generator.

@@ -37,6 +37,7 @@ BINS:=\
  fpoke$(EXESUFFIX)\
  rcs$(EXESUFFIX)\
  Png2Rcs$(EXESUFFIX)\
+ GenTape$(EXESUFFIX)\
  GenRom$(EXESUFFIX)\
  AddItem$(EXESUFFIX)\
  Bit2Bin$(EXESUFFIX)
