@@ -1,6 +1,6 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.11
+:revnumber: 0.12
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -2005,6 +2005,7 @@ Durante la ejecución del core:
 
 - `F1` a `F4`: Modos Turbo
 - `F12`: Soft Reset
+- `Ctrl+Alt+F5`: NMI
 - `Ctrl+Alt+Supr`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 
@@ -2222,6 +2223,100 @@ En él se pueden activar o desactivar las siguientes opciones:
 
 <<<
 
+=== Oric Atmos
+
+El https://es.wikipedia.org/wiki/Oric_Atmos[Oric Atmos] era un ordenador doméstico fabricado por Oric Products International Ltd , sucesor del Oric 1.
+
+La versión para ZX-Uno tiene las siguientes características:
+
+- Salida de vídeo VGA o RGB
+- NMI
+- DOS-8D (basado en el http://www.museo8bits.com/pravetz8d.htm[Pravetz 8d], clon búlgaro del Oric Atmos)
+
+Para más información consultar https://zxuno.com/forum/viewtopic.php?f=19&t=7[el foro oficial de ZX-Uno].
+
+==== Formato de Tarjeta SD
+
+La tarjeta SD ha de ser en un formato exclusivo, y por tanto no puede ser utilizada con otros cores. Está basada en imágenes de disco `NIB` concatenadas. Para convertir imágenes de disco en otro formato (`DSK`), se puede utilizar la utilidad `dsk2nib` (notar que tienen que ser imágenes de 232960 bytes de tamaño).
+
+[WARNING]
+====
+Este proceso borra el contenido que hubiera antes en la tarjeta SD, y no se puede deshacer.
+====
+
+===== Windows
+
+Concatenar las imágenes usando `COPY`:
+
+[source,shell]
+----
+COPY /B imagen1.nib + imagen2.nib + (...) + imagen20.nib oric_discos.img
+----
+
+Volcar la imagen en la SD, por ejemplo, usando http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
+
+===== MacOS y Linux
+
+Concatenar las imágenes usando `cat`:
+
+[source,shell]
+----
+cat imagen1.nib imagen2.nib (...) imagen20.nib > oric_discos.img
+----
+
+Volcar la imagen en la SD, usando `dd`:
+
+[source,shell]
+----
+sudo umount /dev/...
+sudo dd if=oric_discos.img of=/dev/...
+----
+
+<<<
+
+==== Teclado
+
+La distribución del teclado está en inglés (así, por ejemplo, la tecla `-` se corresponde con `'`, al lado del número `0`).
+
+[.text-center] 
+image:img/keyboardoric.png[pdfwidth=80%]
+
+===== Teclas especiales y botones       
+
+Durante la ejecución del core:
+
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `Inicio`: Mostrar datos de depuración (Pista de disco actual -dos dígitos-, número de imagen de disco -dos dígitos-, y registro de contador de programa -cuatro dígitos-)
+- `Fin`: NMI
+- `Inicio+Fin`: Reset 
+- `Re.Pag`: Seleccionar el siguiente disco
+- `Av.Pag`: Seleccionar el  disco anterior
+
+<<<
+
+==== Guía básica
+
+[.text-center] 
+image:img/oric.png[pdfwidth=70%]
+
+Se puede cargar DOS-8D con el comando:
+
+[source]
+----
+CALL800
+----
+
+Ahora, se puede ver el contenido del disco actual con el comando `DIR`.
+
+Para ejecutar un programa, se ha de escribir `-` delante del nombre. Así, por ejemplo, para un programa llamado `DEFENDER.EXE`:
+
+[source]
+----
+-DEFENDER.EXE
+----
+
+<<<
+
 === PC XT
 
 El core https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] es una implementación adaptada y recortada del core http://flea.vieju.net/?page_id=20[Next186] para FleaFPGA y Papilio Pro.
@@ -2243,6 +2338,91 @@ Características del sistema implementado:
 Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición con MS-DOS instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta SD como disco. Existen distintas imágenes en https://www.zxuno.com/forum/viewforum.php?f=56[el foro de ZX-Uno].
 
 Si no estuviera ya, <<#_cores,instalar el core de PC XT>> en el ZXUNO+.
+
+<<<
+
+=== SAM Coupé
+
+El https://es.wikipedia.org/wiki/SAM_Coupé[SAM Coupé] fue un ordenador doméstico desarrollado y comercializado a partir de 1989 por Miles Gordon Technology, basado en el Sinclair ZX Spectrum.
+
+El core de ZX-Uno tiene las siguientes características:
+
+- Soporte VGA (con scanlines) y RGB / Video compuesto
+- Soporte de teclado completo
+- Sonido SAA1099
+- Carga desde dispositivos de audio externos
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Ctrl+Alt+F5`: NMI.
+- `Ctrl+Alt+Supr`: Soft reset.
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+
+<<<
+
+==== Guía básica
+
+[.text-center] 
+image:img/samcoupe.png[pdfwidth=70%]
+
+Sólo es posible cargar programas desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD""` (o pulsando `7` del teclado numérico, equivalente a pulsar `F7` en el teclado del SAM Coupé).
+
+[TIP]
+====
+En el repositorio SVN de ZX-Uno (https://guest:zxuno@svn.zxuno.com/svn.zxuno.com/svn/zxuno/software/SamCoupe/[aquí] - Usuario `guest`, contraseña `zxuno`) se pueden encontrar varios programas adaptados a fichero de cinta TZX.
+====
+
+<<<
+
+=== Sega Master System
+
+La https://es.wikipedia.org/wiki/Master_System[Master System] fue una consola de videojuegos de 8 bits basada en cartuchos y tarjetas, desarrollada por Sega. 
+
+El core de ZX-Uno está basado en el http://forum.gadgetfactory.net/index.php?/topic/1304-sega-master-system-on-the-papilio-plus/[trabajo original de Ben para Papilio Plus].
+
+Algunas de sus características son:
+
+- Soporte para VGA y Video compuesto o RGB, con sincro PAL (50Hz)
+- Soporte de joysticks
+- Emulación de joystick vía teclado
+- Lectura de archivos desde la tarjeta SD
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta SD, con la primera partición en formato FAT16, para almacenar los ficheros con las imágenes (extensión `.SMS` o `.BIN`) de los juegos que se desee cargar. Los ficheros pueden estar en subdirectorios.
+
+Si no estuviera ya, <<#_cores,instalar el core de Sega Master System>> en el ZXUNO+.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- Cursor o `Q`, `A`, `O`, `P` o el joystick 1: Controles de dirección del jugador 1
+- `Z`, `Windows` o el botón de joystick 1: Botón de disparo 1 del jugador 1
+- `X`, `Espacio` o el botón secundario de joystick 1: Botón de disparo 2 del jugador 1
+- `Pause`: Tecla de botón de pausa de Master System
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
+- `Ctrl+Alt+Backspace`: Hard reset.
+- `F12`: Reset y mostrar el selector de ficheros
+
+<<<
+
+==== Guía básica
+
+Pulsando `F12` se muestra el selector de archivos `SMS` o `BIN`. Para desplazarse por el menú y elegir el archivo a cargar, se utilizan las teclas de cursor y `Enter`.
+
+[.text-center] 
+image:img/sms.png[pdfwidth=70%]
 
 <<<
 
@@ -2323,7 +2503,7 @@ La versión para ZXUNO+ está desarrollada por avlixa, basada en el core de ZXDO
 
 Algunas de las características del core son:
 
-- Dos modos de vídeo seleccionables: RGB y VGA
+- Dos modos de vídeo seleccionables: RGB/Video Compuesto y VGA
 - Necesita Joystick(s) para funcionar
 - Modos de color incluyendo monocromo o fósforo verde/naranja
 - Soporte para modificar el tipo de letra (charset) de la ROM de VDC
@@ -2340,7 +2520,8 @@ Si no estuviera ya, <<#_cores,instalar el core de Videopac>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
+- `F2`: Alternar entre RGB y vídeo compuesto cuando no se está usando el modo VGA
 - `F3`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset.
 - Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar. 
