@@ -1,6 +1,6 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 0.12
+:revnumber: 0.13
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1624,6 +1624,60 @@ The http://retrowiki.es/viewtopic.php?f=31&t=200036835[lince] script makes all t
 
 <<<
 
+=== Chip-8
+
+https://en.wikipedia.org/wiki/CHIP-8[CHIP-8] is an interpreted programming language, developed by Joseph Weisbecker. It was initially used on the COSMAC VIP and Telmac 1800 8-bit microcomputers in the mid-1970s. Erik Bryntse later created another interpreter based on CHIP-8, called SCHIP, S-CHIP or Super-Chip which extended the CHIP-8.
+
+The ZXUNO+ core is based on an existing  https://bitbucket.org/csoren/fpga-chip8/[FPGA implementation] of the SuperChip.
+
+There are several sites like https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] ot https://github.com/mattmikolay/chip-8[Matthew Mikolay's CHIP-8] where you can obtain osftware for these machines.
+
+==== SD card format
+
+You can use a SD card with the first partition in FAT16 or FAT32 formata to store `BIN` or `CH8` ROM files to load with the core.
+
+==== Keyboard
+
+The CHIP-8 machine uses an hexadecimal keyboard as input. This is the key mapping:
+
+[align="center",width="25%",%header,cols=2*] 
+|===
+|Chip-8|PS/2
+|`1 2 3 C`|`1 2 3 4`
+|`4 5 6 D`|`Q W E R`
+|`7 8 9 E`|`A S D F`
+|`A 0 B F`|`Z X C V`
+|===
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Esc`: Show or hide configuration menu
+- `F11`: Hard Reset
+- `F12`: Reset
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` shows or hides the configuration menu. Use the cursor keys and `Enter` to select and choose menu options.
+
+[.text-center] 
+image:img/chip8uno.jpg[pdfwidth=70%]
+
+
+The following options are available:
+
+- Reset the core 
+- Change the core clock speed
+- Load a ROM file from the SD card
+- Enable or disable sound output
+- Help
+- Exit the menu
+
+<<<
+
 === ColecoVision
 
 https://en.wikipedia.org/wiki/ColecoVision[ColecoVision] is Coleco Industries' home video-game console that was released in August 1982.
@@ -1977,6 +2031,72 @@ You can use programs like <<#_audio_file_conversion,Audiotap>> with Commodore `T
 
 <<<
 
+=== Galaksija
+
+https://en.wikipedia.org/wiki/Galaksija_%28computer%29[Galaksija] (Galaxy in english) is a build-it-yourself computer designed by Voja Antonić. It was featured in the special edition Računari u vašoj kući (Computers in your home, written by Dejan Ristanović) magazine, published 1984 in Yugoslavia. 
+
+The ZX-Uno core is a revision of the http://galaksija.petnica.rs/[μGalaksija project], improved by azesmog, whom added the Galaksija Plus mode, and the ability to load programs from the SD card.
+
+ZX-Uno core features:
+
+- Only VGA output
+- Sound (optional)
+- Program loading from the SD card
+- Galaksija Clasic (minus) y Galaksija Plus modes
+
+==== SD card format
+
+You can use a SD card with the first partition in FAT16 format, where you can store program files, which you can get, for example at the https://retrospec.sgn.net/users/tomcat/yu/Galaksija_list.php[retrospec.sgn.net] web site.
+
+<<<
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `F1`: Normal speed
+- `F2`: 2x speed
+- `F3`: 4x speed
+- `F9`: Enable or disable sound
+- `Esc`: Freezes a BASIC or machine code execution. Pressing again the same key, resumes the execution
+- `Del`: Pauses a BASIC program execution while being pressed
+- `End`: BREAKs a BASIC program execution
+- `Shift.+M`: Enables plus mode in those programs that have the support (e.g. TETRIS.GTP)
+- `M`: Gets back to normal mode from plus mode
+- `F12`: Soft Reset
+- `Ctrl+Alt+F5`: NMI
+- `Ctrl+Alt+Supr`: Soft Reset
+- `Ctrl+Alt+F12`: Master Reset
+
+<<<
+
+==== Basic guide
+
+[.text-center] 
+image:img/galaksija.png[pdfwidth=70%]
+
+While in BASIC, you can enable the loading programs from the SD card with this command:
+
+[source,basic]
+----
+A=USR(&F000)
+----
+
+The, with commands like `CD <directory>` and `DIR` you can access the directory where there is the file to load. To load a file, you have to type the name, without the extension (e.f. for a file named `GAME.GTP` you have to type `GAME`). Once the program is loaded to RAM, you can start execution with `RUN`.
+
+The core starts up in classic Galaksija mode (minus), but you can start the Galaksija Plus mod typing:
+
+[source,basic]
+----
+A=USR(&E000)
+----
+
+You can check the available BASIC commands https://en.wikipedia.org/wiki/Galaksija_BASIC[at Wikipedia].
+
+<<<
+
 === Jupiter ACE
 
 The https://en.wikipedia.org/wiki/Jupiter_Ace[Jupiter ACE]  was a british micro computer produced by Jupiter Cantab in the early 1980s.
@@ -1988,7 +2108,7 @@ The ZX-Uno core has been developed by McLeod and enhanced by Azesmbog, and has, 
 
 ==== SD card format
 
-You can use a SD card with the first partition in FAT16 format, where you can store Jupiter ACE `.TAP` files, which you can get, for exampel at the https://www.jupiter-ace.co.uk/index.html[Jupiter ACE Archive] website.
+You can use a SD card with the first partition in FAT16 format, where you can store Jupiter ACE `.TAP` files, which you can get, for example at the https://www.jupiter-ace.co.uk/index.html[Jupiter ACE Archive] website.
 
 ==== Keyboard
 
@@ -2013,7 +2133,7 @@ Jupiter ACE `TAP` files are different from the ZX Spectrum ones, so, to use then
 
 To load tape files from the SD card, you have to acces first to SDOS typing
 
-[source]
+[source,basic]
 ----
 61440 call
 ----
@@ -2294,7 +2414,7 @@ image:img/oric.png[pdfwidth=70%]
 
 You can load and enable DOS-8D with the command:
 
-[source]
+[source,basic]
 ----
 CALL800
 ----
@@ -2419,60 +2539,6 @@ image:img/sms.png[pdfwidth=70%]
 
 <<<
 
-=== Chip-8
-
-https://en.wikipedia.org/wiki/CHIP-8[CHIP-8] is an interpreted programming language, developed by Joseph Weisbecker. It was initially used on the COSMAC VIP and Telmac 1800 8-bit microcomputers in the mid-1970s. Erik Bryntse later created another interpreter based on CHIP-8, called SCHIP, S-CHIP or Super-Chip which extended the CHIP-8.
-
-The ZXUNO+ core is based on an existing  https://bitbucket.org/csoren/fpga-chip8/[FPGA implementation] of the SuperChip.
-
-There are several sites like https://johnearnest.github.io/chip8Archive/[CHIP-8 Archive] ot https://github.com/mattmikolay/chip-8[Matthew Mikolay's CHIP-8] where you can obtain osftware for these machines.
-
-==== SD card format
-
-You can use a SD card with the first partition in FAT16 or FAT32 formata to store `BIN` or `CH8` ROM files to load with the core.
-
-==== Keyboard
-
-The CHIP-8 machine uses an hexadecimal keyboard as input. This is the key mapping:
-
-[align="center",width="25%",%header,cols=2*] 
-|===
-|Chip-8|PS/2
-|`1 2 3 C`|`1 2 3 4`
-|`4 5 6 D`|`Q W E R`
-|`7 8 9 E`|`A S D F`
-|`A 0 B F`|`Z X C V`
-|===
-
-===== Special keys and buttons
-
-While the core is running:
-
-- `Esc`: Show or hide configuration menu
-- `F11`: Hard Reset
-- `F12`: Reset
-
-<<<
-
-==== Basic Guide
-
-Pressing `Esc` shows or hides the configuration menu. Use the cursor keys and `Enter` to select and choose menu options.
-
-[.text-center] 
-image:img/chip8uno.jpg[pdfwidth=70%]
-
-
-The following options are available:
-
-- Reset the core 
-- Change the core clock speed
-- Load a ROM file from the SD card
-- Enable or disable sound output
-- Help
-- Exit the menu
-
-<<<
-
 === SmartROM
 
 https://github.com/Utodev/smartROM[SmartROM] is a kind of firmware that allows to loadi different ROMS for implementations of the ZX-Uno core in FPGA boards without flash memory, or where the flash memory cannot be used by the ZX-Uno core.
@@ -2488,7 +2554,6 @@ Finally, if your PS/2 keyboard is not in Spanish, you can copy the coresponding 
 See the <<#_cores,corresponding section>> for instructions of how to install the SmartROM core in ZXUNO+.
 
 <<<
-
 
 === Videopac
 
