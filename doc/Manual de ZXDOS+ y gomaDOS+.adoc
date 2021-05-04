@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.8
+:revnumber: 1.4.9
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1130,7 +1130,7 @@ En el caso de utilizarse también la tarjeta con el core de <<#_pc_xt,PC XT>>, *
 Tal y como se ha explicado en la parte de instalación, existe una serie de comandos que son exclusivos para ZXDOS+, y que se describen a continuación:
 
 - `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
-- `backzx2` o `backzxd`: Genera un fichero `FLASH.ZX2` o `FLASH.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
+- `backzx2` o `backzxd`: Genera un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
 - `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
 - `dmaplayw`: Reproduce un archivo de audio .WAV,  que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
 - `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
@@ -1143,7 +1143,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Sólo funciona correctamente en ZX-Uno y ZXDOS (no utilizar en ZXDOS+ o gomaDOS+). Se debe ejecutar desde una ROM en modo "root". 
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
-- `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH.ZX2` o `FLASH.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root". 
+- `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root". 
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
 
@@ -1327,9 +1327,9 @@ Si todo se ha hecho correctamente, al encender el ZXDOS+ se verá cómo esxdos d
 
 === Memoria Flash
 
-También es posible actualizar la memoria flash de la FPGA. Por el momento desde el menú de la BIOS sólo es posible utilizar imágenes de 16MiB. Para poder usar una imagen de 32MiB, se ha de usar el comando `UPGRZX2` o `UPGRZXD` de <<#_esxdos,esxdos>> y un fichero con el nombre `FLASH.ZX2` o `FLASH.ZXD`.
+También es posible actualizar la memoria flash de la FPGA. Por el momento desde el menú de la BIOS sólo es posible utilizar imágenes de 16MiB. Para poder usar una imagen de 32MiB, se ha de usar el comando `UPGRZX2` o `UPGRZXD` de <<#_esxdos,esxdos>> y un fichero con el nombre `FLASH_32.ZX2` o `FLASH_32.ZXD`.
 
-Copiar el archivo de imagen (de 16MiB) `FLASH.ZXD` en la raíz de la tarjeta microSD.
+Copiar el archivo de imagen (de 16MiB) `FLASH.ZXD` o `FLASH.ZX2` en la raíz de la tarjeta microSD.
 
 Iniciar el ZXDOS+ con la tarjeta insertada y pulsar F2 (`Caps Shift+1` en gomaDOS+) para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade flash from SD"__. En el diálogo que pregunta __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `FLASH...`, .
 

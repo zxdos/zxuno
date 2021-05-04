@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.8
+:revnumber: 1.4.9
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1126,7 +1126,7 @@ The esxdos manager shows file and directory entries in the order stored in the i
 As explained in the installation part, there are a series of commands that are exclusive to ZXDOS+:
 
 - `back16m`: Dumps to a `FLASH.ZX1` file, in the root directory of the microSD card, the contents of a 16 Meg SPI Flash memory. It must be run while using a "root" mode ROM. After finishing, it is necessary to execute the command `.ls` so that the cache is written to the card
-- `backzx2` or `backzxd`: Creates a `FLASH.ZX2` o `FLASH.ZXD` file, in the root directory of the microSD card, with the contents of a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.After finishing its execution, you must execute the command `.ls` to finish recording the cache on the microSD card. If not, the length of the file will be wrongly set to 0
+- `backzx2` or `backzxd`: Creates a `FLASH_32.ZX2` o `FLASH_32.ZXD` file, in the root directory of the microSD card, with the contents of a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.After finishing its execution, you must execute the command `.ls` to finish recording the cache on the microSD card. If not, the length of the file will be wrongly set to 0
 - `corebios`: To upddate simultaneously ZX Spectrum core and BIOS
 - `dmaplayw`: Plays .WAV file, which has to be 8 bits, unsigned and sampled at 15625 Hz
 - `esprst`: Resets the WiFi ESP8266(ESP-12) module
@@ -1139,7 +1139,7 @@ As explained in the installation part, there are a series of commands that are e
 - `romsback`: Dumps to a RomPack File named `ROMS.ZX1`, in the root directory of the microSD card, all ZX Spectrum core ROMS which are stored in SPI flash memory. It must be run while using a "root" mode ROM. Only works correctly on ZX-Uno and ZXDOS (do not use on ZXDOS+ or gomaDOS+).
 - `romsupgr`: Load from a RomPack filel named `ROMS.ZX1`, in the root directory of the microSD card, all ZX Spectrum core ROMS into SPI flash memory. It must be run while using a "root" mode ROM
 - `upgr16m`: Load the content of a `FLASH.ZX1` file, in the root directory of the microSD card, to a 16 Meg SPI Flash memory. It must be run while using a "root" mode ROM
-- `upgrzx2` or `upgrzxd`: Write the content of a `FLASH.ZX2` o `FLASH.ZXD` file, in the root directory of the microSD card, to a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.
+- `upgrzx2` or `upgrzxd`: Write the content of a `FLASH_32.ZX2` or `FLASH_32.ZXD` file, in the root directory of the microSD card, to a 32 Meg SPI Flash memory. It must be run while using a "root" mode ROM.
 - `zxuc`: Utility to configure al options of BIOS, which also can be stored in the microSD in configuration files that can be loaded later
 - `zxunocfg`: Configuration utillity for certain features of ZX-Uno such as timings, contention, keyboard type, CPU speed, video type or vertical frequency
 
@@ -1326,9 +1326,9 @@ If everything has been done correctly, when you turn on the ZXDOS+ you will see 
 
 === Flash Memory
 
-You also can update all the FPGA flash memory. At this moment, from the BIOS you can only use 16MiB image files. To use a 32MiB image, you must use <<#_esxdos,esxdos>> `UPGRZX2` or `UPGRZXD` command and a file named `FLASH.ZX2` or `FLASH.ZXD`.
+You also can update all the FPGA flash memory. At this moment, from the BIOS you can only use 16MiB image files. To use a 32MiB image, you must use <<#_esxdos,esxdos>> `UPGRZX2` or `UPGRZXD` command and a file named `FLASH_32.ZX2` or `FLASH_32.ZXD`.
 
-Copy the image file (16MiB) `FLASH.ZXD` to the root of the microSD card.
+Copy the image file (16MiB) `FLASH.ZXD` or `FLASH.ZX2` to the root of the microSD card.
 
 Turn on the ZXDOS+ and press the `F2` key (`Caps Shift+1` on gomaDOS+) during boot to access the BIOS setup. Select the menu `Upgrade` and then choos the option __"Upgrade flash from SD"__. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
 
