@@ -1,3 +1,10 @@
+; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
         include define.asm
         output  loader.bin
         org     $5ccb
