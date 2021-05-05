@@ -1,3 +1,31 @@
+; scroll.asm - an easteg egg showing the list of people who participated
+; in the crowdfunding of the ZX-Uno project through Verkami:
+;     https://www.verkami.com/projects/14074-zx-uno
+;
+; We put the nick that they agreed. Some of them decided to put their
+; complete names.
+;
+; Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, version 3.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see <https://www.gnu.org/licenses/>.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
         output  scroll.bin
         org     $5e6d
   display $6d35+string-music
