@@ -31,6 +31,11 @@ export PATH
 
 endif	# !ZXSDK
 
+-include $(ZXSDK)/conf.mk
+
+# Default values
+USE_SJASMPLUS_VERSION	?= z00m128
+
 ifeq ($(OS),Windows_NT)
 EXESUFFIX	:= .exe
 DLLSUFFIX	:= .dll

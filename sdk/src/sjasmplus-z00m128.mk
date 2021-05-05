@@ -7,11 +7,11 @@
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make [BUILD=<BUILD>] -w -C sjasmplus -f ../sjasmplus.mk
+#   make [BUILD=<BUILD>] -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk
 # Install / Uninstall:
-#   make [BUILD=<BUILD>] [prefix=<PREFIX>] -w -C sjasmplus -f ../sjasmplus.mk install | uninstall
+#   make [BUILD=<BUILD>] [prefix=<PREFIX>] -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk install | uninstall
 # Clean:
-#   make [BUILD=<BUILD>] -w -C sjasmplus -f ../sjasmplus.mk clean
+#   make [BUILD=<BUILD>] -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk clean
 #
 # where:
 #   <BUILD> - see included `common.mk'.
@@ -29,14 +29,6 @@ INSTALL_PROGRAM	?= $(INSTALL)
 
 BINS		= sjasmplus$(EXESUFFIX)
 
-ifeq ($(BUILD),mingw32)
-CMAKEFLAGS	:= -DCMAKE_TOOLCHAIN_FILE=../Toolchain-mingw32.cmake
-else ifeq ($(BUILD),mingw64)
-CMAKEFLAGS	:= -DCMAKE_TOOLCHAIN_FILE=../Toolchain-mingw64.cmake
-else
-CMAKEFLAGS	:=
-endif
-
 .PHONY: all
 all: $(foreach t,$(BINS),build/$(t))
 
@@ -44,16 +36,14 @@ build\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
-build/sjasmplus$(EXESUFFIX): | build/Makefile
-	$(MAKE) -w -C build
-
-build/Makefile: | build
-	cd $| && cmake $(CMAKEFLAGS) ..
+sjasmplus$(EXESUFFIX): | Makefile
+	$(MAKE) clean
+	$(MAKE)
 
 .PHONY: install
 install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
-$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): build/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
+$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $< $@
 
 .PHONY: uninstall
@@ -62,8 +52,7 @@ uninstall:
 
 .PHONY: clean
 clean:
-	rm -f $(foreach t,$(BINS),build/$(t))
+	$(MAKE) clean
 
 .PHONY: distclean
-distclean:
-	rm -rf build/*
+distclean: clean

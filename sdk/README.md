@@ -10,6 +10,7 @@ No one yet.
 
 This document is under [GNU FDL-1.3 or later](https://spdx.org/licenses/GFDL-1.3-or-later.html) license.  
 SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
+SJAsmPlus Z80 Assembler by aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
 z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.  
 LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.
 
@@ -71,12 +72,20 @@ Go to the project's root directory, enter `sdk` sub-directory and type one of th
 
 Command | Description
 ----|----
+`make configure` | Configure build with default values (on first call)
+`make configure <CFG_PARAMS>` | Configure build with explicit values
 `make` | Build and install all tools from sources
 `make <TARGET>` | Build and install only the TARGET from sources
 `make BUILD=<BUILD>` | Cross-build and install all tools from sources for Windows platform
 `make BUILD=<BUILD> <TARGET>` | Cross-build and install only the TARGET from sources for Windows platform
 
 where:
+
+`<CFG_PARAMS>` is a series of parameters of type `<CFG_VAR>=<VALUE>`.
+
+Value of `<CFG_VAR>` | Possible values | Description
+----|----|----
+`USE_SJASMPLUS_VERSION` | `sjasmplus`, `z00m128` | Version of SJAsmPlus Z80 Compiler to use. Default is `z00m128` (aprisobal).
 
 Value of `TARGET` | Origin | Description
 ----|----|----
@@ -194,12 +203,16 @@ Go to the project's root directory, enter `sdk` sub-directory and type one of th
 
 Command | Description
 ----|----
+`make configure` | Configure build with default values (on first call)
+`make configure <CFG_PARAMS>` | Configure build with explicit values
 `make` | **Quick setup** of all tools (download precompiled binaries and install them)
 `make <TARGET>` | **Qucik setup** of the TARGET only
 `make FORCEBUILD=1` | Build and install all tools from sources
 `make FORCEBUILD=1 <TARGET>` | Build and install only the TARGET from sources
 
 where:
+
+`<CFG_PARAMS>` is a series of parameters as described in [2.2](#22-build-tools).
 
 Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build from sources
 ----|----|----|----
@@ -280,6 +293,7 @@ These changes are actual for current invocation of command shell and all child p
 * [cmd](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd) - command interpreter in Windows
 * [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
+* [SJAsmPlus by aprisobal](https://github.com/z00m128/sjasmplus) - Z80 Assembler
 * [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [LodePNG](https://github.com/lvandeve/lodepng) - PNG encoder and decoder in C and C++
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
