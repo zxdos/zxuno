@@ -1,4 +1,4 @@
-; upgr32m.asm - write the content of a FLASH.ZX2 or FLASH.ZXD file, in
+; upgr32m.asm - write the content of a FLASH_32.ZX2 or FLASH_32.ZXD file, in
 ; the root directory of the microSD card, to a 32 Meg SPI Flash memory.
 ;
 ; It must be run while using a "root" mode ROM.
@@ -42,11 +42,11 @@
                 include zxuno.def
                 include esxdos.def
 
-        define  VERSION "0.1"
+        define  VERSION "0.1.1"
               IF zxdos=1
-        define  FLASH_FILE "FLASH.ZX2"
+        define  FLASH_FILE "FLASH_32.ZX2"
               ELSE
-        define  FLASH_FILE "FLASH.ZXD"
+        define  FLASH_FILE "FLASH_32.ZXD"
               ENDIF
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS

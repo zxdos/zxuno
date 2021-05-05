@@ -45,11 +45,11 @@
                 include zxuno.def
                 include esxdos.def
 
-        define  VERSION "0.1"
+        define  VERSION "0.1.1"
               IF zxdos=1
-        define  FLASH_FILE "FLASH.ZX2"
+        define  FLASH_FILE "FLASH_32.ZX2"
               ELSE
-        define  FLASH_FILE "FLASH.ZXD"
+        define  FLASH_FILE "FLASH_32.ZXD"
               ENDIF
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
