@@ -6,6 +6,8 @@
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
+# Configure:
+#   make configure [<CFG_PARAMS>]
 # Build:
 #   make [<FLAGS>] build | build-<TARGET>
 # Install:
@@ -17,6 +19,8 @@
 #   make [<FLAGS>] distclean | distclean-<TARGET>
 #
 # where:
+#   <CFG_PARAMS> is a set of parameters of type <CFG_VAR>=<VALUE>
+#     USE_SJASMPLUS_VERSION: sjasmplus, z00m128 (default).
 #   <FLAGS> are these flags:
 #     [BUILD=<BUILD>] [FORCEBUILD=<FB_FLAG>] [FORCECLEAN=<FC_FLAG>]
 # where values are:
@@ -62,8 +66,14 @@ $(TARGETS): | src
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install-$@
 
 .PHONY:\
- build install uninstall clean distclean\
+ configure build install uninstall clean distclean\
  $(foreach t,$(TARGETS),build-$(t) install-$(t) uninstall-$(t) clean-$(t) distclean-$(t))
+
+configure:
+	@echo '# This is a local configuration file for Make.' >conf.mk;\
+	echo '# This file is generated automatically by `make configure`.' >>conf.mk;\
+	echo 'USE_SJASMPLUS_VERSION=$(USE_SJASMPLUS_VERSION)' >>conf.mk
+
 build install uninstall clean distclean \
 $(foreach t,$(TARGETS),build-$(t) install-$(t) uninstall-$(t) clean-$(t) distclean-$(t)): | src
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) $@
