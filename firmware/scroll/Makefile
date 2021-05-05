@@ -40,7 +40,11 @@ fuente6x8.bin: fuente6x8.png | $(FUENTEABIN)
 	$(FUENTEABIN) $< $@
 
 $(FUENTEABIN): | tools
+ifeq ($(OS),Windows_NT)
+	$(MAKE) -w -C $| BUILD=mingw32
+else
 	$(MAKE) -w -C $|
+endif
 
 fondo.rcs: fondo.png fondo.atr
 	Png2Rcs $< $@ -a fondo.atr
