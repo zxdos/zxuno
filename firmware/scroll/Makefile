@@ -15,7 +15,14 @@ include ../../sdk/common.mk
 
 FUENTEABIN	= tools/build/FuenteABin$(EXESUFFIX)
 AS		= sjasmplus
-AFLAGS		= --nobanner -I../../sdk/include
+ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
+AFLAGS		= --nobanner
+else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
+AFLAGS		= --nologo
+else
+AFLAGS		=
+endif
+AFLAGS		+= -I../../sdk/include
 
 .PHONY: all
 all: scroll.tap
@@ -23,9 +30,11 @@ all: scroll.tap
 scroll.tap: scrolldesc.bin
 	GenTape $@ basic "SCROLL" 0 $<
 
-scrolldesc.bin: scrolldesc.asm scroll.bin scroll.bin.zx7b
-	echo ' define filesize $(shell stat -c %s scroll.bin)' >define.asm
+scrolldesc.bin: scrolldesc.asm define.asm scroll.bin.zx7b
 	$(AS) $(AFLAGS) --raw=$@ $<
+
+define.asm: scroll.bin
+	echo ' define filesize $(shell stat -c %s $<)' >$@
 
 scroll.bin.zx7b: scroll.bin
 	zx7b $< $@
@@ -56,7 +65,8 @@ install:;
 uninstall:;
 
 .PHONY: clean
-clean:
+clean: | tools
+	$(MAKE) -w -C $| $@
 	rm -f music.bin fuente6x8.bin fondo.rcs scroll.bin scroll.bin.zx7b define.asm scrolldesc.bin scroll.tap
 
 .PHONY: distclean
