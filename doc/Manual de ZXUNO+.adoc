@@ -1,10 +1,10 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 0.13
+:revnumber: 1.0.0
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 0.11
+:Revision: 1.0
 :description: Manual en castellano de ZXUNO+
 :keywords: Manual, Castellano, ZXUNO+
 :icons: font
@@ -1020,7 +1020,7 @@ Una vez descargado y descomprimido, se ha de copiar, a la raíz de la tarjeta, e
 
 Copiar `ESXMMC.BIN` (o `ESXMMC.ROM`, según la versión) en la raíz de la tarjeta SD.
 
-Iniciar el ZXUNO+ con la tarjeta insertada y pulsar F2 para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade esxdos for ZX"__. En el diálogo que aparece elegir __"SD file"__ y, cuando pregunte __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `ESXDOS...`, se grabará en la flash y avisará cuando esté actualizado.
+Iniciar el ZXUNO+ con la tarjeta insertada y pulsar F2 para acceder a la configuración de BIOS. Seleccionar el menú `Upgrade` y elegir __"Upgrade esxdos for ZX"__. En el diálogo que aparece elegir __"SD file"__ y, cuando pregunte __"Load from SD"__ contestar __"Yes"__ a la pregunta __"Are you sure?"__. Se leerá el contenido del fichero `ESXMMC...`, se grabará en la flash y avisará cuando esté actualizado.
 
 Realizar un Hard-reset, o apagar y encender.
 
@@ -1197,11 +1197,16 @@ Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o 
 
 El archivo debe llamarse `BEEB.MMB` y estar en el directorio raíz. Se puede crear con la utilidad `MMBImager` para Windows, disponible en https://guest:zxuno@svn.zxuno.com/svn/zxuno/cores/Acorn_electron/test1/varios/[el repositorio SVN de ZX-Uno] (Usuario `guest`, contraseña `zxuno`) o con la utilidades MMB/SSD en perl, disponibles en https://github.com/sweharris/MMB_Utils[GitHub].
 
-El fichero debe estar sin fragmentar en la SD. Se puede utilizar algún programa que defragmente ficheros o sistemas de archivos FAT, o bien usar el siguiente método:
+El fichero debe estar sin fragmentar en la SD. Se puede utilizar algún programa que defragmente ficheros o sistemas de archivos FAT (como https://www.ccleaner.com/defraggler[Defraggler para Windows]), o bien usar el siguiente método:
 
 . Formatear la primera partición de la SD en FAT16 o FAT32, pero *NO en formato rápido* (en Windows, desmarcar la casilla de formato rápido).
 . Copiar a la SD el archivo `BEEB.MMB`, de modo que este sea el *PRIMER archivo* que se copia a la SD.
 . Si se desea, ya se pueden copiar otros archivos a la SD para usar con otros cores, pero *SIEMPRE debe mantenerse el `BEEB.MMB`* como el primero que se copió a la SD.
+
+[TIP]
+====
+Como el fichero `MMB` se llama igual que el que utiliza el <<#_bbc_micro,core de BBC Micro>>, se puede usar otro core con acceso completo a la tarjeta SD (Como uno de ZX Spectrum con esxDOS), teniendo dos ficheros `MMB` distintos, y renombrar el de Acorn Electron como `BEEB.MMB` antes de ejecutar este core
+====
 
 ==== Teclado
  
@@ -1570,6 +1575,115 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 - Start
 - Cargar ROM (Load ROM)
 - Salir del menú (Exit)
+
+<<<
+
+=== BBC Micro
+
+El https://es.wikipedia.org/wiki/BBC_Micro[BBC Micro], fue uno de los primeros ordenadores domésticos, diseñado y construido por Acorn Computers para la British Broadcasting Corporation (BBC).
+
+El core para ZX-Uno ha sido creado por Quest y mejorado posteriormente por azesmbog y hoglet.
+
+Algunas de sus características son:
+
+- Salida vídeo RGB y VGA (con scanlines opcionales)
+- Soporte SD/MMC, vía archivos de imagen `.MMB`
+- Teclado PS/2 (mapeado a teclado inglés)
+- Soporte de joystick en el puerto 1 (Emula Joy analógico)
+- Implementación del chip de sonido sn76489 desde el https://github.com/wsoltys/pacedev[proyecto PACE] (Programmable Arcade Circuit Emulation)
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o FAT32. El core usa una ROM especial (MMFS en los cores más recientes, Smart SPI en los más antiguos) que lee de la SD un archivo `BEEB.MMB`, que contiene imágenes de disquete.
+
+El archivo debe llamarse exactamente `BEEB.MMB` y estar en el directorio raíz. Se puede crear con la utilidad `MMBImager` para Windows, disponible en https://guest:zxuno@svn.zxuno.com/svn/zxuno/cores/Acorn_electron/test1/varios/[el repositorio SVN de ZX-Uno] (Usuario `guest`, contraseña `zxuno`) o con la utilidades MMB/SSD en perl, disponibles en Github https://github.com/hoglet67/MMFS/tree/master/tools/mmb_utils[aquí] o https://github.com/sweharris/MMB_Utils[aquí].
+
+El fichero `MMB` debe estar sin fragmentar en la SD. Se puede utilizar algún programa que defragmente ficheros o sistemas de archivos FAT (como https://www.ccleaner.com/defraggler[Defraggler para Windows]), o bien usar el siguiente método:
+
+. Formatear la primera partición de la SD en FAT16 o FAT32, pero *NO en formato rápido* (en Windows, desmarcar la casilla de formato rápido).
+. Copiar a la SD el archivo `BEEB.MMB`, de modo que este sea el *PRIMER archivo* que se copia a la SD.
+. Si se desea, ya se pueden copiar otros archivos a la SD para usar con otros cores, pero *SIEMPRE debe mantenerse el `BEEB.MMB`* como el primero que se copió a la SD.
+
+[TIP]
+====
+Como el fichero `MMB` se llama igual que el que utiliza el <<#_acorn_electron,core de Acorn Electron>>, se puede usar otro core con acceso completo a la tarjeta SD (Como uno de ZX Spectrum con esxDOS), teniendo dos ficheros `MMB` distintos, y renombrar el de BBC Micro como `BEEB.MMB` antes de ejecutar este core
+====
+
+<<<
+
+==== Teclado
+
+[.text-center] 
+image:img/keyboardbbc.png[pdfwidth=80%]
+ 
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Bloq. Despl.`: Cambia de modo video compuesto a VGA y viceversa.
+- `-` (del teclado numérico): Activa o desactiva scanlines
+- `F12`: Reset
+- `Mayús+F12`: Soft Reset intentando cargar automáticamente el disco seleccionado en `BEEB.MMB`
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+
+<<<
+
+==== Guía básica
+
+[.text-center] 
+image:img/bbcmicro.png[pdfwidth=80%]
+
+Una vez introducida la SD en el ZX-UNO y arrancado el core, si el archivo de `BEEB.MMB` está correctamente creado, al arrancar debería aparecer:
+
+[source]
+----
+BBC Computer 32k
+Model B MMFS
+BASIC
+>
+----
+
+O bien, si es un core con Smart SPI
+
+[source]
+----
+BBC Computer 32k
+Smart SPI
+BASIC
+----
+
+Automáticamente se monta el disco 0 de la imagen, y se puede ver su contenido con el comando:
+
+[source]
+----
+*CAT
+----
+
+Para cargar, por ejemplo, un programa llamado `MENU`, y que esté en el disco usar el comando:
+
+[source]
+----
+*MENU
+----
+
+Para ver una lista de los discos disponibles en el fichero `BEEB.MMB`:
+
+[source]
+----
+*DCAT
+----
+
+Para insertar un disco concreto:
+
+[source]
+----
+*DIN numerodisco
+----
+
+[TIP]
+====
+Recordar, tras insertar un disco, que si este tiene arranque automático, se puede iniciar pulsando `Mayús+F12`.
+====
 
 <<<
 
@@ -2548,7 +2662,7 @@ image:img/sms.png[pdfwidth=70%]
 
 === SmartROM
 
-https://github.com/Utodev/smartROM[SmartROM] es un nuevo firmware para el core de Spectrum del ZX-UNO pensado para funcionar en placas FPGA que no tengan flash, o en las que no se pueda usar. Está basado en una versión del core de McLeod hay había hecho un core "sin flash", que contiene la ROM y ESXDOS dentro del propio core. El proyecto SmartROM incluye una versión ligeramente modificada de ese core, junto con un fichero que en la SD que permite cargar una ROM de Spectrum distinta y, además, cambiar algunos ajustes.
+https://github.com/Utodev/smartROM[SmartROM] es un nuevo firmware para el core de Spectrum del ZX-UNO pensado para funcionar en placas FPGA que no tengan flash, o en las que no se pueda usar. Está basado en una versión del core de McLeod hay había hecho un core "sin flash", que contiene la ROM y esxdos dentro del propio core. El proyecto SmartROM incluye una versión ligeramente modificada de ese core, junto con un fichero que en la SD que permite cargar una ROM de Spectrum distinta y, además, cambiar algunos ajustes.
 
 ==== Formato de Tarjeta SD
 
@@ -2559,6 +2673,62 @@ Además, la tarjeta debe tener <<#_esxdos,instalado esxdos 0.8.8>> y debe tener 
 Además, si se está utilizando un teclado PS/2 que no esté en español, se puede copiar el <<#_teclado,fichero de mapa de teclado>> correspondiente, renombrado como `KEYMAP.ZX1`.
 
 Si no estuviera ya, <<#_cores,instalar el core smartROM>> en el ZXUNO+.
+
+<<<
+
+=== Vectrex
+
+La https://es.wikipedia.org/wiki/Vectrex[Vectrex] era una consola con pantalla integrada y con los gráficos basados en vectores, en vez de píxeles.
+
+El core para ZX-Uno está basado en el https://sourceforge.net/projects/darfpga/files/Software%20VHDL/vectrex/[trabajo original de DarFPGA].
+
+Algunas de sus características son:
+
+- Soporte VGA
+- Menú OSD
+- Controles vía teclado y vía joystick
+- Tamaño máximo de la ROM a cargar: 8K
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta SD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con las imágenes (extensión `.BIN` o `.VEC`) de los juegos que se desee cargar. Los ficheros pueden estar en subdirectorios.
+
+En https://archive.org/details/GCE_Vectrex_TOSEC_2012_04_23[archive.org] se puede obtener software para Vectrex.
+
+Si no estuviera ya, <<#_cores,instalar el core de Vectrex>> en el ZXUNO+.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- Cursor o el joystick 1: Controles de dirección 
+- `Z`: Botón de disparo 1 
+- `X` o el botón principal de joystick: Botón de disparo 2 
+- `C` o el botón secundario de joystick: Botón de disparo 3
+- `V`: Botón de disparo 4
+- `Esc`: para mostrar u ocultar el menú.
+- `Ctrl+Alt+Backspace`: Hard reset.
+- `F12`: Reset
+
+<<<
+
+==== Guía básica
+
+Por defecto la Vectrex arranca con el juego que trae en memoria de fábrica (Mine Storm).
+
+[.text-center] 
+image:img/vectrex.png[pdfwidth=80%]
+
+Pulsando `Esc` se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Utilizar blanco neutro para los vectores (Disable bluish vectors)
+- Cargar un fichero desde la SD (Load ROM)
+- Salir del menú (Exit)
 
 <<<
 
