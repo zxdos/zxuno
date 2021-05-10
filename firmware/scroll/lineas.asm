@@ -1,3 +1,10 @@
+; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
       macro linea   src1, src2, src3, dst1, dst2, dst3
         ld      sp, $4005+$800*src1+$100*src3+$20*src2
         pop     hl

@@ -53,24 +53,23 @@ distclean: $(foreach t,$(TARGETS),distclean-$(t))
 
 _DoBuild:=1
 _UsePrecompiledOnWindows:=0
+_DoClean:=1
 
 ifeq ($(OS),Windows_NT)
 ifneq ($(FORCEBUILD),1)
 _DoBuild:=0
 _UsePrecompiledOnWindows:=1
 endif
-endif
-
-_DoClean:=1
-ifeq ($(OS),Windows_NT)
 ifneq ($(FORCECLEAN),1)
 _DoClean:=0
 endif
-endif
+endif	# $(OS)==Windows_NT
 
 # sjasmplus
 
 .PHONY: $(foreach a,build install uninstall clean distclean,$(a)-sjasmplus)
+
+ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
 
 ifeq ($(_DoBuild),1)
 
@@ -95,14 +94,14 @@ install-sjasmplus: | sjasmplus/.extracted sjasmplus.mk
 ifeq ($(_DoClean),1)
 
 uninstall-sjasmplus: | sjasmplus.mk
-	if test -f sjasmplus; then\
+	if test -d sjasmplus; then\
 		$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk prefix=$(shell realpath --relative-to=sjasmplus $(prefix)) uninstall;\
 	else\
 		rm -f $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX);\
 	fi
 
 clean-sjasmplus: | sjasmplus.mk
-	if test -f sjasmplus; then $(MAKE) -w -C sjasmplus -f ../sjasmplus.mk clean; fi
+	if test -d sjasmplus; then $(MAKE) -w -C sjasmplus -f ../sjasmplus.mk clean; fi
 
 else	#  !_DoClean
 
@@ -175,6 +174,108 @@ else	# !_DoClean
 distclean-sjasmplus:;
 
 endif	# !_DoClean
+
+else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
+
+ifeq ($(_DoBuild),1)
+
+build-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
+	$(MAKE) -w -C sjasmplus -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix))
+
+sjasmplus-z00m128/.extracted: sjasmplus-z00m128-src.tgz
+	echo '114807bf53d3526b4d1ae7d40f3050b9ee98220df74931efc1e6d1fe5aba3d02  $<' >$<.sha256
+	sha256sum -c $<.sha256
+	rm -f $<.sha256
+	rm -rf $(@D) sjasmplus-1.18.2
+	tar -xzf $<
+	mv sjasmplus-1.18.2 $(@D)
+	touch $@
+
+sjasmplus-z00m128-src.tgz:
+	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/v1.18.2.tar.gz -O $@
+
+install-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
+	$(MAKE) -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix)) install
+
+ifeq ($(_DoClean),1)
+
+uninstall-sjasmplus: | sjasmplus-z00m128.mk
+	if test -d sjasmplus-z00m128; then\
+		$(MAKE) -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix)) uninstall;\
+	else\
+		rm -f $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX);\
+	fi
+
+clean-sjasmplus: | sjasmplus-z00m128.mk
+	if test -d sjasmplus-z00m128; then $(MAKE) -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk clean; fi
+
+else	#  !_DoClean
+
+uninstall-sjasmplus clean-sjasmplus:;
+
+endif	#  !_DoClean
+endif	# _DoBuild
+
+ifeq ($(_UsePrecompiledOnWindows),1)
+
+build-sjasmplus: sjasmplus-z00m128/sjasmplus$(EXESUFFIX)
+
+sjasmplus-z00m128/sjasmplus$(EXESUFFIX): | sjasmplus-z00m128/.extracted
+
+SJASMPLUS_ARCHIVE		:= sjasmplus-z00m128-win32.zip
+SJASMPLUS_ARCHIVE_SHA256	:= 848bca2522d6febbf3e3c48c634731ecd61899166f5922ed15857e8063c3dc4b
+
+sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
+	echo '$(SJASMPLUS_ARCHIVE_SHA256)  $<' >$<.sha256
+	sha256sum -c $<.sha256
+	rm -f $<.sha256
+	rm -rf $(@D)
+	unzip -nq $<
+	mv sjasmplus-1.18.2.win $(@D)
+	touch $@
+
+sjasmplus-z00m128-win32.zip:
+	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.2/sjasmplus-1.18.2.win.zip -O $@
+
+install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
+
+$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus-z00m128/sjasmplus$(EXESUFFIX)
+	$(INSTALL_PROGRAM) $< $@
+
+ifeq ($(_DoClean),1)
+
+uninstall-sjasmplus:
+	rm -f $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
+
+clean-sjasmplus:
+	rm -rf sjasmplus-z00m128
+
+else	#  !_DoClean
+
+uninstall-sjasmplus clean-sjasmplus:;
+
+endif	#  !_DoClean
+endif	# _UsePrecompiledOnWindows
+
+ifeq ($(_DoClean),1)
+
+distclean-sjasmplus:
+	rm -rf sjasmplus-z00m128
+	rm -f\
+ sjasmplus-z00m128-src.tgz\
+ sjasmplus-z00m128-src.tgz.sha256\
+ sjasmplus-z00m128-win32.zip\
+ sjasmplus-z00m128-win32.zip.sha256
+
+else	# !_DoClean
+
+distclean-sjasmplus:;
+
+endif	# !_DoClean
+
+else
+$(error Unknown SJAsmPlus version selected: `$(USE_SJASMPLUS_VERSION)')
+endif
 
 # z88dk
 

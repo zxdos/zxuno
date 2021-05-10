@@ -1,3 +1,12 @@
+; string.asm
+;
+; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
 ; 01234567 01234567 01234567 01234567
 ; abcdefab cdefabcd efabcdef          0642
 ;    abcde fabcdefa bcdefabc def      3175
@@ -187,7 +196,7 @@
         dz      $48, 'Pagantipaco'
         dz      $48, 'Pedro Romero'
         dz      $48, 'Peter Robert Jones'
-        dz      $48, 'Peter \'Sweetlilmre\' Edwards'
+        dz      $48, "Peter 'Sweetlilmre' Edwards"
         dz      $48, 'peterthedark'
         dz      $48, 'princemegahit'
         dz      $48, 'Radastan'

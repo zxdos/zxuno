@@ -29,9 +29,6 @@ INSTALL_PROGRAM	?= $(INSTALL)
 
 BINS		= sjasmplus$(EXESUFFIX)
 
-.PHONY: all
-all: $(foreach t,$(BINS),build/$(t))
-
 ifeq ($(BUILD),mingw32)
 CMAKEFLAGS	:= -DCMAKE_TOOLCHAIN_FILE=../Toolchain-mingw32.cmake
 else ifeq ($(BUILD),mingw64)

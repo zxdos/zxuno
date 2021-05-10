@@ -1,5 +1,8 @@
+@rem SPDX-FileCopyrightText: 2016, 2021 Antonio Villena
+@rem
+@rem SPDX-License-Identifier: GPL-3.0-only
 @call ..\..\sdk\setenv.bat
-FuenteABin
+FuenteABin fuente6x8.png fuente6x8.bin
 Png2Rcs fondo.png fondo.rcs -a fondo.atr
 sjasmplus scroll.asm
 call :getfilesize scroll.bin
