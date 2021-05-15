@@ -1,10 +1,10 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 0.13
+:revnumber: 1.0.0
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 0.11
+:Revision: 1.0
 :description: English ZXUNO+ Manual
 :keywords: Manual, English, ZXUNO+
 :icons: font
@@ -1012,7 +1012,7 @@ Once downloaded and extracted, the contents of `BIN` and `SYS` directories have 
 
 Copy `ESXMMC.BIN` (or `ESXMMC.ROM`, depending on version) to the root of the SD card.
 
-Start ZXUNO+ with the card inserted and press `F2` to access BIOS setup. Select the `Upgrade` menu and choose __"Upgrade esxdos for ZX"__. In the dialog that appears choose __"SD file"__ and, when it asks __"Load from SD"__ answer __"Yes"__ to the question __"Are you sure?"__. The content of the file `ESXDOS...` will be read, written to the flash storage and you will be notified when it is updated.
+Start ZXUNO+ with the card inserted and press `F2` to access BIOS setup. Select the `Upgrade` menu and choose __"Upgrade esxdos for ZX"__. In the dialog that appears choose __"SD file"__ and, when it asks __"Load from SD"__ answer __"Yes"__ to the question __"Are you sure?"__. The content of the file `ESXMMC...` will be read, written to the flash storage and you will be notified when it is updated.
 
 Do a Hard-reset, or turn it off and on.
 
@@ -1169,16 +1169,21 @@ Main features:
 
 ==== SD card format
 
-And SD card with the first partition in FAT16 or FAT32 format is needed to load software from it. A special ROM inside the core (Smart SPI) 
+An SD card with the first partition in FAT16 or FAT32 format is needed to load software from it. A special ROM inside the core (Smart SPI) 
 reads a special file with disk images inside.
 
 The file must have the name `BEEB.MMB` and it has to be in the root directory. You can make one with `MMBImager` for Windows, available at https://guest:zxuno@svn.zxuno.com/svn/zxuno/cores/Acorn_electron/test1/varios/[ZX-Uno SVN Repository] (Usuario `guest`, contraseña `zxuno`) or with MMB/SSD Utils in perl, available at https://github.com/sweharris/MMB_Utils[GitHub].
 
-The file has to be whole across the SD (not fragmented). You can use some any program that can defrag files or FAT filesystems or use the following method:
+The file has to be whole across the SD (not fragmented). You can use a program that can defrag files or FAT filesystems (like https://www.ccleaner.com/defraggler[Defraggler for Windows]) or use the following method:
 
 . Format the first SD partition using FAT16 or FAT32, but *NOT with quick format* (when using Windos, uncheck that option).
 . Copy `BEEM.MB` making sure it is the *FIRST file* being copied.
 . If you want you can add any other file to the SD (e.g. for using with other cores), but keep *ALWAYS* `BEEB.MMB` as the first file copied to the card.
+
+[TIP]
+====
+Since the `MMB` file has the same name as the one for <<#_bbc_micro,BBC Micro core>>, you can use another core with full access to the SD card (like a a ZX Spectrum core with esxdos), with both `MMB` files with a different name, and then rename the one for Acorn Electron as `BEEB.MMB` before running this core
+====
 
 ==== Keyboard
 
@@ -1212,7 +1217,7 @@ Disc 0 from the image file is mounted automatically, and you can see it's conten
 *CAT
 ----
 
-To load, for example, the mene available with some image files available on internet, use the command:
+To load, for example, the menu available with some image files available on internet, use the command:
 
 [source]
 ----
@@ -1564,6 +1569,115 @@ The following options are available:
 
 <<<
 
+=== BBC Micro
+
+The https://en.wikipedia.org/wiki/BBC_Micro[BBC Micro], was a series of microcomputers and associated peripherals designed and built by the Acorn Computer company in the 1980s for the BBC Computer Literacy Project, operated by the British Broadcasting Corporation.
+
+The ZX-Uno core has been made by Quest y and enhanced after by azesmbog y hoglet.
+
+Some of its features are:
+
+- RGB and VGA (with optional scanlines) video output
+- SD/MMC support, using `.MMB` files
+- PS/2 keyboard
+- Joystick support on port 1 (Emulating an analog joy)
+- sn76489 sound chip implementation from https://github.com/wsoltys/pacedev[PACE project] (Programmable Arcade Circuit Emulation)
+
+==== SD card format
+
+An SD card with the first partition in FAT16 or FAT32 format is needed to load software. A special ROM inside the core (MMFS in the more recent core versions, Smart SPI on older ones) which reads a `BEEB.MMB` file with disk images inside.
+
+The file must have the name `BEEB.MMB` and it has to be in the root directory. You can make one with `MMBImager` for Windows, available at https://guest:zxuno@svn.zxuno.com/svn/zxuno/cores/Acorn_electron/test1/varios/[ZX-Uno SVN Repository] (Usuario `guest`, contraseña `zxuno`) or with MMB/SSD Utils in perl, available at Github https://github.com/sweharris/MMB_Utils[here] or https://github.com/sweharris/MMB_Utils[here].
+
+The file has to be whole across the SD (not fragmented). You can use a program that can defrag files or FAT filesystems (like https://www.ccleaner.com/defraggler[Defraggler for Windows]) or use the following method:
+
+. Format the first SD partition using FAT16 or FAT32, but *NOT with quick format* (when using Windos, uncheck that option).
+. Copy `BEEM.MB` making sure it is the *FIRST file* being copied.
+. If you want you can add any other file to the SD (e.g. for using with other cores), but keep *ALWAYS* `BEEB.MMB` as the first file copied to the card.
+
+[TIP]
+====
+Since the `MMB` file has the same name as the one for <<#_acorn_electron,Acorn Electron core>>, you can use another core with full access to the SD card (like a a ZX Spectrum core with esxdos), with both `MMB` files with a different name, and then rename the one for BBC Micro as `BEEB.MMB` before running this core
+====
+
+<<<
+
+==== Keyboard
+
+[.text-center] 
+image:img/keyboardbbc.png[pdfwidth=80%]
+ 
+===== Special keys and buttons
+
+While the core is running:
+
+- `Scroll Lock`: change between RGB and VGA video mode
+- `-` (numeric keyboard): Enable or disable scanlines in VGA mode
+- `F12`: Reset
+- `Shift+F12`: Soft Reset trying to load automatically the selected disk at `BEEB.MMB`
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+
+<<<
+
+==== Basic guide
+
+[.text-center] 
+image:img/bbcmicro.png[pdfwidth=80%]
+
+Once the SD card is inserted and the core running, if `BEEB.MMB` file was created correctly, on start, you should see:
+
+[source]
+----
+BBC Computer 32k
+Model B MMFS
+BASIC
+>
+----
+
+Or, for a core with Smart SPI
+
+[source]
+----
+BBC Computer 32k
+Smart SPI
+BASIC
+----
+
+Disc 0 from the image file is mounted automatically, and you can see it's contents using the command:
+
+[source]
+----
+*CAT
+----
+
+To load, for example, a file name `MENU`, use the command:
+
+[source]
+----
+*MENU
+----
+
+
+To show the list of available discs inside `BEEB.MMB` file:
+
+[source]
+----
+*DCAT
+----
+
+To load a particular virtual disc:
+
+[source]
+----
+*DIN discnum
+----
+
+[TIP]
+====
+Remember that, after inserting a disc, if it has automatic boot, you can start it pressing `Shift+F12`.
+====
+
+<<<
 === Camputers Lynx
 
 https://en.wikipedia.org/wiki/Camputers_Lynx[The Lynx] was an 8-bit British home computer that was first released in early 1983 as a 48kB model.Several models were available with 48kB, 96kB or 128 kB RAM. 
@@ -2552,6 +2666,63 @@ Also, you have to intall <<#_esxdos,instalado esxdos 0.8.8>> into the card, and 
 Finally, if your PS/2 keyboard is not in Spanish, you can copy the coresponding <<#_keyboard,keyboard map file>>, renamed as `KEYMAP.ZX1`.
 
 See the <<#_cores,corresponding section>> for instructions of how to install the SmartROM core in ZXUNO+.
+
+<<<
+
+=== Vectrex
+
+
+The https://en.wikipedia.org/wiki/Vectrex[Vectrex] was a vector display-based home video game console. It also had an integrated monochrome CRT monitor.
+
+The ZX-Uno core is based on https://sourceforge.net/projects/darfpga/files/Software%20VHDL/vectrex/[DarFPGA`s original work].
+
+Some of its features are:
+
+- VGA video out
+- OSD Menu
+- Joystick and keyboard controles
+- Maximum supported ROM size: 8K
+
+==== SD card format
+
+You need a SD card with the first partition in FAT16 or FAT32 format to store `BIN` or `VEC` files of the software to to load. Those files can be inside subdirectories.
+
+At https://archive.org/details/GCE_Vectrex_TOSEC_2012_04_23[archive.org] you can obtain software for Vectrex.
+
+See the <<#_cores,corresponding section>> for instructions of how to install the Vectrex core in ZXUNO+.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+During the core execution:
+
+- Cursor or joystick: Directional controls 
+- `Z`: Fire button 1 
+- `X` or main joystick button: Fire button 2 
+- `C` or secondary joystick button: Fire button 3
+- `V`: Fire button 4
+- `Esc`: Show or hide the menu
+- `Ctrl+Alt+Backspace`: Hard reset
+- `F12`: Reset
+
+<<<
+
+==== Basic guide
+
+By default, Vectrex starts with the built in game (Mine Storm).
+
+[.text-center] 
+image:img/vectrex.png[pdfwidth=80%]
+
+Pressing `Esc` shows or hides the configuration menu. Cursor keys and `Enter` are used to select and choose menu options.
+
+The following options are available:
+
+- Reset core
+- Disable bluish color and enable white color for vectors
+- Load ROM file from SD
+- Exit the menu
 
 <<<
 

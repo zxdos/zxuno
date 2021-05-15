@@ -1,10 +1,10 @@
 # Authors
 
-2021 Ivan Tatarinov <ivan-tat@ya.ru>
+2021 Antonio Villena
 
 # Contributors
 
-No one yet.
+2021 Ivan Tatarinov <ivan-tat@ya.ru> (Makefile)
 
 # License
 
