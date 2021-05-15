@@ -1,0 +1,20 @@
+; ay.def - definitions for AY-3-8910/8912/8913 and compatible PSG.
+;
+; SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: Unlicense
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef ay_def_included
+ define ay_def_included
+
+ay_freq_Spectrum:	equ     1773400
+ay_freq_Pentagon:	equ	1750000
+ay_freq_AmstradCPC: 	equ	1000000
+
+ay_ctrl_port:   equ     $fffd
+ay_data_port:   equ     $bffd
+
+ endif  ; !ay_def_included
