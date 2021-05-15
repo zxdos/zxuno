@@ -1,4 +1,4 @@
-; scroll.asm - an easteg egg showing the list of people who participated
+; scroll.asm - an easter egg showing the list of people who participated
 ; in the crowdfunding of the ZX-Uno project through Verkami:
 ;     https://www.verkami.com/projects/14074-zx-uno
 ;
