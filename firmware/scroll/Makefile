@@ -13,16 +13,18 @@
 
 include ../../sdk/common.mk
 
+INCLUDEDIR	= ../../sdk/include
 FUENTEABIN	= tools/build/FuenteABin$(EXESUFFIX)
 AS		= sjasmplus
 ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
+$(error Original SJAsmPlus is not supported for now - use version by `z00m128')
 AFLAGS		= --nobanner
 else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
 AFLAGS		= --nologo
 else
 AFLAGS		=
 endif
-AFLAGS		+= -I../../sdk/include
+AFLAGS		+= -I$(INCLUDEDIR)
 
 .PHONY: all
 all: scroll.tap
@@ -33,17 +35,24 @@ scroll.tap: scrolldesc.bin
 scrolldesc.bin: scrolldesc.asm define.asm scroll.bin.zx7b
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-define.asm: scroll.bin
+define.asm: scroll.bin scroll.exp
 	echo ' define filesize $(shell stat -c %s $<)' >$@
+	cat scroll.exp >>$@
 
 scroll.bin.zx7b: scroll.bin
 	zx7b $< $@
 
-scroll.bin: scroll.asm string.asm music.bin fuente6x8.bin lineas.asm fondo.rcs
-	$(AS) $(AFLAGS) --raw=$@ $<
-
-music.bin: playstc.bin music.stc
-	cat $^ >$@
+scroll.bin scroll.exp:\
+ scroll.asm\
+ string.asm\
+ $(INCLUDEDIR)/playstc.inc\
+ $(INCLUDEDIR)/filestc.def\
+ $(INCLUDEDIR)/ay.def\
+ music.stc\
+ fuente6x8.bin\
+ lineas.asm\
+ fondo.rcs
+	$(AS) $(AFLAGS) --raw=scroll.bin --exp=scroll.exp $<
 
 fuente6x8.bin: fuente6x8.png | $(FUENTEABIN)
 	$(FUENTEABIN) $< $@
@@ -67,7 +76,7 @@ uninstall:;
 .PHONY: clean
 clean: | tools
 	$(MAKE) -w -C $| $@
-	rm -f music.bin fuente6x8.bin fondo.rcs scroll.bin scroll.bin.zx7b define.asm scrolldesc.bin scroll.tap
+	rm -f fuente6x8.bin fondo.rcs scroll.bin scroll.exp scroll.bin.zx7b define.asm scrolldesc.bin scroll.tap
 
 .PHONY: distclean
 distclean:;

@@ -27,12 +27,26 @@
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
         output  scroll.bin
+
         org     $5e6d
-  display $6d35+string-music
+
+        export  filestart
+        export  start
+
+filestart
 string  include string.asm
-music   ld      (vari+2), ix
-        incbin  music.bin
+
+music   ld      (vari), ix
+        jp      PlaySTC.Play
+
+        define  PLAYSTC_AY_FREQUENCY ay_freq_Spectrum
+        define  PLAYSTC_USER_DEFINED_FILE 0
+        include playstc.inc
+
+track   incbin  music.stc
+
 fuente  incbin  fuente6x8.bin
+
 start   ld      hl, $c000
         ld      de, $c001
         ld      bc, $017f
@@ -116,9 +130,9 @@ start2  ld      a, (hl)
         jr      nc, start1
         ld      a, $c9
         ld      ($c006), a
-        ld      hl, $716f
-        call    music+7
-start3  call    $6e77
+        ld      hl, track
+        call    PlaySTC.Init
+start3  call    PlaySTC.Play
         ei
         halt
         di
@@ -141,7 +155,8 @@ start4  djnz    start4
         push    hl
         push    hl
         ld      sp, hl
-vari    ld      ix, string
+        ld      ix, string
+vari: equ $-2
         ld      hl, start3
         push    hl
         ld      hl, music
