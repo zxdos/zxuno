@@ -10,7 +10,7 @@
         include define.asm
         output  scrolldesc.bin
         org     $5ccb
-        ld      de, $5e6d+filesize-1
+        ld      de, filestart+filesize-1
         di
         defb    $de, $c0, $37, $0e, $8f, $39, $96
         jr      aqui
@@ -63,6 +63,6 @@ offend  rr      e
         lddr
 exitdz  pop     hl
         jr      nc, mainlo
-        jp      $7be4
+        jp      start
         incbin  scroll.bin.zx7b
 fin

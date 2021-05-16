@@ -1,10 +1,10 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.4.9
+:revnumber: 1.5.0
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.4
+:Revision: 1.5
 :description: English Manual of ZXDOS+ and gomaDOS+
 :keywords: Manual, English, ZXDOS+, gomaDOS+
 :icons: font
@@ -104,9 +104,40 @@ In order to take advantage of its full potential, you may also have:
 - A PS/2 mouse (USB to PS/2 adapter is needed when using a gomaDOS+)
 - An audio cable with a stereo 3.5 mm jack on one side, and both audio channels split into two mono outputs on the other side, if you want to use an audio player and/or recorder, like, for example, a Miniduino (<<#_miniduino,see more info later>>)., a PC/Mac/Raspberry PI, etc. or a https://en.wikipedia.org/wiki/Cassette_tape[cassette tape] recorder/player. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).
 
+<<<
+
 ==== microSD card formatting
 
-In order to use a microSD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_microsd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
+This table shows special requirements of the cores that use the microSD card.
+
+[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"] 
+|===
+|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
+|[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
+|[.small]#ZX Spectrum Kyp 48K#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using embedded esxdos#
+|[.small]#ZX Spectrum Kyp 128K#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using embedded esxdos#
+|[.small]#ZX Spectrum Next#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Can read esxdos ROM from microSD#
+|[.small]#MSX#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#Yes (FAT16)#|[.small]#Full#|[.small]#Not compatible with PC XT#
+|[.small]#Amstrad CPC 6128#|[.small]#No#|[.small]#Yes#|[.small]#No#|[.small]#0x0b (Win95 FAT-32)#|[.small]#No#|[.small]#Only `.DSK` image files in SD root#|[.small]#4G or less of size and 4096 cluster size#
+|[.small]#Acorn Atom#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Atom software archive#|
+|[.small]#Commodore 64#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only image files (`.D64` and `.TAP`)#|
+|[.small]#Phoenix#|||||||[.small]#Does not use the MicroSD#
+|[.small]#Pong#|||||||[.small]#Does not use the MicroSD#
+|[.small]#NES#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.NES`)#|
+|[.small]#Camputers Lynx#|||||||[.small]#Does not use the MicroSD#
+|[.small]#ColecoVision#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.ROM`)#|
+|[.small]#Atari 2600#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
+|[.small]#Videopac#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
+|[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Sólo imágenes (`.p`)#|
+|[.small]#PC XT#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#No#|[.small]#Full. Needs DOS installation#|[.small]#Not compatible with MSX#
+|[.small]#CHIP-8#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN` o `.CH8`)#|
+|===
+
+So, at this moment, in order to use all the cores, you will need, at least, three different cards:
+
+- A card with one FAT32 primary partition. Required by <<#_amstrad_cpc_6128,Amstrad CPC 6128>> core
+- A card with one FAT16 primary partition and MSX-DOS installed. Required by <<#_msx,MSX>> core (not compatible with <<#_pc_xt,PC XT>>)
+- A card with one FAT16 primary partition and DOS installed. Required by <<#_pc_xt,PC XT>> (not comopatible with <<#_msx,MSX>>)
 
 [NOTE]
 ====
@@ -118,15 +149,68 @@ FAT16 partitions have a maximum size of 4GB
 When naming a partition which will be used with esxdos, it's important not to use the same of any directory inside, or an access error will happen when trying to see the contents (e.g. do not name the partition as `BIN`, `SYS` or `TMP`).
 ====
 
+[TIP]
+====
+The Spectrum core can also have <<#_microsd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
+====
+
+<<<
+
 ===== Windows
 
-For simple configurations, and cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ].
+For simple configurations, and cards of the right size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ].
 
 For other, more complex, configurations, and depending on operating system version, you may use the command line tool `diskpart` or Windows Disk Managemente GUI.
 
+For example, to format a card, shown as disk 6 when executing `list disk` from `diskpart`, with only one FAT16 partition (if the card size is less than 4GB):
+
+[source]
+----
+select disk 6
+clean
+create part primary
+active
+format FS=FAT label=ZXDOSPLUS
+exit
+----
+
+To create two FAT 16 partitions (e.g. to use MSX core) and have the rest of space as another FAT32 partition (for cards more than 8GB in size):
+
+[source]
+----
+select disk 6
+clean
+create part primary size=4000
+set id  = 06
+active
+format fs=FAT label=ZXDOSPLUS quick
+create part primary size=4000
+format fs=FAT label=EXTRA quick
+create part primary
+format fs=FAT32 label=DATA quick
+exit
+----
+
+To create one FAT32 4GB partition (e.g. to use with Amstrad CPC 6128 core), and then have the rest of space available as a second FAT32 partition (for cards more than 4GB in size):
+
+[source]
+----
+select disk 6
+clean
+create part primary size=4000
+set id  = 0b
+active
+format fs=FAT32 label=ZXDOSPLUS unit=4k quick
+create part primary
+format fs=FAT32 label=EXTRA quick
+exit
+----
+
+<<<
+
 ===== MacOS
 
-For simple configurations, and cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ] or Disk Utility, which is included with the operating system.
+For simple configurations, and cards of the right size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ] or Disk Utility, which is included with the operating system.
 
 In other case, you should use the command line.
 
@@ -161,6 +245,8 @@ sudo newfs_msdos -F 16 -v EXTRA -b 4096 -c 128 /dev/rdisk6s2
 `diskutil` cannot create FAT16 partitions which are bigger than 2G and also format them. That's why, in this example, after only creating the partitions, we have to format them.
 ====
 
+<<<
+
 To create one FAT32 4GB partition (e.g. to use with Amstrad CPC 6128 core), and then have the rest of space available as a second FAT32 partition (for cards of more than 4GB):
 
 [source,shell]
@@ -169,11 +255,82 @@ diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32" EXTRA R
 ----
 
+[NOTE]
+====
+In this example, since the partition has a size of exactly 4G, MacOS will use a cluster size of 4096, which is the one neede for the Amstrad CPC 6128 core. For a smaller size, you may have to format again the first partition with some commands like these:
+
+[source,shell]
+----
+diskutil unmountDisk /dev/disk6
+newfs_msdos -F 32 -v ZXDOSPLUS -b 4096 /dev/rdisk6s1
+----
+====
+
+[TIP]
+====
+The Spotlight feature in MacOS you to search the items on the microSD card, creating a number of hidden files. You can disable the indexing with these commands (assuming that the SD partition is named `ZXDOSPLUS`):
+
+[source,shell]
+----
+mdutil -i off /Volumes/ZXDOSPLUS
+cd /Volumes/ZXDOSPLUS
+rm -rf .{,_.}{fseventsd,Spotlight-V*,Trashes}
+mkdir .fseventsd
+touch .fseventsd/no_log .metadata_never_index .Trashes
+cd -
+----
+====
+
 <<<
 
 ===== Linux
 
 There are a lot of tools for Linux that can format and/or partition a microSD card (`fdisk`, `parted`, `cfdisk`, `sfdisk` or `GParted` to name a few). It should only be taken into account that the partition scheme must always be MBR, and the first partition (the one that will be used for esxdos) must be primary partition.
+
+For example, to format a card, shown as `sdc`, with only one FAT16 partition (if the card size is less than 4GB):
+
+[source,shell]
+----
+sudo fdisk --compatibility=dos /dev/sdc
+----
+
+[source]
+----
+(...)
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (62-31116288, default 62):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (128-31116288, default 31116288):
+Created a new partition 1 of type 'Linux'
+
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 6
+Changed type of partition 'Linux' to 'FAT16'.
+
+Command (m for help): a
+Partition number (1, default 1): 1
+The bootable flag on partition 1 is enabled now.
+
+Command (m for help): p
+Disk /dev/sdc
+Disklabel type: dos
+Disk identifier
+
+Device     Boot   Start     End  Sectors   Size Id Type
+/dev/sdc1           62 31116288  31116288 984,9M 6 FAT16
+----
+
+Formatear la partición FAT (requiere permisos de root)
+
+[source,shell]
+----
+sudo mkfs.fat -F 16 -n ZXDOSPLUS -s 128 /dev/sdc1
+----
 
 <<<
 
@@ -753,30 +910,30 @@ The bootable flag on partition 2 is enabled now.
 
 Command (m for help): n
 Partition type
-   p   primary (1 primary, 0 extended, 3 free)
+   p   primary (2 primary, 0 extended, 2 free)
    e   extended (container for logical partitions)
 Select (default p): p
-Partition number (2-4, default 3): 3 
+Partition number (3-4, default 3): 3 
 First sector (45-31116288, default 45): 9829784     .
 Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 31116288
 
-Created a new partition 2 of type 'Linux'
+Created a new partition 3 of type 'Linux'
 
 Command (m for help): t
-Partition number (1,2, default 2): 2
+Partition number (1-4, default 3): 3
 Hex code (type L to list all codes): b
 
 Changed type of partition 'Linux' to 'W95 FAT32'.
 
 Command (m for help): p
-Disk /dev/sda
+Disk /dev/sdc
 Disklabel type: dos
 Disk identifier
 
 Device     Boot   Start     End  Sectors   Size Id Type
-/dev/sda1           128 2017152  2017025 984,9M 7f unknown
-/dev/sda2  *    2017280 7626751  7812504   2,7G  b FAT16
-/dev/sda3       9829784 7626751 21286504    21G  b W95 FAT32
+/dev/sdc1           128 2017152  2017025 984,9M 7f unknown
+/dev/sdc2  *    2017280 7626751  7812504   2,7G  b FAT16
+/dev/sdc3       9829784 7626751 21286504    21G  b W95 FAT32
 ----
 
 [start=2]

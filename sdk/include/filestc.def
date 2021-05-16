@@ -1,0 +1,62 @@
+; filestc.def - Sound Tracker .STC compiled file structure.
+;
+; Authors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; This is free and unencumbered software released into the public domain.
+; For more information, please refer to <http://unlicense.org>.
+;
+; SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: Unlicense
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef filestc_def_included
+ define filestc_def_included
+
+        struct  ST_Header       ; 27 bytes
+bDelay          ds      1
+wPositionsOff   ds      2
+wOrnamentsOff   ds      2
+wPatternsOff    ds      2
+sIdentifier     ds      18      ; "SONG BY ST COMPILE" by default
+wSize           ds      2       ; not reliable
+rSamples        ds      0       ; ST_Sample * SamplesCnt
+; Data          ds      ?
+        ends
+
+        struct  ST_Positions
+bCount          ds      1
+rPositions      ds      0       ; ST_PositionRec * bCount
+        ends
+
+        struct  ST_PositionRec
+bPNum           ds      1
+bTransposition  ds      1
+        ends
+
+ST_SampleLength:        equ     32      ; power of 2 !
+ST_SamplePosMask:       equ     (ST_SampleLength - 1)
+
+        struct  ST_Sample       ; 99 bytes
+bNumber         ds      1
+rData           ds      ST_SampleLength * 3
+bRepeatPosition ds      1
+bRepeatLength   ds      1
+        ends
+
+        struct  ST_Ornament     ; 33 bytes
+bNumber         ds      1
+rData           ds      ST_SampleLength
+        ends
+
+        struct  ST_Pattern      ; 7 bytes
+bNumber         ds      1
+wChannelAOff    ds      2
+wChannelBOff    ds      2
+wChannelCOff    ds      2
+        ends
+
+ endif  ; !filestc_def_included

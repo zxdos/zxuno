@@ -1,4 +1,4 @@
-; string.asm
+; string.asm - the credits for ZX-Uno project.
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
 ;
@@ -254,6 +254,13 @@
         dz      $48, 'Zolt{n B_sz_rm|nyi'
         dz      $48, 'Zup'
         dz      $48
+        dz      $47, '???and all involved'
+        dz      $47
+        dz      $48, 'Sinclair Research Ltd'
+        dz      $48, 'LodePNG project'
+        dz      $48, 'SJAsmPlus project'
+        dz      $48, 'Xilinx Inc?'
+        dz      $48
         dz      $43, 'The ZX>UNO core team are'
         dz      $43
         dz      $48, 'Superfo'
@@ -274,7 +281,7 @@
         dz      $44, 'Easter egg credits'
         dz      $44
         dz      $48, 'Coder: Antonio Villena'
-        dz      $48, 'Music: Yerzmyey'
+        dz      $48, 'Music: Michal B? > Yerzmyey'
         dz      $48, 'Graphics: Quest'
         dz      $48
         dz      $48
