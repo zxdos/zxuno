@@ -15,29 +15,18 @@
 
 include sdk/common.mk
 
-INSTALL_DIR=SD
+# Use uppercase for FAT filesystem
+prefix		?= SD
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/BIN
 
-UTILS_TARGETS=\
- BACK16M\
- BACKZX2\
- BACKZXD\
- BACKUP\
- CORCLEAN\
- COREBIOS\
- ROMSBACK\
- ROMSUPGR\
- UPGR16M\
- UPGRZX2\
- UPGRZXD\
- UPGRADE
-
-UTILS_INSTALL_DIR=$(INSTALL_DIR)/BIN
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL)
+RM		= rm -f
 
 SOFTWARE_TARGETS=\
  ESPRST\
  IWCONFIG
-
-SOFTWARE_INSTALL_DIR=$(INSTALL_DIR)/BIN
 
 .PHONY: all
 all:\
@@ -48,36 +37,27 @@ all:\
 # utils
 
 .PHONY: install-utils
-install-utils: $(foreach t,$(UTILS_TARGETS),$(UTILS_INSTALL_DIR)/$(t)) | utils
-
-# $1 = target
-define utils_rule =
-$$(UTILS_INSTALL_DIR)/$1: utils/build/$1 | utils
-	mv $$< $$@
-utils/build/$1: | utils
-	$$(MAKE) -w -C $$| build/$$(@F)
-endef
-
-$(foreach t,$(UTILS_TARGETS),$(eval $(call utils_rule,$(t))))
+install-utils: | utils
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) install
 
 .PHONY: clean-utils
 clean-utils: | utils
 	$(MAKE) -w -C $| clean
 
 .PHONY: uninstall-utils
-uninstall-utils: clean-utils
-	rm -f $(foreach t,$(UTILS_TARGETS),$(UTILS_INSTALL_DIR)/$(t))
+uninstall-utils: clean-utils | utils
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) uninstall
 
 # software
 
 .PHONY: install-software
-install-software: $(foreach t,$(SOFTWARE_TARGETS),$(SOFTWARE_INSTALL_DIR)/$(t))
+install-software: $(foreach t,$(SOFTWARE_TARGETS),$(DESTDIR)$(bindir)/$(t))
 
-$(SOFTWARE_INSTALL_DIR)/ESPRST: software/esprst/esprst
-	mv $< $@
+$(DESTDIR)$(bindir)/ESPRST: software/esprst/esprst
+	$(INSTALL) $< $@
 
-$(SOFTWARE_INSTALL_DIR)/IWCONFIG: software/iwconfig/IWCONFIG
-	mv $< $@
+$(DESTDIR)$(bindir)/IWCONFIG: software/iwconfig/IWCONFIG
+	$(INSTALL) $< $@
 
 software/esprst/esprst: | software/esprst
 	$(MAKE) -w -C $|
@@ -94,7 +74,7 @@ clean-software: |\
 
 .PHONY: uninstall-software
 uninstall-software: clean-software
-	rm -f $(foreach t,$(SOFTWARE_TARGETS),$(SOFTWARE_INSTALL_DIR)/$(t))
+	$(RM) $(foreach t,$(SOFTWARE_TARGETS),$(DESTDIR)$(bindir)/$(t))
 
 # clean
 
