@@ -177,11 +177,7 @@ keysc5  ld      a, h
         rlc     b
         jr      c, keyscn
         in      a, ($1f)
-      IF  zesarux=0
         or      a
-      ELSE
-        xor     a
-      ENDIF
         jr      z, nokemp
         ld      hl, kemp-1
 sikemp  inc     hl
@@ -566,9 +562,7 @@ star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         in      a, (c)
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         and     2
-      IF  zesarux=0
         jr      z, star21
-      ENDIF
         xor     a
     ENDIF
 
@@ -2220,7 +2214,7 @@ tosd0   push    af
         dec     b
         dec     b
         push    af
-        call    calbi1
+        call    p, calbi1
         pop     af
         ld      (tmpbu2+$1e), hl
         ld      b, a
@@ -4227,7 +4221,7 @@ wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version>1
+      IF  version>1 AND zesarux
         wreg    flash_spi, $21  ; envío sector erase
         ld      hl, (alto highb)
         out     (c), h
@@ -4243,7 +4237,7 @@ wrfls2  call    waits5
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version>1
+      IF  version>1 AND zesarux
         wreg    flash_spi, $12  ; envío page program
         ld      hl, (alto highb)
         out     (c), h
@@ -4722,13 +4716,15 @@ loadch
 rdflsh  ex      af, af'
         push    hl
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version>1
-        wreg    flash_spi, $13    ; envio flash_spi un 3, orden de lectura
+    IF  version>1
+        wreg    flash_spi, $13-$10*zesarux ; envio flash_spi un 3, orden de lectura
 highb   ld      a, 0
+      IF zesarux=0
         out     (c), a
-      ELSE
-        wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
       ENDIF
+    ELSE
+        wreg    flash_spi, 3    ; envio flash_spi un 3, orden de lectura
+    ENDIF
         pop     hl
         push    hl
         xor     a
