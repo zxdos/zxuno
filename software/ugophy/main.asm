@@ -92,5 +92,5 @@ player
     DISPLAY "Player ends: ", $
     ENT
 eop equ $
-    SAVEBIN "ugoph.bin", Start, $ - Start
-    SAVETAP "ugoph.tap", Start
+;   SAVEBIN "ugoph.bin", Start, $ - Start
+;   SAVETAP "ugoph.tap", Start

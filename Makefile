@@ -1,17 +1,27 @@
 # Updates content of SD directory.
 #
+# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
-# Build:
-#   make
+# Build the project:
+#   make [all]
+# Compile only:
+#   make build | build-<TARGET>
+# Install:
+#   make install | install-<TARGET>
+# Uninstall:
+#   make uninstall | uninstall-<TARGET>
 # Clean:
-#   make clean
+#   make clean | clean-<TARGET>
+#   make distclean | distclean-<TARGET>
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
+# where:
+#   <TARGET> is one of the values for `TARGETS' variable.
 
 include sdk/common.mk
 
@@ -20,65 +30,75 @@ prefix		?= SD
 exec_prefix	?= $(prefix)
 bindir		?= $(exec_prefix)/BIN
 
-INSTALL		?= install
-INSTALL_PROGRAM	?= $(INSTALL)
-RM		= rm -f
+TARGETS=\
+ utils\
+ software
 
-SOFTWARE_TARGETS=\
- ESPRST\
- IWCONFIG
+SOFTWARE_SUBDIRS=\
+ esprst\
+ iwconfig
 
 .PHONY: all
-all:\
- install-utils\
- install-software
+all: $(foreach t,$(TARGETS),install-$(t))
 	@echo 'Done.'
 
 # utils
+
+.PHONY: build-utils
+build-utils: | utils
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir))
 
 .PHONY: install-utils
 install-utils: | utils
 	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) install
 
+.PHONY: uninstall-utils
+uninstall-utils: | utils
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) uninstall
+
 .PHONY: clean-utils
 clean-utils: | utils
 	$(MAKE) -w -C $| clean
 
-.PHONY: uninstall-utils
-uninstall-utils: clean-utils | utils
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) uninstall
+.PHONY: distclean-utils
+distclean-utils: | utils
+	$(MAKE) -w -C $| distclean
 
 # software
 
+.PHONY: build-software
+build-software: | software
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir))
+
 .PHONY: install-software
-install-software: $(foreach t,$(SOFTWARE_TARGETS),$(DESTDIR)$(bindir)/$(t))
-
-$(DESTDIR)$(bindir)/ESPRST: software/esprst/esprst
-	$(INSTALL) $< $@
-
-$(DESTDIR)$(bindir)/IWCONFIG: software/iwconfig/IWCONFIG
-	$(INSTALL) $< $@
-
-software/esprst/esprst: | software/esprst
-	$(MAKE) -w -C $|
-
-software/iwconfig/IWCONFIG: | software/iwconfig
-	$(MAKE) -w -C $|
-
-.PHONY: clean-software
-clean-software: |\
- software/esprst\
- software/iwconfig
-	$(MAKE) -w -C software/esprst clean
-	$(MAKE) -w -C software/iwconfig clean
+install-software: | software
+	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) install; done
 
 .PHONY: uninstall-software
-uninstall-software: clean-software
-	$(RM) $(foreach t,$(SOFTWARE_TARGETS),$(DESTDIR)$(bindir)/$(t))
+uninstall-software: | software
+	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) uninstall; done
 
-# clean
+.PHONY: clean-software
+clean-software: | software
+	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) clean; done
+
+.PHONY: distclean-software
+distclean-software: | software
+	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) distclean; done
+
+# all
+
+.PHONY: build
+build: $(foreach t,$(TARGETS),build-$(t))
+
+.PHONY: install
+install: $(foreach t,$(TARGETS),install-$(t))
+
+.PHONY: uninstall
+uninstall: $(foreach t,$(TARGETS),uninstall-$(t))
 
 .PHONY: clean
-clean:\
- uninstall-utils\
- uninstall-software
+clean: $(foreach t,$(TARGETS),clean-$(t))
+
+.PHONY: distclean
+distclean: $(foreach t,$(TARGETS),distclean-$(t))

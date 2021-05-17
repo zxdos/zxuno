@@ -90,4 +90,4 @@ cmd_info    defb "AT+GMR", 13, 10, 0
 response_ok defb "OK", 13, 10, 0
 response_er defb "ready", 0
 
-    SAVEBIN "esprst", Start, $ - Start
+;   SAVEBIN "esprst", Start, $ - Start
