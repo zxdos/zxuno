@@ -33,14 +33,15 @@
                 ; definition of "zxdos" flag
                 include upgr32m.def
 
-              IF zxdos=1
-                output  UPGRZX2
-              ELSE
-                output  UPGRZXD
-              ENDIF
+;             IF zxdos=1
+;               output  UPGRZX2
+;             ELSE
+;               output  UPGRZXD
+;             ENDIF
 
                 include zxuno.def
                 include esxdos.def
+                include rst28.mac
 
         define  VERSION "0.1.1"
               IF zxdos=1

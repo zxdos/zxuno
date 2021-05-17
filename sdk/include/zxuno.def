@@ -43,9 +43,4 @@
         define  CMD55           $77
         define  CMD58           $7a
 
-              macro wreg  dir, dato
-                call    rst28
-                defb    dir, dato
-              endm
-
  endif  ; !zxuno_def_included
