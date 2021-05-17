@@ -1,10 +1,10 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.4.9
+:revnumber: 1.5.0
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.4
+:Revision: 1.5
 :description: Manual en castellano de ZXDOS+ y gomaDOS+
 :keywords: Manual, Castellano, ZXDOS+, gomaDOS+
 :icons: font
@@ -104,9 +104,40 @@ Para poder aprovechar todo su potencial, es útil tener también:
 - Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)
 - Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
 
+<<<
+
 ==== Formato de la tarjeta microSD
 
-Para poder utilizar una tarjeta microSD, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16 o FAT32 (según el caso, se recomienda uno u otro formato para compatibilidad con distintos cores de terceros). Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_microsd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+La siguiente tabla resume los requisitos particulares de los distintos cores que utilizan la tarjeta microSD.
+
+[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"] 
+|===
+|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
+|[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
+|[.small]#ZX Spectrum Kyp 48K#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos embebido#
+|[.small]#ZX Spectrum Kyp 128K#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos embebido#
+|[.small]#ZX Spectrum Next#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Puede utilizar esxdos en la microSD#
+|[.small]#MSX#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#Sí (FAT16)#|[.small]#Completo#|[.small]#No compatible con PC XT#
+|[.small]#Amstrad CPC 6128#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#0x0b (Win95 FAT-32)#|[.small]#No#|[.small]#Sólo imágenes `.DSK` de disco en la raíz de la SD#|[.small]#Partición de 4G o menos y cluster de 4096#
+|[.small]#Acorn Atom#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Atom software archive#|
+|[.small]#Commodore 64#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.D64` y `.TAP`)#|
+|[.small]#Phoenix#|||||||[.small]#No utiliza la MicroSD#
+|[.small]#Pong#|||||||[.small]#No utiliza la MicroSD#
+|[.small]#NES#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.NES`)#|
+|[.small]#Camputers Lynx#|||||||[.small]#No utiliza la MicroSD#
+|[.small]#ColecoVision#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
+|[.small]#Atari 2600#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
+|[.small]#Videopac#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
+|[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.p`)#|
+|[.small]#PC XT#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#No#|[.small]#Completo. Necesita tener instalado DOS#|[.small]#No compatible con MSX#
+|[.small]#CHIP-8#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN` o `.CH8`)#|
+|===
+
+Por tanto, en este momento, para poder utilizar todos los cores, sería necesario tener, al menos, tres tarjetas distintas:
+
+- Tarjeta con una partición primaria FAT32. Requerida por el core de <<#_amstrad_cpc_6128,Amstrad CPC 6128>>
+- Tarjeta con una partición primaria FAT16 y MSX-DOS instalado. Requerida por el core de <<#_msx,MSX>> (incompatible con <<#_pc_xt,PC XT>>)
+- Tarjeta con una partición primaria FAT16 y DOS instalado. Requerida por el core de <<#_pc_xt,PC XT>> (incompatible con <<#_msx,MSX>>)
 
 [NOTE]
 ====
@@ -118,11 +149,64 @@ El tamaño máximo de una partición FAT16 son 4GB
 A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos, es importante no utilizar el mismo que el de cualquiera de los directorios dentro, o se producirá un error de acceso a ese directorio. (Ej: No llamar a la partición `BIN`, `SYS` o `TMP`).
 ====
 
+[TIP]
+====
+Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_microsd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+====
+
+<<<
+
 ===== Windows
 
 Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
 
 Para otras configuraciones, y según la versión de sistema operativo de que se disponga, se podrá utilizar la herramienta de línea de comandos `diskpart` o bien la interfaz gráfica de administración de discos del sistema.
+
+Por ejemplo, en Windows, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 4GB o menos de tamaño), que figura como disco 6 al ejecutar `list disk` desde `diskpart`:
+
+[source]
+----
+select disk 6
+clean
+create part primary
+active
+format FS=FAT label=ZXDOSPLUS
+exit
+----
+
+Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el core de MSX) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 8GB):
+
+[source]
+----
+select disk 6
+clean
+create part primary size=4000
+set id  = 06
+active
+format fs=FAT label=ZXDOSPLUS quick
+create part primary size=4000
+format fs=FAT label=EXTRA quick
+create part primary
+format fs=FAT32 label=DATA quick
+exit
+----
+
+Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC 6128) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
+
+[source]
+----
+select disk 6
+clean
+create part primary size=4000
+set id  = 0b
+active
+format fs=FAT32 label=ZXDOSPLUS unit=4k quick
+create part primary
+format fs=FAT32 label=EXTRA quick
+exit
+----
+
+<<<
 
 ===== MacOS
 
@@ -161,6 +245,8 @@ sudo newfs_msdos -F 16 -v EXTRA -c 128 /dev/rdisk6s2
 El comando `diskutil` no permite crear particiones FAT16 de más de 2G de tamaño y formatearlas a la vez. Por eso, en el último caso, se crean primero las particiones y luego se formatean en FAT16.
 ====
 
+<<<
+
 Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC 6128) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
 
 [source,shell]
@@ -169,11 +255,82 @@ diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32" EXTRA R
 ----
 
+[NOTE]
+====
+Para el core de Amstrad CPC, en este caso, al elegir exactamente un tamaño de partición de 4G, MacOS elegirá por defecto un tamaño de cluster de 4096. Para un tamaño inferior, podría ser necesario volver a formatear la primera partición con unos comandos similares a estos:
+
+[source,shell]
+----
+diskutil unmountDisk /dev/disk6
+newfs_msdos -F 32 -v ZXDOSPLUS -b 4096 /dev/rdisk6s1
+----
+====
+
+[TIP]
+====
+Por defecto, MacOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la partición de la microSD se llama `ZXDOSPLUS`):
+
+[source,shell]
+----
+mdutil -i off /Volumes/ZXDOSPLUS
+cd /Volumes/ZXDOSPLUS
+rm -rf .{,_.}{fseventsd,Spotlight-V*,Trashes}
+mkdir .fseventsd
+touch .fseventsd/no_log .metadata_never_index .Trashes
+cd -
+----
+====
+
 <<<
 
 ===== Linux
 
 Existen multitud de herramientas en Linux que permiten formatear y particionar el contenido de una tarjeta microSD (como `fdisk`, `parted`, `cfdisk`, `sfdisk` o `GParted`). Sólo se ha de tener en cuenta que el esquema de particiones a utilizar siempre ha de ser MBR, y la primera partición (la que se utilizará para esxdos) ha de ser primaria.
+
+Por ejemplo, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 4GB o menos de tamaño), que figura como `sdc` en la lista de dispositivos:
+
+[source,shell]
+----
+sudo fdisk --compatibility=dos /dev/sdc
+----
+
+[source]
+----
+(...)
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (62-31116288, default 62):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (128-31116288, default 31116288):
+Created a new partition 1 of type 'Linux'
+
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 6
+Changed type of partition 'Linux' to 'FAT16'.
+
+Command (m for help): a
+Partition number (1, default 1): 1
+The bootable flag on partition 1 is enabled now.
+
+Command (m for help): p
+Disk /dev/sdc
+Disklabel type: dos
+Disk identifier
+
+Device     Boot   Start     End  Sectors   Size Id Type
+/dev/sdc1           62 31116288  31116288 984,9M 6 FAT16
+----
+
+Formatear la partición FAT (requiere permisos de root)
+
+[source,shell]
+----
+sudo mkfs.fat -F 16 -n ZXDOSPLUS -s 128 /dev/sdc1
+----
 
 <<<
 
@@ -758,30 +915,30 @@ The bootable flag on partition 2 is enabled now.
 
 Command (m for help): n
 Partition type
-   p   primary (1 primary, 0 extended, 3 free)
+   p   primary (2 primary, 0 extended, 2 free)
    e   extended (container for logical partitions)
 Select (default p): p
-Partition number (2-4, default 3): 3 
+Partition number (3-4, default 3): 3 
 First sector (45-31116288, default 45): 9829784     .
 Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 31116288
 
-Created a new partition 2 of type 'Linux'
+Created a new partition 3 of type 'Linux'
 
 Command (m for help): t
-Partition number (1,2, default 2): 2
+Partition number (1-4, default 3): 3
 Hex code (type L to list all codes): b
 
 Changed type of partition 'Linux' to 'W95 FAT32'.
 
 Command (m for help): p
-Disk /dev/sda
+Disk /dev/sdc
 Disklabel type: dos
 Disk identifier
 
 Device     Boot   Start     End  Sectors   Size Id Type
-/dev/sda1           128 2017152  2017025 984,9M 7f unknown
-/dev/sda2  *    2017280 7626751  7812504   2,7G  b FAT16
-/dev/sda3       9829784 7626751 21286504    21G  b W95 FAT32
+/dev/sdc1           128 2017152  2017025 984,9M 7f unknown
+/dev/sdc2  *    2017280 7626751  7812504   2,7G  b FAT16
+/dev/sdc3       9829784 7626751 21286504    21G  b W95 FAT32
 ----
 
 [start=2]
@@ -2040,7 +2197,7 @@ Para ficheros binarios, se debe usar `MLOAD` en vez de `LOAD`.
 
 [NOTE]
 ====
-El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta `TAP` de Lynx.
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta `TAP` de Lynx.
 ====
 
 Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Lynx2Wav>> con los ficheros `TAP` de cinta de Lynx. Los ficheros de audio obtenidos se pueden embeber a su vez dentro de ficheros TSX o TZX con herramientas como <<#_creación_de_ficheros_tzx_o_tsx_desde_otros_formatos,MakeTSX o RetroConverter>>.
@@ -3506,7 +3663,7 @@ En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunqu
 
 *Material necesario*:
 
-- Cable USB-Blaster. <<<#_preparación_del_cableado,preparado con las conexiones adecuadas para ZXDOS+>>
+- Cable USB-Blaster. <<#_preparación_del_cableado,preparado con las conexiones adecuadas para ZXDOS+>>
 - Imagen Flash y recovery para ZXDOS+ (LX25). Los mismos que se indican para Raspberry pi, del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial, en este enlace]
 
 *Software necesario*:
