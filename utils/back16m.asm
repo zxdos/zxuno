@@ -32,10 +32,11 @@
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
-                output  BACK16M
+;               output  BACK16M
 
                 include zxuno.def
                 include esxdos.def
+                include rst28.mac
 
         define  VERSION "0.1"
         define  FLASH_FILE "FLASH.ZX1"

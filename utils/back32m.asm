@@ -36,14 +36,15 @@
                 ; definition of "zxdos" flag
                 include back32m.def
 
-              IF zxdos=1
-                output  BACKZX2
-              ELSE
-                output  BACKZXD
-              ENDIF
+;             IF zxdos=1
+;               output  BACKZX2
+;             ELSE
+;               output  BACKZXD
+;             ENDIF
 
                 include zxuno.def
                 include esxdos.def
+                include rst28.mac
 
         define  VERSION "0.1.1"
               IF zxdos=1

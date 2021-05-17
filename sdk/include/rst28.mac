@@ -1,0 +1,18 @@
+; rst28.mac - macros definition for `rst28.inc'.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef rst28_mac_included
+ define rst28_mac_included
+
+ macro wreg dir, dato
+        call    rst28
+        defb    dir, dato
+ endm
+
+ endif  ; !rst28_mac_included
