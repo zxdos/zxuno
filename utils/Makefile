@@ -1,24 +1,48 @@
+# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make
+#   make [<TARGET> ...]
+# Install / Uninstall:
+#   make [prefix=<PREFIX>] install | uninstall
 # Clean:
-#   make clean
+#   make clean | distclean
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
+# where:
+#   <TARGET> is one of values for `BINS' variable prefixed with "build/"
+#     (see target `all' below).
+#   <PREFIX> is a prefix directory to install files into.
 
 include ../sdk/common.mk
 
-INC_DIR		= ../sdk/include
-BUILD_DIR	= build
-AS		= sjasmplus
-AFLAGS		= --nobanner -I$(INC_DIR)
+srcdir		= .
+# Use uppercase for FAT filesystem
+prefix		?= .
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/BIN
 
-TARGETS=\
+# Disable execution mode for FAT filesystem
+INSTALL		?= install
+INSTALL_PROGRAM	?= $(INSTALL) -m 644
+RM		= rm -f
+
+INCLUDEDIR	= ../sdk/include
+AS		= sjasmplus
+ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
+AFLAGS		= --nobanner
+else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
+AFLAGS		= --nologo
+else
+AFLAGS		=
+endif
+AFLAGS		+= -I$(INCLUDEDIR)
+
+BINS=\
  BACK16M\
  BACKZX2\
  BACKZXD\
@@ -32,131 +56,155 @@ TARGETS=\
  UPGRZXD\
  UPGRADE
 
-.PHONY: all
-all: $(foreach t,$(TARGETS),$(BUILD_DIR)/$(t))
+TMPS=\
+ back32m.def\
+ upgr32m.def
 
-$(BUILD_DIR):
+.PHONY: all
+all: $(foreach t,$(BINS),build/$(t))
+
+build\
+$(DESTDIR)$(bindir):
 	mkdir -p $@
 
-$(BUILD_DIR)/BACK16M: back16m.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/BACK16M: $(srcdir)/back16m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/BACKZX2: back32m.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/BACKZX2: $(srcdir)/back32m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	echo ' define zxdos 1' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f back32m.def
 
-$(BUILD_DIR)/BACKZXD: back32m.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/BACKZXD: $(srcdir)/back32m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	echo ' define zxdos 0' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f back32m.def
 
-$(BUILD_DIR)/BACKUP: backup.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/BACKUP: $(srcdir)/backup.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/CORCLEAN: corclean.asm\
- $(INC_DIR)/zxuno.def\
- Print.inc\
- rdflsh.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/CORCLEAN: $(srcdir)/corclean.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/COREBIOS: corebios.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/COREBIOS: $(srcdir)/corebios.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/ROMSBACK: romsback.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/ROMSBACK: $(srcdir)/romsback.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/ROMSUPGR: romsupgr.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- rdflsh.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/ROMSUPGR: $(srcdir)/romsupgr.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/UPGR16M: upgr16m.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/UPGR16M: $(srcdir)/upgr16m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(BUILD_DIR)/UPGRZX2: upgr32m.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/UPGRZX2: $(srcdir)/upgr32m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	echo ' define zxdos 1' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f upgr32m.def
 
-$(BUILD_DIR)/UPGRZXD: upgr32m.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/UPGRZXD: $(srcdir)/upgr32m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	echo ' define zxdos 0' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f upgr32m.def
 
-$(BUILD_DIR)/UPGRADE: upgrade.asm\
- $(INC_DIR)/zxuno.def\
- $(INC_DIR)/esxdos.def\
- Print.inc\
- wrflsh.inc\
- rst28.inc\
- | $(BUILD_DIR)
+build/UPGRADE: $(srcdir)/upgrade.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
 	$(AS) $(AFLAGS) --raw=$@ $<
+
+# $1 = target
+define install_bin_rule =
+$$(DESTDIR)$$(bindir)/$1: build/$1 | $$(DESTDIR)$$(bindir)
+	$$(INSTALL_PROGRAM) $$< $$@
+endef
+
+$(foreach t,$(BINS),$(eval $(call install_bin_rule,$(t))))
+
+.PHONY: install
+install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+
+.PHONY: uninstall
+uninstall:
+	$(RM) $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 .PHONY: clean
 clean:
-	rm -f back32m.def upgr32m.def
-	rm -f $(foreach t,$(TARGETS),$(BUILD_DIR)/$(t))
+	rm -f $(TMPS) $(foreach t,$(BINS),build/$(t))
+
+.PHONY: distclean
+distclean:
+	rm -f $(TMPS)
+	rm -rf build/*
