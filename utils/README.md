@@ -40,6 +40,7 @@ Files:
 * `UPGRADE`
 * `UPGRZX2`
 * `UPGRZXD`
+* `ZXUNOCFG`
 
 ## Build utilities
 
