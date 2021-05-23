@@ -54,7 +54,8 @@ BINS=\
  UPGR16M\
  UPGRZX2\
  UPGRZXD\
- UPGRADE
+ UPGRADE\
+ ZXUNOCFG
 
 TMPS=\
  back32m.def\
@@ -193,6 +194,11 @@ build/UPGRADE: $(srcdir)/upgrade.asm\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/ZXUNOCFG: $(srcdir)/zxunocfg.asm\
+ $(INCLUDEDIR)/zxuno.def\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
