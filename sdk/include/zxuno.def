@@ -11,6 +11,7 @@
  define zxuno_def_included
 
         define  zxuno_port      $fc3b
+        define  zxuno_data      $fd3b
         define  master_conf     0
         define  master_mapper   1
         define  flash_spi       2
