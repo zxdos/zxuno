@@ -6,6 +6,8 @@
 ; complete names.
 ;
 ; Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
+; Contributors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -21,12 +23,14 @@
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
 ;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
 ; SPDX-License-Identifier: GPL-3.0-only
 
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
-        output  scroll.bin
+;       output  scroll.bin
 
         org     $5e6d
 

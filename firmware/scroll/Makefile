@@ -13,6 +13,8 @@
 
 include ../../sdk/common.mk
 
+srcdir		= .
+
 INCLUDEDIR	= ../../sdk/include
 FUENTEABIN	= tools/build/FuenteABin$(EXESUFFIX)
 AS		= sjasmplus
@@ -27,35 +29,12 @@ endif
 AFLAGS		+= -I$(INCLUDEDIR)
 
 .PHONY: all
-all: scroll.tap
+all: $(srcdir)/scroll.tap
 
-scroll.tap: scrolldesc.bin
-	GenTape $@ basic "SCROLL" 0 $<
-
-scrolldesc.bin: scrolldesc.asm define.asm scroll.bin.zx7b
-	$(AS) $(AFLAGS) --raw=$@ $<
-
-define.asm: scroll.bin scroll.exp
-	echo ' define filesize $(shell stat -c %s $<)' >$@
-	cat scroll.exp >>$@
-
-scroll.bin.zx7b: scroll.bin
-	zx7b $< $@
-
-scroll.bin scroll.exp:\
- scroll.asm\
- string.asm\
- $(INCLUDEDIR)/playstc.inc\
- $(INCLUDEDIR)/filestc.def\
- $(INCLUDEDIR)/ay.def\
- music.stc\
- fuente6x8.bin\
- lineas.asm\
- fondo.rcs
-	$(AS) $(AFLAGS) --raw=scroll.bin --exp=scroll.exp $<
-
-fuente6x8.bin: fuente6x8.png | $(FUENTEABIN)
-	$(FUENTEABIN) $< $@
+$(srcdir)/fondo.rcs:\
+ $(srcdir)/fondo.png\
+ $(srcdir)/fondo.atr
+	Png2Rcs $< $@ -a $(srcdir)/fondo.atr
 
 $(FUENTEABIN): | tools
 ifeq ($(OS),Windows_NT)
@@ -64,8 +43,39 @@ else
 	$(MAKE) -w -C $|
 endif
 
-fondo.rcs: fondo.png fondo.atr
-	Png2Rcs $< $@ -a fondo.atr
+$(srcdir)/fuente6x8.bin: $(srcdir)/fuente6x8.png | $(FUENTEABIN)
+	$(FUENTEABIN) $< $@
+
+$(srcdir)/scroll.exp\
+$(srcdir)/scroll.bin: $(srcdir)/scroll.asm\
+ $(srcdir)/string.asm\
+ $(INCLUDEDIR)/playstc.inc\
+ $(INCLUDEDIR)/filestc.def\
+ $(INCLUDEDIR)/ay.def\
+ $(srcdir)/music.stc\
+ $(srcdir)/fuente6x8.bin\
+ $(srcdir)/lineas.asm\
+ $(srcdir)/fondo.rcs
+	$(AS) $(AFLAGS) --exp=scroll.exp --raw=scroll.bin $<
+
+$(srcdir)/scroll.bin.zx7b: $(srcdir)/scroll.bin
+	zx7b $< $@
+
+$(srcdir)/define.asm:\
+ $(srcdir)/scroll.bin\
+ $(srcdir)/scroll.exp
+	echo ' define filesize $(shell stat -c %s $<)' >$@
+	cat $(srcdir)/scroll.exp >>$@
+
+$(srcdir)/scrolldesc.bin:\
+ $(srcdir)/scrolldesc.asm\
+ $(srcdir)/define.asm\
+ $(INCLUDEDIR)/dzx7b.mac\
+ $(srcdir)/scroll.bin.zx7b
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+$(srcdir)/scroll.tap: $(srcdir)/scrolldesc.bin
+	GenTape $@ basic "SCROLL" 0 $<
 
 .PHONY: install
 install:;
@@ -76,7 +86,15 @@ uninstall:;
 .PHONY: clean
 clean: | tools
 	$(MAKE) -w -C $| $@
-	rm -f fuente6x8.bin fondo.rcs scroll.bin scroll.exp scroll.bin.zx7b define.asm scrolldesc.bin scroll.tap
+	rm -f\
+ $(srcdir)/fuente6x8.bin\
+ $(srcdir)/fondo.rcs\
+ $(srcdir)/scroll.bin\
+ $(srcdir)/scroll.exp\
+ $(srcdir)/scroll.bin.zx7b\
+ $(srcdir)/define.asm\
+ $(srcdir)/scrolldesc.bin\
+ $(srcdir)/scroll.tap
 
 .PHONY: distclean
-distclean:;
+distclean: clean

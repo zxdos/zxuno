@@ -30,7 +30,9 @@ bindir		?= $(exec_prefix)/bin
 INSTALL		?= install
 INSTALL_PROGRAM	?= $(INSTALL)
 
-BINS		= zx7b$(EXESUFFIX)
+BINS=\
+ zx7b$(EXESUFFIX)\
+ dzx7b$(EXESUFFIX)
 
 .PHONY: all
 all: $(foreach t,$(BINS),build/$(t))
@@ -42,10 +44,16 @@ $(DESTDIR)$(bindir):
 build/zx7b$(EXESUFFIX): $(srcdir)/zx7b.c Makefile | build
 	$(CC) $(CFLAGS) -o $@ $<
 
+build/dzx7b$(EXESUFFIX): $(srcdir)/dzx7b.c Makefile | build
+	$(CC) $(CFLAGS) -o $@ $<
+
 .PHONY: install
 install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 $(DESTDIR)$(bindir)/zx7b$(EXESUFFIX): build/zx7b$(EXESUFFIX) | $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) $< $@
+
+$(DESTDIR)$(bindir)/dzx7b$(EXESUFFIX): build/dzx7b$(EXESUFFIX) | $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $< $@
 
 .PHONY: uninstall
