@@ -259,6 +259,7 @@
         dz      $48, 'Sinclair Research Ltd'
         dz      $48, 'LodePNG project'
         dz      $48, 'SJAsmPlus project'
+        dz      $48, 'Einar Saukas'
         dz      $48, 'Xilinx Inc?'
         dz      $48
         dz      $43, 'The ZX>UNO core team are'
