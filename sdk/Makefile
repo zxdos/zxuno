@@ -33,23 +33,21 @@
 
 include common.mk
 
-prefix	?= .
+prefix	?= $(shell realpath --relative-base=. $(USE_PREFIX))
 
 ifeq ($(BUILD),mingw32)
-FORCEBUILD:=1
+ FORCEBUILD	= 1
 else ifeq ($(BUILD),mingw64)
-FORCEBUILD:=1
+ FORCEBUILD	= 1
 else
-BUILD:=
-FORCEBUILD:=0
+ BUILD		=
+ FORCEBUILD	= 0
 endif
 
 ifdef $(FORCECLEAN)
-ifneq ($(FORCECLEAN),1)
-FORCECLEAN:=0
-else
-FORCECLEAN:=0
-endif
+ ifneq ($(FORCECLEAN),1)
+  FORCECLEAN	= 0
+ endif
 endif
 
 export BUILD

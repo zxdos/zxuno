@@ -11,30 +11,44 @@
 ifndef ZXSDK
 
 ZXSDK		:= $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
-Z88DK		:= $(ZXSDK)/src/z88dk
-ZCCCFG		:= $(Z88DK)/lib/config
-PATH		:= $(ZXSDK)/bin:$(Z88DK)/bin:$(PATH)
 
 ifeq ($(OS),Windows_NT)
-PATH		:= $(ZXSDK)/lib:$(PATH)
+ ifeq ($(PROCESSOR_ARCHITECTURE),X86)
+  ZXSDK_PLATFORM= $(ZXSDK)/windows-x86
+ else ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+  ZXSDK_PLATFORM= $(ZXSDK)/windows-x86
+ else ifeq ($(PROCESSOR_ARCHITECTURE),EM64T)
+  ZXSDK_PLATFORM= $(ZXSDK)/windows-x86
+ else
+  $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
+  ZXSDK_PLATFORM= $(ZXSDK)/windows-x86
+ endif
+else
+ ZXSDK_PLATFORM	= $(ZXSDK)
+endif
+
+Z88DK		:= $(ZXSDK)/src/z88dk
+ZCCCFG		:= $(Z88DK)/lib/config
+PATH		:= $(ZXSDK_PLATFORM)/bin:$(Z88DK)/bin:$(PATH)
+
+ifeq ($(OS),Windows_NT)
+PATH		:= $(ZXSDK_PLATFORM)/lib:$(PATH)
 # Fix paths under Cygwin for z88dk on Windows
 ifeq ($(shell echo $$OSTYPE),cygwin)
 ZCCCFG		:= $(shell cygpath -m $(ZCCCFG))
 endif
 else	# $(OS)!=Windows_NT
-export LD_LIBRARY_PATH:=$(ZXSDK)/lib
+export LD_LIBRARY_PATH:=$(ZXSDK_PLATFORM)/lib
 endif	# $(OS)!=Windows_NT
 
 export ZXSDK
+export ZXSDK_PLATFORM
 export ZCCCFG
 export PATH
 
 endif	# !ZXSDK
 
 -include $(ZXSDK)/conf.mk
-
-# Default values
-USE_SJASMPLUS_VERSION	?= z00m128
 
 ifeq ($(OS),Windows_NT)
 EXESUFFIX	:= .exe
@@ -48,8 +62,14 @@ ifeq ($(BUILD),mingw32)
 CC		:= i686-w64-mingw32-gcc
 EXESUFFIX	:= .exe
 DLLSUFFIX	:= .dll
+USE_PREFIX	?= $(ZXSDK)/windows-x86
 else ifeq ($(BUILD),mingw64)
 CC		:= x86_64-w64-mingw32-gcc
 EXESUFFIX	:= .exe
 DLLSUFFIX	:= .dll
+USE_PREFIX	?= $(ZXSDK)/windows-x86_64
 endif
+
+# Default values
+USE_PREFIX		?= $(ZXSDK_PLATFORM)
+USE_SJASMPLUS_VERSION	?= z00m128
