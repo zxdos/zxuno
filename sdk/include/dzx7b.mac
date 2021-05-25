@@ -1,0 +1,71 @@
+; dzx7b.mac - ZX7 backwards decompressor macros.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2016, 2021 Antonio Villena
+;
+; SPDX-FileNotice: Based on LZ77/LZSS backwards decompressor by Einar Saukas.
+; SPDX-FileNotice: LZ77/LZSS backwards decompressor is Copyright (c) 2015 Einar Saukas. All rights reserved.
+; SPDX-FileNotice: LZ77/LZSS backwards decompressor is distributed under BSD 3-Clause license.
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef dzx7b_mac_included
+ define dzx7b_mac_included
+
+ macro dzx7b_getbit
+        ld      a, (hl)
+        dec     hl
+        adc     a, a
+        ret
+ endm
+
+; -----------------------------------------------------------------------------
+; ZX7 Backwards by Einar Saukas, Antonio Villena
+; Parameters:
+;   HL: source address (compressed data)
+;   DE: destination address (decompressing)
+; -----------------------------------------------------------------------------
+ macro dzx7b_body getbit_label
+        ld      bc, $8000
+        ld      a, b
+.copyby inc     c
+        ldd
+.mainlo add     a, a
+        call    z, getbit_label
+        jr      nc, .copyby
+        push    de
+        ld      d, c
+        defb    $30     ; 2 bytes opcode "jr nc, nn" but CY=1 and it is ignored with the following "add a, a"
+.lenval add     a, a    ; 1 byte opcode
+        call    z, getbit_label
+        rl      c
+        rl      b
+        add     a, a
+        call    z, getbit_label
+        jr      nc, .lenval
+        inc     c
+        jr      z, .exitdz
+        ld      e, (hl)
+        dec     hl
+        sll     e
+        jr      nc, .offend
+        ld      d, $10
+.nexbit add     a, a
+        call    z, getbit_label
+        rl      d
+        jr      nc, .nexbit
+        inc     d
+        srl     d
+.offend rr      e
+        ex      (sp), hl
+        ex      de, hl
+        adc     hl, de
+        lddr
+.exitdz pop     hl
+        jr      nc, .mainlo
+;       ret     ; use it in source code to jump outside
+ endm
+
+ endif  ; !dzx7b_mac_included
