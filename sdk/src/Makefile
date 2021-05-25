@@ -29,7 +29,7 @@
 
 include ../common.mk
 
-prefix		?= ..
+prefix		?= $(shell realpath --relative-base=. $(USE_PREFIX))
 exec_prefix	?= $(prefix)
 bindir		?= $(exec_prefix)/bin
 
@@ -51,23 +51,26 @@ uninstall: $(foreach t,$(TARGETS),uninstall-$(t))
 clean: $(foreach t,$(TARGETS),clean-$(t))
 distclean: $(foreach t,$(TARGETS),distclean-$(t))
 
-_DoBuild:=1
-_UsePrecompiledOnWindows:=0
-_DoClean:=1
+_DoBuild			= 1
+_UsePrecompiledOnWindows	= 0
+_DoClean			= 1
 
 ifeq ($(OS),Windows_NT)
-ifneq ($(FORCEBUILD),1)
-_DoBuild:=0
-_UsePrecompiledOnWindows:=1
-endif
-ifneq ($(FORCECLEAN),1)
-_DoClean:=0
-endif
+ ifneq ($(FORCEBUILD),1)
+  _DoBuild			= 0
+  _UsePrecompiledOnWindows	= 1
+ endif
+ ifneq ($(FORCECLEAN),1)
+  _DoClean			= 0
+ endif
 endif	# $(OS)==Windows_NT
 
 # sjasmplus
 
 .PHONY: $(foreach a,build install uninstall clean distclean,$(a)-sjasmplus)
+
+$(DESTDIR)$(bindir):
+	mkdir -p $@
 
 ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
 
@@ -140,7 +143,7 @@ sjasmplus-win64.7z:
 
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
-$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus/sjasmplus$(EXESUFFIX)
+$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $< $@
 
 ifeq ($(_DoClean),1)
@@ -239,7 +242,7 @@ sjasmplus-z00m128-win32.zip:
 
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
-$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus-z00m128/sjasmplus$(EXESUFFIX)
+$(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus-z00m128/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $< $@
 
 ifeq ($(_DoClean),1)

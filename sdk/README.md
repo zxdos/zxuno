@@ -24,6 +24,7 @@ Directory | Description
 `include` | Header files (`.def`, `.h` etc.) to be included in other sources (assembler, C, etc.).
 `lib` | Libraries, needed for executables (mostly in `bin` directory) to function properly.
 `src` | The source code of local and downloadable tools. See Makefiles for details.
+`windows-x86` | Compiled binaries of tools and libraries for Windows x86 (32 bit) platform.
 
 ## 1.1. Copyright and licensing information for files
 
@@ -95,12 +96,13 @@ Value of `TARGET` | Origin | Description
 `zx7b` | `src/zx7b` | zx7b
 `tools` | `src/tools` | tools
 
-Value of `BUILD` | Target system
+Value of `BUILD` | Target directory | Target system
 ----|----
-`mingw32` | Windows with i686 architecture (32-bits)
-`mingw64` | Windows with AMD64 architecture (64-bits)
+`mingw32` | `windows-x86` | Windows with i686 architecture (32-bits)
+`mingw64` | `windows-x86_64` | Windows with AMD64 architecture (64-bits)
 
-Compiled binaries are installed into `bin` sub-directory.
+Compiled binaries are installed into `bin` sub-directory of target directory.
+Compiled libraries are installed into `lib` sub-directory of target directory.
 
 Example:
 
@@ -111,7 +113,7 @@ make BUILD=mingw64 tools
 Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
 
 ```bash
-strip bin/*.exe
+strip windows-x86/bin/*.exe
 ```
 
 For more options see [`Makefile`](Makefile).
@@ -225,7 +227,7 @@ Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build f
 Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
 
 ```bash
-strip bin/*.exe
+strip windows-x86/bin/*.exe
 ```
 
 For more options see [`Makefile`](Makefile).

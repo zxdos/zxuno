@@ -26,6 +26,7 @@ bindir		?= $(exec_prefix)/bin
 
 INSTALL		?= install
 INSTALL_PROGRAM	?= $(INSTALL)
+RM		?= rm -f
 
 BINS		= sjasmplus$(EXESUFFIX)
 
@@ -36,7 +37,7 @@ build\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
-sjasmplus$(EXESUFFIX): | Makefile
+$(srcdir)/sjasmplus$(EXESUFFIX): | Makefile
 	$(MAKE) clean
 	$(MAKE)
 
@@ -48,7 +49,7 @@ $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus$(EXESUFFIX) | $(DESTDIR)$(b
 
 .PHONY: uninstall
 uninstall:
-	rm -f $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+	$(RM) $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 .PHONY: clean
 clean:

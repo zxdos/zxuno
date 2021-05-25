@@ -6,6 +6,6 @@ SPDX-FileChecksum: SHA1: 1c1d766371864e10bfb5c95fa57d7598e8a6bf89
 
 SPDX-FileCopyrightText: Copyright (c) 2015 Einar Saukas. All rights reserved.
 
-SPDX-License-Identifier: BSD-3-clause
+SPDX-License-Identifier: BSD-3-Clause
 
 SPDX-FileComment: dzx7b version 1.0 (2015) - LZ77/LZSS backwards decompressor.
