@@ -414,8 +414,7 @@ CheckOptionTail
                 inc     hl
                 cp      " "
                 ret     z
-                inc     sp
-                inc     sp
+                pop     hl      ; not used
                 jr      ParseParam.BadOption
 
 ;------------------------------------------------------
