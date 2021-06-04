@@ -34,19 +34,15 @@ TARGETS=\
  utils\
  software
 
-SOFTWARE_SUBDIRS=\
- esprst\
- iwconfig
-
 .PHONY: all
-all: $(foreach t,$(TARGETS),install-$(t))
+all: install
 	@echo 'Done.'
 
 # utils
 
 .PHONY: build-utils
 build-utils: | utils
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir))
+	$(MAKE) -w -C $|
 
 .PHONY: install-utils
 install-utils: | utils
@@ -68,23 +64,23 @@ distclean-utils: | utils
 
 .PHONY: build-software
 build-software: | software
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir))
+	$(MAKE) -w -C $|
 
 .PHONY: install-software
 install-software: | software
-	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) install; done
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) install
 
 .PHONY: uninstall-software
 uninstall-software: | software
-	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) uninstall; done
+	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) uninstall
 
 .PHONY: clean-software
 clean-software: | software
-	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) clean; done
+	$(MAKE) -w -C $| clean
 
 .PHONY: distclean-software
 distclean-software: | software
-	for d in $(SOFTWARE_SUBDIRS); do d=$|/$$d; $(MAKE) -w -C $$d bindir=$$(realpath --relative-to=$$d $(bindir)) distclean; done
+	$(MAKE) -w -C $| distclean
 
 # all
 
