@@ -25,10 +25,9 @@ include ../sdk/common.mk
 
 # Use uppercase for FAT filesystem
 prefix		?= .
-exec_prefix	?= $(prefix)
-bindir		?= $(exec_prefix)/BIN
 
 SUBDIRS=\
+ esxdos\
  esprst\
  iwconfig
 
@@ -49,7 +48,7 @@ $(foreach d,$(SUBDIRS),$(eval $(call build_rule,$(d))))
 
 define install_rule=
 install-$1: | $1
-	$$(MAKE) -w -C $$| bindir=$$(shell realpath --relative-to=$$| $$(bindir)) install
+	$$(MAKE) -w -C $$| prefix=$$(shell realpath --relative-to=$$| $$(prefix)) install
 endef
 
 $(foreach d,$(SUBDIRS),$(eval $(call install_rule,$(d))))
@@ -58,7 +57,7 @@ $(foreach d,$(SUBDIRS),$(eval $(call install_rule,$(d))))
 
 define uninstall_rule=
 uninstall-$1: | $1
-	$$(MAKE) -w -C $$| bindir=$$(shell realpath --relative-to=$$| $$(bindir)) uninstall
+	$$(MAKE) -w -C $$| prefix=$$(shell realpath --relative-to=$$| $$(prefix)) uninstall
 endef
 
 $(foreach d,$(SUBDIRS),$(eval $(call uninstall_rule,$(d))))

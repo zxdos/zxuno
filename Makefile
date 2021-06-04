@@ -27,8 +27,6 @@ include sdk/common.mk
 
 # Use uppercase for FAT filesystem
 prefix		?= SD
-exec_prefix	?= $(prefix)
-bindir		?= $(exec_prefix)/BIN
 
 TARGETS=\
  utils\
@@ -46,11 +44,11 @@ build-utils: | utils
 
 .PHONY: install-utils
 install-utils: | utils
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) install
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
 
 .PHONY: uninstall-utils
 uninstall-utils: | utils
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) uninstall
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 .PHONY: clean-utils
 clean-utils: | utils
@@ -68,11 +66,11 @@ build-software: | software
 
 .PHONY: install-software
 install-software: | software
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) install
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
 
 .PHONY: uninstall-software
 uninstall-software: | software
-	$(MAKE) -w -C $| bindir=$(shell realpath --relative-to=$| $(bindir)) uninstall
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 .PHONY: clean-software
 clean-software: | software
