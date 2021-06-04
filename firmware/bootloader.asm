@@ -1,4 +1,4 @@
-; firmware.asm
+; bootloader.asm
 ;
 ; Copyright (C) 2016-2021 Antonio Villena
 ; Contributors:

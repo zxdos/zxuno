@@ -97,7 +97,7 @@ Value of `TARGET` | Origin | Description
 `tools` | `src/tools` | tools
 
 Value of `BUILD` | Target directory | Target system
-----|----
+----|----|----
 `mingw32` | `windows-x86` | Windows with i686 architecture (32-bits)
 `mingw64` | `windows-x86_64` | Windows with AMD64 architecture (64-bits)
 
