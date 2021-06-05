@@ -69,6 +69,10 @@ endif	# $(OS)==Windows_NT
 
 .PHONY: $(foreach a,build install uninstall clean distclean,$(a)-sjasmplus)
 
+.downloads\
+.downloads/sjasmplus\
+.downloads/sjasmplus-z00m128\
+.downloads/z88dk\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
@@ -76,20 +80,34 @@ ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
 
 ifeq ($(_DoBuild),1)
 
+SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/20190306.1.tar.gz
+SJASMPLUS_ARCHIVE_SHA256	= f3f6d28af19880ed2cb427b6b427e9bd42371929c7d263dac840fb71de1302d6
+SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-20190306.1
+
 build-sjasmplus: | sjasmplus/.extracted sjasmplus.mk
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk prefix=$(shell realpath --relative-to=sjasmplus $(prefix))
 
-sjasmplus/.extracted: sjasmplus-src.tgz
-	echo 'f3f6d28af19880ed2cb427b6b427e9bd42371929c7d263dac840fb71de1302d6  $<' >$<.sha256
+sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
+	echo '$(SJASMPLUS_SHA256)  $<' >$<.sha256
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
-	rm -rf $(@D) sjasmplus-20190306.1
+	rm -rf $(@D)
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
+ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.tar.gz)
+ ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
+  $(error Not implemented)
+ else
 	tar -xzf $<
-	mv sjasmplus-20190306.1 $(@D)
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
 	touch $@
 
-sjasmplus-src.tgz:
-	wget -c https://github.com/sjasmplus/sjasmplus/archive/refs/tags/20190306.1.tar.gz -O $@
+.downloads/sjasmplus/20190306.1.tar.gz: | .downloads/sjasmplus
+	wget -c https://github.com/sjasmplus/sjasmplus/archive/refs/tags/$(@F) -O $@
 
 install-sjasmplus: | sjasmplus/.extracted sjasmplus.mk
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk prefix=$(shell realpath --relative-to=sjasmplus $(prefix)) install
@@ -119,12 +137,27 @@ build-sjasmplus: sjasmplus/sjasmplus$(EXESUFFIX)
 
 sjasmplus/sjasmplus$(EXESUFFIX): | sjasmplus/.extracted
 
-ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-SJASMPLUS_ARCHIVE		:= sjasmplus-win64.7z
-SJASMPLUS_ARCHIVE_SHA256	:= ef352b50ce7c9e9971c6fc3143e378d3e9f4069f11eb0c33022195c6e9b34fcb
+ifeq ($(PROCESSOR_ARCHITECTURE),X86)
+ SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win32-20190306.1.7z
+ SJASMPLUS_ARCHIVE_SHA256	= c84731640930afc4f4cc3c0f30f891916b9b77d63dc0e4cfdcd226682b8545b1
+ SJASMPLUS_ARCHIVE_TYPE		= .7z
+ SJASMPLUS_ARCHIVE_SUBDIR	= .
+else ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+ SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win64-20190306.1.7z
+ SJASMPLUS_ARCHIVE_SHA256	= ef352b50ce7c9e9971c6fc3143e378d3e9f4069f11eb0c33022195c6e9b34fcb
+ SJASMPLUS_ARCHIVE_TYPE		= .7z
+ SJASMPLUS_ARCHIVE_SUBDIR	= .
+else ifeq ($(PROCESSOR_ARCHITECTURE),EM64T)
+ SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win64-20190306.1.7z
+ SJASMPLUS_ARCHIVE_SHA256	= ef352b50ce7c9e9971c6fc3143e378d3e9f4069f11eb0c33022195c6e9b34fcb
+ SJASMPLUS_ARCHIVE_TYPE		= .7z
+ SJASMPLUS_ARCHIVE_SUBDIR	= .
 else
-SJASMPLUS_ARCHIVE		:= sjasmplus-win32.7z
-SJASMPLUS_ARCHIVE_SHA256	:= c84731640930afc4f4cc3c0f30f891916b9b77d63dc0e4cfdcd226682b8545b1
+ $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
+ SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win32-20190306.1.7z
+ SJASMPLUS_ARCHIVE_SHA256	= c84731640930afc4f4cc3c0f30f891916b9b77d63dc0e4cfdcd226682b8545b1
+ SJASMPLUS_ARCHIVE_TYPE		= .7z
+ SJASMPLUS_ARCHIVE_SUBDIR	= .
 endif
 
 sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
@@ -132,14 +165,24 @@ sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
 	rm -rf $(@D)
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
+ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.7z)
+ ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
 	7z x -bd -o$(@D) $<
+ else
+	7z x -bd $<
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
 	touch $@
 
-sjasmplus-win32.7z:
-	wget -c https://github.com/sjasmplus/sjasmplus/releases/download/20190306.1/sjasmplus-win32-20190306.1.7z -O $@
+.downloads/sjasmplus/sjasmplus-win32-20190306.1.7z: | .downloads/sjasmplus
+	wget -c https://github.com/sjasmplus/sjasmplus/releases/download/20190306.1/$(@F) -O $@
 
-sjasmplus-win64.7z:
-	wget -c https://github.com/sjasmplus/sjasmplus/releases/download/20190306.1/sjasmplus-win64-20190306.1.7z -O $@
+.downloads/sjasmplus/sjasmplus-win64-20190306.1.7z: | .downloads/sjasmplus
+	wget -c https://github.com/sjasmplus/sjasmplus/releases/download/20190306.1/$(@F) -O $@
 
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
@@ -164,13 +207,7 @@ endif	# _UsePrecompiledOnWindows
 ifeq ($(_DoClean),1)
 
 distclean-sjasmplus: clean-sjasmplus
-	rm -f\
- sjasmplus-src.tgz\
- sjasmplus-src.tgz.sha256\
- sjasmplus-win32.7z\
- sjasmplus-win32.7z.sha256\
- sjasmplus-win64.7z\
- sjasmplus-win64.7z.sha256
+	rm -rf .downloads/sjasmplus
 
 else	# !_DoClean
 
@@ -182,20 +219,34 @@ else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
 
 ifeq ($(_DoBuild),1)
 
+SJASMPLUS_ARCHIVE		= .downloads/sjasmplus-z00m128/v1.18.2.tar.gz
+SJASMPLUS_ARCHIVE_SHA256	= 114807bf53d3526b4d1ae7d40f3050b9ee98220df74931efc1e6d1fe5aba3d02
+SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2
+
 build-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix))
 
-sjasmplus-z00m128/.extracted: sjasmplus-z00m128-src.tgz
-	echo '114807bf53d3526b4d1ae7d40f3050b9ee98220df74931efc1e6d1fe5aba3d02  $<' >$<.sha256
+sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
+	echo '$(SJASMPLUS_ARCHIVE_SHA256)  $<' >$<.sha256
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
-	rm -rf $(@D) sjasmplus-1.18.2
+	rm -rf $(@D)
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
+ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.tar.gz)
+ ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
+  $(error Not implemented)
+ else
 	tar -xzf $<
-	mv sjasmplus-1.18.2 $(@D)
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
 	touch $@
 
-sjasmplus-z00m128-src.tgz:
-	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/v1.18.2.tar.gz -O $@
+.downloads/sjasmplus-z00m128/v1.18.2.tar.gz: | .downloads/sjasmplus-z00m128
+	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/$(@F) -O $@
 
 install-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
 	$(MAKE) -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix)) install
@@ -225,20 +276,38 @@ build-sjasmplus: sjasmplus-z00m128/sjasmplus$(EXESUFFIX)
 
 sjasmplus-z00m128/sjasmplus$(EXESUFFIX): | sjasmplus-z00m128/.extracted
 
-SJASMPLUS_ARCHIVE		:= sjasmplus-z00m128-win32.zip
-SJASMPLUS_ARCHIVE_SHA256	:= 848bca2522d6febbf3e3c48c634731ecd61899166f5922ed15857e8063c3dc4b
+ifeq ($(PROCESSOR_ARCHITECTURE),X86)
+else ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+else ifeq ($(PROCESSOR_ARCHITECTURE),EM64T)
+else
+ $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
+endif
+
+SJASMPLUS_ARCHIVE		= .downloads/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip
+SJASMPLUS_ARCHIVE_SHA256	= 848bca2522d6febbf3e3c48c634731ecd61899166f5922ed15857e8063c3dc4b
+SJASMPLUS_ARCHIVE_TYPE		= .zip
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2.win
 
 sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 	echo '$(SJASMPLUS_ARCHIVE_SHA256)  $<' >$<.sha256
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
 	rm -rf $(@D)
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
+ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.zip)
+ ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
+	unzip -nq -d $(@D) $<
+ else
 	unzip -nq $<
-	mv sjasmplus-1.18.2.win $(@D)
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
 	touch $@
 
-sjasmplus-z00m128-win32.zip:
-	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.2/sjasmplus-1.18.2.win.zip -O $@
+.downloads/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip: | .downloads/sjasmplus-z00m128
+	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.2/$(@F) -O $@
 
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
@@ -263,12 +332,9 @@ endif	# _UsePrecompiledOnWindows
 ifeq ($(_DoClean),1)
 
 distclean-sjasmplus:
-	rm -rf sjasmplus-z00m128
-	rm -f\
- sjasmplus-z00m128-src.tgz\
- sjasmplus-z00m128-src.tgz.sha256\
- sjasmplus-z00m128-win32.zip\
- sjasmplus-z00m128-win32.zip.sha256
+	rm -rf\
+ .downloads/sjasmplus-z00m128\
+ sjasmplus-z00m128
 
 else	# !_DoClean
 
@@ -310,6 +376,11 @@ build-z88dk install-z88dk: z88dk/.done
 
 ifeq ($(_DoBuild),1)
 
+Z88DK_ARCHIVE		= .downloads/z88dk/z88dk-src-2.1.tgz
+Z88DK_ARCHIVE_SHA256	= f3579ee59b4af552721173165af38223b115ccb67179e79d2f3c0ae64338dc7c
+Z88DK_ARCHIVE_TYPE	= .tar.gz
+Z88DK_ARCHIVE_SUBDIR	= z88dk
+
 # Force Win32 build for Windows
 ifeq ($(OS),Windows_NT)
 export CC=i686-w64-mingw32-gcc
@@ -320,17 +391,27 @@ z88dk/.done: | z88dk/.extracted z88dk.mk
 	cd z88dk/bin && test x $(patsubst %,-a -x %,$(Z88DK_BINS))
 	touch $@
 
-z88dk/.extracted: z88dk-src.tgz
-	echo 'f3579ee59b4af552721173165af38223b115ccb67179e79d2f3c0ae64338dc7c  $<' >$<.sha256
+z88dk/.extracted: $(Z88DK_ARCHIVE) | z88dk.patch
+	echo '$(Z88DK_ARCHIVE_SHA256)  $<' >$<.sha256
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
-	rm -rf z88dk
+	rm -rf $(@D)
+	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || rm -rf $(Z88DK_ARCHIVE_SUBDIR)
+ifeq ($(Z88DK_ARCHIVE_TYPE),.tar.gz)
+ ifeq ($(Z88DK_ARCHIVE_SUBDIR),.)
+  $(error Not implemented)
+ else
 	tar -xzf $<
-	patch -N -p0 -s <z88dk.patch || true
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || mv $(Z88DK_ARCHIVE_SUBDIR) $(@D)
+	patch -N -p0 -s <$| || true
 	touch $@
 
-z88dk-src.tgz:
-	wget -c https://github.com/z88dk/z88dk/releases/download/v2.1/z88dk-src-2.1.tgz -O $@
+.downloads/z88dk/z88dk-src-2.1.tgz: | .downloads/z88dk
+	wget -c https://github.com/z88dk/z88dk/releases/download/v2.1/$(@F) -O $@
 
 uninstall-z88dk:;
 
@@ -351,16 +432,38 @@ endif	# _DoBuild
 
 ifeq ($(_UsePrecompiledOnWindows),1)
 
-z88dk/.done: z88dk-win32.zip
-	echo 'f4abedfae429ea159e388b5c76758ace4dcb86e9a00dbd928862b0a30f6874d6  $<' >$<.sha256
+ifeq ($(PROCESSOR_ARCHITECTURE),X86)
+else ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+else ifeq ($(PROCESSOR_ARCHITECTURE),EM64T)
+else
+ $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
+endif
+
+Z88DK_ARCHIVE		= .downloads/z88dk/z88dk-win32-2.1.zip
+Z88DK_ARCHIVE_SHA256	= f4abedfae429ea159e388b5c76758ace4dcb86e9a00dbd928862b0a30f6874d6
+Z88DK_ARCHIVE_TYPE	= .zip
+Z88DK_ARCHIVE_SUBDIR	= z88dk
+
+z88dk/.done: $(Z88DK_ARCHIVE)
+	echo '$(Z88DK_ARCHIVE_SHA256)  $<' >$<.sha256
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
-	rm -rf z88dk
+	rm -rf $(@D)
+	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || rm -rf $(Z88DK_ARCHIVE_SUBDIR)
+ifeq ($(Z88DK_ARCHIVE_TYPE),.zip)
+ ifeq ($(Z88DK_ARCHIVE_SUBDIR),.)
+	unzip -nq -d $(@D) $<
+ else
 	unzip -nq $<
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || mv $(Z88DK_ARCHIVE_SUBDIR) $(@D)
 	touch $@
 
-z88dk-win32.zip:
-	wget -c https://github.com/z88dk/z88dk/releases/download/v2.1/z88dk-win32-2.1.zip -O $@
+.downloads/z88dk/z88dk-win32-2.1.zip: | .downloads/z88dk
+	wget -c https://github.com/z88dk/z88dk/releases/download/v2.1/$(@F) -O $@
 
 uninstall-z88dk:;
 
@@ -379,11 +482,7 @@ endif	# _UsePrecompiledOnWindows
 ifeq ($(_DoClean),1)
 
 distclean-z88dk: clean-z88dk
-	rm -f\
- z88dk-src.tgz\
- z88dk-src.tgz.sha256\
- z88dk-win32.zip\
- z88dk-win32.zip.sha256
+	rm -rf .downloads/z88dk
 
 else	# !_DoClean
 
