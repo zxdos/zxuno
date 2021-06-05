@@ -2,6 +2,8 @@
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
 ;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
 ; SPDX-License-Identifier: GPL-3.0-only
 
 ; Compatible compilers:
@@ -10,38 +12,55 @@
  ifndef zxuno_def_included
  define zxuno_def_included
 
-        define  zxuno_port      $fc3b
-        define  zxuno_data      $fd3b
-        define  master_conf     0
-        define  master_mapper   1
-        define  flash_spi       2
-        define  flash_cs        3
-        define  scan_code       4
-        define  key_stat        5
-        define  joy_conf        6
-        define  key_map         7
-        define  nmi_event       8
-        define  mouse_data      9
-        define  mouse_status    10
-        define  scandbl_ctrl    11
-        define  raster_line     12
-        define  raster_ctrl     13
-        define  dev_control     14
-        define  core_addr       $fc
-        define  core_boot       $fd
-        define  cold_boot       $fe
-        define  core_id         $ff
+ define zxuno_port      $fc3b   ; ZX-UNO ZXI register address
+ define zxuno_data      $fd3b   ; ZX-UNO ZXI register data
+ define master_conf     0
+ define master_mapper   1
+ define flash_spi       2
+ define flash_cs        3
+ define scan_code       4
+ define key_stat        5
+ define joy_conf        6
+ define key_map         7
+ define nmi_event       8
+ define mouse_data      9
+ define mouse_status    10
+ define scandbl_ctrl    11
+ define raster_line     12
+ define raster_ctrl     13
+ define dev_control     14
+ define dev_control2    15
+ define newreg          16
+ define dma_ctrl        $a0     ; ZX-UNO register to start/stop DMA
+ define dma_src         $a1     ; ZX-UNO register to set DMA source
+ define dma_dst         $a2     ; ZX-UNO register to set DMA destination
+ define dma_pre         $a3     ; ZX-UNO register to set DMA prescaler
+ define dma_len         $a4     ; ZX-UNO register to set DMA length
+ define dma_prob        $a5
+ define dma_stat        $a6
+ define ad724           $fb
+ define core_addr       $fc
+ define core_boot       $fd
+ define cold_boot       $fe
+ define core_id         $ff
 
-        define  SPI_PORT        $eb
-        define  OUT_PORT        $e7
-        define  MMC_0           $fe ; D0 LOW = SLOT0 active
-        define  CMD0            $40
-        define  CMD1            $41
-        define  CMD8            $48
-        define  SET_BLOCKLEN    $50
-        define  READ_SINGLE     $51
-        define  CMD41           $69
-        define  CMD55           $77
-        define  CMD58           $7a
+ ; MMC/SDC interface:
+ define SPI_PORT        $eb
+ define OUT_PORT        $e7
+ define MMC_0           $fe     ; D0 LOW = SLOT0 active
+
+ ; MMC/SDC commands:
+ define CMD0            $40+0   ; GO_IDLE_STATE
+ define CMD1            $40+1   ; SEND_OP_COND (MMC)
+ define CMD8            $40+8   ; SEND_IF_COND
+ define SET_BLOCKLEN    $40+16
+ define READ_SINGLE     $40+17  ; READ_SINGLE_BLOCK
+ define WRITE_BLOCK     $40+24
+ define CMD41           $40+41  ; SD_SEND_OP_COND (SDC)
+ define CMD55           $40+55  ; APP_CMD
+ define CMD58           $40+58  ; READ_OCR
+
+ ; SpecDrum interface:
+ define specdrum_port   $ffdf   ; Specdrum I/O port in 16-bit format for DMA destination
 
  endif  ; !zxuno_def_included
