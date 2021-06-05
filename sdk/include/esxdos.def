@@ -1,8 +1,11 @@
 ; esxdos.def
 ;
-; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
+; SPDX-FileCopyrightText: Copyright (C) 2017 AZXUNO association
 ;
-; SPDX-License-Identifier: GPL-3.0-only
+; SPDX-FileContributor: Copyright (C) 2019, 2021 Antonio Villena
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: GPL-3.0-or-later
 
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
@@ -10,19 +13,88 @@
  ifndef esxdos_def_included
  define esxdos_def_included
 
-        define  FA_READ         0x01
-        define  FA_WRITE        0x02
-        define  FA_OPEN_AL      0x08
-        define  M_GETSETDRV     0x89
-        define  F_OPEN          0x9a
-        define  F_CLOSE         0x9b
-        define  F_READ          0x9d
-        define  F_WRITE         0x9e
-        define  F_FSTAT         0xa1
+ define HOOK_BASE       128
+ define MISC_BASE       HOOK_BASE+8
+ define FSYS_BASE       MISC_BASE+16
 
-              macro esxdos  dato
-                rst     $08
-                defb    dato
-              endm
+ define DISK_STATUS     HOOK_BASE+0     ; hookcodes for block devices
+ define DISK_READ       HOOK_BASE+1
+ define DISK_WRITE      HOOK_BASE+2
+ define DISK_IOCTL      HOOK_BASE+3
+ define DISK_INFO       HOOK_BASE+4
+
+ define M_DOSVERSION    MISC_BASE+0
+ define M_GETSETDRV     MISC_BASE+1
+ define M_DRIVEINFO     MISC_BASE+2
+ define M_TAPEIN        MISC_BASE+3
+ define M_TAPEOUT       MISC_BASE+4
+ define M_GETHANDLE     MISC_BASE+5
+ define M_GETDATE       MISC_BASE+6
+
+ define F_MOUNT         FSYS_BASE+0
+ define F_UMOUNT        FSYS_BASE+1
+ define F_OPEN          FSYS_BASE+2
+ define F_CLOSE         FSYS_BASE+3
+ define F_SYNC          FSYS_BASE+4
+ define F_READ          FSYS_BASE+5
+ define F_WRITE         FSYS_BASE+6
+ define F_SEEK          FSYS_BASE+7
+ define F_FGETPOS       FSYS_BASE+8
+ define F_FSTAT         FSYS_BASE+9
+ define F_FTRUNCATE     FSYS_BASE+10
+ define F_OPENDIR       FSYS_BASE+11
+ define F_READDIR       FSYS_BASE+12
+ define F_TELLDIR       FSYS_BASE+13
+ define F_SEEKDIR       FSYS_BASE+14
+ define F_REWINDDIR     FSYS_BASE+15
+ define F_GETCWD        FSYS_BASE+16
+ define F_CHDIR         FSYS_BASE+17
+ define F_MKDIR         FSYS_BASE+18
+ define F_RMDIR         FSYS_BASE+19
+ define F_STAT          FSYS_BASE+20
+ define F_UNLINK        FSYS_BASE+21
+ define F_TRUNCATE      FSYS_BASE+22
+ define F_CHMOD         FSYS_BASE+23
+ define F_RENAME        FSYS_BASE+24
+ define F_GETFREE       FSYS_BASE+25
+
+ define FA_READ         %00000001       ; Read access
+ define FA_WRITE        %00000010       ; Write access
+ define FA_OPEN_EX      %00000000       ; Open if exists, else error
+ define FA_OPEN_AL      %00001000       ; Open if exists, if not create
+ define FA_CREATE_NEW   %00000100       ; Create if not exists, if exists error
+ define FA_CREATE_AL    %00001100       ; Create if not exists, else open and truncate
+ define FA_USE_HEADER   %01000000       ; Use +3DOS header (passed in DE)
+
+ ; Errors:
+ define EOK             1
+ define ENONSENSE       2
+ define ESTEND          3
+ define EWRTYPE         4
+ define ENOENT          5       ; No such file or directory
+ define EIO             6       ; I/O error
+ define EINVAL          7       ; Invalid file name
+ define EACCES          8       ; Access Denied
+ define ENOSPC          9       ; No space left on device
+ define ENXIO           10      ; Request beyond the limits of the device
+ define ENODRV          11      ; No such drive
+ define ENFILE          12      ; Too many files open in system
+ define EBADF           13      ; Bad file descriptor
+ define ENODEV          14      ; No such device
+ define EOVERFLOW       15
+ define EISDIR          16
+ define ENOTDIR         17
+ define EEXIST          18
+ define EPATH           19      ; Invalid path
+ define ENOSYS          20
+ define ENAMETOOLONG    21
+ define ENOCMD          22
+ define EINUSE          23
+ define ERDONLY         24
+
+ macro esxdos func
+        rst     $08
+        db      func
+ endm
 
  endif  ; !esxdos_def_included

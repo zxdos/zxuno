@@ -49,6 +49,7 @@ BINS=\
  BACKUP\
  CORCLEAN\
  COREBIOS\
+ DMAPLAYW\
  ROMSBACK\
  ROMSUPGR\
  UPGR16M\
@@ -130,6 +131,12 @@ build/COREBIOS: $(srcdir)/corebios.asm\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/DMAPLAYW: $(srcdir)/dmaplayw.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
