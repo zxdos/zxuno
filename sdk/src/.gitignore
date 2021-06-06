@@ -2,20 +2,7 @@
 #
 # SPDX-License-Identifier: CC0-1.0
 
+.downloads
 sjasmplus
-sjasmplus-src.tgz
-sjasmplus-src.tgz.sha256
-sjasmplus-win32.7z
-sjasmplus-win32.7z.sha256
-sjasmplus-win64.7z
-sjasmplus-win64.7z.sha256
 sjasmplus-z00m128
-sjasmplus-z00m128-src.tgz
-sjasmplus-z00m128-src.tgz.sha256
-sjasmplus-z00m128-win32.zip
-sjasmplus-z00m128-win32.zip.sha256
 z88dk
-z88dk-src.tgz
-z88dk-src.tgz.sha256
-z88dk-win32.zip
-z88dk-win32.zip.sha256

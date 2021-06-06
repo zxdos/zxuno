@@ -68,10 +68,14 @@ $(TARGETS): | src
  $(foreach t,$(TARGETS),build-$(t) install-$(t) uninstall-$(t) clean-$(t) distclean-$(t))
 
 configure:
-	@echo '# This is a local configuration file for Make.' >conf.mk;\
-	echo '# This file is generated automatically by `make configure`.' >>conf.mk;\
-	echo 'USE_SJASMPLUS_VERSION=$(USE_SJASMPLUS_VERSION)' >>conf.mk
+	@{ echo '# This is a local configuration file for Make.';\
+	echo '# This file is generated automatically by `make configure`.';\
+	echo 'USE_SJASMPLUS_VERSION=$(USE_SJASMPLUS_VERSION)'; } >conf.mk
 
-build install uninstall clean distclean \
-$(foreach t,$(TARGETS),build-$(t) install-$(t) uninstall-$(t) clean-$(t) distclean-$(t)): | src
+build clean distclean \
+$(foreach t,$(TARGETS),build-$(t) clean-$(t) distclean-$(t)): | src
+	$(MAKE) -w -C $| $@
+
+install uninstall \
+$(foreach t,$(TARGETS),install-$(t) uninstall-$(t)): | src
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) $@

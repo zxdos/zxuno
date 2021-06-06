@@ -12,6 +12,9 @@
 #   make [prefix=<PREFIX>] install | uninstall
 # Clean:
 #   make clean | distclean
+#
+# where:
+#   <PREFIX> is a prefix directory to install files into.
 
 include ../../sdk/common.mk
 
@@ -28,8 +31,6 @@ tmpdir		?= $(prefix)/TMP
 INSTALL		?= install -m 644
 INSTALL_PROGRAM	?= $(INSTALL)
 RM		?= rm -f
-
-ESXDOSNAME	= esxdos089
 
 ROOT_FILES=\
  ESX089.NFO\
@@ -106,10 +107,11 @@ SYSCONF_FILES=\
  TRDOS.CFG
 
 .PHONY: all
-all: install
+all: build/.extracted
 
+.downloads\
+.downloads/esxdos\
 build\
-cache\
 $(DESTDIR)$(prefix)\
 $(DESTDIR)$(bindir)\
 $(DESTDIR)$(docdir)\
@@ -118,18 +120,31 @@ $(DESTDIR)$(sysconfdir)\
 $(DESTDIR)$(tmpdir):
 	mkdir -p $@
 
-cache/$(ESXDOSNAME).extracted: cache/$(ESXDOSNAME).zip | cache build
-	echo 'd455888361cd13d455e362a4c841452b6f4568d30f9069443044affdd40de9a4  $<' >$<.sha256
+ESXDOS_ARCHIVE		= .downloads/esxdos/esxdos089.zip
+ESXDOS_ARCHIVE_SHA256	= d455888361cd13d455e362a4c841452b6f4568d30f9069443044affdd40de9a4
+ESXDOS_ARCHIVE_TYPE	= .zip
+ESXDOS_ARCHIVE_SUBDIR	= .
+
+build/.extracted: $(ESXDOS_ARCHIVE) | build
+	echo '$(ESXDOS_ARCHIVE_SHA256)  $<' >$<.sha256
 	sha256sum -c $<.sha256
 	rm -f $<.sha256
-	rm -rf cache/esxdos
-	unzip -nq $< -d cache/esxdos
-	mv cache/esxdos/* build
-	rmdir cache/esxdos
+	rm -rf $(@D)
+	test '$(@D)' = '$(ESXDOS_ARCHIVE_SUBDIR)' -o '$(ESXDOS_ARCHIVE_SUBDIR)' = . || rm -rf $(ESXDOS_ARCHIVE_SUBDIR)
+ifeq ($(ESXDOS_ARCHIVE_TYPE),.zip)
+ ifeq ($(ESXDOS_ARCHIVE_SUBDIR),.)
+	unzip -nq $< -d $(@D)
+ else
+	unzip -nq $<
+ endif
+else
+ $(error Not implemented)
+endif
+	test '$(@D)' = '$(ESXDOS_ARCHIVE_SUBDIR)' -o '$(ESXDOS_ARCHIVE_SUBDIR)' = . || mv $(ESXDOS_ARCHIVE_SUBDIR) $(@D)
 	touch $@
 
-cache/$(ESXDOSNAME).zip: | cache
-	wget -c http://www.esxdos.org/files/$(ESXDOSNAME).zip -O $@
+.downloads/esxdos/esxdos089.zip: | .downloads/esxdos
+	wget -c http://www.esxdos.org/files/$(@F) -O $@
 
 define install_root_rule =
 $$(DESTDIR)$$(prefix)/$1: build/$1 | $$(DESTDIR)$$(prefix)
@@ -168,7 +183,7 @@ $(foreach f,$(SYSCONF_FILES),$(eval $(call install_sysconf_rule,$(f))))
 
 .PHONY: install
 install:\
- cache/$(ESXDOSNAME).extracted\
+ build/.extracted\
  $(foreach f,$(ROOT_FILES),$(DESTDIR)$(prefix)/$(f))\
  $(foreach f,$(BIN_FILES),$(DESTDIR)$(bindir)/$(f))\
  $(foreach f,$(DOC_FILES),$(DESTDIR)$(docdir)/$(f))\
@@ -188,10 +203,10 @@ uninstall:
 .PHONY: clean
 clean:
 	rm -f\
- cache/$(ESXDOSNAME).sha256\
- cache/$(ESXDOSNAME).extracted
-	rm -rf cache/esxdos build/*
+ .downloads/esxdos/esxdos089.zip.sha256\
+ .downloads/esxdos
+	rm -rf build/*
 
 .PHONY: distclean
 distclean:
-	rm -rf cache build
+	rm -rf .downloads build

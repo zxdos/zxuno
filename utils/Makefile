@@ -27,8 +27,8 @@ exec_prefix	?= $(prefix)
 bindir		?= $(exec_prefix)/BIN
 
 # Disable execution mode for FAT filesystem
-INSTALL		?= install
-INSTALL_PROGRAM	?= $(INSTALL) -m 644
+INSTALL		?= install -m 644
+INSTALL_PROGRAM	?= $(INSTALL)
 RM		= rm -f
 
 INCLUDEDIR	= ../sdk/include
@@ -49,7 +49,6 @@ BINS=\
  BACKUP\
  CORCLEAN\
  COREBIOS\
- DMAPLAYW\
  ROMSBACK\
  ROMSUPGR\
  UPGR16M\
@@ -131,12 +130,6 @@ build/COREBIOS: $(srcdir)/corebios.asm\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
- | build
-	$(AS) $(AFLAGS) --raw=$@ $<
-
-build/DMAPLAYW: $(srcdir)/dmaplayw.asm\
- $(INCLUDEDIR)/zxuno.def\
- $(INCLUDEDIR)/esxdos.def\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -231,4 +224,4 @@ clean:
 .PHONY: distclean
 distclean:
 	rm -f $(TMPS)
-	rm -rf build/*
+	rm -rf build
