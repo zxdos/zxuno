@@ -27,6 +27,7 @@ include ../sdk/common.mk
 prefix		?= .
 
 SUBDIRS=\
+ dmaplayw\
  esxdos\
  esprst\
  iwconfig
