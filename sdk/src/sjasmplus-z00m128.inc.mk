@@ -22,21 +22,12 @@ build-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix))
 
 sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
-	echo '$(SJASMPLUS_ARCHIVE_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
-ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.tar.gz)
- ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
-  $(error Not implemented)
- else
-	tar -xzf $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(SJASMPLUS_ARCHIVE_SHA256)\
+	 --type $(SJASMPLUS_ARCHIVE_TYPE)\
+	 --subdir $(SJASMPLUS_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	touch $@
 
 .downloads/sjasmplus-z00m128/v1.18.2.tar.gz: | .downloads/sjasmplus-z00m128
@@ -83,21 +74,12 @@ SJASMPLUS_ARCHIVE_TYPE		= .zip
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2.win
 
 sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
-	echo '$(SJASMPLUS_ARCHIVE_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
-ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.zip)
- ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
-	unzip -nq -d $(@D) $<
- else
-	unzip -nq $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(SJASMPLUS_ARCHIVE_SHA256)\
+	 --type $(SJASMPLUS_ARCHIVE_TYPE)\
+	 --subdir $(SJASMPLUS_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	touch $@
 
 .downloads/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip: | .downloads/sjasmplus-z00m128

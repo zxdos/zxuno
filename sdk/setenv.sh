@@ -12,7 +12,7 @@ if [[ "x$ZXSDK" == x ]]; then
 	fi
 	Z88DK=$ZXSDK/src/z88dk
 	ZCCCFG=$Z88DK/lib/config
-	PATH=$ZXSDK_PLATFORM/bin:$Z88DK/bin:$PATH
+	PATH=$ZXSDK_PLATFORM/bin:$Z88DK/bin:$ZXSDK:$PATH
 	if [[ x$OS == xWindows_NT ]]; then
 		PATH=$ZXSDK_PLATFORM/lib:$PATH
 		# Fix paths under Cygwin for z88dk on Windows

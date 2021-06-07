@@ -29,7 +29,7 @@ endif
 
 Z88DK		:= $(ZXSDK)/src/z88dk
 ZCCCFG		:= $(Z88DK)/lib/config
-PATH		:= $(ZXSDK_PLATFORM)/bin:$(Z88DK)/bin:$(PATH)
+PATH		:= $(ZXSDK_PLATFORM)/bin:$(Z88DK)/bin:$(ZXSDK):$(PATH)
 
 ifeq ($(OS),Windows_NT)
 PATH		:= $(ZXSDK_PLATFORM)/lib:$(PATH)
