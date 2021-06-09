@@ -105,7 +105,7 @@ install-sdcc: | sdcc/.extracted
 			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL) -m 644 $$< $$@,';\
 		fi;\
 	done; } >install.mk;\
-	$(MAKE) -w -f install.mk DEST=$(DEST) prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix)) INSTALL=$(INSTALL) INSTALL_PROGRAM=$(INSTALL_PROGRAM) install
+	$(MAKE) -w -f install.mk DEST=$(DEST) prefix=$(shell realpath --relative-to=sdcc $(prefix)) INSTALL=$(INSTALL) INSTALL_PROGRAM=$(INSTALL_PROGRAM) install
 
  ifeq ($(_DoClean),1)
 
