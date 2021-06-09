@@ -1,8 +1,28 @@
 /*
-Compilar con:
-sdcc -mz80 --reserve-regs-iy --opt-code-size --max-allocs-per-node 10000
---nostdlib --nostdinc --no-std-crt0 --code-loc 8192 joyconf.c
-*/
+ * joyconf - configure/test protocols for keyboard, joystick and DB9 joystick.
+ *
+ * Copyright (C) 2016-2021 Antonio Villena
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-FileCopyrightText: Copyright (C) 2016-2021 Antonio Villena
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
+#define PROGRAM "joyconf"
+#define PROGRAMUC "JOYCONF" // uppercase
+#define VERSION "0.1"
 
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
@@ -161,7 +181,7 @@ void commandlinemode (char *p)
           case '2': db9conf |= 3; break;
           case 'c': db9conf |= 4; break;
           case 'f': db9conf |= 5; break;
-		  case 'o': db9conf |= 6; break;          
+          case 'o': db9conf |= 6; break;
           default: usage(); return;
         }
         p++;
@@ -190,8 +210,9 @@ void usage (void)
 {
         // 01234567890123456789012345678901
     puts ("Configures/tests protocols for\xd"
-          "keyb joystick and DB9 joystick\xd\xd"
-          "Usage: JOYCONF [-kAx] [-jBx]\xd"
+          "keyb joystick and DB9 joystick\xd"
+          "\xd"
+          "Usage: " PROGRAMUC " [-kAx] [-jBx]\xd"
           "  where A,B can be:\xd"
           "    d: Disabled\xd"
           "    k: Kempston\xd"
@@ -199,13 +220,14 @@ void usage (void)
           "    2: Sinclair port 2\xd"
           "    c: Cursor/Protek/AGF\xd"
           "    f: Fuller\xd"
-          "    o: OPQA-SPACE-M (DB9 only)\xd"          
+          "    o: OPQA-SPACE-M (DB9 only)\xd"
           "  where x can be:\xd"
           "    0: disable autofire\xd"
           "    1: enable autofire\xd"
           "    other/none: keep setting\xd"
-          "  No arguments: interactive mode\xd\xd"
-          "Example: .joyconf -kc0 -jk1\xd"
+          "  No arguments: interactive mode\xd"
+          "\xd"
+          "Example: ." PROGRAM " -kc0 -jk1\xd"
           "Sets Cursor, no autofire for the"
           "keyboard joystick, and Kempston\xd"
           "w/autofire for the DB9 joystick.\xd");
@@ -351,7 +373,7 @@ BYTE printconf (void)
     case 3:  puts("\x4\x46""SINCL P2"); break;
     case 4:  puts("\x4\x46""CURSOR  "); break;
     case 5:  puts("\x4\x46""FULLER  "); break;
-    case 6:  puts("\x4\x46""OPQASPCM"); break;    
+    case 6:  puts("\x4\x46""OPQASPCM"); break;
     default: puts("\x4\x46""DISABLED"); db9dis=1; break;
   }
   if (!db9dis && db9conf&0x8)
