@@ -51,10 +51,10 @@ build/dzx7b$(EXESUFFIX): $(srcdir)/dzx7b.c Makefile | build
 install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 $(DESTDIR)$(bindir)/zx7b$(EXESUFFIX): build/zx7b$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $< $@
+	$(INSTALL_PROGRAM) -m 755 $< $@
 
 $(DESTDIR)$(bindir)/dzx7b$(EXESUFFIX): build/dzx7b$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $< $@
+	$(INSTALL_PROGRAM) -m 755 $< $@
 
 .PHONY: uninstall
 uninstall:

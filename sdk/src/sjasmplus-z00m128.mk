@@ -45,7 +45,7 @@ $(srcdir)/sjasmplus$(EXESUFFIX): | Makefile
 install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $< $@
+	$(INSTALL_PROGRAM) -m 755 $< $@
 
 .PHONY: uninstall
 uninstall:

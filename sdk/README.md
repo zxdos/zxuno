@@ -1,16 +1,18 @@
 # Authors
 
-2021 Ivan Tatarinov <ivan-tat@ya.ru>
+This document:
+* 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 
 # Contributors
 
-No one yet.
+This document: No one yet.
 
 # Licenses
 
 This document is under [GNU FDL-1.3 or later](https://spdx.org/licenses/GFDL-1.3-or-later.html) license.  
 SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
 SJAsmPlus Z80 Assembler by aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
+Small Device C Compiler (SDCC) is distributed under [GPL](https://sourceforge.net/projects/sdcc/) licenses.  
 z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.  
 LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.
 
@@ -23,6 +25,7 @@ Directory | Description
 `bin` | Compiled binaries of tools.
 `include` | Header files (`.def`, `.h` etc.) to be included in other sources (assembler, C, etc.).
 `lib` | Libraries, needed for executables (mostly in `bin` directory) to function properly.
+`opt` | Optionally installed bundles (like SDK).
 `src` | The source code of local and downloadable tools. See Makefiles for details.
 `windows-x86` | Compiled binaries of tools and libraries for Windows x86 (32 bit) platform.
 
@@ -53,6 +56,7 @@ Additional packages for targets:
 Target | Packages
 ----|----
 `sjasmplus` | cmake libboost-all-dev libxml2-dev
+`sdcc` | -
 `z88dk` | dos2unix libboost-all-dev texinfo texi2html libxml2-dev subversion bison flex zlib1g-dev m4
 
 To use cross-compilation for Windows platform install *mingw-w64* package.
@@ -91,6 +95,7 @@ Value of `<CFG_VAR>` | Possible values | Description
 Value of `TARGET` | Origin | Description
 ----|----|----
 `sjasmplus` | downloaded | SJAsmPlus Z80 Assembler
+`sdcc` | downloaded | Small Device C Compiler
 `z88dk` | downloaded | z88dk
 `lodepng` | `src/lodepng` | LodePNG library
 `zx7b` | `src/zx7b` | zx7b
@@ -103,6 +108,7 @@ Value of `BUILD` | Target directory | Target system
 
 Compiled binaries are installed into `bin` sub-directory of target directory.
 Compiled libraries are installed into `lib` sub-directory of target directory.
+Complex bundles are installed into `opt` sub-directory of target directory.
 
 Example:
 
@@ -186,6 +192,7 @@ Target | Dependencies
 ----|----
 all targets | bash git make wget unzip p7zip
 `sjasmplus` | gcc-g++ cmake libboost-devel
+`sdcc` | -
 `z88dk` | mingw64-i686-gcc-core mingw64-i686-libxml2 patch
 `lodepng` | gcc-core
 `zx7b` | gcc-core
@@ -219,6 +226,7 @@ where:
 Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build from sources
 ----|----|----|----
 `sjasmplus` | downloaded | downloaded (**yes**) | available
+`sdcc` | downloaded | downloaded (**yes**) | available
 `z88dk` | downloaded | downloaded (**yes**) | available
 `lodepng` | local | precompiled locally (**no**) | available
 `zx7b` | local | precompiled locally (**no**) | available
@@ -296,6 +304,7 @@ These changes are actual for current invocation of command shell and all child p
 * [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
 * [SJAsmPlus by aprisobal](https://github.com/z00m128/sjasmplus) - Z80 Assembler
+* [SDCC](https://sourceforge.net/projects/sdcc/) - Small Device C Compiler
 * [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [LodePNG](https://github.com/lvandeve/lodepng) - PNG encoder and decoder in C and C++
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)

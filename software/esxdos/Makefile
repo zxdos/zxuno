@@ -126,21 +126,12 @@ ESXDOS_ARCHIVE_TYPE	= .zip
 ESXDOS_ARCHIVE_SUBDIR	= .
 
 build/.extracted: $(ESXDOS_ARCHIVE) | build
-	echo '$(ESXDOS_ARCHIVE_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(ESXDOS_ARCHIVE_SUBDIR)' -o '$(ESXDOS_ARCHIVE_SUBDIR)' = . || rm -rf $(ESXDOS_ARCHIVE_SUBDIR)
-ifeq ($(ESXDOS_ARCHIVE_TYPE),.zip)
- ifeq ($(ESXDOS_ARCHIVE_SUBDIR),.)
-	unzip -nq $< -d $(@D)
- else
-	unzip -nq $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(ESXDOS_ARCHIVE_SUBDIR)' -o '$(ESXDOS_ARCHIVE_SUBDIR)' = . || mv $(ESXDOS_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(ESXDOS_ARCHIVE_SHA256)\
+	 --type $(ESXDOS_ARCHIVE_TYPE)\
+	 --subdir $(ESXDOS_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	touch $@
 
 .downloads/esxdos/esxdos089.zip: | .downloads/esxdos
@@ -202,9 +193,6 @@ uninstall:
 
 .PHONY: clean
 clean:
-	rm -f\
- .downloads/esxdos/esxdos089.zip.sha256\
- .downloads/esxdos
 	rm -rf build/*
 
 .PHONY: distclean

@@ -88,7 +88,7 @@ sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
 $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus-z00m128/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $< $@
+	$(INSTALL_PROGRAM) -m 755 $< $@
 
 ifeq ($(_DoClean),1)
 

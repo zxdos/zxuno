@@ -283,7 +283,7 @@ if [[ $o_use_tmp -eq 0 ]]; then
 		;;
 	.7z)
 		if [[ "$o_subdir" = '.' ]]; then
-			7z x -bd -o "$o_output" "$o_input"
+			7z x -bd -o"$o_output" "$o_input"
 		else
 			7z x -bd "$o_input"
 		fi
