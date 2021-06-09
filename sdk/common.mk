@@ -29,7 +29,7 @@ ifeq ($(OS),Windows_NT)
   ZXSDK_PLATFORM = $(ZXSDK)/windows-x86
  endif
 else
- ZXSDK_PLATFORM	= $(ZXSDK)
+ ZXSDK_PLATFORM = $(ZXSDK)
 endif
 export ZXSDK_PLATFORM
 
@@ -80,7 +80,7 @@ ZCCCFG = $(Z88DK)/lib/config
 ifeq ($(OS),Windows_NT)
  # Fix paths under Cygwin for Z88DK on Windows
  ifeq ($(shell echo $$OSTYPE),cygwin)
-  ZCCCFG = $(shell cygpath -m $(ZCCCFG))
+  ZCCCFG := $(shell cygpath -m $(ZCCCFG))
  endif
 endif
 export ZCCCFG
