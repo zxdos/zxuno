@@ -38,6 +38,7 @@ INSTALL_PROGRAM	?= $(INSTALL)
 
 TARGETS=\
  sjasmplus\
+ sdcc\
  z88dk\
  lodepng\
  zx7b\
@@ -77,6 +78,7 @@ else
  $(error Unknown SJAsmPlus version selected: `$(USE_SJASMPLUS_VERSION)')
 endif
 
+include sdcc.inc.mk
 include z88dk.inc.mk
 include lodepng.inc.mk
 include tools.inc.mk

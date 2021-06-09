@@ -2,27 +2,57 @@
 # SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Supported environments:
+#   * GNU on Linux, FreeBSD etc.
+#   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 
 if [[ "x$ZXSDK" == x ]]; then
-	ZXSDK=$(dirname $(realpath "$BASH_SOURCE"))
+	export ZXSDK=$(dirname $(realpath "$BASH_SOURCE"))
+	_path=$ZXSDK
 	if [[ x$OS == xWindows_NT ]]; then
+		case $PROCESSOR_ARCHITECTURE in
+		X86|AMD64|EM64T)
+			;;
+		*)
+			echo "WARNING: Unsupported platform: \"$PROCESSOR_ARCHITECTURE\"" >&2
+			;;
+		esac
 		ZXSDK_PLATFORM=$ZXSDK/windows-x86
 	else
 		ZXSDK_PLATFORM=$ZXSDK
 	fi
-	Z88DK=$ZXSDK/src/z88dk
-	ZCCCFG=$Z88DK/lib/config
-	PATH=$ZXSDK_PLATFORM/bin:$Z88DK/bin:$PATH
+	export ZXSDK_PLATFORM
+	_path=$_path:$ZXSDK_PLATFORM/bin
 	if [[ x$OS == xWindows_NT ]]; then
-		PATH=$ZXSDK_PLATFORM/lib:$PATH
-		# Fix paths under Cygwin for z88dk on Windows
-		if [[ x$OSTYPE == xcygwin ]]; then
-			ZCCCFG=`cygpath -m $ZCCCFG`
-		fi
+		_path=$_path:$ZXSDK_PLATFORM/lib
 	else
 		export LD_LIBRARY_PATH=$ZXSDK_PLATFORM/lib
 	fi
-	export ZXSDK
-	export ZXSDK_PLATFORM
+	export SDCCHOME=$ZXSDK_PLATFORM/opt/sdcc
+	_path=$_path:$SDCCHOME/bin
+	if [[ x$OS == xWindows_NT ]]; then
+		SDCCINCLUDE=$SDCCHOME/include
+	else
+		SDCCINCLUDE=$SDCCHOME/share/sdcc/include
+	fi
+	export SDCCINCLUDE
+	if [[ x$OS == xWindows_NT ]]; then
+		SDCCLIB=$SDCCHOME/lib
+	else
+		SDCCLIB=$SDCCHOME/share/sdcc/lib
+	fi
+	export SDCCLIB
+	Z88DK=$ZXSDK/src/z88dk
+	_path=$_path:$Z88DK/bin
+	ZCCCFG=$Z88DK/lib/config
+	if [[ x$OS == xWindows_NT ]]; then
+		# Fix paths under Cygwin for Z88DK on Windows
+		if [[ x$OSTYPE == xcygwin ]]; then
+			ZCCCFG=`cygpath -m $ZCCCFG`
+		fi
+	fi
 	export ZCCCFG
+	PATH=$_path:$PATH
+	unset _path
 fi

@@ -22,21 +22,12 @@ build-sjasmplus: | sjasmplus/.extracted sjasmplus.mk
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus.mk prefix=$(shell realpath --relative-to=sjasmplus $(prefix))
 
 sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
-	echo '$(SJASMPLUS_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
-ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.tar.gz)
- ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
-  $(error Not implemented)
- else
-	tar -xzf $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(SJASMPLUS_ARCHIVE_SHA256)\
+	 --type $(SJASMPLUS_ARCHIVE_TYPE)\
+	 --subdir $(SJASMPLUS_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	touch $@
 
 .downloads/sjasmplus/20190306.1.tar.gz: | .downloads/sjasmplus
@@ -94,21 +85,12 @@ else
 endif
 
 sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
-	echo '$(SJASMPLUS_ARCHIVE_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || rm -rf $(SJASMPLUS_ARCHIVE_SUBDIR)
-ifeq ($(SJASMPLUS_ARCHIVE_TYPE),.7z)
- ifeq ($(SJASMPLUS_ARCHIVE_SUBDIR),.)
-	7z x -bd -o$(@D) $<
- else
-	7z x -bd $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(SJASMPLUS_ARCHIVE_SUBDIR)' -o '$(SJASMPLUS_ARCHIVE_SUBDIR)' = . || mv $(SJASMPLUS_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(SJASMPLUS_ARCHIVE_SHA256)\
+	 --type $(SJASMPLUS_ARCHIVE_TYPE)\
+	 --subdir $(SJASMPLUS_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	touch $@
 
 .downloads/sjasmplus/sjasmplus-win32-20190306.1.7z: | .downloads/sjasmplus
@@ -120,7 +102,7 @@ endif
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
 $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $< $@
+	$(INSTALL_PROGRAM) -m 755 $< $@
 
 ifeq ($(_DoClean),1)
 

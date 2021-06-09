@@ -54,7 +54,7 @@ build/Makefile: | build
 install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 
 $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): build/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) $< $@
+	$(INSTALL_PROGRAM) -m 755 $< $@
 
 .PHONY: uninstall
 uninstall:

@@ -53,21 +53,12 @@ z88dk/.done: | z88dk/.extracted z88dk.mk
 	touch $@
 
 z88dk/.extracted: $(Z88DK_ARCHIVE) | z88dk.patch
-	echo '$(Z88DK_ARCHIVE_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || rm -rf $(Z88DK_ARCHIVE_SUBDIR)
-ifeq ($(Z88DK_ARCHIVE_TYPE),.tar.gz)
- ifeq ($(Z88DK_ARCHIVE_SUBDIR),.)
-  $(error Not implemented)
- else
-	tar -xzf $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || mv $(Z88DK_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(Z88DK_ARCHIVE_SHA256)\
+	 --type $(Z88DK_ARCHIVE_TYPE)\
+	 --subdir $(Z88DK_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	patch -N -p0 -s <$| || true
 	touch $@
 
@@ -106,21 +97,12 @@ Z88DK_ARCHIVE_TYPE	= .zip
 Z88DK_ARCHIVE_SUBDIR	= z88dk
 
 z88dk/.done: $(Z88DK_ARCHIVE)
-	echo '$(Z88DK_ARCHIVE_SHA256)  $<' >$<.sha256
-	sha256sum -c $<.sha256
-	rm -f $<.sha256
 	rm -rf $(@D)
-	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || rm -rf $(Z88DK_ARCHIVE_SUBDIR)
-ifeq ($(Z88DK_ARCHIVE_TYPE),.zip)
- ifeq ($(Z88DK_ARCHIVE_SUBDIR),.)
-	unzip -nq -d $(@D) $<
- else
-	unzip -nq $<
- endif
-else
- $(error Not implemented)
-endif
-	test '$(@D)' = '$(Z88DK_ARCHIVE_SUBDIR)' -o '$(Z88DK_ARCHIVE_SUBDIR)' = . || mv $(Z88DK_ARCHIVE_SUBDIR) $(@D)
+	extract.sh $<\
+	 --sha256 $(Z88DK_ARCHIVE_SHA256)\
+	 --type $(Z88DK_ARCHIVE_TYPE)\
+	 --subdir $(Z88DK_ARCHIVE_SUBDIR)\
+	 --output $(@D)
 	touch $@
 
 .downloads/z88dk/z88dk-win32-2.1.zip: | .downloads/z88dk

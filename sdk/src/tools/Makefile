@@ -68,7 +68,7 @@ install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
 # $1 = target
 define install_bin_rule =
 $$(DESTDIR)$$(bindir)/$1: build/$1 | $$(DESTDIR)$$(bindir)
-	$$(INSTALL_PROGRAM) $$< $$@
+	$$(INSTALL_PROGRAM) -m 755 $$< $$@
 endef
 
 $(foreach t,$(BINS),$(eval $(call install_bin_rule,$(t))))
