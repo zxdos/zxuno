@@ -96,7 +96,7 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 esxdos  F_OPEN
                 ret     c               ; Return on error
                 ld      (FHandle), a
-                ld      l, 0            ; SEEK_START
+                ld      l, SEEK_START
                 ld      bc, 0
                 ld      de, 44          ; Skip 44 bytes from start (WAV header)
                 esxdos  F_SEEK

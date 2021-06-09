@@ -66,6 +66,10 @@
  define FA_CREATE_AL    %00001100       ; Create if not exists, else open and truncate
  define FA_USE_HEADER   %01000000       ; Use +3DOS header (passed in DE)
 
+ define SEEK_START      0
+ define SEEK_CUR        1
+ define SEEK_BKCUR      2
+
  ; Errors:
  define EOK             1
  define ENONSENSE       2

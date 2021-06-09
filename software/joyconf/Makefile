@@ -30,19 +30,13 @@ INSTALL		?= install
 INSTALL_PROGRAM	?= $(INSTALL)
 RM		= rm -f
 
-INCLUDEDIR	= ../../sdk/include
-AS		= sjasmplus
-ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
-AFLAGS		= --nobanner
-else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
-AFLAGS		= --nologo
-else
-AFLAGS		=
-endif
-AFLAGS		+= -I$(INCLUDEDIR)
-
 BINS=\
- DMAPLAYW
+ JOYCONF
+
+CC = sdcc
+CFLAGS = -mz80 --reserve-regs-iy --opt-code-size --max-allocs-per-node 30000
+ESXDOS_ORG = 8192
+TMPS =
 
 .PHONY: all
 all: $(foreach t,$(BINS),build/$(t))
@@ -51,11 +45,16 @@ build\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
-build/DMAPLAYW: $(srcdir)/dmaplayw.asm\
- $(INCLUDEDIR)/zxuno.def\
- $(INCLUDEDIR)/esxdos.def\
- | build
-	$(AS) $(AFLAGS) --raw=$@ $<
+build/joyconf.ihx: $(srcdir)/joyconf.c | build
+	$(CC) $(CFLAGS) --nostdlib --nostdinc --no-std-crt0 --code-loc $(ESXDOS_ORG) -o $@ $<
+TMPS += $(foreach s,ihx asm lk lst map noi rel sym,build/joyconf.$(s))
+
+build/joyconf.bin: build/joyconf.ihx
+	makebin -p $< $@
+TMPS += build/joyconf.bin
+
+build/JOYCONF: build/joyconf.bin
+	dd if=$< of=$@ bs=1 skip=$(ESXDOS_ORG) status=noxfer
 
 # $1 = target
 # No need in execution mode for FAT filesystem
@@ -75,7 +74,7 @@ uninstall:
 
 .PHONY: clean
 clean:
-	rm -f $(foreach t,$(BINS),build/$(t))
+	rm -f $(TMPS) $(foreach t,$(BINS),build/$(t))
 
 .PHONY: distclean
 distclean:

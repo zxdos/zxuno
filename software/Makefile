@@ -30,6 +30,7 @@ SUBDIRS=\
  dmaplayw\
  esxdos\
  esprst\
+ joyconf\
  iwconfig
 
 .PHONY: all
