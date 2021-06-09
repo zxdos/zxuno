@@ -102,7 +102,7 @@ install-sdcc: | sdcc/.extracted
 			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL_PROGRAM) -m 755 $$< $$@,';\
 		else\
 			find $$d -type f\
-			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL) -m 755 $$< $$@,';\
+			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL) -m 644 $$< $$@,';\
 		fi;\
 	done; } >install.mk;\
 	$(MAKE) -w -f install.mk DEST=$(DEST) prefix=$(prefix) INSTALL=$(INSTALL) INSTALL_PROGRAM=$(INSTALL_PROGRAM) install
