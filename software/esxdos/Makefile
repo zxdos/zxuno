@@ -171,24 +171,31 @@ endef
 
 $(foreach f,$(SYSCONF_FILES),$(eval $(call install_sysconf_rule,$(f))))
 
-.PHONY: install
-install:\
- build/.extracted\
+# Use separate rule to install files - `build` directory may be empty on
+# `make install` invocation and we have to extract archive before we can
+# use this rule
+.PHONY: install-files
+install-files:\
  $(foreach f,$(ROOT_FILES),$(DESTDIR)$(prefix)/$(f))\
  $(foreach f,$(BIN_FILES),$(DESTDIR)$(bindir)/$(f))\
  $(foreach f,$(DOC_FILES),$(DESTDIR)$(docdir)/$(f))\
  $(foreach f,$(SYS_FILES),$(DESTDIR)$(sysdir)/$(f))\
  $(foreach f,$(SYSCONF_FILES),$(DESTDIR)$(sysconfdir)/$(f))
+
+# Do `make install-files` inside the recipe
+.PHONY: install
+install: build/.extracted
 	mkdir -p $(DESTDIR)$(tmpdir)
+	$(MAKE) -w install-files
 
 .PHONY: uninstall
 uninstall:
 	$(RM)\
- $(foreach f,$(ROOT_FILES),$(DESTDIR)$(prefix)/$(f))\
- $(foreach f,$(BIN_FILES),$(DESTDIR)$(bindir)/$(f))\
- $(foreach f,$(DOC_FILES),$(DESTDIR)$(docdir)/$(f))\
- $(foreach f,$(SYS_FILES),$(DESTDIR)$(sysdir)/$(f))\
- $(foreach f,$(SYSCONF_FILES),$(DESTDIR)$(sysconfdir)/$(f))
+	 $(foreach f,$(ROOT_FILES),$(DESTDIR)$(prefix)/$(f))\
+	 $(foreach f,$(BIN_FILES),$(DESTDIR)$(bindir)/$(f))\
+	 $(foreach f,$(DOC_FILES),$(DESTDIR)$(docdir)/$(f))\
+	 $(foreach f,$(SYS_FILES),$(DESTDIR)$(sysdir)/$(f))\
+	 $(foreach f,$(SYSCONF_FILES),$(DESTDIR)$(sysconfdir)/$(f))
 
 .PHONY: clean
 clean:
