@@ -109,8 +109,7 @@ SYSCONF_FILES=\
 .PHONY: all
 all: build/.extracted
 
-.downloads\
-.downloads/esxdos\
+$(DOWNLOADS)/esxdos\
 build\
 $(DESTDIR)$(prefix)\
 $(DESTDIR)$(bindir)\
@@ -120,7 +119,7 @@ $(DESTDIR)$(sysconfdir)\
 $(DESTDIR)$(tmpdir):
 	mkdir -p $@
 
-ESXDOS_ARCHIVE		= .downloads/esxdos/esxdos089.zip
+ESXDOS_ARCHIVE		= $(DOWNLOADS)/esxdos/esxdos089.zip
 ESXDOS_ARCHIVE_SHA256	= d455888361cd13d455e362a4c841452b6f4568d30f9069443044affdd40de9a4
 ESXDOS_ARCHIVE_TYPE	= .zip
 ESXDOS_ARCHIVE_SUBDIR	= .
@@ -134,7 +133,7 @@ build/.extracted: $(ESXDOS_ARCHIVE) | build
 	 --output $(@D)
 	touch $@
 
-.downloads/esxdos/esxdos089.zip: | .downloads/esxdos
+$(DOWNLOADS)/esxdos/esxdos089.zip: | $(DOWNLOADS)/esxdos
 	wget -c http://www.esxdos.org/files/$(@F) -O $@
 
 define install_root_rule =
@@ -196,5 +195,5 @@ clean:
 	rm -rf build/*
 
 .PHONY: distclean
-distclean:
-	rm -rf .downloads build
+distclean: clean
+	rm -rf $(DOWNLOADS)/esxdos

@@ -6,14 +6,14 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-.downloads/sjasmplus:
+$(DOWNLOADS)/sjasmplus:
 	mkdir -p $@
 
 .PHONY: $(foreach t,build install uninstall clean distclean,$(t)-sjasmplus)
 
 ifeq ($(_DoBuild),1)
 
-SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/20190306.1.tar.gz
+SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus/20190306.1.tar.gz
 SJASMPLUS_ARCHIVE_SHA256	= f3f6d28af19880ed2cb427b6b427e9bd42371929c7d263dac840fb71de1302d6
 SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-20190306.1
@@ -30,7 +30,7 @@ sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
 	 --output $(@D)
 	touch $@
 
-.downloads/sjasmplus/20190306.1.tar.gz: | .downloads/sjasmplus
+$(DOWNLOADS)/sjasmplus/20190306.1.tar.gz: | $(DOWNLOADS)/sjasmplus
 	wget -c https://github.com/sjasmplus/sjasmplus/archive/refs/tags/$(@F) -O $@
 
 install-sjasmplus: | sjasmplus/.extracted sjasmplus.mk
@@ -62,23 +62,23 @@ build-sjasmplus: sjasmplus/sjasmplus$(EXESUFFIX)
 sjasmplus/sjasmplus$(EXESUFFIX): | sjasmplus/.extracted
 
 ifeq ($(PROCESSOR_ARCHITECTURE),X86)
- SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win32-20190306.1.7z
+ SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus/sjasmplus-win32-20190306.1.7z
  SJASMPLUS_ARCHIVE_SHA256	= c84731640930afc4f4cc3c0f30f891916b9b77d63dc0e4cfdcd226682b8545b1
  SJASMPLUS_ARCHIVE_TYPE		= .7z
  SJASMPLUS_ARCHIVE_SUBDIR	= .
 else ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
- SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win64-20190306.1.7z
+ SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus/sjasmplus-win64-20190306.1.7z
  SJASMPLUS_ARCHIVE_SHA256	= ef352b50ce7c9e9971c6fc3143e378d3e9f4069f11eb0c33022195c6e9b34fcb
  SJASMPLUS_ARCHIVE_TYPE		= .7z
  SJASMPLUS_ARCHIVE_SUBDIR	= .
 else ifeq ($(PROCESSOR_ARCHITECTURE),EM64T)
- SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win64-20190306.1.7z
+ SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus/sjasmplus-win64-20190306.1.7z
  SJASMPLUS_ARCHIVE_SHA256	= ef352b50ce7c9e9971c6fc3143e378d3e9f4069f11eb0c33022195c6e9b34fcb
  SJASMPLUS_ARCHIVE_TYPE		= .7z
  SJASMPLUS_ARCHIVE_SUBDIR	= .
 else
  $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
- SJASMPLUS_ARCHIVE		= .downloads/sjasmplus/sjasmplus-win32-20190306.1.7z
+ SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus/sjasmplus-win32-20190306.1.7z
  SJASMPLUS_ARCHIVE_SHA256	= c84731640930afc4f4cc3c0f30f891916b9b77d63dc0e4cfdcd226682b8545b1
  SJASMPLUS_ARCHIVE_TYPE		= .7z
  SJASMPLUS_ARCHIVE_SUBDIR	= .
@@ -93,10 +93,10 @@ sjasmplus/.extracted: $(SJASMPLUS_ARCHIVE)
 	 --output $(@D)
 	touch $@
 
-.downloads/sjasmplus/sjasmplus-win32-20190306.1.7z: | .downloads/sjasmplus
+$(DOWNLOADS)/sjasmplus/sjasmplus-win32-20190306.1.7z: | $(DOWNLOADS)/sjasmplus
 	wget -c https://github.com/sjasmplus/sjasmplus/releases/download/20190306.1/$(@F) -O $@
 
-.downloads/sjasmplus/sjasmplus-win64-20190306.1.7z: | .downloads/sjasmplus
+$(DOWNLOADS)/sjasmplus/sjasmplus-win64-20190306.1.7z: | $(DOWNLOADS)/sjasmplus
 	wget -c https://github.com/sjasmplus/sjasmplus/releases/download/20190306.1/$(@F) -O $@
 
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
@@ -122,7 +122,7 @@ endif	# _UsePrecompiledOnWindows
 ifeq ($(_DoClean),1)
 
 distclean-sjasmplus: clean-sjasmplus
-	rm -rf .downloads/sjasmplus
+	rm -rf $(DOWNLOADS)/sjasmplus
 
 else	# !_DoClean
 

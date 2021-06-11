@@ -6,14 +6,14 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-.downloads/sjasmplus-z00m128:
+$(DOWNLOADS)/sjasmplus-z00m128:
 	mkdir -p $@
 
 .PHONY: $(foreach t,build install uninstall clean distclean,$(t)-sjasmplus)
 
 ifeq ($(_DoBuild),1)
 
-SJASMPLUS_ARCHIVE		= .downloads/sjasmplus-z00m128/v1.18.2.tar.gz
+SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus-z00m128/v1.18.2.tar.gz
 SJASMPLUS_ARCHIVE_SHA256	= 114807bf53d3526b4d1ae7d40f3050b9ee98220df74931efc1e6d1fe5aba3d02
 SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2
@@ -30,7 +30,7 @@ sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 	 --output $(@D)
 	touch $@
 
-.downloads/sjasmplus-z00m128/v1.18.2.tar.gz: | .downloads/sjasmplus-z00m128
+$(DOWNLOADS)/sjasmplus-z00m128/v1.18.2.tar.gz: | $(DOWNLOADS)/sjasmplus-z00m128
 	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/$(@F) -O $@
 
 install-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
@@ -68,7 +68,7 @@ else
  $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
 endif
 
-SJASMPLUS_ARCHIVE		= .downloads/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip
+SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip
 SJASMPLUS_ARCHIVE_SHA256	= 848bca2522d6febbf3e3c48c634731ecd61899166f5922ed15857e8063c3dc4b
 SJASMPLUS_ARCHIVE_TYPE		= .zip
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2.win
@@ -82,7 +82,7 @@ sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 	 --output $(@D)
 	touch $@
 
-.downloads/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip: | .downloads/sjasmplus-z00m128
+$(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip: | $(DOWNLOADS)/sjasmplus-z00m128
 	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.2/$(@F) -O $@
 
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
@@ -108,9 +108,8 @@ endif	# _UsePrecompiledOnWindows
 ifeq ($(_DoClean),1)
 
 distclean-sjasmplus:
-	rm -rf\
- .downloads/sjasmplus-z00m128\
- sjasmplus-z00m128
+	rm -rf $(DOWNLOADS)/sjasmplus-z00m128
+	rm -rf sjasmplus-z00m128
 
 else	# !_DoClean
 
