@@ -1,0 +1,77 @@
+; regs.mac - macros to assign values to CPU registers.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: GPL-3.0-or-above
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef regs_mac_included
+ define regs_mac_included
+
+ ; Load (initialize) A register
+ macro ld_a value
+  if 0 = value
+                xor     a               ; 1 byte
+  else
+                ld      a, value        ; 2 bytes
+  endif
+___a=value
+ endm
+
+ ; Change A register
+ macro chg_a value
+  if ___a != value
+   if 0 = (value & $ff)
+                xor     a               ; 1 byte
+   elseif ((___a + 1) & $ff) = (value & $ff)
+                inc     a               ; 1 byte
+   elseif ((___a - 1) & $ff) = (value & $ff)
+                dec     a               ; 1 byte
+   elseif (((___a & $7f) << 1) + ((___a & $80) >> 7)) = (value & $ff)
+                rlca                    ; 1 byte
+   elseif (((___a & $fe) >> 1) + ((___a & $01) << 7)) = (value & $ff)
+                rrca                    ; 1 byte
+   elseif ((___a ^ $ff) & $ff) = (value & $ff)
+                cpl                     ; 1 byte
+   else
+                ld      a, value & $ff  ; 2 bytes
+   endif
+___a=value
+  endif
+ endm
+
+ ; Load (initialize) BC register
+ macro ld_bc value
+                ld      bc, value
+___bc=value
+ endm
+
+ ; Change BC register
+ macro chg_bc value
+  if (___bc & $ffff) != (value & $ffff)
+   if (___bc & $ff) = (value & $ff)
+    if (((___bc >> 8) + 1) & $ff) = ((value >> 8) & $ff)
+                inc     b
+    elseif (((___bc >> 8) - 1) & $ff) = ((value >> 8) & $ff)
+                dec     b
+    else
+                ld      b, value >> 8
+    endif
+   elseif ((___bc >> 8) & $ff) = ((value >> 8) & $ff)
+    if (((___bc & $ff) + 1) & $ff) = (value & $ff)
+                inc     c
+    elseif (((___bc & $ff) - 1) & $ff) = (value & $ff)
+                dec     c
+    else
+                ld      c, value & $ff
+    endif
+   else
+                ld      bc, value
+   endif
+___bc=value
+  endif
+ endm
+
+ endif  ; !regs_mac_included
