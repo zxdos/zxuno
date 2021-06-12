@@ -31,6 +31,9 @@
 
  define PROGRAM         "keymap"
  define VERSION         "0.1"
+ define DESCRIPTION     "Loads the specified keymap from", 13, KEYMAPPATH, " and enables it."
+ define COPYRIGHT       127, " 2016-2021 Antonio Villena"
+ define LICENSE         "License: GNU GPL 3.0"
 
  include "zxuno.def"
  include "esxdos.def"
@@ -156,10 +159,13 @@ ReadMap:        xor     a
                 ret
 
 ;                        01234567890123456789012345678901
-aUsage:         db      " .", PROGRAM, " file", 13
+aUsage:         db      PROGRAM, " version ", VERSION, 13
+                db      DESCRIPTION, 13
+                db      COPYRIGHT, 13
+                db      LICENSE, 13
                 db      13
-                db      "Loads the specified keymap from", 13
-                db      KEYMAPPATH, " and enables it.", 13, 0
+                db      "Usage:", 13
+                db      "  .", PROGRAM, " file", 13, 0
 
 FileHandle:     db      0
 
