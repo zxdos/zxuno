@@ -44,6 +44,10 @@
  define cold_boot       $fe
  define core_id         $ff
 
+; Aliases
+ZXUNOADDR:              equ     zxuno_port
+ZXUNODATA:              equ     zxuno_data
+
  ; MMC/SDC interface:
  define SPI_PORT        $eb
  define OUT_PORT        $e7

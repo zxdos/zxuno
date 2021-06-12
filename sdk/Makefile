@@ -54,7 +54,13 @@ export BUILD
 export FORCEBUILD
 export FORCECLEAN
 
-TARGETS=sjasmplus z88dk lodepng zx7b tools
+TARGETS=\
+ sjasmplus\
+ sdcc\
+ z88dk\
+ lodepng\
+ zx7b\
+ tools
 
 .PHONY: all
 all: install

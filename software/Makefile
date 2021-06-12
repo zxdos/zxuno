@@ -28,10 +28,11 @@ prefix		?= .
 
 SUBDIRS=\
  dmaplayw\
- esxdos\
  esprst\
+ esxdos\
+ iwconfig\
  joyconf\
- iwconfig
+ keymap
 
 .PHONY: all
 all: build

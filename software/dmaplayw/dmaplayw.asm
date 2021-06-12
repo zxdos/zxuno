@@ -1,6 +1,6 @@
 ; dmaplayw.asm - play an audio file using the SpecDrum and DMA at 15.625 kHz.
 ;
-; Copyright (C) 2017 AZXUNO association
+; Copyright (C) 2017-2021 AZXUNO association
 ; Contributors:
 ;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
@@ -17,7 +17,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ;
-; SPDX-FileCopyrightText: Copyright (C) 2017 AZXUNO association
+; SPDX-FileCopyrightText: Copyright (C) 2017-2021 AZXUNO association
 ;
 ; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
@@ -28,8 +28,11 @@
 
 ;               output  DMAPLAYW
 
- define PROGRAM "dmaplayw"
- define VERSION "0.1"
+ define PROGRAM         "dmaplayw"
+ define VERSION         "0.1"
+ define DESCRIPTION     "Plays an audio file using the", 13, "SpecDrum and DMA at 15.625 kHz"
+ define COPYRIGHT       127, " 2017-2021 AZXUNO association"
+ define LICENSE         "License: GNU GPL 3.0 or above"
 
  include "zxuno.def"
  include "esxdos.def"
@@ -40,29 +43,50 @@
  ; Prescaler for timed DMA. The count goes from 0 to 223, that is, 224 cycles
  define DMA_PRESCALER   CPU_FREQ / SPECDRUM_FREQ - 1
 
-                org     $2000   ; entry point of ESXDOS program
+ define DMA_BUFSIZE      2048           ; DMA buffer size
+
+                org     $2000           ; entry point of ESXDOS program
 
 ;-----------------------------------------------------------------------------
 ; Subroutine
 ; In: HL = pointer to the command line arguments string (ASCIIZ)
 
-Main            ld      a, h
+Main:           ld      a, h
                 or      l
-                jp      nz, Init
-                ld      hl, aUsage
-.PrintLoop      ld      a, (hl)
-                or      a
-                ret     z       ; Return on string end
-                rst     $10
-                inc     hl
-                jr      .PrintLoop
+                jr      nz, Init
+;               jr      ShowUsage       ; No need, it follows
 
 ;-----------------------------------------------------------------------------
 ; Subroutine
-; In: HL = pointer to the command line arguments (filename)
 
-GetFileName     ld      de, BufferFileName
-.CheckCharacter ld      a, (hl)
+ShowUsage:      ld      hl, aUsage
+;               jr      Print           ; No need, it follows
+
+;-----------------------------------------------------------------------------
+; Subroutine
+; In: HL = pointer to an ASCIIZ string
+
+Print:          ld      a, (hl)
+                or      a
+                ret     z               ; Return on string end
+                rst     $10
+                inc     hl
+                jr      Print
+
+;-----------------------------------------------------------------------------
+; Subroutine
+; In: HL = pointer to the command line arguments string (ASCIIZ)
+
+Init:           ld      de, FileName
+;               call    GetFileName     ; inline
+
+;-----------------------------------------------------------------------------
+; Subroutine
+; In:  HL = pointer to the command line arguments (filename)
+;      DE = pointer to the output ASCIIZ string (filename)
+; Out: DE = pointer to terminating 0 character of output string
+
+.GetFileName:   ld      a, (hl)
                 or      a
                 jr      z, .End
                 cp      " "
@@ -72,30 +96,21 @@ GetFileName     ld      de, BufferFileName
                 cp      13
                 jr      z, .End
                 ldi
-                jr      .CheckCharacter
-.End            xor     a
+                jr      .GetFileName
+.End:           xor     a
                 ld      (de), a
-                inc     de      ; DE remains pointing to the buffer that is needed in OPEN, I don't know what for
-                ret
+;               ret                     ; skipped
 
-;                        01234567890123456789012345678901
-aUsage          db      " .", PROGRAM, " audiofile.wav", 13
-                db      13
-                db      "Plays an audio file using the", 13
-                db      "SpecDrum and DMA at 15.625 kHz", 13, 0
-
-;-----------------------------------------------------------------------------
-; Subroutine
-; In: HL = pointer to the command line arguments string (ASCIIZ)
-
-Init            call    GetFileName     ; results DE = buffer for OPEN
+; continue Init()
+                inc     de      ; DE remains pointing to the buffer that is
+                                ; needed in OPEN, I don't know what for
                 xor     a
-                esxdos  M_GETSETDRV     ; A = current unit
-                ld      b, FA_READ      ; B = opening mode
-                ld      hl, BufferFileName      ; HL = pointer to file name (ASCIIZ)
+                esxdos  M_GETSETDRV     ; A = current drive
+                ld      b, FA_READ      ; B = file open mode
+                ld      hl, FileName    ; HL = pointer to filename (ASCIIZ)
                 esxdos  F_OPEN
                 ret     c               ; Return on error
-                ld      (FHandle), a
+                ld      (FileHandle), a
                 ld      l, SEEK_START
                 ld      bc, 0
                 ld      de, 44          ; Skip 44 bytes from start (WAV header)
@@ -103,13 +118,40 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 ret     c               ; Return on error
                 ld      hl, ScreenAddr
                 ld      de, ScreenAddr+1
-                ld      bc, 31
+                ld      bc, 32-1
                 ld      (hl), 255
                 ldir                    ; This line will be deleted on the first wave plot
 
+                ld      hl, ScreenLines ; Fill ScreenLines
+                ld      de, ScreenAddr  ; with screen lines addresses
+                ld      b, (192-1)+1    ; 191 repeats
+.LineDownLoop:  ld      (hl), e
+                inc     hl
+                ld      (hl), d
+                inc     hl
+                ; Calculate next line (down one line)
+                inc     d               ; D = (D + 1) & 255
+                ld      a, d            ; A = D
+                and     %00000111       ; A = D & 7, CY = 0
+                jr      nz, .SamePart   ; if (D & 7) goto SamePart
+                ld      a, e            ; A = E
+                sub     a, -32          ; A = (E + 32) & 255, CY = !A
+                ld      e, a            ; E = (E + 32) & 255, CY = !E
+                sbc     a, a            ; A = -CY
+                and     %11111000       ; A = -8 * CY
+                add     a, d            ; A = (D - 8 * CY) & 255
+                ld      d, a            ; D = (D - 8 * CY) & 255
+.SamePart:      djnz    .LineDownLoop
+
+;               ld      hl, WaveBuffer  ; HL already points to WaveBuffer
+                ld      de, WaveBuffer+1
+                ld      bc, 256-1       ; B = 0
+                ld      (hl), b
+                ldir                    ; Clear WaveBuffer
+
                 ld      hl, DMABuffer
                 ld      de, DMABuffer+1
-                ld      bc, DMABuffer_Len-1
+                ld      bc, DMA_BUFSIZE-1
                 ld      (hl), 0
                 ldir                    ; Clear DMA buffer
 
@@ -140,7 +182,7 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 ld      a, dma_len
                 out     (c), a
                 inc     b               ; BC = zxuno_data
-                ld      hl, DMABuffer_Len
+                ld      hl, DMA_BUFSIZE
                 out     (c), l
                 out     (c), h
                 dec     b               ; BC = zxuno_port
@@ -157,7 +199,7 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 ld      a, %00000111    ; Mem to I/O, redisparable, timed, source address is checked
                 out     (c), a
                 dec     b               ; BC = zxuno_port
-.PlayLoop       ld      bc, $7ffe       ; SPACE halfrow
+.PlayLoop:      ld      bc, $7ffe       ; SPACE halfrow
                 in      a, (c)
                 and     %00000001
                 jp      z, .ExitPlay
@@ -165,7 +207,7 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 ld      a, dma_stat
                 out     (c), a
                 inc     b               ; BC = zxuno_data
-.StillInSecondHalf
+.StillInSecondHalf:
                 in      a, (c)
                 bit     7, a
                 jr      z, .StillInSecondHalf
@@ -173,7 +215,7 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 ld      a, dma_prob
                 out     (c), a
                 inc     b               ; BC = zxuno_data
-                ld      hl, DMABuffer + DMABuffer_Len/2
+                ld      hl, DMABuffer + DMA_BUFSIZE/2
                 out     (c), l
                 out     (c), h
                 dec     b               ; BC = zxuno_port
@@ -183,23 +225,23 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 in      a, (c)
 
                 ; Fill second half of buffer with audio data
-                ld      hl, DMABuffer + DMABuffer_Len/2
-                ld      bc, DMABuffer_Len/2
-                ld      a, (FHandle)
+                ld      hl, DMABuffer + DMA_BUFSIZE/2
+                ld      bc, DMA_BUFSIZE/2
+                ld      a, (FileHandle)
                 esxdos  F_READ
                 jp      c, .ExitPlay    ; End read on error
                 ld      a, b
                 or      c
                 jp      z, .ExitPlay    ; End read on end of data
 
-                ld      hl, DMABuffer + DMABuffer_Len/2
+                ld      hl, DMABuffer + DMA_BUFSIZE/2
                 call    PlotWave
 
                 ld      bc, zxuno_port
                 ld      a, dma_stat
                 out     (c), a
                 inc     b               ; BC = zxuno_data
-.StillInFirstHalf
+.StillInFirstHalf:
                 in      a, (c)
                 bit     7, a
                 jr      z, .StillInFirstHalf
@@ -219,8 +261,8 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
 
                 ; Fill first half of buffer with audio data
                 ld      hl, DMABuffer
-                ld      bc, DMABuffer_Len/2
-                ld      a, (FHandle)
+                ld      bc, DMA_BUFSIZE/2
+                ld      a, (FileHandle)
                 esxdos  F_READ
                 jp      c, .ExitPlay    ; End read on error
                 ld      a, b
@@ -232,7 +274,7 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
 
                 jp      .PlayLoop
 
-.ExitPlay       ld      bc, zxuno_port
+.ExitPlay:      ld      bc, zxuno_port
                 ld      a, dma_ctrl
                 out     (c), a
                 inc     b               ; BC = zxuno_data
@@ -240,21 +282,19 @@ Init            call    GetFileName     ; results DE = buffer for OPEN
                 out     (c), a
                 dec     b               ; BC = zxuno_port
 
-                ld      a, (FHandle)
+                ld      a, (FileHandle)
                 esxdos  F_CLOSE
 
-                or      a       ; Clear carry flag
+                or      a               ; Return to ESXDOS without errors (CY=0)
                 ei
                 ret
-
-FHandle         db      0
 
 ;-----------------------------------------------------------------------------
 ; Subroutine
 
-PlotWave        ld      de, BufferCleared
+PlotWave:       ld      de, WaveBuffer
                 ld      c, 0
-.Loop           ld      a, (de)
+.Loop:          ld      a, (de)
                 ld      b, a
                 call    Plot
                 ld      a, (hl)
@@ -275,14 +315,14 @@ PlotWave        ld      de, BufferCleared
 ; In: B = y
 ;     C = x
 
-Plot            push    bc
+Plot:           push    bc
                 push    de
                 push    hl
                 ld      e, b
                 ld      d, 0            ; DE = y
                 sla     e
                 rl      d               ; DE = DE*2
-                ld      hl, DirScan
+                ld      hl, ScreenLines
                 add     hl, de          ; HL = pointer to the address of the first pixel of Y
                 ld      e, (hl)
                 inc     hl
@@ -296,7 +336,7 @@ Plot            push    bc
                 add     hl, bc          ; HL contains the address to paint the pixel
                 ld      a, d            ; restore X coordinate
                 and     %00000111
-                ld      de, DirBits
+                ld      de, PixelMask
                 add     a, e
                 ld      e, a
                 ld      a, d
@@ -310,25 +350,29 @@ Plot            push    bc
                 pop     bc
                 ret
 
-DirBits
+;                        01234567890123456789012345678901
+aUsage:         db      PROGRAM, " version ", VERSION, 13
+                db      DESCRIPTION, 13
+                db      COPYRIGHT, 13
+                db      LICENSE, 13
+                db      13
+                db      "Usage:", 13
+                db      "  .", PROGRAM, " audiofile.wav", 13, 0
+
+FileHandle:     db      0
+
 i = %10000000
- while i > 0
-                db       i
+PixelMask:      dup     8
+                db      i
 i = i / 2
- endw
+                edup
 
-DirScan
-y = 0
- while y < 192
-                dw	ScreenAddr + (256 * (y & 7)) + (32 * ((y / 8) & 7)) + (64 * 32 * (y / 64))
-y = y + 1
- endw
+ScreenLines:    org     $+192*2
 
-BufferCleared   ds      256
+WaveBuffer:     org     $+256
 
-BufferFileName: equ     $       ; Rest of RAM for filename
+FileName:                       ; Rest of RAM for filename
 
 ScreenAddr:     equ     $4000
 
 DMABuffer:      equ     $8000   ; DMA buffer start address (circular play buffer)
-DMABuffer_Len:  equ     2048    ; DMA buffer length

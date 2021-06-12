@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-.downloads/z88dk:
+$(DOWNLOADS)/z88dk:
 	mkdir -p $@
 
 .PHONY: $(foreach t,build install uninstall clean distclean,$(t)-z88dk)
@@ -37,7 +37,7 @@ build-z88dk install-z88dk: z88dk/.done
 
 ifeq ($(_DoBuild),1)
 
-Z88DK_ARCHIVE		= .downloads/z88dk/z88dk-src-2.1.tgz
+Z88DK_ARCHIVE		= $(DOWNLOADS)/z88dk/z88dk-src-2.1.tgz
 Z88DK_ARCHIVE_SHA256	= f3579ee59b4af552721173165af38223b115ccb67179e79d2f3c0ae64338dc7c
 Z88DK_ARCHIVE_TYPE	= .tar.gz
 Z88DK_ARCHIVE_SUBDIR	= z88dk
@@ -62,7 +62,7 @@ z88dk/.extracted: $(Z88DK_ARCHIVE) | z88dk.patch
 	patch -N -p0 -s <$| || true
 	touch $@
 
-.downloads/z88dk/z88dk-src-2.1.tgz: | .downloads/z88dk
+$(DOWNLOADS)/z88dk/z88dk-src-2.1.tgz: | $(DOWNLOADS)/z88dk
 	wget -c https://github.com/z88dk/z88dk/releases/download/v2.1/$(@F) -O $@
 
 uninstall-z88dk:;
@@ -91,7 +91,7 @@ else
  $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
 endif
 
-Z88DK_ARCHIVE		= .downloads/z88dk/z88dk-win32-2.1.zip
+Z88DK_ARCHIVE		= $(DOWNLOADS)/z88dk/z88dk-win32-2.1.zip
 Z88DK_ARCHIVE_SHA256	= f4abedfae429ea159e388b5c76758ace4dcb86e9a00dbd928862b0a30f6874d6
 Z88DK_ARCHIVE_TYPE	= .zip
 Z88DK_ARCHIVE_SUBDIR	= z88dk
@@ -105,7 +105,7 @@ z88dk/.done: $(Z88DK_ARCHIVE)
 	 --output $(@D)
 	touch $@
 
-.downloads/z88dk/z88dk-win32-2.1.zip: | .downloads/z88dk
+$(DOWNLOADS)/z88dk/z88dk-win32-2.1.zip: | $(DOWNLOADS)/z88dk
 	wget -c https://github.com/z88dk/z88dk/releases/download/v2.1/$(@F) -O $@
 
 uninstall-z88dk:;
@@ -125,7 +125,7 @@ endif	# _UsePrecompiledOnWindows
 ifeq ($(_DoClean),1)
 
 distclean-z88dk: clean-z88dk
-	rm -rf .downloads/z88dk
+	rm -rf $(DOWNLOADS)/z88dk
 
 else	# !_DoClean
 

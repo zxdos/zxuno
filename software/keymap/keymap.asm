@@ -1,120 +1,175 @@
-; API de ESXDOS.
-include "esxdos.inc"
-include "errors.inc"
+; keymap - utility for loading a keymap into the ZX-Uno. You only need a map
+; filename, which must be saved in `/SYS/KEYMAPS' inside the SD card where
+; ESXDOS is.
+;
+; Copyright (C) 2016-2021 Antonio Villena
+; Contributors:
+;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, version 3.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2016-2021 Antonio Villena
+;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: GPL-3.0-only
 
-; KEYMAP. Una utilidad para cargar un mapa de teclado en el ZX-Uno
-; Necesita sólamente un nombre de fichero de mapa, que debe estar
-; guardado en /SYS/KEYMAPS dentro de la tarjeta SD donde esté ESXDOS.
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
 
-;Para ensamblar con PASMO como archivo binario (no TAP)
+;               output  KEYMAP
 
-ZXUNOADDR           equ 0fc3bh
-ZXUNODATA           equ 0fd3bh
+ define PROGRAM         "keymap"
+ define VERSION         "0.1"
+ define DESCRIPTION     "Loads the specified keymap from", 13, KEYMAPPATH, " and enables it."
+ define COPYRIGHT       127, " 2016-2021 Antonio Villena"
+ define LICENSE         "License: GNU GPL 3.0"
 
-                    org 2000h  ;comienzo de la ejecución de los comandos ESXDOS.
+ include "zxuno.def"
+ include "esxdos.def"
 
-Main                proc
-                    ld a,h
-                    or l
-                    jr z,PrintUso  ;si no se ha especificado nombre de fichero, imprimir uso
-                    call RecogerNFile
+ define KEYMAPPATH      "/SYS/KEYMAP"
+ define FNAMESIZE       1024            ; will it be enough?
+ define FBUFSIZE        4096            ; 4KB file buffer
 
-                    call ReadMap
-                    ret
+                org     $2000           ; entry point of ESXDOS program
 
-PrintUso            ld hl,Uso
-BucPrintMsg         ld a,(hl)
-                    or a
-                    ret z
-                    rst 10h
-                    inc hl
-                    jr BucPrintMsg
-                    endp
+;-----------------------------------------------------------------------------
+; Subroutine
+; In: HL = pointer to the command line arguments string (ASCIIZ)
 
+Main:           ld      a, h
+                or      l
+                jr      nz, Init
+;               jr      ShowUsage       ; No need, it follows
 
-RecogerNFile        proc   ;HL apunta a los argumentos (nombre del fichero)
-                    ld de,BufferNFich
-CheckCaracter       ld a,(hl)
-                    or a
-                    jr z,FinRecoger
-                    cp " "
-                    jr z,FinRecoger
-                    cp ":"
-                    jr z,FinRecoger
-                    cp 13
-                    jr z,FinRecoger
-                    ldi
-                    jr CheckCaracter
-FinRecoger          xor a
-                    ld (de),a
-                    inc de   ;DE queda apuntando al buffer este que se necesita en OPEN, no sé pa qué.
-                    ret
-                    endp
+;-----------------------------------------------------------------------------
+; Subroutine
 
+ShowUsage:      ld      hl, aUsage
+;               jr      Print           ; No need, it follows
 
-ReadMap             proc
-                    xor a
-                    rst 08h
-                    db M_GETSETDRV  ;A = unidad actual
-                    ld b,FA_READ    ;B = modo de apertura
-                    ld hl,MapFile   ;HL = Puntero al nombre del fichero (ASCIIZ)
-                    rst 08h
-                    db F_OPEN
-                    ret c   ;Volver si hay error
-                    ld (FHandle),a
+;-----------------------------------------------------------------------------
+; Subroutine
+; In: HL = pointer to an ASCIIZ string
 
-                    ld bc,ZXUNOADDR
-                    ld a,7
-                    out (c),a   ;select KEYMAP register
+Print:          ld      a, (hl)
+                or      a
+                ret     z
+                rst     $10
+                inc     hl
+                jr      Print
 
-                    ld b,4      ;4 chunks of 4096 bytes each to load
-BucReadMapFromFile  push bc
+;-----------------------------------------------------------------------------
+; Subroutine
+; In: HL = pointer to the command line arguments string (ASCIIZ)
 
-                    ld bc,4096
-                    ld hl,Buffer
-                    ld a,(FHandle)
-                    rst 08h
-                    db F_READ
-                    jr c,PrematureEnd  ;si error, fin de lectura
+Init:           ld      de, FileName
+;               call    GetFileName             ; inline
 
-                    ld hl,Buffer
-                    ld bc,ZXUNODATA
-                    ld de,4096
-BucWriteMapToFPGA   ld a,(hl)
-                    out (c),a
-                    inc hl
-                    dec de
-                    ld a,d
-                    or e
-                    jr nz,BucWriteMapToFPGA
+;-----------------------------------------------------------------------------
+; Subroutine
+; In:  HL = pointer to the command line arguments (filename)
+;      DE = pointer to the output ASCIIZ string (filename)
+; Out: DE = pointer to terminating 0 character of output string
 
-                    pop bc
-                    djnz BucReadMapFromFile
+.GetFileName:   ld      a, (hl)
+                or      a
+                jr      z, .End
+                cp      " "
+                jr      z, .End
+                cp      ":"
+                jr      z, .End
+                cp      13
+                jr      z, .End
+                ldi
+                jr      .GetFileName
+.End:           xor     a
+                ld      (de),a
+;               ret                     ; skipped
 
-                    jr FinReadMap
+; continue Init()
+                inc     de      ; DE remains pointing to the buffer that is
+                                ; needed in OPEN, I don't know what for
+;               jr      ReadMap         ; No need, it follows
 
-PrematureEnd        pop bc
-                    push af
-                    ld a,(FHandle)
-                    rst 08h
-                    db F_CLOSE
-                    pop af
-                    ret
+;-----------------------------------------------------------------------------
+; Subroutine
+; In: DE = pointer to the buffer that is needed in OPEN, I don't know what for
 
-FinReadMap          ld a,(FHandle)
-                    rst 08h
-                    db F_CLOSE
-                    or a   ;Volver sin errores a ESXDOS
-                    ret
-                    endp
+ReadMap:        xor     a
+                esxdos  M_GETSETDRV     ; A = current drive
+                ld      b, FA_READ      ; B = file open mode
+                ld      hl, FilePath    ; HL = pointer to a filename (ASCIIZ)
+                esxdos  F_OPEN
+                ret     c               ; Return on error
+                ld      (FileHandle), a
 
-                    ;   01234567890123456789012345678901
-Uso                 db " KEYMAP file",13,13
-                    db "Loads the specified keymap from",13
-                    db "/SYS/KEYMAPS and enables it.",13,0
+                ld      bc, ZXUNOADDR
+                ld      a, key_map      ; Select KEYMAP register
+                out     (c), a
 
-FHandle             db 0
+                ld      b, 4            ; 4 chunks of FBUFSIZE bytes each to load
+.ReadMapFromFileLoop:
+                push    bc              ; Save counter
 
-Buffer              ds 4096  ;4KB para buffer de lectura
-MapFile             db "/SYS/KEYMAPS/"
-BufferNFich         equ $   ;resto de la RAM para el nombre del fichero
+                ld      bc, FBUFSIZE
+                ld      hl, FileBuffer
+                ld      a, (FileHandle)
+                esxdos  F_READ
+                jr      c, .Error       ; End reading on error
+
+                ld      hl, FileBuffer
+                ld      bc, ZXUNODATA
+                ld      de, FBUFSIZE
+.WriteMapToFPGALoop:
+                ld      a, (hl)
+                out     (c), a
+                inc     hl
+                dec     de
+                ld      a, d
+                or      e
+                jr      nz, .WriteMapToFPGALoop
+
+                pop     bc              ; Restore counter
+                djnz    .ReadMapFromFileLoop
+
+                jr      .ReadMapDone
+
+.Error:         pop     bc              ; Restore stack
+                push    af              ; Save error status
+                ld      a, (FileHandle)
+                esxdos  F_CLOSE
+                pop     af              ; Restore error status
+                ret
+
+.ReadMapDone:   ld      a, (FileHandle)
+                esxdos  F_CLOSE
+                or      a               ; Return to ESXDOS without errors (CY=0)
+                ret
+
+;                        01234567890123456789012345678901
+aUsage:         db      PROGRAM, " version ", VERSION, 13
+                db      DESCRIPTION, 13
+                db      COPYRIGHT, 13
+                db      LICENSE, 13
+                db      13
+                db      "Usage:", 13
+                db      "  .", PROGRAM, " file", 13, 0
+
+FileHandle:     db      0
+
+FilePath:       db      KEYMAPPATH, "/"
+FileName:                               ; File name buffer
+                org     $+FNAMESIZE
+FileBuffer:                             ; File data buffer

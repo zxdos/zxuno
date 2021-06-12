@@ -96,6 +96,9 @@ endif	# !ZXSDK
 
 -include $(ZXSDK)/conf.mk
 
+# Shared directory for downloaded files
+DOWNLOADS ?= $(shell realpath $(ZXSDK)/../.downloads)
+
 # C compiler
 ifeq ($(BUILD),mingw32)
  CC = i686-w64-mingw32-gcc
