@@ -1,8 +1,30 @@
 /*
-Compilar con:
-sdcc -mz80 --reserve-regs-iy --opt-code-size --max-allocs-per-node 10000
---nostdlib --nostdinc --no-std-crt0 --code-loc 8192 loadpzx.c
-*/
+ * loadpzx - loads a PZX file into the PZX player.
+ *
+ * Copyright (C) 2016-2021 Antonio Villena
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-FileCopyrightText: Copyright (C) 2016-2021 Antonio Villena
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
+#define PROGRAM     "loadpzx"
+#define VERSION     "0.1"
+#define DESCRIPTION "Loads a PZX file into the PZX" "\r" "player."
+#define COPYRIGHT   "\x7f 2016-2021 Antonio Villena"
+#define LICENSE     "License: GNU GPL 3.0"
 
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
@@ -67,7 +89,7 @@ __sfr __banked __at (0xfd3b) ZXUNODATA;
 #define M_TAPEIN    (MISC_BASE+3)
 #define M_AUTOLOAD  (MISC_BASE+8)
 
-#define FMODE_READ	     0x1 // Read access
+#define FMODE_READ       0x1 // Read access
 #define FMODE_WRITE      0x2 // Write access
 #define FMODE_OPEN_EX    0x0 // Open if exists, else error
 #define FMODE_OPEN_AL    0x8 // Open if exists, if not create
@@ -105,7 +127,7 @@ void seek (BYTE handle, WORD hioff, WORD looff, BYTE from);
 /* --------------------------------------------------------------------------------- */
 BYTE main (char *p);
 void getcoreid(BYTE *s);
-void usage (void);
+void show_usage (void);
 BYTE commandlinemode (char *p);
 void getfilename (char *p, char *fname);
 BYTE printheader (BYTE handle);
@@ -122,60 +144,61 @@ void copysram (BYTE *p, WORD l);
 
 void init (void) __naked
 {
-     __asm
-     xor a
-     ld (#_errno),a
-     push hl
-     call _main
-     inc sp
-     inc sp
-     ld a,l
-     or a
-     jr z,preparaload
-     cp #255
-     jr z,noload
-     scf
-     ret
-noload:
-     or a
-     ret
-preparaload:
-     ;Cierra TAPE.IN
-     ld b,#1
-     rst #8
-     .db #M_TAPEIN
+    __asm
+        xor     a
+        ld      (#_errno), a
+        push    hl
+        call    _main
+        inc     sp
+        inc     sp
+        ld      a, l
+        or      a
+        jr      z, prepare_load
+        cp      #255
+        jr      z, no_load
+        scf
+        ret
+no_load:
+        or      a
+        ret
+prepare_load:
+        ; close TAPE.IN
+        ld      b, #1
+        rst     #8
+        .db     #M_TAPEIN
 
-     ;Auto LOAD ""
-     xor a
-     rst #8
-     .db #M_AUTOLOAD
-     
-     or a
-     ret
+        ; auto LOAD ""
+        xor     a
+        rst     #8
+        .db     #M_AUTOLOAD
 
-;Codigo antiguo para hacer LOAD ""
-;     ld bc,#3
-;     ld hl,(#23641)
-;     push hl
-;     rst #0x18
-;     .dw 0x1655
-;     ld hl,#comando_load
-;     pop de
-;     ld bc,#3
-;     ldir
-;     ld hl,#0x12cf
-;     .db 0xc3, 0xfb, 0x1f
-
-;comando_load:
-;     .db 239,34,34
+        or      a
+        ret
      __endasm;
+    // old code to do LOAD ""
+    /*
+        ld      bc, #3
+        ld      hl, (#23641)
+        push    hl
+        rst     #0x18
+        .dw     0x1655
+        ld      hl, #command_load
+        pop     de
+        ld      bc, #3
+        ldir
+        ld      hl, #0x12cf
+        jp      #0x1ffb
+
+command_load:
+        .db     239, 34, 34
+    */
 }
 
 BYTE main (char *p)
 {
   if (!p)
   {
-     usage();
+     show_usage();
      return 255;
   }
   else
@@ -213,9 +236,9 @@ BYTE commandlinemode (char *p)
        readpzx(handle);
 
     close (handle);
-    
+
     if (noautoload == 255)
-      puts ("\xd\xdType LOAD \"\" and press PLAY\xd");
+      puts ("\r\rType LOAD \"\" and press PLAY\r");
     else
     {
         ZXUNOADDR = 0xf3;
@@ -226,13 +249,20 @@ BYTE commandlinemode (char *p)
     return noautoload;
 }
 
-void usage (void)
+void show_usage (void)
 {
-        // 01234567890123456789012345678901
-    puts (" LOADPZX [-n] file.pzx\xd\xd"
-          "Loads a PZX file into the PZX\xd"
-          "player.\xd"
-          "-n : do not autoplay.\xd");
+    //   01234567890123456789012345678901
+    puts (
+        PROGRAM " version " VERSION "\r"
+        DESCRIPTION "\r"
+        COPYRIGHT "\r"
+        LICENSE "\r"
+        "\r"
+        "Usage:\r"
+        "  ." PROGRAM " [-n] file.pzx\r"
+        "\r"
+        "-n : do not autoplay.\r"
+    );
 }
 
 void getfilename (char *p, char *fname)
@@ -252,7 +282,7 @@ BYTE printheader (BYTE handle)
         buffer[2]!='X' ||
         buffer[3]!='T')
     {
-        puts ("This is not a PZX valid file\xd");
+        puts ("This is not a PZX valid file\r");
         return 0;
     }
 
@@ -260,14 +290,14 @@ BYTE printheader (BYTE handle)
     read (handle, buffer, lblock);
     if (buffer[0]!=1 || buffer[1]!=0)
     {
-        puts ("PZX format not supported\xd");
+        puts ("PZX format not supported\r");
         return 0;
     }
     if (lblock>3)
     {
         puts ("Loading: ");
         puts(buffer+2);
-        puts ("\xd");
+        puts ("\r");
     }
     return 1;
 }
@@ -284,7 +314,7 @@ void readpzx (BYTE handle)
     rewindsram();
     while(1)
     {
-        *((BYTE *)(23692)) = 0xff;  // para evitar el mensaje de scroll
+        *((BYTE *)(23692)) = 0xff;  // to avoid scrolling message
         res = readblocktag (handle);
         if (!res)
            break;
@@ -375,9 +405,9 @@ void readpzx (BYTE handle)
             skipblock(handle,hi,lo);
         }
     }
-    // pequeña pausa de 20ms para evitar errores de carga
-    // a causa de la conmutación brusca de la señal de EAR
-    // del player virtual a la entrada real
+    // small pause of 20ms to avoid loading errors
+    // due to abrupt switching of the EAR signal
+    // from the virtual player to the real input
 
     // Add full stop mark to the tape
     writesram(0);
@@ -415,7 +445,7 @@ void skipblock (BYTE handle, WORD hiskip, WORD loskip)
 void copyblock (BYTE handle, WORD hicopy, WORD locopy)
 {
     //print16bhex(hicopy);
-    //print16bhex(locopy); puts("\xd");
+    //print16bhex(locopy); puts("\r");
     while (hicopy!=0 || locopy>=BUFSIZE)
     {
         read (handle, buffer, BUFSIZE);
@@ -424,12 +454,12 @@ void copyblock (BYTE handle, WORD hicopy, WORD locopy)
            hicopy--;
         locopy -= BUFSIZE;
         //print16bhex(hicopy);
-        //print16bhex(locopy);  puts("\xd");
+        //print16bhex(locopy);  puts("\r");
     }
     if (locopy>0)
     {
         //print16bhex(hicopy);
-        //print16bhex(locopy);  puts("\xd");
+        //print16bhex(locopy);  puts("\r");
         read (handle, buffer, locopy);
         copysram (buffer, locopy);
     }
@@ -437,16 +467,16 @@ void copyblock (BYTE handle, WORD hicopy, WORD locopy)
 
 void convertpaus2puls (BYTE handle)
 {
-    BYTE pausa[10] = {0x6,0,0,0,0x1,0x80,0,0,0,0};
+    BYTE pause[10] = {0x6, 0, 0, 0, 0x1, 0x80, 0, 0, 0, 0};
 
     writesram(0x2);
     incaddrsram();
     read (handle, buffer, 4);
-    pausa[6] = buffer[2];
-    pausa[7] = buffer[3] | 0x80;
-    pausa[8] = buffer[0];
-    pausa[9] = buffer[1];
-    copysram (pausa,10);
+    pause[6] = buffer[2];
+    pause[7] = buffer[3] | 0x80;
+    pause[8] = buffer[0];
+    pause[9] = buffer[1];
+    copysram (pause,10);
 }
 
 void rewindsram (void)
@@ -482,19 +512,19 @@ void copysram (BYTE *p, WORD l)
 
 void getcoreid(BYTE *s)
 {
-  BYTE cont;
-  volatile BYTE letra;
+  BYTE len;
+  volatile BYTE c;
 
   ZXUNOADDR = COREID;
-  cont=0;
+  len=0;
 
   do
   {
-    letra = ZXUNODATA;
-    *(s++) = letra;
-    cont++;
+    c = ZXUNODATA;
+    *(s++) = c;
+    len++;
   }
-  while (letra!=0 && cont<32);
+  while (c!=0 && len<32);
   *s='\0';
 }
 
@@ -506,75 +536,75 @@ void getcoreid(BYTE *s)
 #pragma disable_warning 59
 void memset (BYTE *dir, BYTE val, WORD nby)
 {
-  __asm
-  push bc
-  push de
-  ld l,4(ix)
-  ld h,5(ix)
-  ld a,6(ix)
-  ld c,7(ix)
-  ld b,8(ix)
-  ld d,h
-  ld e,l
-  inc de
-  dec bc
-  ld (hl),a
-  ldir
-  pop de
-  pop bc
-  __endasm;
+    __asm
+        push    bc
+        push    de
+        ld      l, 4(ix)
+        ld      h, 5(ix)
+        ld      a, 6(ix)
+        ld      c, 7(ix)
+        ld      b, 8(ix)
+        ld      d, h
+        ld      e, l
+        inc     de
+        dec     bc
+        ld      (hl), a
+        ldir
+        pop     de
+        pop     bc
+    __endasm;
 }
 
 void memcpy (BYTE *dst, BYTE *fue, WORD nby)
 {
-  __asm
-  push bc
-  push de
-  ld e,4(ix)
-  ld d,5(ix)
-  ld l,6(ix)
-  ld h,7(ix)
-  ld c,8(ix)
-  ld b,9(ix)
-  ldir
-  pop de
-  pop bc
-  __endasm;
+    __asm
+        push    bc
+        push    de
+        ld      e, 4(ix)
+        ld      d, 5(ix)
+        ld      l, 6(ix)
+        ld      h, 7(ix)
+        ld      c, 8(ix)
+        ld      b, 9(ix)
+        ldir
+        pop     de
+        pop     bc
+    __endasm;
 }
 
 void puts (BYTE *str)
 {
-  __asm
-  push bc
-  push de
-  ld a,(#ATTRT)
-  push af
-  ld a,(#ATTRP)
-  ld (#ATTRT),a
-  ld l,4(ix)
-  ld h,5(ix)
-buc_print:
-  ld a,(hl)
-  or a
-  jp z,fin_print
-  cp #4
-  jr nz,no_attr
-  inc hl
-  ld a,(hl)
-  ld (#ATTRT),a
-  inc hl
-  jr buc_print
+    __asm
+        push    bc
+        push    de
+        ld      a, (#ATTRT)
+        push    af
+        ld      a, (#ATTRP)
+        ld      (#ATTRT), a
+        ld      l, 4(ix)
+        ld      h, 5(ix)
+print_loop:
+        ld      a, (hl)
+        or      a
+        jp      z, end_print
+        cp      #4
+        jr      nz, no_attr
+        inc     hl
+        ld      a, (hl)
+        ld      (#ATTRT), a
+        inc     hl
+        jr      print_loop
 no_attr:
-  rst #16
-  inc hl
-  jp buc_print
+        rst     #16
+        inc     hl
+        jp      print_loop
 
-fin_print:
-  pop af
-  ld (#ATTRT),a
-  pop de
-  pop bc
-  __endasm;
+end_print:
+        pop     af
+        ld      (#ATTRT), a
+        pop     de
+        pop     bc
+    __endasm;
 }
 
 // void u16tohex (WORD n, char *s)
@@ -582,144 +612,142 @@ fin_print:
 //   u8tohex((n>>8)&0xFF,s);
 //   u8tohex(n&0xFF,s+2);
 // }
-// 
+//
 // void u8tohex (BYTE n, char *s)
 // {
 //   BYTE i=1;
-//   BYTE resto;
-// 
-//   resto=n&0xF;
-//   s[1]=(resto>9)?resto+55:resto+48;
-//   resto=n>>4;
-//   s[0]=(resto>9)?resto+55:resto+48;
+//   BYTE rest;
+//
+//   rest=n&0xF;
+//   s[1]=(rest>9)?rest+55:rest+48;
+//   rest=n>>4;
+//   s[0]=(rest>9)?rest+55:rest+48;
 //   s[2]='\0';
 // }
 //
 // void print8bhex (BYTE n)
 // {
 //     char s[3];
-// 
+//
 //     u8tohex(n,s);
 //     puts(s);
 // }
-// 
+//
 // void print16bhex (WORD n)
 // {
 //     char s[5];
-// 
+//
 //     u16tohex(n,s);
 //     puts(s);
 // }
 
-
 void __sdcc_enter_ix (void) __naked
 {
     __asm
-    pop	hl	; return address
-    push ix	; save frame pointer
-    ld ix,#0
-    add	ix,sp	; set ix to the stack frame
-    jp (hl)	; and return
+        pop     hl      ; return address
+        push    ix      ; save frame pointer
+        ld      ix, #0
+        add     ix, sp  ; set ix to the stack frame
+        jp      (hl)    ; and return
     __endasm;
 }
 
 BYTE open (char *filename, BYTE mode)
 {
     __asm
-    push bc
-    push de
-    xor a
-    rst #8
-    .db #M_GETSETDRV   ;Default drive in A
-    ld l,4(ix)  ;Filename pointer
-    ld h,5(ix)  ;in HL
-    ld b,6(ix)  ;Open mode in B
-    rst #8
-    .db #F_OPEN
-    jr nc,open_ok
-    ld (#_errno),a
-    ld a,#0xff
+        push    bc
+        push    de
+        xor     a
+        rst     #8
+        .db     #M_GETSETDRV    ; A = default drive
+        ld      l, 4(ix)        ; HL = pointer to filename (ASCIIZ)
+        ld      h, 5(ix)        ;
+        ld      b, 6(ix)        ; B = file open mode
+        rst     #8
+        .db     #F_OPEN
+        jr      nc, open_ok
+        ld      (#_errno), a
+        ld      a, #0xff
 open_ok:
-    ld l,a
-    pop de
-    pop bc
+        ld      l, a
+        pop     de
+        pop     bc
     __endasm;
 }
 
 void close (BYTE handle)
 {
     __asm
-    push bc
-    push de
-    ld a,4(ix)  ;Handle
-    rst #8
-    .db #F_CLOSE
-    pop de
-    pop bc
+        push    bc
+        push    de
+        ld      a, 4(ix)        ; A = file handle
+        rst     #8
+        .db     #F_CLOSE
+        pop     de
+        pop     bc
     __endasm;
 }
 
 WORD read (BYTE handle, BYTE *buffer, WORD nbytes)
 {
     __asm
-    push bc
-    push de
-    ld a,4(ix)  ;File handle in A
-    ld l,5(ix)  ;Buffer address
-    ld h,6(ix)  ;in HL
-    ld c,7(ix)
-    ld b,8(ix)  ;Buffer length in BC
-    rst #8
-    .db #F_READ
-    jr nc,read_ok
-    ld (#_errno),a
-    ld bc,#65535
+        push    bc
+        push    de
+        ld      a, 4(ix)        ; A = file handle
+        ld      l, 5(ix)        ; HL = buffer address
+        ld      h, 6(ix)        ;
+        ld      c, 7(ix)        ; BC = buffer length
+        ld      b, 8(ix)        ;
+        rst     #8
+        .db     #F_READ
+        jr      nc, read_ok
+        ld      (#_errno), a
+        ld      bc, #65535
 read_ok:
-    ld h,b
-    ld l,c
-    pop de
-    pop bc
+        ld      h, b
+        ld      l, c
+        pop     de
+        pop     bc
     __endasm;
 }
 
 WORD write (BYTE handle, BYTE *buffer, WORD nbytes)
 {
     __asm
-    push bc
-    push de
-    ld a,4(ix)  ;File handle in A
-    ld l,5(ix)  ;Buffer address
-    ld h,6(ix)  ;in HL
-    ld c,7(ix)
-    ld b,8(ix)  ;Buffer length in BC
-    rst #8
-    .db #F_WRITE
-    jr nc,write_ok
-    ld (#_errno),a
-    ld bc,#65535
+        push    bc
+        push    de
+        ld      a, 4(ix)        ; A = file handle
+        ld      l, 5(ix)        ; HL = buffer address
+        ld      h, 6(ix)        ;
+        ld      c, 7(ix)        ; BC = buffer length
+        ld      b, 8(ix)        ;
+        rst     #8
+        .db     #F_WRITE
+        jr      nc, write_ok
+        ld      (#_errno),a
+        ld      bc, #65535
 write_ok:
-    ld h,b
-    ld l,c
-    pop de
-    pop bc
+        ld      h, b
+        ld      l, c
+        pop     de
+        pop     bc
     __endasm;
 }
 
 void seek (BYTE handle, WORD hioff, WORD looff, BYTE from)
 {
     __asm
-    push bc
-    push de
-    ld a,4(ix)  ;File handle in A
-    ld c,5(ix)  ;Hiword of offset in BC
-    ld b,6(ix)
-    ld e,7(ix)  ;Loword of offset in DE
-    ld d,8(ix)
-    ld l,9(ix)  ;From where: 0: start, 1:forward current pos, 2: backwards current pos
-    rst #8
-    .db #F_SEEK
-    pop de
-    pop bc
+        push    bc
+        push    de
+        ld      a, 4(ix)        ; A = file handle
+        ld      c, 5(ix)        ; BC = MSW offset
+        ld      b, 6(ix)        ;
+        ld      e, 7(ix)        ; DE = LSW offset
+        ld      d, 8(ix)        ;
+        ld      l, 9(ix)        ; L = whence (0: start, 1: forward current pos, 2: backwards current pos)
+        rst     #8
+        .db     #F_SEEK
+        pop     de
+        pop     bc
     __endasm;
 }
-
