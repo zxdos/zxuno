@@ -33,7 +33,8 @@ SUBDIRS=\
  iwconfig\
  joyconf\
  keymap\
- loadpzx
+ loadpzx\
+ playrmov
 
 .PHONY: all
 all: build
