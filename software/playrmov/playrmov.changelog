@@ -1,0 +1,7 @@
+Version 0.2
+  Fixed the stack problem. Thanks to Miguel Ângelo Guerreiro.
+  Screen clears when playback ends.
+
+Version 0.1
+  Needs the stack to be below 49152. Ex. "CLEAR 49151" before executing the
+  command.

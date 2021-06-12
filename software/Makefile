@@ -32,7 +32,9 @@ SUBDIRS=\
  esxdos\
  iwconfig\
  joyconf\
- keymap
+ keymap\
+ loadpzx\
+ playrmov
 
 .PHONY: all
 all: build

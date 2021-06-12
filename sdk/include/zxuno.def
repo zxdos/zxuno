@@ -31,6 +31,7 @@
  define dev_control     14
  define dev_control2    15
  define newreg          16
+ define radas_ctrl      $40     ; ZX-UNO register to activate Radastan mode
  define dma_ctrl        $a0     ; ZX-UNO register to start/stop DMA
  define dma_src         $a1     ; ZX-UNO register to set DMA source
  define dma_dst         $a2     ; ZX-UNO register to set DMA destination
@@ -47,6 +48,7 @@
 ; Aliases
 ZXUNOADDR:              equ     zxuno_port
 ZXUNODATA:              equ     zxuno_data
+RADASCTRL:              equ     radas_ctrl
 
  ; MMC/SDC interface:
  define SPI_PORT        $eb
