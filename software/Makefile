@@ -34,7 +34,8 @@ SUBDIRS=\
  joyconf\
  keymap\
  loadpzx\
- playrmov
+ playrmov\
+ playzxm
 
 .PHONY: all
 all: build
