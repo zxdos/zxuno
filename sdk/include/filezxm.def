@@ -1,0 +1,35 @@
+; filezxm.def - definitions for ZXM file.
+;
+; Video: header + linear sequence of frames.
+;
+; Each frame:
+;    Black and white: 6144 bytes in Spectrum display format.
+;    If a pixel bit is set to 1 it is displayed as black, blank otherwise.
+;    Color: 256 bytes of padding + 6912 bytes in Spectrum display format.
+; Note:
+;    Each frame is padded to occupy an integer number of sectors.
+;    The fill value is whatever you want, it is ignored.
+;
+; SPDX-FileCopyrightText: Copyright (C) 2016-2021 Antonio Villena
+;
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+;
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef filezxm_def_included
+ define filezxm_def_included
+
+ struct file_zxm_header_t               ; 256 bytes
+a_magic                 ds      3       ; "ZXM"
+a_reserved_0            ds      13      ; Unused
+w_total_frames          ds      2       ; Total number of video frames
+b_sectors_per_frame     ds      1       ; Number of sectors (512 bytes) that
+                                        ; each frame occupies (12 for BW, 14
+                                        ; for color)
+a_reserved_1            ds      237     ; Unused
+ ends
+
+ endif  ; !filezxm_def_included

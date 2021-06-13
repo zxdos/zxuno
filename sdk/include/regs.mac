@@ -10,67 +10,438 @@
  ifndef regs_mac_included
  define regs_mac_included
 
- ; Load (initialize) A register
+; A register -----------------------------------------------------------------
+
+ ; Undefine a value in A register
+ macro undef_a
+___a=-1
+ endm
+
+ ; Assume a value in A register
+ macro assume_a value
+___a=value & $ff
+ endm
+
+ ; Load a value into A register
  macro ld_a value
-  if 0 = value
-                xor     a               ; 1 byte
+  if 0 = (value & $ff)
+        xor     a                       ; 1 byte
   else
-                ld      a, value        ; 2 bytes
+        ld      a, value                ; 2 bytes
   endif
-___a=value
+        assume_a value
  endm
 
- ; Change A register
+ ; Change a value in A register
  macro chg_a value
-  if ___a != value
+  if ___a < 0
+        ld_a    value                   ; A == ?
+  elseif ___a != (value & $ff)
    if 0 = (value & $ff)
-                xor     a               ; 1 byte
+        xor     a                       ; 1 byte
    elseif ((___a + 1) & $ff) = (value & $ff)
-                inc     a               ; 1 byte
+        inc     a                       ; 1 byte
    elseif ((___a - 1) & $ff) = (value & $ff)
-                dec     a               ; 1 byte
+        dec     a                       ; 1 byte
+   elseif ((___a & $7f) << 1) = (value & $ff)
+        add     a, a                    ; 1 byte
    elseif (((___a & $7f) << 1) + ((___a & $80) >> 7)) = (value & $ff)
-                rlca                    ; 1 byte
+        rlca                            ; 1 byte
    elseif (((___a & $fe) >> 1) + ((___a & $01) << 7)) = (value & $ff)
-                rrca                    ; 1 byte
+        rrca                            ; 1 byte
    elseif ((___a ^ $ff) & $ff) = (value & $ff)
-                cpl                     ; 1 byte
+        cpl                             ; 1 byte
    else
-                ld      a, value & $ff  ; 2 bytes
+        ld      a, value                ; 2 bytes
    endif
-___a=value
+        assume_a value
   endif
  endm
 
- ; Load (initialize) BC register
- macro ld_bc value
-                ld      bc, value
-___bc=value
+; B register -----------------------------------------------------------------
+
+ ; Undefine a value in B register
+ macro undef_b
+___b=-1
  endm
 
- ; Change BC register
- macro chg_bc value
-  if (___bc & $ffff) != (value & $ffff)
-   if (___bc & $ff) = (value & $ff)
-    if (((___bc >> 8) + 1) & $ff) = ((value >> 8) & $ff)
-                inc     b
-    elseif (((___bc >> 8) - 1) & $ff) = ((value >> 8) & $ff)
-                dec     b
-    else
-                ld      b, value >> 8
-    endif
-   elseif ((___bc >> 8) & $ff) = ((value >> 8) & $ff)
-    if (((___bc & $ff) + 1) & $ff) = (value & $ff)
-                inc     c
-    elseif (((___bc & $ff) - 1) & $ff) = (value & $ff)
-                dec     c
-    else
-                ld      c, value & $ff
-    endif
+ ; Assume a value in B register
+ macro assume_b value
+___b=value & $ff
+ endm
+
+ ; Load a value into B register
+ macro ld_b value
+        ld      b, value
+        assume_b value
+ endm
+
+ ; Change a value in B register
+ macro chg_b value
+  if ___b < 0
+        ld_b    value                   ; B == ?
+  elseif ___b != (value & $ff)
+   if ((___b + 1) & $ff) = (value & $ff)
+        inc     b                       ; 1 byte
+   elseif ((___b - 1) & $ff) = (value & $ff)
+        dec     b                       ; 1 byte
    else
-                ld      bc, value
+        ld      b, value                ; 2 bytes
    endif
-___bc=value
+        assume_b value
+  endif
+ endm
+
+; C register -----------------------------------------------------------------
+
+ ; Undefine a value in C register
+ macro undef_c
+___c=-1
+ endm
+
+ ; Assume a value in C register
+ macro assume_c value
+___c=value & $ff
+ endm
+
+ ; Load a value into C register
+ macro ld_c value
+        ld      c, value
+        assume_c value
+ endm
+
+ ; Change a value in C register
+ macro chg_c value
+  if ___c < 0
+        ld_c    value                   ; C == ?
+  elseif ___c != (value & $ff)
+   if ((___c + 1) & $ff) = (value & $ff)
+        inc     c                       ; 1 byte
+   elseif ((___c - 1) & $ff) = (value & $ff)
+        dec     c                       ; 1 byte
+   else
+        ld      c, value                ; 2 bytes
+   endif
+        assume_c value
+  endif
+ endm
+
+; BC register ----------------------------------------------------------------
+
+ ; Undefine a value in BC register
+ macro undef_bc
+___b=-1
+___c=-1
+ endm
+
+ ; Assume a value in BC register
+ macro assume_bc value
+___b=(value >> 8) & $ff
+___c=value & $ff
+ endm
+
+ ; Load a value into BC register
+ macro ld_bc value
+        ld      bc, value
+        assume_bc value
+ endm
+
+ ; Change a value in BC register
+ macro chg_bc value
+  if ___b < 0
+   if ___c = (value & $ff)
+        ld_b    value >> 8              ; B == ?, C == LSB
+   else
+        ld_bc   value                   ; B == ?, C != LSB || C == ?
+   endif
+  elseif ___c < 0
+   if ___b = ((value >> 8) & $ff)
+        ld_c    value & $ff             ; B == MSB, C == ?
+   else
+        ld_bc   value                   ; B != MSB || B == ?, C == ?
+   endif
+  else
+___bc=(___b << 8) + ___c
+   if ___bc != (value & $ffff)
+    if ___c = (value & $ff)
+     if ((___b + 1) & $ff) = ((value >> 8) & $ff)
+        inc     b                       ; 1 byte
+     elseif ((___b - 1) & $ff) = ((value >> 8) & $ff)
+        dec     b                       ; 1 byte
+     else
+        ld      b, value >> 8           ; 2 bytes
+     endif
+    elseif ___b = ((value >> 8) & $ff)
+     if ((___c + 1) & $ff) = (value & $ff)
+        inc     c                       ; 1 byte
+     elseif ((___c - 1) & $ff) = (value & $ff)
+        dec     c                       ; 1 byte
+     else
+        ld      c, value & $ff          ; 2 bytes
+     endif
+    else
+        ld      bc, value
+    endif
+        assume_bc value
+   endif
+  endif
+ endm
+
+; D register -----------------------------------------------------------------
+
+ ; Undefine a value in D register
+ macro undef_d
+___d=-1
+ endm
+
+ ; Assume a value in D register
+ macro assume_d value
+___d=value & $ff
+ endm
+
+ ; Load a value into D register
+ macro ld_d value
+        ld      d, value
+        assume_d value
+ endm
+
+ ; Change a value in D register
+ macro chg_d value
+  if ___d < 0
+        ld_d    value                   ; D == ?
+  elseif ___d != (value & $ff)
+   if ((___d + 1) & $ff) = (value & $ff)
+        inc     d                       ; 1 byte
+   elseif ((___d - 1) & $ff) = (value & $ff)
+        dec     d                       ; 1 byte
+   else
+        ld      d, value                ; 2 bytes
+   endif
+        assume_d value
+  endif
+ endm
+
+; E register -----------------------------------------------------------------
+
+ ; Undefine a value in E register
+ macro undef_e
+___e=-1
+ endm
+
+ ; Assume a value in E register
+ macro assume_e value
+___e=value & $ff
+ endm
+
+ ; Load a value into E register
+ macro ld_e value
+        ld      e, value
+        assume_e value
+ endm
+
+ ; Change a value in E register
+ macro chg_e value
+  if ___e < 0
+        ld_e    value                   ; E == ?
+  elseif ___e != (value & $ff)
+   if ((___e + 1) & $ff) = (value & $ff)
+        inc     e                       ; 1 byte
+   elseif ((___e - 1) & $ff) = (value & $ff)
+        dec     e                       ; 1 byte
+   else
+        ld      e, value                ; 2 bytes
+   endif
+        assume_e value
+  endif
+ endm
+
+; DE register ----------------------------------------------------------------
+
+ ; Undefine a value in DE register
+ macro undef_de
+___d=-1
+___e=-1
+ endm
+
+ ; Assume a value in DE register
+ macro assume_de value
+___d=(value >> 8) & $ff
+___e=value & $ff
+ endm
+
+ ; Load a value into DE register
+ macro ld_de value
+        ld      de, value
+        assume_de value
+ endm
+
+ ; Change a value in DE register
+ macro chg_de value
+  if ___d < 0
+   if ___e = (value & $ff)
+        ld_d    value >> 8              ; D == ?, E == LSB
+   else
+        ld_de   value                   ; D == ?, E != LSB || E == ?
+   endif
+  elseif ___e < 0
+   if ___d = ((value >> 8) & $ff)
+        ld_e    value & $ff             ; D == MSB, E == ?
+   else
+        ld_de   value                   ; D != MSB || D == ?, E == ?
+   endif
+  else
+___de=(___d << 8) + ___e
+   if ___de != (value & $ffff)
+    if ___e = (value & $ff)
+     if ((___d + 1) & $ff) = ((value >> 8) & $ff)
+        inc     d                       ; 1 byte
+     elseif ((___d - 1) & $ff) = ((value >> 8) & $ff)
+        dec     d                       ; 1 byte
+     else
+        ld      d, value >> 8           ; 2 bytes
+     endif
+    elseif ___d = ((value >> 8) & $ff)
+     if ((___e + 1) & $ff) = (value & $ff)
+        inc     e                       ; 1 byte
+     elseif ((___e - 1) & $ff) = (value & $ff)
+        dec     e                       ; 1 byte
+     else
+        ld      e, value & $ff          ; 2 bytes
+     endif
+    else
+        ld      de, value
+    endif
+        assume_de value
+   endif
+  endif
+ endm
+
+; H register -----------------------------------------------------------------
+
+ ; Undefine a value in H register
+ macro undef_h
+___h=-1
+ endm
+
+ ; Assume a value in H register
+ macro assume_h value
+___h=value & $ff
+ endm
+
+ ; Load a value into H register
+ macro ld_h value
+        ld      h, value
+        assume_h value
+ endm
+
+ ; Change a value in H register
+ macro chg_h value
+  if ___h < 0
+        ld_h    value                   ; H == ?
+  elseif ___h != (value & $ff)
+   if ((___h + 1) & $ff) = (value & $ff)
+        inc     h                       ; 1 byte
+   elseif ((___h - 1) & $ff) = (value & $ff)
+        dec     h                       ; 1 byte
+   else
+        ld      h, value                ; 2 bytes
+   endif
+        assume_h value
+  endif
+ endm
+
+; L register -----------------------------------------------------------------
+
+ ; Undefine a value in L register
+ macro undef_l
+___l=-1
+ endm
+
+ ; Assume a value in L register
+ macro assume_l value
+___l=value & $ff
+ endm
+
+ ; Load a value into L register
+ macro ld_l value
+        ld      l, value
+        assume_l value
+ endm
+
+ ; Change a value in L register
+ macro chg_l value
+  if ___l < 0
+        ld_l    value                   ; L == ?
+  elseif ___l != (value & $ff)
+   if ((___l + 1) & $ff) = (value & $ff)
+        inc     l                       ; 1 byte
+   elseif ((___l - 1) & $ff) = (value & $ff)
+        dec     l                       ; 1 byte
+   else
+        ld      l, value                ; 2 bytes
+   endif
+        assume_l value
+  endif
+ endm
+
+; HL register ----------------------------------------------------------------
+
+ ; Undefine a value in HL register
+ macro undef_hl
+___h=-1
+___l=-1
+ endm
+
+ ; Assume a value in HL register
+ macro assume_hl value
+___h=(value >> 8) & $ff
+___l=value & $ff
+ endm
+
+ ; Load a value into HL register
+ macro ld_hl value
+        ld      hl, value
+        assume_hl value
+ endm
+
+ ; Change a value in HL register
+ macro chg_hl value
+  if ___h < 0
+   if ___l = (value & $ff)
+        ld_h    value >> 8              ; H == ?, L == LSB
+   else
+        ld_hl   value                   ; H == ?, L != LSB || L == ?
+   endif
+  elseif ___l < 0
+   if ___h = ((value >> 8) & $ff)
+        ld_l    value & $ff             ; H == MSB, L == ?
+   else
+        ld_hl   value                   ; H != MSB || H == ?, L == ?
+   endif
+  else
+___hl=(___h << 8) + ___l
+   if ___hl != (value & $ffff)
+    if ___l = (value & $ff)
+     if ((___h + 1) & $ff) = ((value >> 8) & $ff)
+        inc     h                       ; 1 byte
+     elseif ((___h - 1) & $ff) = ((value >> 8) & $ff)
+        dec     h                       ; 1 byte
+     else
+        ld      h, (value >> 8) $ ff    ; 2 bytes
+     endif
+    elseif ___h = ((value >> 8) & $ff)
+     if ((___l + 1) & $ff) = (value & $ff)
+        inc     l                       ; 1 byte
+     elseif ((___l - 1) & $ff) = (value & $ff)
+        dec     l                       ; 1 byte
+     else
+        ld      l, value & $ff          ; 2 bytes
+     endif
+    else
+        ld      hl, value
+    endif
+        assume_hl value
+   endif
   endif
  endm
 
