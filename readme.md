@@ -4,6 +4,10 @@ http://zxuno.com
 
 https://svn.zxuno.com/svn/zxuno/
 
+Other projects derived or based on ZX-Uno:
+
+https://github.com/spark2k06/ZXUno4ALL
+
 Open Source FPGA Foundation:
 
 https://osfpga.org/osfpga-foundation-launched/
@@ -13,6 +17,7 @@ https://osfpga.org/
 https://github.com/os-fpga/open-source-fpga-resource
 
 License is Creative Commons by SA, except the cores and ugophy(gopher browser) that has its own license
+
 
 | Core                                 | Original author    | Port Author     | Video output | SD       | EAR   | Audio | Keyb | Mou | Joystick   | Updated on | DL                                                                         | Help
 | ------------------------------------ | ------------------ | --------------- | ------------ | -------- | ----- | ----- | ---- | --- | ---------- | ---------- | -------------------------------------------------------------------------- | ----
