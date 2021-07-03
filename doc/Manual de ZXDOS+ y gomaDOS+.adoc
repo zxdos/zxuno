@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.5.0
+:revnumber: 1.5.1
 :doctype: book
 :front-cover-image: image:img/portada.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1404,6 +1404,139 @@ En https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[este hilo del fo
 
 <<<
 
+=== FUZIX
+
+FUZIX es una fusión de varios elementos de http://www.dougbraun.com/uzi.html[UZI] (una implementación del kernel Unix para ordenadores basados en Z80), extendida desde la versión 7 a algo entre SYS3 y SYS5.x con algunas partes de POSIX. 
+
+Aún no es algo util, aunque se puede construir, arrancar y ejecutar aplicaciones. Aún falta mucho trabajo tanto en las utilidades como las bibliotecas.
+
+En el momento de escribir estas líneas, las http://www.fuzix.org[imágenes oficiales] no funcionan con el ZXDOS+. Sin embargo, otro código más reciente, sí. Las siguientes instrucciones han sido probadas con https://github.com/EtchedPixels/FUZIX/tree/49c09b994c3bbc7c77511452ed188bb875562dee[el último código disponible en Junio de 2021].
+
+==== Cómo compilar
+
+Estas instrucciones han sido elaboradas usando una instalación limpia de Fedora Workstation Linux (Fedora 34). Aparte de los comandos relativos a la instalación de paquetes, el resto de pasos deberían servir también con muchas otras distribuciones de Linux.
+
+Primero, instalar los paquetes necesarios, si no estuvieran ya:
+
+[source,shell]
+----
+sudo dnf groupinstall -y 'Development Tools'
+sudo dnf install -y gcc-c++ automake boost-devel gputils flex texinfo bison byacc
+----
+
+Obtener la versión especial del http://sdcc.sourceforge.net[compilador SDCC] para Fuzix, e instalarla:
+
+[source,shell]
+----
+git clone https://github.com/EtchedPixels/sdcc280.git
+
+cd sdcc280
+cd sdcc
+./configure 
+make
+sudo make install
+cd ../..
+----
+
+Obtener el código fuente de Fuzix:
+
+[source,shell]
+----
+git clone https://github.com/EtchedPixels/FUZIX.git
+cd FUZIX
+----
+
+Modificar el fichero `Makefile` y cambiar la línea que pone `TARGET=` para que sea `TARGET=zxdiv`. Compilar:
+
+[source,shell]
+----
+sudo make
+----
+
+Cuando termine, obtener el fichero binario de esxdos y la imagen del kernel en estas rutas:
+
+[source]
+----
+./Kernel/platform-zxdiv/FUZIX
+./Kernel/platform-zxdiv/FUZIX.BIN
+----
+
+Construir el sistema de archivos raíz:
+
+[source,shell]
+----
+cd ./Standalone/filesystem-src
+./build-filesystem rootfs 256 65535
+cd ../..
+----
+
+Obtener el archivo de imagen en esta ubicación:
+
+[source]
+----
+./build-filesystem/rootfs
+----
+
+==== Cómo utilizarlo
+
+Hace falta que la tarjeta microSD tenga una tabla de particiones MBR. Se pueden configurar una o dos particiones primarias <<#_formato_de_la_tarjeta_microsd,de la forma habitual>> (la primera de ellas con una instalación funcional de esxdos), dejando suficiente espacio libre al final para añadir una partición de 32MB (Tipo `7E`) para el sistema de archivos raíz y otra partición de 4MB (Tipo `4E`) para el espacio de intercambio (swap).
+
+Volcar el contenido del sistema de archivos raíz en la partición `7E`. Para ello, se puede usar la utilidad `dd`, incluida en Linux, MacOS, etc. (y también http://www.chrysocome.net/dd[convertida para Windows]).
+
+Una vez determinado el nombre del dispositivo asociado a la partición `7E` se debe usar esta como destino del fichero `rootfs`. Por ejemplo, para `/dev/rdisks3`:
+
+[source,shell]
+----
+sudo dd if=rootfs of=/dev/rdisks3
+----
+
+Copiar el fichero `FUZIX` dentro del directorio `BIN` y copiar `FUZIX.BIN` al directorio raíz de la particion esxdos.
+
+<<<
+
+Iniciar un core de Spectrum con una ROM de 128K y con esxdos, escribir `.fuzix`, y pulsar `Enter`.
+
+[.text-center] 
+image:./img/fuzix01.png[pdfwidth=70%]
+
+[TIP]
+====
+La configuración del teclado en la BIOS debería ser con una disposición en inglés, o no será posible teclear algunos caracteres, como `|`.
+====
+
+Al cabo de unos pocos segundos, el sistema debería detectar la tarjeta microSD y encontrar las particiones. En este ejemplo, la raíz está en la tercera partición de SD 0.
+
+[.text-center] 
+image:./img/fuzix02.png[pdfwidth=70%]
+
+<<<
+
+Escribir el identificador de la partición raiz (por ejemplo, `hd3`) y pulsar `Enter`.
+
+[.text-center] 
+image:./img/fuzix03.png[pdfwidth=70%]
+
+Definir la fecha (pulsar `Enter`) y la hora (pulsar `Enter`).
+
+[.text-center] 
+image:./img/fuzix04.png[pdfwidth=70%]
+
+<<<
+
+Iniciar sesión con el usuario `root` y sin contraseña.
+
+[.text-center] 
+image:./img/fuzix05.png[pdfwidth=70%]
+
+Con esto ya se dispone de una consola de Fuzix.
+
+[TIP]
+====
+Al terminar, recordar detener el sistema usando el comando `shutdown` o el sistema de archivos raíz quedará marcado como no limpio, y esto forzará un comprobación del mismo en el próximo arranque de Fuzix.
+====
+
+<<<
+
 == Actualizaciones 
 
 === BIOS
@@ -2468,7 +2601,7 @@ Características del sistema implementado:
 
 ==== Formato de Tarjeta microSD
 
-Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición FAT16 y con MS-DOS (o similar) instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta microSD como disco.
+Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición FAT16 y con MS-DOS (o similar) instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta microSD como disco. En los foros de https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno] y https://www.forofpga.es/viewtopic.php?f=37&t=120[ZXDOS+] se puede obtener más información y encontrar algunas imágenes de tarjeta microSD.
 
 Una vez formateada y particionada (con la reserva al final), se debe grabar la imagen de BIOS `Next186_BIOS_zxdos_ddr3.COM` (disponible https://github.com/zxdos/sources/raw/master/next186_zxdos_ddr3/software/Next186_BIOS_zxdos_ddr3.COM[en este enlace]) en algún lugar de los primeros 64 sectores, o bien en los últimos 16 sectores de la tarjeta microSD.
 
