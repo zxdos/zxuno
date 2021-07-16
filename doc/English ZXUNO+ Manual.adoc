@@ -1,10 +1,10 @@
 = ZXUNO+ Manual
 :author: kounch
-:revnumber: 1.0.0
+:revnumber: 1.1.0
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.0
+:Revision: 1.1
 :description: English ZXUNO+ Manual
 :keywords: Manual, English, ZXUNO+
 :icons: font
@@ -166,6 +166,32 @@ To create one FAT32 4GB partition (e.g. to use with Amstrad CPC 6128 core), and 
 diskutil unmountDisk /dev/disk6
 diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXUNOPLUS 4G "MS-DOS FAT32" EXTRA R
 ----
+
+[NOTE]
+====
+In this example, since the partition has a size of exactly 4G, MacOS will use a cluster size of 4096, which is the one neede for the Amstrad CPC 6128 core. For a smaller size, you may have to format again the first partition with some commands like these:
+
+[source,shell]
+----
+diskutil unmountDisk /dev/disk6
+newfs_msdos -F 32 -v ZXDOSPLUS -b 4096 /dev/rdisk6s1
+----
+====
+
+[TIP]
+====
+The Spotlight feature in MacOS you to search the items on the SD card, creating a number of hidden files. You can disable the indexing with these commands (assuming that the SD partition is named `ZXDOSPLUS`):
+
+[source,shell]
+----
+mdutil -i off /Volumes/ZXDOSPLUS
+cd /Volumes/ZXDOSPLUS
+rm -rf .{,_.}{fseventsd,Spotlight-V*,Trashes}
+mkdir .fseventsd
+touch .fseventsd/no_log .metadata_never_index .Trashes
+cd -
+----
+====
 
 ===== Linux
 
@@ -952,6 +978,141 @@ There is more information about all this process at https://www.zonadepruebas.co
 
 <<<
 
+=== FUZIX
+
+FUZIX is a fusion of various elements from http://www.dougbraun.com/uzi.html[UZI] (an implementation of the Unix kernel written for a Z80 based computer), extended from the 7th Edition Unix kernel to somewhere in the SYS3 to SYS5.x world, with bits of POSIX. 
+
+It is not yet useful although you can build and boot it and run test application code. A lot of work is still needed on the utilities and libraries.
+
+At the moment of writing these lines, the http://www.fuzix.org[officially built images] do not work with all the ZXUNO+ ZX Spectrum cores. However, building from the source code, does work. The following instructions have been tested with https://github.com/EtchedPixels/FUZIX/tree/49c09b994c3bbc7c77511452ed188bb875562dee[the latest code on June 2021].
+
+==== How to Build
+
+The following instructions have been made using a clean installation of Fedora Workstation Linux (Fedora 34). Apart from the package installation commands, all the other steps should work with many other Linux distributions.
+
+Install the needed packages:
+
+[source,shell]
+----
+sudo dnf groupinstall -y 'Development Tools'
+sudo dnf install -y gcc-c++ automake boost-devel gputils flex texinfo bison byacc
+----
+
+Get the special version of http://sdcc.sourceforge.net[SDCC compiler] for Fuzix, and build it:
+
+[source,shell]
+----
+git clone https://github.com/EtchedPixels/sdcc280.git
+
+cd sdcc280
+cd sdcc
+./configure 
+make
+sudo make install
+cd ../..
+----
+
+Get Fuzix source code:
+
+[source,shell]
+----
+git clone https://github.com/EtchedPixels/FUZIX.git
+cd FUZIX
+----
+
+Edit `Makefile` and change the line with `TARGET=` to `TARGET=zxdiv`. Build:
+
+[source,shell]
+----
+sudo make
+----
+
+<<<
+
+Get the esxdos binary and kernel image from this paths:
+
+[source]
+----
+./Kernel/platform-zxdiv/FUZIX
+./Kernel/platform-zxdiv/FUZIX.BIN
+----
+
+Build the root filesystem:
+
+[source,shell]
+----
+cd ./Standalone/filesystem-src
+./build-filesystem rootfs 256 65535
+cd ../..
+----
+
+Get the root filesystem image file from this location:
+
+[source]
+----
+./build-filesystem/rootfs
+----
+
+==== How to use
+
+You need a MBR partition table on the SD card. You can set up one or two primary partitions <<#_sd_card_formatting,as usual>> (the first one with a functional esxdos installation), leaving enough space at the end to add one 32MB (Type `7E`) primary partition for the root file system and one 4MB (Type `7F`) primary partition for swap.
+
+Copy the rootfs filesystem to the type `7E` partition. You can use the `dd` utility, included with Linux, MacOS, etc. (and also http://www.chrysocome.net/dd[ported to Windows]).
+
+After you find the device name for the `7E` partition, use that as destination for the `rootfs` file. For example, for `/dev/rdisks3`:
+
+[source,shell]
+----
+sudo dd if=rootfs of=/dev/rdisks3
+----
+
+Copy the `FUZIX` command into the `BIN` directory and copy `FUZIX.BIN` to the top level directory of the esxdos partition.
+
+<<<
+
+Boot into a Spectrum core with a 128K ROM and with esxdos, then type '.fuzix', and press `Enter`.
+
+[.text-center] 
+image:./img/fuzix01.png[pdfwidth=70%]
+
+[TIP]
+====
+Your keyboard configuration on BIOS should be using an english layout, or you won't be able to type some characters like `|`.
+====
+
+After a few seconds, the system should detect the SD card and find the partitions. In this example, the root is the third partition of SD 0.
+
+[.text-center] 
+image:./img/fuzix02.png[pdfwidth=70%]
+
+<<<
+
+Type the rootfs partition (e.g. `hd3`) and press `Enter`.
+
+[.text-center] 
+image:./img/fuzix03.png[pdfwidth=70%]
+
+Set up date (press `Enter`) and time (press `Enter`).
+
+[.text-center] 
+image:./img/fuzix04.png[pdfwidth=70%]
+
+<<<
+
+Login with `root` user and no password.
+
+[.text-center] 
+image:./img/fuzix05.png[pdfwidth=70%]
+
+Now you have a Fuzix shell.
+
+[TIP]
+====
+When finished, remember to stop the system using the `shutdown` command or the root filesystem will be marked as not clean, and a filesystem check will be forced on the next Fuzix boot.
+====
+
+<<<
+
 == Upgrade 
 
 === BIOS
@@ -1037,6 +1198,18 @@ This process can't be undone, and it will replace all the previously installed c
 
 == Other cores
 
+=== ZX Spectrum EXP27 (Kyp)
+
+==== SD card format
+
+You may use a SD card with the first partition formatted as FAT16 or FAT32, and inside, an esxdos distribution matching the version installed in BIOS (see the <<#_esxdos,esxdos corresponding section>> for more info).
+
+See the <<#_cores,corresponding section>> for instructions of how to install this alternative core in ZXUNO+.
+
+==== Keyboard
+
+===== Special keys and buttons
+
 === ZX Spectrum 48K (Kyp)
 
 https://github.com/Kyp069/zx48.zxuno/releases[Alternative core], whose objective is to be the most accurate implementation in timings, memory contention, etc.
@@ -1050,7 +1223,9 @@ Main features:
 
 ==== SD card format
 
-You need a SD card with the first partition formatted as FAT16 or FAT32, and inside, the standard esxDOS 0.8.8 (see <<#_esxdos,esxdos corresponding section>> for more info).
+You need a SD card with the first partition formatted as FAT16 or FAT32, and inside, the standard esxDOS 0.8.8 (see the <<#_esxdos,esxdos corresponding section>> for more info).
+
+See the <<#_cores,corresponding section>> for instructions of how to install this alternative core in ZXUNO+.
 
 ==== Keyboard
 
@@ -1081,6 +1256,8 @@ Main features:
 
 You need a SD card with the first partition formatted as FAT16 or FAT32, and inside, the standard esxDOS 0.8.8 (see <<#_esxdos,esxdos corresponding section>> for more info).
 
+See the <<#_cores,corresponding section>> for instructions of how to install this alternative core in ZXUNO+.
+
 ==== Keyboard
 
 ===== Special keys and buttons
@@ -1095,9 +1272,80 @@ While the core is running:
 
 <<<
 
+=== ZX Spectrum (Kyp/azesmbog)
+
+<<<
+
+=== ZX Spectrum TBBlue
+
+The https://github.com/fbelavenuto/TBBlue[TBBlue] firmware, was created by Victor Trucco and Fabio Belavenuto on en 2016. Originally thought to use a Z80 processor, it was changed afterwards to usa Xilinx Spartan-6 FPGA, to add some more advanced features. This the base for https://es.wikipedia.org/wiki/ZX_Spectrum_Next[ZX Spectrum Next].
+
+The lates ZX-Uno TBBlue core is a version synthesized by azesmbog from the latest versions of the reposityr and has, among other, these features:
+
+- Composite video/RGB and VGA video output
+- SD support, with DivMMC
+- Turbo Mode
+- Timex Mode
+- ULAPlus
+- Multiface support
+- Joystick support
+- Turbosound
+- Spectrum ROM selection on boot
+
+==== SD card format
+
+An SD card with the first partition in FAT16 or FAT32 format is needed with, optionally, the esxdos distribution that matches the current BIOS configuration (see the <<#_esxdos,esxdos corresponding section>> for more info).
+
+Obtain the TBBlue distribution that matches the core version, for example, looking in https://www.zxuno.com/forum/viewtopic.php?f=47&t=491[ZX-Uno forums]. Usuaally, the structure is something like this:
+
+----
+   /
+   +-TBBLUE/
+   |  +-128.rom
+   |  (...)
+   |  +-config.ini
+   |  (...)
+   |  +-esxmmc.rom
+   |  (...)
+   |
+   +-TBBLUE.FW
+----
+
+[TIP]
+====
+If you are using a SD card with <<esxdos,esxdos>>, the `esxmmc.rom` file version must match the one of the SD card.
+====
+
+See the <<#_cores,corresponding section>> for instructions of how to install the TBBlue core in ZXUNO+.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+`F1`: Reset
+`Espacio+F1`: Boot menu
+`F10`: NMI
+
+==== Basic Guide
+
+Pressing `Space+F1` a core reset occurs and then the boot menu appears, where the existing boot options in the `config.ini` file are shown.
+
+[.text-center] 
+image:img/tbblue1.jpg[pdfwidth=70%]
+
+Then, pressing `E`, you can access to the other core configuratio options. You can change them with the cursor keys and the `Space` key. Press `Enter` to finish.
+
+[.text-center] 
+image:img/tbblue2.jpg[pdfwidth=70%]
+
+
+<<<
+
 === Acorn Atom
 
-https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] was  a home computer made by Acorn Computers Ltd. The ZXUNO+ core is an adaptation of the https://github.com/hoglet67/AtomFpga[AtomFPGA] project. You can get more information at https://zxuno.com/forum/viewtopic.php?f=16&t=4[ZX-Uno Forums].
+https://es.wikipedia.org/wiki/Acorn_Atom[Acorn Atom] was a home computer made by Acorn Computers Ltd. The ZXUNO+ core is an adaptation of the https://github.com/hoglet67/AtomFpga[AtomFPGA] project. You can get more information at https://zxuno.com/forum/viewtopic.php?f=16&t=4[ZX-Uno Forums].
 
 ==== SD card format
 
@@ -1349,6 +1597,61 @@ Type the command `RUN"<name>` to load a program from disk
 image:img/cpc2.png[pdfwidth=70%]
 
 Press `Page Up` key to reset and load the next `DSK` file.
+
+<<<
+
+=== Apple I
+
+The https://en.wikipedia.org/wiki/Apple_I[Apple I], or Apple-1, was one of the first desktop computers, and te first to combine a microprocessor with a keyboard connection and a monitor.
+
+The ZX-Uno core has been made by Subcritical, using the https://github.com/alangarf/apple-one[Apple-One] project as a basis.
+
+Som of its features are:
+
+- PS/2 keyboard (english layout)
+- Only VGA output
+- Integer Basic included
+
+==== SD card format
+
+This core does not use the SD card.
+
+==== Keyboard
+
+The keyboard uses an english layout.
+
+Take note that, on an Apple I, there is no delete key. Due to the way that the video signal is made, it is not possible to make the cursor come back to delete a character, so instead, a special one is used: `_`. This means that the text has gone back to delete from the data input (for example `PRN_INT` is interpreted as `PRINT`).
+
+==== Basic Guide
+
+Upon start, the Apple I  boots with https://www.sbprojects.net/projects/apple1/wozmon.php[Woz Monitor] (ROM loaded at `0xFF00`)
+
+[.text-center] 
+image:img/apple1_1.png[pdfwidth=70%]
+
+<<<
+
+The BASIC interpreter included with this core is https://es.wikipedia.org/wiki/Integer_BASIC[Integer BASIC]. To start it, you have to invoke the corresponding memory address (`0xE000`):
+
+[source]
+----
+\
+E000R
+----
+
+Once the interpreter is loaded, the console changes in order to show that it is ready to accept https://www.sbprojects.net/projects/apple1/a1basic.php[BASIC commands]:
+
+[source]
+----
+\
+E000R
+
+E000:4C
+>@
+----
+
+[.text-center] 
+image:img/apple1_2.png[pdfwidth=70%]
 
 <<<
 
@@ -1738,7 +2041,7 @@ The http://retrowiki.es/viewtopic.php?f=31&t=200036835[lince] script makes all t
 
 <<<
 
-=== Chip-8
+=== CHIP-8
 
 https://en.wikipedia.org/wiki/CHIP-8[CHIP-8] is an interpreted programming language, developed by Joseph Weisbecker. It was initially used on the COSMAC VIP and Telmac 1800 8-bit microcomputers in the mid-1970s. Erik Bryntse later created another interpreter based on CHIP-8, called SCHIP, S-CHIP or Super-Chip which extended the CHIP-8.
 
@@ -1839,6 +2142,57 @@ At multicart menu, use the directional controls to choose one ROM, and then fire
 
 <<<
 
+=== Colour Genie
+
+The https://en.wikipedia.org/wiki/Colour_Genie[EG2000 Colour Genie] was a computer produced by Hong Kong-based manufacturer EACA and introduced in Germany in August 1982.
+
+The ZX-Uno version has been https://github.com/Kyp069/eg2000[developed by Kyp069] and has these features:
+
+- 32K RAM
+- Text and graphics modes
+- RGB / Composite video output
+- Tape loading using the audio input
+
+==== SD card format
+
+This core does not use the SD card.
+
+==== Keyboard
+
+The `Clear` key is not implemented.
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Windows`: `MODSEL`
+- `F5`: NMI
+- `F11`: Hard Reset
+- `F12` o `Ctrl+Alt+Supr`: Reset
+
+<<<
+
+==== Basic Guide
+
+On boot, a question is asked about the memory size. Usually, after pressing `Enter` the BASIC interpreter is started.
+
+[.text-center] 
+image:img/cgenie.png[pdfwidth=70%]
+
+From BASIC, you can load software from a external tape (or <<#_miniduino,other external audio device>>) with the following commands.
+
+Use `CLOAD` and `Enter` to load BASIC programs. Once the load has finished, use the `RUN` command to start.
+
+To load machine code, type `SYSTEM` and then `Enter`. Afterwards, type the first letter of the program name and `Enter` again. When loading finishes, if the program does not start automatically, type `/` and `Enter`.
+
+<<<
+
+While a program is loading one `*` and two `**` are alternately displayed on the upper right corner of the screen.
+
+image:img/cgenieload.png[pdfwidth=70%]
+
+<<<
+
 === Commodore 16
 
 The https://en.wikipedia.org/wiki/Commodore_16[Commodore 16] was a home computer made by Commodore International, released in 1984 and intended to be an entry-level computer to replace the Commodre VIC-20. 
@@ -1935,7 +2289,7 @@ While the core is running:
 
 ==== Basic Guide
 
-From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `ENTER` if needed. 
+From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed. 
 
 To show the contents of the current disk, press `F3` or use the command `DIRECTORY`. To load a file from disk use the command `DLOAD"<file name>"` and then, usually, `RUN`.
 
@@ -1956,7 +2310,7 @@ Features:
 - Optional JiffyDOS either for the 1541 or for the Commodore 64. This speeds up loading
 - SID sound chip
 - Joystick support: physical (Atari, SMS, Megadrive...) and emulation with the numeric keyboard
-- Switch VGA 50Hz / RGB-Compuesto 
+- Switch VGA 50Hz / Composite-RGB
 - VGA 50Hz and RGB-Composite
 - VGA Scanlines
 - Tape loading using the audio input
@@ -2047,7 +2401,7 @@ While the core is running:
 
 ==== Basic Guide
 
-From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `ENTER` if needed. 
+From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed. 
 
 To show the contents of the current disk, press `Shift+Esc` or use the command `LOAD "*",8,1`. Once you see READY on screen, use the command `RUN`.
 
@@ -2083,7 +2437,7 @@ While running the core:
 
 ==== Basic Guide
 
-You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `ENTER` if needed. 
+You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed. 
 
 [NOTE]
 ====
@@ -2131,7 +2485,7 @@ While the core is running:
 
 ==== Basic Guide
 
-You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `ENTER` if needed. 
+You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed. 
 
 [NOTE]
 ====
@@ -2142,6 +2496,35 @@ Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, s
 ====
 You can use programs like <<#_audio_file_conversion,Audiotap>> with Commodore `TAP` files.
 ====
+
+<<<
+
+=== Flappy Bird
+
+https://en.wikipedia.org/wiki/Flappy_Bird[Flappy Bird] was very succesful mobile game. The main goal is to control a bird, attempting to fly between columns of green pipes without hitting them.
+
+The core has been made by azesmbog using the https://github.com/themaxaboy/Flappy-Bird-Verilog[work of Max Veerapat Kumchom], adapting the original code for the AEON Lite board to ZX-Uno.
+
+Main features:
+
+- Only VGA output
+- It has to be controlled using a joystick
+
+==== SD card format
+
+This core does not use the SD card
+
+==== Keyboard
+
+This core does not use the keyboard. A joystick is needed in order to use it.
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Joystick Up`: Restart the game
+- `Joystick Down`: Master Reset
+- `Joystick Fire`: Fly
 
 <<<
 
@@ -2208,6 +2591,106 @@ A=USR(&E000)
 ----
 
 You can check the available BASIC commands https://en.wikipedia.org/wiki/Galaksija_BASIC[at Wikipedia].
+
+<<<
+
+=== HT-1080Z
+
+The http://ht.homeserver.hu/html/english.html[HT-1080Z School Computer] was a hungarian computer which, basically, was a Video Genie clone, which in turn is a clone of the TRS-80 Model 1 with http://www.trs-80.org/level-2-basic/[Level II BASIC], with an added AY-3-8910 sound chip and additional input / output circuitry.
+
+The core is based http://joco.homeserver.hu/fpga/mist_ht1080z_en.html[Jozsef Laszlo`s original work] for MiST, ported by azesmbog to the AEON development board, and now to ZX-Uno.
+
+It's main features are:
+
+- New 14K BASIC ROM, which can use lowercase with the Radio Shack Lower Case Kit
+- Extra FF port, with a beeper
+- Included SDOS v8.4 by PVV, to load `CAS` files from the SD card
+- Composite video/RGB and VGA video output
+
+==== SD card format
+
+You can use a SD card with the first partition in FAT16 format, where you can store `.CAS` files, but with some limitations:
+
+- Only machine code `CAS` programs. BASIC programs aren´t supported
+- In order to use `CMD` programs, they have to be converted previously to `CAS` with some utility like `trld`, `trs80-tool` or `cmd2cas`
+- SDOS only understands `CAS` binary format files (beysikovsky format is not supported)
+
+You can obtain file conversion utilities at this sites:
+
+https://www.trs-80.com/wordpress/conversion-tape-utilities/
+
+http://48k.ca/trld.html
+
+https://github.com/pullmoll/cass80
+
+<<<
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Ctrl+Alt+Backspace` : Master reset
+- `Ctrl+Alt+Del` : Soft reset
+- `F5` : Change ink colour
+- `F6` : Change paper colour
+- `F7` : Change border colour
+- `F9` : Select 64 or 32 columns mode (only with VGA output)
+- `F10`: `PAGE` key
+- `Home`: `CLEAR` key
+- `Scroll Lock`: Select between VGA and PAL mode.
+- `Shift+0`: If `ULCBAS.CAS` has been loadead (Upper/Lower Case Driver) changes between only uppercase mode or uppercase and lowercase mode
+
+<<<
+
+==== Basic Guide
+
+On startup, you are asked for the upper memory limit. Press `Enter` to continue.
+
+[.text-center] 
+image:img/ht1080z.png[pdfwidth=70%]
+
+[TIP]
+====
+After the BASIC interpreter has loaded, if, for example, you type `PRINT MEM`, the available memory for BASIC will be displayed.
+====
+
+To load tape files from the SD card, you have to start SDOS typing
+
+[source,basic]
+----
+>SYSTEM
+*? /61440
+----
+
+or, if you don't want the screen to be cleared
+
+[source,basic]
+----
+>SYSTEM
+*? /61443
+----
+
+[.text-center] 
+image:img/ht1080z_2.png[pdfwidth=70%]
+
+After that, with instructions like `CD` and `DIR` you can access where the `CAS` file to load is located. Then, to load a `.CAS` file, you only have to type the name, without extension (for example, for a file named `GAME.CAS` you have to type `GAME`).
+
+[TIP]
+====
+All SDOS commands have to be typed in uppercase.
+====
+
+[TIP]
+====
+Pressing `Space` pauses the listing of files and directories, and pressing any other key afterwards, resumes it.
+====
+
+[NOTE]
+====
+The included ROM has already implemented the Radio Shack Lower Case Kit. However, in order to use lowercase from BASIC, you must load from SD the Upper/Lower Case Driver (file `ULCBAS.CAS`).
+====
 
 <<<
 
@@ -2397,6 +2880,93 @@ The spanish keymap officially available can be replaced with a better one. See h
 
 <<<
 
+=== MZ-700
+
+The https://en.wikipedia.org/wiki/Sharp_MZ[MZ-700] was a personal computer sold by Sharp. It included keyboard and tape-based recorder in a single unit.
+
+The ZX-Uno core has been made by jepalza, based on en http://www.retropc.net/ohishi/mzbyfpga/index.htm[previous implementations].
+
+Some features of the core are:
+
+- Only VGA video mode output
+- Tape loading using the audio input
+- PS/2 keyboard support trying to mimic the original keyboard layout
+
+[WARNING]
+====
+Since it is an experimental core, there are some problems. For example, the SRAM tends to get corrupted after some time of use. At this moment, the best option is to turn off and on the ZXUNO+ when this happens
+====
+
+[TIP]
+====
+You can use the https://original.sharpmz.org/mzf2wav.htm[mzf2wav] utility, available for Windows, and with source code valid for Linux and Mac, to convert `MZF` tape files to `WAV` and load them with a external audio device
+====
+
+There is more information and software at these sites:
+
+https://www.sharpmz.no
+
+http://www.sharpmz.org/mz-700/monicmd.htm
+
+http://www.sharpmz.org/mz-700/dldlang.htm
+
+http://www.sharpmz.org/mz-700/dldgames.htm
+
+==== SD card format
+
+This core does not use the SD card
+
+<<<
+
+==== Keyboard
+
+The core tries to keep the original machine keys layout.
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `F1` to `F5`: F1 to F5
+- `Esc`: `GRAPH`
+- `Tab`: `ALPHA`
+- `Shift Lock`: `CTRL`
+- `Shift`: `SHIFT`
+- `Backspace`: `BREAK`
+- `Enter`: `CR`
+- `Insert`: `INS`
+- `Del`: `DEL`
+- `Cursor keys`: `Cursor keys`
+
+==== Basic Guide
+
+You *must* use two jump wires to expansion port pins `P58` and `P51`, both connected to `GND`:
+
+[.text-center] 
+image:img/mz700puente.jpg[pdfwidth=70%]
+
+The MZ-700 had switches to determine the tape status (PLAY) and the country code. The core uses EXT9(`P51`) for PLAY and EXT6(`P58`) for the country. They are both needed since there are some games that use the japanese character set (wire to `P58` *not* connected) or the european character set (wire to `P58` connected), and because the tape loading routines detect the status (`P51` *not connected*, `Stop` mode, `P51` *connected*, `Play` mode).
+
+As a default `P58` *must* be connected to `GND`. You can turn it off for a japanese character set program.
+
+Likewise, `P51` *must* be connected to `GND` to load from tape. Some programs need to disconnect it after finishing loading.
+
+For most software, you can leave always connected both wires. 
+
+<<<
+
+After startup the default MZ-700 ROM has a very basic monitor with a few commands, like LOAD (L), SAVE (S), DUMP (D), etc. Afterwards, you can load from tape machine code programs or a language interpreter (BASIC, Forth, Pascal) and then load a program in the selected language.
+
+To load a tape from the monitor with a (u <<#_miniduino,external audio device>>):
+
+With, at least, `P51` connected to `GND`, type `L` y `Enter` and the start the audio tape.
+
+[.text-center] 
+image:img/mz700load.png[pdfwidth=70%]
+
+You can hear the audio while loading the tape. Take note, that, since the core isn't finished, there are many programs that do not work. Usually small programas load better.
+
+<<<
+
 === NES
 
 Nintendo Entertainment System (also known as Nintendo NES or just NES) is the https://en.wikipedia.org/wiki/Nintendo_Entertainment_System[second home video game console produced by Nintendo].
@@ -2544,6 +3114,66 @@ Yo load and run a program, you have to type `-` and the name of the file. This w
 
 <<<
 
+=== Pong
+
+Pong was https://en.wikipedia.org/wiki/Pong[one of the earliest arcade video games] manufactured by Atari.
+
+The latest ZX-Uno core has been made by avlixa, and some of its features are:
+
+- Two different video modes: Composite Video/RGB and VGA
+- 7 game variants
+- Support for 2 or 4 players
+- Support for Joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_enoders,here>> for more information)
+- Several colour modes
+
+==== SD format
+
+This core does not use the SD card.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `Esc` or joystick button 2: Show or hide configuration menu
+- `Ctrl+Alt+Backspace`: Hard reset
+- `Scroll Lock`: switch between VGA and RGB mode
+- `F3` o `F12`: Restart game
+- Number between `1` and `7`: Change the game variant
+- Joystick 2 (right): Control right pad (Player 1).
+- Joystick 1 (left): Control left pad (Player 2)
+- `Cursor up` and `Cursor down` or `O` and `K`: Control right pad (Player 1 in 2 player mode and player 3 in 4 player mode)
+- `Q` and `A`: Control left pad (Player 2 in 2 player mode and player 4 in 4 player mode)
+- `Z`, `M` or joystick button 1: Manual serve
+- Cursor keys and `Enter` to use the menu
+
+<<<
+
+==== Basic Guide
+
+Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
+
+[.text-center] 
+image:img/ponguno.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Serve mode
+- Ball Angle
+- Ball Speed
+- Paddle Size
+- Sound
+- Number of players
+- Speed mode
+- Angle mode
+- Joystick, mouse, etc. controls
+- Paddle accuracy
+- Colour mode
+- Exit
+
+<<<
+
 === PC XT
 
 https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, pero adapted and trimmed.
@@ -2661,7 +3291,7 @@ https://github.com/Utodev/smartROM[SmartROM] is a kind of firmware that allows t
 
 The card has to be formatted <<_#sd_card_formatting,the same as when preparing for the main Spectrum core>> with, at least, one FAT16 or FAT32 partition.
 
-Also, you have to intall <<#_esxdos,instalado esxdos 0.8.8>> into the card, and also create a directory named `ZXUNO` with, at least, https://github.com/Utodev/smartROM/blob/master/binaries/SMARTROM.ZX1[the `SMARTROM.ZX1` file] and a RomPack file named `ROMS.ZX1` inside.
+Also, you have to install <<#_esxdos,esxdos 0.8.8>> to the card, and create a directory named `ZXUNO` with, at least, https://github.com/Utodev/smartROM/blob/master/binaries/SMARTROM.ZX1[the `SMARTROM.ZX1` file] and a RomPack file named `ROMS.ZX1` inside.
 
 Finally, if your PS/2 keyboard is not in Spanish, you can copy the coresponding <<#_keyboard,keyboard map file>>, renamed as `KEYMAP.ZX1`.
 
@@ -2743,7 +3373,7 @@ Some features of the core are:
 
 You need a SD card with the first partition in FAT16 format to store ROM image files to load.
 
-See the <<#_cores,corresponding section>> for instructions of how to install the Videopac core in ZXDOS+.
+See the <<#_cores,corresponding section>> for instructions of how to install the Videopac core in ZXUNO+.
 
 ==== Keyboard
 
@@ -2835,6 +3465,50 @@ Some monitor stop playing audio if the video signal is lost. It's recommended to
 
 == Other Hardware
 
+=== Rotary Encoders
+
+The Pong core supports the use of quadrature https://en.wikipedia.org/wiki/Rotary_encoder[rotary encoders] as control devices. They can be connected to joystick ports. Although the testing has been done with 600 ppr encoders, lower ppr encoders, like 400 or 300, should also work.
+
+You can also use an Atari 2600 https://en.wikipedia.org/wiki/Paddle_(game_controller)[paddle] driving controller. In this case the playing experience is bad, since they have few ppr and you must do several full rotations. When using them, it's recommended to set the accuracy setting to 8, to have enough speed.
+
+==== Connection
+
+The joystick adapter must have pin 5 connected to positive VCC, used as main power, and pin 8 as GND. The rotary encoders to use must support voltage from 3,4v to 5v.
+
+A rotary encoder has 5 wires: Earth Ground (not connected), Vcc (`+`), GND (`0V`or `-`), `A` and `B`.
+
+`A` and `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the seconde one. This way you can have up to 4 encoders connected using both joystick ports.
+
+[.text-center] 
+image:img/db9joy.png[pdfwidth=40%]
+
+This way, the connections should be:
+
+. Line `A` encoder 1
+. Line `B` encoder 1
+. Line `A` encoder 2
+. Line `B` encoder 2
+. Vcc(`+`)
+. Fire 1
+. NC
+. `GND`
+. Fire 2
+
+<<<
+
+==== Pong Core Configuration
+
+Follow these directions to choose the configuration:
+
+- For 1 or 2 endoders on joystick port 2 de joystick, select `1/2 Paddle in J2` option
+- For 2 encoders, one for each joystick port, select `2/4 Paddle in J1&J2` option. This is also valid to connect two Atari 2600 driving paddles
+- For 4 encoders, two for each joystick port, select `2/4 Paddle in J1&J2` option
+- For 1 or 2 encoders on joystick port 2 along with a mouse (in this case the encoders are for players 2 and 4), select `Mouse PS/2` option
+
+It is recommended to wait, and make the connection after selecting the chosen option, since the encoders interfere with the up/down directions of the joystick, blocking access to the menu. Another option is to add a on/off switch for the encoder that will disable the power.
+
+<<<
+
 === Loading from tape
 
 Some cores can load, as the original machines could, from a external audio device like a cassette player or something else simulating it.
@@ -2920,6 +3594,12 @@ https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] is a grap
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] is a program that can convert Camputers Lynx `TAP` files to `WAV` audio.
 
 https://github.com/rcmolina/CamputersLYNX[2lynx2wav] also can convert Camputers Lynx `TAP` files to audio files.
+
+https://github.com/kounch/cgc2wav[cgc2wav] can convert EACA Colour Genie `CAS` files to `WAV` audio.
+
+https://docs.mamedev.org/tools/castool.html[castool], available with https://www.mamedev.org[MAME] can convert many kinds of tape file data to `WAV` audio.
+
+https://original.sharpmz.org/mzf2wav.htm[mzf2wav] converts `MZF` tape files to `WAV`.
 
 <<<
 
