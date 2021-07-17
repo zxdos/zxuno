@@ -1,6 +1,6 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 1.1.0
+:revnumber: 1.1.1
 :doctype: book
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
@@ -19,7 +19,7 @@
 
 ZXUNO+ es la iteración más reciente de https://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
-Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXUNO+ con la configuración que se desee de entre todas las instaladas.
+Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXUNO+ con la configuración que se desee de entre todas las instaladas.
 
 La página oficial de ZX-Uno es https://zxuno.speccy.org.
 
@@ -61,7 +61,7 @@ image:./img/zxunoboard.png[pdfwidth=65%]
 |4
 |Ranura SD
 |5
-|Enchufe de Alimentación
+|Alimentación (USB Mini-A)
 |6
 |Entrada de Sonido
 |7
@@ -92,7 +92,7 @@ Para poder poner en marcha un ZXUNO+ hace falta, al menos, lo siguiente:
 
 - Un cargador USB, una TV u otro dispositivo que ofrezca alimentación USB. Normalmente con 500 mA es suficiente.
 - Un cable y un monitor o TV con entrada RCA
-- Un teclado PS/2 (se necesista adaptador USB a PS/2)
+- Un teclado PS/2 (se necesita adaptador USB a PS/2)
 
 Para poder aprovechar todo su potencial, es útil tener también:
 
@@ -247,6 +247,11 @@ Si se pulsa la tecla `F2` durante el arranque, se tendrá acceso a la configurac
 
 Usando las teclas de cursor izquierda y derecha, se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
 
+[TIP]
+====
+También es posible acceder a la BIOS, teniendo un adaptador y un joystick conectado, pulsando dirección abajo en el momento del arranque. Así se accede a la lista de cores instalados. Elegir la última opción (`Enter Setup`) para acceder.
+====
+
 ==== Main
 
 [.text-center] 
@@ -271,6 +276,8 @@ Se puede consultar información más tecnica en https://www.zxuno.com/wiki/index
 image:img/bios2.png[pdfwidth=70%]
 
 La segunda pantalla muestra las ROMs de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
+
+<<<
 
 ==== Upgrade
 
@@ -337,16 +344,18 @@ Estas son algunas de sus principales características:
 - Soporte ZXMMC y DIVMMC para para +3e, esxdos y firmwares compatibles
 - Soporte Turbo Sound
 - Soporte de SpecDrum
+- Soporte Covox
 - Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la implementación de configuraciones tales como ACB, ABC, etc.
 - Soporte de joystick real y joystick en teclado con protocolo Kempston, Sinclair 1 y 2, Cursor, Fuller y QAOPSpcM.
 - Soporte de modo turbo a 7MHz, 14MHz, 28MHz
 - Soporte de teclado con protocolo PS/2 y mapeado configurable por el usuario desde el propio Spectrum.
 - Soporte de ratón PS/2 emulando el protocolo Kempston Mouse.
-- Posibilidad de salida de video en modo de video compuesto, RGB 15kHz, o VGA.
+- Posibilidad de salida de video en modo de video compuesto, RGB 15kHz (PAL y NTSC), o VGA.
 - Frecuencia de refresco vertical seleccionable por el usuario para mejorar la compatibilidad con monitores VGA.
 - Soporte de arranque multicore: desde el Spectrum se puede seleccionar una dirección de la SPI Flash y la FPGA cargará un core desde ahí.
-
-<<<
+- Soporte Wi-Fi (UART) vía addon
+- Soporte MIDI (General MIDI) vía addon
+- Carga de ficheros de ficheros `PZX` desde la SD
 
 === Teclado
 
@@ -368,12 +377,12 @@ image:./img/keyboardEsp.png[pdfwidth=70%]
 [.text-center] 
 image:./img/keyboardEng.png[pdfwidth=70%]
 
+<<<
+
 ==== Spectrum   
 
 [.text-center] 
 image:./img/keyboardAV.png[pdfwidth=70%]
-
-<<<
 
 ==== Teclas especiales y botones
 
@@ -382,8 +391,8 @@ Teclas especiales durante el arranque:
 - `F2` Entrar en la BIOS
 - `Bloq. Mayús` o `Cursor abajo` o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
 - `Esc` o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
-- `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.
-- `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root"
+- `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc. (combinado con `Esc` a continuación permite elegir otra ROM distinta)
+- `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
 Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
@@ -511,7 +520,7 @@ La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BAS
 
 La versión IV es una nueva rama de la versión anterior, creada principalmente porque no quedaba espacio para añadir nuevas características a la ROM de 16K. La primera versión (4.0 Anya) añadió una segunda ROM de 16K con soporte para el modo hi-res de Timex. La sintaxis era aún bastante compatible con Sinclair BASIC. La versión 4.2 fue reconstruida específicamente para el Chloe 280SE, eliminó el soporte para dispositivos antiguos como las cintas, añadió soporte integrado y compatibilidad total con el kernel de esxdos, y migró a la sintaxis de Microsoft BASIC.
 
-Aunque guarda una base comúnde código con muchas versiones de Sinclair BASIC (la ROM TS1000), hay varias diferencias significativas:
+Aunque guarda una base común de código con muchas versiones de Sinclair BASIC (la ROM TS1000), hay varias diferencias significativas:
 
 - Soporte para páginas de códigos(8-bit ASCII).
 - Traducción de los mensajes de error.
@@ -881,7 +890,7 @@ Los principales comandos "DOT" commands son los siguientes:
 - `gramon`: Monitor para buscar gráficos, sprites, fuentes de texto, etc. en la memoria RAM.
 - `hexdump`: Muestra el contenido de un fichero usando notación hexadecimal.
 - `hexview`: Permite ver y navegar por el contenido de un fichero usando notación hexadecimal.
-- `launcher`: Crea un atajo (launcher) para abrir directamente un fichero TAP.
+- `launcher`: Crea un atajo (launcher) para abrir directamente un fichero TAP o BAS.
 - `ls`: Ver el contenido de un directorio.
 - `lstap`: Ver el contenido de un fichero .TAP
 - `mkdir`: Crear un directorio.
@@ -914,6 +923,11 @@ Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cu
 [NOTE]
 ====
 El gestor de esxdos muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
+====
+
+[TIP]
+====
+Existen navegadores alternativos como https://spectrumcomputing.co.uk/forums/viewtopic.php?f=9&t=2553[Long Filename Browser de Bob Fossil] o http://board.esxdos.org/viewtopic.php?id=94[New NMI Handler de Dr. Slump] que incorporan funcionalidades y características que no tiene el gestor de esxdos original
 ====
 
 <<<
@@ -1140,7 +1154,7 @@ Para actualizar las ROM instaladas para ZX Spectrum de forma masiva, se ha de ob
 
 [NOTE]
 ====
-Recordar que, si se inicia el ZXUNO+ pulsando la tecla `/` (del teclado numérico), entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".
+Recordar que, <<#_teclas_especiales_y_botones,si se inicia el ZXUNO+ pulsando la tecla `/` (del teclado numérico)>>, entonces se cargará la ROM por defecto del core de ZX Spectrum en modo "root".
 ====
 
 Para hacer el proceso contrario (guardar las ROMs en un fichero RomPack llamado `ROMS.ZX1`), se puede usar el comando `.romsback`.
@@ -1204,13 +1218,13 @@ Este proceso sustituye todos los cores instalados, la BIOS, así como las ROMs d
 
 == Otros cores
 
-=== ZX Spectrum EXP27 (Kyp)
+=== ZX Spectrum EXP27
 
-Este core se basa en las fuentes del core EXP27-160820 de mcleod_ideafix, a las que se le han realizado varias modificaciones:
+Este core se basa en las fuentes del core EXP27-160820 de mcleod_ideafix, a las que se le han realizado varias modificaciones (por Spark2k06, Neuro, Yombo y azesmbog):
 
 - Visualización de la imagen en Color o varios tipos de monocromo
-- Activación / desactivación del addon WIFI
-- Activación / desactivación modificada del Modo Turbo Boost
+- Activación/desactivación del addon Wi-Fi
+- Activación/desactivación modificada del Modo Turbo Boost
 - Recuperada la opción de marcas personalizadas en PZX, tal y como se podía hacer en el primer core T24 no oficial (sin SAA1099)
 - Soporte del chip de audio SAA1099 (sin PZX)
 
@@ -1219,6 +1233,8 @@ Existen dos versiones de este core, una con soporte para PZX y sin chip de audio
 ==== Formato de Tarjeta SD
 
 Se puede utilizar una tarjeta SD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la misma distribución de esxdos que hay instalada en la BIOS (ver <<#_esxdos,el apartado correspondiente de esxdos>> para más información).
+
+<<<
 
 ==== Teclado
  
@@ -1241,6 +1257,8 @@ Además, cuando termina la reproducción completa de un fichero PZX, el reproduc
 ====
 Es posible añadir tags BRWS o STOP a un fichero PZX usando el programa https://zx-modules.de/?page_id=2[ZX-BlockEditor], parte de https://zx-modules.de[ZX-Modules].
 ====
+
+<<<
 
 === ZX Spectrum 48K (Kyp)
 
@@ -1322,7 +1340,6 @@ Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o 
 
 Durante la ejecución del core:
 
-- `Esc`: BREAK
 - `F5`: NMI
 - `F8`: Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
 - `F10`: Modo Pentagon
@@ -1355,6 +1372,8 @@ El core TBBlue más reciente para ZX-Uno es una versión sintetizada por azesmbo
 - Soporte para joysticks
 - Turbosound
 - ROM de Spectrum de arranque configurable
+- Soporte para 3 chips de sonido AY (como en el ZX Spectrum Next), añadido por azesmbog
+- Soporte para chip de sonido SID (como el que lleva el Commodore 64), añadido por azesmbog
 
 <<<
 
@@ -1390,8 +1409,13 @@ Si no estuviera ya, <<#_cores,instalar el core TBBlue>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-`F1`: Reset
+`F1`: Hard Reset
 `Espacio+F1`: Menú de arranque
+`F2`: Activa o desactiva Scandoubler
+`F3`: Cambia entre 50Hz y 60Hz
+`F4`: Soft reset
+`F5`: Pausa CPU
+`F9`: Multiface
 `F10`: NMI
 
 <<<
@@ -1527,8 +1551,6 @@ Durante la ejecución del core:
 - `F10` y `Ctrl+F10`: Soft Reset
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 
-<<<
-
 ==== Guía básica
 
 Una vez introducida la SD en el ZX-UNO y arrancado el core, si el archivo de `BEEB.MMB` está correctamente creado, al arrancar debería aparecer:
@@ -1591,6 +1613,11 @@ Características del core:
 - Soporte RGB/video compuesto y VGA (a 50Hz)
 - Scanlines en modo VGA
 - Soporta el joystick del primer jugador
+
+[NOTE]
+====
+Existe una versión (Amstrad CPC6128) de este core. sintetizada por Jepalza. que añade la paginación de memoria 128K. Sería como un CPC6128 al que no le funcionase la unidad de discos
+====
 
 ==== Formato de Tarjeta SD
 
@@ -2786,9 +2813,11 @@ Durante la ejecución del core:
 - `Ctrl+Alt+Supr`: Reset
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 
+<<<
+
 ==== Guía básica
 
-Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD <nombre>`.
+Desde Forth, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD <nombre>`.
 
 [CAUTION]
 ====
