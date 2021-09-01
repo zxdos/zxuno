@@ -4,7 +4,7 @@ library ieee;
   use ieee.numeric_std.all;
   use std.textio.all;
 
-entity boot_rom is
+entity boot_rom0 is
   generic (
         ADDR_WIDTH       : integer := 14;
         DATA_WIDTH       : integer := 8
@@ -17,7 +17,7 @@ entity boot_rom is
     );
 end;
 
-architecture RTL of boot_rom is
+architecture RTL of boot_rom0 is
 
    constant MEM_DEPTH : integer := 2**ADDR_WIDTH;
 

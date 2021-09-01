@@ -18,12 +18,14 @@ port
  (-- Clock in ports
   clk_in           : in     std_logic;
   sel_pclock : in std_logic;
+  sel_cpu : in std_logic;
   -- Clock out ports
   clk8          : out    std_logic;
   clk16          : out    std_logic;
   clk_cpu          : out    std_logic;
-  clk32  : out    std_logic;
-  pclock : out std_logic
+--  clk32  : out    std_logic;
+  pclock : out std_logic;
+  cpu_pclock : out std_logic
  );
 end clock;
 
@@ -41,6 +43,8 @@ architecture behavioral of clock is
   signal clkout5_unused   : std_logic;
   -- Unused status signals
   signal locked_unused    : std_logic;
+  
+  signal clk357 : std_logic;
 
 begin
 
@@ -66,18 +70,18 @@ begin
     DIVCLK_DIVIDE        => 1,
     CLKFBOUT_MULT        => 16,
     CLKFBOUT_PHASE       => 0.000,
-    CLKOUT0_DIVIDE       => 100, --25 = 32Mhz, --100 = 8Mhz
+    CLKOUT0_DIVIDE       => 100, --25 = 32Mhz, --100 = 8Mhz --1120 = 7,12Mhz (/2 = 3,57)
     CLKOUT0_PHASE        => 0.000,
     CLKOUT0_DUTY_CYCLE   => 0.500,
     CLKOUT1_DIVIDE       => 50, --50 = 16MHz
     CLKOUT1_PHASE        => 0.000,
     CLKOUT1_DUTY_CYCLE   => 0.500,
-    CLKOUT2_DIVIDE       => 27, --27 ~29.5Mhz Z80     --100 = 8mhz    --50 = 16mhz
+    CLKOUT2_DIVIDE       => 25, --27 ~29.5Mhz Z80     --100 = 8mhz    --50 = 16mhz   --32 = 25Mhz
     CLKOUT2_PHASE        => 0.000,
     CLKOUT2_DUTY_CYCLE   => 0.500,
-    CLKOUT3_DIVIDE       => 25, --25 = 32Mhz for HDMI clock
-    CLKOUT3_PHASE        => 0.000,
-    CLKOUT3_DUTY_CYCLE   => 0.500,
+--    CLKOUT3_DIVIDE       => 112, --25 = 32Mhz for HDMI clock
+--    CLKOUT3_PHASE        => 0.000,
+--    CLKOUT3_DUTY_CYCLE   => 0.500,
     CLKIN_PERIOD         => 20.0,
     REF_JITTER           => 0.010)
   port map
@@ -118,10 +122,10 @@ begin
    (O   => clk_cpu,
     I   => clkout2);
 
-  clkout4_buf : BUFG
-  port map
-   (O   => clk32,
-    I   => clkout3);
+--  clkout4_buf : BUFG
+--  port map
+--   (O   => clk32,
+--    I   => clkout3);
 	 
 	pclock_sel : BUFGMUX --muxer del relojes 16 / 8 para el pixel clock del scandoubler on/off
 	port map
@@ -129,5 +133,20 @@ begin
 	 I0 => clkout0, --el de 8
 	 I1 => clkout1, --el de 16
 	 S => sel_pclock);
+	 
+	 
+	pclock_sel_cpu : BUFGMUX --muxer del relojes 32 / 8 para el cambio de cpu (32 = loader/SD)
+	port map
+	(O => cpu_pclock,
+	 I0 => clkout1, 
+	 I1 => clkout2, --el de 32
+	 S => sel_cpu);	 
+
+--	process (clkout3)
+--	 begin
+--		if rising_edge(clkout3) then
+--			clk357 <= not clk357;
+--		end if;
+--	end process;
 
 end behavioral;

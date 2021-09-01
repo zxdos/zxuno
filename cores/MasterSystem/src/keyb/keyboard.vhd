@@ -13,7 +13,7 @@ port (
 	PS2_DATA	:	in		std_logic;
 	resetKey	:	out	std_logic;
 	MRESET	:  out	std_logic;
-   scanSW	:	out	std_logic_vector(7 downto 0)
+   scanSW	:	out	std_logic_vector(9 downto 0)
 	);
 end entity;
 
@@ -53,6 +53,8 @@ signal CTRL	: std_logic;
 signal ALT	: std_logic;
 signal PAUSE: std_logic := '0';
 signal VIDEO: std_logic := '0';
+signal SCANL: std_logic := '0';
+signal VFREQ: std_logic := '0';
 
 begin
 
@@ -119,7 +121,7 @@ begin
 							elsif (VIDEO = '1' and release = '0') then
 								scanSW(6) <= '0';
 								VIDEO <= '0';
-							end if;
+							end if;			
 
 					when X"E1" => 						  			-- pause 
 							if (PAUSE = '0') then
@@ -129,6 +131,24 @@ begin
 								scanSW(7) <= '0';
 								PAUSE <= '0';
 							end if;
+							
+					when X"7B" => 									 -- scanlines ("-" numpad)
+							if (SCANL = '0' and release = '0') then
+								scanSW(8) <= '1';
+								SCANL <= '1';
+							elsif (SCANL = '1' and release = '0') then
+								scanSW(8) <= '0';
+								SCANL <= '0';
+							end if;			
+							
+					when X"7C" => 									 -- vertical freq 50/60Hz ("*" numpad)
+							if (VFREQ = '0' and release = '0') then
+								scanSW(9) <= '1';
+								VFREQ <= '1';
+							elsif (VFREQ = '1' and release = '0') then
+								scanSW(9) <= '0';
+								VFREQ <= '0';
+							end if;									
 								
 					when others => null;
 					end case;

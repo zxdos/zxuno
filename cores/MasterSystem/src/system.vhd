@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_unsigned.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 use work.all;
@@ -8,9 +9,10 @@ entity system is
 	port (
 		clk_cpu:		in		STD_LOGIC;
 		clk_vdp:		in		STD_LOGIC;
+		clk32:		in		STD_LOGIC;
 		
 		ram_we_n:	out	STD_LOGIC;
-		ram_a:		out	STD_LOGIC_VECTOR(18 downto 0);
+		ram_a:		out	STD_LOGIC_VECTOR(19 downto 0);
 		ram_d:		inout	STD_LOGIC_VECTOR(7 downto 0); --Q
 
 		j1_up:		in		STD_LOGIC;
@@ -26,7 +28,7 @@ entity system is
 		j2_tl:		in		STD_LOGIC;
 		j2_tr:		inout	STD_LOGIC;
 		reset:		in		STD_LOGIC;
---		pause:		in		STD_LOGIC;
+		pause:		in		STD_LOGIC;
 
 		x:				in		UNSIGNED(8 downto 0);
 		y:				in		UNSIGNED(7 downto 0);
@@ -39,15 +41,19 @@ entity system is
       ps2_data: 	in    std_logic;	
 
 		scanSW:		out	std_logic;
+		scanL:		out	std_logic;
+		vfreQ:		out	std_logic;
 
 		spi_do:		in		STD_LOGIC;
 		spi_sclk:	out	STD_LOGIC;
 		spi_di:		out	STD_LOGIC;
-		spi_cs_n:	buffer	STD_LOGIC
+		spi_cs_n:	buffer	STD_LOGIC;
+		sel_cpu:		out	std_logic
 	);
 end system;
 
 architecture Behavioral of system is
+
 	
 	component T80se is
 	generic(
@@ -107,6 +113,7 @@ architecture Behavioral of system is
 		output:			out STD_LOGIC);
 	end component;
 	
+	
 	component io is
    port (
 		clk:				in		STD_LOGIC;
@@ -162,6 +169,13 @@ architecture Behavioral of system is
 		miso:				in  STD_LOGIC;
 		mosi:				out STD_LOGIC);
 	end component;
+	
+    component multiboot is
+     port (
+		clk_icap:				in  STD_LOGIC;
+		REBOOT:				in  STD_LOGIC
+		);
+	end component;	
 
 	signal RESET_n:			std_logic;
 	signal resetKey:			std_logic;
@@ -175,8 +189,10 @@ architecture Behavioral of system is
 	signal p1_right:		 	STD_LOGIC; --3
 	signal p1_tl:			 	STD_LOGIC; --4
 	signal p1_tr:				STD_LOGIC; --5
-	signal ctrl_keys:			std_logic_vector(7 downto 0);
+	signal ctrl_keys:			std_logic_vector(9 downto 0);
 	signal Kpause:				std_logic := '1';
+	
+	signal p2_tr:				STD_LOGIC; 
 	
 	signal RD_n:				std_logic;
 	signal WR_n:				std_logic;
@@ -218,10 +234,14 @@ architecture Behavioral of system is
 	--reset vram
 	signal RST_vram:			std_logic;
 
-	signal bank0:				std_logic_vector(4 downto 0);
-	signal bank1:				std_logic_vector(4 downto 0); 
-	signal bank2:				std_logic_vector(4 downto 0); 
+	signal bank0:				std_logic_vector(5 downto 0);
+	signal bank1:				std_logic_vector(5 downto 0); 
+	signal bank2:				std_logic_vector(5 downto 0); 
 	
+	signal downloading : std_logic:='0';
+	
+	signal A_TOP: integer:=18;
+	signal B_TOP: integer:=4;
 	
 begin	
 	
@@ -271,11 +291,12 @@ begin
 		
 	psg_inst: psg
 	port map (
-		clk			=> clk_cpu,
+		clk			=> clk32, --clk_cpu
 		WR_n			=> psg_WR_n,
 		D_in			=> D_in,
 		output		=> audio);
-	
+		
+			
 	io_inst: io
    port map (
 		clk			=> clk_cpu,
@@ -295,7 +316,7 @@ begin
 		J2_left		=> j2_left,
 		J2_right		=> j2_right,
 		J2_tl			=> j2_tl,
-		J2_tr			=> j2_tr,
+		J2_tr			=> p2_tr,
 		RESET			=> reset);
 		
 	ram_inst: ram
@@ -336,7 +357,12 @@ begin
         resetKey,
 		  MRESET,
 		  ctrl_keys 
-        );		
+        );	
+
+	A_TOP <= 18;
+	B_TOP <= 4;
+--	ram_a(19) <= '0';
+		  
 		   
 	
 	-- glue logic
@@ -364,7 +390,7 @@ begin
 	process (clk_cpu)
 	begin
 		if rising_edge(clk_cpu) then
-			if resetKey = '1' then --q
+			if resetKey = '1' or reset = '0' then --q
 					bootloader <= '0';
 					reset_counter <= (others=>'1');
 					--RST_vram <= '1';
@@ -387,6 +413,8 @@ begin
 	irom_D_out <=	boot_rom_D_out when bootloader='0' and A(15 downto 14)="00" else rom_D_out;
 	
 	RST_vram <= '1' when bootloader='0' else '0'; --Q -vram fill
+	
+	sel_cpu <= '1' when bootloader = '0' else '0'; --high speed when downloading rom from SD / bootloader.
 	
    process (io_n,A,spi_D_out,vdp_D_out,io_D_out,irom_D_out,ram_D_out)
 	begin
@@ -417,9 +445,9 @@ begin
 		if rising_edge(clk_cpu) then
 			if WR_n='0' and A(15 downto 2)="11111111111111" then
 				case A(1 downto 0) is
-				when "01" => bank0 <= D_in(4 downto 0); --Q
-				when "10" => bank1 <= D_in(4 downto 0); --Q
-				when "11" => bank2 <= D_in(4 downto 0); --Q
+				when "01" => bank0(B_TOP downto 0) <= D_in(B_TOP downto 0); --Q
+				when "10" => bank1(B_TOP downto 0) <= D_in(B_TOP downto 0); --Q
+				when "11" => bank2(B_TOP downto 0) <= D_in(B_TOP downto 0); --Q
 				when others =>
 				end case;
 			end if;
@@ -435,15 +463,15 @@ begin
 		when "00" =>
 			-- first kilobyte is always from bank 0
 			if A(13 downto 10)="0000" then
-				ram_a(18 downto 14) <= (others=>'0'); --Q
+				ram_a(A_TOP downto 14) <= (others=>'0'); --Q
 			else
-				ram_a(18 downto 14) <= bank0; --Q
+				ram_a(A_TOP downto 14) <= bank0(B_TOP downto 0); --Q
 			end if;
 		when "01" =>
-			ram_a(18 downto 14) <= bank1; --Q
+			ram_a(A_TOP downto 14) <= bank1(B_TOP downto 0); --Q
 			
 		when others =>
-			ram_a(18 downto 14) <= bank2; --Q
+			ram_a(A_TOP downto 14) <= bank2(B_TOP downto 0); --Q
 		end case;
 	end process;
 	
@@ -464,17 +492,19 @@ begin
 	p1_tl <= ctrl_keys(4) xnor not j1_tl;
 	p1_tr <= '0' when ctrl_keys(5)='1' or j1_tr='0' else 'Z';
 	
+	p2_tr <= '0' when j2_tr='0' else 'Z'; --j2_tr tristate
+	
 
 	process (ctrl_keys(7))
 	begin
-		if ctrl_keys(7) = '1' then
+		if ctrl_keys(7) = '1' or pause = '0' then --Pause
 			Kpause <= '0';
 		else
 			Kpause <= '1';
 		end if;
 	end process;
 
-	process (ctrl_keys(6))
+	process (ctrl_keys(6)) --RGB/VGA
 	begin
 		if ctrl_keys(6) = '0' then
 			scanSW <= '0';
@@ -482,11 +512,29 @@ begin
 			scanSW <= '1';
 		end if;
 	end process;
+	
+	process (ctrl_keys(8)) --scanlines
+	begin
+		if ctrl_keys(8) = '0' then
+			scanL <= '0';
+		else
+			scanL <= '1';
+		end if;
+	end process;	
+	
+	process (ctrl_keys(9)) --vfreq
+	begin
+		if ctrl_keys(9) = '0' then
+			vfreQ <= '0';
+		else
+			vfreQ <= '1';
+		end if;
+	end process;	
 
 	
 ------------multiboot---------------
 
-	multiboot: entity work.multiboot
+	multiboot_i: multiboot
 	port map(
 		clk_icap		      => clk_vdp,
 		REBOOT				=> MRESET

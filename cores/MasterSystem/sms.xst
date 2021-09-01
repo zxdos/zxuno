@@ -1,10 +1,10 @@
-set -tmpdir "projnav.tmp"
+set -tmpdir "xst/projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn sms.prj
 -ofn sms
 -ofmt NGC
--p xc6slx9-3-tqg144
+-p xc6slx9-2-tqg144
 -top sms
 -opt_mode Speed
 -opt_level 1
