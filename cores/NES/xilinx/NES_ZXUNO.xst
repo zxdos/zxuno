@@ -1,4 +1,4 @@
-set -tmpdir "projnav.tmp"
+set -tmpdir "xst/projnav.tmp"
 set -xsthdpdir "xst"
 run
 -ifn NES_ZXUNO.prj
@@ -9,7 +9,6 @@ run
 -opt_mode Speed
 -opt_level 1
 -power NO
--uc "timings.xcf"
 -iuc NO
 -keep_hierarchy No
 -netlist_hierarchy As_Optimized
@@ -34,7 +33,7 @@ run
 -ram_style Auto
 -rom_extract Yes
 -shreg_extract YES
--rom_style Auto
+-rom_style Block
 -auto_bram_packing NO
 -resource_sharing YES
 -async_to_sync NO

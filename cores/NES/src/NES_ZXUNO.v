@@ -1,4 +1,5 @@
 // ZXUNO port by DistWave (2016)
+// Modifications by Quest
 // fpganes
 // Copyright (c) 2012-2013 Ludvig Strigeus
 // This program is GPL Licensed. See COPYING for the full license.
@@ -8,20 +9,14 @@
 module NES_ZXUNO(
   input CLOCK_50,
   // VGA
-  output vga_v,
-  output vga_h,
-  output [2:0] vga_r,
-  output [2:0] vga_g,
-  output [2:0] vga_b,
-  output dvga_v,
-  output dvga_h,
-  output [2:0] dvga_r,
-  output [2:0] dvga_g,
-  output [2:0] dvga_b,
+  output vga_v, output vga_h, output [2:0] vga_r, output [2:0] vga_g, output [2:0] vga_b,
   // Memory
   output ram_WE_n,          // Write Enable. WRITE when Low.
-  output [18:0] ram_a,
-  inout [7:0] ram_d,
+  output [20:0] ram_a,
+  inout  [7:0] ram_d,
+//  output ext_ram_WE_n,   
+//  output [20:0] ext_ram_a,
+//  inout  [7:0] ext_ram_d,  
   output AUDIO_R,
   output AUDIO_L,
   input P_A,
@@ -30,6 +25,15 @@ module NES_ZXUNO(
   input P_D,
   input P_L,
   input P_R,
+  output P_Fire3,  
+  input P2_A,
+  input P2_tr,
+  input P2_U,
+  input P2_D,
+  input P2_L,
+  input P2_R, 
+  input  SW1,
+  input  SW2,
   input PS2_CLK,
   input PS2_DAT,
   input SPI_MISO,
@@ -42,6 +46,10 @@ module NES_ZXUNO(
 //output [6:0] sseg_a_to_dp,	// cathode of seven segment display( a,b,c,d,e,f,g,dp )
 //output [3:0] sseg_an			// anaode of seven segment display( AN3,AN2,AN1,AN0 )
   );
+
+// Parametro tipos de joys segun placa (param: joyType):
+// 0 = un joy, 1 = joySplitter
+parameter joyType = 1;
 
   wire osd_window;
   wire osd_pixel;
@@ -87,12 +95,6 @@ module NES_ZXUNO(
   assign vga_r = vga_osd_r[7:5];
   assign vga_g = vga_osd_g[7:5];
   assign vga_b = vga_osd_b[7:5];
-
-  assign dvga_h = vga_hsync;
-  assign dvga_v = vga_vsync;
-  assign dvga_r = vga_osd_r[7:5];
-  assign dvga_g = vga_osd_g[7:5];
-  assign dvga_b = vga_osd_b[7:5];
 
   assign led = loader_fail;
   
@@ -144,17 +146,43 @@ module NES_ZXUNO(
   wire [7:0] joystick1, joystick2;
   wire p_sel = !host_select;
   wire p_start = !host_start;
-  assign joystick1 = {~P_R & P_L, ~P_L & P_R, ~P_D & P_U, ~P_U & P_D, ~p_start | (~P_R & ~P_L), ~p_sel | (~P_D & ~P_U), ~P_tr, ~P_A};  
+  
+  reg P_f3;
+  reg [7:0] joy1, joy2;
+  
+  
+generate //generar segun joyType
+  if (joyType == 1) begin
+	  assign P_Fire3 = P_f3;
+	  always @(posedge clk_ctrl) begin //2joysplit
+		if (P_f3)
+				joy1 <= {~P_R, ~P_L, ~P_D, ~P_U, ~p_start, ~p_sel, ~P_tr, ~P_A};
+		else
+				joy2 <= {~P_R, ~P_L, ~P_D, ~P_U, ~p_start, ~p_sel, ~P_tr, ~P_A};	
+	  end  		
+	  assign joystick1 = joy1;
+	  assign joystick2 = joy2;
+  end else begin
+		assign joystick1 = {~P_R,  ~P_L,  ~P_D,  ~P_U,  ~p_start, ~p_sel, ~P_tr,  ~P_A};  
+		assign joystick2 = 8'b00000000;
+		assign P_Fire3 = 1'b1;
+  end
+endgenerate  
+  
  
   always @(posedge clk) begin
     if (joypad_strobe) begin
       joypad_bits <= joystick1;
       joypad_bits2 <= joystick2;
     end
-    if (!joypad_clock[0] && last_joypad_clock[0])
+    if (!joypad_clock[0] && last_joypad_clock[0]) begin
+		P_f3 <= 1'b0; 
       joypad_bits <= {1'b0, joypad_bits[7:1]};
-    if (!joypad_clock[1] && last_joypad_clock[1])
+	 end
+    if (!joypad_clock[1] && last_joypad_clock[1]) begin
+		P_f3 <= 1'b1; 
       joypad_bits2 <= {1'b0, joypad_bits2[7:1]};
+	 end
     last_joypad_clock <= joypad_clock;
   end
   
@@ -204,22 +232,17 @@ module NES_ZXUNO(
 
   // This is the memory controller to access the board's SRAM
   wire ram_busy;
-  
-  MemoryController memory(clk,
-                          memory_read_cpu && run_mem, 
-                          memory_read_ppu && run_mem,
-                          memory_write && run_mem || loader_write,
-                          loader_write ? loader_addr : memory_addr,
-                          loader_write ? loader_write_data : memory_dout,
-                          memory_din_cpu,
-                          memory_din_ppu,
-                          ram_busy,
-								  ram_WE_n,
-                          ram_a,
-                          ram_d,
-								  debugaddr,
-								  debugdata);
-								  
+
+  MemoryController  memory( clk,
+                            memory_read_cpu && run_mem, 
+                            memory_read_ppu && run_mem,
+                            memory_write && run_mem || loader_write,
+                            loader_write ? loader_addr : memory_addr,
+                            loader_write ? loader_write_data : memory_dout,
+                            memory_din_cpu, memory_din_ppu, ram_busy,
+                            ram_WE_n, ram_a, ram_d,
+                            debugaddr, debugdata);
+
   reg ramfail;
   always @(posedge clk) begin
     if (loader_reset)
@@ -269,6 +292,9 @@ module NES_ZXUNO(
 
 wire [31:0] rom_size;
 
+wire spi_miso_d;
+assign spi_miso_d = (SPI_CS == 1'b0)? SPI_MISO : 1'b0; 
+
 	CtrlModule control (
 			.clk(clk_ctrl), 
 			.reset_n(1'b1), 
@@ -278,7 +304,7 @@ wire [31:0] rom_size;
 			.osd_pixel(osd_pixel), 
 			.ps2k_clk_in(PS2_CLK), 
 			.ps2k_dat_in(PS2_DAT),
-			.spi_miso(SPI_MISO), 
+			.spi_miso(spi_miso_d), //SPI_MISO
 			.spi_mosi(SPI_MOSI), 
 			.spi_clk(SPI_CLK), 
 			.spi_cs(SPI_CS), 
@@ -406,7 +432,7 @@ end
 //-----------------Multiboot-------------
     multiboot el_multiboot (
         .clk_icap(clk),
-        .REBOOT(master_reset | (~P_R & ~P_L & ~P_D & ~P_U))
+        .REBOOT(master_reset)
     );
 
 
