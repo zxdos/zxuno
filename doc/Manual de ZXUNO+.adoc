@@ -1,10 +1,11 @@
 = Manual de ZXUNO+
 :author: kounch
-:revnumber: 1.1.1
+:revnumber: 1.2.0
 :doctype: book
+:notitle:
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.1
+:Revision: 1.2
 :description: Manual en castellano de ZXUNO+
 :keywords: Manual, Castellano, ZXUNO+
 :icons: font
@@ -30,6 +31,7 @@ La mayor parte del contenido de este documento se basa en información compartid
 - En el https://www.zxuno.com/forum/[foro de ZX-Uno]
 - En https://www.forofpga.es/[foroFPGA]
 - En los varios FAQ existentes, principalmente la versión original https://uto.speccy.org/zxunofaq.html[de @uto_dev], y la versión más moderna http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[de @desUBIKado]
+- En el https://t.me/zxuno[canal oficial de Telegram de ZX-Uno]
 
 Un agradecimento especial a desUBIKado por la intensa y continua labor recopilando y recabando información sobre los distintos cores y funcionalidades.
 
@@ -39,18 +41,18 @@ Sin el trabajo previo de todas estas personas (y más), ese manual no podría ex
 
 === Puertos y Conectores
 
-[.text-center] 
+[.text-center]
 image:./img/zxunofront.png[pdfwidth=65%]
 
-[.text-center] 
+[.text-center]
 image:./img/zxunoback.png[pdfwidth=65%]
 
-[.text-center] 
+[.text-center]
 image:./img/zxunoboard.png[pdfwidth=65%]
 
 ==== Descripción
 
-[cols=2*] 
+[cols=2*]
 |===
 |1
 |Salida de Sonido
@@ -76,12 +78,12 @@ image:./img/zxunoboard.png[pdfwidth=65%]
 
 Este es el esquema del conector RJ-45 para utilizar como salida VGA:
 
-[.text-center] 
+[.text-center]
 image:img/rj45pinout.png[pdfwidth=50%]
 
 Esta es la numeración del conector RJ-45 para utilizar como salida RGB con conector SCART:
 
-[.text-center] 
+[.text-center]
 image:img/rj45scart.png[pdfwidth=50%]
 
 <<<
@@ -91,7 +93,7 @@ image:img/rj45scart.png[pdfwidth=50%]
 Para poder poner en marcha un ZXUNO+ hace falta, al menos, lo siguiente:
 
 - Un cargador USB, una TV u otro dispositivo que ofrezca alimentación USB. Normalmente con 500 mA es suficiente.
-- Un cable y un monitor o TV con entrada RCA
+- Un cable y un monitor o TV con entrada RCA (VGA si se dispone de los adaptadores necesarios)
 - Un teclado PS/2 (se necesita adaptador USB a PS/2)
 
 Para poder aprovechar todo su potencial, es útil tener también:
@@ -103,23 +105,76 @@ Para poder aprovechar todo su potencial, es útil tener también:
 
 ==== Formato de la tarjeta SD
 
-Para poder utilizar una tarjeta SD con el core principal de Spectrum, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16, FAT32 u otros (según el caso, se puede necesitar, un formato específico para compatibilidad con distintos cores de terceros). Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_SD_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+Para poder utilizar una tarjeta SD con el core principal de Spectrum, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16, FAT32 u otros (según el caso, se puede necesitar, un formato específico para compatibilidad con distintos cores de terceros). Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
 
 [NOTE]
 ====
 El tamaño máximo de una partición FAT16 son 4GB
 ====
 
-[WARNING]
+[CAUTION]
 ====
 A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos, es importante no utilizar el mismo que el de cualquiera de los directorios dentro, o se producirá un error de acceso a ese directorio. (Ej: No llamar a la partición `BIN`, `SYS` o `TMP`).
 ====
+
+[TIP]
+====
+Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+====
+
+<<<
 
 ===== Windows
 
 Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
 
 Para otras configuraciones, y según la versión de sistema operativo de que se disponga, se podrá utilizar la herramienta de línea de comandos `diskpart` o bien la interfaz gráfica de administración de discos del sistema.
+
+Por ejemplo, en Windows, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 4GB o menos de tamaño), que figura como disco 6 al ejecutar `list disk` desde `diskpart`:
+
+[source]
+----
+select disk 6
+clean
+create part primary
+active
+format FS=FAT label=ZXUNOPLUS
+exit
+----
+
+Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el core de MSX) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 8GB):
+
+[source]
+----
+select disk 6
+clean
+create part primary size=4000
+set id  = 06
+active
+format fs=FAT label=ZXUNOPLUS quick
+create part primary size=4000
+format fs=FAT label=EXTRA quick
+create part primary
+format fs=FAT32 label=DATA quick
+exit
+----
+
+Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC 6128) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
+
+[source]
+----
+select disk 6
+clean
+create part primary size=4000
+set id  = 0b
+active
+format fs=FAT32 label=ZXUNOPLUS unit=4k quick
+create part primary
+format fs=FAT32 label=EXTRA quick
+exit
+----
+
+<<<
 
 ===== MacOS
 
@@ -158,6 +213,8 @@ sudo newfs_msdos -F 16 -v EXTRA -c 128 /dev/rdisk6s2
 El comando `diskutil` no permite crear particiones FAT16 de más de 2G de tamaño y formatearlas a la vez. Por eso, en el último caso, se crean primero las particiones y luego se formatean en FAT16.
 ====
 
+<<<
+
 Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Amstrad CPC 6128) y usar el resto del espacio con otra más en formato FAT32 (para tarjetas de más de 4GB de tamaño):
 
 [source,shell]
@@ -173,18 +230,18 @@ Para el core de Amstrad CPC 6128, en este caso, al elegir exactamente un tamaño
 [source,shell]
 ----
 diskutil unmountDisk /dev/disk6
-newfs_msdos -F 32 -v ZXDOSPLUS -b 4096 /dev/rdisk6s1
+newfs_msdos -F 32 -v ZXUNOPLUS -b 4096 /dev/rdisk6s1
 ----
 ====
 
 [TIP]
 ====
-Por defecto, MacOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la SD se llama `ZXDOSPLUS`):
+Por defecto, MacOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la SD se llama `ZXUNOPLUS`):
 
 [source,shell]
 ----
-mdutil -i off /Volumes/ZXDOSPLUS
-cd /Volumes/ZXDOSPLUS
+mdutil -i off /Volumes/ZXUNOPLUS
+cd /Volumes/ZXUNOPLUS
 rm -rf .{,_.}{fseventsd,Spotlight-V*,Trashes}
 mkdir .fseventsd
 touch .fseventsd/no_log .metadata_never_index .Trashes
@@ -198,21 +255,121 @@ cd -
 
 Existen multitud de herramientas en Linux que permiten formatear y particionar el contenido de una tarjeta SD (como `fdisk`, `parted`, `cfdisk`, `sfdisk` o `GParted`). Sólo se ha de tener en cuenta que el esquema de particiones a utilizar siempre ha de ser MBR, y la primera partición (la que se utilizará para esxdos) ha de ser primaria.
 
+Por ejemplo, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 4GB o menos de tamaño), que figura como `sdc` en la lista de dispositivos:
+
+[source,shell]
+----
+sudo fdisk --compatibility=dos /dev/sdc
+----
+
+[source]
+----
+(...)
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (62-31116288, default 62):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (128-31116288, default 31116288):
+Created a new partition 1 of type 'Linux'
+
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 6
+Changed type of partition 'Linux' to 'FAT16'.
+
+Command (m for help): a
+Partition number (1, default 1): 1
+The bootable flag on partition 1 is enabled now.
+
+Command (m for help): p
+Disk /dev/sdc
+Disklabel type: dos
+Disk identifier
+
+Device     Boot   Start     End  Sectors   Size Id Type
+/dev/sdc1           62 31116288  31116288 984,9M 6 FAT16
+----
+
+Formatear la partición FAT (requiere permisos de root)
+
+[source,shell]
+----
+sudo mkfs.fat -F 16 -n ZXUNOPLUS -s 128 /dev/sdc1
+----
+
 <<<
 
-==== esxdos
+=== Teclado
+
+==== Teclado PS/2
+
+El mapa de un teclado conectado al puerto PS/2 (asignación de las teclas físicas del teclado con las pulsaciones que se presentan a los distintos cores) se cambia desde el menú `Advanced` de la BIOS. Existen tres mapas distintos a elegir: Español (por defecto), inglés, y Spectrum (avanzado).
+
+También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que crear un directorio llamado `keymaps` y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
+
+Para que el mapa se conserve después de un master reset, hay que tener seleccionado `Default` en la configuración de BIOS.
+
+Para más información, consultar https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
+
+*Español*
+
+[.text-center]
+image:./img/keyboardEsp.png[pdfwidth=70%]
+
+*Inglés*
+
+[.text-center]
+image:./img/keyboardEng.png[pdfwidth=70%]
+
+*Spectrum*
+
+[.text-center]
+image:./img/keyboardAV.png[pdfwidth=70%]
+
+<<<
+
+==== Teclas especiales y botones
+
+Teclas especiales durante el arranque:
+
+- `F2` Entrar en la BIOS
+- `Bloq. Mayús` o `Cursor abajo` o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
+- `Esc` o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
+- `R`: Carga la ROM del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc. (combinado con `Esc` a continuación permite elegir otra ROM distinta)
+- `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
+- Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
+
+Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
+
+- `Esc`: BREAK
+- `F2`: Edit
+- `F5`: NMI
+- `F7`: Reproducir o Pausa en la reproducción de archivos .PZX
+- `F8`: Rebobinar el archivo .PZX hasta la marca anterior
+- `F10`: Graph
+- `F12`: Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr`: Soft reset.
+- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa.
+
+<<<
+
+=== esxdos
 
 https://esxdos.org/index.html[esxdos] es un firmware para la interfaz the DivIDE/DivMMC, que el ZXUNO+ implementa, y que permite el acceso a dispositivos de almacenamiento como la tarjeta SD. Incluye comandos similares a los de UNIX, aunque para usarlos hay que precederlos con un punto, por ejemplo `.ls`, `.cd`, `.mv`, etc.
 
 Para poder utilizarlo es necesario incluir los ficheros correspondientes en la primera partición de la tarjeta SD.
 
-En el momento de escribir este documento, la versión instalada en un ZXUNO+ es la 0.8.6, y se puede descargar desde la página oficial https://www.esxdos.org/files/esxdos086.zip[en este enlace].
+En el momento de escribir este documento, la versión instalada en un ZXUNO+ es la 0.8.9, y se puede descargar desde la página oficial https://www.esxdos.org/files/esxdos089.zip[en este enlace].
 
-Una vez descargado y descomprimido, se han de copiar, a la raíz de la tarjeta, los directorios `BIN`, `SYS` y `TMP` con todo su contenido. 
+Una vez descargado y descomprimido, se han de copiar, a la raíz de la tarjeta, los directorios `BIN`, `SYS` y `TMP` con todo su contenido.
 
 Si todo se ha hecho correctamente, al encender el core Spectrum de ZXUNO+ se verá cómo esxdos detecta la tarjeta y carga los componentes necesarios para funcionar.
 
-[.text-center] 
+[.text-center]
 image:./img/esxdos.png[pdfwidth=70%]
 
 <<<
@@ -243,18 +400,26 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXUNO+. 
 
 === BIOS
 
+[.text-center]
+image:./img/boot.png[pdfwidth=80%]
+
 Si se pulsa la tecla `F2` durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXUNO+. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
 
 Usando las teclas de cursor izquierda y derecha, se puede navegar por las pantallas de configuración de la BIOS. Con las teclas arriba y abajo se pueden elegir los distintos elementos de cada pantalla y, con la tecla `Enter`, es posible activar y elegir las opciones de cada una de estas. La tecla `Esc` sirve para cerrar las ventanas de opciones abiertas sin aplicar ninguna acción.
 
-[TIP]
-====
-También es posible acceder a la BIOS, teniendo un adaptador y un joystick conectado, pulsando dirección abajo en el momento del arranque. Así se accede a la lista de cores instalados. Elegir la última opción (`Enter Setup`) para acceder.
-====
+Otras teclas que se pueden pulsar durante el arranque de la BIOS son:
+
+- `Bloq. Mayús` o `Cursor abajo`, o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
+- `Esc` o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMs del core de ZX Spectrum
+- `R`: Carga la ROM del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc. (combinado con `Esc` a continuación permite elegir otra ROM distinta)
+- `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
+- Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
+
+<<<
 
 ==== Main
 
-[.text-center] 
+[.text-center]
 image:img/bios.png[pdfwidth=70%]
 
 En la primera pantalla de configuración, además de poder ejecutar distintas pruebas, se puede definir el comportamiento por defecto para lo siguiente:
@@ -270,25 +435,25 @@ En la primera pantalla de configuración, además de poder ejecutar distintas pr
 
 Se puede consultar información más tecnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
 
+<<<
+
 ==== ROMs
 
-[.text-center] 
+[.text-center]
 image:img/bios2.png[pdfwidth=70%]
 
 La segunda pantalla muestra las ROMs de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
 
-<<<
-
 ==== Upgrade
 
-[.text-center] 
+[.text-center]
 image:img/bios3.png[pdfwidth=70%]
 
 La pantalla _Upgrade_ se utiliza para realizar las distintas actualizaciones del contenido de la memoria Flash: esxdos, BIOS, Cores, etc. (véase <<#_actualizaciones,el apartado correspondiente a actualizaciones>> para más información).
 
 ==== Boot
 
-[.text-center] 
+[.text-center]
 image:img/bios4.png[pdfwidth=70%]
 
 En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que cargue por defecto en el arranque.
@@ -297,7 +462,7 @@ En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que c
 
 ==== Advanced
 
-[.text-center] 
+[.text-center]
 image:img/bios5.png[pdfwidth=70%]
 
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
@@ -315,7 +480,7 @@ La pantalla de configuración avanzada sirve para modificar los siguientes ajust
 
 ==== Exit
 
-[.text-center] 
+[.text-center]
 image:img/bios6.png[pdfwidth=70%]
 
 Finalmente, desde la última pantalla se puede:
@@ -357,59 +522,6 @@ Estas son algunas de sus principales características:
 - Soporte MIDI (General MIDI) vía addon
 - Carga de ficheros de ficheros `PZX` desde la SD
 
-=== Teclado
-
-El mapa de teclado (asignación de las teclas físicas del teclado con las pulsaciones que se presentan a los distinto cores) se cambia desde el menú `Advanced` de la BIOS. Existen tres mapas distintos a elegir: Español (por defecto), inglés, y Spectrum (avanzado).
-
-También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que crear un directorio llamado `keymaps` y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
-
-Para que el mapa se conserve después de un master reset, hay que tener seleccionado `Default` en la configuración de BIOS.
-
-Para más información, consultar https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
-
-==== Español
-
-[.text-center] 
-image:./img/keyboardEsp.png[pdfwidth=70%]
-
-==== Inglés
-
-[.text-center] 
-image:./img/keyboardEng.png[pdfwidth=70%]
-
-<<<
-
-==== Spectrum   
-
-[.text-center] 
-image:./img/keyboardAV.png[pdfwidth=70%]
-
-==== Teclas especiales y botones
-
-Teclas especiales durante el arranque:
-
-- `F2` Entrar en la BIOS
-- `Bloq. Mayús` o `Cursor abajo` o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
-- `Esc` o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
-- `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc. (combinado con `Esc` a continuación permite elegir otra ROM distinta)
-- `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
-- Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
-
-Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
-
-- `Esc`: BREAK
-- `F2`: Edit
-- `F5`: NMI
-- `F7`: Reproducir o Pausa en la reproducción de archivos .PZX
-- `F8`: Rebobinar el archivo .PZX hasta la marca anterior
-- `F10`: Graph
-- `F12`: Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `Ctrl+Alt+Supr`: Soft reset.
-- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa.
-
-<<<
-
 === ROMs
 
 El core de ZX Spectrum tiene la capacidad de inicializar utilizando diferentes versiones de ROM (48K, 128K, Plus 2, etc.). Estas se almacenan en la memoria flash del ZXUNO+, y se puede elegir cuál cargar, pulsando la tecla `Esc` durante el arranque. También es posible definir desde la configuración de BIOS, cuál es la ROM que se desea que se cargue por defecto.
@@ -424,7 +536,7 @@ Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.
 
 Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos de esxdos desde 128 BASIC, así que se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
 
-[%header,cols=2*] 
+[%header,cols=2*]
 |===
 |Ajuste
 |Significado
@@ -453,7 +565,7 @@ El conjunto completo de ROMs está disponible para descargar desde el repositori
 
 Dependiendo de la ROM elegida, los ajustes a indicar cuando se <<#_zx123_tool,añada a la SPI flash>> pueden variar. Por ejemplo, para la ROM `48le_ea_re_po` (que tiene habilitadas todas las opciones), se pueden usar estos ajustes  (no hay que habilitar NMI DivMMC porque el editor de POKEs ya lo utiliza):
 
-[%header,cols=2*] 
+[%header,cols=2*]
 |===
 |Ajuste
 |Significado
@@ -514,7 +626,7 @@ Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches
 
 https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto. SE Basic IV se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también lo hace en ZX-Uno y similares.
 
-SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrurm, pero posteriormente se ha reescrito basándose en la  https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81]. 
+SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrurm, pero posteriormente se ha reescrito basándose en la  https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81].
 
 La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC], todavía se mantiene como un firmware de código abierto para el Spectrum. Se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
 
@@ -542,7 +654,7 @@ Las principales diferencias con Microsoft BASIC son:
   $ – hexadecimal
 - Evaluación de expresiones siempre activa.
 - Operadores lógicos y bit a bit separados.
-- Tipado automático de datos. 
+- Tipado automático de datos.
 
 Se puede encontrar mucha más información, incluyendo el manual de usuario, etc. en https://github.com/cheveron/sebasic4/wiki[la wiki oficial].
 
@@ -552,7 +664,7 @@ Se puede encontrar mucha más información, incluyendo el manual de usuario, etc
 
 Estos son algunos ajustes válidos para <<#_zx123_tool,añadir a la SPI flash>> algunas otras ROM personalizadas:
 
-[%header,cols=2*] 
+[%header,cols=2*]
 |===
 |Nombre de la ROM
 |Ajustes
@@ -641,14 +753,14 @@ Enter 'help' for information
 fdisk: 1> erase
 fdisk:*1> edit 1
 Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 7F
-Do you wish to edit in CHS mode? [n] 
+Do you wish to edit in CHS mode? [n]
 Partition offset [0 - 31116288]: [63] 128
 Partition size [1 - 31116287]: [31116287] 2017152
 
 fdisk:*1> edit 2
 Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 06
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [2017280]  
+Do you wish to edit in CHS mode? [n]
+Partition offset [0 - 31116288]: [2017280]
 Partition size [1 - 29099135]: [29099135] 7812504
 
 fdisk:*1> flag 2
@@ -658,9 +770,9 @@ fdisk:*1> flag 2
 ----
 fdisk:*1> edit 3
 Partition id ('0' to disable)  [0 - FF]: [0] (? for help) 0B
-Do you wish to edit in CHS mode? [n] 
-Partition offset [0 - 31116288]: [9829784] 
-Partition size [1 - 21286504]: [21286504] 
+Do you wish to edit in CHS mode? [n]
+Partition offset [0 - 31116288]: [9829784]
+Partition size [1 - 21286504]: [21286504]
 
 fdisk:*1> print
          Starting       Ending
@@ -669,7 +781,7 @@ fdisk:*1> print
  1: 7F 1023 254  63 - 1023 254  63 [       128 -    2017152] <Unknown ID>
  2: 06 1023 254  63 - 1023 254  63 [   2017280 -    7812504] DOS > 32MB
  3: 0B 1023 254  63 - 1023 254  63 [   9829784 -   21286504] Win95 FAT-32
- 4: 00    0   0   0 -    0   0   0 [         0 -          0] unused  
+ 4: 00    0   0   0 -    0   0   0 [         0 -          0] unused
 
 fdisk:*1> write
 fdisk: 1> quit
@@ -704,6 +816,8 @@ diskutil list
    3:                 DOS_FAT_32 EXTRA                   10.9 GB    disk6s3
 ----
 
+<<<
+
 ==== Linux
 
 Será necesario utilizar la línea de comandos. Lo primero es determinar el disco a formatear:
@@ -713,16 +827,14 @@ Será necesario utilizar la línea de comandos. Lo primero es determinar el disc
 lsblk
 ----
 
-<<<
-
 En este ejemplo sería `sdc`:
 
 [source]
 ----
 NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 (..)
-sdc          179:0    0 15,8G  0 disk 
-└─sdc1       179:1    0 15,8G  0 part 
+sdc          179:0    0 15,8G  0 disk
+└─sdc1       179:1    0 15,8G  0 part
 ----
 
 Pasos a seguir:
@@ -761,7 +873,7 @@ Partition type
    p   primary (1 primary, 0 extended, 3 free)
    e   extended (container for logical partitions)
 Select (default p): p
-Partition number (2-4, default 2): 
+Partition number (2-4, default 2):
 First sector (45-31116288, default 45): 2017280     .
 Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 7812504
 
@@ -783,7 +895,7 @@ Partition type
    p   primary (1 primary, 0 extended, 3 free)
    e   extended (container for logical partitions)
 Select (default p): p
-Partition number (2-4, default 3): 3 
+Partition number (2-4, default 3): 3
 First sector (45-31116288, default 45): 9829784     .
 Last sector, +/-sectors or +/-size{K,M,G,T,P} (2017153-31116288, default 31116288): 31116288
 
@@ -827,10 +939,10 @@ lsblk
 ----
 NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 (...)
-sda      179:0    0 15,8G  0 disk 
-├─sda1   179:1    0    1G  0 part 
-├─sda2   179:2    0    4G  0 part 
-├─sda3   179:3    0 10,8G  0 part 
+sda      179:0    0 15,8G  0 disk
+├─sda1   179:1    0    1G  0 part
+├─sda2   179:2    0    4G  0 part
+├─sda3   179:3    0 10,8G  0 part
 ----
 
 ==== +3e
@@ -854,8 +966,6 @@ FORMAT TO 0,100,2048
 ----
 
 El primer valor (`0`) indica el disco a utilizar (el primero), el segundo valor es el número máximo de particiones IDEDOS que se podrán usar, y el tercer valor es el número de cilindros a utilizar.
-
-<<<
 
 Una vez hecho el formato, ya será posible crear nuevas particiones. Por ejemplo, para crear una partición llamada "Software" de 16MB, una llamada "Swap1", de 4MB (para usar como espacio swap) y otra llamada "Utils" de 8MB:
 
@@ -948,8 +1058,8 @@ tarjeta SD. Si no se hace, la longitud del archivo se quedará en 0 de forma err
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
 - `playrmov`: Reproduce videos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
-- `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta SD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
-- `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta SD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root". 
+- `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta SD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
+- `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta SD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
 - `upgrade`
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta SD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la SD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
@@ -959,7 +1069,7 @@ tarjeta SD. Si no se hace, la longitud del archivo se quedará en 0 de forma err
 
 === Creación de vídeos RDM (RaDastan Movie)
 
-El comando `PLAYRMOV` reproduce videos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN] (Usuario `guest`, contraseña `zxuno`). 
+El comando `PLAYRMOV` reproduce videos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN] (Usuario `guest`, contraseña `zxuno`).
 
 En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o MacOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
 
@@ -998,9 +1108,27 @@ En https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[este hilo del fo
 
 <<<
 
+=== CP/M
+
+En el ZX-Uno existe la posibilidad de usar el core Multicomp que es un CP/M 2.2, o bien correr el CP/M 3.0 de Spectrum con la ROM +3e y una SD especialmente preparada, pero solo se presentarán 51 columnas en pantalla, y es necesario estar intercambiando la parte izquierda y derecha para poder ver las 80 columnas, lo cual es una incomodidad grande.
+
+Multicomp
+
+https://www.zxuno.com/forum/download/file.php?id=1248[multicomp_z80_CPM.ZX1]
+https://obsolescence.wixsite.com/obsolescence/multicomp-fpga-cpm-demo-disk
+http://searle.x10host.com/Multicomp/index.html
+http://searle.x10host.com/Multicomp/cpm/fpgaCPM.html#UsingTheMachine
+
++3
+
+https://www.zxuno.com/forum/viewtopic.php?f=12&t=1427&hilit=core#p16169
+https://www.zxuno.com/forum/viewtopic.php?f=39&t=4099
+
+<<<
+
 === FUZIX
 
-FUZIX es una fusión de varios elementos de http://www.dougbraun.com/uzi.html[UZI] (una implementación del kernel Unix para ordenadores basados en Z80), extendida desde la versión 7 a algo entre SYS3 y SYS5.x con algunas partes de POSIX. 
+FUZIX es una fusión de varios elementos de http://www.dougbraun.com/uzi.html[UZI] (una implementación del kernel Unix para ordenadores basados en Z80), extendida desde la versión 7 a algo entre SYS3 y SYS5.x con algunas partes de POSIX.
 
 Aún no es algo útil, aunque se puede construir, arrancar y ejecutar aplicaciones. Aún falta mucho trabajo tanto en las utilidades como las bibliotecas.
 
@@ -1026,7 +1154,7 @@ git clone https://github.com/EtchedPixels/sdcc280.git
 
 cd sdcc280
 cd sdcc
-./configure 
+./configure
 make
 sudo make install
 cd ../..
@@ -1090,7 +1218,7 @@ Copiar el fichero `FUZIX` dentro del directorio `BIN` y copiar `FUZIX.BIN` al di
 
 Iniciar un core de Spectrum con una ROM de 128K y con esxdos, escribir `.fuzix`, y pulsar `Enter`.
 
-[.text-center] 
+[.text-center]
 image:./img/fuzix01.png[pdfwidth=70%]
 
 [TIP]
@@ -1100,26 +1228,26 @@ La configuración del teclado en la BIOS debería ser con una disposición en in
 
 Al cabo de unos pocos segundos, el sistema debería detectar la tarjeta SD y encontrar las particiones. En este ejemplo, la raíz está en la tercera partición de SD 0.
 
-[.text-center] 
+[.text-center]
 image:./img/fuzix02.png[pdfwidth=70%]
 
 <<<
 
 Escribir el identificador de la partición raiz (por ejemplo, `hd3`) y pulsar `Enter`.
 
-[.text-center] 
+[.text-center]
 image:./img/fuzix03.png[pdfwidth=70%]
 
 Definir la fecha (pulsar `Enter`) y la hora (pulsar `Enter`).
 
-[.text-center] 
+[.text-center]
 image:./img/fuzix04.png[pdfwidth=70%]
 
 <<<
 
 Iniciar sesión con el usuario `root` y sin contraseña.
 
-[.text-center] 
+[.text-center]
 image:./img/fuzix05.png[pdfwidth=70%]
 
 Con esto ya se dispone de una consola de Fuzix.
@@ -1131,7 +1259,7 @@ Al terminar, recordar detener el sistema usando el comando `shutdown` o el siste
 
 <<<
 
-== Actualizaciones 
+== Actualizaciones
 
 === BIOS
 
@@ -1159,17 +1287,17 @@ Recordar que, <<#_teclas_especiales_y_botones,si se inicia el ZXUNO+ pulsando la
 
 Para hacer el proceso contrario (guardar las ROMs en un fichero RomPack llamado `ROMS.ZX1`), se puede usar el comando `.romsback`.
 
-Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack] (Usuario `guest`, contraseña `zxuno`). Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux. 
+Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.comsvn/zxuno/software/ZX1RomPack/[ZX1RomPack] (Usuario `guest`, contraseña `zxuno`). Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux.
 
 <<<
 
 === Cores
 
-Hay un 45 espacios disponibles para almacenar cores, estando reservado el primer espacio para el de ZX Spectrum principal (esto no impide tener más cores de ZX Spectrum en otros espacios además del primero).
+Hay un total de 45 espacios disponibles para almacenar cores, estando reservado el primer espacio para el de ZX Spectrum principal (esto no impide tener más cores de ZX Spectrum en otros espacios además del primero).
 
 Los cores oficiales están https://github.com/zxdos/zxuno/tree/master/cores[disponibles para descargar] en el repositorio en GitHub.
 
-Para actualizar o instalar un nuevo core hay varias alternativas. 
+Para actualizar o instalar un nuevo core hay varias alternativas.
 
 La forma más sencilla consiste en obtener la última versión del fichero que lo define, que será un fichero que hay que llamar `COREnn.ZX1`, donde `nn` es el número de espacio donde realizar la instalación (por ejemplo `CORE2.ZX1` para el espacio 2).
 
@@ -1237,7 +1365,7 @@ Se puede utilizar una tarjeta SD con la primera partición en formato FAT16 o FA
 <<<
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -1251,7 +1379,7 @@ Durante la ejecución del core:
 - `F11`: Activar o desactivar el módulo Wi-Fi
 - `F12`: Activar o desactivar la velocidad de la CPU a 28Mhz. No es necesario mantener pulsada la tecla, como en el core original
 
-Además, cuando termina la reproducción completa de un fichero PZX, el reproductor se para automáticamente. También se parará si se encuentra en el fichero una marca STOP, o si se encuentra una marca STOP IF IN 48K y el ZX-UNO está en modo de 48K (sin paginación de 128K).
+Además, cuando termina la reproducción completa de un fichero PZX, el reproductor se para automáticamente. También se parará si se encuentra en el fichero una marca STOP, o si se encuentra una marca STOP IF IN 48K y el core está en modo de 48K (sin paginación de 128K).
 
 [TIP]
 ====
@@ -1276,7 +1404,7 @@ Sus características principales son:
 Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la distribución de esxdos 0.8.8 (ver <<#_esxdos,el apartado correspondiente de esxdos>> para más información).
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -1305,7 +1433,7 @@ Sus características principales son:
 Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la distribución de esxdos 0.8.8 (ver <<#_esxdos,el apartado correspondiente de esxdos>> para más información).
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -1335,7 +1463,7 @@ Sus características principales son:
 Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la distribución de esxdos 0.8.9 (ver <<#_esxdos,el apartado correspondiente de esxdos>> para más información).
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -1343,7 +1471,7 @@ Durante la ejecución del core:
 - `F5`: NMI
 - `F8`: Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
 - `F10`: Modo Pentagon
-- `F11`: Modo 48K 
+- `F11`: Modo 48K
 - `F12`: Modo 128K
 - `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `Ctrl+Alt+Supr` o `F12`: Soft reset.
@@ -1404,7 +1532,7 @@ En el caso de tener en la tarjeta SD instalado <<esxdos,esxdos>>, el archivo `es
 Si no estuviera ya, <<#_cores,instalar el core TBBlue>> en el ZXUNO+.
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -1422,16 +1550,15 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Pulsando `Espacio+F1` se fuerza un reset del core y la carga del menú de arranque, donde se mostrarán las opciones de inicio existentes en el fichero `config.ini`.
+Pulsando `F1` y, a continuación, `Espacio`, se fuerza un reset del core y la carga del menú de arranque, donde se mostrarán las opciones de inicio existentes en el fichero `config.ini`.
 
-[.text-center] 
+[.text-center]
 image:img/tbblue1.jpg[pdfwidth=70%]
 
 A continuación, pulsando `E`, se accede al resto de opciones de configuración del core. Estas se pueden editar usando las teclas de cursor y la tecla `Espacio`. Pulsar `Enter` para finalizar.
 
-[.text-center] 
+[.text-center]
 image:img/tbblue2.jpg[pdfwidth=70%]
-
 
 <<<
 
@@ -1496,19 +1623,17 @@ Durante la ejecución del core:
 
 El teclado está mapeado en inglés, según el siguiente esquema:
 
-[.text-center] 
+[.text-center]
 image:img/keyboardAtom.jpg[pdfwidth=90%]
 
 <<<
 
 ==== Guía básica
 
-Tras iniciar el core, en algunos casos, puede suceder que se muestre una pantalla llena de `@`. Basta con retirar e insertar, o simplemente insertar, la tarjeta SD, para que empiece a funcionar.
+[.text-center]
+image:img/atom.png[pdfwidth=70%]
 
-[.text-center] 
-image:img/acorn.jpg[pdfwidth=70%]
-
-Una vez iniciado, pulsar `Mayús+F10` para mostrar el menú desde el que se pueden cargar los programas de Atom Software Archive de la tarjeta.
+Una vez iniciado, pulsar `Mayús+F10`, o bien escribir `*MENU` y `Enter`, para mostrar el menú desde el que se pueden cargar los programas de Atom Software Archive de la tarjeta.
 
 <<<
 
@@ -1540,8 +1665,10 @@ El fichero debe estar sin fragmentar en la SD. Se puede utilizar algún programa
 Como el fichero `MMB` se llama igual que el que utiliza el <<#_bbc_micro,core de BBC Micro>>, se puede usar otro core con acceso completo a la tarjeta SD (Como uno de ZX Spectrum con esxDOS), teniendo dos ficheros `MMB` distintos, y renombrar el de Acorn Electron como `BEEB.MMB` antes de ejecutar este core
 ====
 
+<<<
+
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -1553,6 +1680,9 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
+[.text-center]
+image:img/electron.png[pdfwidth=70%]
+
 Una vez introducida la SD en el ZX-UNO y arrancado el core, si el archivo de `BEEB.MMB` está correctamente creado, al arrancar debería aparecer:
 
 [source]
@@ -1562,6 +1692,8 @@ Smart SPI
 BASIC
 >
 ----
+
+<<<
 
 Automáticamente se monta el disco 0 de la imagen, y se puede ver su contenido con el comando:
 
@@ -1586,6 +1718,8 @@ CHAIN""
 ----
 
 Y entonces comenzar la reproducción.
+
+<<<
 
 Para ver una lista de los discos disponibles en el fichero `BEEB.MMB`:
 
@@ -1639,6 +1773,9 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
+[.text-center]
+image:img/cpc464.png[pdfwidth=70%]
+
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `RUN"`. Al contrario que en la máquina original, durante la reproducción se puede escuchar el audio de la cinta.
 
 <<<
@@ -1665,7 +1802,7 @@ Además son necesarios los ficheros ROM siguientes (se pueden obtener http://www
 - `AMSDOS.ROM`
 - `MAXAM.ROM`
 
-También es recomendable incluir uno o más ficheros con imágenes de disco (`DSK`) con el software que se quiera ejecutar.
+También se debe incluir uno o más ficheros con imágenes de disco (`DSK`) con el software que se quiera ejecutar.
 
 Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32.
 
@@ -1684,12 +1821,12 @@ Durante la ejecución del core:
 
 Escribir el comando `CAT` para ver el contenido del fichero DSK cargado actualmente.
 
-[.text-center] 
+[.text-center]
 image:img/cpc.png[pdfwidth=70%]
 
 Escribir el comando `RUN"<nombre>` para cargar un programa del disco
 
-[.text-center] 
+[.text-center]
 image:img/cpc2.png[pdfwidth=70%]
 
 Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en orden alfabético.
@@ -1698,7 +1835,7 @@ Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en 
 
 === Apple I
 
-El https://es.wikipedia.org/wiki/Apple_I[Apple I] fue uno de los primeros computadores personales, y el primero en combinar un microprocesador con una conexión para un teclado y un monitor. 
+El https://es.wikipedia.org/wiki/Apple_I[Apple I] fue uno de los primeros computadores personales, y el primero en combinar un microprocesador con una conexión para un teclado y un monitor.
 
 El core de ZX-Uno ha sido creado por Subcritical, basado en el proyecto https://github.com/alangarf/apple-one[Apple-One].
 
@@ -1722,7 +1859,7 @@ Notar que, en Apple I, no existe tecla de borrado. Debido a la forma en que se m
 
 Según se inicia, el Apple I  arranca con https://www.sbprojects.net/projects/apple1/wozmon.php[Woz Monitor] (ROM cargada en `0xFF00`)
 
-[.text-center] 
+[.text-center]
 image:img/apple1_1.png[pdfwidth=70%]
 
 <<<
@@ -1746,14 +1883,16 @@ E000:4C
 >@
 ----
 
-[.text-center] 
+[.text-center]
 image:img/apple1_2.png[pdfwidth=70%]
 
 <<<
 
-=== Apple II
+=== Apple ][
 
-Está basado en el http://www.cs.columbia.edu/~sedwards/apple2fpga/[original de Stephen A. Edwards] y en https://github.com/vlait/papilio-duo/tree/master/apple2fpga-papilioduo[la adaptación de vlait a las placas Papilio].
+La familia de computadores https://es.wikipedia.org/wiki/Apple_II[Apple II] fue la primera serie de microcomputadoras de producción masiva hecha por la empresa Apple Computer.
+
+El core de ZX-Uno está basado en el http://www.cs.columbia.edu/~sedwards/apple2fpga/[original de Stephen A. Edwards] y en https://github.com/vlait/papilio-duo/tree/master/apple2fpga-papilioduo[la adaptación de vlait a las placas Papilio].
 
 Algunas de sus características son:
 
@@ -1786,6 +1925,8 @@ COPY /B imagen1.nib + imagen2.nib + (...) + imagen20.nib apple2_20discos.img
 
 Volcar la imagen en la SD, por ejemplo, usando http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
 
+<<<
+
 ===== MacOS y Linux
 
 Concatenar las imágenes (máximo 20) usando `cat`:
@@ -1804,8 +1945,8 @@ sudo dd if=apple2_20discos.img of=/dev/...
 ----
 
 ==== Teclado
- 
-===== Teclas especiales y botones       
+
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
@@ -1815,6 +1956,11 @@ Durante la ejecución del core:
 - `Mayús+F1` a `Mayús+F10`: Insertar la imagen de disco 11 a 20 en la tarjeta SD. Pulsar `F12` a continuación.
 - `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `F12`: Soft reset.
+
+[WARNING]
+====
+El core necesita tener insertada una tarjeta SD con el formato correcto, o si no, no finaliza el arranque. Esto es porque el Apple ][ necesita un disco de arranque para funcionar.
+====
 
 <<<
 
@@ -1833,7 +1979,7 @@ En el https://zxuno.com/forum/viewtopic.php?f=60&t=1870[hilo original del foro d
 Señalar que existe una versión vertical de BIOS, y una https://github.com/zxdos/zxuno/blob/master/firmware/jamma.rom[ROM de Spectrum] pensada para poder cargar directamente los distintos cores Arcade.
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 En general, casi todos los cores tienen unas teclas y botones de control similares.
@@ -1879,7 +2025,7 @@ Durante la ejecución del core:
 - `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA
 - `-`: Activar o desactivar scanlines en modo VGA
 - `*`: Alternar el tipo de máquina entre PAL y NTSC
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `F5`: `Help`
 - `F6`: `Start`
 - `F7`: `Select`
@@ -1894,7 +2040,7 @@ Durante la ejecución del core:
 
 Pulsando `F12` se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` (o bien el joystick y el botón de disparo) para elegir y seleccionar en el menú.
 
-[.text-center] 
+[.text-center]
 image:img/a800xl.jpg[pdfwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
@@ -1942,7 +2088,7 @@ Durante la ejecución del core:
 - `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
 - `H` o el botón de disparo del joystick 2: Disparo del jugador 2
 - `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -1950,7 +2096,7 @@ Durante la ejecución del core:
 
 Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
 
-[.text-center] 
+[.text-center]
 image:img/a2600uno.jpg[pdfwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
@@ -2003,9 +2149,9 @@ Como el fichero `MMB` se llama igual que el que utiliza el <<#_acorn_electron,co
 
 ==== Teclado
 
-[.text-center] 
+[.text-center]
 image:img/keyboardbbc.png[pdfwidth=80%]
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
@@ -2020,8 +2166,8 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-[.text-center] 
-image:img/bbcmicro.png[pdfwidth=80%]
+[.text-center]
+image:img/bbcmicro.png[pdfwidth=70%]
 
 Una vez introducida la SD en el ZX-UNO y arrancado el core, si el archivo de `BEEB.MMB` está correctamente creado, al arrancar debería aparecer:
 
@@ -2079,8 +2225,7 @@ Recordar, tras insertar un disco, que si este tiene arranque automático, se pue
 
 === Camputers Lynx
 
-
-El https://es.wikipedia.org/wiki/Camputers_Lynx[Lynx] fue un ordenador doméstico británico de 8 bits lanzado a principios de 1983 por la compañía Camputers. Se lanzaron en total tres modelos, con 48kB, 96kB o 128kB de RAM. 
+El https://es.wikipedia.org/wiki/Camputers_Lynx[Lynx] fue un ordenador doméstico británico de 8 bits lanzado a principios de 1983 por la compañía Camputers. Se lanzaron en total tres modelos, con 48kB, 96kB o 128kB de RAM.
 
 La versión para ZXUNO+ tiene estas características:
 
@@ -2088,7 +2233,6 @@ La versión para ZXUNO+ tiene estas características:
 - ROM Scorpion opcional
 - Carga usando la entrada de audio
 - Soporte para joystick
-- Sólo funciona con RGB/Vídeo Compuesto
 
 ==== Formato de Tarjeta SD
 
@@ -2103,13 +2247,14 @@ Durante la ejecución del core:
 - `F6`: Alterna entre el modo 48kB y el modo 96kB (por defecto)
 - `F7`: Alterna entre activar o desactivar la ROM Scorpio (activa por defecto)
 - `F8`: Activar o desactivar el tener en cuenta los bits 2 y 3 del puerto $80 (señal CAS del banco 2), para que se vean bien los juegos de Level 9.- `Ctrl+Alt+Supr`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `F11`: Reset
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
 ==== Guía básica
 
-[.text-center] 
+[.text-center]
 image:img/lynx.png[pdfwidth=70%]
 
 Desde BASIC, se suele cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con la secuencia de comandos:
@@ -2153,7 +2298,7 @@ Se puede utilizar una tarjeta con la primera partición en formato FAT16 o FAT32
 
 La máquina CHIP-8 utiliza un teclado hexadecimal como entrada. La asignación en el teclado es la siguiente:
 
-[align="center",width="25%",%header,cols=2*] 
+[align="center",width="25%",%header,cols=2*]
 |===
 |Chip-8|PS/2
 |`1 2 3 C`|`1 2 3 4`
@@ -2174,9 +2319,9 @@ Durante la ejecución del core:
 
 ==== Guía Básica
 
-Pulsando `Esc` se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar las distintas opciones.
+Pulsando `Esc` se muestra el menú de configuración. Se usan las teclas de cursor, o bien `W` y `S`, y `Enter` para elegir y seleccionar las distintas opciones.
 
-[.text-center] 
+[.text-center]
 image:img/chip8uno.jpg[pdfwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
@@ -2228,9 +2373,9 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Al iniciar, la ROM de la BIOS se carga desde la tarjeta SD, así como la ROM multicartucho. 
+Al iniciar, la ROM de la BIOS se carga desde la tarjeta SD, así como la ROM multicartucho.
 
-[.text-center] 
+[.text-center]
 image:img/colecouno.jpg[pdfwidth=70%]
 
 En el menú multicartucho, usar los controles de dirección para elegir la ROM a cargar, y luego el botón de disparo 1 para cargar la ROM elegida. Pulsando `Esc` se reinicia el core y se vuelve a cargar el menú de selección de ROM.
@@ -2271,7 +2416,7 @@ Durante la ejecución del core:
 
 En el arranque, aparece una pregunta indicando el tamaño de memoria. Normalmente, basta con pulsar `Enter` para entrar al intérprete de BASIC.
 
-[.text-center] 
+[.text-center]
 image:img/cgenie.png[pdfwidth=70%]
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos siguientes.
@@ -2284,6 +2429,7 @@ Para cargar código máquina, usar `SYSTEM` y `Enter`. A continuación, escribir
 
 Durante la carga, aparecen alternativamente uno `*` y dos `**` en la parte superior derecha de la pantalla.
 
+[.text-center]
 image:img/cgenieload.png[pdfwidth=70%]
 
 <<<
@@ -2300,7 +2446,7 @@ Características:
 - Disquetera 1541, redirigida a SD y en RAW. Sólo lectura (compatible con imágenes .D64)
 - Chip TED de FPGATED
 - Soporte de joystick, tanto real (conector DB9) como emulado en teclado numérico
-- Switch VGA 50Hz / RGB-Compuesto 
+- Switch VGA 50Hz / RGB-Compuesto
 - Scanlines en modo VGA
 - Carga de cinta usando la entrada de audio
 - Cambio de polaridad de la señal de entrada de audio
@@ -2380,15 +2526,20 @@ Durante la ejecución del core:
 - `Bloq. Desp`: para cambiar entre modo de video compuesto y VGA
 - `F11`: Seleccionar la asignación del joystick al puerto 0 o al puerto 1
 - `F12`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+<<<
 
 ==== Guía básica
 
-Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD`. Una vez finalizadada la carga, escribir `RUN` y pulsar `Enter` si fuese necesario. 
+[.text-center]
+image:img/c16.png[pdfwidth=70%]
+
+Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD`. Una vez finalizadada la carga, escribir `RUN` y pulsar `Enter` si fuese necesario.
 
 Para listar el directorio del disco seleccionado, pulsar `F3` o introducir el comando `DIRECTORY`. Para cargar un fichero del disco, usar el comando `DLOAD"<nombre de fichero>"` y luego, normalmente, `RUN`.
 
-Para cargar rápidamente el primer fichero `PRG` de un disco pulsar `Mayús+TAB` o usar el comando `DLOAD"*"`.
+Para cargar rápidamente el primer fichero `PRG` de un disco pulsar `Mayús+TAB` o usar el comando `DLOAD"*"`, y luego, normalmente, `RUN`.
 
 <<<
 
@@ -2405,7 +2556,7 @@ Características:
 - JiffyDOS opcional tanto para la 1541 como para el Commodore 64. Esto acelera muy notablemente las cargas.
 - Chip de sonido SID
 - Soporte de joystick, tanto real (norma Atari, SMS, megadrive...) como emulado en pad numérico
-- Switch VGA 50Hz / RGB-Compuesto 
+- Switch VGA 50Hz / RGB-Compuesto
 - Scanlines en modo VGA
 - Carga de cinta usando la entrada de audio
 - Cambio de polaridad de la señal de entrada de audio
@@ -2487,25 +2638,36 @@ Durante la ejecución del core:
 - `F11`: Rotar entre puertos de joystick
 - `F12`: Reset modo JiffyDOS
 - `Ctrl+F12`:  Reset modo ROM C64 original (para carga de cintas)
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
 ==== Guía básica
 
+[.text-center]
+image:img/c64.png[pdfwidth=70%]
+
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD`. Una vez finalizadada la carga, escribir `RUN` y pulsar `Enter` si fuese necesario.
+[NOTE]
+====
+Para cargar desde cinta se debe estar usando la ROM de C64 original que se activa con `Ctrl+F12`.
+====
 
 Para cargar desde un disco, habitualmente, se puede pulsar `Mayus+Esc` o bien escribir `LOAD "*",8,1` y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa.
 
 Si el disco tuviera varios programas, usar `F1` para listar el contenido, o bien escribir `LOAD "$"` y pulsar `Enter`. A continuación, escribir `LIST`, y pulsar `Enter`, para ver una lista con los archivos dentro del disco.
 
-Ahora, para cargar el archivo deseado, escribir `LOAD "<nombre>",8` (donde `<nombre>` es el nombre del archivo a cargar) y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa. Si esto no funcionase, probar con el comando `LOAD "<nombre>",8,1`. 
+Ahora, para cargar el archivo deseado, escribir `LOAD "<nombre>",8` (donde `<nombre>` es el nombre del archivo a cargar) y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa. Si esto no funcionase, probar con el comando `LOAD "<nombre>",8,1`.
 
+[NOTE]
+====
+Para cargar desde disco se debe estar usando la ROM de C64 con JiffyDOS que se activa con `F12`.
+====
 <<<
 
 === Commodore PET
 
-El https://en.wikipedia.org/wiki/Commodore_PET[Commodore PET (Personal Electronic Transactor)] fue una línea de ordenadores domésticos producida por Commodore a partir de 1977. 
+El https://en.wikipedia.org/wiki/Commodore_PET[Commodore PET (Personal Electronic Transactor)] fue una línea de ordenadores domésticos producida por Commodore a partir de 1977.
 
 La versión para ZX-Uno ha sido https://www.zxuno.com/forum/viewtopic.php?f=50&t=683&start=20[desarrollada por Jepalza], basada en el proyecto https://www.skibo.net/projects/pet2001fpga/[pet2001fpga].
 
@@ -2529,7 +2691,12 @@ Durante la ejecución del core:
 - `F1`: Cancelar carga desde cinta
 - `Alt`: Permite escribir en modo gráfico
 
+<<<
+
 ==== Guía básica
+
+[.text-center]
+image:img/pet.jpg[pdfwidth=70%]
 
 Se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `LOAD`. Una vez finalizadada la carga, normalmente, se ha de escribir `RUN` y pulsar `Enter`.
 
@@ -2568,15 +2735,19 @@ Este core no utiliza la tarjeta SD.
 
 Durante la ejecución del core:
 
-- `F9` a `F11`: Cargar cartuchos incorporados al core
+- `F9` a `F11`: Cargar cartuchos incorporados al core (si los hubiera)
 - `-` del teclado numérico: Cambiar la polaridad de la entrada de audio. El LED rojo se enciende cuando la polaridad está invertida
 - `Bloq. Desp`: para cambiar entre modo de video compuesto y VGA
-- `F11`: Seleccionar la asignación del joystick al puerto 0 o al puerto 1
 - `Bloq. Num`: Reset desactivando la ampliación de memoria de 32K (activa por defecto)
 - `F12`: Reset activando la ampliación de memoria
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+<<<
 
 ==== Guía básica
+
+[.text-center]
+image:img/vic20.png[pdfwidth=70%]
 
 Se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `LOAD`. Una vez finalizadada la carga, normalmente, se ha de escribir `RUN` y pulsar `Enter`.
 
@@ -2625,8 +2796,7 @@ Durante la ejecución del core:
 
 https://en.wikipedia.org/wiki/Galaksija_%28computer%29[Galaksija] (Galaxia en español) es un ordenador creado en 1983 por el inventor serbio Voja Antonić. Los esquemas fueron publicados en la primera revista de ordenadores yugoslava, “Računari u vašoj kući” (Ordenadores en Casa), en su primer número de Enero de 1984. De este primer número se vendieron 100.000 ejemplares, y posteriormente se supo que al menos 8.000 personas habían construido su propio ordenador Galaksija.
 
-El core de ZX-Uno es una versión del http://galaksija.petnica.rs/
-[proyecto μGalaksija], mejorada por azesmog, añadiendo el modo Galaksija Plus, y la posibilidad de cargar programas desde una tarjeta SD.
+El core de ZX-Uno es una versión del http://galaksija.petnica.rs/[proyecto μGalaksija], mejorada por azesmog, añadiendo el modo Galaksija Plus, y la posibilidad de cargar programas desde una tarjeta SD.
 
 Características del core de ZX-Uno:
 
@@ -2654,18 +2824,17 @@ Durante la ejecución del core:
 - `Esc`: Congela la ejecución de un programa BASIC o Código Máquina. Volviendo a pulsar, la ejecución continua
 - `Supr`: Detiene la ejecución de un programa BASIC mientras se mantenga pulsada
 - `Fin`: Si se pulsa durante la ejecución de un programa BASIC realiza un BREAK
-- `Mayús.+M`: Habilita el modo plus más avanzado en aquellos programas que estén preparados para usarlo (por ejemplo TETRIS.GTP)
+- `Mayús.+M`: Habilita el modo plus más avanzado en aquellos programas que estén preparados para usarlo (por ejemplo `TETRIS.GTP`)
 - `M`: Vuelve al modo normal desde el modo plus
-- `F12`: Soft Reset
 - `Ctrl+Alt+F5`: NMI
 - `Ctrl+Alt+Supr`: Soft Reset
-- `Ctrl+Alt+F12`: Master Reset
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
 ==== Guía básica
 
-[.text-center] 
+[.text-center]
 image:img/galaksija.png[pdfwidth=70%]
 
 Desde BASIC, se puede habilitar la carga de programas desde la tarjeta SD, ejecutando la siguiente instrucción:
@@ -2696,7 +2865,7 @@ El core está basado en el http://joco.homeserver.hu/fpga/mist_ht1080z_en.html[t
 
 Sus características principales son:
 
-- Nueva versión de ROM de BASIC de 14K, en lugar de la rom de 12K de Level II BASIC original, que permite usar letras minúsculas con el Radio Shack Lower Case Kit
+- Nueva versión de ROM de BASIC de 14K, en lugar de la ROM de 12K de Level II BASIC original, que permite usar letras minúsculas con el Radio Shack Lower Case Kit
 - Añade el puerto FF, incorporando un beeper
 - Añade el SDOS v8.4 de PVV, para cargar ficheros `CAS` desde la tarjeta SD
 - Salida de vídeo VGA y Video Compuesto
@@ -2720,21 +2889,21 @@ https://github.com/pullmoll/cass80
 <<<
 
 ==== Teclado
- 
+
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
-- `Ctrl+Alt+Backspace` : Master reset
-- `Ctrl+Alt+Del` : Soft reset
-- `F5` : Cambia color de la tinta
-- `F6` : Cambia el color del papel
-- `F7` : Cambia color del borde
-- `F9` : Cambia entre modo 64/32 columnas (solo salida VGA)
+- `F5`: Cambia color de la tinta
+- `F6`: Cambia el color del papel
+- `F7`: Cambia color del borde
+- `F9`: Cambia entre modo 64/32 columnas (solo salida VGA)
 - `F10`: Tecla `PAGE`
 - `Inicio`: Tecla `CLEAR`
 - `Bloq. Despl`: Cambia entre modo VGA y PAL. Nota: en el modo PAL la imagen se desplaza hacia arriba y vuelve a entra por abajo en un bucle, como pasaba antiguamente en los canales de TV analógicos cuando no estaban bien sintonizados.
 - `Mayús+0`: Si se ha cargado el fichero `ULCBAS.CAS` (Upper/Lower Case Driver) permite cambiar el estado de solo mayúsculas o mayúsculas+minúsculas.
+- `Ctrl+Alt+Supr`: Reset
+- `Ctrl+Alt+Backspace`: Hard Reset
 
 <<<
 
@@ -2742,7 +2911,7 @@ Durante la ejecución del core:
 
 Después de arrancar, se pregunta por el límite superior de la memoria accesible, pulsar `Enter` para continuar.
 
-[.text-center] 
+[.text-center]
 image:img/ht1080z.png[pdfwidth=70%]
 
 [TIP]
@@ -2766,7 +2935,7 @@ o bien, si no se quiere que se limpie la pantalla
 *? /61443
 ----
 
-[.text-center] 
+[.text-center]
 image:img/ht1080z_2.png[pdfwidth=70%]
 
 Ahora, con instrucciones como `CD`, `DIR` se puede llegar hasta el directorio donde se encuentre el fichero `CAS` a cargar. Para cargar un fichero de cinta `.CAS` se tiene que escribir sólo el nombre, sin la extensión (por ejemplo, para un fichero `JUEGO.CAS` se debe escribir `JUEGO`).
@@ -2808,10 +2977,9 @@ Se puede utilizar una tarjeta SD, con la primera partición en formato FAT16, pa
 Durante la ejecución del core:
 
 - `F1` a `F4`: Modos Turbo
-- `F12`: Soft Reset
 - `Ctrl+Alt+F5`: NMI
 - `Ctrl+Alt+Supr`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2844,6 +3012,9 @@ Una vez la cinta ha cargado, escribir el comando necesario para iniciar el progr
 ====
 En lugar de BASIC como otros sistemas, el Jupiter ACE utiliza https://es.wikipedia.org/wiki/Forth[Forth]. Para ver los comandos disponibles (incluyendo los que inician un programa cargado desde cinta), se tiene que utilizar `vlist`.
 ====
+
+[.text-center]
+image:img/ace_vlist.png[pdfwidth=70%]
 
 <<<
 
@@ -2887,7 +3058,7 @@ En el fichero `/MSX1FPGA/config.txt` se guarda la configuración del core, segú
 |||+---Sistema de color: N=NTSC, P=PAL
 ||+----Mapa de Teclado: E=Inglés, B=Brasileño, F=Francés, S=Castellano
 |+-----Scandoubler(VGA): 1=Activo, 0=Inactivo
-+------Nextor: 1=Activo, 0=Inactivo 
++------Nextor: 1=Activo, 0=Inactivo
 ----
 
 Si no estuviera ya, <<#_cores,instalar el core de MSX>> en el ZUNO+.
@@ -2900,14 +3071,14 @@ Si no estuviera ya, <<#_cores,instalar el core de MSX>> en el ZUNO+.
 
 Durante la ejecución del core:
 
+- `F1` a `F5`: `F1` a `F5`
 - `Impr Pant`: Cambia el modo entre VGA y RGB
 - `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
 - `Pausa`: Cambia entre 50Hz y 60Hz
 - `F11`: Activa o desactiva el modo turbo
 - `Ctrl+Alt+Supr`: Soft Reset
-- `Ctrl+Alt+F12`: Hard Reset
-- `Ctrl+Alt+Backspace`: Reinicia la FPGA. Backspace es la tecla de borrar hacia atrás, encima del enter
-- `ALT Izquierdo`: MSX GRAPH 
+- `Ctrl+Alt+Backspace`: Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `ALT Izquierdo`: MSX GRAPH
 - `ALT Derecho`: MSX CODE
 - `Re Pág`: MSX SELECT
 - `Inicio`: MSX HOME (`Mayús+HOME`: CLS)
@@ -2930,7 +3101,7 @@ Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de pr
 
 Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`.
 
-[.text-center] 
+[.text-center]
 image:img/msx.png[pdfwidth=70%]
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos `RUN"CAS:"`, `BLOAD"CAS:",R` o `CLOAD`.
@@ -2959,7 +3130,7 @@ Has HWDS = FALSE
 
 Use:
 
-MSXCTRL -h -i -r -b -[5|6] -m<0-2> 
+MSXCTRL -h -i -r -b -[5|6] -m<0-2>
         -c<0-1> -d<0-1> -t<0-1>
         [-w<filename> | -l<filename>]
         -k<0-255> -e<0-255> -p<0-255>
@@ -3039,7 +3210,7 @@ Durante la ejecución del core:
 
 Para usarlo, se deben utilizar *dos* puentes en los pines `P58` y `P51` del puerto de expansion, con `GND`:
 
-[.text-center] 
+[.text-center]
 image:img/mz700puente.jpg[pdfwidth=70%]
 
 El MZ-700 tenía interruptores para la reproducción de cinta (PLAY) y para el código de país. El core utiliza EXT9(`P51`) para PLAY el y EXT6(`P58`) para el de país. Son necesarios porque hay juegos que emplean el juego de caracteres japonés (puente a `P58` *no* conectado) y otros el europeo (puente a `P58` *si* conectado), y porque la carga desde cinta detecta el estado (*sin* puente a `P51`, modo `Stop`, *con* puente a `P51`, modo `Play`).
@@ -3048,7 +3219,7 @@ Por defecto `P58` *debe* estar conectado a GND, y se puede desconectar una vez c
 
 De la misma manera, `P51` *debe* estar conectado a GND para realizar una carga de cinta. Para algunos programas se debe quitar la conexión al finalizar la carga.
 
-En general, para la mayoría de programas, no es necesario necesita quitar los puentes, y se pueden dejar fijos siempre. 
+En general, para la mayoría de programas, no es necesario necesita quitar los puentes, y se pueden dejar fijos siempre.
 
 Tras arrancar, la ROM por defecto del MZ-700 tiene un monitor básico con muy pocos comandos como LOAD (L), SAVE (S), DUMP (D), etc. Posterioremente, desde cinta, se pueden cargar programas en código máquina o distintos intérpretes de lenguajes (BASIC, Forth, Pascal) y posterioremente programas para el intérprete elegido.
 
@@ -3058,7 +3229,7 @@ Desde el monitor inicial, se puede cargar desde una cinta (u <<#_miniduino,otro 
 
 Con, al menos, el puente `P51` conectado, escribir `L` y `Enter` y comenzar después la reproducción de la cinta.
 
-[.text-center] 
+[.text-center]
 image:img/mz700load.png[pdfwidth=70%]
 
 Durante la carga se escucha a través de la salida de sonido el audio de la cinta. Notar que, al ser un core sin finalizar, hay muchos programas que no funcionan correctamente. Normalmente los programas pequeños funcionan mejor que programas grandes.
@@ -3095,7 +3266,7 @@ Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick: Mostrar u ocultar el menú de configuración
 - Teclas de cursor, y `Enter` para usar el menú
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -3103,7 +3274,7 @@ Durante la ejecución del core:
 
 Pulsando `Esc` se muestra el menú de configuración. Para desplazarse por el menú y activar o elegir alguna opción, se utilizan las teclas de cursor, y `Enter`.
 
-[.text-center] 
+[.text-center]
 image:img/nesuno.jpg[pdfwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
@@ -3115,6 +3286,11 @@ En él se pueden activar o desactivar las siguientes opciones:
 - Simular la pulsación del botón Start del mando 1 (P1 Start)
 - Elegir una ROM para cargar desde la SD (Load ROM)
 - Salir del menú (Exit)
+
+[TIP]
+====
+Se puede avanzar y retroceder más rápido por las opciones de menú usando `Re Pág` y `Av Pág`.
+====
 
 <<<
 
@@ -3173,17 +3349,17 @@ sudo dd if=oric_discos.img of=/dev/...
 
 La distribución del teclado está en inglés (así, por ejemplo, la tecla `-` se corresponde con `'`, al lado del número `0`).
 
-[.text-center] 
+[.text-center]
 image:img/keyboardoric.png[pdfwidth=80%]
 
-===== Teclas especiales y botones       
+===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
 - `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
 - `Inicio`: Mostrar datos de depuración (Pista de disco actual -dos dígitos-, número de imagen de disco -dos dígitos-, y registro de contador de programa -cuatro dígitos-)
 - `Fin`: NMI
-- `Inicio+Fin`: Reset 
+- `Inicio+Fin`: Reset
 - `Re.Pag`: Seleccionar el siguiente disco
 - `Av.Pag`: Seleccionar el  disco anterior
 
@@ -3191,7 +3367,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-[.text-center] 
+[.text-center]
 image:img/oric.png[pdfwidth=70%]
 
 Se puede cargar DOS-8D con el comando:
@@ -3209,6 +3385,95 @@ Para ejecutar un programa, se ha de escribir `-` delante del nombre. Así, por e
 ----
 -DEFENDER.EXE
 ----
+
+<<<
+
+=== Oric Atmos (Kyp)
+
+Otra versión distinta de core de https://es.wikipedia.org/wiki/Oric_Atmos[Oric Atmos], basada en la versión de Rampa para MiST, Mistica y SiDi.
+
+Esta versión tiene las siguientes características:
+
+- Salida de vídeo compuesto o VGA (Scandoubler)
+- 64KB de RAM y 16KB de ROM. La ROM oculta la parte alta de la memoria, pero se puede acceder a todos los bancos de memoria mediante ensamblador
+- ROM seleccionable entre la versión original (1.1), y la versión 1.22, ROM alternativa que corrige errores
+- Las direcciones del joystick están mapeadas a las teclas del cursor, y los dos botones de disparo a las teclas `Espacio` y `S`
+- Carga de programas a través de la entrada de audio
+- Grabación de programas a través de la salida de audio
+
+Para más información consultar http://www.retrowiki.es/viewtopic.php?f=110&t=200037261[el foro RetroWiki].
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+<<<
+==== Teclado
+
+La disposición de las teclas en el teclado de PC intenta ser lo más parecida a la que tiene un Oric Atmos real.
+
+La distribución del teclado está en inglés (así, por ejemplo, la tecla `-` se corresponde con `'`, al lado del número `0`).
+
+[.text-center]
+image:img/keyboardoric.png[pdfwidth=80%]
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F1`: Seleccionar la ROM 1.1
+- `F2`: Seleccionar la ROM 1.22
+- `F5`: NMI
+- `F10`: Habilita la salida de audio al ejecutar `CSAVE`
+- `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Ctrl+Alt+Supr` o `F12`: Soft reset
+- `Bloq. Despl.`: para cambiar entre modo de vídeo compuesto y VGA
+- `Alt Gr.`: Tecla `FUNC`
+- `Esc`: Tecla `ESC`
+- `Supr`: Tecla `DEL`
+- `Ctrl`: Tecla `CTRL`
+- `Mayus.`: Tecla `SHIFT`
+- `Windows Izq.`, `Alt Izq`, `Windows Der.`, `Menú`: Teclas de cursor `Izquierda`, `Abajo`, `Arriba`, `Derecha`
+
+<<<
+
+==== Guía básica
+
+[.text-center]
+image:img/oric.png[pdfwidth=70%]
+
+[NOTE]
+====
+La versión 1.0 del core no detecta correctamente los ajustes de la BIOS y siempre arranca en modo vídeo compuesto. Por tanto, unos instantes después de haberlo cargado, se debe pulsar `Bloq. Despl.` para activar la salida de vídeo VGA
+====
+
+Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) usando el comando `CLOAD ""` y `Enter`. A continuación, aparecerá en pantalla el mensaje
+
+[source]
+----
+Searching...
+----
+
+Cuando se detecte un programa en la carga, el texto cambiará a
+
+[source]
+----
+Loading...<nombre de programa>
+----
+
+<<<
+
+En los http://www.retrowiki.es/viewtopic.php?f=110&t=200037261[foros de RetroWiki] hay disponible un script de linux llamado `calorico.sh` que usa bash y PHP, junto con https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[las utilidades TSXphpclass de Natalia Pujol] para convertir ficheros `.TAP` de Oric en archivos `.TSX`.
+
+[TIP]
+====
+Para grabar un programa BASIC usando la salida de audio, se puede utilizar el comando `CSAVE "NOMBRE"` y `Enter`. Si se desea poder escuchar durante la grabación, se debe haber habilitado previamente el sonido de grabación con la tecla `F10`.
+====
+
+[WARNING]
+====
+*No* debe estar activo el sonido de grabación (tecla `F10`) durante una carga desde audio externo. El motivo es que la activación del sonido de grabación provoca una retroalimentación con un ruido alto y agudo que impide la carga por audio.
+====
 
 <<<
 
@@ -3235,14 +3500,14 @@ Este core no utiliza la tarjeta SD.
 Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick: Mostrar u ocultar el menú de configuración
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `Bloq. Despl.`: cambia de modo vídeo RGB a VGA y viceversa
 - `F3` o `F12`: Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
-- Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).   
-- Joystick 1 (izquierda): Control de paleta de la izquierda (Jugador 2)  
+- Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).
+- Joystick 1 (izquierda): Control de paleta de la izquierda (Jugador 2)
 - `Cursor arriba` y `Cursor abajo` o `O` y `K`: Control de paleta de la derecha (Jugador 1 en modo 2 jugadores y jugador 3 en modo de 4 jugadores)
-- `Q` y `A`: Control de paleta de la izquierda (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)  
+- `Q` y `A`: Control de paleta de la izquierda (Jugador 2 en modo 2 jugadores y jugador 4 en modo de 4 jugadores)
 - `Z`, `M` o botón de joystick 1: Saque manual
 - Teclas de cursor y `Enter` para navegar por el menú
 
@@ -3252,7 +3517,7 @@ Durante la ejecución del core:
 
 Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar opciones del menú.
 
-[.text-center] 
+[.text-center]
 image:img/ponguno.jpg[pdfwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
@@ -3332,7 +3597,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-[.text-center] 
+[.text-center]
 image:img/samcoupe.png[pdfwidth=70%]
 
 Sólo es posible cargar programas desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD""` (o pulsando `7` del teclado numérico, equivalente a pulsar `F7` en el teclado del SAM Coupé).
@@ -3346,7 +3611,7 @@ En el repositorio SVN de ZX-Uno (https://guest:zxuno@svn.zxuno.com/svn.zxuno.com
 
 === Sega Master System
 
-La https://es.wikipedia.org/wiki/Master_System[Master System] fue una consola de videojuegos de 8 bits basada en cartuchos y tarjetas, desarrollada por Sega. 
+La https://es.wikipedia.org/wiki/Master_System[Master System] fue una consola de videojuegos de 8 bits basada en cartuchos y tarjetas, desarrollada por Sega.
 
 El core de ZX-Uno está basado en el http://forum.gadgetfactory.net/index.php?/topic/1304-sega-master-system-on-the-papilio-plus/[trabajo original de Ben para Papilio Plus].
 
@@ -3372,9 +3637,9 @@ Durante la ejecución del core:
 - Cursor o `Q`, `A`, `O`, `P` o el joystick 1: Controles de dirección del jugador 1
 - `Z`, `Windows` o el botón de joystick 1: Botón de disparo 1 del jugador 1
 - `X`, `Espacio` o el botón secundario de joystick 1: Botón de disparo 2 del jugador 1
-- `Pause`: Tecla de botón de pausa de Master System
+- `Pausa`: Tecla de botón de pausa de Master System
 - `Bloq. Despl.`: para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `F12`: Reset y mostrar el selector de ficheros
 
 <<<
@@ -3383,7 +3648,7 @@ Durante la ejecución del core:
 
 Pulsando `F12` se muestra el selector de archivos `SMS` o `BIN`. Para desplazarse por el menú y elegir el archivo a cargar, se utilizan las teclas de cursor y `Enter`.
 
-[.text-center] 
+[.text-center]
 image:img/sms.png[pdfwidth=70%]
 
 <<<
@@ -3431,13 +3696,13 @@ Si no estuviera ya, <<#_cores,instalar el core de Vectrex>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-- Cursor o el joystick 1: Controles de dirección 
-- `Z`: Botón de disparo 1 
-- `X` o el botón principal de joystick: Botón de disparo 2 
+- Cursor o el joystick 1: Controles de dirección
+- `Z`: Botón de disparo 1
+- `X` o el botón principal de joystick: Botón de disparo 2
 - `C` o el botón secundario de joystick: Botón de disparo 3
 - `V`: Botón de disparo 4
 - `Esc`: para mostrar u ocultar el menú.
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `F12`: Reset
 
 <<<
@@ -3446,8 +3711,8 @@ Durante la ejecución del core:
 
 Por defecto la Vectrex arranca con el juego que trae en memoria de fábrica (Mine Storm).
 
-[.text-center] 
-image:img/vectrex.png[pdfwidth=80%]
+[.text-center]
+image:img/vectrex.png[pdfwidth=70%]
 
 Pulsando `Esc` se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
 
@@ -3488,8 +3753,8 @@ Durante la ejecución del core:
 - `Bloq. Despl.`: para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
 - `F2`: Alternar entre RGB y vídeo compuesto cuando no se está usando el modo VGA
 - `F3`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset.
-- Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar. 
+- `Ctrl+Alt+Backspace`: Hard reset. . Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar.
 - `Esc` o el botón 2 del joystick para mostrar u ocultar el menú.
 - `W`, `A`, `S`, `D` o las teclas de cursor y luego `Enter` para elegir y seleccionar en el menú.
 
@@ -3499,8 +3764,8 @@ Durante la ejecución del core:
 
 Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
 
-[.text-center] 
-image:img/videopacuno.png[pdfwidth=80%]
+[.text-center]
+image:img/videopacuno.png[pdfwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -3512,11 +3777,11 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 - Cargar un tipo de letra alternativo (Load VDC Font)
 - Modo de vídeo (PAL VideoPac/NTSC Odyssey2)
 - Modo de color (Color Mode)
-- Salir del menú (Exit) 
+- Salir del menú (Exit)
 
 [WARNING]
 ====
-El sistema no tiene claramente definido qué joystick se corresponde a cada jugador, e incluso puede irse alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador ) usar la opción del menú que unifica los dos joysticks.
+El sistema no tiene claramente definido qué joystick se corresponde a cada jugador, e incluso puede irse alternando para algunos juegos, así que puede ser necesario ir cambiando entre los dos, o bien (para partidas de un sólo jugador) usar la opción del menú que unifica los dos joysticks.
 ====
 
 [TIP]
@@ -3553,7 +3818,7 @@ Este core no utiliza la tarjeta SD.
 
 El teclado no está mapeado a la distribución de uno PS/2 estándar, y mantiene la distribución de la máquina original. Así, por ejemplo, para obtener `"` se ha de pulsar `Mayús+P` o para borrar, `Mayús+0`.
 
-[.text-center] 
+[.text-center]
 image:img/keyboardZX81.jpg[pdfwidth=90%]
 
 ==== Guía básica
@@ -3583,7 +3848,7 @@ Los codificadores tienen 5 cables: Tierra (no conectada), Vcc (`+`), GND (`0V`ó
 
 Las conexiones `A` y `B` se conectan en los pines 1 y 2 para el primer codificador, y 3 y 4 para el segundo. Así se pueden tener hasta 4 codificadores conectados entre los 2 puertos de joystick.
 
-[.text-center] 
+[.text-center]
 image:img/db9joy.png[pdfwidth=40%]
 
 De esta manera, las conexiones serían:
@@ -3633,7 +3898,7 @@ Según el sistema operativo (Windows, MacOS, Linux) existen múltiples alternati
 
 ===== PlayTZX
 
-Este programa para Windows, MacOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador. 
+Este programa para Windows, MacOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador.
 
 Se puede descargar el fichero binario (por ejemplo, para Windows desde https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] y para Mac desde https://github.com/kounch/playtzx/releases[este repositorio de GitHub]) o compilar el código fuente como se explica <<#_compilar_código_fuente_macos_o_linux,a continuación>>.
 
@@ -3676,7 +3941,9 @@ Si todo se ha hecho correctamente, se habrá generado el fichero `playtzx` que s
 
 En general, existen muy pocas alternativas (o ninguna) alternativas de programas que puedan reproducir directamente un archivo de cinta en un dispositivo móvil, así que, normalmente, será necesario convertir a un fichero de audio el contenido de la cinta antes de intentar cargarla con uno de estos aparatos.
 
-https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX] es una App para sistemas Android que es capaz de reproducir directamente a través de la salida de auriculares.
+https://github.com/semack/zx_tape_player[ZX Tape Player] es una App para sistemas iOS y Android que es capaz de reproducir directamente a través de la salida de auriculares
+
+https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX] es otra App similar, pero sólo para sistemas Android.
 
 [WARNING]
 ====
@@ -3719,229 +3986,7 @@ https://original.sharpmz.org/mzf2wav.htm[mzf2wav] convierte ficheros de cinta `M
 
 ==== Miniduino
 
-https://www.antoniovillena.es/store/product/miniduino/[Miniduino] es un sistema reproductor de archivos de cinta, basado en un microcontrolador STM32F103C8T6 con 64KB de flash, y que trae instalado de serie el firmware https://github.com/rcmolina/MaxDuino_BETA[Maxduino].
-
-Maxduino permite la reproducción, de una forma similar a como se manejaban las cintas de https://es.wikipedia.org/wiki/Casete[cassette] originales, de archivos digitales de cinta en múltiples formatos como `TAP` y `TZX` (ZX Spectrum), `O` (ZX80), `P` (ZX81), `CDT` (Amstrad CPC), `CAS`(MSX) `TSX` (MSX, Acorn, etc). También es posible reproducir como cinta archivos de sonido AY, para cargarlos en http://www.specay.co.uk[SpecAY] desde ZX Spectrum.
-
-===== Puertos y Botones
-
-[.text-center] 
-image:img/MiniduinoBack.jpg[pdfwidth=50%]
-
-[.text-center] 
-image:img/MiniduinoFront.jpg[pdfwidth=50%]
-
-[cols=2*] 
-|===
-|1
-|Alimentación
-|2
-|Salida de sonido
-|3
-|Botón de control
-|4
-|Control de motor
-|5
-|Ranura de tarjeta SD
-|6
-|Pantalla
-|===
-
-<<<
-
-===== Preparación
-
-Se necesita una tarjeta SD para almacenar los archivos de cinta que se quiere reproducir. Se recomienda que no sea de alta velocidad (Clase 10 o superior) porque puede haber problemas durante la lectura, ni de alta capacidad (SDXC o superior).
-
-La tarjeta debe estar formateada con con la primera partición en formato FAT16 o FAT32.
-
-Además de la tarjeta, recordar utilizar un cable adecuado para la <<#_puertos_y_conectores,entrada de sonido del ZXUNO+>>, conectando el Miniduino.
-
-Para los equipos que soporten control por motor, también se puede utilizar un cable con un jack de 2,6 mm.
-
-En la primera partición de la tarjeta se han de copiar los archivos de cinta (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX`, etc), que se pueden organizar en carpetas o directorios.
-
-[TIP]
-====
-El reproductor muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
-====
-
-<<<
-
-===== Uso
-
-Una vez insertada la tarjeta SD con ficheros de datos, el Miniduino se enciende conectando el cable de alimentación USB incluido.
-
-[.text-center] 
-image:img/MiniduinoLogo.jpg[pdfwidth=30%]
-
-Si se pulsa directamente el botón de control, se accede al menú de opciones que permite modificar lo siguiente:
-
-- Velocidad (Baud Rate): Para ajustar la velocidad turbo en bloques 4B en archivos de MSX (`CAS` y `TSX`)
-- Control de motor (Motor Ctrl): Para indicar que se ha conectado un cable de control remoto a un equipo que lo soporte (Amstrad, CPC, MSX, etc.)
-- Conversión (TSXCzxpUEFWS): Activa la carga turbo para los archivos `.CAS` y `.TSX`, cambiar la polaridad de la señal de audio de los archivos para Spectrum y Amstrad CPC y/o cambiar la paridad en los archivos `.UEF` de Acorn Electron y BBC Micro
-- Saltar bloques (Skip BLK)): Para deshabilitar (Skip ON) o habilitar la pausa automática al encontrar bloques del tipo 2A
-
-Estando fuera del menú de opciones, el botón de control se utiliza como una palanca de control de cuatro direcciones, que se comporta de dos maneras distintas, según esté la reproducción detenida (Stop) o en pausa (Pause).
-
-[.text-center] 
-image:img/MiniduinoVersion.jpg[pdfwidth=30%]
-
-Con la reproducción detenida (navegación por archivos y directorios):
-
-- Arriba y abajo permiten desplazarse por la lista actual de ficheros y directorios
-- Izquierda (Stop) retrocede un nivel en el árbol de direcotorios
-- Derecha (Play/Pause) accede al contenido de un directorio o, si lo que hay seleccionado es un archivo, intenta reproducirlo
-
-<<<
-
-Una vez un archivo está en reproducción, el botón izquierda (Stop), la detiene, y el botón derecho (Play/Pause) la pone en pausa.
-
-[.text-center] 
-image:img/MiniduinoPlay.jpg[pdfwidth=30%]
-
-Con la reproducción en pausa (navegación por bloques de cinta):
-
-- Arriba y abajo permiten desplazarse por los bloques del archivo de cinta que ya hayan sido reproducidos (útil para juegos multicarga, para volver a cargar un bloque de un nivel, por ejemplo)
-- Izquierda (Stop) cancela la reprodución y entra de nuevo en el modo de navegación de archivos y directorios
-- Derecha (Play/Pause) reanuda la reproducción en el bloque seleccionado
-- Presionar directamente el botón de control permite activar o desactivar el modo turbo para MSX
-
-[TIP]
-====
-Para obtener información mucho más detallada, se puede consultar el manual oficial del firmware Maxduino, disponible en el https://github.com/rcmolina/MaxDuino_BETA/tree/master/MANUAL%20por%20desUBIKado[repositorio oficial].
-====
-
-<<<
-
-===== Creación de ficheros TZX o TSX desde otros formatos
-
-Existen algunos formatos de cinta (Commodore, Camputers Lynx, etc.) que, por el momento, no están directamente soportados por Maxduino. No obstante, existen algunos programas que pueden permitir, con mayor o menor éxito, transformar ficheros de cinta desde <<#_conversión_a_fichero_de_audio,formato de audio>> a `TSX` o `TZX`, y así poder utilizarlos con Miniduino.
-
-====== MakeTSX
-
-Para usar https://github.com/nataliapc/makeTSX/releases[MakeTSX] de NataliaPC y crear un fichero `TSX` con audio embebido, se ha de usar un comando como el siguiente:
-
-[source,shell]
-----
-...MakeTSX -b15 -wav fichero_audio.wav -tsx fichero_nuevo.tsx
-----
-
-====== RetroConverter
-
-Para utilizar https://github.com/jorgefuertes/retroconverter/releases[RetroConverter] de Jorge Fuertes, para crear un fichero `TZX` con audio embebido, usar un comando como:
-
-[source,shell]
-----
-...retroconv fichero_audio.wav fichero_nuevo.tzx
-----
-
-<<<
-
-===== Actualización de firmware Maxduino
-
-El firmware Maxduino es actualizado y mejorado periódicamente. Se puede hacer un seguimiento de los cambios y mejoras en el https://www.va-de-retro.com/foros/viewtopic.php?t=5541&start=9999[foro] o bien en la https://github.com/rcmolina/MaxDuino_BETA[página del proyecto en GitHub]. Para poder aprovechar estas mejoras se ha de actualizar la memoria flash del Miniduino con la versión de firmware correspondiente.
-
-====== Preparación del entorno
-
-Para poder instalar el firmware, se ha de hacer desde un ordenador (Windows, Mac, Linux) con el entorno https://www.arduino.cc/en/software[Arduino IDE].
-
-Una vez instalado, se ha de añadir la biblioteca de software SDFat (1.1.4) eligiendo la opción de menú Programa->incluir librería->administrar bibliotecas
-
-También se ha de añadir el soporte para el microcontrolador del Miniduino. Esto se hace en dos pasos:
-
-Primero añadiendo soporte para procesadores ARXM Cortex M3 en el menú Herramientas -> placa -> gestor de tarjetas
-Instalar "Arduino SAM boards (Cortex-M3)"
-
-A continuación se ha de añadir el soporte para microcontroladores STM32, descargando el fichero disponible en https://github.com/rogerclarkmelbourne/Arduino_STM32/archive/master.zip[este enlace].
-
-Descomprimir el contenido en la carpeta del usuario actual en 
-
-[source,shell]
-----
-...Arduino/hardware/Arduino_STM32
-----
-
-En Windows instalar el controlador USB ejecutando con privilegios elevados:
-
-[source,shell]
-----
- ...\drivers\win\install_drivers.bat
-----
-
-En Linux instalar con privilegios de root las reglas de `udev` necesarias:
-
-[source,shell]
-----
-...tools/linux/install.sh
-----
-
-En MacOS, si no apareciese el Miniduino como dispositivo USB en Arduino IDE al conectarlo, puede que sea necesario instalar https://github.com/libusb/libusb/wiki[libusb].
-
-<<<
-
-Finalmente, en el caso de Mac o Linux, el fichero `maple_upload` dentro de `Arduino_STM32` tiene que modificarse con un editor de texto. Estas líneas no funcionan bien:
-
-[source,shell]
-----
-if [ $# -eq 5 ]; then
-    dfuse_addr="--dfuse-address $5"
-else
-    dfuse_addr=""
-fi
-----
-
-Y se tienen que cambiar por 
-
-[source,shell]
-----
-dfuse_addr=""
-----
-
-<<<
-
-====== Actualización
-
-Una vez preparado el entorno, descargar la versión deseada del proyecto desde el https://github.com/rcmolina/MaxDuino_BETA[repositorio oficial en GitHub]
-
-[NOTE]
-====
-El reproductor Miniduino con microcontrolador STM32 sólo está soportado a partir de la versión 1.65
-====
-
-Cargar el fichero del proyecto en Arduino IDE (por ejemplo `MaxDuino_v1.66.ino`).
-
-Verificar en el fichero `userSTM32Config.h` que están comentadas todas las entradas de logo excepto la de Miniduino, y si no, cambiarlas.
-
-[source,c]
-----
-...
-//#define tanque4
-//#define tanque1
-//#define dostanques
-//#define cablemax
-//#define sony
-#define miniduino 
-...
-----
-
-Conectar el Miniduino al equipo usando el cable USB e identificar el puerto asignado, normalmente con un nombre del tipo "Maple Mini" (por ejemplo: COM5 Maple Mini)
-
-Configurar en el menú "" las opciones
-
-[source]
-----
-Placa: Generic STM32F104C Series
-Variant: STM32F104C8 (20k RAM, 64k Flash)
-Upload Method: STM32duino bootloader
-CPU Speed: 72Mhz (Normal)
-Optimize: Smallest (default)
-Puerto: <Puerto identificado antes>
-----
-
-Finalmente, pulsar el botón de carga del firmware y esperar unos segundos mientras se compila el proyecto y se carga en el dispositivo.
-
-Si todo se ha hecho correctamente se verá cómo el Miniduino se reinicia y en la pantalla aparece la versión correspondiente de firmware.
+include::miniduino_es.adoc[leveloffset=+3]
 
 <<<
 
@@ -4037,7 +4082,7 @@ Véase la https://github.com/kounch/zx123_tool/#castellano[documentación de la 
 
 Entre los datos que se indican al añadir una ROM, hay una serie de indicadores para definir qué opciones de hardware, etc. se desean habilitar o deshabilitar al cargar esa ROM en concreto, según se puede ver en esta tabla:
 
-[%header,cols=2*] 
+[%header,cols=2*]
 |===
 |`i`
 |Habilitar teclado issue 3 (en vez de issue 2)
@@ -4123,7 +4168,7 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 
 En los siguientes pasos de recuperación se habla de conectar cables puente o USB-Blaster a la placa de ZXUNO+. Para ello, usar la siguiente imágen como referencia.
 
-[.text-center] 
+[.text-center]
 image:img/jtagzxunoplus.jpg[pdfwidth=80%]
 
 [WARNING]
@@ -4138,7 +4183,7 @@ image:img/jtagzxunoplus.jpg[pdfwidth=80%]
 *Material necesario*:
 
 - Raspberry Pi (con tarjeta SD, teclado, monitor, fuente de alimentación, etc.) y con conexión a internet
-- 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos) y, opcinalmente, un adaptador USB-Blaster
+- 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos) y, opcionalmente, un adaptador USB-Blaster
 - Un destornillador de estrella adecuado
 - Tarjeta SD para el ZXUNO+ con la primera partición en formato FAT16 o FAT32
 - Teclado y monitor para conectar el ZXUNO+
@@ -4171,16 +4216,16 @@ rm -rf ./openocd-code
 <<<
 
 [start=3]
-. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anterioremente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXUNO+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`) con los cables a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anterioremente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXUNO+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
-[.text-center] 
+[.text-center]
 image:img/gpio.jpg[pdfwidth=70%]
 
 En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (correspondientes a `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` y `GND`), de la siguiente manera:
 
-[%header,cols=3*] 
+[%header,cols=3*]
 |===
 |JTAG ZXUNO+
 |GPIO
@@ -4199,7 +4244,7 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 |`37`
 |`GND`
 |GND
-|`39` 
+|`39`
 |===
 
 [start=4]
@@ -4267,20 +4312,20 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 
 En el caso de que no se vea imagen, pulsar `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
-[.text-center] 
+[.text-center]
 image:img/recovery.png[pdfwidth=70%]
 
 [start=12]
 . Insertar en el ZXUNO+ la tarjeta SD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZX1` https://github.com/zxdos/zxuno/raw/master/modflash/FLASH.ZX1[descargado anteriormente].
 
-. Si se está utilizando USB-Blaster, desconectar el cable. 
+. Si se está utilizando USB-Blaster, desconectar el cable.
 
 <<<
 
 [start=14]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
-[.text-center] 
+[.text-center]
 image:img/recovery2.png[pdfwidth=70%]
 
 [WARNING]
@@ -4294,6 +4339,198 @@ Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs
 [NOTE]
 ====
 Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
+<<<
+
+==== Recuperación usando MacOS y Cable USB-Blaster
+
+*Material necesario*:
+
+- Cable USB-Blaster <<#_preparación_del_cableado,preparado con las conexiones adecuadas para ZXUnCore>>
+- Imagen Flash y recovery para ZX-Uno, del https://github.com/zxdos/zxuno/tree/master/modflash[repositorio de Github] y el https://www.zxuno.com/forum/viewtopic.php?f=37&t=774[foro de ZX-Uno]
+
+*Software necesario*:
+
+- Sistema MacOS
+- Carpeta data adicional para UrJTAG, obtenido desde https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[aqui]
+- https://brew.sh[Homebrew para MacOS]
+- UrJTAG: según las instrucciones de https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[este enlace]:
+
+*Pasos a seguir*:
+
+. Preparar la instalación de UrJTAG
+
+[source,shell]
+----
+brew install libftdi libusb pkg-config
+git clone https://github.com/C-Elegans/urjtag.git
+cd urjtag
+----
+
+[start=2]
+. Copiar la carpeta data adicional para UrJTAG, dentro de la carpeta data de urjtag.
+
+. Lanzar el proceso de compilacion:
+
+[source,shell]
+----
+./configure --with-libftdi --with-libusb --with-ftd2xx --with-inpout32 --enable-python=no
+make -j4
+sudo make install
+----
+
+[start=4]
+. Copiar el archivo `FLASH.ZX1` en la raiz de la tarjeta SD para el ZX-Uno.
+
+. Conectar el cable USB-Blaster al ZXUnCore y al Mac
+
+. Encender el ZX-Uno
+
+. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.bit`, y lanzar el comando `jtag`.
+
+<<<
+
+[start=8]
+. Aparecerá una consola donde se han de escribir los comandos:
+
+[source,shell]
+----
+cable usbblaster
+detect
+pld load recovery.bit
+----
+
+[NOTE]
+====
+En el comando detect es importante que aparezca el dispositivo detectado. Puede que sea necesario lanzar el comando `detect` de manera repetida hasta que aparezca.
+====
+
+[.text-center]
+image:img/recovery_mac_1.png[pdfwidth=90%]
+
+<<<
+
+[start=9]
+. Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
+
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+
+[.text-center]
+image:img/recovery.png[pdfwidth=70%]
+
+[start=10]
+. Insertar en el ZX-Uno la tarjeta SD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZX1` https://github.com/zxdos/zxuno/raw/master/modflash/FLASH.ZX1[descargado anteriormente].
+
+. Desconectar el cable USB-Blaster.
+
+<<<
+
+[start=12]
+. Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
+
+[.text-center]
+image:img/recovery2.png[pdfwidth=70%]
+
+[WARNING]
+====
+Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
+====
+
+<<<
+
+[start=13]
+. Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZX-Uno vuelve a arrancar correctamente.
+
+[NOTE]
+====
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.`para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
+
+
+[NOTE]
+====
+En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se deberia hacer mediante apt, yum o similar
+====
+
+<<<
+
+==== Recuperación usando Windows y Cable USB-Blaster
+
+*Material necesario*:
+
+- Cable USB-Blaster. <<#_preparación_del_cableado,preparado con las conexiones adecuadas para ZXUnCore>
+- Imagen Flash y recovery para ZX-Uno (LX9). Los mismos que se indican para Raspberry pi, del https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[repositorio oficial, en este enlace]
+
+*Software necesario*:
+
+- Sistema Windows
+- Drivers de USB-Blaster para Windows, disponible en https://www.zxuno.com/forum/viewtopic.php?f=25&t=432[el foro de ZX-Uno]
+- UrJTAG, para Windows, disponible en https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[el repositorio oficial]
+
+*Pasos a seguir*:
+
+. Descomprimir el fichero ZIP con los drivers (obtenido en https://www.zxuno.com/forum/download/file.php?id=889[el foro de ZX-Uno])
+
+. Conectar el cable USB-Blaster al PC con Windows e instalar el driver eligiendo la opción de añadir ficheros manualmente y seleccionado la carpeta `drivers` que se ha obtenido al descomprimir el fichero anterior
+
+. Descomprimir el software de UrJTAG, obtenido en https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[el repositorio oficial]
+
+. Copiar el archivo `FLASH.ZX1` en la raiz de la tarjeta SD para el ZX-Uno.
+
+. Conectar el cable USB-Blaster al ZXUnCore y al PC con Windows
+
+. Encender el ZX-Uno
+
+. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.bit`, y lanzar  `jtag.exe`.
+
+. Aparecerá una consola donde se han de escribir los comandos:
+
+[source,shell]
+----
+cable usbblaster
+detect
+pld load recovery.bit
+----
+
+<<<
+
+[start=9]
+. Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
+
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+
+[.text-center]
+image:img/recovery.png[pdfwidth=70%]
+
+[start=10]
+. Insertar en el ZX-Uno la tarjeta SD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZX1` https://github.com/zxdos/zxuno/raw/master/modflash/FLASH.ZX1[descargado anteriormente].
+
+. Desconectar el cable USB-Blaster.
+
+<<<
+
+[start=12]
+. Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
+
+[.text-center]
+image:img/recovery2.png[pdfwidth=70%]
+
+[WARNING]
+====
+Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
+====
+
+
+<<<
+
+[start=13]
+. Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZX-Uno vuelve a arrancar correctamente.
+
+[NOTE]
+====
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.`para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 <<<
