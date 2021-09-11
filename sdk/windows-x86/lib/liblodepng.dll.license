@@ -2,8 +2,8 @@ SPDX-FileName: liblodepng.dll
 
 SPDX-FileType: BINARY
 
-SPDX-FileChecksum: SHA1: 186170a7b63aebd0dc584847fd2d84d908a7c763
+SPDX-FileChecksum: SHA1: 3a4fd8310b61e7fb5e71eddfe878968f34ef95d9
 
-SPDX-FileCopyrightText: Copyright (c) 2005-2020 Lode Vandevenne
+SPDX-FileCopyrightText: Copyright (c) 2005-2021 Lode Vandevenne
 
 SPDX-License-Identifier: Zlib

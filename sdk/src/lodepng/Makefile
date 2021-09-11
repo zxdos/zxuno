@@ -33,6 +33,8 @@ INSTALL_PROGRAM	?= $(INSTALL)
 LIBS		= liblodepng$(DLLSUFFIX)
 HEADERS		= lodepng.h
 
+CFLAGS := -W -Wall -Wextra -ansi -pedantic -O3 -Wno-unused-function $(CFLAGS)
+
 .PHONY: all
 all: $(foreach t,$(LIBS),build/$(t))
 
@@ -69,4 +71,4 @@ clean:
 
 .PHONY: distclean
 distclean:
-	rm -rf build/*
+	rm -rf build
