@@ -1,4 +1,4 @@
-# lodepng.inc.mk - script to build LodePNG.
+# zx7b.inc.mk - script to build zx7b tools.
 #
 # This file is a part of main Makefile.
 #
@@ -6,35 +6,35 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-.PHONY: $(foreach t,build install uninstall clean distclean,$(t)-lodepng)
+.PHONY: $(foreach a,build install uninstall clean distclean,$(a)-zx7b)
 
 ifeq ($(_DoBuild),1)
 
-build-lodepng: | lodepng
+build-zx7b: | zx7b
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix))
 
-install-lodepng: | lodepng
+install-zx7b: | zx7b
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
 
 else	# !_DoBuild
 
-build-lodepng install-lodepng:;
+build-zx7b install-zx7b:;
 
 endif	# !_DoBuild
 
 ifeq ($(_DoClean),1)
 
-uninstall-lodepng: | lodepng
+uninstall-zx7b: | zx7b
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
-clean-lodepng: | lodepng
+clean-zx7b: | zx7b
 	$(MAKE) -w -C $| clean
 
-distclean-lodepng: | lodepng
+distclean-zx7b: | zx7b
 	$(MAKE) -w -C $| distclean
 
 else	# !_DoClean
 
-uninstall-lodepng clean-lodepng distclean-lodepng:;
+uninstall-zx7b clean-zx7b distclean-zx7b:;
 
 endif	# !_DoClean

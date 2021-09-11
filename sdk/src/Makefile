@@ -82,3 +82,4 @@ include sdcc.inc.mk
 include z88dk.inc.mk
 include lodepng.inc.mk
 include tools.inc.mk
+include zx7b.inc.mk
