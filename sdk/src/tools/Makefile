@@ -45,6 +45,8 @@ BINS:=\
 INCLUDEDIR	= $(ZXSDK)/include
 LIBDIR		= $(ZXSDK)/lib
 
+CFLAGS := -fPIC -O3 -W $(CFLAGS)
+
 .PHONY: all
 all: $(foreach t,$(BINS),build/$(t))
 
@@ -52,12 +54,14 @@ build\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
-build/Png2Rcs$(EXESUFFIX):\
- $(srcdir)/Png2Rcs.c\
+$(srcdir)/liblodepng$(DLLSUFFIX): $(LIBDIR)/liblodepng$(DLLSUFFIX)
+	ln -fs $< $@
+
+build/Png2Rcs$(EXESUFFIX): $(srcdir)/Png2Rcs.c\
  $(INCLUDEDIR)/lodepng.h\
- $(LIBDIR)/liblodepng$(DLLSUFFIX)\
+ $(srcdir)/liblodepng$(DLLSUFFIX)\
  Makefile | build
-	$(CC) -I$(INCLUDEDIR) -L$(LIBDIR) -l:liblodepng$(DLLSUFFIX) $(CFLAGS) -o $@ $<
+	$(CC) -I$(INCLUDEDIR) -L$(LIBDIR) -l:liblodepng$(DLLSUFFIX) $(CFLAGS) -o $@ $< liblodepng$(DLLSUFFIX)
 
 build/%$(EXESUFFIX): $(srcdir)/%.c Makefile | build
 	$(CC) $(CFLAGS) -o $@ $<
@@ -80,7 +84,9 @@ uninstall:
 .PHONY: clean
 clean:
 	rm -f $(foreach t,$(BINS),build/$(t))
+	rm -f $(srcdir)/liblodepng$(DLLSUFFIX)
 
 .PHONY: distclean
 distclean:
-	rm -rf build/*
+	rm -rf build
+	rm -f $(srcdir)/liblodepng$(DLLSUFFIX)
