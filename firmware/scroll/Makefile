@@ -10,6 +10,8 @@
 #   make
 # Clean:
 #   make clean
+# Test:
+#   make test
 
 include ../../sdk/common.mk
 
@@ -64,7 +66,7 @@ $(srcdir)/scroll.bin.zx7b: $(srcdir)/scroll.bin
 $(srcdir)/define.asm:\
  $(srcdir)/scroll.bin\
  $(srcdir)/scroll.exp
-	echo ' define filesize $(shell stat -c %s $<)' >$@
+	echo 'filesize: EQU $(shell stat -c %s $<)' >$@
 	cat $(srcdir)/scroll.exp >>$@
 
 $(srcdir)/scrolldesc.bin:\
@@ -83,6 +85,10 @@ install:;
 .PHONY: uninstall
 uninstall:;
 
+.PHONY: test
+test: $(srcdir)/scroll.tap
+	fuse --machine 128 --graphics-filter tv2x --auto-load --fastload --traps $<
+
 .PHONY: clean
 clean: | tools
 	$(MAKE) -w -C $| $@
@@ -97,4 +103,5 @@ clean: | tools
  $(srcdir)/scroll.tap
 
 .PHONY: distclean
-distclean: clean
+distclean: clean | tools
+	$(MAKE) -w -C $| $@
