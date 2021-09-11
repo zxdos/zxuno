@@ -29,12 +29,35 @@ include sdk/common.mk
 prefix		?= SD
 
 TARGETS=\
+ keymaps\
  utils\
  software
 
 .PHONY: all
 all: install
 	@echo 'Done.'
+
+# keymaps
+
+.PHONY: build-keymaps
+build-keymaps: | firmware
+	$(MAKE) -w -C $|
+
+.PHONY: install-keymaps
+install-keymaps: | firmware
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
+
+.PHONY: uninstall-keymaps
+uninstall-keymaps: | firmware
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
+
+.PHONY: clean-keymaps
+clean-keymaps: | firmware
+	$(MAKE) -w -C $| clean
+
+.PHONY: distclean-keymaps
+distclean-keymaps: | firmware
+	$(MAKE) -w -C $| distclean
 
 # utils
 
