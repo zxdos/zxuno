@@ -11,7 +11,7 @@ This document: No one yet.
 
 This document is under [GNU FDL-1.3 or later](https://spdx.org/licenses/GFDL-1.3-or-later.html) license.  
 SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
-SJAsmPlus Z80 Assembler by aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
+SJAsmPlus Z80 Assembler by Aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
 Small Device C Compiler (SDCC) is distributed under [GPL](https://sourceforge.net/projects/sdcc/) licenses.  
 z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.  
 LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.
@@ -88,9 +88,24 @@ where:
 
 `<CFG_PARAMS>` is a series of parameters of type `<CFG_VAR>=<VALUE>`.
 
-Value of `<CFG_VAR>` | Possible values | Description
-----|----|----
-`USE_SJASMPLUS_VERSION` | `sjasmplus`, `z00m128` | Version of SJAsmPlus Z80 Compiler to use. Default is `z00m128` (aprisobal).
+Value of `<CFG_VAR>` | Description
+----|----
+`USE_SJASMPLUS_BRANCH` | Branch of SJAsmPlus Z80 Compiler to use
+`USE_SJASMPLUS_VERSION` | Version of SJAsmPlus Z80 Compiler to use
+
+Value of `USE_SJASMPLUS_BRANCH`:
+
+Branch | Default
+----|----
+`sjasmplus` (original) |
+`z00m128` (by Aprisobal) | yes
+
+Value of `USE_SJASMPLUS_VERSION` for `z00m128` branch of SJAsmPlus Z80 Compiler:
+
+Version | Default
+----|----
+`1.18.2` |
+`1.18.3` | yes
 
 Value of `TARGET` | Origin | Description
 ----|----|----
@@ -303,7 +318,7 @@ These changes are actual for current invocation of command shell and all child p
 * [cmd](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd) - command interpreter in Windows
 * [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
-* [SJAsmPlus by aprisobal](https://github.com/z00m128/sjasmplus) - Z80 Assembler
+* [SJAsmPlus by Aprisobal](https://github.com/z00m128/sjasmplus) - Z80 Assembler
 * [SDCC](https://sourceforge.net/projects/sdcc/) - Small Device C Compiler
 * [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [LodePNG](https://github.com/lvandeve/lodepng) - PNG encoder and decoder in C and C++

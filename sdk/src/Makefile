@@ -70,12 +70,12 @@ endif	# $(OS)==Windows_NT
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
-ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
+ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
  include sjasmplus.inc.mk
-else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
+else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
  include sjasmplus-z00m128.inc.mk
 else
- $(error Unknown SJAsmPlus version selected: `$(USE_SJASMPLUS_VERSION)')
+ $(error Unknown SJAsmPlus branch selected: `$(USE_SJASMPLUS_BRANCH)')
 endif
 
 include sdcc.inc.mk

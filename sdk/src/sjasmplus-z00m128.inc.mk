@@ -13,10 +13,29 @@ $(DOWNLOADS)/sjasmplus-z00m128:
 
 ifeq ($(_DoBuild),1)
 
+ ifeq ($(USE_SJASMPLUS_VERSION),1.18.2)
+
 SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus-z00m128/v1.18.2.tar.gz
 SJASMPLUS_ARCHIVE_SHA256	= 114807bf53d3526b4d1ae7d40f3050b9ee98220df74931efc1e6d1fe5aba3d02
 SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2
+
+$(DOWNLOADS)/sjasmplus-z00m128/v1.18.2.tar.gz: | $(DOWNLOADS)/sjasmplus-z00m128
+	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/$(@F) -O $@
+
+ else ifeq ($(USE_SJASMPLUS_VERSION),1.18.3)
+
+SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus-z00m128/v1.18.3.tar.gz
+SJASMPLUS_ARCHIVE_SHA256	= ce0707070946e3439756c0577dd9c4b16a1a4b75cc8bbf1b2be9c6638957be85
+SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.3
+
+$(DOWNLOADS)/sjasmplus-z00m128/v1.18.3.tar.gz: | $(DOWNLOADS)/sjasmplus-z00m128
+	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/$(@F) -O $@
+
+ else
+  $(error Unknown SJAsmPlus version selected: $(USE_SJASMPLUS_VERSION))
+ endif
 
 build-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
 	$(MAKE) -w -C sjasmplus -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix))
@@ -29,9 +48,6 @@ sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 	 --subdir $(SJASMPLUS_ARCHIVE_SUBDIR)\
 	 --output $(@D)
 	touch $@
-
-$(DOWNLOADS)/sjasmplus-z00m128/v1.18.2.tar.gz: | $(DOWNLOADS)/sjasmplus-z00m128
-	wget -c https://github.com/z00m128/sjasmplus/archive/refs/tags/$(@F) -O $@
 
 install-sjasmplus: | sjasmplus-z00m128/.extracted sjasmplus-z00m128.mk
 	$(MAKE) -w -C sjasmplus-z00m128 -f ../sjasmplus-z00m128.mk prefix=$(shell realpath --relative-to=sjasmplus-z00m128 $(prefix)) install
@@ -68,10 +84,29 @@ else
  $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
 endif
 
+ ifeq ($(USE_SJASMPLUS_VERSION),1.18.2)
+
 SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip
 SJASMPLUS_ARCHIVE_SHA256	= 848bca2522d6febbf3e3c48c634731ecd61899166f5922ed15857e8063c3dc4b
 SJASMPLUS_ARCHIVE_TYPE		= .zip
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.2.win
+
+$(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip: | $(DOWNLOADS)/sjasmplus-z00m128
+	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.2/$(@F) -O $@
+
+ else ifeq ($(USE_SJASMPLUS_VERSION),1.18.3)
+
+SJASMPLUS_ARCHIVE		= $(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.3.win.zip
+SJASMPLUS_ARCHIVE_SHA256	= 62a833089179ad86d3e028dfdd23e8031bff40f0d2658188378081cf0ac20eda
+SJASMPLUS_ARCHIVE_TYPE		= .zip
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.3.win
+
+$(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.3.win.zip: | $(DOWNLOADS)/sjasmplus-z00m128
+	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.3/$(@F) -O $@
+
+ else
+$(error Unknown SJAsmPlus version selected: $(USE_SJASMPLUS_VERSION))
+ endif
 
 sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 	rm -rf $(@D)
@@ -82,9 +117,6 @@ sjasmplus-z00m128/.extracted: $(SJASMPLUS_ARCHIVE)
 	 --output $(@D)
 	touch $@
 
-$(DOWNLOADS)/sjasmplus-z00m128/sjasmplus-1.18.2.win.zip: | $(DOWNLOADS)/sjasmplus-z00m128
-	wget -c https://github.com/z00m128/sjasmplus/releases/download/v1.18.2/$(@F) -O $@
-
 install-sjasmplus: $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
 $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus-z00m128/sjasmplus$(EXESUFFIX) | $(DESTDIR)$(bindir)
@@ -93,7 +125,7 @@ $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX): sjasmplus-z00m128/sjasmplus$(EXESUFFI
 ifeq ($(_DoClean),1)
 
 uninstall-sjasmplus:
-	rm -f $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
+	$(RM) $(DESTDIR)$(bindir)/sjasmplus$(EXESUFFIX)
 
 clean-sjasmplus:
 	rm -rf sjasmplus-z00m128
