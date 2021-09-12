@@ -36,6 +36,7 @@
 
  include "zxuno.def"
  include "esxdos.def"
+ include "regs.mac"
 
  define CPU_FREQ        3500000
  define SPECDRUM_FREQ   15625
@@ -44,6 +45,9 @@
  define DMA_PRESCALER   CPU_FREQ / SPECDRUM_FREQ - 1
 
  define DMA_BUFSIZE      2048           ; DMA buffer size
+
+ScreenAddr:     equ     $4000
+DMABuffer:      equ     $8000   ; DMA buffer start address (circular play buffer)
 
                 org     $2000           ; entry point of ESXDOS program
 
@@ -157,76 +161,75 @@ Init:           ld      de, FileName
 
                 ; Prepare to play
                 di
-                ld      hl, DMABuffer
-                ld      bc, zxuno_port
-                ld      a, dma_src
+                ld_hl   DMABuffer
+                ld_bc   zxuno_port
+                ld_a    dma_src
                 out     (c), a
-                inc     b               ; BC = zxuno_data
+                chg_bc  zxuno_data
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_dst
+                chg_bc  zxuno_port
+                chg_a   dma_dst
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      hl, specdrum_port
+                chg_bc  zxuno_data
+                chg_hl  specdrum_port
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_pre
+                chg_bc  zxuno_port
+                chg_a   dma_pre
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      hl, DMA_PRESCALER
+                chg_bc  zxuno_data
+                chg_hl  DMA_PRESCALER
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_len
+                chg_bc  zxuno_port
+                chg_a   dma_len
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      hl, DMA_BUFSIZE
+                chg_bc  zxuno_data
+                chg_hl  DMA_BUFSIZE
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_prob
+                chg_bc  zxuno_port
+                chg_a   dma_prob
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      hl, DMABuffer
+                chg_bc  zxuno_data
+                chg_hl  DMABuffer       ; hl
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_ctrl
+                chg_bc  zxuno_port
+                chg_a   dma_ctrl
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      a, %00000111    ; Mem to I/O, redisparable, timed, source address is checked
+                chg_bc  zxuno_data
+                chg_a   %00000111       ; Mem to I/O, redisparable, timed, source address is checked
                 out     (c), a
-                dec     b               ; BC = zxuno_port
-.PlayLoop:      ld      bc, $7ffe       ; SPACE halfrow
+PlayLoop:       ld_bc   $7ffe           ; SPACE halfrow
                 in      a, (c)
                 and     %00000001
                 jp      z, .ExitPlay
-                ld      bc, zxuno_port
+                chg_bc  zxuno_port
                 ld      a, dma_stat
                 out     (c), a
-                inc     b               ; BC = zxuno_data
+                chg_bc  zxuno_data
 .StillInSecondHalf:
                 in      a, (c)
                 bit     7, a
                 jr      z, .StillInSecondHalf
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_prob
+                chg_bc  zxuno_port
+                ld_a    dma_prob
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      hl, DMABuffer + DMA_BUFSIZE/2
+                chg_bc  zxuno_data
+                chg_hl  DMABuffer + DMA_BUFSIZE/2
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_stat
+                chg_bc  zxuno_port
+                chg_a   dma_stat
                 out     (c), a
-                inc     b               ; BC = zxuno_data
+                chg_bc  zxuno_data
                 in      a, (c)
 
                 ; Fill second half of buffer with audio data
-                ld      hl, DMABuffer + DMA_BUFSIZE/2
-                ld      bc, DMA_BUFSIZE/2
+                chg_hl  DMABuffer + DMA_BUFSIZE/2
+                chg_bc  DMA_BUFSIZE/2
                 ld      a, (FileHandle)
                 esxdos  F_READ
                 jp      c, .ExitPlay    ; End read on error
@@ -237,31 +240,31 @@ Init:           ld      de, FileName
                 ld      hl, DMABuffer + DMA_BUFSIZE/2
                 call    PlotWave
 
-                ld      bc, zxuno_port
+                ld_bc   zxuno_port
                 ld      a, dma_stat
                 out     (c), a
-                inc     b               ; BC = zxuno_data
+                chg_bc  zxuno_data
 .StillInFirstHalf:
                 in      a, (c)
                 bit     7, a
                 jr      z, .StillInFirstHalf
 
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_prob
+                chg_bc  zxuno_port
+                ld_a    dma_prob
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                ld      hl, DMABuffer
+                chg_bc  zxuno_data
+                ld_hl   DMABuffer
                 out     (c), l
                 out     (c), h
-                dec     b               ; BC = zxuno_port
-                ld      a, dma_stat
+                chg_bc  zxuno_port
+                chg_a   dma_stat
                 out     (c), a
-                inc     b               ; BC = zxuno_data
+                chg_bc  zxuno_data
                 in      a, (c)
 
                 ; Fill first half of buffer with audio data
-                ld      hl, DMABuffer
-                ld      bc, DMA_BUFSIZE/2
+                chg_hl  DMABuffer
+                chg_bc  DMA_BUFSIZE/2
                 ld      a, (FileHandle)
                 esxdos  F_READ
                 jp      c, .ExitPlay    ; End read on error
@@ -272,15 +275,15 @@ Init:           ld      de, FileName
                 ld      hl, DMABuffer
                 call    PlotWave
 
-                jp      .PlayLoop
+                jp      PlayLoop
 
-.ExitPlay:      ld      bc, zxuno_port
-                ld      a, dma_ctrl
+.ExitPlay:      ld_bc   zxuno_port
+                ld_a    dma_ctrl
                 out     (c), a
-                inc     b               ; BC = zxuno_data
-                xor     a
+                chg_bc  zxuno_data
+                chg_a   0
                 out     (c), a
-                dec     b               ; BC = zxuno_port
+                chg_bc  zxuno_port
 
                 ld      a, (FileHandle)
                 esxdos  F_CLOSE
@@ -372,7 +375,3 @@ ScreenLines:    org     $+192*2
 WaveBuffer:     org     $+256
 
 FileName:                       ; Rest of RAM for filename
-
-ScreenAddr:     equ     $4000
-
-DMABuffer:      equ     $8000   ; DMA buffer start address (circular play buffer)
