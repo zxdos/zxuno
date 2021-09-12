@@ -71,4 +71,4 @@ clean:
 
 .PHONY: distclean
 distclean:
-	rm -rf build/*
+	rm -rf build
