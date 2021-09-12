@@ -73,7 +73,7 @@ new_tmp_file() {
 
 # $1 = temporary directory name
 new_tmp_dir() {
-	tmp_files[$tmp]=d
+	tmp_files[$1]=d
 }
 
 # $1 = temporary file or directory name
