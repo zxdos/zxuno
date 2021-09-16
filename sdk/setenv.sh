@@ -13,14 +13,18 @@ if [[ "x$ZXSDK" == x ]]; then
 	if [[ x$OS == xWindows_NT ]]; then
 		case $PROCESSOR_ARCHITECTURE in
 		X86|AMD64|EM64T)
+			ZXSDK_PLATFORM=$ZXSDK/windows-x86
 			;;
 		*)
 			echo "WARNING: Unsupported platform: \"$PROCESSOR_ARCHITECTURE\"" >&2
+			ZXSDK_PLATFORM=$ZXSDK/unknown
 			;;
 		esac
-		ZXSDK_PLATFORM=$ZXSDK/windows-x86
+	elif [[ x`uname -s` == xLinux ]]; then
+		ZXSDK_PLATFORM=$ZXSDK/linux
 	else
-		ZXSDK_PLATFORM=$ZXSDK
+		echo "WARNING: Unsupported platform" >&2
+		ZXSDK_PLATFORM=$ZXSDK/unknown
 	fi
 	export ZXSDK_PLATFORM
 	_path=$_path:$ZXSDK_PLATFORM/bin

@@ -257,6 +257,7 @@ if [[ $o_use_tmp -eq 0 ]]; then
 	if [[ "$o_subdir" != "$o_output" && "$o_subdir" != '.' ]]; then
 		rm -rf "$o_subdir"
 	fi
+	echo "Extracting archive, please wait..."
 	case "$o_type" in
 	.zip)
 		if [[ "$o_subdir" = '.' ]]; then

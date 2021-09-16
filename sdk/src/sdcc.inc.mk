@@ -6,6 +6,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+sdcc_prefix = $(SDCCHOME)
+
 $(DOWNLOADS)/sdcc:
 	mkdir -p $@
 
@@ -34,12 +36,12 @@ build-sdcc: | sdcc/.extracted sdcc.mk
 	$(MAKE) -w -C sdcc -f ../sdcc.mk
 
 install-sdcc: | sdcc/.extracted sdcc.mk
-	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(SDCCHOME) install
+	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(sdcc_prefix) install
 
  ifeq ($(_DoClean),1)
 
 uninstall-sdcc: | sdcc/.extracted sdcc.mk
-	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(SDCCHOME) uninstall
+	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(sdcc_prefix) uninstall
 
 clean-sdcc: | sdcc/.extracted sdcc.mk
 	$(MAKE) -w -C sdcc -f ../sdcc.mk clean
@@ -92,26 +94,26 @@ install-sdcc: | sdcc/.extracted
 	echo '.PHONY: install';\
 	echo 'install:\';\
 	find $(SDCC_SUBDIRS) -type f\
-	| sed -Ee 's,(.+), $$(DEST)$$(prefix)/\1\\,';\
+	 | sed -Ee 's,(.+), $$(DESTDIR)$$(prefix)/\1\\,';\
 	echo '';\
 	find $(SDCC_SUBDIRS) -type d\
-	| sed -Ee 's,(.+),$$(prefix)/\1\\,';\
-	echo -e ':\n\tmkdir -p $$@';\
+	 | sed -Ee 's,(.+),$$(DESTDIR)$$(prefix)/\1\\,';\
+	printf ':\n\tmkdir -p $$@\n';\
 	for d in $(SDCC_SUBDIRS); do\
 		if [ $$d = bin ]; then\
 			find $$d -type f\
-			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL_PROGRAM) -m 755 $$< $$@,';\
+			 | sed -Ee 's,^(.+)/([^/]+),$$(DESTDIR)$$(prefix)/\1/\2: \1/\2 | $$(DESTDIR)$$(prefix)/\1\n\t$$(INSTALL_PROGRAM) $$< $$@,';\
 		else\
 			find $$d -type f\
-			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL) -m 644 $$< $$@,';\
+			 | sed -Ee 's,^(.+)/([^/]+),$$(DESTDIR)$$(prefix)/\1/\2: \1/\2 | $$(DESTDIR)$$(prefix)/\1\n\t$$(INSTALL_DATA) $$< $$@,';\
 		fi;\
 	done; } >install.mk;\
-	$(MAKE) -w -f install.mk DEST=$(DEST) prefix=$(shell realpath --relative-to=sdcc $(prefix)) INSTALL=$(INSTALL) INSTALL_PROGRAM=$(INSTALL_PROGRAM) install
+	$(MAKE) -w -f install.mk DESTDIR= prefix=$(shell realpath -m --relative-to=sdcc $(sdcc_prefix)) INSTALL_PROGRAM='$(INSTALL) -m 755' INSTALL_DATA='$(INSTALL) -m 644' install
 
  ifeq ($(_DoClean),1)
 
 uninstall-sdcc:
-	test '$(SDCCHOME)' = . || rm -rf $(SDCCHOME)
+	test '$(sdcc_prefix)' = . || rm -rf $(sdcc_prefix)
 
 clean-sdcc:
 	rm -rf sdcc

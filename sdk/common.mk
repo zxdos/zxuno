@@ -13,7 +13,7 @@ ifndef ZXSDK
 # ZXSDK
 
 # Root (if set acts as a flag of the properly configured environment variables)
-export ZXSDK = $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
+export ZXSDK := $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
 _path = $(ZXSDK)
 
 # Root of platform specific files
@@ -26,10 +26,13 @@ ifeq ($(OS),Windows_NT)
   ZXSDK_PLATFORM = $(ZXSDK)/windows-x86
  else
   $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
-  ZXSDK_PLATFORM = $(ZXSDK)/windows-x86
+  ZXSDK_PLATFORM = $(ZXSDK)/unknown
  endif
+else ifeq ($(shell uname -s),Linux)
+ ZXSDK_PLATFORM = $(ZXSDK)/linux
 else
- ZXSDK_PLATFORM = $(ZXSDK)
+ $(warning Unsupported platform)
+ ZXSDK_PLATFORM = $(ZXSDK)/unknown
 endif
 export ZXSDK_PLATFORM
 

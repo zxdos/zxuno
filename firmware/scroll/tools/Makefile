@@ -32,8 +32,8 @@ INSTALL_PROGRAM	?= $(INSTALL)
 
 BINS		:= FuenteABin$(EXESUFFIX)
 
-INCLUDEDIR	= $(ZXSDK)/include
-LIBDIR		= $(ZXSDK)/lib
+INCLUDEDIR	= $(ZXSDK_PLATFORM)/include
+LIBDIR		= $(ZXSDK_PLATFORM)/lib
 
 CFLAGS := -fPIC -O3 -Wall -Wextra -pedantic $(CFLAGS)
 

@@ -18,7 +18,10 @@ install-lodepng: | lodepng
 
 else	# !_DoBuild
 
-build-lodepng install-lodepng:;
+build-lodepng:;
+
+install-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install-headers
 
 endif	# !_DoBuild
 
@@ -35,6 +38,9 @@ distclean-lodepng: | lodepng
 
 else	# !_DoClean
 
-uninstall-lodepng clean-lodepng distclean-lodepng:;
+uninstall-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall-headers
+
+clean-lodepng distclean-lodepng:;
 
 endif	# !_DoClean

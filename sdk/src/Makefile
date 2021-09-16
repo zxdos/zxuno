@@ -66,7 +66,6 @@ ifeq ($(OS),Windows_NT)
  endif
 endif	# $(OS)==Windows_NT
 
-.downloads\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 

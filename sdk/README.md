@@ -22,12 +22,29 @@ The structure of `sdk` folder:
 
 Directory | Description
 ----|----
-`bin` | Compiled binaries of tools.
-`include` | Header files (`.def`, `.h` etc.) to be included in other sources (assembler, C, etc.).
-`lib` | Libraries, needed for executables (mostly in `bin` directory) to function properly.
-`opt` | Optionally installed bundles (like SDK).
-`src` | The source code of local and downloadable tools. See Makefiles for details.
-`windows-x86` | Compiled binaries of tools and libraries for Windows x86 (32 bit) platform.
+`include` | Header files (`.def`, `.h`, etc.) to be included in other sources (assembler, C, etc.), regardless of host platform.
+`src` | The source code of local tools and scripts to download other used tools. See Makefiles for details.
+*PLATFORM* | Compiled binaries of tools and libraries for specified platform.
+
+Actual directory name for *PLATFORM* is chosen automatically by scripts. Recognized platforms are:
+
+Directory (*PLATFORM* value) | Platform (OS) | Architecture | Host architecture | Precompiled
+---- | ---- | :----: | :----: | :----:
+`linux` | GNU/Linux | any | any | no
+`unknown` | unknown | any | any | no
+`windows-x86` | Windows NT | x86 (32 bits) | x86 (32 and 64 bits) | yes
+`windows-x86_64` | Windows NT (*cross-builds only*) | x86 (64 bits) | not used | no
+
+**NOTE**: `windows-x86` directory is used also on Windows NT x86_64 host.
+
+Each *PLATFORM* directory has the following structure:
+
+Directory | Description
+----|----
+`bin` | Compiled binaries of tools
+`include` | Header files to build the tools
+`lib` | Libraries, used by tools
+`opt` | Optionally installed bundles (such as SDK)
 
 ## 1.1. Copyright and licensing information for files
 
@@ -96,7 +113,7 @@ Value of `<CFG_VAR>` | Description
 Value of `USE_SJASMPLUS_BRANCH`:
 
 Branch | Default
-----|----
+---- | :----:
 `sjasmplus` (original) |
 `z00m128` (by Aprisobal) | yes
 
