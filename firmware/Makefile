@@ -44,11 +44,17 @@ KEYMAPS=\
  es.bin/ES\
  us.bin/US
 
+FONTS=\
+ chloe6x8.bin\
+ fuente6x8.bin\
+ fuente8x6.bin
+
 IMAGES=$(patsubst images/%,%,$(wildcard images/*.png))
 
 .PHONY: all
 all:\
  build-keymaps\
+ build-fonts\
  build-images
 
 build\
@@ -92,6 +98,34 @@ clean-keymaps:
 distclean-keymaps: clean-keymaps
 
 #-----------------------------------------------------------------------------
+# fonts
+
+build/chloe6x8.bin: fonts/chloe6x8.png | build
+	fontconv -q -f 6x8 $< $@
+
+build/fuente6x8.bin: fonts/fuente6x8.png | build
+	fontconv -q -f 6x8 $< $@
+
+build/fuente8x6.bin: fonts/fuente6x8.png | build
+	fontconv -q -f 6x8 -t 8x8 -r $< $@
+
+.PHONY: build-fonts
+build-fonts: $(foreach f,$(FONTS),build/$(f))
+
+.PHONY: install-fonts
+install-fonts:;
+
+.PHONY: uninstall-fonts
+uninstall-fonts:;
+
+.PHONY: clean-fonts
+clean-fonts:
+	rm -f $(foreach f,$(FONTS),build/$(f))
+
+.PHONY: distclean-fonts
+distclean-fonts: clean-fonts
+
+#-----------------------------------------------------------------------------
 # images
 
 # $(1) = source filename
@@ -130,6 +164,7 @@ distclean-images: clean-images
 .PHONY: install
 install:\
  install-keymaps\
+ install-fonts\
  install-images
 
 #-----------------------------------------------------------------------------
@@ -138,6 +173,7 @@ install:\
 .PHONY: uninstall
 uninstall:\
  uninstall-keymaps\
+ uninstall-fonts\
  uninstall-images
 
 #-----------------------------------------------------------------------------
@@ -146,6 +182,7 @@ uninstall:\
 .PHONY: clean
 clean:\
  clean-keymaps\
+ clean-fonts\
  clean-images
 
 #-----------------------------------------------------------------------------
