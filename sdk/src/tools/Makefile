@@ -35,6 +35,7 @@ INSTALL_PROGRAM	?= $(INSTALL)
 BINS:=\
  bin2hex$(EXESUFFIX)\
  fcut$(EXESUFFIX)\
+ fontconv$(EXESUFFIX)\
  fpad$(EXESUFFIX)\
  fpoke$(EXESUFFIX)\
  rcs$(EXESUFFIX)\
@@ -58,6 +59,12 @@ $(DESTDIR)$(bindir):
 
 $(srcdir)/liblodepng$(DLLSUFFIX): $(DESTDIR)$(libdir)/liblodepng$(DLLSUFFIX)
 	ln -fs $< $@
+
+build/fontconv$(EXESUFFIX): $(srcdir)/fontconv.c\
+ $(DESTDIR)$(includedir)/lodepng.h\
+ $(srcdir)/liblodepng$(DLLSUFFIX)\
+ Makefile | build
+	$(CC) -ansi -Wall -Wextra -Wpedantic $(CFLAGS) -o $@ $< $(foreach l,liblodepng$(DLLSUFFIX),-l:$(l) $(l))
 
 build/Png2Rcs$(EXESUFFIX): $(srcdir)/Png2Rcs.c\
  $(DESTDIR)$(includedir)/lodepng.h\

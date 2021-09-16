@@ -1,0 +1,11 @@
+SPDX-FileName: fontconv.exe
+
+SPDX-FileType: BINARY
+
+SPDX-FileChecksum: SHA1: 1e9ab02ba4eecbb556745190e1a4432d6b87702f
+
+SPDX-FileCopyrightText: Copyright (C) 2021 Ivan Tatarinov
+
+SPDX-License-Identifier: GPL-3.0-or-later
+
+SPDX-FileComment: fontconv version 0.1 - PNG image <=> binary font file converter.
