@@ -773,9 +773,7 @@ int encode () {
   image = image_new ();
   if (!image) goto error_exit;
 
-  if (image_set_filename (image, opt_fi)) goto error_exit;
-
-  if (image_import_png (image, image->filename)) goto error_exit;
+  if (image_import_png (image, opt_fi)) goto error_exit;
 
   font = font_new ();
   if (!font) goto error_exit;
@@ -818,9 +816,7 @@ int decode () {
   font->cw = opt_cwi;
   font->ch = opt_chi;
 
-  if (font_set_filename (font, opt_fi)) goto error_exit;
-
-  if (font_load (font, font->filename)) goto error_exit;
+  if (font_load (font, opt_fi)) goto error_exit;
 
   image = image_new ();
   if (!image) goto error_exit;
@@ -835,11 +831,11 @@ int decode () {
   png = image_new ();
   if (!png) goto error_exit;
 
+  if (image_set_filename (png, opt_fo)) goto error_exit;
+
   if (image_convert_to_png (png, image)) goto error_exit;
 
   image_dispose (&image);
-
-  if (image_set_filename (png, opt_fo)) goto error_exit;
 
   if (image_save (png, png->filename)) goto error_exit;
 
