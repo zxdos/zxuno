@@ -38,7 +38,7 @@
 "it under the terms of the GNU General Public License as published by\n"     \
 "the Free Software Foundation, either version 3 of the License, or\n"        \
 "(at your option) any later version."
-#define HOMEPAGE "<https://github.com/zxdos/zxuno/>"
+#define HOMEPAGE "<https://gitlab.com/ivan-tat/fontconv/>"
 #define THIRDPARTY                                                           \
 "LodePNG library: <https://github.com/lvandeve/lodepng/>\n"                  \
 "License: Zlib. Copyright (c) 2005-2021 Lode Vandevenne"
