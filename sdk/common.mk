@@ -73,7 +73,7 @@ export SDCCLIB
 # Z88DK
 
 # Root
-Z88DK = $(ZXSDK)/src/z88dk
+export Z88DK = $(ZXSDK_PLATFORM)/opt/z88dk
 
 # "bin" directory
 _path := $(_path):$(Z88DK)/bin
@@ -100,13 +100,13 @@ endif	# !ZXSDK
 -include $(ZXSDK)/conf.mk
 
 # Shared directory for downloaded files
-DOWNLOADS ?= $(shell realpath $(ZXSDK)/../.downloads)
+DOWNLOADS ?= $(shell realpath -m $(ZXSDK)/../.downloads)
 
 # C compiler
 ifeq ($(BUILD),mingw32)
- CC = i686-w64-mingw32-gcc
+ export CC = i686-w64-mingw32-gcc
 else ifeq ($(BUILD),mingw64)
- CC = x86_64-w64-mingw32-gcc
+ export CC = x86_64-w64-mingw32-gcc
 endif
 
 # Filename suffixes (platform specific)
@@ -132,9 +132,15 @@ ifeq ($(BUILD),mingw32)
 else ifeq ($(BUILD),mingw64)
  USE_PREFIX ?= $(ZXSDK)/windows-x86_64
 else
-USE_PREFIX ?= $(ZXSDK_PLATFORM)
+ USE_PREFIX ?= $(ZXSDK_PLATFORM)
 endif
 
 # Version of SJAsmPlus compiler to use
 USE_SJASMPLUS_BRANCH ?= z00m128
-USE_SJASMPLUS_VERSION ?= 1.18.3
+ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
+else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
+ USE_SJASMPLUS_VERSION ?= 1.18.3
+endif
+
+# Version of Z88DK to use
+USE_Z88DK_VERSION ?= 2.1
