@@ -1,0 +1,82 @@
+; memcpy.mac - macros for fast memory copying.
+;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: Copyright (C) 2016 Antonio Villena
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef memcpy_mac_included
+ define memcpy_mac_included
+
+;-----------------------------------------------------------------------------
+; Copies 16 bytes of memory from "src" address to "dst" address using stack.
+; Cost: 204 T states, 26 bytes.
+;
+; Out: SP = dst
+;
+ macro memcpy_16 dst, src
+        ld      sp, src
+        pop     hl      ; LD HL, (src) : INC SP : INC SP
+        pop     de      ; LD DE, (src+2) : INC SP : INC SP
+        pop     bc      ; LD BC, (src+4) : INC SP : INC SP
+        pop     af      ; LD AF, (src+6) ; INC SP : INC SP
+        ex      af, af'
+        exx
+        pop     hl      ; LD HL', (src+8) : INC SP : INC SP
+        pop     de      ; LD DE', (src+10) : INC SP : INC SP
+        pop     bc      ; LD BC', (src+12) : INC SP : INC SP
+        pop     af      ; LD AF', (src+14) ; INC SP : INC SP
+        ld      sp, dst+16
+        push    af      ; DEC SP : DEC SP : LD (dst+14), AF'
+        push    bc      ; DEC SP : DEC SP : LD (dst+12), BC'
+        push    de      ; DEC SP : DEC SP : LD (dst+10), DE'
+        push    hl      ; DEC SP : DEC SP : LD (dst+8), HL'
+        ex      af, af'
+        exx
+        push    af      ; DEC SP : DEC SP : LD (dst+6), AF
+        push    bc      ; DEC SP : DEC SP : LD (dst+4), BC
+        push    de      ; DEC SP : DEC SP : LD (dst+2), DE
+        push    hl      ; DEC SP : DEC SP : LD (dst), HL
+ endm
+
+;-----------------------------------------------------------------------------
+; Copies 22 bytes of memory from "src" address to "dst" address using stack.
+; Cost: 279 T states, 36 bytes.
+;
+; Out: SP = dst+14
+;
+ macro memcpy_22 dst, src
+        ld      sp, src
+        pop     hl      ; LD HL, (src) : INC SP : INC SP
+        pop     de      ; LD DE, (src+2) : INC SP : INC SP
+        pop     bc      ; LD BC, (src+4) : INC SP : INC SP
+        pop     af      ; LD AF, (src+6) ; INC SP : INC SP
+        exx
+        pop     hl      ; LD HL', (src+8) : INC SP : INC SP
+        pop     de      ; LD DE', (src+10) : INC SP : INC SP
+        pop     bc      ; LD BC', (src+12) : INC SP : INC SP
+        ld      sp, dst+14
+        push    bc      ; DEC SP : DEC SP : LD (dst+12), BC'
+        push    de      ; DEC SP : DEC SP : LD (dst+10), DE'
+        push    hl      ; DEC SP : DEC SP : LD (dst+8), HL'
+        exx
+        push    af      ; DEC SP : DEC SP : LD (dst+6), AF
+        push    bc      ; DEC SP : DEC SP : LD (dst+4), BC
+        push    de      ; DEC SP : DEC SP : LD (dst+2), DE
+        push    hl      ; DEC SP : DEC SP : LD (dst), HL
+        ld      sp, src+14
+        pop     hl      ; LD HL, (src+14) : INC SP : INC SP
+        pop     de      ; LD DE, (src+16) : INC SP : INC SP
+        pop     bc      ; LD BC, (src+18) : INC SP : INC SP
+        pop     af      ; LD AF, (src+20) ; INC SP : INC SP
+        ld      sp, dst+22
+        push    af      ; DEC SP : DEC SP : LD (dst+20), AF
+        push    bc      ; DEC SP : DEC SP : LD (dst+18), BC
+        push    de      ; DEC SP : DEC SP : LD (dst+16), DE
+        push    hl      ; DEC SP : DEC SP : LD (dst+14), HL
+ endm
+
+ endif  ; !memcpy_mac_included
