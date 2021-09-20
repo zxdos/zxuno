@@ -1,0 +1,43 @@
+; rcs.mac - macros to decode RCS image into ZX Spectrum's screen.
+;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: Copyright (C) 2016 Antonio Villena
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef rcs_mac_included
+ define rcs_mac_included
+
+;-----------------------------------------------------------------------------
+; Decode RCS image into ZX Spectrum's screen (without attributes)
+;
+; In:  BC = screen address ($4000)
+;      HL = RCS image address
+;
+; Out: A = 0
+;      BC = screen size without attributes ($1800)
+;      DE = screen attributes address ($5800)
+;      HL = RCS image address + $1800
+;
+ macro drcs_screen
+.loop   ld      a, b            ; A = [B7 B6 B5 B4 B3 B2 B1 B0]
+        xor     c               ; A = [B7^C7 B6^C6 B5^C5 B4^C4 B3^C3 B2^C2 B1^C1 B0^C0]
+        and     %11111000       ; A = [B7^C7 B6^C6 B5^C5 B4^C4 B3^C3 -- -- --]
+        xor     c               ; A = [B7 B6 B5 B4 B3 C2 C1 C0]
+        ld      d, a            ; D = [B7 B6 B5 B4 B3 C2 C1 C0]
+        xor     b               ; A = [-- -- -- -- -- B2^C2 B1^C1 B0^C0]
+        xor     c               ; A = [C7 C6 C5 C4 C3 B2 B1 B0]
+ .2     rlca                    ; A = [C5 C4 C3 B2 B1 B0 C7 C6]
+        ld      e, a            ; DE = [B7 B6 B5 B4 B3 C2 C1 C0] [C5 C4 C3 B2 B1 B0 C7 C6]
+        inc     bc              ; BC++
+        ldi                     ; BC--, (byte)*DE = (byte)*HL, DE++, HL++
+        inc     bc              ; BC++
+        ld      a, b
+        sub     high $5800
+        jr      nz, .loop       ; if ((BC>>8) != ($5800>>8)) goto .loop
+ endm
+
+ endif  ; !rcs_mac_included
