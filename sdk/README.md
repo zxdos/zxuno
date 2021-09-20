@@ -109,6 +109,7 @@ Value of `<CFG_VAR>` | Description
 ----|----
 `USE_SJASMPLUS_BRANCH` | Branch of SJAsmPlus Z80 Compiler to use
 `USE_SJASMPLUS_VERSION` | Version of SJAsmPlus Z80 Compiler to use
+`USE_SDCC_VERSION` | Version of SDCC to use
 `USE_Z88DK_VERSION` | Version of z88dk to use
 
 Value of `USE_SJASMPLUS_BRANCH`:
@@ -124,6 +125,12 @@ Version | Default
 ----|----
 `1.18.2` |
 `1.18.3` | yes
+
+Value of `USE_SDCC_VERSION`:
+
+Version | Default
+----|----
+`4.1.0` | yes
 
 Value of `USE_Z88DK_VERSION`:
 

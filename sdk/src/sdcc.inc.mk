@@ -15,16 +15,21 @@ $(DOWNLOADS)/sdcc:
 
 ifeq ($(_DoBuild),1)
 
-SDCC_ARCHIVE		= $(DOWNLOADS)/sdcc/sdcc-src-4.1.0.tar.bz2
-SDCC_ARCHIVE_SHA256	= 81edf776d5a2dc61a4b5c3408929db7b25874d69c46e4a71b116be1322fd533f
-SDCC_ARCHIVE_TYPE	= .tar.bz2
-SDCC_ARCHIVE_SUBDIR	= sdcc
+ifeq ($(USE_SDCC_VERSION),4.1.0)
+ SDCC_ARCHIVE		= sdcc-src-4.1.0.tar.bz2
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc/4.1.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= 81edf776d5a2dc61a4b5c3408929db7b25874d69c46e4a71b116be1322fd533f
+ SDCC_ARCHIVE_TYPE	= .tar.bz2
+ SDCC_ARCHIVE_SUBDIR	= sdcc
+else
+ $(error Unknown SDCC version: "$(USE_SDCC_VERSION)")
+endif
 
-$(DOWNLOADS)/sdcc/sdcc-src-4.1.0.tar.bz2: | $(DOWNLOADS)/sdcc
-	wget -c https://sourceforge.net/projects/sdcc/files/sdcc/4.1.0/$(@F)/download -O $@
+$(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE): | $(DOWNLOADS)/sdcc
+	wget -c $(SDCC_ARCHIVE_URL) -O $@
 
-sdcc/.extracted: $(SDCC_ARCHIVE)
-	rm -rf $(@D)
+sdcc/.extracted: $(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE)
+	$(RM) -r $(@D)
 	extract.sh $<\
 	 --sha256 $(SDCC_ARCHIVE_SHA256)\
 	 --type $(SDCC_ARCHIVE_TYPE)\
@@ -47,8 +52,7 @@ clean-sdcc: | sdcc/.extracted sdcc.mk
 	$(MAKE) -w -C sdcc -f ../sdcc.mk clean
 
 distclean-sdcc:
-	rm -rf $(DOWNLOADS)/sdcc
-	rm -rf sdcc
+	$(RM) -r $(DOWNLOADS)/sdcc sdcc
 
  else	#  !_DoClean
 
@@ -62,10 +66,15 @@ endif	# _DoBuild
 
 ifeq ($(_UsePrecompiledOnWindows),1)
 
-SDCC_ARCHIVE		= $(DOWNLOADS)/sdcc/sdcc-4.1.0-setup.exe
-SDCC_ARCHIVE_SHA256	= cbf064c9f1a3f9a73db6d2c8ba3a43563fa3a2d2966f52cf5a571a3064222ed8
-SDCC_ARCHIVE_TYPE	= .7z
-SDCC_ARCHIVE_SUBDIR	= .
+ifeq ($(USE_SDCC_VERSION),4.1.0)
+ SDCC_ARCHIVE		= sdcc-4.1.0-setup.exe
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.1.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= cbf064c9f1a3f9a73db6d2c8ba3a43563fa3a2d2966f52cf5a571a3064222ed8
+ SDCC_ARCHIVE_TYPE	= .7z
+ SDCC_ARCHIVE_SUBDIR	= .
+else
+ $(error Unknown SDCC version: "$(USE_SDCC_VERSION)")
+endif
 
 SDCC_SUBDIRS=\
  bin\
@@ -74,11 +83,11 @@ SDCC_SUBDIRS=\
  lib\
  non-free
 
-$(DOWNLOADS)/sdcc/sdcc-4.1.0-setup.exe: | $(DOWNLOADS)/sdcc
-	wget -c https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.1.0/$(@F)/download -O $@
+$(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE): | $(DOWNLOADS)/sdcc
+	wget -c $(SDCC_ARCHIVE_URL) -O $@
 
-sdcc/.extracted: $(SDCC_ARCHIVE)
-	rm -rf $(@D)
+sdcc/.extracted: $(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE)
+	$(RM) -r $(@D)
 	extract.sh $<\
 	 --sha256 $(SDCC_ARCHIVE_SHA256)\
 	 --type $(SDCC_ARCHIVE_TYPE)\
@@ -113,13 +122,13 @@ install-sdcc: | sdcc/.extracted
  ifeq ($(_DoClean),1)
 
 uninstall-sdcc:
-	test '$(sdcc_prefix)' = . || rm -rf $(sdcc_prefix)
+	test '$(sdcc_prefix)' = . || $(RM) -r $(sdcc_prefix)
 
 clean-sdcc:
-	rm -rf sdcc
+	$(RM) -r sdcc
 
 distclean-sdcc: clean-sdcc
-	rm -rf $(DOWNLOADS)/sdcc
+	$(RM) -r $(DOWNLOADS)/sdcc
 
  else	#  !_DoClean
 

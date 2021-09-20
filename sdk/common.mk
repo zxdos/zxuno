@@ -142,5 +142,8 @@ else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
  USE_SJASMPLUS_VERSION ?= 1.18.3
 endif
 
+# Version of SDCC to use
+USE_SDCC_VERSION ?= 4.1.0
+
 # Version of Z88DK to use
 USE_Z88DK_VERSION ?= 2.1
