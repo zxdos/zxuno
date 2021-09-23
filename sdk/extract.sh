@@ -247,11 +247,13 @@ fi
 
 exit_on_errors
 
-tmp=`mktemp`
-new_tmp_file "$tmp"
-echo "$o_sha256  $o_input" >"$tmp"
-sha256sum -c "$tmp"
-rm_tmp_file "$tmp"
+if [[ -n "$o_sha256" ]]; then
+	tmp=`mktemp`
+	new_tmp_file "$tmp"
+	echo "$o_sha256  $o_input" >"$tmp"
+	sha256sum -c "$tmp"
+	rm_tmp_file "$tmp"
+fi
 
 if [[ $o_use_tmp -eq 0 ]]; then
 	if [[ "$o_subdir" != "$o_output" && "$o_subdir" != '.' ]]; then

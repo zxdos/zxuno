@@ -21,10 +21,9 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program. If not, see <https://www.gnu.org/licenses/>.
 ;
+; SPDX-FileType: SOURCE
 ; SPDX-FileCopyrightText: Copyright (C) 2016, 2017, 2020, 2021 Antonio Villena
-;
 ; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-;
 ; SPDX-License-Identifier: GPL-3.0-only
 
 ; Compatible compilers:
@@ -32,10 +31,29 @@
 
 ;       output  scroll.bin
 
+        include rcs.mac
+        include memcpy.mac
+
         org     $5e6d
 
         export  filestart
         export  start
+
+SCREEN: equ $4000
+ATTRS: equ $5800
+XA: equ 5       ; X attributes offset
+YA: equ 22      ; Y attributes offset
+LS: equ 22      ; line size (bytes)
+
+; copy LS bytes from (x0, y0) to (x1, y1)
+ macro copy_screen_line x1, y1, x0, y0
+        memcpy_22 SCREEN+2048*(y1/64)+256*(y1&7)+32*((y1/8)&7)+x1, SCREEN+2048*(y0/64)+256*(y0&7)+32*((y0/8)&7)+x0
+ endm
+
+; copy LS bytes from (x0, y0) to (x1, y1)
+ macro copy_attrs_line x1, y1, x0, y0
+        memcpy_22 ATTRS+y1*32+x1, ATTRS+y0*32+x0
+ endm
 
 filestart
 string  include string.asm
@@ -52,33 +70,18 @@ track   incbin  music.stc
 fuente  incbin  fuente6x8.bin
 
 start   ld      hl, $c000
-        ld      de, $c001
-        ld      bc, $017f
+        ld      de, $c000+1
+        ld      bc, $180-1
         ld      (hl), l
         ldir
         ld      hl, fuente
-        ld      b, 3
+        ld      b, 3            ; BC = 768, DE = $c000+$180
         ldir
         ld      hl, fondo
-        ld      b, $40          ; filtro RCS inverso
-start0  ld      a, b
-        xor     c
-        and     $f8
-        xor     c
-        ld      d, a
-        xor     b
-        xor     c
-        rlca
-        rlca
-        ld      e, a
-        inc     bc
-        ldi
-        inc     bc
-        ld      a, b
-        sub     $58
-        jr      nz, start0
-        ld      b, 3
-        ldir
+        ld      b, high SCREEN  ; BC = SCREEN
+        drcs_screen
+        ld      b, high (32*24) ; A = 0, BC = 32*24, DE = ATTRS, HL = fondo+32*192
+        ldir                    ; copy attributes
         out     ($fe), a
         inc     a
         ex      af, af'
@@ -123,7 +126,7 @@ start0  ld      a, b
 ;        jr      nz, rever
 
         ld      hl, $c000
-        ld      de, $c400
+        ld      de, $c000+$400
 start1  ld      b, $08
 start2  ld      a, (hl)
         rrca
@@ -133,7 +136,7 @@ start2  ld      a, (hl)
         jp      pe, start2
         jr      nc, start1
         ld      a, $c9
-        ld      ($c006), a
+        ld      ($c000+6), a
         ld      hl, track
         call    PlaySTC.Init
 start3  call    PlaySTC.Play
@@ -144,64 +147,43 @@ start3  call    PlaySTC.Play
 start4  djnz    start4
         dec     c
         jr      nz, start4
-        include lineas.asm
-        ld      sp, $401b+$800*2+$100*7+$20*7
+y=0
+ dup 192-1
+        copy_screen_line XA, y, XA, (y+1)
+y=y+1
+ edup
+        ld      sp, ATTRS-32+XA+LS      ; clear bottom line (LS bytes)
         sbc     hl, hl
+ dup LS/2
         push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        push    hl
-        ld      sp, hl
+ edup
+        ld      sp, hl                  ; SP = 0
         ld      ix, string
 vari: equ $-2
         ld      hl, start3
-        push    hl
+        push    hl                      ; ($fffe) = start3
         ld      hl, music
-        push    hl
+        push    hl                      ; ($fffc) = music
         ex      af, af'
         rrca
         jr      c, start5
         ex      af, af'
         ret
 start5  ex      af, af'
-        linea   3, 1, 0,    3, 0, 0
-        linea   3, 2, 0,    3, 1, 0
-        linea   3, 3, 0,    3, 2, 0
-        linea   3, 4, 0,    3, 3, 0
-        linea   3, 5, 0,    3, 4, 0
-        linea   3, 6, 0,    3, 5, 0
-        linea   3, 7, 0,    3, 6, 0
-        linea   3, 0, 1,    3, 7, 0
-        linea   3, 1, 1,    3, 0, 1
-        linea   3, 2, 1,    3, 1, 1
-        linea   3, 3, 1,    3, 2, 1
-        linea   3, 4, 1,    3, 3, 1
-        linea   3, 5, 1,    3, 4, 1
-        linea   3, 6, 1,    3, 5, 1
-        linea   3, 7, 1,    3, 6, 1
-        linea   3, 0, 2,    3, 7, 1
-        linea   3, 1, 2,    3, 0, 2
-        linea   3, 2, 2,    3, 1, 2
-        linea   3, 3, 2,    3, 2, 2
-        linea   3, 4, 2,    3, 3, 2
-        linea   3, 5, 2,    3, 4, 2
-        linea   3, 6, 2,    3, 5, 2
+y=0
+ dup YA
+        copy_attrs_line XA, y, XA, (y+1)
+y=y+1
+ edup
         ld      sp, $fffc
         ld      b, (ix)
         djnz    start6
         ld      ix, string
 start6  inc     ix
-        ld      hl, $5ac5
+        ld      hl, ATTRS+32*YA+XA      ; fill attributes in buffer (LS bytes)
         ld      (hl), b
-        ld      de, $5ac6
-        ld      bc, 21
+        ld      de, ATTRS+32*YA+XA+1
+        ld      bc, LS-1
         ldir
         xor     a
         push    ix
