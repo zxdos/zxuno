@@ -33,6 +33,8 @@
 
         include rcs.mac
         include memcpy.mac
+        include ay.def
+        include prn6x8f.mac
 
         org     $5e6d
 
@@ -41,9 +43,16 @@
 
 SCREEN: equ $4000
 ATTRS: equ $5800
-XA: equ 5       ; X attributes offset
-YA: equ 22      ; Y attributes offset
-LS: equ 22      ; line size (bytes)
+FONT: equ $c000         ; only bits 10-15 are used
+FA: equ 80              ; font characters available for printing
+FC: equ 128             ; font capacity (total characters used by subroutines)
+XMAX: equ (256-6)/3     ; maximal horizontal position to print string
+XA: equ 5               ; X attributes offset
+YA: equ 23              ; Y attributes offset
+LS: equ 22              ; line size (bytes)
+
+PLAYSTC_AY_FREQUENCY: equ ay_freq_Spectrum
+PLAYSTC_USER_DEFINED_FILE: equ 0
 
 ; copy LS bytes from (x0, y0) to (x1, y1)
  macro copy_screen_line x1, y1, x0, y0
@@ -56,310 +65,107 @@ LS: equ 22      ; line size (bytes)
  endm
 
 filestart
-string  include string.asm
 
-music   ld      (vari), ix
+start   ld      hl, FONT                ; L = 0
+        ld      de, FONT+1
+        ld      bc, 8*(FC-FA)-1
+        ld      (hl), l
+        ldir                            ; clear unused characters
+        ld      hl, font
+        ld      bc, 8*FA
+        ldir                            ; copy font
+        ; HL = picture
+        ld      b, high SCREEN          ; BC = SCREEN
+        drcs_screen                     ; show picture
+        ; A = 0, BC = 32*192, DE = ATTRS, HL = picture+32*192
+        ld      b, high (32*24)         ; BC = 32*24
+        ldir                            ; show attributes
+        out     ($fe), a                ; set border to black
+        inc     a                       ; A = flag variable to print new text
+        ex      af, af'                 ; hide flag variable
+        ld      hl, FONT
+        ld      de, FONT+8*FC
+        ld      b, high (8*FC*7)        ; BC = size of 7 copies of font
+setfont ld      a, (hl)                 ; A = (HL)
+        rrca                            ; A = [A0 A7 A6 A5 A4 A3 A2 A1]
+        ld      (de), a                 ; (DE) = A
+        inc     de                      ; DE++
+        cpi                             ; HL++, BC--, PV = (BC!=0)
+        jp      pe, setfont             ; if (BC) goto setfont
+        ld      hl, track
+        call    PlaySTC.Init
+;       jp      main_loop               ; no need, it follows
+
+main_loop
+        call    PlaySTC.Play
+        ei
+        halt                            ; wait for new video frame
+        di
+        ; wait to avoid refresh artifacts on the screen
+        ld      bc, 5                   ; B = 0, C = 5
+pause   djnz    pause                   ; wait: inner loop (256 iterations)
+        dec     c                       ; B = 0, C--
+        jr      nz, pause               ; wait: outer loop (5 iterations)
+y=0     ; scroll credits
+      dup 192-1
+        copy_screen_line XA, y, XA, (y+1)
+y=y+1
+      edup
+        ld      sp, ATTRS-32+XA+LS      ; clear bottom line (LS bytes)
+        sbc     hl, hl
+      dup LS/2
+        push    hl
+      edup
+        ld      sp, hl                  ; SP = 0
+        ld      ix, credits
+credits_pos: equ $-2
+        ld      hl, main_loop
+        push    hl                      ; ($fffe) = main_loop
+        ld      hl, music
+        push    hl                      ; ($fffc) = music
+        ex      af, af'                 ; show flag variable
+        rrca                            ; next screen line, CY = new text
+        jr      c, new_text
+        ex      af, af'                 ; hide flag variable
+        ret                             ; jump to "music"
+
+new_text
+        ex      af, af'                 ; hide flag variable
+y=0
+      dup YA-1
+        copy_attrs_line XA, y, XA, (y+1)
+y=y+1
+      edup
+        ld      sp, $fffc
+getattr ld      b, (ix)                 ; B = attribute or end mark
+        djnz    goahead                 ; if (--B) goto goahead
+        ld      ix, credits             ; IX = credits
+        jr      getattr                 ; B = attribute
+goahead inc     ix                      ; IX = pointer to ASCIIZ string
+        ld      hl, ATTRS+32*(YA-1)+XA
+        ld      (hl), b
+        ld      de, ATTRS+32*(YA-1)+XA+1
+        ld      bc, LS-1
+        ldir                            ; fill attributes (LS bytes)
+        xor     a                       ; A = 0
+        push    ix                      ; IX = pointer to ASCIIZ string
+        pop     hl                      ; HL = IX
+        ld      bc, (YA<<8)+(XMAX+1)/2+1; B = YA, C = (XMAX+1)/2+1
+        cpir                            ; C = (XMAX+1)/2-strlen(HL)
+;       jp      print                   ; no need, it follows
+print   print6x8_84_fast FONT           ; inline
+
+music   ld      (credits_pos), ix
         jp      PlaySTC.Play
 
-        define  PLAYSTC_AY_FREQUENCY ay_freq_Spectrum
-        define  PLAYSTC_USER_DEFINED_FILE 0
         include playstc.inc
 
 track   incbin  music.stc
 
-fuente  incbin  fuente6x8.bin
+credits include string.asm
 
-start   ld      hl, $c000
-        ld      de, $c000+1
-        ld      bc, $180-1
-        ld      (hl), l
-        ldir
-        ld      hl, fuente
-        ld      b, 3            ; BC = 768, DE = $c000+$180
-        ldir
-        ld      hl, fondo
-        ld      b, high SCREEN  ; BC = SCREEN
-        drcs_screen
-        ld      b, high (32*24) ; A = 0, BC = 32*24, DE = ATTRS, HL = fondo+32*192
-        ldir                    ; copy attributes
-        out     ($fe), a
-        inc     a
-        ex      af, af'
-;        ld      de, $401f
-;rever   ld      hl, $ffe1
-;        add     hl, de
-;        ld      c, (hl)
-;        ld      a, $80
-;revl1   rl      c
-;        rra
-;        jr      nc, revl1
-;        ld      (de), a
-;        inc     hl
-;        dec     de
-;        ld      c, (hl)
-;        ld      a, $80
-;revl2   rl      c
-;        rra
-;        jr      nc, revl2
-;        ld      (de), a
-;        inc     hl
-;        dec     de
-;        ld      c, (hl)
-;        ld      a, $80
-;revl3   rl      c
-;        rra
-;        jr      nc, revl3
-;        ld      (de), a
-;        inc     hl
-;        dec     de
-;        ld      c, (hl)
-;        ld      a, $80
-;revl4   rl      c
-;        rra
-;        jr      nc, revl4
-;        ld      (de), a
-;        ld      hl, $23
-;        add     hl, de
-;        ex      de, hl
-;        ld      a, d
-;        cp      $58
-;        jr      nz, rever
+; Sequence must match with no gaps: font, picture
 
-        ld      hl, $c000
-        ld      de, $c000+$400
-start1  ld      b, $08
-start2  ld      a, (hl)
-        rrca
-        ld      (de), a
-        inc     de
-        cpi
-        jp      pe, start2
-        jr      nc, start1
-        ld      a, $c9
-        ld      ($c000+6), a
-        ld      hl, track
-        call    PlaySTC.Init
-start3  call    PlaySTC.Play
-        ei
-        halt
-        di
-        ld      bc, 5
-start4  djnz    start4
-        dec     c
-        jr      nz, start4
-y=0
- dup 192-1
-        copy_screen_line XA, y, XA, (y+1)
-y=y+1
- edup
-        ld      sp, ATTRS-32+XA+LS      ; clear bottom line (LS bytes)
-        sbc     hl, hl
- dup LS/2
-        push    hl
- edup
-        ld      sp, hl                  ; SP = 0
-        ld      ix, string
-vari: equ $-2
-        ld      hl, start3
-        push    hl                      ; ($fffe) = start3
-        ld      hl, music
-        push    hl                      ; ($fffc) = music
-        ex      af, af'
-        rrca
-        jr      c, start5
-        ex      af, af'
-        ret
-start5  ex      af, af'
-y=0
- dup YA
-        copy_attrs_line XA, y, XA, (y+1)
-y=y+1
- edup
-        ld      sp, $fffc
-        ld      b, (ix)
-        djnz    start6
-        ld      ix, string
-start6  inc     ix
-        ld      hl, ATTRS+32*YA+XA      ; fill attributes in buffer (LS bytes)
-        ld      (hl), b
-        ld      de, ATTRS+32*YA+XA+1
-        ld      bc, LS-1
-        ldir
-        xor     a
-        push    ix
-        pop     hl
-        ld      bc, $172b
-        cpir
-        srl     c
-        ld      a, c
-        jr      c, prn2
-        and     %11111100
-        ld      d, a
-        xor     c
-        ld      c, a
-        ld      e, a
-        jr      z, prn1
-        dec     e
-prn1    ld      a, d
-        rrca
-        ld      d, a
-        rrca
-        add     a, d
-        add     a, e
-        ld      e, a
-        ld      a, b
-        and     %00011000
-        or      %01000000
-        ld      d, a
-        ld      a, b
-        and     %00000111
-        rrca
-        rrca
-        rrca
-        add     a, e
-        ld      e, a
-        rr      c
-        jr      c, pos26
-        jr      nz, pos4
-pos0    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $c0 >> 2
-        call    simple
-pos2    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $d8 >> 2
-        ld      bc, $04fc
-        call    doble
-pos4    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $d0 >> 2
-        ld      bc, $04f0
-        call    doble
-pos6    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $c8 >> 2
-        call    simple
-        inc     de
-        jr      pos0
-pos26   rr      c
-        jr      c, pos6
-        jr      pos2
-prn2    and     %11111100
-        ld      d, a
-        xor     c
-        ld      c, a
-        cp      2
-        adc     a, -1
-        ld      e, a
-        ld      a, d
-        rrca
-        ld      d, a
-        rrca
-        add     a, d
-        add     a, e
-        ld      e, a
-        ld      a, b
-        and     %00011000
-        or      %01000000
-        ld      d, a
-        ld      a, b
-        and     %00000111
-        rrca
-        rrca
-        rrca
-        add     a, e
-        ld      e, a
-        rr      c
-        jr      c, pos37
-        jr      nz, pos5
-pos1    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $cc >> 2
-        ld      bc, $04e0
-        call    doble
-pos3    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $c4 >> 2
-        call    simple
-pos5    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $dc >> 2
-        ld      bc, $04fe
-        call    doble
-pos7    ld      a, (ix)
-        inc     ix
-        add     a, a
-        ret     z
-        ld      h, $d4 >> 2
-        ld      bc, $04f8
-        call    doble
-        jr      pos1
-pos37   rr      c
-        jr      c, pos7
-        jr      pos3
+font    incbin  fuente6x8.bin
 
-simple  ld      b, 4
-        ld      l, a
-        add     hl, hl
-        add     hl, hl
-simple2 ld      a, (de)
-        xor     (hl)
-        ld      (de), a
-        inc     d
-        inc     l
-        ld      a, (de)
-        xor     (hl)
-        ld      (de), a
-        inc     d
-        inc     l
-        djnz    simple2
-        ld      hl, $f800
-        add     hl, de
-        ex      de, hl
-        ret
-
-doble   ld      l, a
-        add     hl, hl
-        add     hl, hl
-doble2  ld      a, (de)
-        xor     (hl)
-        and     c
-        xor     (hl)
-        ld      (de), a
-        inc     e
-        ld      a, (hl)
-        and     c
-        ld      (de), a
-        inc     d
-        inc     l
-        ld      a, (hl)
-        and     c
-        ld      (de), a
-        dec     e
-        ld      a, (de)
-        xor     (hl)
-        and     c
-        xor     (hl)
-        ld      (de), a
-        inc     d
-        inc     l
-        djnz    doble2
-        ld      hl, $f801
-        add     hl, de
-        ex      de, hl
-        ret
-fondo   incbin  fondo.rcs
+picture incbin  fondo.rcs
