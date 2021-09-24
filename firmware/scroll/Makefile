@@ -1,5 +1,5 @@
+# SPDX-FileType: SOURCE
 # SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Supported environments:
@@ -18,65 +18,66 @@ include ../../sdk/common.mk
 srcdir		= .
 
 INCLUDEDIR	= ../../sdk/include
-FUENTEABIN	= tools/build/FuenteABin$(EXESUFFIX)
-AS		= sjasmplus
-ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
-$(error Original SJAsmPlus is not supported for now - use version by `z00m128')
-AFLAGS		= --nobanner
-else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
-AFLAGS		= --nologo
+
+INCLUDEDIRS	= $(INCLUDEDIR) build
+
+AS = sjasmplus
+ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
+ $(error Original SJAsmPlus is not supported for now - use version by Aprisobal ("z00m128"))
+ AFLAGS = --nobanner
+else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
+ AFLAGS = --nologo
 else
-AFLAGS		=
+ AFLAGS =
 endif
-AFLAGS		+= -I$(INCLUDEDIR)
+AFLAGS += $(addprefix -I,$(INCLUDEDIRS))
 
 .PHONY: all
-all: $(srcdir)/scroll.tap
+all: build/scroll.tap
 
-$(srcdir)/fondo.rcs:\
+build:
+	mkdir -p $@
+
+build/fondo.rcs:\
  $(srcdir)/fondo.png\
- $(srcdir)/fondo.atr
+ $(srcdir)/fondo.atr\
+ | build
 	Png2Rcs $< $@ -a $(srcdir)/fondo.atr
 
-$(FUENTEABIN): | tools
-ifeq ($(OS),Windows_NT)
-	$(MAKE) -w -C $| BUILD=mingw32
-else
-	$(MAKE) -w -C $|
-endif
+build/fuente6x8.bin: $(srcdir)/fuente6x8.png | build
+	fontconv -q -f 6x8 $< $@
 
-$(srcdir)/fuente6x8.bin: $(srcdir)/fuente6x8.png | $(FUENTEABIN)
-	$(FUENTEABIN) $< $@
-
-$(srcdir)/scroll.exp\
-$(srcdir)/scroll.bin: $(srcdir)/scroll.asm\
- $(srcdir)/string.asm\
- $(INCLUDEDIR)/playstc.inc\
- $(INCLUDEDIR)/filestc.def\
+build/scroll.exp build/scroll.bin: $(srcdir)/scroll.asm\
  $(INCLUDEDIR)/ay.def\
+ $(INCLUDEDIR)/filestc.def\
+ $(INCLUDEDIR)/memcpy.mac\
+ $(INCLUDEDIR)/playstc.inc\
+ $(INCLUDEDIR)/prn6x8f.mac\
+ $(INCLUDEDIR)/rcs.mac\
  $(srcdir)/music.stc\
- $(srcdir)/fuente6x8.bin\
- $(srcdir)/lineas.asm\
- $(srcdir)/fondo.rcs
-	$(AS) $(AFLAGS) --exp=scroll.exp --raw=scroll.bin $<
+ $(srcdir)/string.asm\
+ build/fondo.rcs\
+ build/fuente6x8.bin\
+ | build
+	$(AS) $(AFLAGS) --exp=build/scroll.exp --raw=build/scroll.bin $<
 
-$(srcdir)/scroll.bin.zx7b: $(srcdir)/scroll.bin
+build/scroll.bin.zx7b: build/scroll.bin
 	zx7b $< $@
 
-$(srcdir)/define.asm:\
- $(srcdir)/scroll.bin\
- $(srcdir)/scroll.exp
+build/define.asm:\
+ build/scroll.bin\
+ build/scroll.exp
 	echo 'filesize: EQU $(shell stat -c %s $<)' >$@
-	cat $(srcdir)/scroll.exp >>$@
+	cat build/scroll.exp >>$@
 
-$(srcdir)/scrolldesc.bin:\
+build/scrolldesc.bin:\
  $(srcdir)/scrolldesc.asm\
- $(srcdir)/define.asm\
+ build/define.asm\
  $(INCLUDEDIR)/dzx7b.mac\
- $(srcdir)/scroll.bin.zx7b
+ build/scroll.bin.zx7b
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-$(srcdir)/scroll.tap: $(srcdir)/scrolldesc.bin
+build/scroll.tap: build/scrolldesc.bin
 	GenTape $@ basic "SCROLL" 0 $<
 
 .PHONY: install
@@ -86,22 +87,21 @@ install:;
 uninstall:;
 
 .PHONY: test
-test: $(srcdir)/scroll.tap
+test: build/scroll.tap
 	fuse --machine 128 --graphics-filter tv2x --auto-load --fastload --traps $<
 
 .PHONY: clean
-clean: | tools
-	$(MAKE) -w -C $| $@
-	rm -f\
- $(srcdir)/fuente6x8.bin\
- $(srcdir)/fondo.rcs\
- $(srcdir)/scroll.bin\
- $(srcdir)/scroll.exp\
- $(srcdir)/scroll.bin.zx7b\
- $(srcdir)/define.asm\
- $(srcdir)/scrolldesc.bin\
- $(srcdir)/scroll.tap
+clean:
+	$(RM)\
+ build/fuente6x8.bin\
+ build/fondo.rcs\
+ build/scroll.bin\
+ build/scroll.exp\
+ build/scroll.bin.zx7b\
+ build/define.asm\
+ build/scrolldesc.bin\
+ build/scroll.tap
 
 .PHONY: distclean
-distclean: clean | tools
-	$(MAKE) -w -C $| $@
+distclean:
+	$(RM) -r build
