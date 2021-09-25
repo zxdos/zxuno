@@ -1,5 +1,6 @@
 # SPDX-FileType: SOURCE
 # SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+# SPDX-FileNotice: Based on code by Antonio Villena <espineter@yahoo.com>
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Supported environments:

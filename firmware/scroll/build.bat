@@ -1,5 +1,6 @@
 @REM SPDX-FileType: SOURCE
 @REM SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+@REM SPDX-FileNotice: Based on code by Antonio Villena <espineter@yahoo.com>
 @REM SPDX-License-Identifier: GPL-3.0-or-later
 
 SETLOCAL ENABLEEXTENSIONS

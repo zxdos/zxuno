@@ -1,5 +1,6 @@
+# SPDX-FileType: SOURCE
 # SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileNotice: Based on code by Antonio Villena <espineter@yahoo.com>
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Supported environments:
@@ -29,12 +30,12 @@ RM		= rm -f
 
 INCLUDEDIR	= ../sdk/include
 AS		= sjasmplus
-ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
-AFLAGS		= --nobanner
-else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
-AFLAGS		= --nologo
+ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
+ AFLAGS		= --nobanner
+else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
+ AFLAGS		= --nologo
 else
-AFLAGS		=
+ AFLAGS		=
 endif
 AFLAGS		+= -I$(INCLUDEDIR)
 
