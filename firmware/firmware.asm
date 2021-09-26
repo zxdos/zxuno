@@ -4,6 +4,7 @@
         define  recodire        0
         define  zesarux         0
         define  vertical        0
+        define  buryak          0
         output  firmware_strings.rom
       macro wreg  dir, dato
         rst     $28
@@ -76,7 +77,12 @@
         define  layout  grapmo+1
         define  joykey  layout+1
         define  joydb9  joykey+1
+      IF version=1
+        define  split   joydb9+1
+        define  outvid  split+1
+      ELSE
         define  outvid  joydb9+1
+      ENDIF
         define  scanli  outvid+1
         define  freque  scanli+1
         define  cpuspd  freque+1
@@ -300,6 +306,7 @@ start2  ld      a, (hl)
         out     ($fe), a
         ld      a, (quietb)
         or      a
+        ld      d, $7a
         jr      nz, start3
         ld      h, l
         ld      d, $20
@@ -308,7 +315,6 @@ start2  ld      a, (hl)
 start3  xor     a
         out     ($fe), a
         ld      hl, finlog-1
-        ld      d, $7a
         call    dzx7b           ; descomprimir
         call    drcs
         ld      bc, zxuno_port
@@ -469,7 +475,15 @@ star16  djnz    star18
 star17  ld      hl, (joykey)
         inc     h
         inc     l
+      IF  version=1
+        ld      a, (split)
+        rlca
+        rlca
+        rlca
+        or      h
+      ELSE
         ld      a, h
+      ENDIF
         rlca
         rlca
         rlca
@@ -2359,7 +2373,11 @@ terror  jp      ferror
 saba    sub     'N'
         jr      z, sab2
     IF  version=3
+      IF buryak=1
+        sub     'B'-'N'
+      ELSE
         sub     'D'-'N'
+      ENDIF
     ELSE
       IF version<3
         sub     $30+version-'N'
@@ -2457,7 +2475,11 @@ sabe    pop     bc
         sub     'N'
         jr      z, sab3
     IF  version=3
+      IF buryak=1
+        sub     'B'-'N'
+      ELSE
         sub     'D'-'N'
+      ENDIF
     ELSE
       IF version<3
         sub     $30+version-'N'
@@ -2817,6 +2839,12 @@ advan1  call    showop          ; Joy Keypad & DB9
         ld      a, iyl
         rrca
         jr      nc, advan1
+      IF version=1
+        call    showop          ; Splitter
+        defw    cad28
+        defw    cad29
+        defw    $ffff
+      ENDIF
         ld      c, $0b
         call    showop          ; Output
         defw    cad96
@@ -2856,6 +2884,9 @@ advan1  call    showop          ; Joy Keypad & DB9
         defb    $04
         defb    $05
         defb    $06
+      IF version=1
+        defb    $07
+      ENDIF
         defb    $0b
         defb    $0c
         defb    $0d
@@ -2866,6 +2897,9 @@ advan1  call    showop          ; Joy Keypad & DB9
         defw    cad84
         defw    cad85
         defw    cad86
+      IF version=1
+        defw    cad865
+      ENDIF
         defw    cad87
         defw    cad99
         defw    cad100
@@ -2887,16 +2921,7 @@ advan1  call    showop          ; Joy Keypad & DB9
         ret
 advan2  ld      b, a
         djnz    advan3
-        call    popupw          ; Joy Keypad
-        defw    cad91
-        defw    cad92
-        defw    cad93
-        defw    cad94
-        defw    cad95
-        defw    $ffff
-        ret
-advan3  djnz    advan4
-        call    popupw          ; Joy DB9
+adva25  call    popupw          ; Joy Keypad & DB9
         defw    cad91
         defw    cad92
         defw    cad93
@@ -2905,7 +2930,18 @@ advan3  djnz    advan4
         defw    cad955
         defw    $ffff
         ret
-advan4  djnz    advan5
+advan3  djnz    advan4
+        jr      adva25
+advan4  
+      IF version=1
+        djnz    adva45
+        call    popupw          ; Splitter
+        defw    cad28
+        defw    cad29
+        defw    $ffff
+        ret
+      ENDIF
+adva45  djnz    advan5
         call    popupw          ; Output
         defw    cad96
         defw    cad97
@@ -4469,7 +4505,11 @@ finav
           IF version=2
             incbin  logo256x192d.rcs.zx7b
           ELSE
+           IF buryak=1
+            incbin  logo256x192bn.rcs.zx7b
+           ELSE
             incbin  logo256x192dp.rcs.zx7b
+           ENDIF
           ENDIF
         ENDIF
 finlog  incbin  strings.bin.zx7b
