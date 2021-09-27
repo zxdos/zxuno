@@ -4,7 +4,7 @@ cad1    defb    'http://zxuno.speccy.org', 0
       ELSE
 cad1    defb    'http://zxdos.forofpga.es', 0
       ENDIF
-        defb    'ZX-Uno BIOS v0.84', 0
+        defb    'ZX-Uno BIOS v0.85', 0
         defb    'Copyleft ', 127, ' 2021 ZX-Uno Team', 0
         defb    'Processor: Z80 3.5MHz', 0
         defb    'Memory:    '
@@ -41,7 +41,7 @@ cad8    defb    $10, '                         ', $10, '              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $18, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    '   BIOS v0.84    ', $7f, '2021 ZX-Uno Team', 0
+        defb    '   BIOS v0.85    ', $7f, '2021 ZX-Uno Team', 0
       ELSE
         defb    'Press <Edit> to Setup',0
         defb    '      <Break> Boot Menu', 0
@@ -72,7 +72,7 @@ cad8    defb    $10, '                              ', $10, 0
 cad9    defb    $14, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11
         defb    $11, $11, $11, $11
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $11, $15, 0
-        defb    ' BIOS v0.84 ', $7f, '2021 ZX1 Team', 0
+        defb    ' BIOS v0.85 ', $7f, '2021 ZX1 Team', 0
         defs    $66
       ENDIF
 cad10   defb    'Hardware tests', 0
@@ -319,10 +319,17 @@ cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
 files   defb    'ESXMMC  BIN'
     IF version=3
+      IF buryak=1
+        defb    'FIRMWAREZXB'
+        defb    'FLASH   ZXB'
+        defb    'SPECTRUMZXB'
+fileco  defb    'CORE    ZXB'
+      ELSE
         defb    'FIRMWAREZXD'
         defb    'FLASH   ZXD'
         defb    'SPECTRUMZXD'
 fileco  defb    'CORE    ZXD'
+      ENDIF
     ELSE
       IF version<3
         defb    'FIRMWAREZX', $30+version
@@ -342,7 +349,11 @@ cad83   defb    'Input', 0
         defb    'Keyb Layout', 0
         defb    'Joy Keypad', 0
         defb    'Joy DB9', 0
+    IF version=1
+        defb    'Splitter', 0
+    ELSE
         defb    ' ', 0
+    ENDIF
         defb    ' ', 0
         defb    'Output', 0
         defb    $11, $11, $11, $11, $11, $11, $11, $11, $11, 0
@@ -360,6 +371,9 @@ cad85   defb    'Simulated', 0
         defb    'configuration', 0, 0
 cad86   defb    'Real joystick', 0
         defb    'configuration', 0, 0
+    IF version=1
+cad865  defb    '2nd joystick', 0, 0
+    ENDIF
 cad87   defb    'Select '
 cad875  defb    'Default', 0
         defb    'video output', 0, 0
