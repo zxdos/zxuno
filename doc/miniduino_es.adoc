@@ -192,7 +192,7 @@ Una vez preparado el entorno, descargar la versión deseada del proyecto desde e
 El reproductor Miniduino con microcontrolador STM32 sólo está soportado a partir de la versión 1.65
 ====
 
-Cargar el fichero del proyecto en Arduino IDE (por ejemplo `MaxDuino_v1.66.ino`).
+Cargar el fichero del proyecto en Arduino IDE (por ejemplo `MaxDuino_v1.69.ino`).
 
 Verificar en el fichero `userSTM32Config.h` que están comentadas todas las entradas de logo excepto la de Miniduino, y si no, cambiarlas.
 
@@ -248,7 +248,7 @@ Una vez instalado Arduino IDE, se ha de añadir la biblioteca de software SDFat 
 
 Una vez preparado el entorno, descargar la versión deseada del proyecto desde el https://github.com/rcmolina/MaxDuino_BETA[repositorio oficial en GitHub]
 
-Cargar el fichero del proyecto en Arduino IDE (por ejemplo `MaxDuino_v1.68.ino`).
+Cargar el fichero del proyecto en Arduino IDE (por ejemplo `MaxDuino_v1.69.ino`).
 
 Verificar en el fichero `userconfig.h` que estén comentadas todas las entradas de logo excepto la de Miniduino, y si no, cambiarlas.
 

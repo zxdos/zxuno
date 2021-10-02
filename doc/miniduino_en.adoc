@@ -186,7 +186,7 @@ Once you have the environment ready, download the software from the https://gith
 Miniduino player with STM32 microcontroller is only supported from 1.65 and up
 ====
 
-Load the project file with Arduino IDE (for example `MaxDuino_v1.66.ino`).
+Load the project file with Arduino IDE (for example `MaxDuino_v1.69.ino`).
 
 Check in the file `userSTM32Config.h` that all logo entries are commented except for Miniduino and, if not, change them.
 
@@ -245,7 +245,7 @@ You have to install SDFat (1.1.4) software library selecting the menu option Pro
 Once you have the environment ready, download the software from the https://github.com/rcmolina/MaxDuino_BETA[official repository in GitHub]
 
 
-Load the project file with Arduino IDE (for example `MaxDuino_v1.68.ino`).
+Load the project file with Arduino IDE (for example `MaxDuino_v1.69.ino`).
 
 Check in the file `userconfig.h` that all logo entries are commented except for Miniduino and, if not, change them.
 

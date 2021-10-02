@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.6.0
+:revnumber: 1.6.1
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portada.jpg[]
@@ -582,7 +582,7 @@ image:./img/keyboardAV.png[pdfwidth=70%]
 
 ==== Teclas especiales y botones
 
-Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT` (Por ejemplo, `Caps Shift+Symbol Shift+2` en vez de `Caps Shift+1`).
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<#_teclado_de_membrana_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT` (Por ejemplo, `Caps Shift+Symbol Shift+2` en vez de `Caps Shift+1`).
 
 Teclas especiales durante el arranque:
 
@@ -596,7 +596,7 @@ Teclas especiales durante el arranque:
 Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
 
 - `Esc` (`Caps Shift+Espacio` en gomaDOS+): BREAK
-- `F1`: (`Caps Shift+Symbol Shift+1` en gomaDOS+): En las versiones más recientes del core, activar los distintos modos de color monocromo
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): En las versiones más recientes del core, activar los distintos modos de color monocromo
 - `F2` (`Caps Shift+1` en gomaDOS+): Edit
 - `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): NMI
 - `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Reproducir o Pausa en la reproducción de archivos .PZX
@@ -648,7 +648,7 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. 
     zxuc
     zxunocfg
 
-<<#_comandos_para_zxdos+,Más adelante>> se explica lo que hace cada uno de ellos.
+<<#_comandos_para_zxdos,Más adelante>> se explica lo que hace cada uno de ellos.
 
 <<<
 
@@ -1341,6 +1341,13 @@ Por ejemplo:
 .iwconfig miwifi miclavedeacceso
 ----
 
+[CAUTION]
+====
+Debido a que la la frecuencia seleccionada para VGA afecta a la frecuencia del reloj maestro, para que el módulo Wi-Fi se comunique correctamente con el core, esta debe estar configurada a 50 (véase el <<#_advanced,apartado dedicado a la configuración de la BIOS>>).
+====
+
+<<<
+
 ==== Network tools for ZX-Uno pack
 
 Se trata de un conjunto de programas, desarrollados por Nihirash y que se pueden https://nihirash.net/network-tools-for-zx-uno-pack/[descargar] https://nihirash.net/ugophy-1-0-and-nettools-for-zx-spectrum/#more-71[de su web].
@@ -1761,7 +1768,7 @@ Si no estuviera ya, <<#_cores,instalar el core de ZX Spectrum Next>> en el ZXDOS
 
 ===== Teclas especiales y botones
 
-Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `ZX`. Véase el <<#_teclado_de_membrana_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
 Notar que `Ctrl+Alt+backspace` no funciona con el core de Spectrum Next. Hay que apagar manualmente y volver a encender si se desea cambiar a otro core. Tampoco hay botón físico de Reset o Drive.
 
@@ -1774,7 +1781,7 @@ Durante la ejecución del core:
 - `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Scanlines
 - `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+): NMI
 - `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+): divMMC NMI. Simula la pulsación del botón Drive. Si se usa con mayúsculas, fuerza volver a buscar unidades de almacenamiento y cargar la pantalla de arranque en esxdos
-- `F11`: (`Caps Shift+Symbol Shift+Q` en gomaDOS+): En las versiones más recientes del core, activar distintos modos de color monocromo
+- `F11` (`Caps Shift+Symbol Shift+Q` en gomaDOS+): En las versiones más recientes del core, activar distintos modos de color monocromo
 - `F12` (`Caps Shift+Symbol Shift+W en gomaDOS+): Alternar entre la salida audio estándar y la salida I^2^S, si está conectado el <<#_addon_rtci2spizero,addon RTC+I^2^S+PI0>>. Notar que activar la salida I^2^S inhabilita parcialmente el sonido de la Raspberry Pi.
 
 <<<
@@ -1881,7 +1888,7 @@ Si no estuviera ya, <<#_cores,instalar el core de MSX>> en el ZXDOS+.
 
 ===== Teclas especiales y botones
 
-Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `MSX`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `MSX`. Véase el <<#_teclado_de_membrana_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
 Durante la ejecución del core:
 
@@ -1988,7 +1995,7 @@ Copiar tanto los ficheros `ROM` como los `DSK` a la raíz de la partición FAT32
 
 ===== Teclas especiales y botones
 
-Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Amstrad CPC`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Amstrad CPC`. Véase el <<#_teclado_de_membrana_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
 Durante la ejecución del core:
 
@@ -2058,7 +2065,7 @@ Ahora, se puede organizar la información en la tarjeta microSD de dos maneras d
 
 ===== Teclas especiales y botones
 
-Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Acorn Electron`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Acorn Electron`. Véase el <<#_teclado_de_membrana_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de teclado `PC XT`.
 
 Durante la ejecución del core:
 
@@ -2106,7 +2113,7 @@ Si no estuviera ya, <<#_cores,instalar el core de Commodore 64>> en el ZXDOS+.
 
 ===== Teclas especiales y botones
 
-Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Commodore 64`. Véase el <<#_modos_de_teclado_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de tecldo `PC XT`.
+Las combinaciones específicas de gomaDOS+ que se indican a continuación se corresponden con el modo de teclado `Commodore 64`. Véase el <<#_teclado_de_membrana_en_gomados,apartado dedicado a los modos de teclado>> de gomaDOS+ para más información. También se pueden utilizar las equivalentes en el modo de tecldo `PC XT`.
 
 Durante la ejecución del core:
 
@@ -2553,11 +2560,31 @@ Estos archivos se pueden crear siguiendo las instrucciones y utilizando el edito
 
 El computador personal https://es.wikipedia.org/wiki/ZX81[Sinclair ZX81], lanzado por Sinclair Research en 1981, fue el de menor precio de la época.
 
-La versión para ZXDOS+ ha sido creada por avlixa.
+La versión para ZXDOS+ ha sido creada por avlixa, basada en la página de Grant Searle's sobre el ZX80
+
+Características:
+
+- Se puede elegir entre ZX80 y ZX81 (ZX80 sólo con salida RGB por el momento)
+- 16k/32k/48k RAM packs
+- 8KB con addon CHR$128/UDG (sin probar)
+- QS CHRS (sin probar)
+- CHROMA81
+- Turbo en modo lento: NoWait, x2, x8
+- Chip de sonido YM2149 (compatible con ZON X-81)
+- Múltiples joysticks (Cursor, Sinclar, ZX81, ZXpand)
+- Timings PAL y NTSC
+- Turbo carga de ficheros .o y .p (.o no funcionan por el momento, .p funcionan parcialmente)
+- Carga de ROM alternativa.
 
 ==== Formato de Tarjeta microSD
 
-Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con archivos de cinta que se deseen cargar.
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con archivos de cinta o ROM que se deseen cargar.
+
+SE ha de copiar el fichero `ZX8X.ROM` (disponible the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[repositorio oficial] en el directorio `/zx81/roms`: se trata de los ficheros ZX81 rom (8k) + ZX80 rom (4k) concatenados.
+
+Si no estuviera ya, <<#_cores,instalar el core de ZX81>> en el ZXDOS+.
+
+<<<
 
 ==== Teclado
 
@@ -2566,21 +2593,15 @@ El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la dis
 [.text-center]
 image:img/keyboardZX81.jpg[pdfwidth=90%]
 
-<<<
-
 ===== Teclas especiales y botones
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
 - `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
-- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Asignar teclas simuladas al joystick 1 (por defecto: `5`, `6`, `7`, `8` y `0`)
-- `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Asignar teclas simuladas al joystick 2 (por defecto: `Q`, `A`, `O`, `P` y `Espacio`)
-- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+): Inicia la reproducción de un archivo de cinta cargado
-- `F6` (`Caps Shift+Symbol Shift+6` en gomaDOS+): Detiene la reproducción de cinta
-- `F7` (`Caps Shift+Symbol Shift+7` en gomaDOS+): Desconecta la cinta (se olvida del último fichero cargado)
-- `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+): Reset
+- `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Habilitar o deshabilitar los caracteres alternativos
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+): Hard reset.
 
 <<<
 
@@ -2594,15 +2615,48 @@ image:img/zx81.jpg[pdfwidth=70%]
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
 - Reiniciar el core (Reset)
-- Duplicar el tamaño de la ventana de menú (Double OSD Window)
 - Cargar un archivo de cinta (Load Tape)
+- Cargar una ROM alternativa (Load ROM)
+- Configurar opciones (Configuration Options)
 - Salir del menú (Exit)
 
-Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado desde el menú, con el comando `LOAD""` y pulsando a continuación `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+). Notar que, durante la carga, se desactiva la señal de vídeo y, al contrario que en la máquina original, se puede escuchar el audio de la cinta.
+<<<
+
+[.text-center]
+image:img/zx81_2.jpg[pdfwidth=70%]
+
+- Elegir el modelo de computador (Computer Model): ZX80/ZX81
+- Tamaño de RAM (Main RAM): 16K/32K
+- RAM baja (Low RAM): Off/8KB
+- Joystick: Cursor/Sinclair/ZX81
+- Habilitar o deshabilitar QS CHRS
+- Configuración de CHR$128/UDG: 128 chars/64 chars/Disabled
+- Habilitar o deshabilitar Chroma81: Disabled/Enabled
+- Vídeo inverso (Inverse Video): Off/On
+- Borde negro (Black Border): Off/On
+- Modo de velocidad (Slow mode speed): Original/No Wait/x2
+- Frecuencia de vídeo (Video frequency): 50Hz/60Hz
+
+Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado desde el menú, con el comando `LOAD""` y pulsando `Enter`.
 
 [TIP]
 ====
 Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+====
+
+Se pueden cargar archivos `.p` con color y caracteres alternativos.
+
+Para que funcione el coloreado, se debe activar CHROMA81 antes de la carga. Igualmente, para los caracteres alternativos, QS CHRS debería estar activo antes de cargar.
+
+[TIP]
+====
+Las opciones recomendadas para la mayoría de los juegos son:
+
+Main RAM: 16KB
+Low RAM: 8KB
+CHR$128: 128 chars
+QS CHRS: enabled
+CHROMA81: enabled
 ====
 
 <<<
@@ -2621,6 +2675,8 @@ Características del sistema implementado:
 - Soporte para OPL3 (corregido para detección correcta de adlib)
 - Soporte para teclado y raton PS/2
 - Detección de BIOS en la tarjeta microSD en los primeros 64 sectores o en los últimos 16
+
+<<<
 
 ==== Formato de Tarjeta microSD
 

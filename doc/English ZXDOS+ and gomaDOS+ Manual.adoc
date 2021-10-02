@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.6.0
+:revnumber: 1.6.1
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portada.jpg[]
@@ -581,7 +581,7 @@ image:./img/keyboardAV.png[pdfwidth=70%]
 
 ==== Special keys and buttons
 
-The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations (like `Caps Shift+Symbol Shift+2` instead of `Caps Shift+1`).
+The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<#_gomados_keyboard,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations (like `Caps Shift+Symbol Shift+2` instead of `Caps Shift+1`).
 
 Special keys which can be used during startup:
 
@@ -700,7 +700,7 @@ The second screen shows the installed ZX Spectrum ROMs. You can reorder (Move Up
 [.text-center]
 image:img/bios3.png[pdfwidth=70%]
 
-_Upgrade_ screen is used to perform the different updates of the Flash memory content: esxdos, BIOS, Cores, etc. (see <<#_updates,the section corresponding to updates>> for more information).
+_Upgrade_ screen is used to perform the different updates of the Flash memory content: esxdos, BIOS, Cores, etc. (see <<#_upgrade,the section corresponding to upgrades>> for more information).
 
 <<<
 
@@ -1333,6 +1333,11 @@ For example:
 .iwconfig mywifi mypassword
 ----
 
+[CAUTION]
+====
+Since the selected VGA frequency affects the master clock frequency, for the communication between the core and the Wi-Fi module to work correctly, it has to be set at 50 (see the <<#_advanced,BIOS settings chapter>>).
+====
+
 ==== Network tools for ZX-Uno pack
 
 These are programs, developed by Nihirash and that are available to https://nihirash.net/network-tools-for-zx-uno-pack/[download] https://nihirash.net/ugophy-1-0-and-nettools-for-zx-spectrum/#more-71[from his web].
@@ -1618,6 +1623,8 @@ The ZX Spectrum core update is exactly the same as other cores, but instead of t
 Due to some limitations in the FPGA, the cores that are stored in the SPI Flash second half have to be installed without using the space https://github.com/zxdos/zxuno/blob/master/firmware/formato_lx25.txt[at address `0x10B0000`]. https://github.com/zxdos/zxuno/blob/master/firmware/CORE21_special.ZXD[A special core] has to be there, this makes sure that, when another core installed in the upper half of the flash is reset, the main Spectrum core and the BIOS load correctly.
 ====
 
+<<<
+
 === esxdos
 
 To update esxdos to a new version, the distribution must be obtained from https://www.esxdos.org[the official website].
@@ -1758,7 +1765,7 @@ If it wasn't already, <<#_cores,install ZX Spectrum Next core>> into ZXDOS+.
 
 ===== Special keys and buttons
 
-The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
+The following gomaDOS+ key combinations are in `ZX` keyboard mode. Please check <<#_gomados_keyboard,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
 
 Take into account that `Ctrl+Alt+backspace` does not work with the ZX Spectrum Next core. You have to power cycle if you want to use another core. Also, there is no Reset or Drive button.
 
@@ -1878,7 +1885,7 @@ If it wasn't already, <<#_cores,install MSX core>> into ZXDOS+.
 
 ===== Special keys and buttons
 
-The following gomaDOS+ key combinations are in `MSX` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
+The following gomaDOS+ key combinations are in `MSX` keyboard mode. Please check <<#_gomados_keyboard,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations .
 
 While running the core:
 
@@ -1985,7 +1992,7 @@ Copy all `ROM` and `DSK` files to the root directory of the FAT32 partition.
 
 ===== Special keys and buttons
 
-The following gomaDOS+ key combinations are in `Amstrad CPC` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
+The following gomaDOS+ key combinations are in `Amstrad CPC` keyboard mode. Please check <<#_gomados_keyboard,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
 
 During core execution:
 
@@ -2055,7 +2062,7 @@ You can set up the files in the microSD in two different ways:
 
 ===== Special keys and buttons
 
-The following gomaDOS+ key combinations are in `Acorn Electron` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
+The following gomaDOS+ key combinations are in `Acorn Electron` keyboard mode. Please check <<#_gomados_keyboard,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
 
 While the core is running:
 
@@ -2103,7 +2110,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 ===== Special keys and buttons
 
-The following gomaDOS+ key combinations are in `Commodore 64` keyboard mode. Please check <<#_gomados_keyboard_modes,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
+The following gomaDOS+ key combinations are in `Commodore 64` keyboard mode. Please check <<#_gomados_keyboard,the corresponding section>> for more information. You can also use `PC XT` keyboard mode combinations.
 
 While the core is running:
 
@@ -2193,7 +2200,7 @@ Some features of this core are:
 - Two different video modes: RGB/PAL60Hz and VGA 60Hz
 - 7 game variants
 - Support for 2 or 4 players
-- Support for Joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_enoders,here>> for more information)
+- Support for Joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_encoders,here>> for more information)
 - Several colour modes
 
 ==== microSD format
@@ -2321,7 +2328,7 @@ While running the core:
 - `F6` (`Caps Shift+Symbol Shift+6` on gomaDOS+): Switch between 48kB mode and 96kB mode (default)
 - `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Enable or disable Scorpio ROM
 - `F8` (`Caps Shift+Symbol Shift+8` on gomaDOS+): Switch the option to consider port $80 bits 2 and 3, so that Level 9 games are displayed properly.
-- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switch between RGB and VGA video output
+- `SCroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switch between RGB and VGA video output
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Reset
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 
@@ -2353,7 +2360,7 @@ Binary files are loaded with `MLOAD` instead of `LOAD`.
 Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, native support for Lynx tape files.
 ====
 
-You can use programs like  <<#_audio_file_conversion,Lynx2Wav>> with Lynx `TAP` files. The resulting audio files can be embedded inside of TSX or TZX with tools like <<#_creación_de_ficheros_tzx_o_tsx_desde_otros_formatos,MakeTSX or RetroConverter>>.
+You can use programs like  <<#_audio_file_conversion,Lynx2Wav>> with Lynx `TAP` files. The resulting audio files can be embedded inside of TSX or TZX with tools like <<#_making_tzx_or_tsx_files_from_other_formats,MakeTSX or RetroConverter>>.
 
 The http://retrowiki.es/viewtopic.php?f=31&t=200036835[lince] script makes all this process easier, creating directly Maxduino `TZX` compatible files from Lynx `TAP` files.
 
@@ -2415,7 +2422,7 @@ ZXDOS+ core version is developed by avlixa.
 Some of the features of the core are:
 
 - RGB and VGA support
-- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_enoders,here>> for more information)
+- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_encoders,here>> for more information)
 
 ==== microSD card format
 
@@ -2552,13 +2559,31 @@ Those files can be made following the instructions and using the editor availabl
 
 The https://en.wikipedia.org/wiki/ZX81[ZX81] was a home computer produced by Sinclair Research,designed to be a low-cost introduction to home computing for the general public.
 
-The ZXDOS+ version has been made by avlixa.
+The ZXDOS+ version has been made by avlixa, based on Grant Searle's ZX80 page.
+
+Features:
+
+- Selectable ZX80/ZX81 (ZX80 currently working only in RGB mode)
+- 16k/32k/48k RAM packs
+- 8KB with CHR$128/UDG addon (not tested)
+- QS CHRS (not tested)
+- CHROMA81
+- Turbo in Slow mode: NoWait, x2, x8
+- YM2149 sound chip (ZON X-81 compatible)
+- Joystick types: Cursor, Sinclar, ZX81, ZXpand
+- PAL/NTSC timings
+- Turbo loading of .o and .p files (.o files not working, .p files: partially working)
+- Load alternative ROM.
 
 ==== microSD card format
 
-You can use a microSD card with the first partition in FAT16 or FAT32 format to store tape files.
+You can use a microSD card with the first partition in FAT16 or FAT32 format to store ROM and tape files.
+
+You have to copy the file `ZX8X.ROM` (available at the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[official repository] into folder `/zx81/roms`: it is a concatenation of ZX81 rom (8k) + ZX80 rom (4k).
 
 See the <<#_cores,corresponding section>> for instructions of how to install the ZX81 core in ZXDOS+.
+
+<<<
 
 ==== Keyboard
 
@@ -2567,21 +2592,15 @@ The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For
 [.text-center]
 image:img/keyboardZX81.jpg[pdfwidth=90%]
 
-<<<
-
 ===== Special keys and buttons
 
 During the core execution:
 
-- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): change between RGB and VGA video mode
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset
 - `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
-- `F1` (`Caps Shift+Symbol Shift+1` on gomaDOS+): Assign emulated keys to joystick 1 (Default: `5`, `6`, `7`, `8` and `0`)
-- `F2` (`Caps Shift+Symbol Shift+2` on gomaDOS+): Assign emulated keys to joystick 2 (Default: `Q`, `A`, `O`, `P` and `Space`)
-- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+): Starts playing a tape file previously loaded
-- `F6` (`Caps Shift+Symbol Shift+6` on gomaDOS+): Stops playing the tape
-- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Ejects the tape (resets the info about the latest loaded file)
-- `F12` (`Caps Shift+Symbol Shift+W` on gomaDOS+): Reset
+- `F1` (`Caps Shift+Symbol Shift+1` on gomaDOS+): Enable or disable the alternative chars
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switch between RGB and VGA video output
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset
 
 <<<
 
@@ -2595,15 +2614,48 @@ image:img/zx81.jpg[pdfwidth=70%]
 The following options are available:
 
 - Reset
-- Double OSD Window
 - Load Tape
+- Load ROM
+- Configuration Options
 - Exit
 
-You can load a tape file (previously selected from the menu) with the command `LOAD""` and then press `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) to start the tape. Take note, that, while loading, the video output is disables and, unlike the original machine, you can hear the loading sound.
+<<<
+
+[.text-center]
+image:img/zx81_2.jpg[pdfwidth=70%]
+
+- Computer Model: ZX80/ZX81
+- Main RAM: 16K/32K
+- Low RAM: Off/8KB
+- Joystick: Cursor/Sinclair/ZX81
+- QS CHRS: Disabled/Enabled
+- CHR$128/UDG: 128 chars/64 chars/Disabled
+- Chroma81: Disabled/Enabled
+- Inverse Video: Off/On
+- Black Border: Off/On
+- Slow mode speed: Original/No Wait/x2
+- Video frequency: 50Hz/60Hz
+
+You can load a tape file selecting it from the menu, then enter the command `LOAD""` and `Enter`
 
 [TIP]
 ====
 Some monitors stop playing audio if the video signal is lost. It's recommended to plug headphones or a external speaker if you want to hear the sound while loading a tape. On a gomaDOS+, the internal speaker will play the sound if nothing is connected to the audio out port.
+====
+
+`.p` files with colorization and char are supported.
+
+For colorization to work, CHROMA81 should be enabled before loading. For alternate chars, QS CHRS should be enabled before loading.
+
+[TIP]
+====
+The recommended options for most games are:
+
+Main RAM: 16KB
+Low RAM: 8KB
+CHR$128: 128 chars
+QS CHRS: enabled
+CHROMA81: enabled
 ====
 
 <<<
