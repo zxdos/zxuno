@@ -1,6 +1,6 @@
 = ZXDOS+ and gomaDOS+ Manual
 :author: kounch
-:revnumber: 1.6.1
+:revnumber: 1.6.2
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portada.jpg[]
@@ -2572,14 +2572,15 @@ Features:
 - YM2149 sound chip (ZON X-81 compatible)
 - Joystick types: Cursor, Sinclar, ZX81, ZXpand
 - PAL/NTSC timings
-- Turbo loading of .o and .p files (.o files not working, .p files: partially working)
-- Load alternative ROM.
+- Turbo loading of .o and .p files
+- Load alternative ROM
+- Program loading using the audio input
 
 ==== microSD card format
 
 You can use a microSD card with the first partition in FAT16 or FAT32 format to store ROM and tape files.
 
-You have to copy the file `ZX8X.ROM` (available at the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[official repository] into folder `/zx81/roms`: it is a concatenation of ZX81 rom (8k) + ZX80 rom (4k).
+You can copy a file named `ZX8X.ROM` (available at the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[official repository] into folder `/zx81/roms`: it is a concatenation of ZX81 rom (8k) + ZX80 rom (4k).
 
 See the <<#_cores,corresponding section>> for instructions of how to install the ZX81 core in ZXDOS+.
 
@@ -2589,15 +2590,24 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For example, to obtain a `"` you have to type `Shift+P` or `Shift+0` to delete.
 
+**ZX80**
+
 [.text-center]
-image:img/keyboardZX81.jpg[pdfwidth=90%]
+image:img/keyboardZX80.jpg[pdfwidth=80%]
+
+**ZX81**
+
+[.text-center]
+image:img/keyboardZX81.jpg[pdfwidth=80%]
 
 ===== Special keys and buttons
 
 During the core execution:
 
-- `Esc` or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
 - `F1` (`Caps Shift+Symbol Shift+1` on gomaDOS+): Enable or disable the alternative chars
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+): Disables or enables the MIC audio output, since some games make annoying sounds when enabled
+- `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+): Enables or disables playing the audio input through the audio output, to hear loading sounds while loading
 - `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switch between RGB and VGA video output
 - `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Reset
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on gomaDOS+): Hard reset
@@ -2606,7 +2616,7 @@ During the core execution:
 
 ==== Basic Guide
 
-Pressing `Esc` or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
+Pressing `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/zx81.jpg[pdfwidth=70%]
