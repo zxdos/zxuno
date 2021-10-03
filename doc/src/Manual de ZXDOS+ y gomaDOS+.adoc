@@ -2606,7 +2606,7 @@ image:img/keyboardZX81.jpg[pdfwidth=80%]
 Durante la ejecución del core:
 
 - `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Habilitar o deshabilitar los caracteres alternativos
-- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+) o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+) para mostrar u ocultar el menú.
+- `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+) o el botón 2 del joystick para mostrar u ocultar el menú.
 - `F9` (`Caps Shift+Symbol Shift+9` en gomaDOS+): Deshabilita o habilita la salida MIC al conector de audio, porque algunos juegos generan un ruido molesto
 - `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+): Habilita o deshabilita sonido de entrada por la salida de audio, para escuchar la cinta si se carga por audio
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA
@@ -2617,7 +2617,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Pulsando `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+) o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
+Pulsando `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+) o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center]
 image:img/zx81.jpg[pdfwidth=70%]
@@ -3549,7 +3549,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 [start=11]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -3584,7 +3584,7 @@ Habitualmente, la imagen de recuperación está configurada para usar un teclado
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 [NOTE]
@@ -3677,7 +3677,7 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -3712,7 +3712,7 @@ Habitualmente, la imagen de recuperación está configurada para usar un teclado
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 [NOTE]
@@ -3782,7 +3782,7 @@ pld load recovery.zxd.bit
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -3817,7 +3817,7 @@ Habitualmente, la imagen de recuperación está configurada para usar un teclado
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+): para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
 [NOTE]

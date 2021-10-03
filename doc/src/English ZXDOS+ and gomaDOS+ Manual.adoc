@@ -2605,7 +2605,7 @@ image:img/keyboardZX81.jpg[pdfwidth=80%]
 During the core execution:
 
 - `F1` (`Caps Shift+Symbol Shift+1` on gomaDOS+): Enable or disable the alternative chars
-- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) or joystick button 2 (or `Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode): Show or hide configuration menu
+- `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) or joystick button 2: Show or hide configuration menu
 - `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+): Disables or enables the MIC audio output, since some games make annoying sounds when enabled
 - `F10` (`Caps Shift+Symbol Shift+0` on gomaDOS+): Enables or disables playing the audio input through the audio output, to hear loading sounds while loading
 - `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): Switch between RGB and VGA video output
@@ -2616,7 +2616,7 @@ During the core execution:
 
 ==== Basic Guide
 
-Pressing `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) or joystick button 2 (`Caps Shift+Space` on gomaDOS+, `PC XT` keyboard mode) shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
+Pressing `F5` (`Caps Shift+Symbol Shift+5` on gomaDOS+) or joystick button 2 shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on gomaDOS+, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/zx81.jpg[pdfwidth=70%]
@@ -3591,7 +3591,7 @@ For a gomaDOS+, since the recovery image uses a PS/2 configuration as default, f
 *Hardware required*:
 
 - USB-Blaster cable. Using the right pins for ZXDOS+, <<#_jtag_cable_connections,as explained earlier>>
-- Flash Image file and andrecovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
+- Flash Image file and and recovery file for ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
 
 *Software required*:
 
@@ -3657,7 +3657,7 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 [start=9]
 . If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
 
-If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -3690,7 +3690,7 @@ Ususally, the recovery image is set to use a PS/2 keyboard so, for a gomaDOS+, s
 
 [NOTE]
 ====
-If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
 ====
 
 [NOTE]
@@ -3722,7 +3722,7 @@ When using Linux with `urjtag`, the process should be quite similar, although th
 *Hardware required*:
 
 - USB-Blaster cable. Using the right pins for ZXDOS+, <<#_jtag_cable_connections,as explained earlier>>
-- Flash Image file and andrecovery file fo ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
+- Flash Image file and and recovery file for ZXDOS+ (LX25). The same ones as for Raspberry Pi, from the https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[official repository]
 
 *Software required*:
 
@@ -3760,7 +3760,7 @@ pld load recovery.zxd.bit
 [start=9]
 . If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
 
-If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -3793,7 +3793,7 @@ Ususally, the recovery image is set to use a PS/2 keyboard so, for a gomaDOS+, s
 
 [NOTE]
 ====
-If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+): to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on gomaDOS+) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
 ====
 
 [NOTE]

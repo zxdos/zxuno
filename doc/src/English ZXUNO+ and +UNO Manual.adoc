@@ -1,13 +1,13 @@
-= ZXUNO+ Manual
+= ZXUNO+ and +UNO Manual
 :author: kounch
-:revnumber: 1.2.0
+:revnumber: 1.3.0
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.2
-:description: English ZXUNO+ Manual
-:keywords: Manual, English, ZXUNO+
+:Revision: 1.3
+:description: English ZXUNO+ and +UNO Manual
+:keywords: Manual, English, ZXUNO+, +UNO
 :icons: font
 :source-highlighter: rouge
 :toc: left
@@ -18,7 +18,7 @@
 
 == Introduction
 
-ZXUNO+ is the latest iteration of https://zxuno.speccy.org[ZX-Uno] a hardware and software project based on an FPGA board programmed to work like a ZX Spectrum computer, and created by the ZX-Uno team: Superfo, AVillena, McLeod, Quest and Hark0.
+ZXUNO+ and +UNO are another iteration of https://zxuno.speccy.org[ZX-Uno] a hardware and software project based on an FPGA board programmed to work like a ZX Spectrum computer, and created by the ZX-Uno team: Superfo, AVillena, McLeod, Quest and Hark0.
 
 Over time, the project has been growing, and now it is possible to install different configurations (cores) in the flash memory of the FPGA, which work like different systems than the ZX Spectrum, and you can choose to start the ZXUNO+ with the desired configuration among all those installed.
 
@@ -41,6 +41,8 @@ Without the previous work of all of these people (and more), this manual wouldn'
 
 === Ports and Connectors
 
+==== ZXUNO+
+
 [.text-center]
 image:./img/zxunofront.png[pdfwidth=65%]
 
@@ -50,6 +52,16 @@ image:./img/zxunoback.png[pdfwidth=65%]
 [.text-center]
 image:./img/zxunoboard.png[pdfwidth=65%]
 
+<<<
+
+==== +UNO
+
+[.text-center]
+image:img/plusuno_frontal.jpg[pdfwidth=45%]
+
+[.text-center]
+image:img/plusuno_trasera.jpg[pdfwidth=70%]
+
 ==== Description
 
 [cols=2*]
@@ -57,7 +69,7 @@ image:./img/zxunoboard.png[pdfwidth=65%]
 |1
 |Audio Out
 |2
-|Video Out
+|Composite Video Out
 |3
 |Expansion Port
 |4
@@ -72,16 +84,30 @@ image:./img/zxunoboard.png[pdfwidth=65%]
 |Mouse USB (PS/2) Port
 |9
 |Keyboard USB (PS/2) Port
+|10
+|Left Joystick Port
+|11
+|Right Joystick Port
+|12
+|RGB/VGA video out
+|13
+|Volume control
+|14
+|PS/2 Port
+|15
+|Reset button
+|16
+|Internal speaker opening
 |===
 
 ===== RJ-45 Video Out
 
-This is the pinout or RJ-45 connector to use as VGA output:
+This is the pinout or RJ-45 connector to use as VGA output on a ZXUNO+:
 
 [.text-center]
 image:img/rj45pinout.png[pdfwidth=50%]
 
-This are the pin numbers for RJ-45 connector to use as RGB out with a SCART connector:
+This are the pin numbers for RJ-45 connector to use as RGB out with a SCART connector on a ZXUNO+:
 
 [.text-center]
 image:img/rj45scart.png[pdfwidth=50%]
@@ -105,7 +131,7 @@ In order to take advantage of its full potential, you may also have:
 
 ==== SD card formatting
 
-In order to use a SD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_SD_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
+In order to use a SD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_sd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
 
 [NOTE]
 ====
@@ -298,29 +324,244 @@ sudo mkfs.fat -F 16 -n ZXUNOPLUS -s 128 /dev/sdc1
 
 <<<
 
-=== Keyboard
+=== Keyboard and mouse
+
+==== +UNO keyboard
+
+The +UNO keyboard, being similar to the original ZX Spectrum keyboard, lacks some of the existing keys on a modern PC keyboard. The keyboard membrane is connected to an Arduino board, which manages the transformation key presses to PS/2 keyboard protocol. The board is programmed so it can behave in different modes according to your needs.
+
+The default is ZX Spectrum mode. To change to a different mode, you must press `Caps Shift+Symbol Shift+U` and then the key for the desired mode. After doing that, some text is automatically typed, to show the selected mode (for example `.zx` if you press `Caps Shift+Symbol Shift+U` and then `0`).
+
+This table shows the available modes and activation keys:
+
+[align="center",width="40%",%header,cols=2*]
+|===
+|Mode
+|Key
+|ZX Spectrum
+|`0`
+|Amstrad CPC
+|`1`
+|MSX
+|`2`
+|Commodore 64
+|`3`
+|Atari 800XL
+|`4`
+|BBC Micro
+|`5`
+|Acorn Electron
+|`6`
+|Apple (I and II)
+|`7`
+|Commodore VIC 20
+|`8`
+|PC XT
+|`9`
+|Oric Atmos
+|`A`
+|SAM Coupé
+|`B`
+|Jupiter ACE
+|`C`
+|===
+
+<<<
+
+ZX Spectrum mode key assignment, with the corresponding keypress when used simultaneouly with `Caps Shift+Symbol Shift`:
+
+[align="center",width="80%",cols=10*]
+|===
+^|**1**
+^|**2**
+^|**3**
+^|**4**
+^|**5**
+^|**6**
+^|**7**
+^|**8**
+^|**9**
+^|**0**
+^|`F1`
+^|`F2`
+^|`F3`
+^|`F4`
+^|`F5`
+^|`F6`
+^|`F7`
+^|`F8`
+^|`F9`
+^|`F1`
+^|**Q**
+^|**W**
+^|**E**
+^|**R**
+^|**T**
+^|**Y**
+^|**U**
+^|**I**
+^|**O**
+^|**P**
+^|`F11`
+^|`F12`
+^|
+^|
+^|
+^|
+^|`Mode`
+^|
+^|
+^|
+^|**A**
+^|**S**
+^|**D**
+^|**F**
+^|**G**
+^|**H**
+^|**J**
+^|**K**
+^|**L**
+^|**Enter**
+^|
+^|
+^|
+^|
+^|`ScrLk`
+^|
+^|
+^|
+^|
+^|
+^|**CShift**
+^|**Z**
+^|**X**
+^|**C**
+^|**V**
+^|**B**
+^|**N**
+^|**M**
+^|**SShift**
+^|**Space**
+^|
+^|
+^|`Save`
+^|
+^|`Vers`
+^|`hRes`
+^|`sRes`
+^|
+^|
+^|
+|===
+
+Where:
+
+- `ScrLk`: `Scroll Lock` changes between RGB and VGA video mode (on Next Core, you must use `Caps Shift+Symbol Shift+2` or`F2` instead)
+- `Save`: Sets the current mode as the default one
+- `Vers`: Shows (types) current firmware version
+- `hRes`: Hard Reset
+- `sRes`: Soft Reset
+
+<<<
+
+The full list of key combinations (and compatible modes) is as follows:
+
+[align="center",width="75%",%header,cols=3*]
+|===
+|Caps S.+Symbol S.
+|Mode
+|Action
+|1
+|All
+|`F1`
+|2
+|All
+|`F2`
+|3
+|All
+|`F3`
+|4
+|All
+|`F4`
+|5
+|All
+|`F5`
+|6
+|All
+|`F6`
+|7
+|All
+|`F7`
+|8
+|All
+|`F8`
+|9
+|All
+|`F9`
+|0
+|All
+|`F10`
+|Q
+|All
+|`F11`
+|W
+|All
+|`F12`
+|S
+|C64
+|`Ctrl+F12`
+|E
+|Acorn/CPC
+|`PgUp`
+|R
+|Acorn
+|`PgDown`
+|U
+|All
+|`Mode`
+|G
+|ZX/MSX/C64
+|`ScrLk`
+|X
+|All
+|`Save`
+|C
+|PC
+|`OPQA`
+|V
+|All
+|`Version`
+|B
+|ZX
+|`Ctrl+Alt+Bcksp`
+|N
+|ZX
+|`Ctrl+Alt+Supr`
+|===
+
+<<<
 
 ==== PS/2 Keyboard
 
 The keyboard map (physical keys of the keyboard assignment to the keystrokes that are presented to the different cores) is changed using the `Advanced` menu of the BIOS. There are three different maps to choose from: Spanish (default), English, and Spectrum (advanced).
 
-You can also change it using the `keymap` utility. Inside `/bin` you have to create a directory named `keymaps` and copy inside the keyboard map files that you want to use. For example, to switch to the US map you have to write `.keymap us` from esxdos.
+You can also change it using the `keymap` utility. Inside `/sys` you have to create a directory named `keymaps` and copy inside the keyboard map files that you want to use. For example, to switch to the US map you have to write `.keymap us` from esxdos.
 
 For the map to be preserved after a master reset, it has to be selected as `Default` in the BIOS.
 
 For more information, see https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[this message in the ZX-Uno forum].
 
-==== Spanish
+*Spanish*
 
 [.text-center]
 image:./img/keyboardEsp.png[pdfwidth=70%]
 
-==== English
+*English*
 
 [.text-center]
 image:./img/keyboardEng.png[pdfwidth=70%]
 
-==== Spectrum
+*Spectrum*
 
 [.text-center]
 image:./img/keyboardAV.png[pdfwidth=70%]
@@ -331,7 +572,7 @@ image:./img/keyboardAV.png[pdfwidth=70%]
 
 Special keys which can be used during startup:
 
-- `F2`: Enter BIOS setup
+- `F2` (`Caps Shift+Symbol Shift+2` on +UNO): Enter BIOS setup
 - `Caps Lock` or `Cursor down` or, if a joystick is connected, pressing `down`: Core selection menu
 - `Esc`, or if a joystick with two or more fire buttons is connected, pressing the 2nd fire button: ZX Spectrum core ROM selection menu
 - `R`: Loads the Spectrum core ROM in "real" mode, disabling esxdos, new graphics modes, etc. (pressing `Esc` afterwards allows you to choose another core)
@@ -341,19 +582,30 @@ Special keys which can be used during startup:
 Special keys that can be used while running the main core (ZX Spectrum):
 
 - `Esc`: BREAK
-- `F2`: Edit
-- `F5`: NMI
-- `F7`: Play or pause when playing .PZX files
-- `F8`: Rewind .PZX file to the previous mark
-- `F10`: Graph
-- `F12`: Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
-- `Ctrl+Alt+Supr`: Soft reset.
+- `F2` (`Caps Shift+Symbol Shift+2` on +UNO): Edit
+- `F3` (`Caps Shift+Symbol Shift+3` on +UNO): True Video
+- `F4` (`Caps Shift+Symbol Shift+4` on +UNO): Inverse Video
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): NMI
+- `F7` (`Caps Shift+Symbol Shift+7` on +UNO): Play or pause when playing .PZX files
+- `F8` (`Caps Shift+Symbol Shift+8` on +UNO): Rewind .PZX file to the previous mark
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Graph
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Soft reset.
 - `Scroll Lock`: Switches between composite and VGA video modes.
 
 <<<
 
-==== esxdos
+==== PS/2 Mouse
+
+You can also connect a mouse to the PS/2 port. The switch inside a +UNO, near the Wi-Fi chip and keys `1` and `2`, selects between a direct connection of the mouse, or if a PS/2 splitter cable is needed (when using the mouse along with a PS/2 keyboard).
+
+[.text-center]
+image:./img/plusuno_switch.jpg[pdfwidth=70%]
+
+<<<
+
+=== esxdos
 
 https://esxdos.org/index.html[esxdos] is a firmware for the DivIDE/DivMMC hardware interfaces (which ZXUNO+ implements). This allows access to storage devices such as a SD card. It includes commands similar to those of UNIX, although to use them you must precede them with a period, for example `.ls`,` .cd`, `.mv`, etc.
 
@@ -388,7 +640,7 @@ It is also recommended to add the specific esxdos commands for ZXUNO+. These can
     zxuc
     zxunocfg
 
-<<#_zxuno+_commands,It is explained later>> what each of them does.
+<<#_zxuno_commands,It is explained later>> what each of them does.
 
 <<<
 
@@ -446,7 +698,7 @@ The second screen shows the installed ZX Spectrum ROMs. You can reorder (Move Up
 [.text-center]
 image:img/bios3.png[pdfwidth=70%]
 
-_Upgrade_ screen is used to perform the different updates of the Flash memory content: esxdos, BIOS, Cores, etc. (see <<#_updates,the section corresponding to updates>> for more information).
+_Upgrade_ screen is used to perform the different updates of the Flash memory content: esxdos, BIOS, Cores, etc. (see <<#_upgrade,the section corresponding to upgrades>> for more information).
 
 <<<
 
@@ -456,6 +708,11 @@ _Upgrade_ screen is used to perform the different updates of the Flash memory co
 image:img/bios4.png[pdfwidth=70%]
 
 In the _Boot_ screen you can choose which one of the installed cores is loaded by default at startup.
+
+[CAUTION]
+====
+Never set a Spectrum core (apart from the main one, the first core in the flash. This would set the ZX-Uno into a loop of core resets.
+====
 
 <<<
 
@@ -467,13 +724,62 @@ image:img/bios5.png[pdfwidth=70%]
 The Advanced configuration screen is used to edit the following settings:
 
 - Keyboard layout (Keyb Layout): See <<#_keyboard,the corresponding section>> for more information)
-- Joystick behavior when emulated with the numeric keypad (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek or Fuller
-- Behavior of a joystick connected to the port (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller or simulate the keys `Q`,` A`, `O`,` P`, `Space` and `M`
+- Joystick behavior when emulated with the numeric keypad (Joy Keypad) and the second joystick (with splitter): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek or Fuller
+- Behavior of a joystick connected to the main port (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller or simulate the keys `Q`,` A`, `O`,` P`, `Space` and `M`
+- Enable the second physical joystick (splitter). Only on +UNO and for cores which have splitter support 
 - Video output: PAL, NTSC or VGA
 - Scanlines simulation: Enabled or Disabled
 - VGA horizontal frequency: 50, 51, etc.
 - CPU speed: Normal (1x) or accelerated (2X, 3X, etc.)
 - Csync: Spectrum or PAL
+
+This table explains how the joystick buttons are assigned:
+
+[align="center",width="100%",%header,cols=6*,options="header"]
+|===
+|Button
+|Kempston
+|Sinclair 1
+|Sinclair 2
+|Protek
+|Fuller
+|Left
+|Bit 0
+|1
+|6
+|5
+|Bit 2
+|Right
+|Bit 1
+|2
+|7
+|8
+|Bit 3
+|Down
+|Bit 2
+|3
+|8
+|6
+|Bit 1
+|Up
+|Bit 3
+|4
+|9
+|7
+|Bit 0
+|Fire 1
+|Bit 4
+|5
+|0
+|0
+|Bit 4
+|Fire 2
+|Bit 5
+|X
+|Z
+|9
+|Bit 5
+|===
 
 <<<
 
@@ -1373,13 +1679,13 @@ See the <<#_cores,corresponding section>> for instructions of how to install thi
 While the core is running:
 
 - `End`: Switches between colour, green monochrome, amber monochrome and black and white
-- `F6`: Sets up a custom mark at the current PZX position (only in the version with PZX support)
+- `F6` (`Caps Shift+Symbol Shift+6` on +UNO): Sets up a custom mark at the current PZX position (only in the version with PZX support)
 - `F7: PXC Play/Pause (only in the version with PZX support)
 - `F8: Moves the PZX position to a the custom mark (only in the version with PZX support)
 - `CTRL+ F8: Rewinds the PZX position to a "tag BRWS" mark. These marks are used, for example, to label where a multiload starts (only in the version with PZX support)
 - `F9: Stops playing the PZX and set the position back to the beginning (only in the version with PZX support)
-- `F11`: Enabe or disable the Wi-Fi module
-- `F12`: Enable or disable 28 MHz CPU speed.
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Enabe or disable the Wi-Fi module
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Enable or disable 28 MHz CPU speed.
 
 The PZX player will stop when it gets to the end of the file, or if it finds a STOP mark, or if it finds a STOP IF IN 48K mark and the core is in 48K mode (no 128K pagination).
 
@@ -1414,8 +1720,8 @@ See the <<#_cores,corresponding section>> for instructions of how to install thi
 While the core is running:
 
 - `Esc`: BREAK
-- `F5`: NMI
-- `F8`: Change Turbosound mixer configuration between ACB and ABC.
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` on +UNO): Change Turbosound mixer configuration between ACB and ABC.
 - `Scroll Lock`: Switches between composite and VGA video modes.
 - `Ctrl+Alt+Backspace` or `F11`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Supr` or `F12`: Soft reset.
@@ -1445,8 +1751,8 @@ See the <<#_cores,corresponding section>> for instructions of how to install thi
 While the core is running:
 
 - `Esc`: BREAK
-- `F5`: NMI
-- `F8`: Change Turbosound mixer configuration between ACB and ABC.
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` on +UNO): Change Turbosound mixer configuration between ACB and ABC.
 - `Ctrl+Alt+Backspace` or `F11`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Supr` or `F12`: Soft reset.
 
@@ -1476,11 +1782,11 @@ See the <<#_cores,corresponding section>> for instructions of how to install thi
 
 While the core is running:
 
-- `F5`: NMI
-- `F8`: Change Turbosound betwween ACB and ABC.
-- `F10`: Pentagon Mode
-- `F11`: 48K Mode
-- `F12`: 128K Mode
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` on +UNO): Change Turbosound betwween ACB and ABC.
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Pentagon Mode
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): 48K Mode
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): 128K Mode
 - `Ctrl+Alt+Backspace` or `F11`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 - `Ctrl+Alt+Supr` or `F12`: Soft reset.
 
@@ -1532,7 +1838,7 @@ Obtain the TBBlue distribution that matches the core version, for example, looki
 
 [TIP]
 ====
-If you are using a SD card with <<esxdos,esxdos>>, the `esxmmc.rom` file version must match the one of the SD card.
+If you are using a SD card with <<#_esxdos,esxdos>>, the `esxmmc.rom` file version must match the one of the SD card.
 ====
 
 See the <<#_cores,corresponding section>> for instructions of how to install the TBBlue core in ZXUNO+.
@@ -1616,11 +1922,11 @@ You can set up the files in the SD in two different ways:
 While the core is running:
 
 - `Shift+F10`: Shows Atom Software Archive Menu
-- `F10`: Soft Reset
-- `F1`: Turbo mode 1Mhz
-- `F2`: Turbo mode 2Mhz
-- `F3`: Turbo mode 4Mhz
-- `F4`: Turbo mode 8Mhz
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Soft Reset
+- `F1` (`Caps Shift+Symbol Shift+1` on +UNO): Turbo mode 1Mhz
+- `F2` (`Caps Shift+Symbol Shift+2` on +UNO): Turbo mode 2Mhz
+- `F3` (`Caps Shift+Symbol Shift+3` on +UNO): Turbo mode 4Mhz
+- `F4` (`Caps Shift+Symbol Shift+4` on +UNO): Turbo mode 8Mhz
 
 The keyboard uses the following mapping:
 
@@ -1676,7 +1982,7 @@ While the core is running:
 - `Scroll Lock`: Switches between composite and VGA video.
 - `Ctrl+Shift+1` to `Ctrl+Shift+4`: Use other graphic modes (60Hz, etc)
 - `F10` and `Ctrl+F10`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 
 <<<
 
@@ -1769,8 +2075,8 @@ During core execution:
 - `Print Scr` or `Left Windows`: `COPY`
 - `F10` and `Ctrl+F10`: Soft Reset.
 - `Ctrl+Alt+F5`: NMI.
-- `Ctrl+Alt+Del`: Reset.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `End`: Switches beteween color and green screen modes
 
 ==== Basic Guide
@@ -1953,8 +2259,8 @@ While the core is running:
 - `*` (numeric keyboard): Change between colour monitor and black and white
 - `F1` to `F10`: Insert disk image between 1 and 10 from the SD. Press `F12` afterwards.
 - `Shift+F1` to `Shift+F10`: : Insert disk image between 11 and 20 from the SD. Press `F12` afterwards.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
-- `F12`: Soft reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Soft reset.
 
 <<<
 
@@ -1986,8 +2292,8 @@ Special keys that can be used while running the core:
 - `Z` and `X` (or joystick fire buttons): Fire Buttons
 - `0`: When in a vertical core, enable or disable 90º rotation of directional controls
 - `Scroll Lock`: Switches between composite and VGA video modes.
-- `F10`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 
 <<<
 
@@ -2019,13 +2325,13 @@ While the core is running:
 - `Scroll Lock`: change between RGB and VGA video mode
 - `-`: Enable or disable scanlines in VGA mode
 - `*`: Change machine type between PAL and NTSC
-- `Ctrl+Alt+Backspace`: Hard reset.
-- `F5`: `Help`
-- `F6`: `Start`
-- `F7`: `Select`
-- `F9`: `Reset`
-- `F11`: Load a disk
-- `F12`: Show or hide the configuration menu
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset.
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): `Help`
+- `F6` (`Caps Shift+Symbol Shift+6` on +UNO): `Start`
+- `F7` (`Caps Shift+Symbol Shift+7` on +UNO): `Select`
+- `F9` (`Caps Shift+Symbol Shift+9` on +UNO): `Reset`
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Load a disk
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Show or hide the configuration menu
 - The numeric keypad emulates a joystic, where `5` and `2` keys work as  __down__ direction and `0` is the fire button
 
 <<<
@@ -2063,7 +2369,7 @@ ZXUNO+ core version is developed by Quest and DistWave.
 Some of the features of the core are:
 
 - RGB and VGA support
-- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_enoders,here>> for more information)
+- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_encoders,here>> for more information)
 
 ==== SD card format
 
@@ -2082,7 +2388,18 @@ During the core execution:
 - `I`, `J`, `K`, `L` or joystick 2: Directional controls for player 2
 - `H` or joystick 2 fire button: Player 2 fire button
 - `Scroll Lock`: change between RGB and VGA video mode
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset.
+
+===== Personalización de los controles
+
+Existe oras versiones de este core que permite modificar el soporte de teclado. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+
+Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón de disparo`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+
+[TIP]
+====
+Por ejemplo, la secuencia `15 1C 44 4D 29` se correspondería con `Q A O P Espacio`
+====
 
 <<<
 
@@ -2152,9 +2469,9 @@ While the core is running:
 
 - `Scroll Lock`: change between RGB and VGA video mode
 - `-` (numeric keyboard): Enable or disable scanlines in VGA mode
-- `F12`: Reset
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Reset
 - `Shift+F12`: Soft Reset trying to load automatically the selected disk at `BEEB.MMB`
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 
 <<<
 
@@ -2196,6 +2513,8 @@ To load, for example, a file name `MENU`, use the command:
 *MENU
 ----
 
+<<<
+
 To show the list of available discs inside `BEEB.MMB` file:
 
 [source]
@@ -2220,7 +2539,7 @@ Remember that, after inserting a disc, if it has automatic boot, you can start i
 
 https://en.wikipedia.org/wiki/Camputers_Lynx[The Lynx] was an 8-bit British home computer that was first released in early 1983 as a 48kB model.Several models were available with 48kB, 96kB or 128 kB RAM.
 
-The ZXUNO+ core has these features:
+The ZX-Uno core has been https://github.com/Kyp069/lynx[developed by Kyp069] and has these features:
 
 - 48kB and 96 kB modes
 - Optional Scorpion ROM
@@ -2238,11 +2557,11 @@ This core does not use the SD card
 
 While running the core:
 
-- `F6`: Switch between 48kB mode and 96kB mode (default)
-- `F7`: Enable or disable Scorpio ROM
-- `F8`: Switch the option to consider port $80 bits 2 and 3, so that Level 9 games are displayed properly.
-- `Ctrl+Alt+Del`: Reset.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `F6` (`Caps Shift+Symbol Shift+6` on +UNO): Switch between 48kB mode and 96kB mode (default)
+- `F7` (`Caps Shift+Symbol Shift+7` on +UNO): Enable or disable Scorpio ROM
+- `F8` (`Caps Shift+Symbol Shift+8` on +UNO): Switch the option to consider port $80 bits 2 and 3, so that Level 9 games are displayed properly.
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 
 <<<
 
@@ -2270,7 +2589,7 @@ Binary files are loaded with `MLOAD` instead of `LOAD`.
 Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, native support for Lynx tape files.
 ====
 
-You can use programs like  <<#_audio_file_conversion,Lynx2Wav>> with Lynx `TAP` files. The resulting audio files can be embedded inside of TSX or TZX with tools like <<#_creación_de_ficheros_tzx_o_tsx_desde_otros_formatos,MakeTSX or RetroConverter>>.
+You can use programs like  <<#_audio_file_conversion,Lynx2Wav>> with Lynx `TAP` files. The resulting audio files can be embedded inside of TSX or TZX with tools like <<#_making_tzx_or_tsx_files_from_other_formats,MakeTSX or RetroConverter>>.
 
 The http://retrowiki.es/viewtopic.php?f=31&t=200036835[lince] script makes all this process easier, creating directly Maxduino `TZX` compatible files from Lynx `TAP` files.
 
@@ -2306,8 +2625,8 @@ The CHIP-8 machine uses an hexadecimal keyboard as input. This is the key mappin
 While the core is running:
 
 - `Esc`: Show or hide configuration menu
-- `F11`: Hard Reset
-- `F12`: Reset
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Hard Reset
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Reset
 
 <<<
 
@@ -2400,9 +2719,9 @@ The `Clear` key is not implemented.
 While the core is running:
 
 - `Windows`: `MODSEL`
-- `F5`: NMI
-- `F11`: Hard Reset
-- `F12` o `Ctrl+Alt+Supr`: Reset
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): NMI
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Hard Reset
+- `F12` o `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Reset
 
 <<<
 
@@ -2433,7 +2752,7 @@ The https://en.wikipedia.org/wiki/Commodore_16[Commodore 16] was a home computer
 
 The ZXUNO+ core is based on https://hackaday.io/project/11460-fpgated[FPGATED project from István Hegedus], with some changes and upgrades, like loading tapes from audio sources.
 
-Featutres:
+Features:
 
 - Commodore 16 PAL expanded to 64K RAM
 - 1541 Floppy, redirected to SD RAW. Read only (.D64 image files)
@@ -2517,9 +2836,9 @@ While the core is running:
 - `+`: Change audio input polarity
 - `-`: Enable or disable scanlines in VGA mode
 - `Scroll Lock`: change between RGB and VGA video mode
-- `F11`: Change joystick between port 0 and port 1
-- `F12`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Change joystick between port 0 and port 1
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset.
 
 <<<
 
@@ -2529,6 +2848,16 @@ While the core is running:
 image:img/c16.png[pdfwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed.
+
+[NOTE]
+====
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore 16, pero posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
+====
 
 To show the contents of the current disk, press `F3` or use the command `DIRECTORY`. To load a file from disk use the command `DLOAD"<file name>"` and then, usually, `RUN`.
 
@@ -2620,8 +2949,8 @@ While the core is running:
 - `Alt` = Commodore
 - Numeric Keyboard: Emulated Joystick
 - `F1` to `F8`: F1 to F8
-- `F9`: Pound symbol key
-- `F10`: `+` symbol key
+- `F9` (`Caps Shift+Symbol Shift+9` on +UNO): Pound symbol key
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): `+` symbol key
 - `Insert`: Select the first disk in the SD card
 - `Page Up`: Select the next disk
 - `Page Down`: Select the previous disk
@@ -2631,10 +2960,10 @@ While the core is running:
 - `-`: Enable or disable scanlines in VGA mode
 - `Scroll Lock`: change between RGB and VGA video mode
 - `End`: Change the colour palette
-- `F11`: Change joystick port behaviour
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Change joystick port behaviour
 - `Ctrl+F12`: Soft Reset to JyffyDOS mode
 - `Ctrl+F12`: Soft Reset to original C64 ROM mode (to load from tape)
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset.
 
 <<<
 
@@ -2644,6 +2973,21 @@ While the core is running:
 image:img/c64.png[pdfwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed.
+
+[NOTE]
+====
+Para cargar desde cinta se debe estar usando la ROM de C64 original que se activa con `Ctrl+F12`.
+====
+
+[NOTE]
+====
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore 64, pero posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
+====
 
 To show the contents of the current disk, press `Shift+Esc` or use the command `LOAD "*",8,1`. Once you see READY on screen, use the command `RUN`.
 
@@ -2674,7 +3018,7 @@ This core does not use the SD card
 
 While running the core:
 
-- `F1`: Cancel tape loading
+- `F1` (`Caps Shift+Symbol Shift+1` on +UNO): Cancel tape loading
 - `Alt`: Type using graphic mode
 
 <<<
@@ -2688,7 +3032,12 @@ You can load from a external tape (or other external audio device) with the comm
 
 [NOTE]
 ====
-Maxduino, which is used in <<<<#_miniduino,miniduino>> does not, at this moment, support for Commodore PET tape files.
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore PET tape files, pero posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
 ====
 
 [TIP]
@@ -2725,10 +3074,10 @@ While the core is running:
 - `F9` to `F11`: Load cartridges embedded in the core
 - Numeric keyboard `-`: Change audio input polarity. The red LED is enable when inverted.
 - `Scroll Lock`: To switch between composite video and VGA
-- `F11`: Swtich the joystick mapping between port 0 or port 1
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Swtich the joystick mapping between port 0 or port 1
 - `Num Lock`: Reset disabling the 32K memory expansion (enabled by default)
-- `F12`: Reset enabling the memory expansion
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Reset enabling the memory expansion
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 
 <<<
 
@@ -2741,8 +3090,14 @@ You can load from a external tape (or other external audio device) with the comm
 
 [NOTE]
 ====
-Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore VIC-20 tape files.
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore VIC-20 tape files, pero es posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
 ====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
+====
+
 
 [TIP]
 ====
@@ -2805,18 +3160,18 @@ You can use a SD card with the first partition in FAT16 format, where you can st
 
 While the core is running:
 
-- `F1`: Normal speed
-- `F2`: 2x speed
-- `F3`: 4x speed
-- `F9`: Enable or disable sound
+- `F1` (`Caps Shift+Symbol Shift+1` on +UNO): Normal speed
+- `F2` (`Caps Shift+Symbol Shift+2` on +UNO): 2x speed
+- `F3` (`Caps Shift+Symbol Shift+3` on +UNO): 4x speed
+- `F9` (`Caps Shift+Symbol Shift+9` on +UNO): Enable or disable sound
 - `Esc`: Freezes a BASIC or machine code execution. Pressing again the same key, resumes the execution
 - `Del`: Pauses a BASIC program execution while being pressed
 - `End`: BREAKs a BASIC program execution
 - `Shift.+M`: Enables plus mode in those programs that have the support (e.g. TETRIS.GTP)
 - `M`: Gets back to normal mode from plus mode
-- `F12`: Soft Reset
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Soft Reset
 - `Ctrl+Alt+F5`: NMI
-- `Ctrl+Alt+Supr`: Soft Reset
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Soft Reset
 - `Ctrl+Alt+F12`: Master Reset
 
 <<<
@@ -2889,7 +3244,7 @@ While the core is running:
 - `F6` : Change paper colour
 - `F7` : Change border colour
 - `F9` : Select 64 or 32 columns mode (only with VGA output)
-- `F10`: `PAGE` key
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): `PAGE` key
 - `Home`: `CLEAR` key
 - `Scroll Lock`: Select between VGA and PAL mode.
 - `Shift+0`: If `ULCBAS.CAS` has been loadead (Upper/Lower Case Driver) changes between only uppercase mode or uppercase and lowercase mode
@@ -2966,10 +3321,10 @@ You can use a SD card with the first partition in FAT16 format, where you can st
 While the core is running:
 
 - `F1` to `F4`: Turbo Modes
-- `F12`: Soft Reset
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Soft Reset
 - `Ctrl+Alt+F5`: NMI
-- `Ctrl+Alt+Supr`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 
 <<<
 
@@ -3064,10 +3419,10 @@ While running the core:
 - `Print Scr`: Changes between VGA and RGB mode
 - `Scroll Lock`: Enables or disables scanlines
 - `Pause`: Changes between 50Hz and 60Hz
-- `F11`: Enables and disables turbo mode
-- `Ctrl+Alt+Supr`: Soft Reset
+- `F11` (`Caps Shift+Symbol Shift+Q` on +UNO): Enables and disables turbo mode
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Soft Reset
 - `Ctrl+Alt+F12`: Hard Reset
-- `Ctrl+Alt+Backspace`: Restarts the FPGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Restarts the FPGA
 - `Left ALT`: MSX GRAPH
 - `Right ALT`: MSX CODE
 - `Page Up`: MSX SELECT
@@ -3254,7 +3609,29 @@ While the core is running:
 
 - `Esc` or joystick button 2: Show or hide configuration menu
 - Cursor keys, and `Enter` to use the menu
-- `Ctrl+Alt+Backspace`: Hard reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
+
+===== Personalización de los controles
+
+Existe otras versiones de este core que permiten el control también con teclado:
+
+- `W`, `A`, `S`, `D` (personalizables) o el joystick 1: Controles de dirección del jugador 1
+- `F` y `R` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 1)
+- `5` y `1`: `Select` y `Start` (Jugador 1)
+- `I`, `J`, `K`, `L` (personalizables) o el joystick 2: Controles de dirección del jugador 2
+- `H`, `Y` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 2)
+- `6` y `2`: `Select` y `Start` (Jugador 1)
+- `F4` (`Caps Shift+Symbol Shift+4` en ZXUnGo+): Intercambiar la asignación de teclas de jugador 1 y jugador 2
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y luego `B` en ZXUnGo+): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+Los controles por defecto del core con soporte de teclado se pueden modificar. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+
+Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón A`, `Botón B`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+
+[TIP]
+====
+Por ejemplo, la secuencia `15 1C 44 4D 29 22` se correspondería con `Q A O P Espacio X`, y la secuencia `1D 1B 23 2B 1A 22` se correspondería con `W S D F Z X`
+====
 
 <<<
 
@@ -3375,7 +3752,7 @@ Yo load and run a program, you have to type `-` and the name of the file. This w
 
 A different core version of https://es.wikipedia.org/wiki/Oric_Atmos[Oric Atmos], based on Rampa's implementation for MiST, Mistica and SiDi.
 
-It has the following features:
+It has been https://github.com/Kyp069/atmos[developed by Kyp069] and has these features:
 
 - VGA (Scandoubler) and composite video out
 - 64KB RAM and 16KB ROM. The ROM hides the upper memory, but it can be accessed all the memory banks using machine code
@@ -3405,8 +3782,8 @@ While the core is running:
 
 - `F1` : Choose ROM 1.1
 - `F2` : Choose ROM 1.22
-- `F5`: NMI
-- `F10`: Enable audio output when using `CSAVE`
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO): NMI
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Enable audio output when using `CSAVE`
 - `Ctrl+Alt+Backspace` or `F11`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Del` or `F12`: Soft reset
 - `Scroll Lock`: Selects between VGA and composite video modes
@@ -3461,7 +3838,7 @@ The latest ZX-Uno core has been made by avlixa, and some of its features are:
 - Two different video modes: Composite Video/RGB and VGA
 - 7 game variants
 - Support for 2 or 4 players
-- Support for Joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_enoders,here>> for more information)
+- Support for Joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_encoders,here>> for more information)
 - Several colour modes
 
 ==== SD format
@@ -3475,7 +3852,7 @@ This core does not use the SD card.
 While the core is running:
 
 - `Esc` or joystick button 2: Show or hide configuration menu
-- `Ctrl+Alt+Backspace`: Hard reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
 - `Scroll Lock`: switch between VGA and RGB mode
 - `F3` o `F12`: Restart game
 - Number between `1` and `7`: Change the game variant
@@ -3558,8 +3935,8 @@ This core does not use the SD card
 While the core is running:
 
 - `Ctrl+Alt+F5`: NMI.
-- `Ctrl+Alt+Supr`: Soft reset.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Soft reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 
 <<<
 
@@ -3607,8 +3984,8 @@ Durante la ejecución del core:
 - `X`. `Space` or joystick 1 secondary fire button: Fire button 1 for player 1
 - `Pause`: Master System pause button
 - `Scroll Lock`: Change between RGB/Composite and VGA video mode
-- `Ctrl+Alt+Backspace`: Hard reset
-- `F12`: Reset and show the file selection menu
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Reset and show the file selection menu
 
 <<<
 
@@ -3670,8 +4047,8 @@ During the core execution:
 - `C` or secondary joystick button: Fire button 3
 - `V`: Fire button 4
 - `Esc`: Show or hide the menu
-- `Ctrl+Alt+Backspace`: Hard reset
-- `F12`: Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Reset
 
 <<<
 
@@ -3719,18 +4096,18 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 During the core execution:
 
 - `Scroll Lock`: Change between RGB/Composite and VGA video mode
-- `F2`: Switch between RGB and Composite when not in VGA video mode
-- `F3`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset
+- `F2` (`Caps Shift+Symbol Shift+2` on +UNO): Switch between RGB and Composite when not in VGA video mode
+- `F3` (`Caps Shift+Symbol Shift+3` on +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
 - After loading a ROM, most games will prompt the user with "SELECT GAME". Press `0`-`9` on the keyboard or mapped controller button to play the game.
-- `Esc` or joystick button 2 to show or hide the options menu
+- `Esc` (`Caps Shift+Space` on +UNO) or joystick button 2 to show or hide the options menu
 - `W`, `A`, `S`, `D` or cursor keys and then `Enter` to choose and select menu options
 
 <<<
 
 ==== Basic Guide
 
-Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
+Pressing `Esc`  (`Caps Shift+Space` on +UNO) or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/videopacuno.png[pdfwidth=70%]
@@ -3796,6 +4173,119 @@ You can load a external tape (or from <<#_miniduino,other external audio device>
 [WARNING]
 ====
 Some monitor stop playing audio if the video signal is lost. It's recommended to plug headphones or a external speaker if you want to hear the sound while loading a tape.
+====
+
+<<<
+
+=== ZX81 and ZX80
+
+Alternative ZX81 and ZX80 core, made by avlixa, based on Grant Searle's ZX80 page.
+
+Features:
+
+- Selectable ZX80/ZX81 (ZX80 currently working only in RGB mode)
+- 16k/32k/48k RAM packs
+- 8KB with CHR$128/UDG addon (not tested)
+- QS CHRS (not tested)
+- CHROMA81
+- Turbo in Slow mode: NoWait, x2, x8
+- YM2149 sound chip (ZON X-81 compatible)
+- Joystick types: Cursor, Sinclar, ZX81, ZXpand
+- PAL/NTSC timings
+- Turbo loading of .o and .p files
+- Load alternative ROM
+- Program loading using the audio input
+
+==== SD card format
+
+You can use a SD card with the first partition in FAT16 or FAT32 format to store ROM and tape files.
+
+You can copy a file named `ZX8X.ROM` (available at the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[official repository] into folder `/zx81/roms`: it is a concatenation of ZX81 rom (8k) + ZX80 rom (4k).
+
+See the <<#_cores,corresponding section>> for instructions of how to install the ZX81 and ZX80 core in ZXUNO+.
+
+<<<
+
+==== Keyboard
+
+The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For example, to obtain a `"` you have to type `Shift+P` or `Shift+0` to delete.
+
+**ZX80**
+
+[.text-center]
+image:img/keyboardZX80.jpg[pdfwidth=80%]
+
+**ZX81**
+
+[.text-center]
+image:img/keyboardZX81.jpg[pdfwidth=80%]
+
+===== Special keys and buttons
+
+During the core execution:
+
+- `F1` (`Caps Shift+Symbol Shift+1` on +UNO): Enable or disable the alternative chars
+- `F5` (`Caps Shift+Symbol Shift+5` on +UNO) or joystick button 2: Show or hide configuration menu
+- `F9` (`Caps Shift+Symbol Shift+9` on +UNO): Disables or enables the MIC audio output, since some games make annoying sounds when enabled
+- `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Enables or disables playing the audio input through the audio output, to hear loading sounds while loading
+- `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO): Switch between RGB and VGA video output
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` on +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
+
+<<<
+
+==== Basic Guide
+
+Pressing `F5` (`Caps Shift+Symbol Shift+5` on +UNO) or joystick button 2 shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on +UNO, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
+
+[.text-center]
+image:img/zx8180.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Reset
+- Load Tape
+- Load ROM
+- Configuration Options
+- Exit
+
+<<<
+
+[.text-center]
+image:img/zx8180_2.jpg[pdfwidth=70%]
+
+- Computer Model: ZX80/ZX81
+- Main RAM: 16K/32K
+- Low RAM: Off/8KB
+- Joystick: Cursor/Sinclair/ZX81
+- QS CHRS: Disabled/Enabled
+- CHR$128/UDG: 128 chars/64 chars/Disabled
+- Chroma81: Disabled/Enabled
+- Inverse Video: Off/On
+- Black Border: Off/On
+- Slow mode speed: Original/No Wait/x2
+- Video frequency: 50Hz/60Hz
+
+You can load a tape file selecting it from the menu, then enter the command `LOAD""` and `Enter`
+
+[TIP]
+====
+Some monitors stop playing audio if the video signal is lost. It's recommended to plug headphones or a external speaker if you want to hear the sound while loading a tape. On a +UNO, the internal speaker will play the sound if nothing is connected to the audio out port.
+====
+
+`.p` files with colorization and char are supported.
+
+For colorization to work, CHROMA81 should be enabled before loading. For alternate chars, QS CHRS should be enabled before loading.
+
+[TIP]
+====
+The recommended options for most games are:
+
+Main RAM: 16KB
+Low RAM: 8KB
+CHR$128: 128 chars
+QS CHRS: enabled
+CHROMA81: enabled
 ====
 
 <<<
@@ -3931,6 +4421,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 `tsx2wav` in https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] is made with PHP and that can export from `TSX` to `WAV`.
 
 https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] is a graphical interface program made for Windows (but also working on Wine) that can convert Commodore `TAP` files to `WAV` audio files.
+
+http://retrowiki.es/viewtopic.php?f=110&t=200037282[Comodoro 2.0] es un script que permite convertir a formato `TAP` y `TZX` para poder realizar cargas por audio en las Commodore Pet, VIC-20, 16 y 64.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] is a program that can convert Camputers Lynx `TAP` files to `WAV` audio.
 
@@ -4136,6 +4628,11 @@ image:img/jtagzxunoplus.jpg[pdfwidth=80%]
 *DO NOT* connect the 3V line
 ====
 
+[NOTE]
+====
+For a +UNO, you have to unplug the ZX-Uno board to make a recovery.
+====
+
 <<<
 
 ==== Recovery using a Raspberry Pi
@@ -4269,7 +4766,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 [start=11]
 . If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
 
-If there is no image on the display, press `Scroll Lock` to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -4292,17 +4789,277 @@ image:img/recovery2.png[pdfwidth=70%]
 This process can't be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
 ====
 
+[NOTE]
+====
+Ususally, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+====
+
 [start=15]
 . After some minutes, the process will end, and, after turning the ZXUNO+ off and on, it should start fine.
 
 [NOTE]
 ====
-If no image is shown, press again `Scroll Lock` to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+====
+
+[NOTE]
+====
+For a +UNO, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
+
+. If you see no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Change to `PC XT` keyboard mode (`Caps Shift+Symbol Shift+U` and then `9`)
+. Reboot +UNO without losing the temporary keyboard mode (`Caps Shift+Symbol Shift+B`)
+. Quickly, press `Caps Shift + 1`
+. Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Navigate through BIOS and turno on these options:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (only if there was no image)
+. Save changes:
+- `Exit` -> `Save changes and exit`
+. Completely turn off +UNO` and turn it on again
+====
+
+<<<
+
+==== Recovery using MacOS and USB-Blaster cable
+
+*Hardware required*:
+
+- USB-Blaster cable. Using the right pins for ZXUNO+, <<#_jtag_cable_connections,as explained earlier>>
+- Flash Image file and and recovery file for ZX-Uno. The same ones as for Raspberry Pi, from https://github.com/zxdos/zxuno/tree/master/modflash[Github repository] and https://www.zxuno.com/forum/viewtopic.php?f=37&t=774[ZX-Uno forum]
+
+*Software required*:
+
+- Mac OS
+- Extra data folder for UrJTAG, obtained from https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[here]
+- https://brew.sh[Homebrew for Mac OS]
+- UrJTAG: following instructions from https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[here]:
+
+*Instruction Steps*:
+
+. Prepare UrJTAG instal:
+
+[source,shell]
+----
+brew install libftdi libusb pkg-config
+git clone https://github.com/C-Elegans/urjtag.git
+cd urjtag
+----
+
+[start=2]
+. Copy the extra data folder for UrJTAG, into urjtag `data` folder.
+
+. Start compiling:
+
+[source,shell]
+----
+./configure --with-libftdi --with-libusb --with-ftd2xx --with-inpout32 --enable-python=no
+make -j4
+sudo make install
+----
+
+[start=4]
+. Copy `FLASH.ZX1` file to the root of the ZX-Uno SD card.
+
+. Connect USB-Blaster cable to ZXUNO+ and the Mac
+
+. Turn on the ZXUNO+ or +UNO.
+
+. Make sure that, we are in the directory where `recovery.bit` is, and execute `jtag` command.
+
+<<<
+
+[start=8]
+. A new shell appears. Now type the commands:
+
+[source,shell]
+----
+cable usbblaster
+detect
+pld load recovery.bit
+----
+
+[NOTE]
+====
+Make sure, when using `detect`, that the device is shown as detected. You may need to execute `detect` several times until it appears.
+====
+
+[.text-center]
+image:img/recovery_mac_1.png[pdfwidth=90%]
+
+<<<
+
+[start=9]
+. If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
+
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+
+[.text-center]
+image:img/recovery.png[pdfwidth=70%]
+
+[start=10]
+. Insert in the ZXUNO+ the SD card formatted as FAT16 o FAT32, and with the `FLASH.ZX1` file downloaded previously.
+
+. Unplug the USB-Blaster.
+
+<<<
+
+[start=12]
+. Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
+
+[.text-center]
+image:img/recovery2.png[pdfwidth=70%]
+
+[WARNING]
+====
+This process can't be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
+====
+
+[NOTE]
+====
+Ususally, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+====
+
+[start=13]
+. After some minutes, the process will end, and, after turning the ZXUNO+ off and on, it should start fine.
+
+[NOTE]
+====
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+====
+
+[NOTE]
+====
+For a +UNO, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
+
+. If you see no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
+. Reboot +UNO without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
+. Quickly, press `Caps Shift + 1`
+. Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Navigate through BIOS and turno on these options:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (only if there was no image)
+. Save changes:
+- `Exit` -> `Save changes and exit`
+. Completely turn off +UNO` and turn it on again
+====
+
+[NOTE]
+====
+When using Linux with `urjtag`, the process should be quite similar, although the dependencies (libftdi libusb pkg-config) would have to be installed with the appropiate package manager (apt, yum, pacman, etc.)
+====
+
+<<<
+
+==== Recovery using Windows and USB-Blaster cable
+
+*Hardware required*:
+
+- USB-Blaster cable. Using the right pins for ZXUNO+, <<#_jtag_cable_connections,as explained earlier>>
+- Flash Image file and and recovery file fo ZXUNO+ (LX25). The same ones as for Raspberry Pi, from https://github.com/zxdos/zxuno/tree/master/modflash[Github repository] and https://www.zxuno.com/forum/viewtopic.php?f=37&t=774[ZX-Uno forum]
+
+*Software required*:
+
+- Windows
+- USB-Blaster drivers for Windows, available at https://www.zxuno.com/forum/viewtopic.php?f=25&t=432[ZX-Uno forums]
+- UrJTAG, for Windows, available at https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[the official repository]
+
+*Instruction Steps*:
+
+. Extract the ZIP file with drivers (obtained from the https://www.zxuno.com/forum/download/file.php?id=889[ZX-Uno forums])
+
+. Plug USB-Blaster to the Windows PC and install the driver choosing to select manually installation files and using the folder `drivers` obtained after extracting the ZIP
+
+. Extract UrJTAG Windows software, obtained at the https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[official repository]
+
+. Copy `FLASH.ZX1` file to the root of the ZX-Uno SD card.
+
+. Connect USB-Blaster cable to ZXUNO+ and the PC
+
+. Make sure that you are in the directory where `recovery.bit` is, and execute `jtag` command.
+
+. Turn on the ZXUNO+ or +UNO.
+
+. A new shell appears. Now type the commands:
+
+[source,shell]
+----
+cable usbblaster
+detect
+pld load recovery.bit
+----
+
+<<<
+
+[start=9]
+. If all goes well, we will see that the FPGA LED change their state and the BIOS is shown on the display.
+
+If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
+
+[.text-center]
+image:img/recovery.png[pdfwidth=70%]
+
+[start=10]
+. Insert in the ZXUNO+ the SD card formatted as FAT16 o FAT32, and with the `FLASH.ZX1` file downloaded previously.
+
+. Unplug the USB-Blaster.
+
+<<<
+
+[start=12]
+. Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
+
+[.text-center]
+image:img/recovery2.png[pdfwidth=70%]
+
+[WARNING]
+====
+This process can't be undone, and it will replace all the previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
+====
+
+[NOTE]
+====
+Ususally, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+====
+
+[start=13]
+. After some minutes, the process will end, and, after turning the ZXUNO+ off and on, it should start fine.
+
+[NOTE]
+====
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
+====
+
+[NOTE]
+====
+For a +UNO, since the recovery image uses a PS/2 configuration as default, follow this steps to set up the BIOS correctly:
+
+. If you see no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Change to `PC XT` keyboard mode (`Caps Shift + Symbol Shift + U` and then `9`)
+. Reboot +UNO without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
+. Quickly, press `Caps Shift + 1`
+. Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
+. Navigate through BIOS and turno on these options:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `Video`: `VGA`  (only if there was no image)
+. Save changes:
+- `Exit` -> `Save changes and exit`
+. Completely turn off +UNO` and turn it on again
 ====
 
 <<<
 
 == References
+
+=== Scan Codes
+
+[.text-center]
+image:img/scancodes.png[pdfwidth=80%]
+
+<<<
+
+=== Links
 
 https://zxuno.speccy.org/index.shtml[ZX-Uno]
 
@@ -4321,6 +5078,8 @@ https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
+
+http://www.benophetinternet.nl/hobby/vanmezelf/ESXDOS%20manual.pdf[ESXDOS Manual]
 
 http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p200075671[WiFi (RetroWiki)]
 

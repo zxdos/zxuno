@@ -1,13 +1,13 @@
-= Manual de ZXUNO+
+= Manual de ZXUNO+ y +UNO
 :author: kounch
-:revnumber: 1.2.0
+:revnumber: 1.3.0
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.2
-:description: Manual en castellano de ZXUNO+
-:keywords: Manual, Castellano, ZXUNO+
+:Revision: 1.3
+:description: Manual en castellano de ZXUNO+ y +UNO
+:keywords: Manual, Castellano, ZXUNO+, +UNO
 :icons: font
 :source-highlighter: rouge
 :toc: left
@@ -18,7 +18,7 @@
 
 == Introducción
 
-ZXUNO+ es la iteración más reciente de https://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
+ZXUNO+ y +UNO son otra iteración de https://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
 Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXUNO+ con la configuración que se desee de entre todas las instaladas.
 
@@ -41,6 +41,8 @@ Sin el trabajo previo de todas estas personas (y más), ese manual no podría ex
 
 === Puertos y Conectores
 
+==== ZXUNO+ 
+
 [.text-center]
 image:./img/zxunofront.png[pdfwidth=65%]
 
@@ -50,6 +52,16 @@ image:./img/zxunoback.png[pdfwidth=65%]
 [.text-center]
 image:./img/zxunoboard.png[pdfwidth=65%]
 
+<<<
+
+==== +UNO
+
+[.text-center]
+image:img/plusuno_frontal.jpg[pdfwidth=45%]
+
+[.text-center]
+image:img/plusuno_trasera.jpg[pdfwidth=70%]
+
 ==== Descripción
 
 [cols=2*]
@@ -57,7 +69,7 @@ image:./img/zxunoboard.png[pdfwidth=65%]
 |1
 |Salida de Sonido
 |2
-|Salida de vídeo
+|Salida de vídeo compuesto
 |3
 |Salida / Puerto de Expansión
 |4
@@ -72,16 +84,30 @@ image:./img/zxunoboard.png[pdfwidth=65%]
 |Puerto de Ratón USB (PS/2)
 |9
 |Puerto de Teclado USB (PS/2)
+|10
+|Puerto de Joystick Izquierdo
+|11
+|Puerto de Joystick Derecho
+|12
+|Salida RGB/VGA
+|13
+|Control de volumen
+|14
+|Puerto PS/2
+|15
+|Pulsador de reset
+|16
+|Abertura para altavoz interno
 |===
 
 ===== Salida de vídeo RJ-45
 
-Este es el esquema del conector RJ-45 para utilizar como salida VGA:
+Este es el esquema del conector RJ-45 para utilizar como salida VGA en un ZXUNO+:
 
 [.text-center]
 image:img/rj45pinout.png[pdfwidth=50%]
 
-Esta es la numeración del conector RJ-45 para utilizar como salida RGB con conector SCART:
+Esta es la numeración del conector RJ-45 para utilizar como salida RGB con conector SCART en un ZXUNO+:
 
 [.text-center]
 image:img/rj45scart.png[pdfwidth=50%]
@@ -302,13 +328,228 @@ sudo mkfs.fat -F 16 -n ZXUNOPLUS -s 128 /dev/sdc1
 
 <<<
 
-=== Teclado
+=== Teclado y ratón
+
+==== Teclado incorporado en +UNO
+
+El teclado de +UNO al ser similar al teclado del ZX Spectrum original, carece de algunas de teclas existentes en un teclado moderno de PC. Internamente, el teclado de membrana está conectado a una placa Arduino, que se encarga de transformar las pulsaciones al protocolo PS/2 de teclado. Esta placa está programada de manera que pueda comportarse de distintas maneras según nos interese.
+
+Por defecto, está configurado en modo ZX Spectrum. Para cambiar a otro modo, se debe pulsar `Caps Shift+Symbol Shift+U` y luego la tecla correspondiente. Al hacerlo, se tecleará automáticamente un texto indicando el modo seleccionado (por ejemplo: `.zx` si se pulsa `Caps Shift+Symbol Shift+U` y luego `0`).
+
+La siguiente tabla indica los distintos modos y la tecla de activación asociada:
+
+[align="center",width="40%",%header,cols=2*]
+|===
+|Modo
+|Tecla
+|ZX Spectrum
+|`0`
+|Amstrad CPC
+|`1`
+|MSX
+|`2`
+|Commodore 64
+|`3`
+|Atari 800XL
+|`4`
+|BBC Micro
+|`5`
+|Acorn Electron
+|`6`
+|Apple (I y II)
+|`7`
+|Commodore VIC 20
+|`8`
+|PC XT
+|`9`
+|Oric Atmos
+|`A`
+|SAM Coupé
+|`B`
+|Jupiter ACE
+|`C`
+|===
+
+<<<
+
+La distribución del teclado en modo ZX Spectrum, con la pulsación asociada al combinar junto con `Caps Shift+Symbol Shift`, se puede resumir según el siguiente esquema:
+
+[align="center",width="80%",cols=10*]
+|===
+^|**1**
+^|**2**
+^|**3**
+^|**4**
+^|**5**
+^|**6**
+^|**7**
+^|**8**
+^|**9**
+^|**0**
+^|`F1`
+^|`F2`
+^|`F3`
+^|`F4`
+^|`F5`
+^|`F6`
+^|`F7`
+^|`F8`
+^|`F9`
+^|`F1`
+^|**Q**
+^|**W**
+^|**E**
+^|**R**
+^|**T**
+^|**Y**
+^|**U**
+^|**I**
+^|**O**
+^|**P**
+^|`F11`
+^|`F12`
+^|
+^|
+^|
+^|
+^|`Modo`
+^|
+^|
+^|
+^|**A**
+^|**S**
+^|**D**
+^|**F**
+^|**G**
+^|**H**
+^|**J**
+^|**K**
+^|**L**
+^|**Enter**
+^|
+^|
+^|
+^|
+^|`BlqDs`
+^|
+^|
+^|
+^|
+^|
+^|**CShift**
+^|**Z**
+^|**X**
+^|**C**
+^|**V**
+^|**B**
+^|**N**
+^|**M**
+^|**SShift**
+^|**Space**
+^|
+^|
+^|`Guarda`
+^|
+^|`Vers`
+^|`hRes`
+^|`sRes`
+^|
+^|
+^|
+|===
+
+Donde:
+
+- `BlqDs`: `Bloq. Despl.` cambia de modo vídeo RGB a VGA y viceversa (en el core de Next, se debe usar `Caps Shift+Symbol Shift+2` o `F2`)
+- `Guarda`: Define el modo actual como el modo por defecto
+- `Vers`: Muestra (teclea) la versión actual del firmware
+- `hRes`: Hard Reset
+- `sRes`: Soft Reset
+
+<<<
+
+La lista completa de combinaciones de teclado (y el modo en que se pueden utilizar) es la siguiente:
+
+[align="center",width="75%",%header,cols=3*]
+|===
+|Caps S.+Symbol S.
+|Modo
+|Acción
+|1
+|Todos
+|`F1`
+|2
+|Todos
+|`F2`
+|3
+|Todos
+|`F3`
+|4
+|Todos
+|`F4`
+|5
+|Todos
+|`F5`
+|6
+|Todos
+|`F6`
+|7
+|Todos
+|`F7`
+|8
+|Todos
+|`F8`
+|9
+|Todos
+|`F9`
+|0
+|Todos
+|`F10`
+|Q
+|Todos
+|`F11`
+|W
+|Todos
+|`F12`
+|S
+|C64
+|`Ctrl+F12`
+|E
+|Acorn/CPC
+|`Re Pág`
+|R
+|Acorn
+|`PgAbajo`
+|U
+|Todos
+|`Modo`
+|G
+|ZX/MSX/C64
+|`BlqDs`
+|X
+|Todos
+|`Guarda`
+|C
+|PC
+|`OPQA`
+|V
+|Todos
+|`Versión`
+|B
+|ZX
+|`Ctrl+Alt+Bcksp`
+|N
+|ZX
+|`Ctrl+Alt+Supr`
+|===
+
+<<<
 
 ==== Teclado PS/2
 
 El mapa de un teclado conectado al puerto PS/2 (asignación de las teclas físicas del teclado con las pulsaciones que se presentan a los distintos cores) se cambia desde el menú `Advanced` de la BIOS. Existen tres mapas distintos a elegir: Español (por defecto), inglés, y Spectrum (avanzado).
 
-También se puede cambiar con la utilidad `keymap`. Dentro de `/bin` hay que crear un directorio llamado `keymaps` y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
+También se puede cambiar con la utilidad `keymap`. Dentro de `/sys` hay que crear un directorio llamado `keymaps` y ahí copiar los mapas de teclado se desee usar. Por ejemplo, para cambiar al mapa US hay que escribir `.keymap us` desde esxdos.
 
 Para que el mapa se conserve después de un master reset, hay que tener seleccionado `Default` en la configuración de BIOS.
 
@@ -335,25 +576,36 @@ image:./img/keyboardAV.png[pdfwidth=70%]
 
 Teclas especiales durante el arranque:
 
-- `F2` Entrar en la BIOS
-- `Bloq. Mayús` o `Cursor abajo` o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
-- `Esc` o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
+- `F2` (`Caps Shift+1` en +UNO) Entrar en la BIOS
+- `Bloq. Mayús` o `Cursor abajo` (`Caps Shift+2` en +UNO) o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
+- `Esc` (`Caps Shift+Espacio` en +UNO) o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
 - `R`: Carga la ROM del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc. (combinado con `Esc` a continuación permite elegir otra ROM distinta)
-- `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
+- `/` (del teclado numérico, `Symbol Shift+V` en +UNO): Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número
 
 Teclas especiales que se pueden utilizar durante la ejecución del core principal (ZX Spectrum):
 
-- `Esc`: BREAK
-- `F2`: Edit
-- `F5`: NMI
-- `F7`: Reproducir o Pausa en la reproducción de archivos .PZX
-- `F8`: Rebobinar el archivo .PZX hasta la marca anterior
-- `F10`: Graph
-- `F12`: Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `Ctrl+Alt+Supr`: Soft reset.
-- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa.
+- `Esc` (`Caps Shift+Espacio` en +UNO): BREAK
+- `F2` (`Caps Shift+1` en +UNO): Edit
+- `F3` (`Caps Shift+Symbol Shift+3` en +UNO): True Video
+- `F4` (`Caps Shift+Symbol Shift+4` en +UNO): Inverse Video
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): NMI
+- `F7` (`Caps Shift+Symbol Shift+7` en +UNO): Reproducir o Pausa en la reproducción de archivos .PZX
+- `F8` (`Caps Shift+Symbol Shift+8` en +UNO): Rebobinar el archivo .PZX hasta la marca anterior
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Graph
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Turbo Boost. Pone a la CPU a 28MHz mientras se mantenga pulsada (a partir del core EXP27).
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Soft reset.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): cambia de modo video compuesto a VGA y viceversa.
+
+<<<
+
+==== Ratón PS/2
+
+También es posible conectar un ratón al puerto PS/2. El interruptor que hay en el interior de un +UNO, cerca de las teclas `1` y `2` y el chip Wi-Fi, permite definir si hará falta un adaptador de teclado y ratón (para conectar simultáneamente un teclado y ratón), o no.
+
+[.text-center]
+image:./img/plusuno_switch.jpg[pdfwidth=70%]
 
 <<<
 
@@ -394,7 +646,7 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXUNO+. 
     zxuc
     zxunocfg
 
-<<#_comandos_para_ZXUNO+,Más adelante>> se explica lo que hace cada uno de ellos.
+<<#_comandos_para_zxuno,Más adelante>> se explica lo que hace cada uno de ellos.
 
 <<<
 
@@ -458,6 +710,11 @@ image:img/bios4.png[pdfwidth=70%]
 
 En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que cargue por defecto en el arranque.
 
+[CAUTION]
+====
+Nunca se ha de elegir como arranque un core de tipo Spectrum distinto del principal (Primer core de la flash). Esto provoca un bucle de reinicios constantes del mismo.
+====
+
 <<<
 
 ==== Advanced
@@ -468,13 +725,62 @@ image:img/bios5.png[pdfwidth=70%]
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
 
 - Distribución del teclado (Keyb Layout): Ver <<#_teclado,el apartado correspondiente >> para más información)
-- Comportamiento del joystick emulado con el teclado numérico (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek o Fuller
-- Comportamiento de un joystick conectado al puerto (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
+- Comportamiento del joystick emulado con el teclado numérico (Joy Keypad) y del segundo joystick (con splitter): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek o Fuller
+- Comportamiento de un joystick conectado al puerto principal (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
+- Activar el segundo joystick (splitter). Sólo válido para +UNO y para los cores que estén diseñados para soportarlo
 - Salida de vídeo (Video): PAL, NTSC o VGA
 - Simulación de línea de exploración (Scanlines): Activas (Enabled) o inactivas (Disabled)
 - Frecuencia horizontal de VGA (Frequency): 50, 51, etc.
 - Velocidad de la CPU: Normal (1x) o acelerada (2X, 3X, etc.)
 - Csync: Spectrum o PAL
+
+La siguiente tabla resume las distintas asignaciones de botones de joystick:
+
+[align="center",width="100%",%header,cols=6*,options="header"]
+|===
+|Botón
+|Kempston
+|Sinclair 1
+|Sinclair 2
+|Protek
+|Fuller
+|Izquierda
+|Bit 0
+|1
+|6
+|5
+|Bit 2
+|Derecha
+|Bit 1
+|2
+|7
+|8
+|Bit 3
+|Abajo
+|Bit 2
+|3
+|8
+|6
+|Bit 1
+|Arriba
+|Bit 3
+|4
+|9
+|7
+|Bit 0
+|Disparo 1
+|Bit 4
+|5
+|0
+|0
+|Bit 4
+|Disparo 2
+|Bit 5
+|X
+|Z
+|9
+|Bit 5
+|===
 
 <<<
 
@@ -1371,13 +1677,13 @@ Se puede utilizar una tarjeta SD con la primera partición en formato FAT16 o FA
 Durante la ejecución del core:
 
 - `Fin`: Alterna la visualización entre color, monocromo verde, monocromo ámbar o blanco y negro
-- `F6`: Pone una marca personalizada en la posición actual de un PZX que se haya cargado (sólo en la versión con soporte para PZX)
+- `F6` (`Caps Shift+Symbol Shift+6` en +UNO): Pone una marca personalizada en la posición actual de un PZX que se haya cargado (sólo en la versión con soporte para PZX)
 - `F7: Play/Pausa de PZX (sólo en la versión con soporte para PZX)
 - `F8: Mueve la posición de PZX a la marca personalizada (sólo en la versión con soporte para PZX)
 - `CTRL+ F8: Rebobina el PZX hasta una marca del tipo "tag BRWS". Estas marcas sirven para señalar, por ejemplo, el comienzo de una multicarga (sólo en la versión con soporte para PZX)
 - `F9: Para la reproducción del PZX y rebobina hasta el principio (sólo en la versión con soporte para PZX)
-- `F11`: Activar o desactivar el módulo Wi-Fi
-- `F12`: Activar o desactivar la velocidad de la CPU a 28Mhz. No es necesario mantener pulsada la tecla, como en el core original
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Activar o desactivar el módulo Wi-Fi
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Activar o desactivar la velocidad de la CPU a 28Mhz. No es necesario mantener pulsada la tecla, como en el core original
 
 Además, cuando termina la reproducción completa de un fichero PZX, el reproductor se para automáticamente. También se parará si se encuentra en el fichero una marca STOP, o si se encuentra una marca STOP IF IN 48K y el core está en modo de 48K (sin paginación de 128K).
 
@@ -1409,12 +1715,12 @@ Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o 
 
 Durante la ejecución del core:
 
-- `Esc`: BREAK
-- `F5`: NMI
-- `F8`: Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
-- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa.
-- `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `Ctrl+Alt+Supr` o `F12`: Soft reset.
+- `Esc` (`Caps Shift+Espacio` en +UNO): BREAK
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` en +UNO): Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): cambia de modo video compuesto a VGA y viceversa.
+- `Ctrl+Alt+Backspace` o `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` o `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Soft reset.
 
 <<<
 
@@ -1438,11 +1744,11 @@ Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o 
 
 Durante la ejecución del core:
 
-- `Esc`: BREAK
-- `F5`: NMI
-- `F8`: Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
-- `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `Ctrl+Alt+Supr` o `F12`: Soft reset.
+- `Esc` (`Caps Shift+Espacio` en +UNO): BREAK
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` en +UNO): Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
+- `Ctrl+Alt+Backspace` o `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` o `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Soft reset.
 
 <<<
 
@@ -1468,13 +1774,13 @@ Se debe de utilizar una tarjeta SD con la primera partición en formato FAT16 o 
 
 Durante la ejecución del core:
 
-- `F5`: NMI
-- `F8`: Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
-- `F10`: Modo Pentagon
-- `F11`: Modo 48K
-- `F12`: Modo 128K
-- `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `Ctrl+Alt+Supr` o `F12`: Soft reset.
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): NMI
+- `F8` (`Caps Shift+Symbol Shift+8` en +UNO): Alternar la configuración de mezcla de Turbosound entre ACB y ABC.
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Modo Pentagon
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Modo 48K
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Modo 128K
+- `Ctrl+Alt+Backspace` o `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` o `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Soft reset.
 
 El core arranca por defecto en modo 128K.
 
@@ -1526,7 +1832,7 @@ Obtener la distribución de TBBlue correspondiente al core instalado, por ejempl
 
 [TIP]
 ====
-En el caso de tener en la tarjeta SD instalado <<esxdos,esxdos>>, el archivo `esxmmc.rom` debe ser la ROM con el mismo número de versión.
+En el caso de tener en la tarjeta SD instalado <<#_esxdos,esxdos>>, el archivo `esxmmc.rom` debe ser la ROM con el mismo número de versión.
 ====
 
 Si no estuviera ya, <<#_cores,instalar el core TBBlue>> en el ZXUNO+.
@@ -1537,14 +1843,14 @@ Si no estuviera ya, <<#_cores,instalar el core TBBlue>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-`F1`: Hard Reset
+`F1` (`Caps Shift+Symbol Shift+1` en +UNO): Hard Reset
 `Espacio+F1`: Menú de arranque
-`F2`: Activa o desactiva Scandoubler
-`F3`: Cambia entre 50Hz y 60Hz
-`F4`: Soft reset
-`F5`: Pausa CPU
-`F9`: Multiface
-`F10`: NMI
+`F2` (`Caps Shift+Symbol Shift+2` en +UNO): Activa o desactiva Scandoubler
+`F3` (`Caps Shift+Symbol Shift+3` en +UNO): Cambia entre 50Hz y 60Hz
+`F4` (`Caps Shift+Symbol Shift+4` en +UNO): Soft reset
+`F5` (`Caps Shift+Symbol Shift+5` en +UNO): Pausa CPU
+`F9` (`Caps Shift+Symbol Shift+9` en +UNO): Multiface
+`F10` (`Caps Shift+Symbol Shift+0` en +UNO): NMI
 
 <<<
 
@@ -1615,11 +1921,11 @@ Ahora, se puede organizar la información en la tarjeta SD de dos maneras distin
 Durante la ejecución del core:
 
 - `Mayús+F10`: Muestra el menú de Atom Software Archive
-- `F10`: Soft Reset
-- `F1`: Modo turbo 1Mhz
-- `F2`: Modo turbo 2Mhz
-- `F3`: Modo turbo 4Mhz
-- `F4`: Modo turbo 8Mhz
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Soft Reset
+- `F1` (`Caps Shift+Symbol Shift+1` en +UNO): Modo turbo 1Mhz
+- `F2` (`Caps Shift+Symbol Shift+2` en +UNO): Modo turbo 2Mhz
+- `F3` (`Caps Shift+Symbol Shift+3` en +UNO): Modo turbo 4Mhz
+- `F4` (`Caps Shift+Symbol Shift+4` en +UNO): Modo turbo 8Mhz
 
 El teclado está mapeado en inglés, según el siguiente esquema:
 
@@ -1673,10 +1979,12 @@ Como el fichero `MMB` se llama igual que el que utiliza el <<#_bbc_micro,core de
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.`: cambia de modo video compuesto a VGA y viceversa.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): cambia de modo video compuesto a VGA y viceversa.
 - `Ctrl+Bloq May+1` - `Ctrl+Bloq May+4`: Configurar otros modos gráficos (60Hz, etc)
 - `F10` y `Ctrl+F10`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+
+<<<
 
 ==== Guía básica
 
@@ -1692,8 +2000,6 @@ Smart SPI
 BASIC
 >
 ----
-
-<<<
 
 Automáticamente se monta el disco 0 de la imagen, y se puede ver su contenido con el comando:
 
@@ -1767,8 +2073,8 @@ Durante la ejecución del core:
 - `Impr. Pant` o `Windows Izquierda`: `COPY`
 - `F10` y `Ctrl+F10`: Soft Reset.
 - `Ctrl+Alt+F5`: NMI.
-- `Ctrl+Alt+Supr`: Reset.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 - `Fin`: Alterna entre modo color y modo fósforo verde
 
 ==== Guía básica
@@ -1952,10 +2258,10 @@ Durante la ejecución del core:
 
 - `-` (teclado numérico): Activar o desactivar scanlines en salida VGA.
 - `*` (teclado numérico): Alternar entre monitor en color y monitor en blanco y negro.
-- `F1` a `F10`: Insertar la imagen de disco 1 a 10 en la tarjeta SD. Pulsar `F12` a continuación.
+- `F1` a `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Insertar la imagen de disco 1 a 10 en la tarjeta SD. Pulsar `F12` a continuación.
 - `Mayús+F1` a `Mayús+F10`: Insertar la imagen de disco 11 a 20 en la tarjeta SD. Pulsar `F12` a continuación.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
-- `F12`: Soft reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Soft reset.
 
 [WARNING]
 ====
@@ -1991,9 +2297,9 @@ Durante la ejecución:
 - Teclas de cursor (o palanca de joystick): Joystick
 - `Z` y `X` (o botones de disparo de joystick): Botones de disparo
 - `0`: En cores verticales, activa o desactiva giro de 90º en las direcciones de los controles
-- `Bloq. Despl.`: Cambia de modo video compuesto a VGA y viceversa.
-- `F10`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): Cambia de modo video compuesto a VGA y viceversa.
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2022,16 +2328,16 @@ Si no estuviera ya, <<#_cores,instalar el core de Atari 800XL>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de video compuesto y VGA
 - `-`: Activar o desactivar scanlines en modo VGA
 - `*`: Alternar el tipo de máquina entre PAL y NTSC
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
-- `F5`: `Help`
-- `F6`: `Start`
-- `F7`: `Select`
-- `F9`: `Reset`
-- `F11`: Cargar un disco
-- `F12`: Acceder al menú de opciones
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): `Help`
+- `F6` (`Caps Shift+Symbol Shift+6` en +UNO): `Start`
+- `F7` (`Caps Shift+Symbol Shift+7` en +UNO): `Select`
+- `F9` (`Caps Shift+Symbol Shift+9` en +UNO): `Reset`
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Cargar un disco
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Acceder al menú de opciones
 - El teclado numérico emula un joystick. Las teclas `5` y `2` sirven indistintamente para la dirección __abajo__ y  `0` es el disparo
 
 <<<
@@ -2087,10 +2393,21 @@ Durante la ejecución del core:
 - `F` o el botón de disparo del joystick 1: Disparo del jugador 1
 - `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
 - `H` o el botón de disparo del joystick 2: Disparo del jugador 2
-- `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de video compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
+
+===== Personalización de los controles
+
+Existe oras versiones de este core que permite modificar el soporte de teclado. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+
+Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón de disparo`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+
+[TIP]
+====
+Por ejemplo, la secuencia `15 1C 44 4D 29` se correspondería con `Q A O P Espacio`
+====
 
 ==== Guía básica
 
@@ -2156,11 +2473,11 @@ image:img/keyboardbbc.png[pdfwidth=80%]
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.`: Cambia de modo video compuesto a VGA y viceversa.
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): Cambia de modo video compuesto a VGA y viceversa.
 - `-` (del teclado numérico): Activa o desactiva scanlines
-- `F12`: Reset
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset
 - `Mayús+F12`: Soft Reset intentando cargar automáticamente el disco seleccionado en `BEEB.MMB`
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 
 <<<
 
@@ -2202,6 +2519,8 @@ Para cargar, por ejemplo, un programa llamado `MENU`, y que esté en el disco us
 *MENU
 ----
 
+<<<
+
 Para ver una lista de los discos disponibles en el fichero `BEEB.MMB`:
 
 [source]
@@ -2227,7 +2546,7 @@ Recordar, tras insertar un disco, que si este tiene arranque automático, se pue
 
 El https://es.wikipedia.org/wiki/Camputers_Lynx[Lynx] fue un ordenador doméstico británico de 8 bits lanzado a principios de 1983 por la compañía Camputers. Se lanzaron en total tres modelos, con 48kB, 96kB o 128kB de RAM.
 
-La versión para ZXUNO+ tiene estas características:
+La versión para ZX-Uno ha sido https://github.com/Kyp069/lynx[desarrollada por Kyp069] y tiene las siguientes características:
 
 - Modos 48kB y 96 kB
 - ROM Scorpion opcional
@@ -2244,11 +2563,11 @@ Este core no utiliza la tarjeta SD.
 
 Durante la ejecución del core:
 
-- `F6`: Alterna entre el modo 48kB y el modo 96kB (por defecto)
-- `F7`: Alterna entre activar o desactivar la ROM Scorpio (activa por defecto)
-- `F8`: Activar o desactivar el tener en cuenta los bits 2 y 3 del puerto $80 (señal CAS del banco 2), para que se vean bien los juegos de Level 9.- `Ctrl+Alt+Supr`: Reset
-- `F11`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F6` (`Caps Shift+Symbol Shift+6` en +UNO): Alterna entre el modo 48kB y el modo 96kB (por defecto)
+- `F7` (`Caps Shift+Symbol Shift+7` en +UNO): Alterna entre activar o desactivar la ROM Scorpio (activa por defecto)
+- `F8` (`Caps Shift+Symbol Shift+8` en +UNO): Activar o desactivar el tener en cuenta los bits 2 y 3 del puerto $80 (señal CAS del banco 2), para que se vean bien los juegos de Level 9.- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Reset
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2273,7 +2592,7 @@ Para ficheros binarios, se debe usar `MLOAD` en vez de `LOAD`.
 
 [NOTE]
 ====
-El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta `TAP` de Lynx.
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta `TAP` de Lynx.
 ====
 
 Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Lynx2Wav>> con los ficheros `TAP` de cinta de Lynx. Los ficheros de audio obtenidos se pueden embeber a su vez dentro de ficheros TSX o TZX con herramientas como <<#_creación_de_ficheros_tzx_o_tsx_desde_otros_formatos,MakeTSX o RetroConverter>>.
@@ -2311,9 +2630,9 @@ La máquina CHIP-8 utiliza un teclado hexadecimal como entrada. La asignación e
 
 Durante la ejecución del core:
 
-- `Esc`: para mostrar u ocultar el menú.
-- `F11`: Hard Reset
-- `F12`: Reset
+- `Esc` (`Caps Shift+Espacio` en +UNO): para mostrar u ocultar el menú.
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Hard Reset
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset
 
 <<<
 
@@ -2406,9 +2725,9 @@ El teclado está con la distribución en inglés. No está implementada la tecla
 Durante la ejecución del core:
 
 - `Windows`: `MODSEL`
-- `F5`: NMI
-- `F11`: Hard Reset
-- `F12` o `Ctrl+Alt+Supr`: Reset
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): NMI
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Hard Reset
+- `F12` o `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Reset
 
 <<<
 
@@ -2510,12 +2829,12 @@ Si no estuviera ya, <<#_cores,instalar el core de Commodore 16>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-- `Esc`: Esc
+- `Esc` (`Caps Shift+Espacio` en +UNO): Esc
 - `Tab`:  RUN/STOP
 - `Windows izquierda` = Commodore
 - Teclado Numérico: Joystick emulado
-- `F1` a `F3`: F1 a F3
-- `Bloq. Num` o `F4`: HELP
+- `F1` a `F3` (`Caps Shift+Symbol Shift+3` en +UNO): F1 a F3
+- `Bloq. Num` o `F4` (`Caps Shift+Symbol Shift+4` en +UNO): HELP
 - `Insert`: Seleccionar el primer disco de la tarjeta SD
 - `Re.Pag`: Seleccionar el siguiente disco
 - `Av.Pag`: Seleccionar el  disco anterior
@@ -2524,9 +2843,9 @@ Durante la ejecución del core:
 - `+` del teclado numérico: Cambiar la polaridad de la entrada de audio
 - `-` del teclado numérico: Activar o desactivar scanlines en modo VGA
 - `Bloq. Desp`: para cambiar entre modo de video compuesto y VGA
-- `F11`: Seleccionar la asignación del joystick al puerto 0 o al puerto 1
-- `F12`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Seleccionar la asignación del joystick al puerto 0 o al puerto 1
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2536,6 +2855,16 @@ Durante la ejecución del core:
 image:img/c16.png[pdfwidth=70%]
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD`. Una vez finalizadada la carga, escribir `RUN` y pulsar `Enter` si fuese necesario.
+
+[NOTE]
+====
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore 16, pero es posible utilizar <<#_conversión_a_fichero_de_audio,Comodoro>> para generar ficheros `TZX` compatibles
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
+====
 
 Para listar el directorio del disco seleccionado, pulsar `F3` o introducir el comando `DIRECTORY`. Para cargar un fichero del disco, usar el comando `DLOAD"<nombre de fichero>"` y luego, normalmente, `RUN`.
 
@@ -2619,13 +2948,13 @@ Si no estuviera ya, <<#_cores,instalar el core de Commodore 64>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-- `Esc`: Start/Stop
+- `Esc` (`Caps Shift+Espacio` en +UNO): Start/Stop
 - `Tab`:  RUN/STOP
 - `Alt` = Commodore
 - Teclado Numérico: Joystick emulado
-- `F1` a `F8`: F1 a F8
-- `F9`: Tecla del símbolo de la libra
-- `F10`: Tecla del símbolo `+`
+- `F1` a `F8` (`Caps Shift+Symbol Shift+8` en +UNO): F1 a F8
+- `F9` (`Caps Shift+Symbol Shift+9` en +UNO): Tecla del símbolo de la libra
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Tecla del símbolo `+`
 - `Insert`: Seleccionar el primer disco de la tarjeta SD
 - `Re.Pag`: Seleccionar el siguiente disco
 - `Av.Pag`: Seleccionar el  disco anterior
@@ -2635,10 +2964,10 @@ Durante la ejecución del core:
 - `-` del teclado numérico: Activar o desactivar scanlines en modo VGA
 - `Bloq. Desp`: para cambiar entre modo de video compuesto y VGA
 - `Fin` = Cambiar paleta de colores
-- `F11`: Rotar entre puertos de joystick
-- `F12`: Reset modo JiffyDOS
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Rotar entre puertos de joystick
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset modo JiffyDOS
 - `Ctrl+F12`:  Reset modo ROM C64 original (para carga de cintas)
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2648,9 +2977,20 @@ Durante la ejecución del core:
 image:img/c64.png[pdfwidth=70%]
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con el comando `LOAD`. Una vez finalizadada la carga, escribir `RUN` y pulsar `Enter` si fuese necesario.
+
 [NOTE]
 ====
 Para cargar desde cinta se debe estar usando la ROM de C64 original que se activa con `Ctrl+F12`.
+====
+
+[NOTE]
+====
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore 64, pero es posible utilizar <<#_conversión_a_fichero_de_audio,Comodoro>> para generar ficheros `TZX` compatibles
+====
+
+[TIP]
+====
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
 ====
 
 Para cargar desde un disco, habitualmente, se puede pulsar `Mayus+Esc` o bien escribir `LOAD "*",8,1` y pulsar `Enter`. Una vez aparezca `READY` en la pantalla, escribir `RUN` y pulsar `Enter` para ejecutar el programa.
@@ -2688,7 +3028,7 @@ El teclado está con la distribución en inglés.
 
 Durante la ejecución del core:
 
-- `F1`: Cancelar carga desde cinta
+- `F1` (`Caps Shift+Symbol Shift+1` en +UNO): Cancelar carga desde cinta
 - `Alt`: Permite escribir en modo gráfico
 
 <<<
@@ -2702,12 +3042,12 @@ Se puede cargar desde una cinta (u otro dispositivo externo de audio) con el com
 
 [NOTE]
 ====
-El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore PET.
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore PET, pero es posible utilizar <<#_conversión_a_fichero_de_audio,Comodoro>> para generar ficheros `TZX` compatibles
 ====
 
 [TIP]
 ====
-Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap>> con los ficheros `TAP` de cinta de Commodore.
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
 ====
 
 <<<
@@ -2735,12 +3075,12 @@ Este core no utiliza la tarjeta SD.
 
 Durante la ejecución del core:
 
-- `F9` a `F11`: Cargar cartuchos incorporados al core (si los hubiera)
+- `F9` a `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Cargar cartuchos incorporados al core (si los hubiera)
 - `-` del teclado numérico: Cambiar la polaridad de la entrada de audio. El LED rojo se enciende cuando la polaridad está invertida
 - `Bloq. Desp`: para cambiar entre modo de video compuesto y VGA
 - `Bloq. Num`: Reset desactivando la ampliación de memoria de 32K (activa por defecto)
-- `F12`: Reset activando la ampliación de memoria
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset activando la ampliación de memoria
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2753,12 +3093,12 @@ Se puede cargar desde una cinta (u otro dispositivo externo de audio) con el com
 
 [NOTE]
 ====
-El software Maxduino incorporando en <<<<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore VIC-20.
+El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore VIC-20, pero es posible utilizar <<#_conversión_a_fichero_de_audio,Comodoro>> para generar ficheros `TZX` compatibles
 ====
 
 [TIP]
 ====
-Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap>> con los ficheros `TAP` de cinta de Commodore.
+Es posible utilizar programas como <<#_conversión_a_fichero_de_audio,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
 ====
 
 <<<
@@ -2817,18 +3157,18 @@ Se puede utilizar una tarjeta SD, con la primera partición en formato FAT16, pa
 
 Durante la ejecución del core:
 
-- `F1`: Velocidad de ejecución normal
-- `F2`: Velocidad de ejecución 2x
-- `F3`: Velocidad de ejecución 4x
-- `F9`: Habilitar o deshabilitar sonido
-- `Esc`: Congela la ejecución de un programa BASIC o Código Máquina. Volviendo a pulsar, la ejecución continua
+- `F1` (`Caps Shift+Symbol Shift+1` en +UNO): Velocidad de ejecución normal
+- `F2` (`Caps Shift+Symbol Shift+2` en +UNO): Velocidad de ejecución 2x
+- `F3` (`Caps Shift+Symbol Shift+3` en +UNO): Velocidad de ejecución 4x
+- `F9` (`Caps Shift+Symbol Shift+9` en +UNO): Habilitar o deshabilitar sonido
+- `Esc` (`Caps Shift+Espacio` en +UNO): Congela la ejecución de un programa BASIC o Código Máquina. Volviendo a pulsar, la ejecución continua
 - `Supr`: Detiene la ejecución de un programa BASIC mientras se mantenga pulsada
 - `Fin`: Si se pulsa durante la ejecución de un programa BASIC realiza un BREAK
 - `Mayús.+M`: Habilita el modo plus más avanzado en aquellos programas que estén preparados para usarlo (por ejemplo `TETRIS.GTP`)
 - `M`: Vuelve al modo normal desde el modo plus
 - `Ctrl+Alt+F5`: NMI
-- `Ctrl+Alt+Supr`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -2894,16 +3234,16 @@ https://github.com/pullmoll/cass80
 
 Durante la ejecución del core:
 
-- `F5`: Cambia color de la tinta
-- `F6`: Cambia el color del papel
-- `F7`: Cambia color del borde
-- `F9`: Cambia entre modo 64/32 columnas (solo salida VGA)
-- `F10`: Tecla `PAGE`
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): Cambia color de la tinta
+- `F6` (`Caps Shift+Symbol Shift+6` en +UNO): Cambia el color del papel
+- `F7` (`Caps Shift+Symbol Shift+7` en +UNO): Cambia color del borde
+- `F9` (`Caps Shift+Symbol Shift+9` en +UNO): Cambia entre modo 64/32 columnas (solo salida VGA)
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Tecla `PAGE`
 - `Inicio`: Tecla `CLEAR`
 - `Bloq. Despl`: Cambia entre modo VGA y PAL. Nota: en el modo PAL la imagen se desplaza hacia arriba y vuelve a entra por abajo en un bucle, como pasaba antiguamente en los canales de TV analógicos cuando no estaban bien sintonizados.
 - `Mayús+0`: Si se ha cargado el fichero `ULCBAS.CAS` (Upper/Lower Case Driver) permite cambiar el estado de solo mayúsculas o mayúsculas+minúsculas.
-- `Ctrl+Alt+Supr`: Reset
-- `Ctrl+Alt+Backspace`: Hard Reset
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard Reset
 
 <<<
 
@@ -2976,10 +3316,10 @@ Se puede utilizar una tarjeta SD, con la primera partición en formato FAT16, pa
 
 Durante la ejecución del core:
 
-- `F1` a `F4`: Modos Turbo
+- `F1` a `F4` (`Caps Shift+Symbol Shift+4` en +UNO): Modos Turbo
 - `Ctrl+Alt+F5`: NMI
-- `Ctrl+Alt+Supr`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -3071,13 +3411,13 @@ Si no estuviera ya, <<#_cores,instalar el core de MSX>> en el ZUNO+.
 
 Durante la ejecución del core:
 
-- `F1` a `F5`: `F1` a `F5`
+- `F1` a `F5` (`Caps Shift+Symbol Shift+5` en +UNO): `F1` a `F5`
 - `Impr Pant`: Cambia el modo entre VGA y RGB
 - `Bloq Desp`: Cambia el modo de línea de exploración (Scanlines)
 - `Pausa`: Cambia entre 50Hz y 60Hz
-- `F11`: Activa o desactiva el modo turbo
-- `Ctrl+Alt+Supr`: Soft Reset
-- `Ctrl+Alt+Backspace`: Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Activa o desactiva el modo turbo
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `ALT Izquierdo`: MSX GRAPH
 - `ALT Derecho`: MSX CODE
 - `Re Pág`: MSX SELECT
@@ -3193,8 +3533,8 @@ El teclado no está mapeado a la distribución de uno PS/2 estándar, e intenta 
 
 Durante la ejecución del core:
 
-- `F1` a `F5`: F1 a F5
-- `Esc`: `GRAPH`
+- `F1` a `F5` (`Caps Shift+Symbol Shift+5` en +UNO): F1 a F5
+- `Esc` (`Caps Shift+Espacio` en +UNO): `GRAPH`
 - `Tab`: `ALPHA`
 - `Bloq. Mayús`: `CTRL`
 - `Mayús`: `SHIFT`
@@ -3266,7 +3606,29 @@ Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick: Mostrar u ocultar el menú de configuración
 - Teclas de cursor, y `Enter` para usar el menú
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+===== Personalización de los controles
+
+Existe otras versiones de este core que permiten el control también con teclado:
+
+- `W`, `A`, `S`, `D` (personalizables) o el joystick 1: Controles de dirección del jugador 1
+- `F` y `R` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 1)
+- `5` y `1`: `Select` y `Start` (Jugador 1)
+- `I`, `J`, `K`, `L` (personalizables) o el joystick 2: Controles de dirección del jugador 2
+- `H`, `Y` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 2)
+- `6` y `2`: `Select` y `Start` (Jugador 1)
+- `F4` (`Caps Shift+Symbol Shift+4` en ZXUnGo+): Intercambiar la asignación de teclas de jugador 1 y jugador 2
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y luego `B` en ZXUnGo+): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+Los controles por defecto del core con soporte de teclado se pueden modificar. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+
+Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón A`, `Botón B`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+
+[TIP]
+====
+Por ejemplo, la secuencia `15 1C 44 4D 29 22` se correspondería con `Q A O P Espacio X`, y la secuencia `1D 1B 23 2B 1A 22` se correspondería con `W S D F Z X`
+====
 
 <<<
 
@@ -3356,7 +3718,7 @@ image:img/keyboardoric.png[pdfwidth=80%]
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de vídeo RGB y VGA
 - `Inicio`: Mostrar datos de depuración (Pista de disco actual -dos dígitos-, número de imagen de disco -dos dígitos-, y registro de contador de programa -cuatro dígitos-)
 - `Fin`: NMI
 - `Inicio+Fin`: Reset
@@ -3392,7 +3754,7 @@ Para ejecutar un programa, se ha de escribir `-` delante del nombre. Así, por e
 
 Otra versión distinta de core de https://es.wikipedia.org/wiki/Oric_Atmos[Oric Atmos], basada en la versión de Rampa para MiST, Mistica y SiDi.
 
-Esta versión tiene las siguientes características:
+Esta versión ha sido https://github.com/Kyp069/atmos[desarrollada por Kyp069] y tiene las siguientes características:
 
 - Salida de vídeo compuesto o VGA (Scandoubler)
 - 64KB de RAM y 16KB de ROM. La ROM oculta la parte alta de la memoria, pero se puede acceder a todos los bancos de memoria mediante ensamblador
@@ -3421,15 +3783,15 @@ image:img/keyboardoric.png[pdfwidth=80%]
 
 Durante la ejecución del core:
 
-- `F1`: Seleccionar la ROM 1.1
-- `F2`: Seleccionar la ROM 1.22
-- `F5`: NMI
-- `F10`: Habilita la salida de audio al ejecutar `CSAVE`
-- `Ctrl+Alt+Backspace` o `F11`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
-- `Ctrl+Alt+Supr` o `F12`: Soft reset
-- `Bloq. Despl.`: para cambiar entre modo de vídeo compuesto y VGA
+- `F1` (`Caps Shift+Symbol Shift+1` en +UNO): Seleccionar la ROM 1.1
+- `F2` (`Caps Shift+Symbol Shift+2` en +UNO): Seleccionar la ROM 1.22
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO): NMI
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Habilita la salida de audio al ejecutar `CSAVE`
+- `Ctrl+Alt+Backspace` o `F11` (`Caps Shift+Symbol Shift+Q` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Ctrl+Alt+Supr` o `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Soft reset
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de vídeo compuesto y VGA
 - `Alt Gr.`: Tecla `FUNC`
-- `Esc`: Tecla `ESC`
+- `Esc` (`Caps Shift+Espacio` en +UNO): Tecla `ESC`
 - `Supr`: Tecla `DEL`
 - `Ctrl`: Tecla `CTRL`
 - `Mayus.`: Tecla `SHIFT`
@@ -3441,11 +3803,6 @@ Durante la ejecución del core:
 
 [.text-center]
 image:img/oric.png[pdfwidth=70%]
-
-[NOTE]
-====
-La versión 1.0 del core no detecta correctamente los ajustes de la BIOS y siempre arranca en modo vídeo compuesto. Por tanto, unos instantes después de haberlo cargado, se debe pulsar `Bloq. Despl.` para activar la salida de vídeo VGA
-====
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) usando el comando `CLOAD ""` y `Enter`. A continuación, aparecerá en pantalla el mensaje
 
@@ -3500,9 +3857,9 @@ Este core no utiliza la tarjeta SD.
 Durante la ejecución del core:
 
 - `Esc` o botón 2 del joystick: Mostrar u ocultar el menú de configuración
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
-- `Bloq. Despl.`: cambia de modo vídeo RGB a VGA y viceversa
-- `F3` o `F12`: Reinicio del juego
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): cambia de modo vídeo RGB a VGA y viceversa
+- `F3` o `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
 - Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).
 - Joystick 1 (izquierda): Control de paleta de la izquierda (Jugador 2)
@@ -3590,8 +3947,8 @@ Este core no utiliza la tarjeta SD.
 Durante la ejecución del core:
 
 - `Ctrl+Alt+F5`: NMI.
-- `Ctrl+Alt+Supr`: Soft reset.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+N` en +UNO): Soft reset.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`.
 
 <<<
 
@@ -3638,9 +3995,9 @@ Durante la ejecución del core:
 - `Z`, `Windows` o el botón de joystick 1: Botón de disparo 1 del jugador 1
 - `X`, `Espacio` o el botón secundario de joystick 1: Botón de disparo 2 del jugador 1
 - `Pausa`: Tecla de botón de pausa de Master System
-- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
-- `F12`: Reset y mostrar el selector de ficheros
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset y mostrar el selector de ficheros
 
 <<<
 
@@ -3701,9 +4058,9 @@ Durante la ejecución del core:
 - `X` o el botón principal de joystick: Botón de disparo 2
 - `C` o el botón secundario de joystick: Botón de disparo 3
 - `V`: Botón de disparo 4
-- `Esc`: para mostrar u ocultar el menú.
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
-- `F12`: Reset
+- `Esc` (`Caps Shift+Espacio` en +UNO): para mostrar u ocultar el menú.
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F12` (`Caps Shift+Symbol Shift+w` en +UNO): Reset
 
 <<<
 
@@ -3750,19 +4107,19 @@ Si no estuviera ya, <<#_cores,instalar el core de Videopac>> en el ZXUNO+.
 
 Durante la ejecución del core:
 
-- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
-- `F2`: Alternar entre RGB y vídeo compuesto cuando no se está usando el modo VGA
-- `F3`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset. . Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de vídeo RGB/Vídeo Compuesto y VGA
+- `F2` (`Caps Shift+Symbol Shift+2` en +UNO): Alternar entre RGB y vídeo compuesto cuando no se está usando el modo VGA
+- `F3` (`Caps Shift+Symbol Shift+3` en +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset. . Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - Tras cargar una ROM, la mayoría de los juegos mostrarán un mensaje "SELECT GAME". Pulsar una tecla entre `0` y `9` o el botón del joystick para jugar.
-- `Esc` o el botón 2 del joystick para mostrar u ocultar el menú.
-- `W`, `A`, `S`, `D` o las teclas de cursor y luego `Enter` para elegir y seleccionar en el menú.
+- `Esc` (`Caps Shift+Symbol Shift+Espacio` en +UNO) o el botón 2 del joystick para mostrar u ocultar el menú.
+- `W`, `A`, `S`, `D` o las teclas de cursor (`Caps Shift+6` y `Caps Shift+7` en +UNO) y luego `Enter` para elegir y seleccionar en el menú.
 
 <<<
 
 ==== Guía básica
 
-Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar en el menú.
+Pulsando `Esc` (`Caps Shift+Symbol Shift+Espacio` en +UNO) o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+6` y `Caps Shift+7` en +UNO) y `Enter` para elegir y seleccionar en el menú.
 
 [.text-center]
 image:img/videopacuno.png[pdfwidth=70%]
@@ -3828,6 +4185,119 @@ Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo e
 [WARNING]
 ====
 Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+====
+
+<<<
+
+=== ZX81 y ZX80
+
+Versión alternativa de core de ZX81 y ZX80 creada por avlixa, basada en la página de Grant Searle's sobre el ZX80
+
+Características:
+
+- Se puede elegir entre ZX80 y ZX81 (ZX80 sólo con salida RGB por el momento)
+- 16k/32k/48k RAM packs
+- 8KB con addon CHR$128/UDG (sin probar)
+- QS CHRS (sin probar)
+- CHROMA81
+- Turbo en modo lento: NoWait, x2, x8
+- Chip de sonido YM2149 (compatible con ZON X-81)
+- Múltiples joysticks (Cursor, Sinclar, ZX81, ZXpand)
+- Timings PAL y NTSC
+- Turbo carga de ficheros .o y .p
+- Carga de ROM alternativa
+- Carga de programas a través de la entrada de audio
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta SD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con archivos de cinta o ROM que se deseen cargar.
+
+Se puede copiar, si se desea, un fichero `ZX8X.ROM` (disponible the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[repositorio oficial] en el directorio `/zx81/roms`: se trata de los ficheros ZX81 rom (8k) + ZX80 rom (4k) concatenados.
+
+Si no estuviera ya, <<#_cores,instalar el core de ZX81 y ZX80>> en el ZX-Uno.
+
+<<<
+
+==== Teclado
+
+El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la distribución de la máquina original. Así, por ejemplo, para obtener `"` se ha de pulsar `Mayús+P` o para borrar, `Mayús+0`.
+
+**ZX80**
+
+[.text-center]
+image:img/keyboardZX80.jpg[pdfwidth=80%]
+
+**ZX81**
+
+[.text-center]
+image:img/keyboardZX81.jpg[pdfwidth=80%]
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F1` (`Caps Shift+Symbol Shift+1` en +UNO): Habilitar o deshabilitar los caracteres alternativos
+- `F5` (`Caps Shift+Symbol Shift+5` en +UNO) o el botón 2 del joystick para mostrar u ocultar el menú.
+- `F9` (`Caps Shift+Symbol Shift+9` en +UNO): Deshabilita o habilita la salida MIC al conector de audio, porque algunos juegos generan un ruido molesto
+- `F10` (`Caps Shift+Symbol Shift+0` en +UNO): Habilita o deshabilita sonido de entrada por la salida de audio, para escuchar la cinta si se carga por audio
+- `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO): para cambiar entre modo de vídeo RGB y VGA
+- `Ctrl+Alt+Supr` (`Caps Shift+Symbol Shift+B` en +UNO): Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard reset.
+
+<<<
+
+==== Guía básica
+
+Pulsando `F5` (`Caps Shift+Symbol Shift+5` en +UNO) o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en +UNO, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
+
+[.text-center]
+image:img/zx8180.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Cargar un archivo de cinta (Load Tape)
+- Cargar una ROM alternativa (Load ROM)
+- Configurar opciones (Configuration Options)
+- Salir del menú (Exit)
+
+<<<
+
+[.text-center]
+image:img/zx8180_2.jpg[pdfwidth=70%]
+
+- Elegir el modelo de computador (Computer Model): ZX80/ZX81
+- Tamaño de RAM (Main RAM): 16K/32K
+- RAM baja (Low RAM): Off/8KB
+- Joystick: Cursor/Sinclair/ZX81
+- Habilitar o deshabilitar QS CHRS
+- Configuración de CHR$128/UDG: 128 chars/64 chars/Disabled
+- Habilitar o deshabilitar Chroma81: Disabled/Enabled
+- Vídeo inverso (Inverse Video): Off/On
+- Borde negro (Black Border): Off/On
+- Modo de velocidad (Slow mode speed): Original/No Wait/x2
+- Frecuencia de vídeo (Video frequency): 50Hz/60Hz
+
+Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado desde el menú, con el comando `LOAD""` y pulsando `Enter`.
+
+[TIP]
+====
+Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+====
+
+Se pueden cargar archivos `.p` con color y caracteres alternativos.
+
+Para que funcione el coloreado, se debe activar CHROMA81 antes de la carga. Igualmente, para los caracteres alternativos, QS CHRS debería estar activo antes de cargar.
+
+[TIP]
+====
+Las opciones recomendadas para la mayoría de los juegos son:
+
+Main RAM: 16KB
+Low RAM: 8KB
+CHR$128: 128 chars
+QS CHRS: enabled
+CHROMA81: enabled
 ====
 
 <<<
@@ -3937,6 +4407,8 @@ make
 
 Si todo se ha hecho correctamente, se habrá generado el fichero `playtzx` que se puede copiar a donde se desee en el disco duro y utilizar. Se puede borrar el directorio descomprimido donde se compiló.
 
+<<<
+
 ==== Teléfono móvil, tableta, reproductor de sonido MP3, etc.
 
 En general, existen muy pocas alternativas (o ninguna) alternativas de programas que puedan reproducir directamente un archivo de cinta en un dispositivo móvil, así que, normalmente, será necesario convertir a un fichero de audio el contenido de la cinta antes de intentar cargarla con uno de estos aparatos.
@@ -3971,6 +4443,8 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] es un programa con inter
 `tsx2wav` en https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass] es una utilidad en PHP y que sirve para exportar desde ficheros `TSX` a `WAV`.
 
 https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] es un programa con interfaz gráfica para Windows (pero que se puede usar también con Wine en Linux o Mac) que permite convertir ficheros `TAP` de Commodore como `WAV` de audio.
+
+http://retrowiki.es/viewtopic.php?f=110&t=200037282[Comodoro 2.0] es un script que permite convertir a formato `TAP` y `TZX` para poder realizar cargas por audio en las Commodore Pet, VIC-20, 16 y 64.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] es un programa que permite convertir ficheros `TAP` de Camputers Lynx como `WAV` de audio.
 
@@ -4176,6 +4650,11 @@ image:img/jtagzxunoplus.jpg[pdfwidth=80%]
 *NO* se ha de conectar la línea de 3V
 ====
 
+[NOTE]
+====
+En el caso de un +UNO, será necesario extraer la placa de ZX-Uno para realizar la recuperación.
+====
+
 <<<
 
 ==== Recuperación usando una Raspberry Pi
@@ -4333,12 +4812,34 @@ image:img/recovery2.png[pdfwidth=70%]
 Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
 ====
 
+[NOTE]
+====
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de +UNO, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`), para que funcionen de nuevo temporalmente.
+====
+
 [start=15]
 . Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXUNO+ vuelve a arrancar correctamente.
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO) para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
+[NOTE]
+====
+En el caso de +UNO, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
+
+. Si no hay imagen, cambiar entre modo vídeo RGB y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el +UNO sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
+. Rápidamente, pulsar `Caps Shift + 1`
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
+. Navegar por la BIOS y configurar las siguientes opciones:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
+. Guardar los cambios de la BIOS:
+- `Exit` -> `Save changes and exit`
+.Apagar completamente el +UNO y volver a encenderlo
 ====
 
 <<<
@@ -4414,7 +4915,7 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -4437,17 +4938,35 @@ image:img/recovery2.png[pdfwidth=70%]
 Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
 ====
 
-<<<
+[NOTE]
+====
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de +UNO, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`), para que funcionen de nuevo temporalmente.
+====
 
 [start=13]
 . Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZX-Uno vuelve a arrancar correctamente.
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.`para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO) para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
 ====
 
+[NOTE]
+====
+En el caso de +UNO, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
 
+. Si no hay imagen, cambiar entre modo vídeo RGB y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el +UNO sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
+. Rápidamente, pulsar `Caps Shift + 1`
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
+. Navegar por la BIOS y configurar las siguientes opciones:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
+. Guardar los cambios de la BIOS:
+- `Exit` -> `Save changes and exit`
+.Apagar completamente el +UNO y volver a encenderlo
+====
 
 [NOTE]
 ====
@@ -4499,7 +5018,7 @@ pld load recovery.bit
 [start=9]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
-En el caso de que no se vea imagen, pulsar `Bloq. Despl.` para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en +UNO) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
 image:img/recovery.png[pdfwidth=70%]
@@ -4522,6 +5041,10 @@ image:img/recovery2.png[pdfwidth=70%]
 Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
 ====
 
+[NOTE]
+====
+Habitualmente, la imagen de recuperación está configurada para usar un teclado PS/2 y no el teclado de membrana de Spectrum, así que, en el caso de +UNO, puede que no funcionen las combinaciones como `Caps Shift + 5`, etc. En este caso, se ha de cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`), para que funcionen de nuevo temporalmente.
+====
 
 <<<
 
@@ -4530,12 +5053,33 @@ Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs
 
 [NOTE]
 ====
-Si no se obtiene imagen, pulsar de nuevo `Bloq. Despl.`para cambiar entre modo de vídeo RGB y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+En el caso de +UNO, como la configuración de la imagen de recuperación por defecto espera un teclado PS/2, se pueden seguir los siguientes pasos para configurar la BIOS correctamente:
+
+. Si no hay imagen, cambiar entre modo vídeo RGB y modo VGA (`Caps Shift+Symbol Shift+G`)
+. Cambiar al modo `PC XT` de teclado (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el +UNO sin que se pierda la configuración del teclado (`Caps Shift+Symbol Shift+B`)
+. Rápidamente, pulsar `Caps Shift + 1`
+. De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
+. Navegar por la BIOS y configurar las siguientes opciones:
+- `Advanced` -> `Keyboard Layout`: `Spectrum`
+- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
+. Guardar los cambios de la BIOS:
+- `Exit` -> `Save changes and exit`
+.Apagar completamente el +UNO y volver a encenderlo
 ====
 
 <<<
 
 == Referencias
+
+=== Scan Codes
+
+[.text-center]
+image:img/scancodes.png[pdfwidth=80%]
+
+<<<
+
+=== Enlaces
 
 https://zxuno.speccy.org/index.shtml[ZX-Uno]
 
@@ -4554,6 +5098,8 @@ https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with P
 https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Configuración de teclado de ZX-Uno].
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
+
+http://www.benophetinternet.nl/hobby/vanmezelf/ESXDOS%20manual.pdf[ESXDOS Manual]
 
 https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10#p25076[Cargando Leches 2.0]
 
