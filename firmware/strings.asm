@@ -404,8 +404,7 @@ cad112  defb    '4X', 0
 cad113  defb    '8X', 0
 cad114  defb    'Break to exit', 0
 cad115  defb    'Slot occupied, select', 0
-        defb    'another or delete a', 0
-        defb    'ROM to free it', 0
+        defb    'another one', 0
 cad116  defb    'Disable for', 0
         defb    'old games', 0, 0
       IF  recovery=1
