@@ -1,0 +1,21 @@
+= Miniduino English Manual
+:author: kounch
+:revnumber: 1.0.0
+:doctype: book
+:notitle:
+:front-cover-image: image:img/portadaminiduino.jpg[]
+:email: kounch@users.noreply.github.com
+:Revision: 1.0
+:description: Miniduino English Manual
+:keywords: Manual, English, Miniduino
+:icons: font
+:source-highlighter: rouge
+:toc: left
+:toc-title: Index
+:toclevels: 4
+
+<<<
+
+== Introduction
+
+include::miniduino_en.adoc[]
