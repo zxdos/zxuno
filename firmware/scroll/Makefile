@@ -16,6 +16,9 @@
 
 include ../../sdk/common.mk
 
+-include conf.mk
+VERSION ?= 1
+
 srcdir		= .
 
 INCLUDEDIR	= ../../sdk/include
@@ -39,13 +42,31 @@ all: build/scroll.tap
 build:
 	mkdir -p $@
 
-build/fondo.rcs:\
- $(srcdir)/fondo.png\
- $(srcdir)/fondo.atr\
- | build
-	Png2Rcs $< $@ -a $(srcdir)/fondo.atr
+ifeq ($(VERSION),1)
 
-build/fuente6x8.bin: $(srcdir)/fuente6x8.png | build
+build/fondo.rcs:\
+ images/fondo.png\
+ images/fondo.atr\
+ | build
+	Png2Rcs $< $@ -a images/fondo.atr
+
+SCROLL_DEPS = build/fondo.rcs
+
+else ifeq ($(VERSION),2)
+
+build/fondo2.rcs:\
+ images/fondo2.png\
+ images/fondo2.atr\
+ | build
+	Png2Rcs $< $@ -a images/fondo2.atr
+
+SCROLL_DEPS = build/fondo2.rcs
+
+else
+ $(error Unknown version selected: $(VERSION))
+endif
+
+build/fuente6x8.bin: fonts/fuente6x8.png | build
 	fontconv -q -f 6x8 $< $@
 
 build/scroll.exp build/scroll.bin: $(srcdir)/scroll.asm\
@@ -55,12 +76,13 @@ build/scroll.exp build/scroll.bin: $(srcdir)/scroll.asm\
  $(INCLUDEDIR)/playstc.inc\
  $(INCLUDEDIR)/prn6x8f.mac\
  $(INCLUDEDIR)/rcs.mac\
+ $(INCLUDEDIR)/rever.mac\
  $(srcdir)/music.stc\
  $(srcdir)/string.asm\
- build/fondo.rcs\
  build/fuente6x8.bin\
+ $(SCROLL_DEPS)\
  | build
-	$(AS) $(AFLAGS) --exp=build/scroll.exp --raw=build/scroll.bin $<
+	$(AS) $(AFLAGS) -DVERSION=$(VERSION) --exp=build/scroll.exp --raw=build/scroll.bin $<
 
 build/scroll.bin.zx7b: build/scroll.bin
 	zx7b $< $@
@@ -95,7 +117,7 @@ test: build/scroll.tap
 clean:
 	$(RM)\
  build/fuente6x8.bin\
- build/fondo.rcs\
+ $(SCROLL_DEPS)\
  build/scroll.bin\
  build/scroll.exp\
  build/scroll.bin.zx7b\

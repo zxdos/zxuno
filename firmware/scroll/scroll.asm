@@ -31,15 +31,27 @@
 
 ;       output  scroll.bin
 
+ ifndef VERSION
+VERSION: equ 1
+ endif
+
         include rcs.mac
         include memcpy.mac
         include ay.def
         include prn6x8f.mac
+        include rever.mac
 
         org     $5e6d
 
         export  filestart
         export  start
+
+ if VERSION == 1
+  define PICTURE "fondo.rcs"
+ endif
+ if VERSION == 2
+  define PICTURE "fondo2.rcs"
+ endif
 
 SCREEN: equ $4000
 ATTRS: equ $5800
@@ -83,6 +95,9 @@ start   ld      hl, FONT                ; L = 0
         out     ($fe), a                ; set border to black
         inc     a                       ; A = flag variable to print new text
         ex      af, af'                 ; hide flag variable
+ if VERSION == 2
+        rever 4
+ endif
         ld      hl, FONT
         ld      de, FONT+8*FC
         ld      b, high (8*FC*7)        ; BC = size of 7 copies of font
@@ -168,4 +183,4 @@ credits include string.asm
 
 font    incbin  fuente6x8.bin
 
-picture incbin  fondo.rcs
+picture incbin  PICTURE

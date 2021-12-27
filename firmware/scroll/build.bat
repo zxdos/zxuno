@@ -9,6 +9,11 @@ SETLOCAL ENABLEEXTENSIONS
 CALL ..\..\sdk\setenv.bat
 @IF NOT ERRORLEVEL 0 GOTO Error
 
+IF EXIST conf.bat CALL conf.bat
+@IF NOT ERRORLEVEL 0 GOTO Error
+
+@IF "%VERSION%" == "" SET VERSION=1
+
 @SET INCLUDEDIR=..\..\sdk\include
 @SET AS=sjasmplus
 @SET AFLAGS=--nologo -I%INCLUDEDIR% -Ibuild
@@ -25,13 +30,16 @@ CALL ..\..\sdk\setenv.bat
 IF NOT EXIST build MKDIR build
 @IF NOT ERRORLEVEL 0 GOTO Error
 
-Png2Rcs fondo.png build\fondo.rcs -a fondo.atr
+IF %VERSION% == 1 Png2Rcs images\fondo.png build\fondo.rcs -a images\fondo.atr
 @IF NOT ERRORLEVEL 0 GOTO Error
 
-fontconv -q -f 6x8 fuente6x8.png build\fuente6x8.bin
+IF %VERSION% == 2 Png2Rcs images\fondo2.png build\fondo2.rcs -a images\fondo2.atr
 @IF NOT ERRORLEVEL 0 GOTO Error
 
-%AS% %AFLAGS% --exp=build\scroll.exp --raw=build\scroll.bin scroll.asm
+fontconv -q -f 6x8 fonts\fuente6x8.png build\fuente6x8.bin
+@IF NOT ERRORLEVEL 0 GOTO Error
+
+%AS% %AFLAGS% -DVERSION=%VERSION% --exp=build\scroll.exp --raw=build\scroll.bin scroll.asm
 @IF NOT ERRORLEVEL 0 GOTO Error
 
 @CALL :GetFileSize x build\scroll.bin
