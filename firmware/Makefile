@@ -1,8 +1,3 @@
-# SPDX-FileType: SOURCE
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-# SPDX-FileNotice: Based on code by Antonio Villena <espineter@yahoo.com>
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -16,6 +11,11 @@
 #
 # where:
 #   <PREFIX> is a prefix directory to install files into.
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-FileNotice: Based on code by Antonio Villena
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include ../sdk/common.mk
 
@@ -93,7 +93,7 @@ uninstall-keymaps:
 
 .PHONY: clean-keymaps
 clean-keymaps:
-	rm -f $(foreach f,$(KEYMAPS),build/$(subst .bin/,,$(dir $(f))).zx7b)
+	$(RM) $(foreach f,$(KEYMAPS),build/$(subst .bin/,,$(dir $(f))).zx7b)
 
 .PHONY: distclean-keymaps
 distclean-keymaps: clean-keymaps
@@ -121,7 +121,7 @@ uninstall-fonts:;
 
 .PHONY: clean-fonts
 clean-fonts:
-	rm -f $(foreach f,$(FONTS),build/$(f))
+	$(RM) $(foreach f,$(FONTS),build/$(f))
 
 .PHONY: distclean-fonts
 distclean-fonts: clean-fonts
@@ -133,9 +133,9 @@ distclean-fonts: clean-fonts
 define build_image_rule =
 build/$(1:.png=.rcs): images/$(1) $(wildcard images/$(1:.png=.atr)) | build
  ifneq ($(wildcard images/$(1:.png=.atr)),)
-	Png2Rcs $$< $$@ -a images/$(1:.png=.atr)
+	scrconv -q -t rcs $$< $$@ -a images/$(1:.png=.atr)
  else
-	Png2Rcs $$< $$@
+	scrconv -q -t rcs $$< $$@
  endif
 build/$(1:.png=.rcs.zx7b): build/$(1:.png=.rcs)
 	zx7b $$< $$@
@@ -154,7 +154,7 @@ uninstall-images:;
 
 .PHONY: clean-images
 clean-images:
-	rm -f $(foreach i,$(IMAGES),build/$(i:.png=.rcs) build/$(i:.png=.rcs.zx7b))
+	$(RM) $(foreach i,$(IMAGES),build/$(i:.png=.rcs) build/$(i:.png=.rcs.zx7b))
 
 .PHONY: distclean-images
 distclean-images: clean-images
@@ -191,4 +191,4 @@ clean:\
 
 .PHONY: distclean
 distclean:
-	rm -rf build
+	$(RM) -r build

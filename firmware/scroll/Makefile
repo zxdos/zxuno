@@ -1,8 +1,3 @@
-# SPDX-FileType: SOURCE
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-# SPDX-FileNotice: Based on code by Antonio Villena <espineter@yahoo.com>
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -13,6 +8,11 @@
 #   make clean
 # Test:
 #   make test
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-FileNotice: Based on code by Antonio Villena
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include ../../sdk/common.mk
 
@@ -48,7 +48,7 @@ build/fondo.rcs:\
  images/fondo.png\
  images/fondo.atr\
  | build
-	Png2Rcs $< $@ -a images/fondo.atr
+	scrconv -q -t rcs $< $@ -a images/fondo.atr
 
 SCROLL_DEPS = build/fondo.rcs
 
@@ -58,7 +58,7 @@ build/fondo2.rcs:\
  images/fondo2.png\
  images/fondo2.atr\
  | build
-	Png2Rcs $< $@ -a images/fondo2.atr
+	scrconv -q -t rcs $< $@ -a images/fondo2.atr
 
 SCROLL_DEPS = build/fondo2.rcs
 

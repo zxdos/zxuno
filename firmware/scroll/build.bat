@@ -1,6 +1,6 @@
 @REM SPDX-FileType: SOURCE
-@REM SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-@REM SPDX-FileNotice: Based on code by Antonio Villena <espineter@yahoo.com>
+@REM SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+@REM SPDX-FileNotice: Based on code by Antonio Villena
 @REM SPDX-License-Identifier: GPL-3.0-or-later
 
 SETLOCAL ENABLEEXTENSIONS
@@ -30,10 +30,10 @@ IF EXIST conf.bat CALL conf.bat
 IF NOT EXIST build MKDIR build
 @IF NOT ERRORLEVEL 0 GOTO Error
 
-IF %VERSION% == 1 Png2Rcs images\fondo.png build\fondo.rcs -a images\fondo.atr
+IF %VERSION% == 1 scrconv -q -t rcs images\fondo.png build\fondo.rcs -a images\fondo.atr
 @IF NOT ERRORLEVEL 0 GOTO Error
 
-IF %VERSION% == 2 Png2Rcs images\fondo2.png build\fondo2.rcs -a images\fondo2.atr
+IF %VERSION% == 2 scrconv -q -t rcs images\fondo2.png build\fondo2.rcs -a images\fondo2.atr
 @IF NOT ERRORLEVEL 0 GOTO Error
 
 fontconv -q -f 6x8 fonts\fuente6x8.png build\fuente6x8.bin
