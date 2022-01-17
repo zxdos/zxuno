@@ -1,16 +1,17 @@
 # Common declarations for Makefiles.
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+#-----------------------------------------------------------------------------
+# ZXSDK
 
 ifndef ZXSDK
-
-# ZXSDK
 
 # Root (if set acts as a flag of the properly configured environment variables)
 export ZXSDK := $(patsubst %/,%,$(abspath $(dir $(lastword $(MAKEFILE_LIST)))))
@@ -49,7 +50,7 @@ endif
 # SDCC
 
 # Root (platform specific)
-export SDCCHOME	= $(ZXSDK_PLATFORM)/opt/sdcc
+export SDCCHOME = $(ZXSDK_PLATFORM)/opt/sdcc
 
 # "bin" directory (platform specific)
 _path := $(_path):$(SDCCHOME)/bin
@@ -95,6 +96,7 @@ undefine _path
 
 endif	# !ZXSDK
 
+#-----------------------------------------------------------------------------
 # Default values
 
 -include $(ZXSDK)/conf.mk
@@ -147,3 +149,6 @@ USE_SDCC_VERSION ?= 4.1.0
 
 # Version of Z88DK to use
 USE_Z88DK_VERSION ?= 2.1
+
+# Version of The Right Tools to use
+USE_THERIGHTTOOLS_VERSION ?= 0.2

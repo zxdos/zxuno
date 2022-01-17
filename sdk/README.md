@@ -1,7 +1,7 @@
 # Authors
 
 This document:
-* 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+* 2021, 2022 Ivan Tatarinov
 
 # Contributors
 
@@ -14,7 +14,8 @@ SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zl
 SJAsmPlus Z80 Assembler by Aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
 Small Device C Compiler (SDCC) is distributed under [GPL](https://sourceforge.net/projects/sdcc/) licenses.  
 z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.  
-LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.
+LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
+The Right Tools are distributed under [GPL 3.0 or later](https://spdx.org/licenses/GPL-3.0-or-later.html) license.
 
 # 1. General information
 
@@ -75,6 +76,7 @@ Target | Packages
 `sjasmplus` | cmake libboost-all-dev libxml2-dev
 `sdcc` | -
 `z88dk` | dos2unix libboost-all-dev texinfo texi2html libxml2-dev subversion bison flex zlib1g-dev m4
+`therighttools` | -
 
 To use cross-compilation for Windows platform install *mingw-w64* package.
 
@@ -111,6 +113,7 @@ Value of `<CFG_VAR>` | Description
 `USE_SJASMPLUS_VERSION` | Version of SJAsmPlus Z80 Compiler to use
 `USE_SDCC_VERSION` | Version of SDCC to use
 `USE_Z88DK_VERSION` | Version of z88dk to use
+`USE_THERIGHTTOOLS_VERSION` | Version of The Right Tools to use
 
 Value of `USE_SJASMPLUS_BRANCH`:
 
@@ -139,6 +142,12 @@ Version | Default
 ----|----
 `2.1` | yes
 
+Value of `USE_THERIGHTTOOLS_VERSION`:
+
+Version | Default
+----|----
+`0.2` | yes
+
 Value of `TARGET` | Origin | Description
 ----|----|----
 `sjasmplus` | downloaded | SJAsmPlus Z80 Assembler
@@ -147,6 +156,7 @@ Value of `TARGET` | Origin | Description
 `lodepng` | `src/lodepng` | LodePNG library
 `zx7b` | `src/zx7b` | zx7b
 `tools` | `src/tools` | tools
+`therighttools` | downloaded | The Right Tools
 
 Value of `BUILD` | Target directory | Target system
 ----|----|----
@@ -244,6 +254,7 @@ all targets | bash git make wget unzip p7zip
 `lodepng` | gcc-core
 `zx7b` | gcc-core
 `tools` | gcc-core
+`therighttools` | gcc-core
 
 **HINT**: you can install *Midnight Commander* (`mc` package). It will help you to navigate through filesystem.
 
@@ -278,6 +289,7 @@ Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build f
 `lodepng` | local | precompiled locally (**no**) | available
 `zx7b` | local | precompiled locally (**no**) | available
 `tools` | local | precompiled locally (**no**) | available
+`therighttools` | downloaded | downloaded (**yes**) | available
 
 Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
 
@@ -354,6 +366,7 @@ These changes are actual for current invocation of command shell and all child p
 * [SDCC](https://sourceforge.net/projects/sdcc/) - Small Device C Compiler
 * [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [LodePNG](https://github.com/lvandeve/lodepng) - PNG encoder and decoder in C and C++
+* [The Right Tools](https://gitlab.com/ivan-tat/therighttools/) - simple CLI tools for Z80 development
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
 * [Open-Source FPGA Foundation](https://osfpga.org/) - main site
 * [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub

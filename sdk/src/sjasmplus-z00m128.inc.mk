@@ -2,8 +2,8 @@
 #
 # This file is a part of main Makefile.
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 $(DOWNLOADS)/sjasmplus-z00m128:
@@ -108,8 +108,6 @@ else ifeq ($(PROCESSOR_ARCHITECTURE),EM64T)
 else
  $(warning Unsupported platform: "$(PROCESSOR_ARCHITECTURE)")
 endif
-
-$(DOWNLOADS)/sjasmplus-z00m128/
 
  ifeq ($(USE_SJASMPLUS_VERSION),1.18.2)
 
