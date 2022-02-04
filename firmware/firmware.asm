@@ -475,15 +475,7 @@ star16  djnz    star18
 star17  ld      hl, (joykey)
         inc     h
         inc     l
-      IF  version=1
-        ld      a, (split)
-        rlca
-        rlca
-        rlca
-        or      h
-      ELSE
         ld      a, h
-      ENDIF
         rlca
         rlca
         rlca
@@ -494,6 +486,13 @@ star17  ld      hl, (joykey)
         out     (c), d
         inc     b
         out     (c), a
+      IF  version=1
+        ld      a, (split)
+        rrca
+        rrca
+        rrca
+        ld      (alto contib+1), a
+      ENDIF
         ld      a, (cpuspd)
         rrca
         rrca
@@ -543,8 +542,6 @@ star20a cp      $72-$1d         ; 'r'
         jr      nz, star20b
         out     ($fe), a
         ld      (hl), %11111101
-        ld      a, %00000111
-        ld      (contib+1), a
 star20b cp      $17-$1d         ; 'Edit'
         jr      nz, star19
     ELSE
@@ -4637,16 +4634,16 @@ contia  and     %11111111
         out     (c), a
         dec     b
         ld      a, dev_control2
-contib  or      %00000000
         out     (c), a
         inc     b
         ld      a, (grapmo)
         srl     a
-        jr      c, contic
+        jr      c, contib
         ld      a, 7            ; Resv Resv Resv Resv Resv DIRADAS DITIMEX DIULAPLUS
-        jr      z, contic
+        jr      z, contib
         ld      a, (ix+4)
-contic  out     (c), a
+contib  or      %00000000
+        out     (c), a
         rst     0
       ENDIF
 ; -------------------------------------
