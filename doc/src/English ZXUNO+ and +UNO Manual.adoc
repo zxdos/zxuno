@@ -1,6 +1,6 @@
 = ZXUNO+ and +UNO Manual
 :author: kounch
-:revnumber: 1.3.0
+:revnumber: 1.3.1
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
@@ -143,6 +143,11 @@ FAT16 partitions have a maximum size of 4GB
 When naming a partition which will be used with esxdos, it's important not to use the same of any directory inside, or an access error will happen when trying to see the contents (e.g. do not name the partition as `BIN`, `SYS` or `TMP`).
 ====
 
+[TIP]
+====
+The Spectrum core can also have <<#_sd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
+====
+
 <<<
 
 ===== Windows
@@ -151,7 +156,7 @@ For simple configurations, and cards of the correct size (less than 2GB for FAT1
 
 For other, more complex, configurations, and depending on operating system version, you may use the command line tool `diskpart` or Windows Disk Managemente GUI.
 
-For example, on Windows, to format a card with just one FAT16 partition (if the SD card is 4GB or less in size), shown as disk 6 when running `list disk` from `diskpart`:
+For example, on Windows, to format a card with just one FAT16 partition (if the card is 4GB or less in size), which is shown as disk 6 when typing `list disk` on `diskpart`:
 
 [source]
 ----
@@ -163,14 +168,14 @@ format FS=FAT label=ZXUNOPLUS
 exit
 ----
 
-To create two 4GB FAT16 partitions (for example, to use with the MSX core) y and the rest of the space as FAT32 (for cards of more than 8GB in size):
+To create two 4GB FAT16 partitions (for example, to use with MSX core) and leave the rest of the space with a third one in FAT32 format (for cards of more than 8GB):
 
 [source]
 ----
 select disk 6
 clean
 create part primary size=4000
-set id  = 06
+set id = 06
 active
 format fs=FAT label=ZXUNOPLUS quick
 create part primary size=4000
@@ -180,14 +185,14 @@ format fs=FAT32 label=DATA quick
 exit
 ----
 
-To create a 4GB FAT32 partition (for example to use with theAmstrad CPC 6128 core ) and then the rest of the space with another one in FAT32 (for cards of more than 4GB):
+To create one 4GB FAT16 partition (for example, to use with Amstrad CPC 6128 core) and leave the rest of the space with another one in FAT32 format (for cards of more than 4GB):
 
 [source]
 ----
 select disk 6
 clean
 create part primary size=4000
-set id  = 0b
+set id = 0b
 active
 format fs=FAT32 label=ZXUNOPLUS unit=4k quick
 create part primary
@@ -276,8 +281,7 @@ cd -
 
 There are a lot of tools for Linux that can format and/or partition an SD card (`fdisk`, `parted`, `cfdisk`, `sfdisk` or `GParted` to name a few). It should only be taken into account that the partition scheme must always be MBR, and the first partition (the one that will be used for esxdos) must be primary partition.
 
-For example, to format a card whin only one FAT16 partition (if de card is 4B or less in size), 
-Por ejemplo, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 4GB o menos de tamaño), found as `sdc` in the device list:
+For example, to format a card, shown as `sdc`, with only one FAT16 partition (if the card size is less than 4GB)
 
 [source,shell]
 ----
@@ -289,8 +293,8 @@ sudo fdisk --compatibility=dos /dev/sdc
 (...)
 Command (m for help): n
 Partition type
-   p   primary (0 primary, 0 extended, 4 free)
-   e   extended (container for logical partitions)
+   p primary (0 primary, 0 extended, 4 free)
+   e extended (container for logical partitions)
 Select (default p): p
 Partition number (1-4, default 1): 1
 First sector (62-31116288, default 62):
@@ -1035,9 +1039,9 @@ For this example, it will be disk 6:
 ----
 (...)
 /dev/disk6 (external, physical):
-   #:                       TYPE NAME                    SIZE       IDENTIFIER
-   0:     FDisk_partition_scheme                        *15.9 GB    disk6
-   1:                 DOS_FAT_32 UNKNOWN                 15.9 GB    disk6s1
+ #: TYPE NAME SIZE IDENTIFIER
+ 0: FDisk_partition_scheme *15.9 GB disk6
+ 1: DOS_FAT_32 UNKNOWN 15.9 GB disk6s1
 ----
 
 <<<
@@ -1293,7 +1297,7 @@ There are two different kind of esxdos commands, the so-called "DOT" commands, w
 
 The main "DOT" commands are the following:
 
-- `128`: Para enter 128K mode from within 48K mode
+- `128`: To enter 128K mode from within 48K mode
 - `cd`: Change current working directory
 - `chmod`: Change file attributes
 - `cp`: Copy a file
@@ -1369,6 +1373,68 @@ As explained in the installation part, there are a series of commands that are e
 
 <<<
 
+=== Wi-Fi
+
+The +UNO has an ESP module with a Wi-Fi chip https://es.wikipedia.org/wiki/ESP8266[ESP8266]. It can easily be used with a ZX Spectrum core (e.g., EXP27 160820 core) which has synthesized an https://es.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART] device, that allows communication with the module.
+
+There are two "DOT" commands for configuring software access to the module. They can be downloaded from https://github.com/zxdos/zxuno/tree/master/SD/BIN/[GitHub official repository]:
+
+- `esprst`, which restarts the module
+- `iwconfig`, to register the Wi-Fi network name (SSID) and password, keeping them in the file `/sys/config/iw.cfg`.
+
+For example:
+[source,shell]
+----
+.iwconfig mywifi mypassword
+----
+
+[CAUTION]
+====
+Since the selected VGA frequency affects the master clock frequency, for the communication between the core and the Wi-Fi module to work correctly, it has to be set at 50 (see the <<#_advanced,BIOS settings chapter>>).
+====
+
+==== Network tools for ZX-Uno pack
+
+These are programs, developed by Nihirash and that are available to https://nihirash.net/network-tools-for-zx-uno-pack/[download] https://nihirash.net/ugophy-1-0-and-nettools-for-zx-spectrum/#more-71[from his web].
+
+- `netman`: Utility to configure the ESP Wi-Fi chip for other programs from Nihirash. Does not work in 48K mode
+- `uGophy`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode
+- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz
+- `wget`: Utility to download files with HTTP (does not work with HTTPS)
+- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/#about[IRATA.ONLINE] web
+
+==== FTP-Uno
+
+FTP cliente developed by Yombo, available https://github.com/yomboprime/FTP_Uno[at GitHub].
+
+Configuration steps:
+
+. Edit `FTP.CFG` file with all the required information (SSID and password, FTP server, etc.)
+. Copy `FTP.CFG` inside `/SYS/CONFIG/` in microSD card
+. Also copy `ftpUno.tap` to any place in the card
+. Start up the ZX-Uno and load the tape file `ftpUno.tap`
+
+<<<
+
+==== UART Terminal
+
+Program example included with https://github.com/yomboprime/ZXYLib[ZXYLib] C library, developed by yombo, that let's you send directly typed characters using the UART, and also see the result. Available to download https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[at this link].
+
+Once the file `UARTTERM.tap` is in the card and loaded, you can type several specific commands for ESP8266 chip. For example:
+
+- `AT`. To check if ther is communication. `OK` would be the result if everything is fine
+- `AT+RST`. To restart the chip. Exactly what <<#_wi_fi,`esprst`>> command does
+- `AT+GMR`. To see some information, like firmware version, etc.
+- `AT+CWMODE_CUR=1`. Put temporarily the chip into Wi-Fi client mode, until next restart
+- `AT+CWMODE_DEF=1`. Put temporarily the chip into Wi-Fi client mode, and save it as default
+- `AT+CWJAP_CUR="<WiFiNetwork>","<WiFiPassword>"`, where `<WiFiNetwork>` Wi-Fi ID of the network to connect to, and `<WiFiPassword>` the access password, connects temporarily to that network
+- `AT+CWJAP_DEF="<WiFiNetwork>","<WiFiPassword>"`, connects to the network, and saves the settings as default in the chip flash memory
+- `AT+CWAUTOCONN=1` sets the chip to connect automatically on boot to the default network (`AT+CWAUTOCONN=0` disables it)
+
+You can see all the available commands reading the https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[official documentation].
+
+<<<
+
 === Making RDM (RaDastan Movie) files
 
 The `PLAYRMOV` "DOT" command plays radastanian format video files. To convert your own videos, you need `makevideoradas`, a utility that is available at https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository].
@@ -1382,7 +1448,7 @@ gcc makevideoradas.c -o makevideoradas
 
 Apart from `makevdideoradas`, you need another two tools: https://ffmpeg.org[`ffmpeg`] and https://imagemagick.org/index.php[`imagemagick`]. These can be installed with a package manager (`apt`, `yum`, `pacmam`, `brew`, etc.) or downloading the source code and compiling.
 
-Now, the first step to convert our video (for example `myvideo.mp4`), is exporting the frames as 128x96 pixel BMP image files. We create a temporary file  (`img` for this example), to store them.
+Now, the first step to convert our video (for example `myvideo.mp4`), is exporting the frames as 128x96 pixel BMP image files. We create a temporary file (`img` for this example), to store them.
 
 [source,shell]
 ----
@@ -1946,7 +2012,7 @@ Once it's running, press `Shift+F10`, or type `*MENU` and `Enter`, to show a men
 
 === Acorn Electron
 
-The https://en.wikipedia.org/wiki/Acorn_Electron[Acorn Electron] was a budget version of the BBC Micro educational/home computer. The core is based on el https://github.com/hoglet67/ElectronFpga[David Banks (hoglet) original works].
+The https://en.wikipedia.org/wiki/Acorn_Electron[Acorn Electron] was a budget version of the BBC Micro educational/home computer. The core is based on https://github.com/hoglet67/ElectronFpga[David Banks (hoglet) original works].
 
 Main features:
 
@@ -2253,6 +2319,11 @@ sudo dd if=apple2_20discs.img of=/dev/...
 
 =====  Special keys and buttons
 
+
+[WARNING]
+====
+Some versions of this core do not initialize properly the keyboard when using only a membrane keyboard (+UNO). You have to cold boot the +UNO with a PS/2 keyboard attached.
+====
 While the core is running:
 
 - `/` (numeric keyboard): Enable or disable scanlines on VGA
@@ -2338,7 +2409,7 @@ While the core is running:
 
 ==== Basic Guide
 
-Pressing `F12` shows or hides the configuration menu. Cursor keys  and `Enter` (or joystick and fire button) to select and choose menu options.
+Pressing `F12` (`Caps Shift+Symbol Shift+W` on +UNO) shows or hides the configuration menu. Cursor keys  and `Enter` (or joystick and fire button) to select and choose menu options.
 
 [.text-center]
 image:img/a800xl.jpg[pdfwidth=70%]
@@ -2390,15 +2461,15 @@ During the core execution:
 - `Scroll Lock`: change between RGB and VGA video mode
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset.
 
-===== Personalización de los controles
+===== Control customization
 
-Existe oras versiones de este core que permite modificar el soporte de teclado. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+You can customize the core default controls, creating one or two files in the root of the SD card. The file has to be named `KEYSP1` for player 1 and `KEYSP2` for player 2 (you can obtain a sample file from https://www.zxuno.com/forum/download/file.php?id=1360[ZX-Uno forums]).
 
-Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón de disparo`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+These files can be made with an hex editor (like https://mh-nexus.de/en/hxd/[HxD for Windows]) and contain a byte sequence with this order: `Up`, `Down`, `Left`, `Right`, `Fire Button`. The codes to use are available at the <<#_scan_codes,Scan Codes>> table at the end of this manual (MAKE column), taking into account that if the code is paired with `0xE0`, the other value has to be used, adding `0x80` (e.g. for `E0 14`, it would be `0x94`).
 
 [TIP]
 ====
-Por ejemplo, la secuencia `15 1C 44 4D 29` se correspondería con `Q A O P Espacio`
+For example, the sequence `15 1C 44 4D 29` would match `Q A O P Space`
 ====
 
 <<<
@@ -2429,7 +2500,7 @@ The following options are available:
 
 The https://en.wikipedia.org/wiki/BBC_Micro[BBC Micro], was a series of microcomputers and associated peripherals designed and built by the Acorn Computer company in the 1980s for the BBC Computer Literacy Project, operated by the British Broadcasting Corporation.
 
-The ZX-Uno core has been made by Quest y and enhanced after by azesmbog y hoglet.
+The ZX-Uno core has been made by Quest and enhanced after by azesmbog and hoglet.
 
 Some of its features are:
 
@@ -2622,6 +2693,10 @@ The CHIP-8 machine uses an hexadecimal keyboard as input. This is the key mappin
 
 ===== Special keys and buttons
 
+[WARNING]
+====
+Some versions of this core do not initialize properly the keyboard when using only a membrane keyboard (+UNO). You have to cold boot the +UNO with a PS/2 keyboard attached.
+====
 While the core is running:
 
 - `Esc`: Show or hide configuration menu
@@ -2742,6 +2817,7 @@ To load machine code, type `SYSTEM` and then `Enter`. Afterwards, type the first
 
 While a program is loading one `*` and two `**` are alternately displayed on the upper right corner of the screen.
 
+[.text-center]
 image:img/cgenieload.png[pdfwidth=70%]
 
 <<<
@@ -2801,7 +2877,7 @@ Concatenate the disk images using `cat`:
 
 [source,shell]
 ----
-cat imagen1.d64 dummyto256.bin imagen2.d64 dummyto256.bin (...) > c16rawsd.img
+cat image1.d64 dummyto256.bin image2.d64 dummyto256.bin (...) > c16rawsd.img
 ----
 
 Dump the new file to the SD card, using `dd`:
@@ -2851,12 +2927,7 @@ From within BASIC, you can load from a external tape (or <<#_miniduino,other ext
 
 [NOTE]
 ====
-El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore 16, pero posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
-====
-
-[TIP]
-====
-Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore 16 tape files, but you can use <<#_audio_file_conversion,Comodoro>> to make compatible `TZX` files
 ====
 
 To show the contents of the current disk, press `F3` or use the command `DIRECTORY`. To load a file from disk use the command `DLOAD"<file name>"` and then, usually, `RUN`.
@@ -2910,7 +2981,7 @@ Concatenate the disk images using `COPY`:
 
 [source,shell]
 ----
-COPY /B imagen1.d64 + dummyto256.bin + imagen2.d64 + dummyto256.bin + (...) c64rawsd.img
+COPY /B image1.d64 + dummyto256.bin + image2.d64 + dummyto256.bin + (...) c64rawsd.img
 ----
 
 Dump the new file to the SD card, for example, using http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
@@ -2921,7 +2992,7 @@ Concatenate the disk images using `cat`:
 
 [source,shell]
 ----
-cat imagen1.d64 dummyto256.bin imagen2.d64 dummyto256.bin (...) > c64rawsd.img
+cat image1.d64 dummyto256.bin image2.d64 dummyto256.bin (...) > c64rawsd.img
 ----
 
 Dump the new file to the SD card, using `dd`:
@@ -2939,8 +3010,6 @@ If it wasn't already, <<#_cores,install Commodore 64 core>> into ZXUNO+.
 ==== Keyboard
 
 ===== Special keys and buttons
-
-Durante la ejecución del core:
 
 While the core is running:
 
@@ -2976,17 +3045,12 @@ From within BASIC, you can load from a external tape (or <<#_miniduino,other ext
 
 [NOTE]
 ====
-Para cargar desde cinta se debe estar usando la ROM de C64 original que se activa con `Ctrl+F12`.
+In order to load from tape, you must use the C64 original ROM, which is enabled with `Ctrl+F12`.
 ====
 
 [NOTE]
 ====
-El software Maxduino incorporando en <<#_miniduino,el miniduino>> no tiene, por el momento, soporte para los archivos de cinta de Commodore 64, pero posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
-====
-
-[TIP]
-====
-Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore 64 tape files, but you can use <<#_audio_file_conversion,Comodoro>> to make compatible `TZX` files
 ====
 
 To show the contents of the current disk, press `Shift+Esc` or use the command `LOAD "*",8,1`. Once you see READY on screen, use the command `RUN`.
@@ -2994,6 +3058,11 @@ To show the contents of the current disk, press `Shift+Esc` or use the command `
 If the disk has more than one program, press `F1` or use the command `LOAD "$"`. Then use the command `LIST` to see a list of the files in the disk.
 
 Now, to load a specific file, use the command `LOAD "<name>",8` (where `<name>` is the name of the file to load). When you see `READY`, use the command `RUN`. Sometimes, this may not work, in this case, try to load with the command `LOAD "<name>",8,1`.
+
+[NOTE]
+====
+To be able to load from disk, you have to use the JiffyDOS C64 ROM, which is enabled using `F12`.
+====
 
 <<<
 
@@ -3032,17 +3101,12 @@ You can load from a external tape (or other external audio device) with the comm
 
 [NOTE]
 ====
-Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore PET tape files, pero posible utilizar <<#_audio_file_conversion,Comodoro>> para generar ficheros `TZX` compatibles
+Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, support for Commodore PET tape files, but you can use <<#_audio_file_conversion,Comodoro>> to make compatible `TZX` files
 ====
 
 [TIP]
 ====
-Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
-====
-
-[TIP]
-====
-You can use programs like <<#_audio_file_conversion,Audiotap>> with Commodore `TAP` files.
+You can use programs like <<#_audio_file_conversion,Audiotap or Comodorp>> with Commodore `TAP` files.
 ====
 
 <<<
@@ -3095,13 +3159,7 @@ Maxduino, which is used in <<#_miniduino,miniduino>> does not, at this moment, s
 
 [TIP]
 ====
-Es posible utilizar programas como <<#_audio_file_conversion,Audiotap o Comodoro>> con los ficheros `TAP` de cinta de Commodore.
-====
-
-
-[TIP]
-====
-You can use programs like <<#_audio_file_conversion,Audiotap>> with Commodore `TAP` files.
+You can use programs like <<#_audio_file_conversion,Audiotap or Comodoro>> with Commodore `TAP` files.
 ====
 
 <<<
@@ -3188,7 +3246,7 @@ While in BASIC, you can enable the loading programs from the SD card with this c
 A=USR(&F000)
 ----
 
-The, with commands like `CD <directory>` and `DIR` you can access the directory where there is the file to load. To load a file, you have to type the name, without the extension (e.f. for a file named `GAME.GTP` you have to type `GAME`). Once the program is loaded to RAM, you can start execution with `RUN`.
+Then, with commands like `CD <directory>` and `DIR` you can access the directory where there is the file to load. To load a file, you have to type the name, without the extension (e.f. for a file named `GAME.GTP` you have to type `GAME`). Once the program is loaded to RAM, you can start execution with `RUN`.
 
 The core starts up in classic Galaksija mode (minus), but you can start the Galaksija Plus mod typing:
 
@@ -3611,26 +3669,26 @@ While the core is running:
 - Cursor keys, and `Enter` to use the menu
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset
 
-===== Personalización de los controles
+There are alternate versions of this core, which can also be controlled with a keyboard:
 
-Existe otras versiones de este core que permiten el control también con teclado:
+- `W`, `A`, `S`, `D` (customizable) or joystick 1: Directional controls for player 1
+- `F` and `R` (customizable) or joystick 1 fire buttons: Player 1 A and B buttons
+- `5` y `1`: `Select` and `Start` (Player 1)
+- `I`, `J`, `K`, `L` (customizable) or joystick 2: Directional controls for player 2
+- `H`, `Y` (customizable) or joystick 2 fire buttons: Player 2 A and B button
+- `6` y `2`: `Select` and `Start` (Player 1)
+- `F4` (`Caps Shift+Symbol Shift+4` on ZXUnGo+): Swap the keyboard keys for player 1 and player 2
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` and then `B` on ZXUnGo+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 
-- `W`, `A`, `S`, `D` (personalizables) o el joystick 1: Controles de dirección del jugador 1
-- `F` y `R` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 1)
-- `5` y `1`: `Select` y `Start` (Jugador 1)
-- `I`, `J`, `K`, `L` (personalizables) o el joystick 2: Controles de dirección del jugador 2
-- `H`, `Y` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 2)
-- `6` y `2`: `Select` y `Start` (Jugador 1)
-- `F4` (`Caps Shift+Symbol Shift+4` en ZXUnGo+): Intercambiar la asignación de teclas de jugador 1 y jugador 2
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y luego `B` en ZXUnGo+): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+===== Control customization
 
-Los controles por defecto del core con soporte de teclado se pueden modificar. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+You can customize the core default controls, creating one or two files in the root of the SD card. The file has to be named `KEYSP1` for player 1 and `KEYSP2` for player 2 (you can obtain a sample file from https://www.zxuno.com/forum/download/file.php?id=1360[ZX-Uno forums]).
 
-Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón A`, `Botón B`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+These files can be made with an hex editor (like https://mh-nexus.de/en/hxd/[HxD for Windows]) and contain a byte sequence with this order: `Up`, `Down`, `Left`, `Right`, `Button A`, `Button B`. The codes to use are available at the <<#_scan_codes,Scan Codes>> table at the end of this manual (MAKE column), taking into account that if the code is paired with `0xE0`, the other value has to be used, adding `0x80` (e.g. for `E0 14`, it would be `0x94`).
 
 [TIP]
 ====
-Por ejemplo, la secuencia `15 1C 44 4D 29 22` se correspondería con `Q A O P Espacio X`, y la secuencia `1D 1B 23 2B 1A 22` se correspondería con `W S D F Z X`
+For example, the sequence `15 1C 44 4D 29 22` would match `Q A O P Space X`, and the sequence `1D 1B 23 2B 1A 22` would be `W S D F Z X`
 ====
 
 <<<
@@ -3652,13 +3710,17 @@ The following options are available:
 - Load ROM
 - Exit
 
+[TIP]
+====
+You can move faster through the menu options using `Page Up` and `Page Down`.
+====
 <<<
 
 === Oric Atmos
 
 The https://en.wikipedia.org/wiki/Oric#Oric_Atmos[Oric Atmos] was the name used by UK-based Tangerine Computer Systems for one 6502-based home computer sold in the 1980s, primarily in Europe.
 
-The ZX-Uno core has these features:
+It has been https://github.com/Kyp069/atmos[developed by Kyp069] and has these features:
 
 - VGA / RGB video Out
 - NMI
@@ -3761,9 +3823,9 @@ It has been https://github.com/Kyp069/atmos[developed by Kyp069] and has these f
 - Program loading using the audio input
 - Program saving using the audio output
 
-For more information check  http://www.retrowiki.es/viewtopic.php?f=110&t=200037261[RetroWiki forums].
+For more informatio you can see http://www.retrowiki.es/viewtopic.php?f=110&t=200037261[RetroWiki forums].
 
-==== SD format
+==== SD card format
 
 This core does not use the SD card.
 
@@ -3808,7 +3870,7 @@ From BASIC, you can load software from a external tape (or <<#_miniduino,other e
 Searching...
 ----
 
-When a program is detected loading, the text changes to
+When a program load is detected, the text changes to
 
 [source]
 ----
@@ -3819,13 +3881,37 @@ There's a script named `calorico.sh` at http://www.retrowiki.es/viewtopic.php?f=
 
 [TIP]
 ====
-To save a BASIC program using the audio output, you can use the command `CSAVE "NAME"` and `Enter`. To hear the sound while recording, you must enable previously the audio output using the `F10` key.
+To save a BASIC program with the audio output, you can use the command `CSAVE "NAME"` and `Enter`. If you want to hear while recording, enable the recording audio previously using the `F10` key.
 ====
 
 [WARNING]
 ====
-*Do not* keep enabled the recording sound (`F10` key) while loading from a external audio source. This is because the recording sound creates a feedback whith a high pitch sound which breaks loading from audio.
+*Do not* keep recording audio enabled (`F10`) while loading using the audio input. This is because the audio feedback has a high pitch and volume sound which breaks audio loading.
 ====
+
+<<<
+
+=== PC XT
+
+https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, pero adapted and trimmed.
+
+Features:
+
+- Only works on VGA out
+- Next186 core at 25 MHz and 50 MHz system bus. Te processor is 286 equivalent in real mode. There's no protected mode.
+- 504 KB conventional RAM
+- 60 KB VRAM
+- PS/2 keyboard and mouse support
+- 80x25 text mode
+- EGA 320x200x16 and MCGA 320x200x256 graphic modes, partially functional (MCGA mode does not draw the last lines on screen because 2.5 KB video RAM is missing). No graphic card is being emulated
+- Beeper Sound and Tandy 3 voice
+- Parallel DAC port to play digital sound
+
+==== SD card format
+
+You have to use a SDHC card, with the first partition in FAT16 format and with MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and connecting directly de SD card device as a hard disk. You can also find several pre-made images at https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno forum page] and https://www.forofpga.es/viewtopic.php?f=37&t=120[ZXDOS+ forums].
+
+See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXUNO+.
 
 <<<
 
@@ -3886,30 +3972,6 @@ The following options are available:
 - Paddle accuracy
 - Colour mode
 - Exit
-
-<<<
-
-=== PC XT
-
-https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, pero adapted and trimmed.
-
-Features:
-
-- Only works on VGA out
-- Next186 core at 25 MHz and 50 MHz system bus. Te processor is 286 equivalent in real mode. There's no protected mode.
-- 504 KB conventional RAM
-- 60 KB VRAM
-- PS/2 keyboard and mouse support
-- 80x25 text mode
-- EGA 320x200x16 and MCGA 320x200x256 graphic modes, partially functional (MCGA mode does not draw the last lines on screen because 2.5 KB video RAM is missing). No graphic card is being emulated
-- Beeper Sound and Tandy 3 voice
-- Parallel DAC port to play digital sound
-
-==== SD card format
-
-You have to use a SDHC card, with the first partition with MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and connecting directly de SD card device as a hard disk. You can also find several pre-made images at https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno forum page].
-
-See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXUNO+.
 
 <<<
 
@@ -3977,7 +4039,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 ===== Special keys and buttons
 
-Durante la ejecución del core:
+While the core is running:
 
 - Cursor or `Q`, `A`, `O`, `P` or joystick 1: Directional controls for player 1
 - `Z`, `Windows` or joystick 1 main fire button: Fire Button 1 for player 1
@@ -4107,7 +4169,7 @@ During the core execution:
 
 ==== Basic Guide
 
-Pressing `Esc`  (`Caps Shift+Space` on +UNO) or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
+Pressing `Esc` (`Caps Shift+Space` on +UNO) or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/videopacuno.png[pdfwidth=70%]
@@ -4422,7 +4484,7 @@ https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Win
 
 https://sourceforge.net/projects/wav-prg/files/audiotap/2.2/[Audiotap] is a graphical interface program made for Windows (but also working on Wine) that can convert Commodore `TAP` files to `WAV` audio files.
 
-http://retrowiki.es/viewtopic.php?f=110&t=200037282[Comodoro 2.0] es un script que permite convertir a formato `TAP` y `TZX` para poder realizar cargas por audio en las Commodore Pet, VIC-20, 16 y 64.
+http://retrowiki.es/viewtopic.php?f=110&t=200037282[Comodoro 2.0] it's a script which can convert to `TAP` and `TZX` files for Commodore Pet, VIC-20, 16 and 64.
 
 https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav] is a program that can convert Camputers Lynx `TAP` files to `WAV` audio.
 
@@ -4517,7 +4579,7 @@ This way to change the BIOS of a file named `FLASH.ZX1`, using the BIOS file `FI
 ...zx123_tool.py -i FLASH.ZX1 -a BIOS,FIRMWARE.ZX1 -m 2
 ----
 
-There are also options to set the BIOS boot delay time, the default core or the default Spectrum ROM. See the  https://github.com/kounch/zx123_tool/[documentation] for more info.
+There are also options to set the BIOS boot delay time, the default core or the default Spectrum ROM. See the https://github.com/kounch/zx123_tool/[documentation] for more info.
 
 <<<
 
@@ -4530,7 +4592,7 @@ To add a Spectrum ROM file named `48.rom`, with the name `Spec48` and using the 
 ...zx123_tool.py -i FLASH.ZX1 -a ROM,5,xdnlh17,Spec48,48.rom
 ----
 
-See the  https://github.com/kounch/zx123_tool/[documentation] for all the possible options when adding a Spectrum ROM.
+See the https://github.com/kounch/zx123_tool/[documentation] for all the possible options when adding a Spectrum ROM.
 
 Amongst the information you give when adding a ROM, there are some flags used to tell which hardware options, etc, you want to have enabled or disabled when loading the ROM, as shown in this table:
 
@@ -4758,7 +4820,7 @@ For USB-Blaster connection:
 
 [source,shell]
 ----
-sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg  -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.bit ; exit"
+sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.bit ; exit"
 ----
 
 <<<
@@ -4791,7 +4853,7 @@ This process can't be undone, and it will replace all the previously installed c
 
 [NOTE]
 ====
-Ususally, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+Usually, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
 ====
 
 [start=15]
@@ -4816,7 +4878,12 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
 . Save changes:
 - `Exit` -> `Save changes and exit`
-. Completely turn off +UNO` and turn it on again
+. Completely turn off the +UNO and turn it on again
+====
+
+[NOTE]
+====
+If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes. In this case, you should have to enter the BIOS and change <<#_advanced, the right advanced setting>> that matches your display.
 ====
 
 <<<
@@ -4942,7 +5009,7 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
 . Save changes:
 - `Exit` -> `Save changes and exit`
-. Completely turn off +UNO` and turn it on again
+. Completely turn off +UNO and turn it on again
 ====
 
 [NOTE]
@@ -4957,7 +5024,7 @@ When using Linux with `urjtag`, the process should be quite similar, although th
 *Hardware required*:
 
 - USB-Blaster cable. Using the right pins for ZXUNO+, <<#_jtag_cable_connections,as explained earlier>>
-- Flash Image file and and recovery file fo ZXUNO+ (LX25). The same ones as for Raspberry Pi, from https://github.com/zxdos/zxuno/tree/master/modflash[Github repository] and https://www.zxuno.com/forum/viewtopic.php?f=37&t=774[ZX-Uno forum]
+- Flash Image file and and recovery file fo ZXUNO+. The same ones as for Raspberry Pi, from https://github.com/zxdos/zxuno/tree/master/modflash[GitHub repository] and https://www.zxuno.com/forum/viewtopic.php?f=37&t=774[ZX-Uno forum]
 
 *Software required*:
 
@@ -5045,7 +5112,7 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
 . Save changes:
 - `Exit` -> `Save changes and exit`
-. Completely turn off +UNO` and turn it on again
+. Completely turn off the +UNO and turn it on again
 ====
 
 <<<
@@ -5063,9 +5130,15 @@ image:img/scancodes.png[pdfwidth=80%]
 
 https://zxuno.speccy.org/index.shtml[ZX-Uno]
 
+https://www.forofpga.es/[foroFPGA]
+
+https://t.me/zxuno[canal oficial de Telegram de ZX-Uno]
+
 http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[ZX-Uno FAQ]
 
 https://docs.google.com/document/d/1NI0zgCDRk7c-5CVi-lfZEK6q8Lnpnco7PhpsEEdxD60/edit[Guía rápida del ZX-Uno]
+
+https://www.zxuno.com/wiki/index.php/ZX_Spectrum[Wiki de ZX-Uno].
 
 https://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 
@@ -5073,7 +5146,7 @@ https://worldofspectrum.org/zxplus3e/index.html[The ZX Spectrum +3e Homepage]
 
 https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with PC (FAT) partitions]
 
-https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
+https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Configuración de teclado de ZX-Uno].
 
 https://github.com/spark2k06/zxunops2/blob/master/Alternative/Nuevo%20firmware%20de%20teclado%20ZX-GO%2B.pdf[Firmware de teclado para ZX Go+]
 
@@ -5125,7 +5198,37 @@ https://github.com/RW-FPGA-devel-Team/Videopac-G7000[Videopac G7000 / Odyssey2 f
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
 
+https://github.com/kounch/zx123_tool/[zx123_tool]
+
+https://esxdos.org/index.html[esxdos]
+
+https://zx-modules.de/?page_id=117[ZX-Modules].
+
+https://spectrumcomputing.co.uk/forums/viewtopic.php?f=9&t=2553[Long Filename Browser de Bob Fossil]
+
+http://board.esxdos.org/viewtopic.php?id=94[New NMI Handler de Dr. Slump]
+
+http://www.fuzix.org[Fuzix]
+
+https://github.com/Utodev/smartROM[SmartROM]
+
+https://github.com/semack/zx_tape_player[ZX Tape Player]
+
+https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX]
+
+https://www.alessandrogrussu.it/tapir/index.html[Tapir]
+
+https://fuse-emulator.sourceforge.net/[Fuse Utilities]
+
 https://github.com/nataliapc/makeTSX/releases[MakeTSX]
+
+https://github.com/RW-FPGA-devel-Team/lynx2wav[Lynx2Wav]
+
+https://github.com/rcmolina/CamputersLYNX[2lynx2wav]
+
+https://github.com/kounch/cgc2wav[cgc2wav]
+
+https://original.sharpmz.org/mzf2wav.htm[mzf2wav]
 
 https://github.com/jorgefuertes/retroconverter/releases[RetroConverter]
 
