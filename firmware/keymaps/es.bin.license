@@ -1,9 +1,7 @@
 SPDX-FileName: es.bin
-
 SPDX-FileType: BINARY
-
-SPDX-FileChecksum: SHA1: 3c5e131cd6a3ff5c2c282f575c9724a7c81f5081
-
-SPDX-FileCopyrightText: Copyright (C) 2016, 2018  Antonio Villena
-
+SPDX-FileChecksum: SHA1: 25866f8b11006831f3c62e3b83b98d00f2af139ed151c6c77f23583dcdc999a9
+SPDX-FileComment: Original file: https://github.com/zxdos/zxuno/blob/623cbd44a5ca524765581666a1c9f999ba4b06e2/firmware/es.zx7b
+SPDX-FileCopyrightText: Copyright (C) 2016, 2018, 2022 Antonio Villena
+SPDX-FileContributor: 2021, 2022 Ivan Tatarinov
 SPDX-License-Identifier: GPL-3.0-only
