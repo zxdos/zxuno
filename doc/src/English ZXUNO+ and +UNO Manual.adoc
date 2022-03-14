@@ -1,11 +1,11 @@
 = ZXUNO+ and +UNO Manual
 :author: kounch
-:revnumber: 1.3.1
+:revnumber: 1.4.0
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.3
+:Revision: 1.4
 :description: English ZXUNO+ and +UNO Manual
 :keywords: Manual, English, ZXUNO+, +UNO
 :icons: font
@@ -24,7 +24,7 @@ Over time, the project has been growing, and now it is possible to install diffe
 
 ZXUNO+ official web page is https://zxuno.speccy.org.
 
-=== Aknowledgements
+=== Acknowledgements
 
 Most of the content is based on information previously shared:
 
@@ -33,7 +33,7 @@ Most of the content is based on information previously shared:
 - Several existing FAQ, mostly the original version https://uto.speccy.org/zxunofaq.html[by @uto_dev], and the latest one http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[by @desUBIKado]
 - At https://t.me/zxuno[ZX-Uno Telegram Channel]
 
-A very special thaks to desUBIKado for the continuous and thorough work finding and sharing information about all the available cores and their functionalities.
+A very special thanks to desUBIKado for the continuous and thorough work finding and sharing information about all the available cores and their functionalities.
 
 Without the previous work of all of these people (and more), this manual wouldn't exist.
 
@@ -131,7 +131,7 @@ In order to take advantage of its full potential, you may also have:
 
 ==== SD card formatting
 
-In order to use a SD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core wich can have <<#_sd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
+In order to use a SD card, it has to be formatted with, at least, one FAT16 or FAT32 format (depending on the case, one or the other format is recommended for compatibility with different third-party cores). It must be the first partition if there are more than one, except for the Spectrum core which can have <<#_sd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
 
 [NOTE]
 ====
@@ -154,7 +154,7 @@ The Spectrum core can also have <<#_sd_advanced_format_3e,the first partition in
 
 For simple configurations, and cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ].
 
-For other, more complex, configurations, and depending on operating system version, you may use the command line tool `diskpart` or Windows Disk Managemente GUI.
+For other, more complex, configurations, and depending on operating system version, you may use the command line tool `diskpart` or Windows Disk Management GUI.
 
 For example, on Windows, to format a card with just one FAT16 partition (if the card is 4GB or less in size), which is shown as disk 6 when typing `list disk` on `diskpart`:
 
@@ -251,7 +251,7 @@ diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXUNOPLUS 4G "MS-DOS FAT32"
 
 [NOTE]
 ====
-In this example, since the partition has a size of exactly 4G, MacOS will use a cluster size of 4096, which is the one neede for the Amstrad CPC 6128 core. For a smaller size, you may have to format again the first partition with some commands like these:
+In this example, since the partition has a size of exactly 4G, MacOS will use a cluster size of 4096, which is the one needed for the Amstrad CPC 6128 core. For a smaller size, you may have to format again the first partition with some commands like these:
 
 [source,shell]
 ----
@@ -372,7 +372,7 @@ This table shows the available modes and activation keys:
 
 <<<
 
-ZX Spectrum mode key assignment, with the corresponding keypress when used simultaneouly with `Caps Shift+Symbol Shift`:
+ZX Spectrum mode key assignment, with the corresponding keypress when used simultaneously with `Caps Shift+Symbol Shift`:
 
 [align="center",width="80%",cols=10*]
 |===
@@ -593,7 +593,7 @@ Special keys that can be used while running the main core (ZX Spectrum):
 - `F7` (`Caps Shift+Symbol Shift+7` on +UNO): Play or pause when playing .PZX files
 - `F8` (`Caps Shift+Symbol Shift+8` on +UNO): Rewind .PZX file to the previous mark
 - `F10` (`Caps Shift+Symbol Shift+0` on +UNO): Graph
-- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginnig with core EXP27).
+- `F12` (`Caps Shift+Symbol Shift+W` on +UNO): Turbo Boost. Speeds up CPU to 28MHz while pressed (beginning with core EXP27).
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`.
 - `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Soft reset.
 - `Scroll Lock`: Switches between composite and VGA video modes.
@@ -659,7 +659,7 @@ Using left and right cursor keys, you can navigate through the BIOS setup screen
 
 [TIP]
 ====
-You can also acces the BIOS if you have an adapter and a joystick connected, pressing the down direction button on startup. This accesses the list of installed cores. Choose the latest option (`Enter Setup`) to access.
+You can also access the BIOS if you have an adapter and a joystick connected, pressing the down direction button on startup. This accesses the list of installed cores. Choose the latest option (`Enter Setup`) to access.
 ====
 
 Other useful keys to use on startup are:
@@ -667,7 +667,7 @@ Other useful keys to use on startup are:
 - `Scroll Lock` or `Cursor Down`, or, if a joystick is connected, pressing the down direction button: Core Selection Menu
 - `Esc` or, if a joystick with two or more buttons is connected, pressing the second fire: ZX Spectrum Core ROM selection menu
 - `R`: Load the ZX Spectrum default ROM in "real" mode disabling esxdos, new graphic modes, etc. (combined with `Esc` let's you use a different ROM)
-- `/` (numeric keypad): oad the ZX Spectrum default ROM in  in "root" mode (combined with `Esc` let's you use a different ROM)
+- `/` (numeric keypad): Load the ZX Spectrum default ROM in  in "root" mode (combined with `Esc` let's you use a different ROM)
 - Number between `1` and `9`: Load the corresponding core from Flash
 
 ==== Main
@@ -810,7 +810,7 @@ These are some of its main characteristics:
 - Ability to disable memory contention (for Pentagon 128 compatibility)
 - Ability to choose the keyboard behavior (issue 2 or issue 3)
 - Possibility to choose the timing of the ULA (48K, 128K or Pentagon)
-- Control of screen framing, configurable for type of timing, and possibility to choose between original Spectrum synchronisms or progressive PAL standard.
+- Control of screen framing, configurable for type of timing, and possibility to choose between original Spectrum synchronism or progressive PAL standard.
 - Timex horizontal MMU support with HOME, DOC and EXT banks in RAM.
 - Programmable raster interruption in line number, for any TV line.
 - Possibility of activating/deactivating memory bank management registers, for better compatibility with each implemented model
@@ -866,7 +866,7 @@ CargandoLeches is a set of ZX Spectrum ROMs that started as a project to load ga
 Since version 2.0 the project changed from a single ROM to more, each one with different options. This way, you can choose a different mix of options that may include:
 
 - Ultrafast loading
-- Reset & Play (After a sofware reset of the core, the system is ready to load from tape)
+- Reset & Play (After a software reset of the core, the system is ready to load from tape)
 - POKE editor
 - Enable or disable Sinclair BASIC token expansion
 
@@ -994,7 +994,7 @@ Here are flag settings which work when <<#_zx123_tool,adding to the SPI flash>> 
 
 === SD advanced format (+3e)
 
-ZX Spectrum +3e is one ROM that can be used with ZX Spectrum core. This is an improved Sinclair ZX Spectrum +3, wich can use hard disks or memory cards.
+ZX Spectrum +3e is one ROM that can be used with ZX Spectrum core. This is an improved Sinclair ZX Spectrum +3, which can use hard disks or memory cards.
 
 +3e uses its own partition format (called IDEDOS), to split de hard disk into several partitions to store data. ROM version 1.28 and later can share IDEDOS partitions with MBR partitions. In other case, you must reserve the whole card for IDEDOS partitions.
 
@@ -1048,7 +1048,7 @@ For this example, it will be disk 6:
 
 Instruction steps:
 
-. Unmount the disk and edit the partition sceme (the second step requires admin privileges):
+. Unmount the disk and edit the partition scheme (the second step requires admin privileges):
 
 [source,shell]
 ----
@@ -3648,9 +3648,9 @@ Some features of this core are:
 - Only VGA video mode is supported, with non-accurate timings, so it may not work with some displays
 - HQ2X filters that "removes pixels" from the image
 - Scanlines simulation
-- Made with NES NTSC clock timings, so only USA ROMs run fine. PAL ROMs run faster than they sould
+- Made with NES NTSC clock timings, so only USA ROMs run fine. PAL ROMs run faster than they should
 - You can load ROMs from the SD
-- It uses all 512 KB ZXUNO+ SRAM. It's split into two 256 KB banks, uno for PRG_ROM and the other for CHR_ROM. So any ROM using more than 256 KB for CHR or PRG won't work. Obviously any ROM bigger than 512 KB won´t work too.
+- It uses all 512 KB ZXUNO+ SRAM. It's split into two 256 KB banks, uno for PRG_ROM and the other for CHR_ROM. So any ROM using more than 256 KB for CHR or PRG won't work. Obviously any ROM bigger than 512 KB won`t work too.
 - Joystick support
 
 ==== SD card format
@@ -3677,8 +3677,8 @@ There are alternate versions of this core, which can also be controlled with a k
 - `I`, `J`, `K`, `L` (customizable) or joystick 2: Directional controls for player 2
 - `H`, `Y` (customizable) or joystick 2 fire buttons: Player 2 A and B button
 - `6` y `2`: `Select` and `Start` (Player 1)
-- `F4` (`Caps Shift+Symbol Shift+4` on ZXUnGo+): Swap the keyboard keys for player 1 and player 2
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` and then `B` on ZXUnGo+): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+- `F4` (`Caps Shift+Symbol Shift+4` on +UNO): Swap the keyboard keys for player 1 and player 2
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
 
 ===== Control customization
 
@@ -3714,6 +3714,62 @@ The following options are available:
 ====
 You can move faster through the menu options using `Page Up` and `Page Down`.
 ====
+
+<<<
+
+=== Ondra SPO 186
+
+The https://cs.wikipedia.org/wiki/Ondra_(poč%C3%ADtač)[Ondra SPO 186] was a Czechoslovak 8-bit computer developed in 1985 at Tesla Liberec as a cheap school and home computer. 
+
+The https://github.com/PetrM1/OndraSPO186_ZXUno[ZX-Uno version] has been developed by PetrM1, based on the previous MiSTer version, and has these features:
+
+- 64 kB RAM
+- Keyboard support
+- Sound
+- Software loading via ZX-Uno audio in port
+- Program loading via serial port
+
+==== SD card format
+
+This core does not use the SD card.
+
+==== Keyboard
+
+[WARNING]
+====
+Due to the requirements of this core, it is not enough having a membrane keyboard connected. It is necessary to have a PS/2 keyboard connected at the same time to be able to use it.
+====
+
+Ondra has a 37-key keyboard, where the use of modifier keys allows each key to serve 2 or 3 different characters. Each modifier key must be pressed (and held) before pressing the character key to be modified.
+
+[.text-center]
+image:img/keyboardondra.png[pdfwidth=70%]
+
+===== Special keys and buttons
+
+- `Shift`: `Shift`
+- `Alt`: `Symbols`
+- `Tab`: `Numbers`
+- `Control`: `Ctrl`
+- `Shift`:  `ČS` (used for Czech diacritics)
+
+==== Basic guide
+
+[.text-center]
+image:img/ondraspo1.png[pdfwidth=70%]
+
+Once you have started the core, you can load it from a tape (or other external audio device) by pressing the `Enter` key (if you have typed anything, erase it all using `Ctrl+Left Cursor`). The display will then start to flash and the following text will be shown:
+
+[source]
+----
+.KÓD 1
+----
+
+[.text-center]
+image:img/ondraspo1.png[pdfwidth=70%]
+
+Start tape playback and the text on the screen will change during loading.
+
 <<<
 
 === Oric Atmos
@@ -3877,7 +3933,7 @@ When a program load is detected, the text changes to
 Loading...<program name>
 ----
 
-There's a script named `calorico.sh` at http://www.retrowiki.es/viewtopic.php?f=110&t=200037261[RetroWiki forums], made with bash, PHP and https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass utilities from Natalia Pujol] to convert Oirc `.TAP` files into `.TSX`.
+There's a script named `calorico.sh` at http://www.retrowiki.es/viewtopic.php?f=110&t=200037261[RetroWiki forums], made with bash, PHP and https://github.com/nataliapc/MSX_devs/tree/master/TSXphpclass[TSXphpclass utilities from Natalia Pujol] to convert Oric `.TAP` files into `.TSX`.
 
 [TIP]
 ====
@@ -3893,7 +3949,7 @@ To save a BASIC program with the audio output, you can use the command `CSAVE "N
 
 === PC XT
 
-https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, pero adapted and trimmed.
+https://www.zxuno.com/forum/viewforum.php?f=56[Next186lite] core is an implementation of http://flea.vieju.net/?page_id=20[Next186] core for FleaFPGA and Papilio Pro, but adapted and trimmed.
 
 Features:
 
@@ -3912,6 +3968,71 @@ Features:
 You have to use a SDHC card, with the first partition in FAT16 format and with MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and connecting directly de SD card device as a hard disk. You can also find several pre-made images at https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno forum page] and https://www.forofpga.es/viewtopic.php?f=37&t=120[ZXDOS+ forums].
 
 See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in ZXUNO+.
+
+<<<
+
+=== PC XT CGA
+
+The https://es.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT] also known as PC/XT was the second PC IBM model. The https://es.wikipedia.org/wiki/Color_Graphics_Adapter[IBM Color/Graphics Adapter] was the first graphic adapter card made by IBM for PC.
+
+This core, https://github.com/spark2k06/next186lite_graphics_gremlin[made by spark2k06], and based on the <<#_pc_xt,original port of Next186 by DistWave>>, tries to be a more faithful recreation of the original PC XT, and has these features:
+
+- Faithful implementation of https://es.wikipedia.org/wiki/Motorola_6845[Motorola 6845 chip], having all its registers and graphic modes
+- Same behaviour with PUS SP like a 8086/80186 the CPU is correctly detected
+- All partial video modes in Next186 are removed (MCGA/EGA/VGA)
+- Full CGA implementation based on  https://github.com/schlae/graphics-gremlin[Graphics Gremlin project] by TubeTime
+- Partial Tandy Graphics (TGA) implementation
+- Simplified clocks, setting the overall speed of the machine to 12Mhz (default) or 4.77Mhz (Throttle Down)
+- Revised BIOS video functions, using part of https://github.com/skiselev/8088_bios[Micro8088 project by Sergey Kiselev]
+- RGB666 video DAC support
+- 2MB SRAM version has, for the moment, 1MB (EMS) available for the core
+
+==== SD card format
+
+You have to use a SDHC card, with the first partition in FAT16 format and with MS-DOS (or similar) installed. You can achieve this using, for example, virtualization software and connecting directly de SD card device as a hard disk. You can also find several pre-made images at https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno forum page] and https://www.forofpga.es/viewtopic.php?f=37&t=120[ZXDOS+ forums].
+
+[CAUTION]
+====
+**Do not use any FAT reordering utility** since, this may stop DOS from booting.
+====
+
+[WARNING]
+====
+Some files and directories used by MSXDOS have the same names, so it's not recommended to use the same SD card for <<#_msx,MSX>> and PC XT cores.
+====
+
+See the <<#_cores,corresponding section>> for instructions of how to install the PC XT core in Zx-Uno.
+
+<<<
+
+==== Keyboard
+
+===== Special keys and buttons
+
+The following +UNO keyboard combinations are obtained while in `PCXT` mode (`Caps Shift+Symbol Shift+U` and then `9`). Please read <<#_uno_keyboard,the section dedicated to +UNO keyboard modes>> for more information.
+
+While the core is running:
+
+- `Ctrl+Alt+Scroll Lock`: Change between Green, amber, and black and white modes
+- `Ctrl+Alt+KeyPad -`: Throttle down speed
+- `Ctrl+Alt+KeyPad +`: Set speed to normal (12MHz)
+- `Ctrl+Alt+Del` (`Caps Shift+Symbol Shift+N` on +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol+B` on +UNO): Hard reset. Backspace is the delete key, located in the top-right portion of the keyboard, above `Enter`
+
+==== Basic Guide
+
+[.text-center]
+image:img/pcxt.png[pdfwidth=70%]
+
+. Start the ZX-Uno
+. For a +UNO, change the keyboard mode to `PC XT` keyboard mode (`Caps Shift+Symbol Shift+U`, and then `9`)
+. Reboot the ZX-Uno without losing the temporary keyboard mode (`Caps Shift+Symbol Shift+`B`)
+. Quickly, press `Caps Shift+2` or `Caps Shift+6` and select the PC XT core to boot
+
+[CAUTION]
+====
+On a +UNO, it's not recommended to use the `PC XT` keyboard mode with a PS/2 keyboard connected. This causes some conflicts and both keyboards won't function properly.
+====
 
 <<<
 
@@ -4022,9 +4143,9 @@ The https://en.wikipedia.org/wiki/Master_System[Sega Master System] was a video 
 
 The ZX-Uno core is based on http://forum.gadgetfactory.net/index.php?/topic/1304-sega-master-system-on-the-papilio-plus/[Ben's original work for Papilio Plus].
 
-Some of the core featurers are:
+Some of the core features are:
 
-- VGA and Compostite or RGB video output with PAL sync (50Hz)
+- VGA and Composite or RGB video output with PAL sync (50Hz)
 - Joysticks support
 - Joystick emulation via keyboard
 - Loading cartridge image files from the SD card
@@ -4062,7 +4183,7 @@ image:img/sms.png[pdfwidth=70%]
 
 === SmartROM
 
-https://github.com/Utodev/smartROM[SmartROM] is a kind of firmware that allows to loadi different ROMS for implementations of the ZX-Uno core in FPGA boards without flash memory, or where the flash memory cannot be used by the ZX-Uno core.
+https://github.com/Utodev/smartROM[SmartROM] is a kind of firmware that can load different ROMS for implementations of the ZX-Uno core in FPGA boards without flash memory, or where the flash memory cannot be used by the ZX-Uno core.
 
 ==== SD card format
 
@@ -4070,7 +4191,7 @@ The card has to be formatted <<_#sd_card_formatting,the same as when preparing f
 
 Also, you have to install <<#_esxdos,esxdos 0.8.8>> to the card, and create a directory named `ZXUNO` with, at least, https://github.com/Utodev/smartROM/blob/master/binaries/SMARTROM.ZX1[the `SMARTROM.ZX1` file] and a RomPack file named `ROMS.ZX1` inside.
 
-Finally, if your PS/2 keyboard is not in Spanish, you can copy the coresponding <<#_keyboard,keyboard map file>>, renamed as `KEYMAP.ZX1`.
+Finally, if your PS/2 keyboard is not in Spanish, you can copy the corresponding <<#_keyboard,keyboard map file>>, renamed as `KEYMAP.ZX1`.
 
 See the <<#_cores,corresponding section>> for instructions of how to install the SmartROM core in ZXUNO+.
 
@@ -4366,7 +4487,7 @@ The joystick adapter must have pin 5 connected to positive VCC, used as main pow
 
 A rotary encoder has 5 wires: Earth Ground (not connected), Vcc (`+`), GND (`0V`or `-`), `A` and `B`.
 
-`A` and `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the seconde one. This way you can have up to 4 encoders connected using both joystick ports.
+`A` and `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the second one. This way you can have up to 4 encoders connected using both joystick ports.
 
 [.text-center]
 image:img/db9joy.png[pdfwidth=40%]
@@ -4402,14 +4523,14 @@ It is recommended to wait, and make the connection after selecting the chosen op
 
 Some cores can load, as the original machines could, from a external audio device like a cassette player or something else simulating it.
 
-Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXUNO+ audio input>>. It must have a 3.5 mm stero jack on one side, and two mono outputs on the other side (one for each audio channel). The right audio mono is connected to the audio player (this is not necessary with a miniduino, since it already uses only the right audio channel when playing).
+Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXUNO+ audio input>>. It must have a 3.5 mm stereo jack on one side, and two mono outputs on the other side (one for each audio channel). The right audio mono is connected to the audio player (this is not necessary with a miniduino, since it already uses only the right audio channel when playing).
 
 ==== Cassette Player
 
 The use is exactly the same as when using the original computers:
 
 . Plug the audio cable
-. Type on the computer or select the tape loading option. For examle, for ZX Spectrum 48K, typing `J`, then, twice, `"` and then `Enter` to do the classic `LOAD "" + Enter`
+. Type on the computer or select the tape loading option. For example, for ZX Spectrum 48K, typing `J`, then, twice, `"` and then `Enter` to do the classic `LOAD "" + Enter`
 . Start playing the tape (you may have to try several times adjusting the player volume)
 
 ==== Computer
@@ -4423,7 +4544,7 @@ This program for Windows, MacOS or Linux, can play directly a `TZX` tape file th
 You can download the binary file (for example), for Windows from https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository]) or compile the source code as <<#_compile_source_code_macos_or_linux,explained later>>.
 
 . Plug the audio cable between the computer audio output and ZXUNO+ audio input (remember to use only the right mono channel to the PC, Mac, etc. output)
-. Type on the computer or select the tape loading option. For examle, for ZX Spectrum 48K, typing `J`, then, twice, `"` and then `Enter` to do the classic `LOAD "" + Enter`
+. Type on the computer or select the tape loading option. For example, for ZX Spectrum 48K, typing `J`, then, twice, `"` and then `Enter` to do the classic `LOAD "" + Enter`
 . Start playing a tape file with this command (you may have to try several times adjusting the player volume)
 
 [source,shell]
@@ -4463,7 +4584,7 @@ https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[Pl
 
 [WARNING]
 ====
-The latest devices with headphone output are normally designed to work with impedances of only a few ohmis. This may, sometimes, not be enouth for the ZXUNO+ audio input.
+The latest devices with headphone output are normally designed to work with impedances of only a few Ohms. This may, sometimes, not be enough for the ZXUNO+ audio input.
 
 In these cases, it's recommended (if possible) to disable headphone volume limitations and/or use a headphone amplifier that can give a higher impedance.
 ====
@@ -4472,7 +4593,7 @@ In these cases, it's recommended (if possible) to disable headphone volume limit
 
 ===== Audio file conversion
 
-These are some of the many programas that exist and which can export tape files to audio files.
+These are some of the many programs that exist and which can export tape files to audio files.
 
 https://www.alessandrogrussu.it/tapir/index.html[Tapir] is a GUI program for Windows (but which can also run with Wine on Linux or Mac) that can load `TZX` and `TAP` files and export to `WAV` audio.
 
@@ -4534,7 +4655,7 @@ With other operating systems it normally is like:
 python3 ./zx123_tool.py
 ----
 
-You also need a SPI flash image file. This can be obtained from within the Spectrum core in "root" mode, with one of the commands `back16m`, `backzx2` or `backzxd`. Once you have obtained the exteacted file from the SD, you can "clean" it leaving only the Spectrum core and the first Spectrum ROM with a command like this:
+You also need a SPI flash image file. This can be obtained from within the Spectrum core in "root" mode, with one of the commands `back16m`, `backzx2` or `backzxd`. Once you have obtained the extracted file from the SD, you can "clean" it leaving only the Spectrum core and the first Spectrum ROM with a command like this:
 
 [source,shell]
 ----
@@ -4554,7 +4675,7 @@ To see the contents of an image file named `FLASH.ZX1` (installed cores and some
 ... zx123_tool.py -i FLASH.ZX1 -l
 ----
 
-To show the contents of the same file, including ZX Spectrun ROMs info:
+To show the contents of the same file, including ZX Spectrum ROMs info:
 
 [source,shell]
 ----
@@ -4663,7 +4784,7 @@ Just like the BIOS firmware, you can install a ROM esxdos file, with a command l
 
 *Mix several actions in one line*
 
-Please do note that you can add several actions in one command line. For example, to "clean" an image file named `FLASH.ZX1`, creating a new one named `FLASHnew.ZX1`, installing the BIOS from the file `FIRMWARE.ZX1`, set up video mode to VGA, the keyboard in Spectrum mode, add a Spectrum ROM file `48.rom`, with the name `Spec48` while ussing slot number 5, install a core at space 3, from a file named `TBBLUE.ZX1`, with the name `TBBlue`, as default core:
+Please do note that you can add several actions in one command line. For example, to "clean" an image file named `FLASH.ZX1`, creating a new one named `FLASHnew.ZX1`, installing the BIOS from the file `FIRMWARE.ZX1`, set up video mode to VGA, the keyboard in Spectrum mode, add a Spectrum ROM file `48.rom`, with the name `Spec48` while using slot number 5, install a core at space 3, from a file named `TBBLUE.ZX1`, with the name `TBBlue`, as default core:
 
 [source,shell]
 ----
@@ -4713,7 +4834,7 @@ For a +UNO, you have to unplug the ZX-Uno board to make a recovery.
 
 *Instruction Steps*:
 
-. Install Raspberry Pi OS (formely known as Raspbian) to the Raspberry Pi SD card (using https://www.raspberrypi.org/downloads/raspberry-pi-os/[the official download], https://www.raspberrypi.org/downloads/noobs/[NOOBS], https://github.com/procount/pinn[PINN], etc.)
+. Install Raspberry Pi OS (formerly known as Raspbian) to the Raspberry Pi SD card (using https://www.raspberrypi.org/downloads/raspberry-pi-os/[the official download], https://www.raspberrypi.org/downloads/noobs/[NOOBS], https://github.com/procount/pinn[PINN], etc.)
 . Install Open OCD:
 
 [source,shell]
@@ -4788,7 +4909,7 @@ bcm2835gpio_jtag_nums 26 6 13 19
 ----
 
 [start=7]
-. Comment, if it wasnt't already, the line `bcm2835gpio_swd_nums` (not necessary for USB-Blaster connection):
+. Comment, if it wasn't already, the line `bcm2835gpio_swd_nums` (not necessary for USB-Blaster connection):
 
 [source]
 ----
@@ -4873,7 +4994,7 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 . Reboot +UNO without losing the temporary keyboard mode (`Caps Shift+Symbol Shift+B`)
 . Quickly, press `Caps Shift + 1`
 . Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
-. Navigate through BIOS and turno on these options:
+. Navigate through BIOS and turn on these options:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
 . Save changes:
@@ -4984,7 +5105,7 @@ This process can't be undone, and it will replace all the previously installed c
 
 [NOTE]
 ====
-Ususally, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+Usually, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
 ====
 
 [start=13]
@@ -5004,7 +5125,7 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 . Reboot +UNO without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
 . Quickly, press `Caps Shift + 1`
 . Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
-. Navigate through BIOS and turno on these options:
+. Navigate through BIOS and turn on these options:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
 . Save changes:
@@ -5014,7 +5135,7 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 
 [NOTE]
 ====
-When using Linux with `urjtag`, the process should be quite similar, although the dependencies (libftdi libusb pkg-config) would have to be installed with the appropiate package manager (apt, yum, pacman, etc.)
+When using Linux with `urjtag`, the process should be quite similar, although the dependencies (libftdi libusb pkg-config) would have to be installed with the appropriate package manager (apt, yum, pacman, etc.)
 ====
 
 <<<
@@ -5087,7 +5208,7 @@ This process can't be undone, and it will replace all the previously installed c
 
 [NOTE]
 ====
-Ususally, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
+Usually, the recovery image is set to use a PS/2 keyboard so, for a +UNO, some key combinations, like `Caps Shift + 5`, etc may not work. In this case, you have to change the keyboard mode to `PC XT`(`Caps Shift + Symbol Shift + U` and then `9`), to make them work temporarily.
 ====
 
 [start=13]
@@ -5107,7 +5228,7 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 . Reboot +UNO without losing the temporary keyboard mode (`Caps Shift + Symbol Shift + B`)
 . Quickly, press `Caps Shift + 1`
 . Again, if there's no image, switch between RGB and VGA mode (`Caps Shift+Symbol Shift+G`)
-. Navigate through BIOS and turno on these options:
+. Navigate through BIOS and turn on these options:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
 - `Advanced` -> `Video`: `VGA`  (only if there was no image)
 . Save changes:

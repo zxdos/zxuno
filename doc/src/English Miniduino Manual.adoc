@@ -1,6 +1,6 @@
 = Miniduino English Manual
 :author: kounch
-:revnumber: 1.0.0
+:revnumber: 1.0.1
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadaminiduino.jpg[]

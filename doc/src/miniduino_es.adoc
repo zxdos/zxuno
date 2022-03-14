@@ -69,7 +69,7 @@ image:img/MiniduinoVersion.jpg[pdfwidth=30%]
 Con la reproducción detenida (navegación por archivos y directorios):
 
 - Arriba y abajo permiten desplazarse por la lista actual de ficheros y directorios
-- Izquierda (Stop) retrocede un nivel en el árbol de direcotorios
+- Izquierda (Stop) retrocede un nivel en el árbol de directorios
 - Derecha (Play/Pause) accede al contenido de un directorio o, si lo que hay seleccionado es un archivo, intenta reproducirlo
 
 <<<
@@ -82,7 +82,7 @@ image:img/MiniduinoPlay.jpg[pdfwidth=30%]
 Con la reproducción en pausa (navegación por bloques de cinta):
 
 - Arriba y abajo permiten desplazarse por los bloques del archivo de cinta que ya hayan sido reproducidos (útil para juegos multicarga, para volver a cargar un bloque de un nivel, por ejemplo)
-- Izquierda (Stop) cancela la reprodución y entra de nuevo en el modo de navegación de archivos y directorios
+- Izquierda (Stop) cancela la reproducción y entra de nuevo en el modo de navegación de archivos y directorios
 - Derecha (Play/Pause) reanuda la reproducción en el bloque seleccionado
 - Presionar directamente el botón de control permite activar o desactivar el modo turbo para MSX
 
@@ -266,7 +266,7 @@ Verificar en el fichero `userconfig.h` que estén comentadas todas las entradas 
 
 <<<
 
-Conectar el Miniduino al adaptador USBasp, asegurándose de que la serigrafía de los dos conectore se corresponde (ej: VCC con VCC, MOSI con MOSI, GND con GND, etc.), y conectar el adaptador USB al equipo.
+Conectar el Miniduino al adaptador USBasp, asegurándose de que la serigrafía de los dos conectores se corresponde (ej: VCC con VCC, MOSI con MOSI, GND con GND, etc.), y conectar el adaptador USB al equipo.
 
 [.text-center]
 image:img/usbasp_2.jpg[pdfwidth=50%]
