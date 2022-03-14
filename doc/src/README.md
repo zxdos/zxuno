@@ -8,9 +8,9 @@ In order to make PDF and ePub files from the source code (`.adoc` files), folow 
 
 - Run on the shell commands like these (adjusting paths as needed):
 
-      asciidoctor-pdf -a pdf-stylesdir=... -a pdf-style=style.yml -o ".../build/English ZXUno4ALL Manual.pdf" index.adoc
+      asciidoctor-pdf -a pdf-stylesdir=... -a pdf-style=style.yml -o ".../English ZXUno4ALL Manual.pdf" English ZXUNO+ and +UNO Manual.adoc
 
-      asciidoctor-epub3 -o ".../build/English ZXUno4ALL Manual.epub" index.adoc
+      asciidoctor-epub3 -o ".../English ZXUno4ALL Manual.epub" English ZXUNO+ and +UNO Manual.adoc
 
 ---
 
@@ -22,6 +22,6 @@ Para poder generar desde el código fuente (archivos `.adoc`), ficheros PDF y eP
 
 - Ejecutar unos comandos similares a los siguientes
 
-      asciidoctor-epub3 -o ".../build/Manual de ZXUno4ALL.epub" indice.adoc
+      asciidoctor-pdf -a pdf-stylesdir=... -a pdf-style=style.yml -o ".../Manual de ZXUNO+ y +UNO.pdf" Manual de ZXUNO+ y +UNO.adoc
 
-      asciidoctor-pdf -a pdf-stylesdir=... -a pdf-style=style.yml -o ".../build/Manual de ZXUno4ALL.pdf" indice.adoc
+      asciidoctor-epub3 -o ".../Manual de ZXUNO+ y +UNO.epub" Manual de ZXUNO+ y +UNO.adoc
