@@ -165,6 +165,24 @@ clean-images:
 distclean-images: clean-images
 
 #-----------------------------------------------------------------------------
+# temporary solution (until main developer merge all these local changes upstream)
+
+strings-new.asm: strings.asm
+	{\
+	 echo '; strings.asm - text messages and string constants';\
+	 echo ';';\
+	 echo '; SPDX-FileType: SOURCE';\
+	 echo '; SPDX-FileCopyrightText: 2016-2021 Antonio Villena';\
+	 echo '; SPDX-FileContributor: 2020 Aitor Gómez';\
+	 echo '; SPDX-FileContributor: 2022 Ivan Tatarinov';\
+	 echo '; SPDX-License-Identifier: GPL-3.0-only';\
+	 echo '';\
+	 echo ' include version.asm';\
+	 echo '';\
+	 cat $<;\
+	 } > $@
+
+#-----------------------------------------------------------------------------
 # firmware version 1: ZXUNO+ with an FPGA LX16 board
 
 build/v1/version.asm: | build/v1
