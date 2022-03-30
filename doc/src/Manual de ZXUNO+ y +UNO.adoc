@@ -1,11 +1,11 @@
 = Manual de ZXUNO+ y +UNO
 :author: kounch
-:revnumber: 1.3.1
+:revnumber: 1.4.0
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.3
+:Revision: 1.4
 :description: Manual en castellano de ZXUNO+ y +UNO
 :keywords: Manual, Castellano, ZXUNO+, +UNO
 :icons: font
@@ -126,12 +126,12 @@ Para poder aprovechar todo su potencial, es útil tener también:
 
 - Una tarjeta SD, no necesariamente muy grande
 - Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV
-- Un ratón PS/2 (se necesista adaptador USB a PS/2)
+- Un ratón PS/2 (se necesita adaptador USB a PS/2)
 - Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
 
 ==== Formato de la tarjeta SD
 
-Para poder utilizar una tarjeta SD con el core principal de Spectrum, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16, FAT32 u otros (según el caso, se puede necesitar, un formato específico para compatibilidad con distintos cores de terceros). Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+Para poder utilizar una tarjeta SD con el core principal de Spectrum, esta debe tener, al menos, una partición (la primera en el caso de haber varias) en formato FAT16, FAT32 u otros (según el caso, se puede necesitar, un formato específico para compatibilidad con distintos cores de terceros). Para el core de Spectrum, también es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
 
 [NOTE]
 ====
@@ -145,7 +145,7 @@ A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos,
 
 [TIP]
 ====
-Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+Para el core de Spectrum, también es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
 ====
 
 <<<
@@ -685,7 +685,7 @@ En la primera pantalla de configuración, además de poder ejecutar distintas pr
 - Soporte NMI para DivMMC
 - Soporte para nuevos modos gráficos (ULAPlus, Timex, Radastan)
 
-Se puede consultar información más tecnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
+Se puede consultar información más técnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
 
 <<<
 
@@ -798,7 +798,7 @@ Finalmente, desde la última pantalla se puede:
 
 == ZX Spectrum
 
-El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustibuir por otro que no sea de ZX Spectrum, ya que el ZXUNO+ lo utiliza para su funcionamiento.
+El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustituir por otro que no sea de ZX Spectrum, ya que el ZXUNO+ lo utiliza para su funcionamiento.
 
 Estas son algunas de sus principales características:
 
@@ -838,7 +838,7 @@ Véase el <<#_roms_3,apartado de actualizaciones>> para más información sobre 
 
 https://www.facebook.com/groups/DerbyPro[DerbyPro o Derby{pp}] es una ROM mejorada para el ZX Spectrum, basada en la versión 1.4 de la ROM de desarrollo Derby. El Spectrum 128 (nombre en código "Derby") fue una máquina española, encargada por Investronica y lanzada en 1985. Incluía un teclado aparte que añadía varias teclas de edición extra. En 1986 se lanzó la versión para Reino Unido con una versión simplificada de 128 BASIC y sin teclado extra. Derby++ se basa en la ROM española para incluir lo mejor de las dos versiones, sin sus inconvenientes, y con soporte para nuevo hardware.
 
-Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.facebook.com/groups/DerbyPro[grupo púbilco oficial de Facebook].
+Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.facebook.com/groups/DerbyPro[grupo público oficial de Facebook].
 
 Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos de esxdos desde 128 BASIC, así que se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
 
@@ -858,7 +858,7 @@ Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos
 
 ==== CargandoLeches
 
-https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
+https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarrápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
 
 Desde la versión 2.0, el proyecto pasó de ser una única ROM a varias, cada una con distintas opciones. Así, es posible elegir diferentes combinaciones que pueden incluir:
 
@@ -900,7 +900,7 @@ En el caso de usar una ROM con la opción de introducir POKEs, se hace de la sig
 
 Las ROMs con la opción de carga ultrarrápida necesitan archivos de cinta especiales que se generan desde ficheros `TAP` de carga normal, de juegos que no tengan protección de carga o modo turbo.
 
-Para crear una cinta de carga ultrarrápida se necesitan las utilidates de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para MacOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
+Para crear una cinta de carga ultrarrápida se necesitan las utilidades de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para MacOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
 
 En otro caso, es posible compilar desde https://github.com/antoniovillena/CargandoLeches[el código fuente disponible en el repositorio oficial]. Por ejemplo, para compilar en Linux usando `gcc` basta con usar estos comandos:
 
@@ -932,7 +932,7 @@ Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches
 
 https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto. SE Basic IV se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también lo hace en ZX-Uno y similares.
 
-SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrurm, pero posteriormente se ha reescrito basándose en la  https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81].
+SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrum, pero posteriormente se ha reescrito basándose en la  https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81].
 
 La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC], todavía se mantiene como un firmware de código abierto para el Spectrum. Se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
 
@@ -1598,7 +1598,7 @@ image:./img/fuzix02.png[pdfwidth=70%]
 
 <<<
 
-Escribir el identificador de la partición raiz (por ejemplo, `hd3`) y pulsar `Enter`.
+Escribir el identificador de la partición raíz (por ejemplo, `hd3`) y pulsar `Enter`.
 
 [.text-center]
 image:./img/fuzix03.png[pdfwidth=70%]
@@ -1852,7 +1852,7 @@ Para ver el menú de opciones en modo 128K se debe usar el comando de esxdos: `.
 
 === ZX Spectrum TBBlue
 
-El firmware https://github.com/fbelavenuto/TBBlue[TBBlue], creado en 2016 por Victor Trucco y Fabio Belavenuto, lleva el nombre de dos de los creadores y el color de la máscara de soldadura de la placa base. Aunque inicialmente se pretendía usar el chip Z80 del ZX Spectrum original, el diseño se modificó posteriorement para usar una FPGA Xilinx Spartan-6, para permitir otras características avanzadas. Este core es la base sobre la que se construyó posterioremente el https://es.wikipedia.org/wiki/ZX_Spectrum_Next[ZX Spectrum Next].
+El firmware https://github.com/fbelavenuto/TBBlue[TBBlue], creado en 2016 por Victor Trucco y Fabio Belavenuto, lleva el nombre de dos de los creadores y el color de la máscara de soldadura de la placa base. Aunque inicialmente se pretendía usar el chip Z80 del ZX Spectrum original, el diseño se modificó posteriormente para usar una FPGA Xilinx Spartan-6, para permitir otras características avanzadas. Este core es la base sobre la que se construyó posteriormente el https://es.wikipedia.org/wiki/ZX_Spectrum_Next[ZX Spectrum Next].
 
 El core TBBlue más reciente para ZX-Uno es una versión sintetizada por azesmbog sobre últimas versiones del repositorio y tiene, entre otras, las siguientes caracterísicas:
 
@@ -2464,7 +2464,7 @@ Durante la ejecución del core:
 
 ===== Personalización de los controles
 
-Existen otras versiones de este core que permiten modificar el soporte de teclado. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+Existen otras versiones de este core que permiten modificar el soporte de teclado. Para ello, se ha de crear en la raíz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
 
 Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón de disparo`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
 
@@ -3579,7 +3579,7 @@ Debido a que es un core experimental, existen algunos problemas como, por ejempl
 
 [TIP]
 ====
-Se puede utilizar la utilidad https://original.sharpmz.org/mzf2wav.htm[mzf2wav], disponible para Windows, y con código fuente válido para Linux y Mac, para convetir ficheros de cinta `MZF` en `WAV` y así poder cargarlos desde un dispositivo externo de audio
+Se puede utilizar la utilidad https://original.sharpmz.org/mzf2wav.htm[mzf2wav], disponible para Windows, y con código fuente válido para Linux y Mac, para convertir ficheros de cinta `MZF` en `WAV` y así poder cargarlos desde un dispositivo externo de audio
 ====
 
 En los siguientes sitios web se puede encontrar información variada y software:
@@ -3621,7 +3621,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Para usarlo, se deben utilizar *dos* puentes en los pines `P58` y `P51` del puerto de expansion, con `GND`:
+Para usarlo, se deben utilizar *dos* puentes en los pines `P58` y `P51` del puerto de expansión, con `GND`:
 
 [.text-center]
 image:img/mz700puente.jpg[pdfwidth=70%]
@@ -3634,7 +3634,7 @@ De la misma manera, `P51` *debe* estar conectado a GND para realizar una carga d
 
 En general, para la mayoría de programas, no es necesario necesita quitar los puentes, y se pueden dejar fijos siempre.
 
-Tras arrancar, la ROM por defecto del MZ-700 tiene un monitor básico con muy pocos comandos como LOAD (L), SAVE (S), DUMP (D), etc. Posterioremente, desde cinta, se pueden cargar programas en código máquina o distintos intérpretes de lenguajes (BASIC, Forth, Pascal) y posterioremente programas para el intérprete elegido.
+Tras arrancar, la ROM por defecto del MZ-700 tiene un monitor básico con muy pocos comandos como LOAD (L), SAVE (S), DUMP (D), etc. Posteriormente, desde cinta, se pueden cargar programas en código máquina o distintos intérpretes de lenguajes (BASIC, Forth, Pascal) y posteriormente programas para el intérprete elegido.
 
 <<<
 
@@ -3691,14 +3691,14 @@ Existe otras versiones de este core que permiten el control también con teclado
 - `I`, `J`, `K`, `L` (personalizables) o el joystick 2: Controles de dirección del jugador 2
 - `H`, `Y` (personalizables) o botones de disparo del joystick 1: Botones A y B (Jugador 2)
 - `6` y `2`: `Select` y `Start` (Jugador 1)
-- `F4` (`Caps Shift+Symbol Shift+4` en ZXUnGo+): Intercambiar la asignación de teclas de jugador 1 y jugador 2
-- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F` y luego `B` en ZXUnGo+): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F4` (`Caps Shift+Symbol Shift+4` en +UNO): Intercambiar la asignación de teclas de jugador 1 y jugador 2
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en +UNO): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 ===== Personalización de los controles
 
-Los controles por defecto del core con soporte de teclado se pueden modificar. Para ello, se ha de crear en la raiz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
+Los controles por defecto del core con soporte de teclado se pueden modificar. Para ello, se ha de crear en la raíz de la tarjeta SD un fichero llamado KEYSP1` para el primer jugador y `KEYSP2` para el segundo (se puede descargar uno de ejemplo desde https://www.zxuno.com/forum/download/file.php?id=1360[el foro de ZX-Uno]).
 
-Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón A`, `Botón B`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumánole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
+Estos ficheros se pueden crear con un editor hexadecimal (como https://mh-nexus.de/en/hxd/[HxD para Windows])y están formados por una secuencia de bytes indicando en este orden: `Arriba`, `Abajo`, `Izquierda`, `Derecha`, `Botón A`, `Botón B`. Los códigos a utilizar en la secuencia se pueden consultar en la tabla <<#_scan_codes,Scan Codes>> al final del manual (Columna MAKE), pero, teniendo en cuenta que, si el código está emparejado con `0xE0`, se ha de usar el otro valor, sumándole `0x80` (por ejemplo, para `E0 14`, sería `0x94`).
 
 [TIP]
 ====
@@ -3730,6 +3730,62 @@ Se puede avanzar y retroceder más rápido por las opciones de menú usando `Re 
 ====
 
 <<<
+
+=== Ondra SPO 186
+
+El https://cs.wikipedia.org/wiki/Ondra_(poč%C3%ADtač)[Ondra SPO 186] era un ordenador checoslovaco de 8 bits desarrollado en 1985 en Tesla Liberec como ordenador escolar y doméstico barato. 
+
+La https://github.com/PetrM1/OndraSPO186_ZXUno[versión para ZX-Uno] ha sido desarrollada por PetrM1, basada en la versión anterior para MiSTer, y tiene estas características:
+
+- 64 kB de RAM
+- Soporte para teclado
+- Sonido
+- Carga de programas a través de la entrada de audio
+- Carga de programas vía puerto serie
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+==== Teclado
+
+[WARNING]
+====
+Debido a los requisitos de este core, no es suficiente si sólo hay conectado un teclado de membrana. Es necesario tener un teclado PS/2 conectado, a la vez, para poder utilizarlo.
+====
+
+Ondra tiene teclado de 37 teclas, en el que el uso de teclas modificadoras permite que cada tecla sirva para 2 o 3 caracteres diferentes. Cada tecla modificadora debe ser presionada (y mantenida) antes de presionar la tecla de carácter a modificar.
+
+[.text-center]
+image:img/keyboardondra.png[pdfwidth=70%]
+
+===== Teclas especiales y botones
+
+- `Mayúsculas`: `Shift`
+- `Alt`: `Symbols`
+- `Tab`: `Numbers`
+- `Control`: `Ctrl`
+- `Bloq. Mayús`: `ČS` (se usa para los diacríticos checos)
+
+==== Guía básica
+
+[.text-center]
+image:img/ondraspo1.png[pdfwidth=70%]
+
+Una vez iniciado el core, se puede cargar desde una cinta (u otro dispositivo externo de audio) pulsando la tecla `Enter` (si se hubiera escrito algo, se ha de borrar todo utilizando `Ctrl+Cursor Izquierdo`). A continuación, la pantalla comenzará a parpadear y aparecerá el texto
+
+[source]
+----
+.KÓD 1
+----
+
+[.text-center]
+image:img/ondraspo2.png[pdfwidth=70%]
+
+Inicie la reproducción de la cinta y el texto en pantalla irá cambiando durante la carga.
+
+<<<
+
 
 === Oric Atmos
 
@@ -3930,6 +3986,70 @@ Características del sistema implementado:
 Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición con MS-DOS instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta SD como disco. Existen distintas imágenes en https://www.zxuno.com/forum/viewforum.php?f=56[el foro de ZX-Uno].
 
 Si no estuviera ya, <<#_cores,instalar el core de PC XT>> en el ZXUNO+.
+
+<<<
+
+=== PC XT CGA
+
+El https://es.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT] o PC/XT fue el segundo modelo de la línea PC de IBM. Por otra parte la https://es.wikipedia.org/wiki/Color_Graphics_Adapter[IBM Color/Graphics Adapter] fue la primera tarjeta gráfica de IBM para PC.
+
+Este core, https://github.com/spark2k06/next186lite_graphics_gremlin[creado por spark2k06], y basado en el <<#_pc_xt,port original de DistWave de Next186>>, intenta ser una recreación más fiel del PC XT original, y tiene las siguientes características:
+
+- Implementación bastante fiel del https://es.wikipedia.org/wiki/Motorola_6845[chip Motorola 6845], con lo cual se dispone de todos sus registros y modos gráficos
+- Mismo comportamiento que un 8086/80186 con PUSH SP, correcta identificación del modelo de CPU por parte de los programas
+- Se eliminan los modos de vídeo que estaban parcialmente implementados en el proyecto Next186 (MCGA/EGA/VGA)
+- Implementación completa de CGA basada en el https://github.com/schlae/graphics-gremlin[proyecto Graphics Gremlin] de TubeTime
+- Implementación parcial de Tandy Graphics (TGA)
+- Relojes simplificados, estableciendo la velocidad general de la máquina en 12Mhz (por defecto) y 4.77Mhz (velocidad reducida)
+- Funciones de BIOS correspondientes al acceso a vídeo revisadas, utilizando parte del https://github.com/skiselev/8088_bios[proyecto Micro8088 de Sergey Kiselev]
+- Soporte para DAC de Vídeo RGB666
+- Soporte Adlib gracias al módulo de OPL2 desarrollado por @jotego (jtopl2[https://github.com/jotego/jtopl])
+- La versión de 2MB de SRAM tiene, por el momento, direccionamiento de 1MB (EMS)
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta SDHC (por tanto de al menos 4GB), con la primera partición FAT16 y con MS-DOS (o similar) instalado. Esto se puede conseguir usando, por ejemplo, software de virtualización y conectando directamente el dispositivo de la tarjeta SD como disco. En los foros de https://www.zxuno.com/forum/viewforum.php?f=56[ZX-Uno] y https://www.forofpga.es/viewtopic.php?f=37&t=120[ZXDOS+] se puede obtener más información y encontrar algunas imágenes de tarjeta SD.
+
+[CAUTION]
+====
+**No se debe utilizar ninguna utilidad de reordenación de FAT** ya que esto puede provocar que deje de arrancar correctamente DOS.
+====
+
+[WARNING]
+====
+Como algunos de los directorios y ficheros de sistema de MSXDOS pueden tienen el mismo nombre, no se recomienda utilizar la misma tarjeta para el <<#_msx,core de MSX>> y el de PC XT.
+====
+
+Si no estuviera ya, <<#_cores,instalar el core de PC XT CGA>> en el ZX-Uno.
+
+<<<
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Las combinaciones específicas de +UNO se corresponden con el modo de teclado `PCXT` (`Caps Shift+Symbol Shift+U` y luego `9`). Véase el <<#_teclado_incorporado_en_uno,apartado dedicado a los modos de teclado>> de +UNO para más información.
+
+- `Ctrl+Alt+Bloq. Desp`: Cambio a Verde - Ambar - B&W (Simulación de monitor monocromático)
+- `Ctrl+Alt+KeyPad -`: Reducir velocidad
+- `Ctrl+Alt+KeyPad +`: Velocidad normal a 12MHz
+- `Ctrl+Alt+Supr`(`Caps Shift+Symbol Shift+N` en +UNO): Soft Reset
+- `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+F+B` en +UNO): Hard Reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+==== Guía Básica
+
+[.text-center]
+image:img/pcxt.png[pdfwidth=70%]
+
+. Iniciar el ZX-Uno
+. En el caso de +UNO, cambiar el modo de teclado a `PC XT` (`Caps Shift+Symbol Shift+U` y luego `9`)
+. Reiniciar el +UNO sin que se pierda la configuración del teclado pulsando `Caps Shift+Symbol Shift+B`
+. Rápidamente, pulsar `Caps Shift+2` o `Caps Shift+6` y elegir el core de PC XT en el arranque
+
+[CAUTION]
+====
+No se recomienda usar el modo de teclado `PC XT` en +UNO, a la vez que un teclado de PS/2 conectado, ya que se generan conflictos y no funciona correctamente.
+====
 
 <<<
 
@@ -4259,7 +4379,7 @@ Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo e
 
 [WARNING]
 ====
-Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oír el sonido durante la carga de una cinta.
 ====
 
 <<<
@@ -4357,7 +4477,7 @@ Desde BASIC, se puede cargar desde un fichero cinta, que se haya seleccionado de
 
 [TIP]
 ====
-Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oir el sonido durante la carga de una cinta.
+Algunos monitores dejan de reproducir la entrada de audio si se desactiva la señal de vídeo. Se recomienda conectar unos auriculares o altavoces externos para poder oír el sonido durante la carga de una cinta.
 ====
 
 Se pueden cargar archivos `.p` con color y caracteres alternativos.
@@ -4469,7 +4589,7 @@ En Linux, el programa utiliza como salida el dispositivo `/dev/dsp`, así que, e
 
 ====== Compilar código fuente (MacOS o Linux)
 
-Verificar que están instaladas las herramientas de desarrollo, incluyendo un compilador de C (`gcc`, `clang` herramientas de desarrollaor de línea de comandos en Mac, etc.) y https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
+Verificar que están instaladas las herramientas de desarrollo, incluyendo un compilador de C (`gcc`, `clang` herramientas de desarrollador de línea de comandos en Mac, etc.) y https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
 
 Descargar el código fuente https://github.com/kounch/playtzx[desde este repositorio]), descomprimirlo y acceder en una consola al directorio, y ejecutar los comandos:
 
@@ -4547,7 +4667,7 @@ Existen distintas herramientas que permiten generar y/o editar el contenido de l
 
 ==== zx123_tool
 
-Esta es una herramienta que analiza, extrae o añade datos en ficheros de imagen de SPI flash de ZX-Uno, ZXDOS y otros dispostivos similares.
+Esta es una herramienta que analiza, extrae o añade datos en ficheros de imagen de SPI flash de ZX-Uno, ZXDOS y otros dispositivos similares.
 
 Para poder utilizarla se necesita https://www.python.org/[Python 3]. Según el sistema operativo que se utilice puede que sea necesario https://www.python.org/downloads/[instalarlo].
 
@@ -4715,7 +4835,7 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 
 ==== Preparación del cableado
 
-En los siguientes pasos de recuperación se habla de conectar cables puente o USB-Blaster a la placa de ZXUNO+. Para ello, usar la siguiente imágen como referencia.
+En los siguientes pasos de recuperación se habla de conectar cables puente o USB-Blaster a la placa de ZXUNO+. Para ello, usar la siguiente imagen como referencia.
 
 [.text-center]
 image:img/jtagzxunoplus.jpg[pdfwidth=80%]
@@ -4770,7 +4890,7 @@ rm -rf ./openocd-code
 <<<
 
 [start=3]
-. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anterioremente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXUNO+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXUNO+ y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
@@ -4929,7 +5049,7 @@ En el caso de +UNO, como la configuración de la imagen de recuperación por def
 *Software necesario*:
 
 - Sistema MacOS
-- Carpeta data adicional para UrJTAG, obtenido desde https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[aqui]
+- Carpeta data adicional para UrJTAG, obtenido desde https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[aquí]
 - https://brew.sh[Homebrew para MacOS]
 - UrJTAG: según las instrucciones de https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[este enlace]:
 
@@ -4947,7 +5067,7 @@ cd urjtag
 [start=2]
 . Copiar la carpeta data adicional para UrJTAG, dentro de la carpeta data de urjtag.
 
-. Lanzar el proceso de compilacion:
+. Lanzar el proceso de compilación:
 
 [source,shell]
 ----
@@ -4957,7 +5077,7 @@ sudo make install
 ----
 
 [start=4]
-. Copiar el archivo `FLASH.ZX1` en la raiz de la tarjeta SD para el ZX-Uno.
+. Copiar el archivo `FLASH.ZX1` en la raíz de la tarjeta SD para el ZX-Uno.
 
 . Conectar el cable USB-Blaster al ZXUnCore y al Mac
 
@@ -5045,7 +5165,7 @@ En el caso de +UNO, como la configuración de la imagen de recuperación por def
 
 [NOTE]
 ====
-En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se deberia hacer mediante apt, yum o similar
+En Linux, usando el mismo software UrJTAG, el proceso debería ser similar, aunque en vez de instalar las dependencias (libftdi libusb pkg-config) mediante brew, se podría hacer utilizando apt, yum o similar
 ====
 
 <<<
@@ -5071,7 +5191,7 @@ En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunqu
 
 . Descomprimir el software de UrJTAG, obtenido en https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[el repositorio oficial]
 
-. Copiar el archivo `FLASH.ZX1` en la raiz de la tarjeta SD para el ZX-Uno.
+. Copiar el archivo `FLASH.ZX1` en la raíz de la tarjeta SD para el ZX-Uno.
 
 . Conectar el cable USB-Blaster al ZXUnCore y al PC con Windows
 

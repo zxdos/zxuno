@@ -34,9 +34,9 @@ A SD is needed in order to store the tape files to play. Fast cards (Class 10 or
 
 The card must have the first partition formatted as FAT16 or FAT32.
 
-Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXUNO+ audio input>>. It must have a 3.5 mm stero jack on one side, and two mono output on the other side (one for each audio channel). The right audio mono is connected to the Miniduino.
+Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXUNO+ audio input>>. It must have a 3.5 mm stereo jack on one side, and two mono output on the other side (one for each audio channel). The right audio mono is connected to the Miniduino.
 
-If you hava a device that can use motor control, you can also use a cable with a 2.6 mm jack.
+If you have a device that can use motor control, you can also use a cable with a 2.6 mm jack.
 
 Copy the tape files (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX`, etc) to the first partition of the SD card. They can be organized using folders or directories.
 
@@ -81,10 +81,10 @@ image:img/MiniduinoPlay.jpg[pdfwidth=30%]
 
 When in pause (tape block browser:
 
-- Up and Down mov through the tape block files alreadey played (useful for multiload titles, to load a previous level block, for example)
+- Up and Down mov through the tape block files already played (useful for multiload titles, to load a previous level block, for example)
 - Left (Stop) cancels the player and goes back to file and directory browser mode
 - Right (Play/Pause) continues playing from the selected block
-- Press down the control butto to enable or disable turbo mode for MSX
+- Press down the control button to enable or disable turbo mode for MSX
 
 == Making TZX or TSX files from other formats
 
@@ -146,7 +146,7 @@ If on Windows, install the USB device controller, running (with elevated privile
  ...\drivers\win\install_drivers.bat
 ----
 
-On Linux, install with root privileeges the necessary `udev` rules:
+On Linux, install with root privileges the necessary `udev` rules:
 
 [source,shell]
 ----
@@ -157,7 +157,7 @@ On MacOS, if Miniduino does not appear as USB device in Arduino ID when plugged,
 
 <<<
 
-Finaly, when on Mac or Linux, the file `maple_upload` inside `Arduino_STM32` has to be changed with a text editor. Those lines do not work:
+Finally, when on Mac or Linux, the file `maple_upload` inside `Arduino_STM32` has to be changed with a text editor. Those lines do not work:
 
 [source,shell]
 ----
