@@ -29,6 +29,14 @@ SJASMPLUS_ARCHIVE_SHA256	= ce0707070946e3439756c0577dd9c4b16a1a4b75cc8bbf1b2be9c
 SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.3
 
+ else ifeq ($(USE_SJASMPLUS_VERSION),1.19.0)
+
+SJASMPLUS_ARCHIVE		= v1.19.0.tar.gz
+SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/archive/refs/tags/$(SJASMPLUS_ARCHIVE)
+SJASMPLUS_ARCHIVE_SHA256	= 3f71b256bde11dbe034c0f18587c7a0b5bcbd8f9ebd124672d135342439b124a
+SJASMPLUS_ARCHIVE_TYPE		= .tar.gz
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.19.0
+
  else ifeq ($(USE_SJASMPLUS_VERSION),current)
 
 SJASMPLUS_ARCHIVE		= master.zip
@@ -124,6 +132,14 @@ SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/releases/download/
 SJASMPLUS_ARCHIVE_SHA256	= 62a833089179ad86d3e028dfdd23e8031bff40f0d2658188378081cf0ac20eda
 SJASMPLUS_ARCHIVE_TYPE		= .zip
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.18.3.win
+
+ else ifeq ($(USE_SJASMPLUS_VERSION),1.19.0)
+
+SJASMPLUS_ARCHIVE		= sjasmplus-1.19.0.win.zip
+SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/releases/download/v1.19.0/$(SJASMPLUS_ARCHIVE)
+SJASMPLUS_ARCHIVE_SHA256	= 38aed2d67b99cfbec94c0b5be258f312063a5a9ec62b4f315e749e553d01bbcb
+SJASMPLUS_ARCHIVE_TYPE		= .zip
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.19.0.win
 
  else ifeq ($(USE_SJASMPLUS_VERSION),current)
   $(error There is no current precompiled SJAsmPlus version for Windows NT)

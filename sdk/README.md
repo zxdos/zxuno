@@ -127,7 +127,8 @@ Value of `USE_SJASMPLUS_VERSION` for `z00m128` branch of SJAsmPlus Z80 Compiler:
 Version | Default
 ---- | :----:
 `1.18.2` |
-`1.18.3` | yes
+`1.18.3` |
+`1.19.0` | yes
 `current` |
 
 Value of `USE_SDCC_VERSION`:

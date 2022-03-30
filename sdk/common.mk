@@ -141,7 +141,7 @@ endif
 USE_SJASMPLUS_BRANCH ?= z00m128
 ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
 else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
- USE_SJASMPLUS_VERSION ?= 1.18.3
+ USE_SJASMPLUS_VERSION ?= 1.19.0
 endif
 
 # Version of SDCC to use
