@@ -2,8 +2,8 @@
 #
 # This file is a part of main Makefile.
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 sdcc_prefix = $(SDCCHOME)
@@ -21,6 +21,12 @@ ifeq ($(USE_SDCC_VERSION),4.1.0)
  SDCC_ARCHIVE_SHA256	= 81edf776d5a2dc61a4b5c3408929db7b25874d69c46e4a71b116be1322fd533f
  SDCC_ARCHIVE_TYPE	= .tar.bz2
  SDCC_ARCHIVE_SUBDIR	= sdcc
+else ifeq ($(USE_SDCC_VERSION),4.2.0)
+ SDCC_ARCHIVE		= sdcc-src-4.2.0.tar.bz2
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc/4.2.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= b49bae1d23bcd6057a82c4ffe5613f9cd0cbcfd1e940e9d84c4bfe9df0a8c053
+ SDCC_ARCHIVE_TYPE	= .tar.bz2
+ SDCC_ARCHIVE_SUBDIR	= sdcc-4.2.0
 else
  $(error Unknown SDCC version: "$(USE_SDCC_VERSION)")
 endif
@@ -70,6 +76,12 @@ ifeq ($(USE_SDCC_VERSION),4.1.0)
  SDCC_ARCHIVE		= sdcc-4.1.0-setup.exe
  SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.1.0/$(SDCC_ARCHIVE)/download
  SDCC_ARCHIVE_SHA256	= cbf064c9f1a3f9a73db6d2c8ba3a43563fa3a2d2966f52cf5a571a3064222ed8
+ SDCC_ARCHIVE_TYPE	= .7z
+ SDCC_ARCHIVE_SUBDIR	= .
+else ifeq ($(USE_SDCC_VERSION),4.2.0)
+ SDCC_ARCHIVE		= sdcc-4.2.0-setup.exe
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.2.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= 14a7b65d03197c0cd9d1c2895b7949c672c4b350bb129d79514b3908f0177443
  SDCC_ARCHIVE_TYPE	= .7z
  SDCC_ARCHIVE_SUBDIR	= .
 else

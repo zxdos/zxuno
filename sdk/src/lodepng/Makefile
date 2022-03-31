@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -19,6 +15,10 @@
 #   <TARGET> is one of values for `LIBS' variable prefixed with "build/"
 #     (see target `all' below).
 #   <PREFIX> is a prefix directory to install files into.
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include ../../common.mk
 
@@ -31,7 +31,7 @@ INSTALL		?= install
 INSTALL_DATA	?= $(INSTALL) -m 644
 
 LIBS		= liblodepng$(DLLSUFFIX)
-HEADERS		= lodepng.h
+HEADERS		= lodepng.h lodepng_ver.h
 
 CFLAGS := -ansi -W -Wall -Wextra -Wpedantic -O3 -Wno-unused-function $(CFLAGS)
 

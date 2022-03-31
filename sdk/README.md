@@ -136,6 +136,7 @@ Value of `USE_SDCC_VERSION`:
 Version | Default
 ----|----
 `4.1.0` | yes
+`4.2.0` |
 
 Value of `USE_Z88DK_VERSION`:
 
@@ -147,7 +148,8 @@ Value of `USE_THERIGHTTOOLS_VERSION`:
 
 Version | Default
 ----|----
-`0.2` | yes
+`0.2` |
+`0.2.1` | yes
 
 Value of `TARGET` | Origin | Description
 ----|----|----
