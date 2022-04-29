@@ -44,16 +44,6 @@ module tld_zxuncore (
    output wire audio_out_left,
    output wire audio_out_right,
 
-   output wire midi_out,
-   input wire clkbd,
-   input wire wsbd,
-   input wire dabd,    
-
-   output wire uart_tx,
-   input wire uart_rx,
-   output wire uart_rts,
-   output wire uart_reset,
-
    output wire stdn,
    output wire stdnb,
    
@@ -88,6 +78,8 @@ module tld_zxuncore (
    wire sysclk, mcolorclk;
    wire disable_genclk;
    wire [2:0] pll_frequency_option;	
+
+   wire midi_out, clkbd, wsbd, dabd, uart_tx, uart_rx, uart_rts, uart_reset;
 
    assign dr = r[5:3];
    assign dg = g[5:3];

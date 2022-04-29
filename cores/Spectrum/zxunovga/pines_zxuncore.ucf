@@ -79,16 +79,16 @@ NET "audio_out_right" LOC="P9" | IOSTANDARD = LVCMOS33;
 NET "ear" LOC="P94" | IOSTANDARD = LVCMOS33 | PULLUP;  #para que no quede flotante en el uZX1
 
 # MIDI
-NET "midi_out" LOC="P43" | IOSTANDARD = LVCMOS33 | DRIVE=12;  # MIDI_OUT del addon MIDI
-NET "clkbd" LOC="P50" | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "wsbd" LOC="P57" | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "dabd" LOC="P46" | IOSTANDARD = LVCMOS33 | PULLUP;
+#NET "midi_out" LOC="P43" | IOSTANDARD = LVCMOS33 | DRIVE=12;  # MIDI_OUT del addon MIDI
+#NET "clkbd" LOC="P50" | IOSTANDARD = LVCMOS33 | PULLUP;
+#NET "wsbd" LOC="P57" | IOSTANDARD = LVCMOS33 | PULLUP;
+#NET "dabd" LOC="P46" | IOSTANDARD = LVCMOS33 | PULLUP;
 
 # UART
-NET "uart_tx"           LOC="P16"  | IOSTANDARD = LVCMOS33;
-NET "uart_rx"           LOC="P12"  | IOSTANDARD = LVCMOS33 | PULLUP;
-NET "uart_rts"          LOC="P22"  | IOSTANDARD = LVCMOS33;
-NET "uart_reset"        LOC="P21"  | IOSTANDARD = LVCMOS33 | PULLUP;
+#NET "uart_tx"           LOC="P16"  | IOSTANDARD = LVCMOS33;
+#NET "uart_rx"           LOC="P12"  | IOSTANDARD = LVCMOS33 | PULLUP;
+#NET "uart_rts"          LOC="P22"  | IOSTANDARD = LVCMOS33;
+#NET "uart_reset"        LOC="P21"  | IOSTANDARD = LVCMOS33 | PULLUP;
 
 # Keyboard and mouse
 NET "clkps2" LOC="P99"    | IOSTANDARD = LVCMOS33 | PULLUP;  # pin 1 DIN

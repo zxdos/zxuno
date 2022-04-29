@@ -27,8 +27,8 @@
 // The following two defines are taken into account only if LOAD_ROM_FROM_FLASH_OPTION is not defined
 `define DEFAULT_SYSTEM_ROM "128en.hex"
 `define DEFAULT_DIVMMC_ROM "esxdos088.hex"
-`define MIDI_SYNTH_OPTION
-`define UART_ESP8266_OPTION
+//`define MIDI_SYNTH_OPTION
+//`define UART_ESP8266_OPTION
 `define F11_ESP8266_FEATURE
 `define PZX_PLAYER_OPTION
 `define VGA_OUTPUT_OPTION
@@ -52,7 +52,7 @@
 //`define AD724_CONTROL_SUPPORT
 //`define FPGA_GENERATES_COLOR_CLOCK_OPTION
 `define MONOCHROMERGB
-//`define SAA1099
+`define SAA1099
 `define INITIAL_KB_RESET
 // ZXUNO core ID string. Must be padded with zero bytes to the right (16 bytes total)
   localparam COREID_STRING = {"EXP27-030422", 8'h00, 8'h00, 8'h00, 8'h00};
