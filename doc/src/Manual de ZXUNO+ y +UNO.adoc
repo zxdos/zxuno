@@ -1,6 +1,6 @@
 = Manual de ZXUNO+ y +UNO
 :author: kounch
-:revnumber: 1.4.0
+:revnumber: 1.4.1
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
@@ -125,7 +125,7 @@ Para poder poner en marcha un ZXUNO+ hace falta, al menos, lo siguiente:
 Para poder aprovechar todo su potencial, es útil tener también:
 
 - Una tarjeta SD, no necesariamente muy grande
-- Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV
+- Unos altavoces de PC para conectar a la salida de audio, o un cable jack-estéreo a dos conectores RCA rojo/blanco para conectar a la TV
 - Un ratón PS/2 (se necesita adaptador USB a PS/2)
 - Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
 
@@ -147,6 +147,56 @@ A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos,
 ====
 Para el core de Spectrum, también es posible tener <<#_formato_avanzado_de_la_tarjeta_sd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
 ====
+
+<<<
+
+La siguiente tabla resume los requisitos particulares de los distintos cores que utilizan la tarjeta SD.
+
+[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
+|===
+|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
+|[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
+|[.small]#ZX Spectrum Kyp 48K#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos embebido#
+|[.small]#ZX Spectrum Kyp 128K#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos embebido#
+|[.small]#ZX Spectrum TBBlue#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Puede utilizar esxdos en la SD#
+|[.small]#Acorn Atom#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Atom software archive#|
+|[.small]#Acorn Electron#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo archivo `MMB`#|
+|[.small]#Amstrad CPC 464#|||||||[.small]#No utiliza la SD#
+|[.small]#Amstrad CPC 6128#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#0x0b (Win95 FAT-32)#|[.small]#No#|[.small]#Sólo imágenes `.DSK` de disco en la raíz de la SD#|[.small]#Partición de 4G o menos y cluster de 4096#
+|[.small]#Apple I#|||||||[.small]#No utiliza la SD#
+|[.small]#Apple II#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusivo#|[.small]#No#|[.small]#Formato exclusivo especial#
+|[.small]#Arcades#|||||||[.small]#No utilizan la SD#
+|[.small]#Atari 800XL#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes `ROM`, disco o cartucho#|
+|[.small]#Atari 2600#|[.small]#Si#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes `ROM`#|
+|[.small]#BBC Micro#|[.small]#Sí#|[.small]#Si#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo archivo `MMFS` o `MMB`, según versión#|
+|[.small]#Camputers Lynx#|||||||[.small]#No utiliza la SD#
+|[.small]#CHIP-8#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN` o `.CH8`)#|
+|[.small]#ColecoVision#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
+|[.small]#Colour Genie#|||||||[.small]#No utiliza la SD#
+|[.small]#Commodore 16#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusivo#|[.small]#No#|[.small]#Formato exclusivo especial (compatible con C64)#
+|[.small]#Commodore 64#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusivo#|[.small]#No#|[.small]#Formato exclusivo especial (compatible con C16)#
+|[.small]#Commodore PET#|||||||[.small]#No utiliza la SD#
+|[.small]#Commodore VIC-20#|||||||[.small]#No utiliza la SD#
+|[.small]#Flappy Bird#|||||||[.small]#No utiliza la SD#
+|[.small]#Galaksija#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ficheros `GTP`#|
+|[.small]#HT-1080Z#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ficheros `CAS`#|
+|[.small]#Jupiter ACE#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ficheros `TAP`#|
+|[.small]#MSX#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#Sí (FAT16)#|[.small]#Completo#|[.small]#No compatible con PC XT#
+|[.small]#NES#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.NES`)#|
+|[.small]#Ondra SPO 186#|||||||[.small]#No utiliza la SD#
+|[.small]#Oric Atmos#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusivo#|[.small]#No#|[.small]#Formato exclusivo especial#
+|[.small]#Oric Atmos (Kyp)#|||||||[.small]#No utiliza la SD#
+|[.small]#PC XT#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#No#|[.small]#Completo. Necesita tener instalado DOS#|[.small]#No compatible con MSX#
+|[.small]#PC XT CGA#|[.small]#Sí#|[.small]#Si#|[.small]#No#|[.small]#Según versión de DOS#|[.small]#No#|[.small]#Completo. Necesita tener instalado DOS#|[.small]#No compatible con MSX#
+|[.small]#Pong#|||||||[.small]#No utiliza la SD#
+|[.small]#SAM Coupé#|||||||[.small]#No utiliza la SD#
+|[.small]#Sega Master System#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ficheros `SMS` o `BIN`#|
+|[.small]#SmartROM#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Necesita ficheros específicos#|
+|[.small]#Vectrex#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ficheros `BIN` o `VEC`#|
+|[.small]#Videopac#|[.small]#Sí#|[.small]#No#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
+|[.small]#ZX81#|||||||[.small]#No utiliza la SD#
+|[.small]#ZX81 y ZX80#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
+|===
 
 <<<
 
@@ -736,7 +786,7 @@ La pantalla de configuración avanzada sirve para modificar los siguientes ajust
 
 La siguiente tabla resume las distintas asignaciones de botones de joystick:
 
-[align="center",width="100%",%header,cols=6*,options="header"]
+[align="center",width="100%",%header,cols=7*,options="header"]
 |===
 |Botón
 |Kempston
@@ -744,42 +794,49 @@ La siguiente tabla resume las distintas asignaciones de botones de joystick:
 |Sinclair 2
 |Protek
 |Fuller
+|QAOPSpcM
 |Izquierda
 |Bit 0
 |1
 |6
 |5
 |Bit 2
+|`O`
 |Derecha
 |Bit 1
 |2
 |7
 |8
 |Bit 3
+|`P`
 |Abajo
 |Bit 2
 |3
 |8
 |6
 |Bit 1
+|`A`
 |Arriba
 |Bit 3
 |4
 |9
 |7
 |Bit 0
+|`Q`
 |Disparo 1
 |Bit 4
 |5
 |0
 |0
 |Bit 4
+|`Espacio`
 |Disparo 2
 |Bit 5
 |X
 |Z
 |9
 |Bit 5
+|`M`
 |===
 
 <<<
