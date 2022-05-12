@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="Y:/cores/spectrum_v2_spartan6/exp27/zxdos_lx16/tb_cpu_y_sram_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_cpu_y_sram" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="/tb_cpu_y_sram/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/cpuaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpuaddr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cpuaddr[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/mreq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mreq_n</obj_property>
+      <obj_property name="ObjectShortName">mreq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/m1_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">m1_n</obj_property>
+      <obj_property name="ObjectShortName">m1_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/iorq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iorq_n</obj_property>
+      <obj_property name="ObjectShortName">iorq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/mem/toda_la_ram/we2_n_dly" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">we2_n_dly</obj_property>
+      <obj_property name="ObjectShortName">we2_n_dly</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/rfsh_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rfsh_n</obj_property>
+      <obj_property name="ObjectShortName">rfsh_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/cpudin" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpudin[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cpudin[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/cpudout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpudout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cpudout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider19" type="divider">
+      <obj_property name="label">SRAM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/sram_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_addr[20:0]</obj_property>
+      <obj_property name="ObjectShortName">sram_addr[20:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/sram_we_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_we_n</obj_property>
+      <obj_property name="ObjectShortName">sram_we_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu_y_sram/sram_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sram_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sram_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="D:/Users/rodriguj/Documents/zxspectrum/zxuno/repositorio/team/zxdosplus/exp27/zxdos_lx25/tb_cpu_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_cpu" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="12" />
+   <wvobject fp_name="/tb_cpu/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/m1_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">m1_n</obj_property>
+      <obj_property name="ObjectShortName">m1_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/mreq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mreq_n</obj_property>
+      <obj_property name="ObjectShortName">mreq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/iorq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iorq_n</obj_property>
+      <obj_property name="ObjectShortName">iorq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/rfsh_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rfsh_n</obj_property>
+      <obj_property name="ObjectShortName">rfsh_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/A" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">A[15:0]</obj_property>
+      <obj_property name="ObjectShortName">A[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/di" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">di[7:0]</obj_property>
+      <obj_property name="ObjectShortName">di[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/mem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">mem[0:15,7:0]</obj_property>
+      <obj_property name="ObjectShortName">mem[0:15,7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject fp_name="/tb_cpu/mem[0]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[0,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[0,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[1]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[1,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[1,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[2]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[2,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[2,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[3]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[3,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[3,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[4]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[4,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[4,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[5]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[5,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[5,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[6]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[6,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[6,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[7]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[7,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[7,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[8]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[8,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[8,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[9]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[9,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[9,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[10]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[10,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[10,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[11]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[11,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[11,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[12]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[12,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[12,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[13]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[13,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[13,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[14]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[14,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[14,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cpu/mem[15]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[15,7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem[15,7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

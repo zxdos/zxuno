@@ -1,0 +1,149 @@
+#    This file is part of the ZXUNO Spectrum core. 
+#    Creation date is UNKNOWN by Miguel Angel Rodriguez Jodar
+#    (c)2014-2020 ZXUNO association.
+#    ZXUNO official repository: http://svn.zxuno.com/svn/zxuno
+#    Username: guest   Password: zxuno
+#    Github repository for this core: https://github.com/mcleod-ideafix/zxuno_spectrum_core
+#
+#    ZXUNO Spectrum core is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    ZXUNO Spectrum core is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with the ZXUNO Spectrum core.  If not, see <https://www.gnu.org/licenses/>.
+#
+#    Any distributed copy of this file must keep this notice intact.
+
+#INST "clk50mhz_IBUF_BUFG" LOC = BUFGMUX_X3Y15;
+#INST "relojes_maestros/reconfiguracion_pll/PLL_ADV_inst" LOC = PLL_ADV_X0Y1;
+
+# Timing constraints
+NET "clk50mhz" TNM_NET = "clk50mhz";
+#NET "clk50mhz" CLOCK_DEDICATED_ROUTE = FALSE;
+TIMESPEC TS_clk50 = PERIOD "clk50mhz" 20ns HIGH 50%;
+
+#NET "sysclk" TNM_NET = "sysclk";
+#TIMESPEC TS_clk28 = PERIOD "sysclk" 29ns HIGH 50%;  #pongo en realidad la frecuencia más alta que tendrá este enable
+
+#NET "la_maquina/clk14en" TNM_NET = FFS "mc_clk14";
+#NET "la_maquina/clk7en" TNM_NET = FFS "mc_clk7";
+#NET "la_maquina/clk7en_n" TNM_NET = FFS "mc_clk7n";
+#NET "la_maquina/clk35en" TNM_NET = FFS "mc_clk35";
+#NET "la_maquina/clk35en_n" TNM_NET = FFS "mc_clk35n";
+#NET "la_maquina/clk175en" TNM_NET = FFS "mc_clk175";
+
+#TIMESPEC TS_mcycle14 = FROM "mc_clk14" TO "mc_clk14" TS_clk50 / 0.28;
+#TIMESPEC TS_mcycle7 = FROM "mc_clk7" TO "mc_clk7" TS_clk28 / 0.14;
+#TIMESPEC TS_mcycle175 = FROM "mc_clk175" TO "mc_clk175" TS_clk28 / 0.035;
+
+# Clocks & debug
+NET "clk50mhz" LOC="P55" | IOSTANDARD = LVCMOS33;
+NET "testled" LOC="P11" | IOSTANDARD = LVCMOS33;
+
+# Video output
+NET "b<2>" LOC="P93" | IOSTANDARD = LVCMOS33;
+NET "b<1>" LOC="P92" | IOSTANDARD = LVCMOS33;
+NET "b<0>" LOC="P88" | IOSTANDARD = LVCMOS33;
+NET "g<2>" LOC="P84" | IOSTANDARD = LVCMOS33;
+NET "g<1>" LOC="P83" | IOSTANDARD = LVCMOS33;
+NET "g<0>" LOC="P82" | IOSTANDARD = LVCMOS33;
+NET "r<2>" LOC="P81" | IOSTANDARD = LVCMOS33;
+NET "r<1>" LOC="P80" | IOSTANDARD = LVCMOS33;
+NET "r<0>" LOC="P79" | IOSTANDARD = LVCMOS33;
+NET "hsync" LOC="P87" | IOSTANDARD = LVCMOS33; #87
+NET "vsync" LOC="P85" | IOSTANDARD = LVCMOS33;
+NET "stdn" LOC="P66" | IOSTANDARD = LVCMOS33;
+NET "stdnb" LOC="P67" | IOSTANDARD = LVCMOS33;
+
+# Sound input/output
+NET "audio_out_left" LOC="P10" | IOSTANDARD = LVCMOS33;
+NET "audio_out_right" LOC="P9" | IOSTANDARD = LVCMOS33;
+NET "ear" LOC="P94" | IOSTANDARD = LVCMOS33 | PULLUP;  #para que no quede flotante en el uZX1
+
+# MIDI
+# NET "midi_out" LOC="P43" | IOSTANDARD = LVCMOS33 | DRIVE=12;  # MIDI_OUT del addon MIDI
+# NET "clkbd" LOC="P50" | IOSTANDARD = LVCMOS33 | PULLUP;
+# NET "wsbd" LOC="P57" | IOSTANDARD = LVCMOS33 | PULLUP;
+# NET "dabd" LOC="P46" | IOSTANDARD = LVCMOS33 | PULLUP; # compartido con joy2fire
+
+# UART
+# NET "uart_tx"           LOC="P16"  | IOSTANDARD = LVCMOS33;
+# NET "uart_rx"           LOC="P12"  | IOSTANDARD = LVCMOS33 | PULLUP;
+# NET "uart_rts"          LOC="P22"  | IOSTANDARD = LVCMOS33;
+# NET "uart_reset"        LOC="P26"  | IOSTANDARD = LVCMOS33 | PULLUP; # compartido con joy2up
+
+# Keyboard and mouse
+NET "clkps2" LOC="P99"    | IOSTANDARD = LVCMOS33 | PULLUP;  # pin 1 DIN
+NET "dataps2" LOC="P98"   | IOSTANDARD = LVCMOS33 | PULLUP;  # pin 5 DIN
+NET "mouseclk" LOC="P95"  | IOSTANDARD = LVCMOS33 | PULLUP;  # pin 6 DIN
+NET "mousedata" LOC="P97" | IOSTANDARD = LVCMOS33 | PULLUP;  # pin 2 DIN
+
+# SRAM
+NET "sram_*" SLEW = FAST;
+NET "sram_addr<0>"  LOC="P141" | IOSTANDARD = LVTTL;
+NET "sram_addr<1>"  LOC="P139" | IOSTANDARD = LVTTL;
+NET "sram_addr<2>"  LOC="P137" | IOSTANDARD = LVTTL;
+NET "sram_addr<3>"  LOC="P134" | IOSTANDARD = LVTTL;
+NET "sram_addr<4>"  LOC="P133" | IOSTANDARD = LVTTL;
+NET "sram_addr<5>"  LOC="P120" | IOSTANDARD = LVTTL;
+NET "sram_addr<6>"  LOC="P118" | IOSTANDARD = LVTTL;
+NET "sram_addr<7>"  LOC="P116" | IOSTANDARD = LVTTL;
+NET "sram_addr<8>"  LOC="P114" | IOSTANDARD = LVTTL;
+NET "sram_addr<9>"  LOC="P112" | IOSTANDARD = LVTTL;
+NET "sram_addr<10>" LOC="P104" | IOSTANDARD = LVTTL;
+NET "sram_addr<11>" LOC="P102" | IOSTANDARD = LVTTL;
+NET "sram_addr<12>" LOC="P101" | IOSTANDARD = LVTTL;
+NET "sram_addr<13>" LOC="P100" | IOSTANDARD = LVTTL;
+NET "sram_addr<14>" LOC="P111" | IOSTANDARD = LVTTL;
+NET "sram_addr<15>" LOC="P131" | IOSTANDARD = LVTTL;
+NET "sram_addr<16>" LOC="P138" | IOSTANDARD = LVTTL;
+NET "sram_addr<17>" LOC="P140" | IOSTANDARD = LVTTL;
+NET "sram_addr<18>" LOC="P142" | IOSTANDARD = LVTTL;
+NET "sram_addr<19>" LOC="P105" | IOSTANDARD = LVTTL;
+NET "sram_addr<20>" LOC="P143" | IOSTANDARD = LVTTL;
+
+NET "sram_data<0>" LOC="P132" | IOSTANDARD = LVTTL;
+NET "sram_data<1>" LOC="P127" | IOSTANDARD = LVTTL;
+NET "sram_data<2>" LOC="P124" | IOSTANDARD = LVTTL;
+NET "sram_data<3>" LOC="P123" | IOSTANDARD = LVTTL;
+NET "sram_data<4>" LOC="P115" | IOSTANDARD = LVTTL;
+NET "sram_data<5>" LOC="P117" | IOSTANDARD = LVTTL;
+NET "sram_data<6>" LOC="P119" | IOSTANDARD = LVTTL;
+NET "sram_data<7>" LOC="P126" | IOSTANDARD = LVTTL;
+
+NET "sram_we_n" 	 LOC="P121" | IOSTANDARD = LVTTL;
+
+# SPI Flash
+NET "flash_cs_n" LOC="P38" | IOSTANDARD = LVCMOS33;
+NET "flash_clk"  LOC="P70" | IOSTANDARD = LVCMOS33;
+NET "flash_mosi" LOC="P64" | IOSTANDARD = LVCMOS33;
+NET "flash_miso" LOC="P65" | IOSTANDARD = LVCMOS33;
+
+# SD/MMC
+NET "sd_cs_n" LOC="P59" | IOSTANDARD = LVCMOS33;
+NET "sd_clk"  LOC="P75" | IOSTANDARD = LVCMOS33;
+NET "sd_mosi" LOC="P74" | IOSTANDARD = LVCMOS33;
+NET "sd_miso" LOC="P78" | IOSTANDARD = LVCMOS33;
+
+# JOYSTICK
+NET "joyup"    LOC="P1"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY6
+NET "joydown"  LOC="P5"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY4
+NET "joyleft"  LOC="P6"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY3
+NET "joyright" LOC="P7"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY2
+NET "joyfire"  LOC="P2"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY7
+NET "joybtn2"  LOC="P8"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY5
+NET "joybtn3"  LOC="P39" | IOSTANDARD = LVCMOS33 | PULLUP;  #
+
+# JOYSTICK 2
+NET "joy2up"    LOC="P26"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY6
+NET "joy2down"  LOC="P30"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY4
+NET "joy2left"  LOC="P34"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY3
+NET "joy2right" LOC="P41"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY2
+NET "joy2fire"  LOC="P46"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY7
+NET "joy2btn2"  LOC="P47"  | IOSTANDARD = LVCMOS33 | PULLUP;  #JOY5

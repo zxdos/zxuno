@@ -1,6 +1,6 @@
 = ZXUNO+ and +UNO Manual
 :author: kounch
-:revnumber: 1.4.0
+:revnumber: 1.4.1
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
@@ -147,6 +147,56 @@ When naming a partition which will be used with esxdos, it's important not to us
 ====
 The Spectrum core can also have <<#_sd_advanced_format_3e,the first partition in +3DOS format, and then the second one in FAT16 or FAT32 format>> to use with a +3e ROM.
 ====
+
+<<<
+
+This table shows special requirements of the cores that use the SD card.
+
+[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
+|===
+|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partition#|[.small]#Access#|[.small]#Notes#
+|[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Uses SPI Flash esxdos#
+|[.small]#ZX Spectrum Kyp 48K#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Uses embedded esxdos#
+|[.small]#ZX Spectrum Kyp 128K#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Uses embedded esxdos#
+|[.small]#ZX Spectrum TBBlue#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Can use esxdos in SD#
+|[.small]#Acorn Atom#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Atom software archive#|
+|[.small]#Acorn Electron#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `MMB` file#|
+|[.small]#Amstrad CPC 464#|||||||[.small]#Doesn't use the SD#
+|[.small]#Amstrad CPC 6128#|[.small]#No#|[.small]#Yes#|[.small]#No#|[.small]#0x0b (Win95 FAT-32)#|[.small]#No#|[.small]#Only disk image files `.DSK` in SD card root#|[.small]#4G or less partition and 4096 cluster#
+|[.small]#Apple I#|||||||[.small]#Doesn't use the SD#
+|[.small]#Apple II#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusive#|[.small]#No#|[.small]#Exclusive special format#
+|[.small]#Arcades#|||||||[.small]#SD not used#
+|[.small]#Atari 800XL#|[.small]#No#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `ROM`, disk or cartridge images#|
+|[.small]#Atari 2600#|[.small]#Si#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `ROM` files#|
+|[.small]#BBC Micro#|[.small]#Yes#|[.small]#Si#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `MMFS` or `MMB` file, depending on version#|
+|[.small]#Camputers Lynx#|||||||[.small]#Doesn't use the SD#
+|[.small]#CHIP-8#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN` or `.CH8`)#|
+|[.small]#ColecoVision#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.ROM`)#|
+|[.small]#Colour Genie#|||||||[.small]#Doesn't use the SD#
+|[.small]#Commodore 16#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusive#|[.small]#No#|[.small]#Exclusive special format (C64 compatible)#
+|[.small]#Commodore 64#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusive#|[.small]#No#|[.small]#Exclusive special format (C16 compatible)#
+|[.small]#Commodore PET#|||||||[.small]#Doesn't use the SD#
+|[.small]#Commodore VIC-20#|||||||[.small]#Doesn't use the SD#
+|[.small]#Flappy Bird#|||||||[.small]#Doesn't use the SD#
+|[.small]#Galaksija#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `GTP` files#|
+|[.small]#HT-1080Z#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only`CAS` files#|
+|[.small]#Jupiter ACE#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `TAP` files#|
+|[.small]#MSX#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#Yes (FAT16)#|[.small]#Full#|[.small]#Not compatible with PC XT#
+|[.small]#NES#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.NES`)#|
+|[.small]#Ondra SPO 186#|||||||[.small]#Doesn't use the SD#
+|[.small]#Oric Atmos#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Exclusive#|[.small]#No#|[.small]#Exclusive special format#
+|[.small]#Oric Atmos (Kyp)#|||||||[.small]#Doesn't use the SD#
+|[.small]#PC XT#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#0x06 (16-bit FAT)#|[.small]#No#|[.small]#Full. Needs DOS installed#|[.small]#Not compatible with MSX#
+|[.small]#PC XT CGA#|[.small]#Yes#|[.small]#Si#|[.small]#No#|[.small]#Depending on DOS version#|[.small]#No#|[.small]#Full. Needs DOS installed#|[.small]#Not compatible with MSX#
+|[.small]#Pong#|||||||[.small]#Doesn't use the SD#
+|[.small]#SAM Coupé#|||||||[.small]#Doesn't use the SD#
+|[.small]#Sega Master System#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `SMS` or `BIN` files#|
+|[.small]#SmartROM#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Needs specific files#|
+|[.small]#Vectrex#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only `BIN` or `VEC` files#|
+|[.small]#Videopac#|[.small]#Yes#|[.small]#No#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
+|[.small]#ZX81#|||||||[.small]#Doesn't use the SD#
+|[.small]#ZX81 y ZX80#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only image files (`.o` or `.p`)#|
+|===
 
 <<<
 
@@ -739,7 +789,7 @@ The Advanced configuration screen is used to edit the following settings:
 
 This table explains how the joystick buttons are assigned:
 
-[align="center",width="100%",%header,cols=6*,options="header"]
+[align="center",width="100%",%header,cols=7*,options="header"]
 |===
 |Button
 |Kempston
@@ -747,42 +797,49 @@ This table explains how the joystick buttons are assigned:
 |Sinclair 2
 |Protek
 |Fuller
+|QAOPSpcM
 |Left
 |Bit 0
 |1
 |6
 |5
 |Bit 2
+|`O`
 |Right
 |Bit 1
 |2
 |7
 |8
 |Bit 3
+|`P`
 |Down
 |Bit 2
 |3
 |8
 |6
 |Bit 1
+|`A`
 |Up
 |Bit 3
 |4
 |9
 |7
 |Bit 0
+|`Q`
 |Fire 1
 |Bit 4
 |5
 |0
 |0
 |Bit 4
+|`Space`
 |Fire 2
 |Bit 5
 |X
 |Z
 |9
 |Bit 5
+|`M`
 |===
 
 <<<

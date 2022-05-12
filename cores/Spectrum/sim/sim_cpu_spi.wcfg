@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="D:/Users/rodriguj/Documents/zxspectrum/zxuno/repositorio/team/cores/exp27/zxdos_lx16/tb_z80_y_spi_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_z80_y_spi" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="27" />
+   <wvobject fp_name="/tb_z80_y_spi/sysclk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sysclk</obj_property>
+      <obj_property name="ObjectShortName">sysclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/wait_spi_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wait_spi_n</obj_property>
+      <obj_property name="ObjectShortName">wait_spi_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/cpuaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpuaddr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cpuaddr[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/m1_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">m1_n</obj_property>
+      <obj_property name="ObjectShortName">m1_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/mreq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mreq_n</obj_property>
+      <obj_property name="ObjectShortName">mreq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/iorq_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iorq_n</obj_property>
+      <obj_property name="ObjectShortName">iorq_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/cpudin" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpudin[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cpudin[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/cpudout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cpudout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cpudout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/rfsh_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rfsh_n</obj_property>
+      <obj_property name="ObjectShortName">rfsh_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/halt_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">halt_n</obj_property>
+      <obj_property name="ObjectShortName">halt_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/spi_dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">spi_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">spi_dout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/oe_spi" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_spi</obj_property>
+      <obj_property name="ObjectShortName">oe_spi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/oe_romyram" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_romyram</obj_property>
+      <obj_property name="ObjectShortName">oe_romyram</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/zxuno_addr_to_cpu" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">zxuno_addr_to_cpu[7:0]</obj_property>
+      <obj_property name="ObjectShortName">zxuno_addr_to_cpu[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/zxuno_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">zxuno_addr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">zxuno_addr[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/flash_cs_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flash_cs_n</obj_property>
+      <obj_property name="ObjectShortName">flash_cs_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/flash_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flash_clk</obj_property>
+      <obj_property name="ObjectShortName">flash_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/flash_di" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flash_di</obj_property>
+      <obj_property name="ObjectShortName">flash_di</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/flash_do" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flash_do</obj_property>
+      <obj_property name="ObjectShortName">flash_do</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/memory_dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">memory_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">memory_dout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/spimem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">spimem[0:3,7:0]</obj_property>
+      <obj_property name="ObjectShortName">spimem[0:3,7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/indxspi" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">indxspi[1:0]</obj_property>
+      <obj_property name="ObjectShortName">indxspi[1:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/regspi" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">regspi[7:0]</obj_property>
+      <obj_property name="ObjectShortName">regspi[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_z80_y_spi/data_from_mosi" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data_from_mosi</obj_property>
+      <obj_property name="ObjectShortName">data_from_mosi</obj_property>
+   </wvobject>
+</wave_config>

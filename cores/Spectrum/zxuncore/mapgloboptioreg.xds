@@ -1,0 +1,34 @@
+<DesignStrategy goal="Timing Performance" strategy="SmartXplorer - mapgloboptioreg" version="14.7">
+   <Description><![CDATA[      This is a Timing Performance optimized strategy.This strategy is also one of the strategies used by SmartXplorer.      If you wish to run SmartXplorer to automatically try multiple Timing Performance strategies, including this one, close this dialog and then select Tools -> SmartXplorer -> Launch SmartXplorer .   ]]></Description>
+   <DeviceList devices="spartan6,spartan6l,aspartan6,qspartan6,qspartan6l" />
+   <Properties>
+      <property name = "Map:Placer Effort Level"
+               value = "High" />
+      <property name = "Map:Global Optimization"
+               value = "Speed" />
+      <property name = "Map:Pack I/O Registers/Latches into IOBs"
+               value = "For Inputs and Outputs" />
+      <property name = "Place &amp; Route:Place &amp; Route Effort Level (Overall)"
+               value = "High" />
+      <property name = "Place &amp; Route:Extra Effort (Highest PAR level only)"
+               value = "Normal" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Number of Paths in Error/Verbose Report"
+               value = "3" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Report Type"
+               value = "Verbose Report" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Generate Constraints Interaction Report"
+               value = "true" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Number of Paths in Error/Verbose Report"
+               value = "tld_zxuno_v4.tsi" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Generate Timegroups Section"
+               value = "true" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Perform Advanced Analysis"
+               value = "true" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Change Device Speed To"
+               value = "-2" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Report Paths by Endpoint"
+               value = "3" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Report Fastest Path(s) in Each Constraint"
+               value = "true" />
+   </Properties>
+</DesignStrategy>
