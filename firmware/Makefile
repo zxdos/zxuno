@@ -60,9 +60,11 @@ all:\
  build-firmwares
 
 build\
-build/v1\
-build/v2\
-build/v3\
+build/zxuno\
+build/zxdos\
+build/zxdosplus\
+build/buryak\
+build/unoxt\
 build/v4\
 $(DESTDIR)$(keymapsdir):
 	mkdir -p $@
@@ -167,47 +169,61 @@ distclean-images: clean-images
 #-----------------------------------------------------------------------------
 # temporary solution (until main developer merge all these local changes upstream)
 
-strings-new.asm: strings.asm
+firmware-new.asm: firmware.asm Makefile
 	{\
-	 echo '; strings.asm - text messages and string constants';\
+	 echo '; firmware.asm - BIOS';\
 	 echo ';';\
 	 echo '; SPDX-FileType: SOURCE';\
-	 echo '; SPDX-FileCopyrightText: 2016-2021 Antonio Villena';\
+	 echo '; SPDX-FileCopyrightText: 2016-2022 Antonio Villena';\
 	 echo '; SPDX-FileContributor: 2020 Aitor Gómez';\
 	 echo '; SPDX-FileContributor: 2022 Ivan Tatarinov';\
 	 echo '; SPDX-License-Identifier: GPL-3.0-only';\
 	 echo '';\
 	 echo ' include version.asm';\
 	 echo '';\
-	 cat $<;\
+	 tail -n+9 $< | sed -Ee 's,(strings)(\.asm),\1-new\2,';\
+	 } > $@
+
+strings-new.asm: strings.asm Makefile
+	{\
+	 echo '; strings.asm - text messages and string constants';\
+	 echo ';';\
+	 echo '; SPDX-FileType: SOURCE';\
+	 echo '; SPDX-FileCopyrightText: 2016-2022 Antonio Villena';\
+	 echo '; SPDX-FileContributor: 2020 Aitor Gómez';\
+	 echo '; SPDX-FileContributor: 2022 Ivan Tatarinov';\
+	 echo '; SPDX-License-Identifier: GPL-3.0-only';\
+	 echo '';\
+	 echo ' include version.asm';\
+	 echo '';\
+	 sed -Ee "s,'([^']+)\\\\'([^']+)',\"\1'\2\"," $<;\
 	 } > $@
 
 #-----------------------------------------------------------------------------
-# firmware version 1: ZXUNO+ with an FPGA LX16 board
+# firmware for ZXUNO
 
-build/v1/version.asm: | build/v1
+build/zxuno/version.asm: | build/zxuno
 	{\
 	 echo ' ifndef VERSION_ASM';\
 	 echo '  define VERSION_ASM 1';\
-	 echo '  define version 1';\
+	 echo '  define version 1 ; ZXUNO';\
 	 echo '  define chloe 0';\
 	 echo '  define recovery 0';\
 	 echo '  define recodire 0';\
 	 echo '  define zesarux 0';\
 	 echo '  define vertical 0';\
-	 echo '  define buryak 0';\
 	 echo ' endif';\
 	 } > $@
 
-build/v1/strings.bin:\
+build/zxuno/strings.bin:\
  $(srcdir)/strings-new.asm\
- build/v1/version.asm
-	$(AS) $(AFLAGS) -Ibuild/v1 --raw=$@ $<
+ build/zxuno/version.asm
+	$(AS) $(AFLAGS) -Ibuild/zxuno --raw=$@ $<
 
-build/v1/strings.bin.zx7b: build/v1/strings.bin
+build/zxuno/strings.bin.zx7b: build/zxuno/strings.bin
 	zx7b $< $@
 
-build/v1/firmware_strings.rom:\
+build/zxuno/firmware_strings.rom:\
  $(srcdir)/firmware-new.asm\
  $(srcdir)/crctable.bin\
  $(srcdir)/sd.asm\
@@ -216,54 +232,53 @@ build/v1/firmware_strings.rom:\
  build/us.zx7b\
  build/fuente6x8.bin\
  build/logo256x192.rcs.zx7b\
- build/v1/version.asm\
- build/v1/strings.bin.zx7b\
- | build/v1
-	$(AS) $(AFLAGS) -Ibuild/v1 --raw=$@ $<
+ build/zxuno/version.asm\
+ build/zxuno/strings.bin.zx7b\
+ | build/zxuno
+	$(AS) $(AFLAGS) -Ibuild/zxuno --raw=$@ $<
 
-build/v1/firmware.rom: build/v1/firmware_strings.rom
+build/zxuno/firmware.rom: build/zxuno/firmware_strings.rom
 	dd if=$< of=$@ bs=16384 count=1
 
-.PHONY: build-firmware-v1
-build-firmware-v1: | build/v1
-	$(MAKE) -w build/v1/firmware.rom
+.PHONY: build-firmware-zxuno
+build-firmware-zxuno: | build/zxuno
+	$(MAKE) -w build/zxuno/firmware.rom
 
-.PHONY: install-firmware-v1
-install-firmware-v1:;
+.PHONY: install-firmware-zxuno
+install-firmware-zxuno:;
 
-.PHONY: uninstall-firmware-v1
-uninstall-firmware-v1:;
+.PHONY: uninstall-firmware-zxuno
+uninstall-firmware-zxuno:;
 
-.PHONY: clean-firmware-v1
-clean-firmware-v1:
-	$(RM) -r build/v1
+.PHONY: clean-firmware-zxuno
+clean-firmware-zxuno:
+	$(RM) -r build/zxuno
 
 #-----------------------------------------------------------------------------
-# firmware version 2: ZXDOS+ with an FPGA LX16 board
+# firmware for ZXDOS
 
-build/v2/version.asm: | build/v2
+build/zxdos/version.asm: | build/zxdos
 	{\
 	 echo ' ifndef VERSION_ASM';\
 	 echo '  define VERSION_ASM 1';\
-	 echo '  define version 2';\
+	 echo '  define version 2; ZXDOS';\
 	 echo '  define chloe 0';\
 	 echo '  define recovery 0';\
 	 echo '  define recodire 0';\
 	 echo '  define zesarux 0';\
 	 echo '  define vertical 0';\
-	 echo '  define buryak 0';\
 	 echo ' endif';\
 	 } > $@
 
-build/v2/strings.bin:\
+build/zxdos/strings.bin:\
  $(srcdir)/strings-new.asm\
- build/v2/version.asm
-	$(AS) $(AFLAGS) -Ibuild/v2 --raw=$@ $<
+ build/zxdos/version.asm
+	$(AS) $(AFLAGS) -Ibuild/zxdos --raw=$@ $<
 
-build/v2/strings.bin.zx7b: build/v2/strings.bin
+build/zxdos/strings.bin.zx7b: build/zxdos/strings.bin
 	zx7b $< $@
 
-build/v2/firmware_strings.rom:\
+build/zxdos/firmware_strings.rom:\
  $(srcdir)/firmware-new.asm\
  $(srcdir)/crctable.bin\
  $(srcdir)/sd.asm\
@@ -272,54 +287,54 @@ build/v2/firmware_strings.rom:\
  build/us.zx7b\
  build/fuente6x8.bin\
  build/logo256x192d.rcs.zx7b\
- build/v2/version.asm\
- build/v2/strings.bin.zx7b\
- | build/v2
-	$(AS) $(AFLAGS) -Ibuild/v2 --raw=$@ $<
+ build/zxdos/version.asm\
+ build/zxdos/strings.bin.zx7b\
+ | build/zxdos
+	$(AS) $(AFLAGS) -Ibuild/zxdos --raw=$@ $<
 
-build/v2/firmware.rom: build/v2/firmware_strings.rom
+build/zxdos/firmware.rom: build/zxdos/firmware_strings.rom
 	dd if=$< of=$@ bs=16384 count=1
 
-.PHONY: build-firmware-v2
-build-firmware-v2: | build/v2
-	$(MAKE) -w build/v2/firmware.rom
+.PHONY: build-firmware-zxdos
+build-firmware-zxdos: | build/zxdos
+	$(MAKE) -w build/zxdos/firmware.rom
 
-.PHONY: install-firmware-v2
-install-firmware-v2:;
+.PHONY: install-firmware-zxdos
+install-firmware-zxdos:;
 
-.PHONY: uninstall-firmware-v2
-uninstall-firmware-v2:;
+.PHONY: uninstall-firmware-zxdos
+uninstall-firmware-zxdos:;
 
-.PHONY: clean-firmware-v2
-clean-firmware-v2:
-	$(RM) -r build/v2
+.PHONY: clean-firmware-zxdos
+clean-firmware-zxdos:
+	$(RM) -r build/zxdos
 
 #-----------------------------------------------------------------------------
-# firmware version 3: ZXDOS+ with an FPGA LX25 board
+# firmware for ZXDOS+
 
-build/v3/version.asm: | build/v3
+build/zxdosplus/version.asm: | build/zxdosplus
 	{\
 	 echo ' ifndef VERSION_ASM';\
 	 echo '  define VERSION_ASM 1';\
-	 echo '  define version 3';\
+	 echo '  define version 3 ; use "clones"';\
+	 echo '  define clones 0 ; ZXDOS+';\
 	 echo '  define chloe 0';\
 	 echo '  define recovery 0';\
 	 echo '  define recodire 0';\
 	 echo '  define zesarux 0';\
 	 echo '  define vertical 0';\
-	 echo '  define buryak 0';\
 	 echo ' endif';\
 	 } > $@
 
-build/v3/strings.bin:\
+build/zxdosplus/strings.bin:\
  $(srcdir)/strings-new.asm\
- build/v3/version.asm
-	$(AS) $(AFLAGS) -Ibuild/v3 --raw=$@ $<
+ build/zxdosplus/version.asm
+	$(AS) $(AFLAGS) -Ibuild/zxdosplus --raw=$@ $<
 
-build/v3/strings.bin.zx7b: build/v3/strings.bin
+build/zxdosplus/strings.bin.zx7b: build/zxdosplus/strings.bin
 	zx7b $< $@
 
-build/v3/firmware_strings.rom:\
+build/zxdosplus/firmware_strings.rom:\
  $(srcdir)/firmware-new.asm\
  $(srcdir)/crctable.bin\
  $(srcdir)/sd.asm\
@@ -328,42 +343,154 @@ build/v3/firmware_strings.rom:\
  build/us.zx7b\
  build/fuente6x8.bin\
  build/logo256x192dp.rcs.zx7b\
- build/v3/version.asm\
- build/v3/strings.bin.zx7b\
- | build/v3
-	$(AS) $(AFLAGS) -Ibuild/v3 --raw=$@ $<
+ build/zxdosplus/version.asm\
+ build/zxdosplus/strings.bin.zx7b\
+ | build/zxdosplus
+	$(AS) $(AFLAGS) -Ibuild/zxdosplus --raw=$@ $<
 
-build/v3/firmware.rom: build/v3/firmware_strings.rom
+build/zxdosplus/firmware.rom: build/zxdosplus/firmware_strings.rom
 	dd if=$< of=$@ bs=16384 count=1
 
-.PHONY: build-firmware-v3
-build-firmware-v3: | build/v3
-	$(MAKE) -w build/v3/firmware.rom
+.PHONY: build-firmware-zxdosplus
+build-firmware-zxdosplus: | build/zxdosplus
+	$(MAKE) -w build/zxdosplus/firmware.rom
 
-.PHONY: install-firmware-v3
-install-firmware-v3:;
+.PHONY: install-firmware-zxdosplus
+install-firmware-zxdosplus:;
 
-.PHONY: uninstall-firmware-v3
-uninstall-firmware-v3:;
+.PHONY: uninstall-firmware-zxdosplus
+uninstall-firmware-zxdosplus:;
 
-.PHONY: clean-firmware-v3
-clean-firmware-v3:
-	$(RM) -r build/v3
+.PHONY: clean-firmware-zxdosplus
+clean-firmware-zxdosplus:
+	$(RM) -r build/zxdosplus
 
 #-----------------------------------------------------------------------------
-# firmware version 4
+# firmware for Buryak Next
 
-build/v4/version.asm: | build/v4
+build/buryak/version.asm: | build/buryak
 	{\
 	 echo ' ifndef VERSION_ASM';\
 	 echo '  define VERSION_ASM 1';\
-	 echo '  define version 3';\
+	 echo '  define version 3 ; use "clones"';\
+	 echo '  define clones 1 ; Buryak Next';\
 	 echo '  define chloe 0';\
 	 echo '  define recovery 0';\
 	 echo '  define recodire 0';\
 	 echo '  define zesarux 0';\
 	 echo '  define vertical 0';\
-	 echo '  define buryak 0';\
+	 echo ' endif';\
+	 } > $@
+
+build/buryak/strings.bin:\
+ $(srcdir)/strings-new.asm\
+ build/buryak/version.asm
+	$(AS) $(AFLAGS) -Ibuild/buryak --raw=$@ $<
+
+build/buryak/strings.bin.zx7b: build/buryak/strings.bin
+	zx7b $< $@
+
+build/buryak/firmware_strings.rom:\
+ $(srcdir)/firmware-new.asm\
+ $(srcdir)/crctable.bin\
+ $(srcdir)/sd.asm\
+ build/av.zx7b\
+ build/es.zx7b\
+ build/us.zx7b\
+ build/fuente6x8.bin\
+ build/logo256x192dp.rcs.zx7b\
+ build/buryak/version.asm\
+ build/buryak/strings.bin.zx7b\
+ | build/buryak
+	$(AS) $(AFLAGS) -Ibuild/buryak --raw=$@ $<
+
+build/buryak/firmware.rom: build/buryak/firmware_strings.rom
+	dd if=$< of=$@ bs=16384 count=1
+
+.PHONY: build-firmware-buryak
+build-firmware-buryak: | build/buryak
+	$(MAKE) -w build/buryak/firmware.rom
+
+.PHONY: install-firmware-buryak
+install-firmware-buryak:;
+
+.PHONY: uninstall-firmware-buryak
+uninstall-firmware-buryak:;
+
+.PHONY: clean-firmware-buryak
+clean-firmware-buryak:
+	$(RM) -r build/buryak
+
+#-----------------------------------------------------------------------------
+# firmware for UnoXT
+
+build/unoxt/version.asm: | build/unoxt
+	{\
+	 echo ' ifndef VERSION_ASM';\
+	 echo '  define VERSION_ASM 1';\
+	 echo '  define version 3 ; use "clones"';\
+	 echo '  define clones 2 ; UnoXT';\
+	 echo '  define chloe 0';\
+	 echo '  define recovery 0';\
+	 echo '  define recodire 0';\
+	 echo '  define zesarux 0';\
+	 echo '  define vertical 0';\
+	 echo ' endif';\
+	 } > $@
+
+build/unoxt/strings.bin:\
+ $(srcdir)/strings-new.asm\
+ build/unoxt/version.asm
+	$(AS) $(AFLAGS) -Ibuild/unoxt --raw=$@ $<
+
+build/unoxt/strings.bin.zx7b: build/unoxt/strings.bin
+	zx7b $< $@
+
+build/unoxt/firmware_strings.rom:\
+ $(srcdir)/firmware-new.asm\
+ $(srcdir)/crctable.bin\
+ $(srcdir)/sd.asm\
+ build/av.zx7b\
+ build/es.zx7b\
+ build/us.zx7b\
+ build/fuente6x8.bin\
+ build/logo256x192ut.rcs.zx7b\
+ build/unoxt/version.asm\
+ build/unoxt/strings.bin.zx7b\
+ | build/unoxt
+	$(AS) $(AFLAGS) -Ibuild/unoxt --raw=$@ $<
+
+build/unoxt/firmware.rom: build/unoxt/firmware_strings.rom
+	dd if=$< of=$@ bs=16384 count=1
+
+.PHONY: build-firmware-unoxt
+build-firmware-unoxt: | build/unoxt
+	$(MAKE) -w build/unoxt/firmware.rom
+
+.PHONY: install-firmware-unoxt
+install-firmware-unoxt:;
+
+.PHONY: uninstall-firmware-unoxt
+uninstall-firmware-unoxt:;
+
+.PHONY: clean-firmware-unoxt
+clean-firmware-unoxt:
+	$(RM) -r build/unoxt
+
+#-----------------------------------------------------------------------------
+# firmware version 4 (?)
+
+build/v4/version.asm: | build/v4
+	{\
+	 echo ' ifndef VERSION_ASM';\
+	 echo '  define VERSION_ASM 1';\
+	 echo '  define version 4 ; ?';\
+	 echo '  define clones 0 ; ?';\
+	 echo '  define chloe 0';\
+	 echo '  define recovery 0';\
+	 echo '  define recodire 0';\
+	 echo '  define zesarux 0';\
+	 echo '  define vertical 0';\
 	 echo ' endif';\
 	 } > $@
 
@@ -411,31 +538,40 @@ clean-firmware-v4:
 
 .PHONY: build-firmwares
 build-firmwares:\
- build-firmware-v1\
- build-firmware-v2\
- build-firmware-v3\
+ build-firmware-zxuno\
+ build-firmware-zxdos\
+ build-firmware-zxdosplus\
+ build-firmware-buryak\
+ build-firmware-unoxt\
  build-firmware-v4
 
 .PHONY: install-firmwares
 install-firmwares:\
- install-firmware-v1\
- install-firmware-v2\
- install-firmware-v3\
+ install-firmware-zxuno\
+ install-firmware-zxdos\
+ install-firmware-zxdosplus\
+ install-firmware-buryak\
+ install-firmware-unoxt\
  install-firmware-v4
 
 .PHONY: uninstall-firmwares
 uninstall-firmwares:\
- uninstall-firmware-v1\
- uninstall-firmware-v2\
- uninstall-firmware-v3\
+ uninstall-firmware-zxuno\
+ uninstall-firmware-zxdos\
+ uninstall-firmware-zxdosplus\
+ uninstall-firmware-buryak\
+ uninstall-firmware-unoxt\
  uninstall-firmware-v4
 
 .PHONY: clean-firmwares
 clean-firmwares:\
- clean-firmware-v1\
- clean-firmware-v2\
- clean-firmware-v3\
+ clean-firmware-zxuno\
+ clean-firmware-zxdos\
+ clean-firmware-zxdosplus\
+ clean-firmware-buryak\
+ clean-firmware-unoxt\
  clean-firmware-v4
+	$(RM) firmware-new.asm strings-new.asm
 
 #-----------------------------------------------------------------------------
 # install

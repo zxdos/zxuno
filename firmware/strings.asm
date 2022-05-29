@@ -319,16 +319,23 @@ cad81   defb    'SD file', 0
 cad82   defb    'Input machine\'s name', 0
 files   defb    'ESXMMC  BIN'
     IF version=3
-      IF buryak=1
-        defb    'FIRMWAREZXB'
-        defb    'FLASH   ZXB'
-        defb    'SPECTRUMZXB'
-fileco  defb    'CORE    ZXB'
-      ELSE
+      IF clones=0
         defb    'FIRMWAREZXD'
         defb    'FLASH   ZXD'
         defb    'SPECTRUMZXD'
 fileco  defb    'CORE    ZXD'
+      ELSE
+       IF clones=1
+        defb    'FIRMWAREZXB'
+        defb    'FLASH   ZXB'
+        defb    'SPECTRUMZXB'
+fileco  defb    'CORE    ZXB'
+       ELSE
+        defb    'FIRMWAREZXT'
+        defb    'FLASH   ZXT'
+        defb    'SPECTRUMZXT'
+fileco  defb    'CORE    ZXT'
+       ENDIF
       ENDIF
     ELSE
       IF version<3

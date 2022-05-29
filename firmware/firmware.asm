@@ -4,7 +4,7 @@
         define  recodire        0
         define  zesarux         0
         define  vertical        0
-        define  buryak          0
+        define  clones          0   ; 0= zxdos+,  1= buryak,  2= unoxt
         output  firmware_strings.rom
       macro wreg  dir, dato
         rst     $28
@@ -2370,10 +2370,14 @@ terror  jp      ferror
 saba    sub     'N'
         jr      z, sab2
     IF  version=3
-      IF buryak=1
-        sub     'B'-'N'
-      ELSE
+      IF clones=0
         sub     'D'-'N'
+      ELSE
+       IF clones=1
+        sub     'B'-'N'
+       ELSE
+        sub     'T'-'N'
+       ENDIF
       ENDIF
     ELSE
       IF version<3
@@ -2472,10 +2476,14 @@ sabe    pop     bc
         sub     'N'
         jr      z, sab3
     IF  version=3
-      IF buryak=1
-        sub     'B'-'N'
-      ELSE
+      IF clones=0
         sub     'D'-'N'
+      ELSE
+       IF clones=1
+        sub     'B'-'N'
+       ELSE
+        sub     'T'-'N'
+       ENDIF
       ENDIF
     ELSE
       IF version<3
@@ -4499,15 +4507,19 @@ finav
         IF version=1
           incbin  logo256x192.rcs.zx7b
         ELSE
-          IF version=2
+         IF version=2
             incbin  logo256x192d.rcs.zx7b
+         ELSE
+          IF clones=0
+            incbin  logo256x192dp.rcs.zx7b
           ELSE
-           IF buryak=1
+           IF clones=1
             incbin  logo256x192bn.rcs.zx7b
            ELSE
-            incbin  logo256x192dp.rcs.zx7b
+            incbin  logo256x192ut.rcs.zx7b
            ENDIF
           ENDIF
+         ENDIF
         ENDIF
 finlog  incbin  strings.bin.zx7b
       ELSE
