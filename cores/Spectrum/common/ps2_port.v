@@ -149,14 +149,14 @@ module ps2_host_to_kb (
     );
     
     `define PULLCLKLOW    3'b000
-    `define PULLDATALOW   3'b001 
-    `define SENDDATA      3'b010
-    `define SENDPARITY    3'b011
-    `define RCVACK        3'b100
-    `define RCVIDLE       3'b101
-    `define SENDFINISHED  3'b110
+    `define PULLCLKDATALOW    3'b001
+    `define PULLDATALOW   3'b010 
+    `define SENDDATA      3'b011
+    `define SENDPARITY    3'b100
+    `define RCVACK        3'b101
+    `define RCVIDLE       3'b110
+    `define SENDFINISHED  3'b111
 
-    reg initial_kb_reset = 1'b1;
     reg busy = 1'b0;
     reg error = 1'b0;
     assign ps2busy = busy;
@@ -198,16 +198,6 @@ module ps2_host_to_kb (
 
     always @(posedge clk) begin
         // Carga de rdata desde el exterior
-	`ifdef INITIAL_KB_RESET
-	if (initial_kb_reset) begin // Reset inicial de teclado para establecer el SET 2
-		initial_kb_reset <= 1'b0;
-		rdata <= 8'hFF;
-            	busy <= 1'b1;
-            	error <= 1'b0;
-            	timeoutcnt <= 24'h000000;
-            	state <= `PULLCLKLOW;				
-	end
-	`endif
         if (dataload) begin
             rdata <= data;
             busy <= 1'b1;
@@ -226,11 +216,17 @@ module ps2_host_to_kb (
 
         case (state)
             `PULLCLKLOW: begin  // 280000 cuentas son 10ms para 28 MHz
-                if (timeoutcnt >= 24'd280000) begin
-                    state <= `PULLDATALOW;
-                    shiftreg <= rdata;
-                    cntbits <= 3'd0;
-                    timeoutcnt <= 24'h000000;
+                if (timeoutcnt >= 24'd3360) begin
+                  state <= `PULLCLKDATALOW;
+                  timeoutcnt <= 24'h000000;
+                end
+            end
+            `PULLCLKDATALOW: begin
+                if (timeoutcnt >= 24'd280) begin
+                  state <= `PULLDATALOW;
+                  shiftreg <= rdata;
+                  cntbits <= 3'd0;
+                  timeoutcnt <= 24'h000000;
                 end
             end
             `PULLDATALOW: begin
@@ -280,10 +276,10 @@ module ps2_host_to_kb (
         endcase     
     end
     
-    assign ps2data_ext = (state == `PULLCLKLOW || state == `PULLDATALOW)    ? 1'b0 :
+    assign ps2data_ext = (state == `PULLCLKDATALOW || state == `PULLDATALOW) ? 1'b0 :
                          (state == `SENDDATA && shiftreg[0] == 1'b0)        ? 1'b0 :
                          (state == `SENDPARITY && paritycalculated == 1'b0) ? 1'b0 : // si lo que se va a enviar es un 1
                                                                               1'bZ;  // no se manda, sino que se pone la línea a alta impedancia
-    assign ps2clk_ext = (state == `PULLCLKLOW)                              ? 1'b0 :
+    assign ps2clk_ext = (state == `PULLCLKLOW || state == `PULLCLKDATALOW)    ? 1'b0 :
                                                                               1'bZ;
 endmodule

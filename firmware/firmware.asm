@@ -250,6 +250,17 @@ kemp    defb    $1f, $1e, $1d, $1c, $0d ; Right   Left    Down    Up      Enter
 
 start   ld      bc, chrend-sdtab
         ldir
+        wreg    scan_code, $f6  ; $f6 = kb set defaults
+        halt
+        halt
+        wreg    scan_code, $f0  ; $f0 + 2 = Set scan code set 2
+        halt
+        halt
+        wreg    scan_code, $02
+        ld      c, $05          ; 100msec delay
+delay1  halt
+        dec     c
+        jr      nz, delay1
       IF  recovery=0
         call    alto loadch
         ld      hl, (scanli)
@@ -463,7 +474,10 @@ star16  djnz    star18
         halt
         wreg    scan_code, $ed  ; $ed + 2 = kb set leds + numlock
         halt
+        halt
         wreg    scan_code, $02
+        halt
+        halt
       IF  vertical=0
         ld      hl, $0017       ; Si se acaba el temporizador borrar
         ld      de, $2001       ; lo de presione Break
