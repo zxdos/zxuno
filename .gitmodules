@@ -1,0 +1,3 @@
+[submodule "cores/ZX81/ZX81_MiSTer_zxdos"]
+	path = cores/ZX81/ZX81_MiSTer_zxdos
+	url = https://github.com/avlixa/ZX81_MiSTer_zxdos
