@@ -128,7 +128,8 @@ Version | Default
 ---- | :----:
 `1.18.2` |
 `1.18.3` |
-`1.19.0` | yes
+`1.19.0` |
+`1.20.0` | yes
 `current` |
 
 Value of `USE_SDCC_VERSION`:
