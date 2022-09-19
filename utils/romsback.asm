@@ -24,19 +24,13 @@
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
 ;
-; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-; SPDX-FileContributor: 2021 kounch
-;
-; SPDX-License-Identifier: GPL-3.0-only
-
 ; Compatible compilers:
-;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
 ;               output  ROMSBACK
 
                 include zxuno.def
                 include esxdos.def
-                include rst28.mac
 
         define  VERSION "0.1"
         define  ROMS_FILE "ROMS.ZX1"

@@ -18,20 +18,17 @@
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
-                output  MC
+;               output  MC
 
                 include zxuno.def
                 include esxdos.def
-                include rst28.mac
-
-        define  VERSION "0.1"
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 
 Main            ld      a, h
                 or      l
                 jr      nz, NoPrint     ; si no se ha especificado nombre de fichero, imprimir uso
-                call    Print;567890123456789012345678901
+                call    Print
                 dz      '.mc corefile.zx1', 13, 13, 'Loads and executes a core'
                 ret
 NoPrint         ld      de, FileName
@@ -59,7 +56,7 @@ Nonlock         wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 in      a, (c)
                 in      a, (c)
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                sub     $19
+                sub     $18
                 jr      z, Goodflsh
                 call    Print
                 dz      'Incorrect flash IC'
@@ -80,21 +77,7 @@ Goodflsh        ld      a, scandbl_ctrl
                 inc     b
 normal          ld      a, 0
                 out     (c), a
-                ld      bc, zxuno_port
-                out     (c), a
-                ld      bc, zxuno_port
-                ld      a, core_addr
-                ld      hl, $2f80
-                ld      de, core_boot
-                out     (c), a
-                inc     b
-                out     (c), h
-                out     (c), l
-                out     (c), d
-                dec     b
-                out     (c), e
-                inc     b
-                out     (c), a
+                ret
 init            xor     a
                 esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
@@ -111,7 +94,7 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 ret
 FileFound       call    Print
                 db      'Writing SPI flash', 13
-                dz      '[', 6, '     ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
+                dz      '[', 6, '      ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ixl, $15
                 ld      de, $2f80
                 exx
@@ -137,11 +120,19 @@ ReadOK          ld      a, $40
                 exx
                 dec     ixl
                 jr      nz, Bucle
-                ld      a, (handle+1)
-                esxdos  F_CLOSE
-                call    Print
-                dz      13, 'Launching core'
-                ret
+                ld      bc, zxuno_port
+                ld      hl, $2f80
+                ld      a, core_addr
+                out     (c), a
+                inc     a
+                inc     b
+                out     (c), h
+                out     (c), l
+                out     (c), 0
+                dec     b
+                out     (c), a
+                inc     b
+                out     (c), a
                 include Print.inc
                 include wrflsh.inc
                 include rst28.inc

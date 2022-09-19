@@ -70,3 +70,13 @@ RADASCTRL:              equ     radas_ctrl
  define specdrum_port   $ffdf   ; Specdrum I/O port in 16-bit format for DMA destination
 
  endif  ; !zxuno_def_included
+
+ ifndef rst28_mac_included
+ define rst28_mac_included
+
+ macro wreg dir, dato
+        call    rst28
+        defb    dir, dato
+ endm
+
+ endif  ; !rst28_mac_included

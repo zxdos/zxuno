@@ -20,20 +20,13 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program. If not, see <https://www.gnu.org/licenses/>.
 ;
-; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
-;
-; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-;
-; SPDX-License-Identifier: GPL-3.0-only
-
 ; Compatible compilers:
-;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
 ;               output  ROMSUPGR
 
                 include zxuno.def
                 include esxdos.def
-                include rst28.mac
 
         define  VERSION "0.1"
         define  ROMS_FILE "ROMS.ZX1"
