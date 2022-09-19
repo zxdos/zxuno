@@ -88,7 +88,7 @@ export ZCCCFG
 # PATH
 
 export PATH := $(_path):$(PATH)
-undefine _path
+#undefine _path
 
 endif	# !ZXSDK
 

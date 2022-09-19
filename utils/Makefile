@@ -49,6 +49,7 @@ BINS=\
  BACKUP\
  CORCLEAN\
  COREBIOS\
+ MC\
  ROMSBACK\
  ROMSUPGR\
  UPGR16M\
@@ -188,6 +189,17 @@ build/UPGRZXD: $(srcdir)/upgr32m.asm\
 	rm -f upgr32m.def
 
 build/UPGRADE: $(srcdir)/upgrade.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/rst28.mac\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+
+build/MC: $(srcdir)/mc.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/rst28.mac\
