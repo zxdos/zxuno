@@ -1,4 +1,4 @@
-; mc.asm - multicore load any .ZX1 core on slot 9.
+; mc.asm - multicore load any .ZX1 core on slot 9 or 45.
 ; File must exists in current directory.  It must be run while using a "root" mode ROM.
 ;
 ; Copyright (C) 2022 Antonio Villena
@@ -58,6 +58,11 @@ Nonlock         wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 sub     $18
                 jr      z, Goodflsh
+                ld      hl, $2f80
+                ld      (Slot+1), hl
+                inc     a
+                inc     a
+                jr      z, Goodflsh
                 call    Print
                 dz      'Incorrect flash IC'
                 ret
@@ -96,7 +101,7 @@ FileFound       call    Print
                 db      'Writing SPI flash', 13
                 dz      '[', 6, '      ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ixl, $15
-                ld      de, $2f80
+Slot            ld      de, $f7c0
                 exx
 Bucle           ld      a, 'o'
                 exx
@@ -121,7 +126,7 @@ ReadOK          ld      a, $40
                 dec     ixl
                 jr      nz, Bucle
                 ld      bc, zxuno_port
-                ld      hl, $2f80
+                ld      hl, (Slot+1)
                 ld      a, core_addr
                 out     (c), a
                 inc     a

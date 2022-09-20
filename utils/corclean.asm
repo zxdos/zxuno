@@ -22,7 +22,6 @@
 ;               output  CORCLEAN
 
                 include zxuno.def
-                include rst28.mac
 
         define  VERSION "0.1"
 ;        define  ROMS_FILE "ROMS.ZX1"

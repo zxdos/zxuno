@@ -72,7 +72,6 @@ $(DESTDIR)$(bindir):
 build/BACK16M: $(srcdir)/back16m.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -82,7 +81,6 @@ build/BACK16M: $(srcdir)/back16m.asm\
 build/BACKZX2: $(srcdir)/back32m.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -94,7 +92,6 @@ build/BACKZX2: $(srcdir)/back32m.asm\
 build/BACKZXD: $(srcdir)/back32m.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -106,7 +103,6 @@ build/BACKZXD: $(srcdir)/back32m.asm\
 build/BACKUP: $(srcdir)/backup.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -115,7 +111,6 @@ build/BACKUP: $(srcdir)/backup.asm\
 
 build/CORCLEAN: $(srcdir)/corclean.asm\
  $(INCLUDEDIR)/zxuno.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/wrflsh.inc\
@@ -126,7 +121,6 @@ build/CORCLEAN: $(srcdir)/corclean.asm\
 build/COREBIOS: $(srcdir)/corebios.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/wrflsh.inc\
@@ -137,7 +131,6 @@ build/COREBIOS: $(srcdir)/corebios.asm\
 build/ROMSBACK: $(srcdir)/romsback.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -147,7 +140,6 @@ build/ROMSBACK: $(srcdir)/romsback.asm\
 build/ROMSUPGR: $(srcdir)/romsupgr.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/wrflsh.inc\
@@ -158,7 +150,6 @@ build/ROMSUPGR: $(srcdir)/romsupgr.asm\
 build/UPGR16M: $(srcdir)/upgr16m.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -168,7 +159,6 @@ build/UPGR16M: $(srcdir)/upgr16m.asm\
 build/UPGRZX2: $(srcdir)/upgr32m.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -191,7 +181,6 @@ build/UPGRZXD: $(srcdir)/upgr32m.asm\
 build/UPGRADE: $(srcdir)/upgrade.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
@@ -202,7 +191,6 @@ build/UPGRADE: $(srcdir)/upgrade.asm\
 build/MC: $(srcdir)/mc.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
- $(INCLUDEDIR)/rst28.mac\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
