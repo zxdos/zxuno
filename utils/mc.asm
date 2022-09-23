@@ -19,18 +19,26 @@
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
 ;               output  MC
+                define  plugin  0
 
                 include zxuno.def
                 include esxdos.def
 
-                org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
+        IF plugin=1
+                org     $8000           ; comienzo requerido si es plugin del navegador
+                jr      NoPrint
+                db      'BP', 0, 0, 0, 0, 'MC plugin - antoniovillena', 0
 
+        ELSE
+                org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 Main            ld      a, h
                 or      l
                 jr      nz, NoPrint     ; si no se ha especificado nombre de fichero, imprimir uso
                 call    Print
                 dz      '.mc corefile.zx1', 13, 13, 'Loads and executes a core'
                 ret
+        ENDIF
+
 NoPrint         ld      de, FileName
 NextChar        ld      a, (hl)
                 or      a
@@ -98,7 +106,7 @@ SDCard          ld      b, FA_READ      ; B = modo de apertura
                 dz      'File not found'
                 ret
 FileFound       call    Print
-                db      'Writing SPI flash', 13
+                db      13, 'Writing SPI flash', 13
                 dz      '[', 6, '      ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ixl, $15
 Slot            ld      de, $f7c0
@@ -109,7 +117,7 @@ Bucle           ld      a, 'o'
                 rst     $10
                 pop     de
                 exx
-punto           ld      hl, $8000
+punto           ld      hl, $8000+plugin*4000
                 ld      bc, $4000
 handle          ld      a, 0
                 esxdos  F_READ
@@ -118,7 +126,7 @@ handle          ld      a, 0
                 dz      'Read Error'
                 ret
 ReadOK          ld      a, $40
-                ld      hl, $8000
+                ld      hl, $8000+plugin*4000
                 exx
                 call    wrflsh
                 inc     de
