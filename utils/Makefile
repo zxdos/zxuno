@@ -49,7 +49,9 @@ BINS=\
  BACKUP\
  CORCLEAN\
  COREBIOS\
- MC\
+ ZX1\
+ SETDATE\
+ RTC.SYS\
  ROMSBACK\
  ROMSUPGR\
  UPGR16M\
@@ -188,12 +190,25 @@ build/UPGRADE: $(srcdir)/upgrade.asm\
 	$(AS) $(AFLAGS) --raw=$@ $<
 
 
-build/MC: $(srcdir)/mc.asm\
+build/ZX1: $(srcdir)/zx1.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/SETDATE: $(srcdir)/setdate.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/RTC.SYS: $(srcdir)/rtc.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 

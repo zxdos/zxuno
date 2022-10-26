@@ -39,6 +39,7 @@
  define dma_len         $a4     ; ZX-UNO register to set DMA length
  define dma_prob        $a5
  define dma_stat        $a6
+ define i2creg          $f8
  define ad724           $fb
  define core_addr       $fc
  define core_boot       $fd
