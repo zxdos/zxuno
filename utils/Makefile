@@ -50,7 +50,7 @@ BINS=\
  CORCLEAN\
  COREBIOS\
  ZX1\
- SETDATE\
+ DATE\
  RTC.SYS\
  ROMSBACK\
  ROMSUPGR\
@@ -199,7 +199,7 @@ build/ZX1: $(srcdir)/zx1.asm\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-build/SETDATE: $(srcdir)/setdate.asm\
+build/DATE: $(srcdir)/date.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/Print.inc\

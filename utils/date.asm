@@ -1,5 +1,5 @@
-; setdate.asm - set date and time using pcf8563
-; .setdate YYYYMMDDHHMMSS
+; date.asm - set date and time using pcf8563
+; .date YYYYMMDDHHMMSS
 ;
 ; Copyright (C) 2022 Antonio Villena/McLeod_ideafix
 ;
@@ -18,7 +18,7 @@
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
-;               output  SETDATE
+;               output  DATE
 
         define  SCL0SDA0    00b
         define  SCL0SDA1    01b
@@ -35,13 +35,52 @@ NoPrint         ld      (Command+1), hl
                 ld      a, h
                 or      l
                 jp      nz, Init
+                esxdos  M_GETDATE
+                ld      ix, DateFormat+1
+                ld      a, b
+                rrca
+                and     %01111111
+                ld      l, 18
+                add     a, 80
+Milnov          inc     l
+                ld      h, a
+                sub     100
+                jr      nc, Milnov
+                ld      a, l
+                call    PrnDec
+                ld      a, h
+                call    PrnDec
+                ld      a, b
+                and     %00000001
+                xor     c
+                and     %00011111
+                xor     c
+                call    PrnDecS3
+                ld      a, c
+                and     %00011111
+                call    PrnDecS
+                ld      a, d
+                rrca
+                rrca
+                rrca
+                and     %00011111
+                call    PrnDecS
+                ld      a, d
+                and     %00011111
+                xor     e
+                and     %00011111
+                xor     e
+                call    PrnDecS3
+                ld      a, e
+                and     %00011111
+                call    PrnDecS1
                 call    Print
-                db      13, 'Usage:', 13
-                db      ' .SETDATE YYYYMMDDHHMMSS', 13
+DateFormat      db      13, '0000/00/00 00:00:00', 13
+                db      'Usage:', 13
+                db      ' .DATE YYYYMMDDHHMMSS', 13
                 db      'Example:', 13
-                dz      ' .SETDATE 20151021072800', 13
+                dz      ' .DATE 20151021072800', 13
                 ret
-
 Params          db 02h  ; VL_seconds register . Indico que quiero empezar a leer desde aquí (que es lo típico para leer toda la fecha y hora)
                 db 0,40h,16h,24h,01h,10h,22h,0  ;La hora a la que quieres poner el reloj. En lectura, estos datos se machacan con la hora leída del RTC
                 ;  S  M   H   D   W  Mo   Y
@@ -133,6 +172,23 @@ ReadBCD         ld      (de), a
                 inc     hl
                 sub     $30
                 or      c
+                ret
+
+PrnDecS3        rlca
+                rlca
+PrnDecS1        rlca
+PrnDecS         inc     ix
+PrnDec          ld      l, $2f
+PrnDec1         inc     l
+                sub     10
+                jr      nc, PrnDec1
+                add     a, $3a
+                push    af
+                ld      a, l
+                call    PrnWrt
+                pop     af
+PrnWrt          ld      (ix), a
+                inc     ix
                 ret
 
                 include Print.inc
