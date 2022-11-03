@@ -66,7 +66,7 @@ Milnov          inc     l
                 and     %00011111
                 call    PrnDecS
                 ld      a, d
-                and     %00011111
+                and     %00000111
                 xor     e
                 and     %00011111
                 xor     e
