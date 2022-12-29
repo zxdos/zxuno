@@ -19,7 +19,7 @@
 ;
 ;-------------------------------------------------------------------------------
 
-;               output  RTC.SYS
+               output  RTC.SYS
 
         define  SCL0SDA0    00b
         define  SCL0SDA1    01b
@@ -132,12 +132,11 @@ Suma10          add     a, 10
 Params          db      0, 0, 0, 0, 0, 0, 0  ;La hora a la que quieres poner el reloj
                      ;  S  M  H  D  W  Mo Y  En lectura, estos datos se machacan con la hora leída del RTC
 
+SendByte        scf                     ;Enviar un byte por I2C. Byte en A. BC=puerto de datos del ZXUNO ya
+                adc     a, a            ;apuntando a I2CREG. Usa y modifica: A, D, flags
 Trans           call    c, Send1
                 call    nc, Send0
-                and     a
-                db      $38             ;jr nc, +$37 / jr TransBit
-SendByte        scf                     ;Enviar un byte por I2C. Byte en A. BC=puerto de datos del ZXUNO ya
-TransBit        adc     a, a            ;apuntando a I2CREG. Usa y modifica: A, D, flags
+                add     a, a
                 jr      nz, Trans
 Send1           ld      d, SCL0SDA1
                 out     (c), d
