@@ -137,15 +137,12 @@ LoopSendMess    ld      a, (hl)         ;y en un bucle, me pongo a enviar uno tr
                 or      a
                 ret
 
-SendByte        ;Enviar un byte por I2C. Byte en A. BC=puerto de datos del ZXUNO ya apuntando a I2CREG. Usa y modifica: A, D, flags
-                scf
-TransBit        adc     a, a   ;A otro bit
-                jr      z, Endbyte
-                call    c, Send1
+SendByte        scf                     ;Enviar un byte por I2C. Byte en A. BC=puerto de datos del ZXUNO ya
+                adc     a, a            ;apuntando a I2CREG. Usa y modifica: A, D, flags
+Trans           call    c, Send1
                 call    nc, Send0
-                and     a
-                jr      TransBit
-Endbyte         ; Wait for ACK
+                add     a, a
+                jr      nz, Trans
 Send1           ld      d, SCL0SDA1
                 out     (c), d
                 ld      d, SCL1SDA1
