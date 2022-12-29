@@ -134,7 +134,8 @@ Params          db      0, 0, 0, 0, 0, 0, 0  ;La hora a la que quieres poner el 
 
 Trans           call    c, Send1
                 call    nc, Send0
-                db      $e6             ;and $37 / jr TransBit
+                and     a
+                db      $38             ;jr nc, +$37 / jr TransBit
 SendByte        scf                     ;Enviar un byte por I2C. Byte en A. BC=puerto de datos del ZXUNO ya
 TransBit        adc     a, a            ;apuntando a I2CREG. Usa y modifica: A, D, flags
                 jr      nz, Trans
