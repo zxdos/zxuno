@@ -3,7 +3,7 @@
 # This file is a part of main Makefile.
 #
 # SPDX-FileType: SOURCE
-# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-FileCopyrightText: 2021-2023 Ivan Tatarinov
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 $(DOWNLOADS)/sjasmplus-z00m128:
@@ -44,6 +44,14 @@ SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/releases/download/
 SJASMPLUS_ARCHIVE_SHA256	= 37c01c4ee34e22ce11f7359ff42759368a5b3745f1fb9e4ede862026c0ca598a
 SJASMPLUS_ARCHIVE_TYPE		= .tar.xz
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.20.0
+
+ else ifeq ($(USE_SJASMPLUS_VERSION),1.20.1)
+
+SJASMPLUS_ARCHIVE		= sjasmplus-1.20.1-src.tar.xz
+SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/releases/download/v1.20.1/$(SJASMPLUS_ARCHIVE)
+SJASMPLUS_ARCHIVE_SHA256	= a4a024917d971c6afc98ec09c3b1222a0cc31378f3522528d11ea4f26bfa51aa
+SJASMPLUS_ARCHIVE_TYPE		= .tar.xz
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.20.1
 
  else ifeq ($(USE_SJASMPLUS_VERSION),current)
 
@@ -156,6 +164,14 @@ SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/releases/download/
 SJASMPLUS_ARCHIVE_SHA256	= abe675817aa1a117d01401d6e700476f09f0ec77242b6918962e50952905f0d7
 SJASMPLUS_ARCHIVE_TYPE		= .zip
 SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.20.0.win
+
+ else ifeq ($(USE_SJASMPLUS_VERSION),1.20.1)
+
+SJASMPLUS_ARCHIVE		= sjasmplus-1.20.1.win.zip
+SJASMPLUS_ARCHIVE_URL		= https://github.com/z00m128/sjasmplus/releases/download/v1.20.1/$(SJASMPLUS_ARCHIVE)
+SJASMPLUS_ARCHIVE_SHA256	= 3d7921a38e246ace3a7befe5e730fb615a64732414dbf14f36e3f2b2b40afdab
+SJASMPLUS_ARCHIVE_TYPE		= .zip
+SJASMPLUS_ARCHIVE_SUBDIR	= sjasmplus-1.20.1.win
 
  else ifeq ($(USE_SJASMPLUS_VERSION),current)
   $(error There is no current precompiled SJAsmPlus version for Windows NT)

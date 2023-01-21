@@ -1,9 +1,10 @@
 #!/bin/bash -e
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021 Ivan Tatarinov
 # SPDX-FileNotice: Based on code by Antonio Villena <_@antoniovillena.es>
-#
 # SPDX-License-Identifier: GPL-3.0-or-later
+
+source ../sdk/setenv.sh
 
 i=2
 

@@ -141,14 +141,14 @@ endif
 USE_SJASMPLUS_BRANCH ?= z00m128
 ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
 else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
- USE_SJASMPLUS_VERSION ?= 1.20.0
+ USE_SJASMPLUS_VERSION ?= 1.20.1
 endif
 
 # Version of SDCC to use
 USE_SDCC_VERSION ?= 4.1.0
 
 # Version of Z88DK to use
-USE_Z88DK_VERSION ?= 2.1
+USE_Z88DK_VERSION ?= 2.2
 
 # Version of The Right Tools to use
 USE_THERIGHTTOOLS_VERSION ?= 0.2.1

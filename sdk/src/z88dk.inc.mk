@@ -2,8 +2,8 @@
 #
 # This file is a part of main Makefile.
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021-2023 Ivan Tatarinov
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 $(DOWNLOADS)/z88dk \
@@ -13,6 +13,7 @@ z88dk:
 .PHONY: $(foreach t,build install uninstall clean distclean,$(t)-z88dk)
 
 ifeq ($(USE_Z88DK_VERSION),2.1)
+ Z88DK_PATCH=z88dk-2.1.patch
  Z88DK_BINS:=\
   asmpp.pl\
   sccz80$(EXESUFFIX)\
@@ -34,6 +35,33 @@ ifeq ($(USE_Z88DK_VERSION),2.1)
   z88dk-zpragma$(EXESUFFIX)\
   z88dk-zx7$(EXESUFFIX)\
   zcc$(EXESUFFIX)
+else ifeq ($(USE_Z88DK_VERSION),2.2)
+ Z88DK_PATCH=z88dk-2.2.patch
+ Z88DK_BINS:=\
+  z80asm$(EXESUFFIX)\
+  z88dk-appmake$(EXESUFFIX)\
+  z88dk-asmpp\
+  z88dk-asmstyle\
+  z88dk-basck$(EXESUFFIX)\
+  z88dk-copt$(EXESUFFIX)\
+  z88dk-dis$(EXESUFFIX)\
+  z88dk-dzx0$(EXESUFFIX)\
+  z88dk-dzx7$(EXESUFFIX)\
+  z88dk-font2pv1000$(EXESUFFIX)\
+  z88dk-gdb$(EXESUFFIX)\
+  z88dk-lib$(EXESUFFIX)\
+  z88dk-sccz80$(EXESUFFIX)\
+  z88dk-ticks$(EXESUFFIX)\
+  z88dk-ucpp$(EXESUFFIX)\
+  z88dk-z80asm$(EXESUFFIX)\
+  z88dk-z80nm$(EXESUFFIX)\
+  z88dk-z80svg$(EXESUFFIX)\
+  z88dk-zcpp$(EXESUFFIX)\
+  z88dk-zobjcopy$(EXESUFFIX)\
+  z88dk-zpragma$(EXESUFFIX)\
+  z88dk-zx0$(EXESUFFIX)\
+  z88dk-zx7$(EXESUFFIX)\
+  zcc$(EXESUFFIX)
 else
  $(error Unknown Z88DK version: "$(USE_Z88DK_VERSION)")
 endif
@@ -44,6 +72,12 @@ ifeq ($(USE_Z88DK_VERSION),2.1)
  Z88DK_ARCHIVE		= z88dk-src-2.1.tgz
  Z88DK_ARCHIVE_URL	= https://github.com/z88dk/z88dk/releases/download/v2.1/$(Z88DK_ARCHIVE)
  Z88DK_ARCHIVE_SHA256	= f3579ee59b4af552721173165af38223b115ccb67179e79d2f3c0ae64338dc7c
+ Z88DK_ARCHIVE_TYPE	= .tar.gz
+ Z88DK_ARCHIVE_SUBDIR	= z88dk
+else ifeq ($(USE_Z88DK_VERSION),2.2)
+ Z88DK_ARCHIVE		= z88dk-src-2.2.tgz
+ Z88DK_ARCHIVE_URL	= https://github.com/z88dk/z88dk/releases/download/v2.2/$(Z88DK_ARCHIVE)
+ Z88DK_ARCHIVE_SHA256	= 942aef3f5c55209a76925c8df681271e8340cf6623bedcb5a2933d4024657a41
  Z88DK_ARCHIVE_TYPE	= .tar.gz
  Z88DK_ARCHIVE_SUBDIR	= z88dk
 else
@@ -67,7 +101,7 @@ $(Z88DK)/.extracted: $(DOWNLOADS)/z88dk/$(Z88DK_ARCHIVE)
 	 --output $(@D)
 	touch $(Z88DK)/.extracted
 
-$(Z88DK)/z88dk.patch: z88dk.patch
+$(Z88DK)/z88dk.patch: $(Z88DK_PATCH)
 	cp $< $@
 
 $(Z88DK)/.built: $(Z88DK)/.extracted $(Z88DK)/z88dk.patch z88dk.mk
@@ -112,6 +146,12 @@ ifeq ($(USE_Z88DK_VERSION),2.1)
  Z88DK_ARCHIVE		= z88dk-win32-2.1.zip
  Z88DK_ARCHIVE_URL	= https://github.com/z88dk/z88dk/releases/download/v2.1/$(Z88DK_ARCHIVE)
  Z88DK_ARCHIVE_SHA256	= f4abedfae429ea159e388b5c76758ace4dcb86e9a00dbd928862b0a30f6874d6
+ Z88DK_ARCHIVE_TYPE	= .zip
+ Z88DK_ARCHIVE_SUBDIR	= z88dk
+else ifeq ($(USE_Z88DK_VERSION),2.2)
+ Z88DK_ARCHIVE		= z88dk-win32-2.2.zip
+ Z88DK_ARCHIVE_URL	= https://github.com/z88dk/z88dk/releases/download/v2.2/$(Z88DK_ARCHIVE)
+ Z88DK_ARCHIVE_SHA256	= 21bcc3e6fac3b4134054d4ba42fa8c865bec72e3d97385727b5b3c107493a5af
  Z88DK_ARCHIVE_TYPE	= .zip
  Z88DK_ARCHIVE_SUBDIR	= z88dk
 else

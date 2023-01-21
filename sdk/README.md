@@ -1,7 +1,7 @@
 # Authors
 
 This document:
-* 2021, 2022 Ivan Tatarinov
+* 2021-2023 Ivan Tatarinov
 
 # Contributors
 
@@ -129,7 +129,8 @@ Version | Default
 `1.18.2` |
 `1.18.3` |
 `1.19.0` |
-`1.20.0` | yes
+`1.20.0` |
+`1.20.1` | yes
 `current` |
 
 Value of `USE_SDCC_VERSION`:
@@ -143,7 +144,8 @@ Value of `USE_Z88DK_VERSION`:
 
 Version | Default
 ----|----
-`2.1` | yes
+`2.1` |
+`2.2` | yes
 
 Value of `USE_THERIGHTTOOLS_VERSION`:
 
@@ -352,7 +354,7 @@ These changes are actual for current invocation of command shell and all child p
 # References
 
 * [REUSE SOFTWARE](https://reuse.software/) - a set of recommendations to make licensing your Free Software projects easier
-* [The Software Package Data Exchange (SPDX)](https://spdx.dev/) - An open standard for communicating software bill of material information, including components, licenses, copyrights, and security references
+* [The Software Package Data Exchange (SPDX)](https://spdx.dev/) - an open standard for communicating software bill of material information, including components, licenses, copyrights, and security references
 * [GNU Operating System](https://www.gnu.org/)
 * [GNU Standards](http://savannah.gnu.org/projects/gnustandards) - GNU coding and package maintenance standards ([package](https://pkgs.org/download/gnu-standards))
 * [GNU Core Utilities](https://www.gnu.org/software/coreutils/) ([package](https://pkgs.org/download/coreutils))
@@ -362,7 +364,7 @@ These changes are actual for current invocation of command shell and all child p
 * [Cygwin](https://cygwin.com/) - a large collection of GNU and Open Source tools which provide functionality similar to a Linux distribution on Windows
 * [MSYS2](https://www.msys2.org/) - a collection of tools and libraries providing you with an easy-to-use environment for building, installing and running native Windows software
 * [MinGW](https://osdn.net/projects/mingw/) - Minimalist GNU for Windows
-* [MinGW-w64](http://mingw-w64.org/doku.php) - an advancement of the original mingw.org project, created to support the GCC compiler on Windows systems
+* [MinGW-w64](http://mingw-w64.org/) - an advancement of the original mingw.org project, created to support the GCC compiler on Windows systems
 * [cmd](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd) - command interpreter in Windows
 * [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
