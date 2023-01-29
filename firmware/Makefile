@@ -29,6 +29,7 @@ INSTALL_DATA	?= $(INSTALL) -m 644
 RM		= rm -f
 
 INCLUDEDIR	= ../sdk/include
+FONTSDIR	= ../fonts/build
 AS		= sjasmplus
 ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
  AFLAGS		= --nobanner
@@ -37,7 +38,7 @@ else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
 else
  AFLAGS		=
 endif
-AFLAGS		+= -I$(INCLUDEDIR)
+AFLAGS		+= -I$(INCLUDEDIR) -I$(FONTSDIR)
 
 # Each item is in form "source_filename/destination_filename"
 KEYMAPS=\
@@ -45,17 +46,11 @@ KEYMAPS=\
  es.bin/ES\
  us.bin/US
 
-FONTS=\
- chloe6x8.bin\
- fuente6x8.bin\
- fuente8x6.bin
-
 IMAGES=$(patsubst images/%,%,$(wildcard images/*.png))
 
 .PHONY: all
 all:\
  build-keymaps\
- build-fonts\
  build-images\
  build-firmwares
 
@@ -104,34 +99,6 @@ clean-keymaps:
 
 .PHONY: distclean-keymaps
 distclean-keymaps: clean-keymaps
-
-#-----------------------------------------------------------------------------
-# fonts
-
-build/chloe6x8.bin: fonts/chloe6x8.png | build
-	fontconv -q -f 6x8 $< $@
-
-build/fuente6x8.bin: fonts/fuente6x8.png | build
-	fontconv -q -f 6x8 $< $@
-
-build/fuente8x6.bin: fonts/fuente6x8.png | build
-	fontconv -q -f 6x8 -t 8x8 -r $< $@
-
-.PHONY: build-fonts
-build-fonts: $(foreach f,$(FONTS),build/$(f))
-
-.PHONY: install-fonts
-install-fonts:;
-
-.PHONY: uninstall-fonts
-uninstall-fonts:;
-
-.PHONY: clean-fonts
-clean-fonts:
-	$(RM) $(foreach f,$(FONTS),build/$(f))
-
-.PHONY: distclean-fonts
-distclean-fonts: clean-fonts
 
 #-----------------------------------------------------------------------------
 # images
@@ -230,7 +197,7 @@ build/zxuno/firmware_strings.rom:\
  build/av.zx7b\
  build/es.zx7b\
  build/us.zx7b\
- build/fuente6x8.bin\
+ $(FONTSDIR)/fuente6x8.bin\
  build/logo256x192.rcs.zx7b\
  build/zxuno/version.asm\
  build/zxuno/strings.bin.zx7b\
@@ -285,7 +252,7 @@ build/zxdos/firmware_strings.rom:\
  build/av.zx7b\
  build/es.zx7b\
  build/us.zx7b\
- build/fuente6x8.bin\
+ $(FONTSDIR)/fuente6x8.bin\
  build/logo256x192d.rcs.zx7b\
  build/zxdos/version.asm\
  build/zxdos/strings.bin.zx7b\
@@ -341,7 +308,7 @@ build/zxdosplus/firmware_strings.rom:\
  build/av.zx7b\
  build/es.zx7b\
  build/us.zx7b\
- build/fuente6x8.bin\
+ $(FONTSDIR)/fuente6x8.bin\
  build/logo256x192dp.rcs.zx7b\
  build/zxdosplus/version.asm\
  build/zxdosplus/strings.bin.zx7b\
@@ -397,7 +364,7 @@ build/buryak/firmware_strings.rom:\
  build/av.zx7b\
  build/es.zx7b\
  build/us.zx7b\
- build/fuente6x8.bin\
+ $(FONTSDIR)/fuente6x8.bin\
  build/logo256x192dp.rcs.zx7b\
  build/buryak/version.asm\
  build/buryak/strings.bin.zx7b\
@@ -453,7 +420,7 @@ build/unoxt/firmware_strings.rom:\
  build/av.zx7b\
  build/es.zx7b\
  build/us.zx7b\
- build/fuente6x8.bin\
+ $(FONTSDIR)/fuente6x8.bin\
  build/logo256x192ut.rcs.zx7b\
  build/unoxt/version.asm\
  build/unoxt/strings.bin.zx7b\
@@ -509,7 +476,7 @@ build/v4/firmware_strings.rom:\
  build/av.zx7b\
  build/es.zx7b\
  build/us.zx7b\
- build/fuente6x8.bin\
+ $(FONTSDIR)/fuente6x8.bin\
  build/logo256x192dp.rcs.zx7b\
  build/v4/version.asm\
  build/v4/strings.bin.zx7b\
@@ -579,7 +546,6 @@ clean-firmwares:\
 .PHONY: install
 install:\
  install-keymaps\
- install-fonts\
  install-images\
  install-firmwares
 
@@ -589,7 +555,6 @@ install:\
 .PHONY: uninstall
 uninstall:\
  uninstall-keymaps\
- uninstall-fonts\
  uninstall-images\
  uninstall-firmwares
 
@@ -599,7 +564,6 @@ uninstall:\
 .PHONY: clean
 clean:\
  clean-keymaps\
- clean-fonts\
  clean-images\
  clean-firmwares
 

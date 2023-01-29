@@ -35,7 +35,7 @@ INSTALL_PROGRAM	?= $(INSTALL)
 RM		= rm -f
 
 INCLUDEDIR	= ../sdk/include
-FONTSDIR	= ../firmware
+FONTSDIR	= ../fonts/build
 AS		= sjasmplus
 ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
 AFLAGS		= --nobanner
