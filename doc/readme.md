@@ -1,6 +1,6 @@
 # FAQs
 
-Uto FAQ Spanish: <http://uto.speccy.org/zxunofaq.htm>
+Uto FAQ Spanish: <http://uto.speccy.org/zxunofaq.html>
 
 Uto FAQ English: <http://uto.speccy.org/zxunofaq_en.html>
 

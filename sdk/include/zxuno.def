@@ -1,9 +1,8 @@
 ; zxuno.def
 ;
-; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
-;
-; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: 2019, 2021, 2022 Antonio Villena
+; SPDX-FileContributor: 2021, 2023 Ivan Tatarinov
 ; SPDX-License-Identifier: GPL-3.0-only
 
 ; Compatible compilers:
@@ -39,6 +38,7 @@
  define dma_len         $a4     ; ZX-UNO register to set DMA length
  define dma_prob        $a5
  define dma_stat        $a6
+ define i2creg          $f8
  define ad724           $fb
  define core_addr       $fc
  define core_boot       $fd
@@ -68,5 +68,10 @@ RADASCTRL:              equ     radas_ctrl
 
  ; SpecDrum interface:
  define specdrum_port   $ffdf   ; Specdrum I/O port in 16-bit format for DMA destination
+
+ macro wreg dir, dato
+        call    rst28
+        defb    dir, dato
+ endm
 
  endif  ; !zxuno_def_included

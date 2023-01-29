@@ -3,19 +3,19 @@
 ## Authors
 
 ESXDOS utilities:
-* 2019, 2021 Antonio Villena
+* 2019, 2021, 2022 Antonio Villena
 
 File [`ROMS.ZX1`](ROMS.ZX1):
 * desUBIKado
 
 This document:
-* 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+* 2021, 2023 Ivan Tatarinov
 
 ## Contributors
 
 ESXDOS utilities:
 * 2021 kounch
-* 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+* 2021, 2023 Ivan Tatarinov
 
 This document:
 * No one yet.
@@ -34,12 +34,15 @@ Files:
 * `BACKZXD`
 * `CORCLEAN`
 * `COREBIOS`
+* `DATE`
 * `ROMSBACK`
 * `ROMSUPGR`
+* `RTC.SYS`
 * `UPGR16M`
 * `UPGRADE`
 * `UPGRZX2`
 * `UPGRZXD`
+* `ZX1`
 * `ZXUNOCFG`
 
 ## Build utilities
