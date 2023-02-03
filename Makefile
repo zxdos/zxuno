@@ -33,6 +33,7 @@ prefix		?= SD
 TARGETS=\
  fonts\
  keymaps\
+ firmwares\
  utils\
  software
 
@@ -65,23 +66,45 @@ distclean-fonts: | fonts
 # keymaps
 
 .PHONY: build-keymaps
-build-keymaps: | firmware
+build-keymaps: | cores/Spectrum/keymaps
 	$(MAKE) -w -C $|
 
 .PHONY: install-keymaps
-install-keymaps: | firmware
+install-keymaps: | cores/Spectrum/keymaps
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
 
 .PHONY: uninstall-keymaps
-uninstall-keymaps: | firmware
+uninstall-keymaps: | cores/Spectrum/keymaps
 	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
 
 .PHONY: clean-keymaps
-clean-keymaps: | firmware
+clean-keymaps: | cores/Spectrum/keymaps
 	$(MAKE) -w -C $| clean
 
 .PHONY: distclean-keymaps
-distclean-keymaps: | firmware
+distclean-keymaps: | cores/Spectrum/keymaps
+	$(MAKE) -w -C $| distclean
+
+# firmwares
+
+.PHONY: build-firmwares
+build-firmwares: | firmware
+	$(MAKE) -w -C $|
+
+.PHONY: install-firmwares
+install-firmwares: | firmware
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
+
+.PHONY: uninstall-firmwares
+uninstall-firmwares: | firmware
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
+
+.PHONY: clean-firmwares
+clean-firmwares: | firmware
+	$(MAKE) -w -C $| clean
+
+.PHONY: distclean-firmwares
+distclean-firmwares: | firmware
 	$(MAKE) -w -C $| distclean
 
 # utils

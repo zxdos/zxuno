@@ -1,7 +1,5 @@
 # SPDX-FileType: TEXT
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov
+# SPDX-FileCopyrightText: 2023 Ivan Tatarinov
 # SPDX-License-Identifier: CC0-1.0
 
 build
-conf.mk
-conf.bat

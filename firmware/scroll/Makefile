@@ -1,3 +1,5 @@
+#!/bin/make -f
+#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -21,6 +23,9 @@ VERSION ?= 1
 
 srcdir		= .
 
+MKDIR		?= mkdir
+RM		?= rm -f
+
 INCLUDEDIR	= ../../sdk/include
 
 INCLUDEDIRS	= $(INCLUDEDIR) build
@@ -40,7 +45,7 @@ AFLAGS += $(addprefix -I,$(INCLUDEDIRS))
 all: build/scroll.tap
 
 build:
-	mkdir -p $@
+	$(MKDIR) -p $@
 
 ifeq ($(VERSION),1)
 
@@ -116,14 +121,14 @@ test: build/scroll.tap
 .PHONY: clean
 clean:
 	$(RM)\
- build/fuente6x8.bin\
- $(SCROLL_DEPS)\
- build/scroll.bin\
- build/scroll.exp\
- build/scroll.bin.zx7b\
- build/define.asm\
- build/scrolldesc.bin\
- build/scroll.tap
+	 build/fuente6x8.bin\
+	 $(SCROLL_DEPS)\
+	 build/scroll.bin\
+	 build/scroll.exp\
+	 build/scroll.bin.zx7b\
+	 build/define.asm\
+	 build/scrolldesc.bin\
+	 build/scroll.tap
 
 .PHONY: distclean
 distclean:

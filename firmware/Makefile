@@ -1,3 +1,5 @@
+#!/bin/make -f
+#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -13,7 +15,7 @@
 #   <PREFIX> is a prefix directory to install files into.
 #
 # SPDX-FileType: SOURCE
-# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-FileCopyrightText: 2021, 2022, 2023 Ivan Tatarinov
 # SPDX-FileNotice: Based on code by Antonio Villena
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -26,9 +28,11 @@ keymapsdir	?= $(prefix)/SYS/KEYMAPS
 
 INSTALL		?= install
 INSTALL_DATA	?= $(INSTALL) -m 644
-RM		= rm -f
+RM		?= rm -f
+MKDIR		?= mkdir
 
 INCLUDEDIR	= ../sdk/include
+KEYMAPSDIR	= ../cores/Spectrum/keymaps/build
 FONTSDIR	= ../fonts/build
 AS		= sjasmplus
 ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
@@ -40,11 +44,10 @@ else
 endif
 AFLAGS		+= -I$(INCLUDEDIR) -I$(FONTSDIR)
 
-# Each item is in form "source_filename/destination_filename"
 KEYMAPS=\
- av.bin/AV\
- es.bin/ES\
- us.bin/US
+ build/av.zx7b\
+ build/es.zx7b\
+ build/us.zx7b
 
 IMAGES=$(patsubst images/%,%,$(wildcard images/*.png))
 
@@ -60,42 +63,27 @@ build/zxdos\
 build/zxdosplus\
 build/buryak\
 build/unoxt\
-build/v4\
-$(DESTDIR)$(keymapsdir):
-	mkdir -p $@
+build/v4:
+	$(MKDIR) -p $@
 
 #-----------------------------------------------------------------------------
 # keymaps
 
-# $(1) = source filename
-define build_keymap_rule =
-build/$(1:.bin=).zx7b: keymaps/$(1) | build
-	zx7b $$< $$@
-endef
+build/av.zx7b: $(KEYMAPSDIR)/av-fw.bin | build
+	zx7b $< $@
 
-$(foreach f,$(KEYMAPS),$(eval $(call build_keymap_rule,$(subst /,,$(dir $(f))))))
+build/es.zx7b: $(KEYMAPSDIR)/es-fw.bin | build
+	zx7b $< $@
+
+build/us.zx7b: $(KEYMAPSDIR)/us-fw.bin | build
+	zx7b $< $@
 
 .PHONY: build-keymaps
-build-keymaps: $(foreach f,$(KEYMAPS),build/$(subst .bin/,,$(dir $(f))).zx7b)
-
-# $(1) = source filename, $(2) = destination filename
-define install_keymap_rule =
-$$(DESTDIR)$$(keymapsdir)/$(2): keymaps/$(1) | $$(DESTDIR)$$(keymapsdir)
-	$$(INSTALL_DATA) $$< $$@
-endef
-
-$(foreach f,$(KEYMAPS),$(eval $(call install_keymap_rule,$(subst /,,$(dir $(f))),$(notdir $(f)))))
-
-.PHONY: install-keymaps
-install-keymaps: $(foreach f,$(KEYMAPS),$(DESTDIR)$(keymapsdir)/$(notdir $(f))) | $(DESTDIR)$(keymapsdir)
-
-.PHONY: uninstall-keymaps
-uninstall-keymaps:
-	$(RM) $(foreach f,$(KEYMAPS),$(DESTDIR)$(keymapsdir)/$(notdir $(f)))
+build-keymaps: $(KEYMAPS)
 
 .PHONY: clean-keymaps
 clean-keymaps:
-	$(RM) $(foreach f,$(KEYMAPS),build/$(subst .bin/,,$(dir $(f))).zx7b)
+	$(RM) $(KEYMAPS)
 
 .PHONY: distclean-keymaps
 distclean-keymaps: clean-keymaps
@@ -119,12 +107,6 @@ $(foreach i,$(IMAGES),$(eval $(call build_image_rule,$(i))))
 
 .PHONY: build-images
 build-images: $(foreach i,$(IMAGES),build/$(i:.png=.rcs.zx7b))
-
-.PHONY: install-images
-install-images:;
-
-.PHONY: uninstall-images
-uninstall-images:;
 
 .PHONY: clean-images
 clean-images:
@@ -545,8 +527,6 @@ clean-firmwares:\
 
 .PHONY: install
 install:\
- install-keymaps\
- install-images\
  install-firmwares
 
 #-----------------------------------------------------------------------------
@@ -554,8 +534,6 @@ install:\
 
 .PHONY: uninstall
 uninstall:\
- uninstall-keymaps\
- uninstall-images\
  uninstall-firmwares
 
 #-----------------------------------------------------------------------------
