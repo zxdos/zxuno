@@ -17,6 +17,10 @@
 ;
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
+;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: 2022 Antonio Villena
+; SPDX-License-Identifier: GPL-3.0-only
 
 ;               output  ZX1
 

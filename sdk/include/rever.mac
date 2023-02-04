@@ -1,0 +1,64 @@
+; rever.mac - macros to mirror horizontally part of left side of the screen to
+; the right side
+;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: Copyright (C) 2016 Antonio Villena
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
+
+ ifndef rever_mac_included
+ define rever_mac_included
+
+ macro rever_byte
+        ld      c, (hl)         ; C = M[HL]
+        ld      a, 1<<7         ; A = target variable with end flag set
+.loop   rl      c               ; CY = reg>>7, reg <<= 1
+        rra                     ; A = (A>>1)+(CY<<7), CY = (previous A)&1
+        jr      nc, .loop       ; repeat 7 times to fill A
+        ld      (de), a         ; M[DE] = A
+ endm
+
+; Mirrors horizontally part of left side of the screen to the right side
+ macro rever bytes
+        ld      de, $4000+32-1  ; DE = SCREEN+32-1
+.lines  ld      hl, 1-32
+        add     hl, de          ; HL = DE+1-32
+ if bytes > 1
+      dup bytes-1
+        rever_byte
+        inc     hl              ; HL++          // next address
+        dec     de              ; DE--          // previous address
+      edup
+ endif
+        rever_byte
+        ld      hl, bytes-1+32
+        add     hl, de
+        ex      de, hl          ; DE += bytes-1+32 // next screen line
+        ld      a, d
+        cp      high $5800
+        jr      nz, .lines      ; if (DE != ATTRS) goto .loop
+
+.attrs  ld      hl, 1-32
+        add     hl, de          ; HL = DE+1-32
+ if bytes > 1
+      dup bytes-1
+        ld      a, (hl)
+        ld      (de), a
+        inc     hl              ; HL++          // next address
+        dec     de              ; DE--          // previous address
+      edup
+ endif
+        ld      a, (hl)
+        ld      (de), a
+        ld      hl, bytes-1+32
+        add     hl, de
+        ex      de, hl          ; DE += bytes-1+32 // next screen line
+        ld      a, d
+        cp      high ($5800+32*24)
+        jr      nz, .attrs      ; if (DE != ATTRS+32*24) goto .loop
+ endm
+
+ endif  ; !rever_mac_included

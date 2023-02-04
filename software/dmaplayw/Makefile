@@ -54,6 +54,7 @@ $(DESTDIR)$(bindir):
 build/DMAPLAYW: $(srcdir)/dmaplayw.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/regs.mac\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 

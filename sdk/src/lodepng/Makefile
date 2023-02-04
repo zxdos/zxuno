@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -19,6 +15,10 @@
 #   <TARGET> is one of values for `LIBS' variable prefixed with "build/"
 #     (see target `all' below).
 #   <PREFIX> is a prefix directory to install files into.
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include ../../common.mk
 
@@ -28,13 +28,15 @@ libdir		?= $(prefix)/lib
 includedir	?= $(prefix)/include
 
 INSTALL		?= install
-INSTALL_PROGRAM	?= $(INSTALL)
+INSTALL_DATA	?= $(INSTALL) -m 644
 
 LIBS		= liblodepng$(DLLSUFFIX)
-HEADERS		= lodepng.h
+HEADERS		= lodepng.h lodepng_ver.h
+
+CFLAGS := -ansi -W -Wall -Wextra -Wpedantic -O3 -Wno-unused-function $(CFLAGS)
 
 .PHONY: all
-all: $(foreach t,$(LIBS),build/$(t))
+all: build-libs
 
 build \
 $(DESTDIR)$(libdir) \
@@ -47,26 +49,39 @@ build/liblodepng$(DLLSUFFIX):\
  Makefile | build
 	$(CC) -fPIC -shared $(CFLAGS) -o $@ $<
 
-.PHONY: install
-install:\
- $(foreach t,$(LIBS),$(DESTDIR)$(libdir)/$(t)) \
- $(foreach t,$(HEADERS),$(DESTDIR)$(includedir)/$(t))
+.PHONY: build-libs
+build-libs: $(foreach f,$(LIBS),build/$(f))
 
 $(DESTDIR)$(libdir)/%$(DLLSUFFIX): build/%$(DLLSUFFIX) | $(DESTDIR)$(libdir)
-	$(INSTALL) -m 644 $< $@
+	$(INSTALL_DATA) $< $@
 
-$(DESTDIR)$(includedir)/%.h: %.h | $(DESTDIR)$(includedir)
-	$(INSTALL) -m 644 $< $@
+.PHONY: install-libs
+install-libs: $(foreach f,$(LIBS),$(DESTDIR)$(libdir)/$(f))
+
+$(DESTDIR)$(includedir)/%.h: $(srcdir)/%.h | $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) $< $@
+
+.PHONY: install-headers
+install-headers: $(foreach f,$(HEADERS),$(DESTDIR)$(includedir)/$(f))
+
+.PHONY: install
+install: install-libs install-headers
+
+.PHONY: uninstall-libs
+uninstall-libs:
+	$(RM) $(foreach f,$(LIBS),$(DESTDIR)$(libdir)/$(f))
+
+.PHONY: uninstall-headers
+uninstall-headers:
+	$(RM) $(foreach f,$(HEADERS),$(DESTDIR)$(includedir)/$(f))
 
 .PHONY: uninstall
-uninstall:
-	rm -f $(foreach t,$(LIBS),$(DESTDIR)$(libdir)/$(t))
-	rm -f $(foreach t,$(HEADERS),$(DESTDIR)$(includedir)/$(t))
+uninstall: uninstall-libs uninstall-headers
 
 .PHONY: clean
 clean:
-	rm -f $(foreach t,$(LIBS),build/$(t))
+	$(RM) $(foreach f,$(LIBS),build/$(f))
 
 .PHONY: distclean
 distclean:
-	rm -rf build/*
+	$(RM) -r build

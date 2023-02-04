@@ -7,24 +7,24 @@
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
 #
 # Build:
-#   make [BUILD=<BUILD>] -w -C z88dk -f ../z88dk.mk
+#   make [BUILD=<BUILD>] -w -f z88dk.mk
 # Clean:
-#   make [BUILD=<BUILD>] -w -C z88dk -f ../z88dk.mk clean | distclean
+#   make [BUILD=<BUILD>] -w -f z88dk.mk clean | distclean
 #
 # where:
 #   <BUILD> is one of: mingw32, mingw64.
 
-include ../../common.mk
+include ../common.mk
 
 .PHONY: all
-all: | build.sh
+all: | $(Z88DK)/build.sh
 	chmod 777 $|
-	./build.sh
+	cd $(Z88DK) && ./build.sh
 
 .PHONY: install uninstall
 install uninstall:;
 
 .PHONY: clean distclean
-clean distclean: | build.sh
+clean distclean: | $(Z88DK)/build.sh
 	chmod 777 $|
-	./build.sh -C
+	cd $(Z88DK) && ./build.sh -C

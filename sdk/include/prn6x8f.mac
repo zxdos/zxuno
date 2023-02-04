@@ -1,0 +1,285 @@
+; prn6x8f.mac - print string using font 6x8 macros.
+;
+; Features:
+; * 1-bit raster font, 128 characters, 6x8 pixels, 1024 bytes (8*128)
+; * Requires static data generation of 3K (or 7K) bytes before use (only once)
+;   Overall memory size for data is 4096 (or 8192) bytes
+; * All data is stored continuously, starting from address aligned to 1024
+;   bytes boundary
+; * First character cannot be printed because it's used as a zero-terminator
+;   of input string. This gives unused memory of 32 (or 64) bytes of data
+;
+; Character:
+;   Format: 6 bits per line (1 byte per line), 8 lines (8 bytes per char.)
+;   Order of pixels in a line: from 0=left to 5=right
+;   Order of lines in an image: from 0=top to 7=bottom
+;   Line format:
+;     * pixels 0-5 are mapped into bits 7-2 of a line
+;     * bits 0-1 of a line are cleared
+;
+; Rasterizer:
+;   Output: directly on the screen ignoring attributes
+;   Logical coordinates: X in range 0-41 (or 0-83), Y in range 0-23
+;   Output screen coordinates: 6*X (or 3*X), 8*Y
+;
+; Static data generator for version with 42 on-screen positions in C:
+;
+;   void gen3fonts (u8 *font) {
+;     u16 i;
+;     for (i=0; i<1024*3; i++)
+;         font[1024+i] = (font[i]>>2) | (font[i]<<6);
+;   }
+;
+; Static data generator for version with 84 on-screen positions in C:
+;
+;   void gen7fonts (u8 *font) {
+;     u16 i;
+;     for (i=0; i<1024*7; i++)
+;         font[1024+i] = (font[i]>>1) | (font[i]<<7);
+;   }
+;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: Copyright (C) 2016 Antonio Villena
+; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+; SPDX-License-Identifier: GPL-3.0-only
+
+; Compatible compilers:
+;   SJAsmPlus (original): <https://github.com/sjasmplus/sjasmplus>
+;   SJAsmPlus (by Aprisobal): <https://github.com/z00m128/sjasmplus>
+
+ ifndef prn6x8f_mac_included
+ define prn6x8f_mac_included
+
+;-----------------------------------------------------------------------------
+; Subroutine (used in "prn6x8f_loop", "print6x8_42_fast" and
+; "print6x8_84_fast" macros)
+;
+; Prints one unshifted character 8x8 on the screen without a mask.
+;
+; In:   A  = character index * 2 (real value 0-127 => 0-254)
+;       HL = font address / 4 (real bits 10-15 => bits 8-13)
+;       DE = target screen address (initial)
+; Out:  B = 0, CY = 0
+; Used: A, HL
+;
+ macro prn6x8f_simple
+        ld      b, 4            ; B = 4         // loops count (8 lines)
+        ld      l, a            ; L = character index * 2
+ .2     add     hl, hl          ; HL = real character address
+.loop dup 2
+        ld      a, (de)
+        xor     (hl)
+        ld      (de), a         ; (DE) ^= (HL)
+        inc     d               ; DE += $100    // next screen line address
+        inc     l               ; HL++          // next font data address
+      edup
+        djnz    .loop           ; if (--B) goto .loop
+        ld      hl, -$800
+        add     hl, de
+        ex      de, hl          ; DE -= $800    // restore initial address
+        ret
+ endm
+
+;-----------------------------------------------------------------------------
+; Subroutine (used in "prn6x8f_loop", "print6x8_42_fast" and
+; "print6x8_84_fast" macros)
+;
+; Prints one shifted character 8x8 on the screen using mask
+;
+; In:   A  = character index * 2 (real value 0-127 => 0-254)
+;       B  = 4 (lines count / 2 => 8 lines)
+;       C  = 8 bits mask (0 => use font's bit, 1 => use screen's bit)
+;       DE = target screen address in range $4000-$57ff (initial)
+;       HL = font address / 4 (real bits 10-15 => bits 8-13)
+; Out:  B  = 0, CY = 0
+; Used: A, HL
+;
+ macro prn6x8f_double
+        ld      l, a            ; L = character index * 2
+ .2     add     hl, hl          ; HL = real character address in font
+.loop   ld      a, (de)
+        xor     (hl)
+        and     c
+        xor     (hl)            ; A = ((M[DE]^M[HL])&C)^M[HL]
+        ld      (de), a         ; M[DE] = (M[DE]&C)|(M[HL]&~C)
+        inc     e               ; DE++          // next position
+        ld      a, (hl)
+        and     c
+        ld      (de), a         ; M[DE] = M[HL]&C
+        inc     d               ; DE += $100    // next line address
+        inc     l               ; HL++          // next font data address
+        ld      a, (hl)
+        and     c
+        ld      (de), a         ; M[DE] = M[HL]&C
+        dec     e               ; DE--          // previous position on a line
+        ld      a, (de)
+        xor     (hl)
+        and     c
+        xor     (hl)            ; A = ((M[DE]^M[HL])&C)^M[HL]
+        ld      (de), a         ; M[DE] = (M[DE]&C)|(M[HL]&~C)
+        inc     d               ; DE += $100    // next line address
+        inc     l               ; HL++          // next font data address
+        djnz    .loop           ; if (--B) goto .loop
+        ld      hl, -$800+1
+        add     hl, de          ; DE -= $800    // restore initial address
+        ex      de, hl          ; DE++          // next position on a line
+        ret
+ endm
+
+;-----------------------------------------------------------------------------
+; Used in "prn6x8f_loop" macro
+;
+; In:  IX = pointer to ASCIIZ string
+; Out: A = M[initial IX]*2
+;      IX = initial IX + 1
+;
+ macro prn6x8f_read_ch
+        ld      a, (ix)
+        inc     ix
+        add     a, a
+        ret     z
+ endm
+
+;-----------------------------------------------------------------------------
+; Used in "prn6x8f_loop" macro
+;
+; In: addr  = font address (only bits 10-15 are used)
+;     index = index of used font (0-7)
+;
+ macro prn6x8f_call_simple addr, index
+        ld      h, high (addr+$400*index)>>2
+        call    .simple         ; HL = address/4
+ endm
+
+;-----------------------------------------------------------------------------
+; Used in "prn6x8f_loop" macro
+;
+; In: addr  = font address (only bits 10-15 are used)
+;     index = index of used font (0-7)
+;     shift = shift amount (0-7)
+;
+ macro prn6x8f_call_double addr, index, shift
+        ld      h, high (addr+$400*index)>>2
+        ld      bc, (4<<8)+($ff>>shift)^$ff
+        call    .double         ; HL = address/4, B = 4, C = mask
+ endm
+
+;-----------------------------------------------------------------------------
+; Used in "print6x8_42_fast" and "print6x8_84_fast" macros
+;
+; In: version = see "print6x8_42_fast" and "print6x8_84_fast" macros
+;     addr    = font address (only bits 10-15 are used)
+;     A = C   = character X position (0-41)
+;     B       = character Y position (0-23)
+;     IX      = pointer to ASCIIZ string
+;
+ macro prn6x8f_loop version, addr
+        and     %11111100       ; A = (X/4)*4
+        ld      d, a            ; D = (X/4)*4
+        xor     c               ; A = X%4, Z=!(X%4)
+        ld      c, a            ; C = X%4
+ if version < 2
+        ld      e, a            ; E = X%4
+        jr      z, .skip        ; if (E > 0) E--
+        dec     e               ; i.e.: 0,0,1,2 // = delta
+.skip
+ else
+        cp      2               ; E = X%4
+        adc     a, -1           ; if (E > 1) E--
+        ld      e, a            ; i.e.: 0,1,1,2 // = delta
+ endif
+        ld      a, d
+        rrca
+        ld      d, a            ; A = D = (X/4)*2
+        rrca                    ; A = X/4
+        add     a, d            ; A = (X/4)*3
+        add     a, e
+        ld      e, a            ; E = (X/4)*3+delta
+        ld      a, b            ; A = [ 0  0  0 Y4 Y3 Y2 Y1 Y0]
+        and     %00011000       ; A = [ 0  0  0 Y4 Y3  0  0  0]
+        or      %01000000       ; A = [ 0  1  0 Y4 Y3  0  0  0]
+        ld      d, a            ; D = [ 0  1  0 Y4 Y3  0  0  0]
+        ld      a, b            ; A = [ 0  0  0 Y4 Y3 Y2 Y1 Y0]
+        and     %00000111       ; A = [ 0  0  0  0  0 Y2 Y1 Y0]
+ .3     rrca                    ; A = [Y2 Y1 Y0  0  0  0  0  0]
+        add     a, e
+        ld      e, a            ; E = ((Y&7)<<5)+(X/4)*3+delta, CY = 0
+        rr      c               ; CY = X&1, C = (X/2)&1
+
+ if version < 2
+  if version == 0
+   define divisor 2
+  else
+   define divisor 1
+  endif
+        jr      c, .pos26       ; if (((X%4) == 1)||((X%4) == 3)) goto .pos26
+        jr      nz, .pos4       ; if ((X%4) != 0) goto .pos4 else goto .pos0
+.pos0   prn6x8f_read_ch
+        prn6x8f_call_simple addr, 0
+.pos2   prn6x8f_read_ch
+        prn6x8f_call_double addr, (6/divisor), 6
+.pos4   prn6x8f_read_ch
+        prn6x8f_call_double addr, (4/divisor), 4
+.pos6   prn6x8f_read_ch
+        prn6x8f_call_simple addr, (2/divisor)
+        inc     de              ; DE++  // next screen position
+        jr      .pos0           ; goto .pos0 (exit when string ends)
+.pos26  rr      c               ; CY = (X/2)&1, C is no longer needed
+        jr      c, .pos6        ; if ((X%4) == 3) goto .pos6
+        jr      .pos2           ; if ((X%4) == 1) goto .pos2 (always)
+  undefine divisor
+ else
+        jr      c, .pos37       ; if (((X%4) == 1)||((X%4) == 3)) goto .pos37
+        jr      nz, .pos5       ; if ((X%4) != 0) goto .pos5 else goto .pos1
+.pos1   prn6x8f_read_ch
+        prn6x8f_call_double addr, 3, 3
+.pos3   prn6x8f_read_ch
+        prn6x8f_call_simple addr, 1
+.pos5   prn6x8f_read_ch
+        prn6x8f_call_double addr, 7, 7
+.pos7   prn6x8f_read_ch
+        prn6x8f_call_double addr, 5, 5
+        jr      .pos1           ; goto .pos1 (exit when string ends)
+.pos37  rr      c               ; CY = (X/2)&1, C is no longer needed
+        jr      c, .pos7        ; if ((X%4) == 3) goto .pos7
+        jr      .pos3           ; if ((X%4) == 1) goto .pos3 (always)
+ endif
+ endm
+
+;-----------------------------------------------------------------------------
+; Subroutine
+;
+; Prints ASCIIZ string on the screen using specially prepared set of 4 fonts
+; 6x8 each of 128 characters.
+;
+; In: addr = font address (only bits 10-15 are used)
+;     B    = character Y position (0-23), C = character X position (0-41)
+;     IX   = pointer to ASCIIZ string
+;
+ macro print6x8_42_fast addr
+        prn6x8f_loop 0, addr
+.simple prn6x8f_simple
+.double prn6x8f_double
+ endm
+
+;-----------------------------------------------------------------------------
+; Subroutine
+;
+; Prints ASCIIZ string on the screen using specially prepared set of 8 fonts
+; 6x8 each of 128 characters.
+;
+; In: addr = font address (only bits 10-15 are used)
+;     B    = character Y position (0-23), C = character X position (0-83)
+;     IX   = pointer to ASCIIZ string
+;
+ macro print6x8_84_fast addr
+        srl     c               ; C = X/2
+        ld      a, c            ; A = X/2
+        jr      c, .odd         ; if (X%2) goto .odd
+        prn6x8f_loop 1, addr
+.odd    prn6x8f_loop 2, addr
+.simple prn6x8f_simple
+.double prn6x8f_double
+ endm
+
+endif  ; !prn6x8f_mac_included

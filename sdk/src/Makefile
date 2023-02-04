@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
 #   * GNU on Windows NT (using MinGW/MSYS/Cygwin/WSL)
@@ -26,6 +22,10 @@
 #   <TARGET> is one of the values of `TARGETS' variable.
 #
 # NOTE: `FORCEBUILD' and `FORCECLEAN' are mainly for Windows platform.
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include ../common.mk
 
@@ -42,7 +42,8 @@ TARGETS=\
  z88dk\
  lodepng\
  zx7b\
- tools
+ tools\
+ therighttools
 
 .PHONY: all build install uninstall clean distclean
 all: install
@@ -66,19 +67,20 @@ ifeq ($(OS),Windows_NT)
  endif
 endif	# $(OS)==Windows_NT
 
-.downloads\
 $(DESTDIR)$(bindir):
 	mkdir -p $@
 
-ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
+ifeq ($(USE_SJASMPLUS_BRANCH),sjasmplus)
  include sjasmplus.inc.mk
-else ifeq ($(USE_SJASMPLUS_VERSION),z00m128)
+else ifeq ($(USE_SJASMPLUS_BRANCH),z00m128)
  include sjasmplus-z00m128.inc.mk
 else
- $(error Unknown SJAsmPlus version selected: `$(USE_SJASMPLUS_VERSION)')
+ $(error Unknown SJAsmPlus branch selected: `$(USE_SJASMPLUS_BRANCH)')
 endif
 
 include sdcc.inc.mk
 include z88dk.inc.mk
 include lodepng.inc.mk
 include tools.inc.mk
+include zx7b.inc.mk
+include therighttools.inc.mk

@@ -1,6 +1,4 @@
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
+#!/bin/make -f
 #
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
@@ -14,9 +12,12 @@
 #   make clean | distclean
 #
 # where:
-#   <TARGET> is one of values for `BINS' variable prefixed with "build/"
-#     (see target `all' below).
+#   <TARGET> is one of values for target `all'.
 #   <PREFIX> is a prefix directory to install files into.
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2023 Ivan Tatarinov
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include ../sdk/common.mk
 
@@ -25,6 +26,8 @@ srcdir		= .
 prefix		?= .
 exec_prefix	?= $(prefix)
 bindir		?= $(exec_prefix)/BIN
+bpluginsdir	?= $(exec_prefix)/BIN/BPLUGINS
+sysdir		?= $(exec_prefix)/SYS
 
 # Disable execution mode for FAT filesystem
 INSTALL		?= install -m 644
@@ -32,6 +35,7 @@ INSTALL_PROGRAM	?= $(INSTALL)
 RM		= rm -f
 
 INCLUDEDIR	= ../sdk/include
+FONTSDIR	= ../fonts/build
 AS		= sjasmplus
 ifeq ($(USE_SJASMPLUS_VERSION),sjasmplus)
 AFLAGS		= --nobanner
@@ -40,7 +44,7 @@ AFLAGS		= --nologo
 else
 AFLAGS		=
 endif
-AFLAGS		+= -I$(INCLUDEDIR)
+AFLAGS		+= -I$(INCLUDEDIR) -I$(FONTSDIR)
 
 BINS=\
  BACK16M\
@@ -49,9 +53,7 @@ BINS=\
  BACKUP\
  CORCLEAN\
  COREBIOS\
- ZX1\
  DATE\
- RTC.SYS\
  ROMSBACK\
  ROMSUPGR\
  UPGR16M\
@@ -60,15 +62,23 @@ BINS=\
  UPGRADE\
  ZXUNOCFG
 
+BPLUGINS=\
+ ZX1
+
+SYSS=\
+ RTC.SYS
+
 TMPS=\
  back32m.def\
  upgr32m.def
 
 .PHONY: all
-all: $(foreach t,$(BINS),build/$(t))
+all: $(foreach t,$(BINS) $(BPLUGINS) $(SYSS),build/$(t))
 
 build\
-$(DESTDIR)$(bindir):
+$(DESTDIR)$(bindir)\
+$(DESTDIR)$(bpluginsdir)\
+$(DESTDIR)$(sysdir):
 	mkdir -p $@
 
 build/BACK16M: $(srcdir)/back16m.asm\
@@ -189,13 +199,14 @@ build/UPGRADE: $(srcdir)/upgrade.asm\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
-
 build/ZX1: $(srcdir)/zx1.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
+ $(FONTSDIR)/fuente6x8.bin\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
@@ -225,18 +236,40 @@ endef
 
 $(foreach t,$(BINS),$(eval $(call install_bin_rule,$(t))))
 
+# $1 = target
+define install_bplugin_rule =
+$$(DESTDIR)$$(bpluginsdir)/$1: build/$1 | $$(DESTDIR)$$(bpluginsdir)
+	$$(INSTALL_PROGRAM) $$< $$@
+endef
+
+$(foreach t,$(BPLUGINS),$(eval $(call install_bplugin_rule,$(t))))
+
+# $1 = target
+define install_sys_rule =
+$$(DESTDIR)$$(sysdir)/$1: build/$1 | $$(DESTDIR)$$(sysdir)
+	$$(INSTALL_PROGRAM) $$< $$@
+endef
+
+$(foreach t,$(SYSS),$(eval $(call install_sys_rule,$(t))))
+
 .PHONY: install
-install: $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+install:\
+ $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))\
+ $(foreach t,$(BPLUGINS),$(DESTDIR)$(bpluginsdir)/$(t))\
+ $(foreach t,$(SYSS),$(DESTDIR)$(sysdir)/$(t))
 
 .PHONY: uninstall
 uninstall:
-	$(RM) $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))
+	$(RM)\
+	 $(foreach t,$(BINS),$(DESTDIR)$(bindir)/$(t))\
+	 $(foreach t,$(BPLUGINS),$(DESTDIR)$(bpluginsdir)/$(t))\
+	 $(foreach t,$(SYSS),$(DESTDIR)$(sysdir)/$(t))
 
 .PHONY: clean
 clean:
-	rm -f $(TMPS) $(foreach t,$(BINS),build/$(t))
+	$(RM) $(TMPS) $(foreach t,$(BINS) $(BPLUGINS) $(SYSS),build/$(t))
 
 .PHONY: distclean
 distclean:
-	rm -f $(TMPS)
-	rm -rf build
+	$(RM) $(TMPS)
+	$(RM) -r build

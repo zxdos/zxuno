@@ -1,7 +1,7 @@
 # Authors
 
 This document:
-* 2021 Ivan Tatarinov <ivan-tat@ya.ru>
+* 2021-2023 Ivan Tatarinov
 
 # Contributors
 
@@ -11,10 +11,11 @@ This document: No one yet.
 
 This document is under [GNU FDL-1.3 or later](https://spdx.org/licenses/GFDL-1.3-or-later.html) license.  
 SJAsmPlus Z80 Assembler is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
-SJAsmPlus Z80 Assembler by aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
+SJAsmPlus Z80 Assembler by Aprisobal (*z00m128*) is distributed under [BSD 3-Clause "New" or "Revised"](https://spdx.org/licenses/BSD-3-Clause.html) license.  
 Small Device C Compiler (SDCC) is distributed under [GPL](https://sourceforge.net/projects/sdcc/) licenses.  
 z88dk is distributed under [Clarified Artistic](https://spdx.org/licenses/ClArtistic.html) license.  
-LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.
+LodePNG C/C++ library is distributed under [zlib](https://spdx.org/licenses/Zlib.html) license.  
+The Right Tools are distributed under [GPL 3.0 or later](https://spdx.org/licenses/GPL-3.0-or-later.html) license.
 
 # 1. General information
 
@@ -22,12 +23,29 @@ The structure of `sdk` folder:
 
 Directory | Description
 ----|----
-`bin` | Compiled binaries of tools.
-`include` | Header files (`.def`, `.h` etc.) to be included in other sources (assembler, C, etc.).
-`lib` | Libraries, needed for executables (mostly in `bin` directory) to function properly.
-`opt` | Optionally installed bundles (like SDK).
-`src` | The source code of local and downloadable tools. See Makefiles for details.
-`windows-x86` | Compiled binaries of tools and libraries for Windows x86 (32 bit) platform.
+`include` | Header files (`.def`, `.h`, etc.) to be included in other sources (assembler, C, etc.), regardless of host platform.
+`src` | The source code of local tools and scripts to download other used tools. See Makefiles for details.
+*PLATFORM* | Compiled binaries of tools and libraries for specified platform.
+
+Actual directory name for *PLATFORM* is chosen automatically by scripts. Recognized platforms are:
+
+Directory (*PLATFORM* value) | Platform (OS) | Architecture | Host architecture | Precompiled
+---- | ---- | :----: | :----: | :----:
+`linux` | GNU/Linux | any | any | no
+`unknown` | unknown | any | any | no
+`windows-x86` | Windows NT | x86 (32 bits) | x86 (32 and 64 bits) | yes
+`windows-x86_64` | Windows NT (*cross-builds only*) | x86 (64 bits) | not used | no
+
+**NOTE**: `windows-x86` directory is used also on Windows NT x86_64 host.
+
+Each *PLATFORM* directory has the following structure:
+
+Directory | Description
+----|----
+`bin` | Compiled binaries of tools
+`include` | Header files to build the tools
+`lib` | Libraries, used by tools
+`opt` | Optionally installed bundles (such as SDK)
 
 ## 1.1. Copyright and licensing information for files
 
@@ -58,6 +76,7 @@ Target | Packages
 `sjasmplus` | cmake libboost-all-dev libxml2-dev
 `sdcc` | -
 `z88dk` | dos2unix libboost-all-dev texinfo texi2html libxml2-dev subversion bison flex zlib1g-dev m4
+`therighttools` | -
 
 To use cross-compilation for Windows platform install *mingw-w64* package.
 
@@ -88,9 +107,52 @@ where:
 
 `<CFG_PARAMS>` is a series of parameters of type `<CFG_VAR>=<VALUE>`.
 
-Value of `<CFG_VAR>` | Possible values | Description
-----|----|----
-`USE_SJASMPLUS_VERSION` | `sjasmplus`, `z00m128` | Version of SJAsmPlus Z80 Compiler to use. Default is `z00m128` (aprisobal).
+Value of `<CFG_VAR>` | Description
+----|----
+`USE_SJASMPLUS_BRANCH` | Branch of SJAsmPlus Z80 Compiler to use
+`USE_SJASMPLUS_VERSION` | Version of SJAsmPlus Z80 Compiler to use
+`USE_SDCC_VERSION` | Version of SDCC to use
+`USE_Z88DK_VERSION` | Version of z88dk to use
+`USE_THERIGHTTOOLS_VERSION` | Version of The Right Tools to use
+
+Value of `USE_SJASMPLUS_BRANCH`:
+
+Branch | Default
+---- | :----:
+`sjasmplus` (original) |
+`z00m128` (by Aprisobal) | yes
+
+Value of `USE_SJASMPLUS_VERSION` for `z00m128` branch of SJAsmPlus Z80 Compiler:
+
+Version | Default
+---- | :----:
+`1.18.2` |
+`1.18.3` |
+`1.19.0` |
+`1.20.0` |
+`1.20.1` | yes
+`current` |
+
+Value of `USE_SDCC_VERSION`:
+
+Version | Default
+----|----
+`4.1.0` | yes
+`4.2.0` |
+
+Value of `USE_Z88DK_VERSION`:
+
+Version | Default
+----|----
+`2.1` |
+`2.2` | yes
+
+Value of `USE_THERIGHTTOOLS_VERSION`:
+
+Version | Default
+----|----
+`0.2` |
+`0.2.1` | yes
 
 Value of `TARGET` | Origin | Description
 ----|----|----
@@ -100,6 +162,7 @@ Value of `TARGET` | Origin | Description
 `lodepng` | `src/lodepng` | LodePNG library
 `zx7b` | `src/zx7b` | zx7b
 `tools` | `src/tools` | tools
+`therighttools` | downloaded | The Right Tools
 
 Value of `BUILD` | Target directory | Target system
 ----|----|----
@@ -197,6 +260,7 @@ all targets | bash git make wget unzip p7zip
 `lodepng` | gcc-core
 `zx7b` | gcc-core
 `tools` | gcc-core
+`therighttools` | gcc-core
 
 **HINT**: you can install *Midnight Commander* (`mc` package). It will help you to navigate through filesystem.
 
@@ -231,6 +295,7 @@ Value of `TARGET` | Sources origin | Binaries origin (**Quick setup**) | Build f
 `lodepng` | local | precompiled locally (**no**) | available
 `zx7b` | local | precompiled locally (**no**) | available
 `tools` | local | precompiled locally (**no**) | available
+`therighttools` | downloaded | downloaded (**yes**) | available
 
 Then you may use `strip` tool to strip debug information from file and thus shrink file's size. Example:
 
@@ -289,7 +354,7 @@ These changes are actual for current invocation of command shell and all child p
 # References
 
 * [REUSE SOFTWARE](https://reuse.software/) - a set of recommendations to make licensing your Free Software projects easier
-* [The Software Package Data Exchange (SPDX)](https://spdx.dev/) - An open standard for communicating software bill of material information, including components, licenses, copyrights, and security references
+* [The Software Package Data Exchange (SPDX)](https://spdx.dev/) - an open standard for communicating software bill of material information, including components, licenses, copyrights, and security references
 * [GNU Operating System](https://www.gnu.org/)
 * [GNU Standards](http://savannah.gnu.org/projects/gnustandards) - GNU coding and package maintenance standards ([package](https://pkgs.org/download/gnu-standards))
 * [GNU Core Utilities](https://www.gnu.org/software/coreutils/) ([package](https://pkgs.org/download/coreutils))
@@ -299,14 +364,15 @@ These changes are actual for current invocation of command shell and all child p
 * [Cygwin](https://cygwin.com/) - a large collection of GNU and Open Source tools which provide functionality similar to a Linux distribution on Windows
 * [MSYS2](https://www.msys2.org/) - a collection of tools and libraries providing you with an easy-to-use environment for building, installing and running native Windows software
 * [MinGW](https://osdn.net/projects/mingw/) - Minimalist GNU for Windows
-* [MinGW-w64](http://mingw-w64.org/doku.php) - an advancement of the original mingw.org project, created to support the GCC compiler on Windows systems
+* [MinGW-w64](http://mingw-w64.org/) - an advancement of the original mingw.org project, created to support the GCC compiler on Windows systems
 * [cmd](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd) - command interpreter in Windows
 * [Windows commands](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [SJAsmPlus](https://github.com/sjasmplus/sjasmplus) - Z80 Assembler
-* [SJAsmPlus by aprisobal](https://github.com/z00m128/sjasmplus) - Z80 Assembler
+* [SJAsmPlus by Aprisobal](https://github.com/z00m128/sjasmplus) - Z80 Assembler
 * [SDCC](https://sourceforge.net/projects/sdcc/) - Small Device C Compiler
 * [Z88DK](https://github.com/z88dk/z88dk) - The Development Kit for Z80 Computers
 * [LodePNG](https://github.com/lvandeve/lodepng) - PNG encoder and decoder in C and C++
+* [The Right Tools](https://gitlab.com/ivan-tat/therighttools/) - simple CLI tools for Z80 development
 * [Open Source FPGA Foundation Formed to Accelerate Widespread Adoption of Programmable Logic](https://osfpga.org/osfpga-foundation-launched/) - news article (April 8, 2021)
 * [Open-Source FPGA Foundation](https://osfpga.org/) - main site
 * [Related Projects of Open Source FPGA Foundation](https://github.com/os-fpga/open-source-fpga-resource) - page on GitHub

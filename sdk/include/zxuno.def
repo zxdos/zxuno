@@ -1,9 +1,8 @@
 ; zxuno.def
 ;
-; SPDX-FileCopyrightText: Copyright (C) 2019, 2021 Antonio Villena
-;
-; SPDX-FileContributor: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: 2019, 2021, 2022 Antonio Villena
+; SPDX-FileContributor: 2021, 2023 Ivan Tatarinov
 ; SPDX-License-Identifier: GPL-3.0-only
 
 ; Compatible compilers:
@@ -70,14 +69,9 @@ RADASCTRL:              equ     radas_ctrl
  ; SpecDrum interface:
  define specdrum_port   $ffdf   ; Specdrum I/O port in 16-bit format for DMA destination
 
- endif  ; !zxuno_def_included
-
- ifndef rst28_mac_included
- define rst28_mac_included
-
  macro wreg dir, dato
         call    rst28
         defb    dir, dato
  endm
 
- endif  ; !rst28_mac_included
+ endif  ; !zxuno_def_included

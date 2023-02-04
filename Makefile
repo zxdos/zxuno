@@ -1,8 +1,6 @@
+#!/bin/make -f
+#
 # Updates content of SD directory.
-#
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Supported environments:
 #   * GNU on Linux, FreeBSD etc.
@@ -22,6 +20,10 @@
 #
 # where:
 #   <TARGET> is one of the values for `TARGETS' variable.
+#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2023 Ivan Tatarinov
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 include sdk/common.mk
 
@@ -29,12 +31,81 @@ include sdk/common.mk
 prefix		?= SD
 
 TARGETS=\
+ fonts\
+ keymaps\
+ firmwares\
  utils\
  software
 
 .PHONY: all
-all: install
+all: build-fonts install
 	@echo 'Done.'
+
+# fonts
+
+.PHONY: build-fonts
+build-fonts: | fonts
+	$(MAKE) -w -C $|
+
+.PHONY: install-fonts
+install-fonts: | fonts
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
+
+.PHONY: uninstall-fonts
+uninstall-fonts: | fonts
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
+
+.PHONY: clean-fonts
+clean-fonts: | fonts
+	$(MAKE) -w -C $| clean
+
+.PHONY: distclean-fonts
+distclean-fonts: | fonts
+	$(MAKE) -w -C $| distclean
+
+# keymaps
+
+.PHONY: build-keymaps
+build-keymaps: | cores/Spectrum/keymaps
+	$(MAKE) -w -C $|
+
+.PHONY: install-keymaps
+install-keymaps: | cores/Spectrum/keymaps
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
+
+.PHONY: uninstall-keymaps
+uninstall-keymaps: | cores/Spectrum/keymaps
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
+
+.PHONY: clean-keymaps
+clean-keymaps: | cores/Spectrum/keymaps
+	$(MAKE) -w -C $| clean
+
+.PHONY: distclean-keymaps
+distclean-keymaps: | cores/Spectrum/keymaps
+	$(MAKE) -w -C $| distclean
+
+# firmwares
+
+.PHONY: build-firmwares
+build-firmwares: | firmware
+	$(MAKE) -w -C $|
+
+.PHONY: install-firmwares
+install-firmwares: | firmware
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
+
+.PHONY: uninstall-firmwares
+uninstall-firmwares: | firmware
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
+
+.PHONY: clean-firmwares
+clean-firmwares: | firmware
+	$(MAKE) -w -C $| clean
+
+.PHONY: distclean-firmwares
+distclean-firmwares: | firmware
+	$(MAKE) -w -C $| distclean
 
 # utils
 

@@ -2,7 +2,7 @@
 ;
 ; SPDX-FileCopyrightText: Copyright (C) 2021 Ivan Tatarinov <ivan-tat@ya.ru>
 ;
-; SPDX-License-Identifier: GPL-3.0-or-above
+; SPDX-License-Identifier: GPL-3.0-or-later
 
 ; Compatible compilers:
 ;   SJAsmPlus, <https://github.com/sjasmplus/sjasmplus/>
@@ -164,25 +164,12 @@ ___c=value & $ff
 ___bc=(___b << 8) + ___c
    if ___bc != (value & $ffff)
     if ___c = (value & $ff)
-     if ((___b + 1) & $ff) = ((value >> 8) & $ff)
-        inc     b                       ; 1 byte
-     elseif ((___b - 1) & $ff) = ((value >> 8) & $ff)
-        dec     b                       ; 1 byte
-     else
-        ld      b, value >> 8           ; 2 bytes
-     endif
+        chg_b   (value >> 8) & $ff
     elseif ___b = ((value >> 8) & $ff)
-     if ((___c + 1) & $ff) = (value & $ff)
-        inc     c                       ; 1 byte
-     elseif ((___c - 1) & $ff) = (value & $ff)
-        dec     c                       ; 1 byte
-     else
-        ld      c, value & $ff          ; 2 bytes
-     endif
+        chg_c   value & $ff
     else
-        ld      bc, value
+        ld_bc   value
     endif
-        assume_bc value
    endif
   endif
  endm
@@ -293,25 +280,12 @@ ___e=value & $ff
 ___de=(___d << 8) + ___e
    if ___de != (value & $ffff)
     if ___e = (value & $ff)
-     if ((___d + 1) & $ff) = ((value >> 8) & $ff)
-        inc     d                       ; 1 byte
-     elseif ((___d - 1) & $ff) = ((value >> 8) & $ff)
-        dec     d                       ; 1 byte
-     else
-        ld      d, value >> 8           ; 2 bytes
-     endif
+        chg_d   (value >> 8) & $ff
     elseif ___d = ((value >> 8) & $ff)
-     if ((___e + 1) & $ff) = (value & $ff)
-        inc     e                       ; 1 byte
-     elseif ((___e - 1) & $ff) = (value & $ff)
-        dec     e                       ; 1 byte
-     else
-        ld      e, value & $ff          ; 2 bytes
-     endif
+        chg_e   value & $ff
     else
-        ld      de, value
+        ld_de   value
     endif
-        assume_de value
    endif
   endif
  endm
@@ -422,25 +396,12 @@ ___l=value & $ff
 ___hl=(___h << 8) + ___l
    if ___hl != (value & $ffff)
     if ___l = (value & $ff)
-     if ((___h + 1) & $ff) = ((value >> 8) & $ff)
-        inc     h                       ; 1 byte
-     elseif ((___h - 1) & $ff) = ((value >> 8) & $ff)
-        dec     h                       ; 1 byte
-     else
-        ld      h, (value >> 8) $ ff    ; 2 bytes
-     endif
+        chg_h   (value >> 8) & $ff
     elseif ___h = ((value >> 8) & $ff)
-     if ((___l + 1) & $ff) = (value & $ff)
-        inc     l                       ; 1 byte
-     elseif ((___l - 1) & $ff) = (value & $ff)
-        dec     l                       ; 1 byte
-     else
-        ld      l, value & $ff          ; 2 bytes
-     endif
+        chg_l   value & $ff
     else
-        ld      hl, value
+        ld_hl   value
     endif
-        assume_hl value
    endif
   endif
  endm

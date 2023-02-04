@@ -3,10 +3,7 @@
 ;
 ; It must be run while using a "root" mode ROM.
 ;
-; Copyright (C) 2019, 2021 Antonio Villena
-; Contributors:
-;   2021 Ivan Tatarinov <ivan-tat@ya.ru>
-;   2021 kounch
+; Copyright (C) 2019, 2021, 2022 Antonio Villena
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -22,6 +19,12 @@
 ;
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
+;
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: 2019, 2021, 2022 Antonio Villena
+; SPDX-FileContributor: 2021 kounch
+; SPDX-FileContributor: 2021, 2023 Ivan Tatarinov
+; SPDX-License-Identifier: GPL-3.0-only
 
                 ; definition of "zxdos" flag
                 include upgr32m.def

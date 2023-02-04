@@ -1,0 +1,18 @@
+--- build.sh	2021-08-10 06:00:05.000000000 +0300
++++ build_Cygwin.sh	2023-01-19 22:19:04.036109160 +0300
+@@ -65,6 +65,7 @@
+ builddir=`dirname $0`
+ ZCCCFG=$builddir/lib/config
+ PATH=$builddir/bin:$PATH
++if test x$OS = xWindows_NT -a x$OSTYPE = xcygwin; then ZCCCFG=`cygpath -m $ZCCCFG`; fi
+ export ZCCCFG
+ export PATH
+ 
+@@ -135,6 +136,7 @@
+ 
+ ZCCCFG=`pwd`/lib/config/                # Set ZCCCFG to the lib config directory
+ mkdir -p $ZCCCFG                        # Guarantee that the directory exists
++if test x$OS = xWindows_NT -a x$OSTYPE = xcygwin; then ZCCCFG=`cygpath -m $ZCCCFG`; fi
+ export ZCCCFG
+ 
+ 

@@ -52,7 +52,7 @@ int check(int value){
   return value==0 || value==192 || value==255;
 }
 
-int tospec(int r, int g, int b){
+unsigned tospec(unsigned r, unsigned g, unsigned b){
   return g>>7<<2 | r>>7<<1 | b>>7;
 }
 

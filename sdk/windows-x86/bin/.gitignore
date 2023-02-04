@@ -1,3 +1,7 @@
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
 # SPDX-License-Identifier: CC0-1.0
+
+fontconv.exe
+scrconv.exe
+sjasmplus.exe

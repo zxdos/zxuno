@@ -2,9 +2,11 @@
 #
 # This file is a part of main Makefile.
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
 # SPDX-License-Identifier: GPL-3.0-or-later
+
+sdcc_prefix = $(SDCCHOME)
 
 $(DOWNLOADS)/sdcc:
 	mkdir -p $@
@@ -13,16 +15,27 @@ $(DOWNLOADS)/sdcc:
 
 ifeq ($(_DoBuild),1)
 
-SDCC_ARCHIVE		= $(DOWNLOADS)/sdcc/sdcc-src-4.1.0.tar.bz2
-SDCC_ARCHIVE_SHA256	= 81edf776d5a2dc61a4b5c3408929db7b25874d69c46e4a71b116be1322fd533f
-SDCC_ARCHIVE_TYPE	= .tar.bz2
-SDCC_ARCHIVE_SUBDIR	= sdcc
+ifeq ($(USE_SDCC_VERSION),4.1.0)
+ SDCC_ARCHIVE		= sdcc-src-4.1.0.tar.bz2
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc/4.1.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= 81edf776d5a2dc61a4b5c3408929db7b25874d69c46e4a71b116be1322fd533f
+ SDCC_ARCHIVE_TYPE	= .tar.bz2
+ SDCC_ARCHIVE_SUBDIR	= sdcc
+else ifeq ($(USE_SDCC_VERSION),4.2.0)
+ SDCC_ARCHIVE		= sdcc-src-4.2.0.tar.bz2
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc/4.2.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= b49bae1d23bcd6057a82c4ffe5613f9cd0cbcfd1e940e9d84c4bfe9df0a8c053
+ SDCC_ARCHIVE_TYPE	= .tar.bz2
+ SDCC_ARCHIVE_SUBDIR	= sdcc-4.2.0
+else
+ $(error Unknown SDCC version: "$(USE_SDCC_VERSION)")
+endif
 
-$(DOWNLOADS)/sdcc/sdcc-src-4.1.0.tar.bz2: | $(DOWNLOADS)/sdcc
-	wget -c https://sourceforge.net/projects/sdcc/files/sdcc/4.1.0/$(@F)/download -O $@
+$(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE): | $(DOWNLOADS)/sdcc
+	wget -c $(SDCC_ARCHIVE_URL) -O $@
 
-sdcc/.extracted: $(SDCC_ARCHIVE)
-	rm -rf $(@D)
+sdcc/.extracted: $(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE)
+	$(RM) -r $(@D)
 	extract.sh $<\
 	 --sha256 $(SDCC_ARCHIVE_SHA256)\
 	 --type $(SDCC_ARCHIVE_TYPE)\
@@ -34,19 +47,18 @@ build-sdcc: | sdcc/.extracted sdcc.mk
 	$(MAKE) -w -C sdcc -f ../sdcc.mk
 
 install-sdcc: | sdcc/.extracted sdcc.mk
-	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(SDCCHOME) install
+	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(sdcc_prefix) install
 
  ifeq ($(_DoClean),1)
 
 uninstall-sdcc: | sdcc/.extracted sdcc.mk
-	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(SDCCHOME) uninstall
+	$(MAKE) -w -C sdcc -f ../sdcc.mk prefix=$(sdcc_prefix) uninstall
 
 clean-sdcc: | sdcc/.extracted sdcc.mk
 	$(MAKE) -w -C sdcc -f ../sdcc.mk clean
 
 distclean-sdcc:
-	rm -rf $(DOWNLOADS)/sdcc
-	rm -rf sdcc
+	$(RM) -r $(DOWNLOADS)/sdcc sdcc
 
  else	#  !_DoClean
 
@@ -60,10 +72,21 @@ endif	# _DoBuild
 
 ifeq ($(_UsePrecompiledOnWindows),1)
 
-SDCC_ARCHIVE		= $(DOWNLOADS)/sdcc/sdcc-4.1.0-setup.exe
-SDCC_ARCHIVE_SHA256	= cbf064c9f1a3f9a73db6d2c8ba3a43563fa3a2d2966f52cf5a571a3064222ed8
-SDCC_ARCHIVE_TYPE	= .7z
-SDCC_ARCHIVE_SUBDIR	= .
+ifeq ($(USE_SDCC_VERSION),4.1.0)
+ SDCC_ARCHIVE		= sdcc-4.1.0-setup.exe
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.1.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= cbf064c9f1a3f9a73db6d2c8ba3a43563fa3a2d2966f52cf5a571a3064222ed8
+ SDCC_ARCHIVE_TYPE	= .7z
+ SDCC_ARCHIVE_SUBDIR	= .
+else ifeq ($(USE_SDCC_VERSION),4.2.0)
+ SDCC_ARCHIVE		= sdcc-4.2.0-setup.exe
+ SDCC_ARCHIVE_URL	= https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.2.0/$(SDCC_ARCHIVE)/download
+ SDCC_ARCHIVE_SHA256	= 14a7b65d03197c0cd9d1c2895b7949c672c4b350bb129d79514b3908f0177443
+ SDCC_ARCHIVE_TYPE	= .7z
+ SDCC_ARCHIVE_SUBDIR	= .
+else
+ $(error Unknown SDCC version: "$(USE_SDCC_VERSION)")
+endif
 
 SDCC_SUBDIRS=\
  bin\
@@ -72,11 +95,11 @@ SDCC_SUBDIRS=\
  lib\
  non-free
 
-$(DOWNLOADS)/sdcc/sdcc-4.1.0-setup.exe: | $(DOWNLOADS)/sdcc
-	wget -c https://sourceforge.net/projects/sdcc/files/sdcc-win32/4.1.0/$(@F)/download -O $@
+$(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE): | $(DOWNLOADS)/sdcc
+	wget -c $(SDCC_ARCHIVE_URL) -O $@
 
-sdcc/.extracted: $(SDCC_ARCHIVE)
-	rm -rf $(@D)
+sdcc/.extracted: $(DOWNLOADS)/sdcc/$(SDCC_ARCHIVE)
+	$(RM) -r $(@D)
 	extract.sh $<\
 	 --sha256 $(SDCC_ARCHIVE_SHA256)\
 	 --type $(SDCC_ARCHIVE_TYPE)\
@@ -92,32 +115,32 @@ install-sdcc: | sdcc/.extracted
 	echo '.PHONY: install';\
 	echo 'install:\';\
 	find $(SDCC_SUBDIRS) -type f\
-	| sed -Ee 's,(.+), $$(DEST)$$(prefix)/\1\\,';\
+	 | sed -Ee 's,(.+), $$(DESTDIR)$$(prefix)/\1\\,';\
 	echo '';\
 	find $(SDCC_SUBDIRS) -type d\
-	| sed -Ee 's,(.+),$$(prefix)/\1\\,';\
-	echo -e ':\n\tmkdir -p $$@';\
+	 | sed -Ee 's,(.+),$$(DESTDIR)$$(prefix)/\1\\,';\
+	printf ':\n\tmkdir -p $$@\n';\
 	for d in $(SDCC_SUBDIRS); do\
 		if [ $$d = bin ]; then\
 			find $$d -type f\
-			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL_PROGRAM) -m 755 $$< $$@,';\
+			 | sed -Ee 's,^(.+)/([^/]+),$$(DESTDIR)$$(prefix)/\1/\2: \1/\2 | $$(DESTDIR)$$(prefix)/\1\n\t$$(INSTALL_PROGRAM) $$< $$@,';\
 		else\
 			find $$d -type f\
-			| sed -Ee 's,^(.+)/([^/]+),$$(DEST)$$(prefix)/\1/\2: \1/\2 | $$(DEST)$$(prefix)/\1\n\t$$(INSTALL) -m 644 $$< $$@,';\
+			 | sed -Ee 's,^(.+)/([^/]+),$$(DESTDIR)$$(prefix)/\1/\2: \1/\2 | $$(DESTDIR)$$(prefix)/\1\n\t$$(INSTALL_DATA) $$< $$@,';\
 		fi;\
 	done; } >install.mk;\
-	$(MAKE) -w -f install.mk DEST=$(DEST) prefix=$(shell realpath --relative-to=sdcc $(prefix)) INSTALL=$(INSTALL) INSTALL_PROGRAM=$(INSTALL_PROGRAM) install
+	$(MAKE) -w -f install.mk DESTDIR= prefix=$(shell realpath -m --relative-to=sdcc $(sdcc_prefix)) INSTALL_PROGRAM='$(INSTALL) -m 755' INSTALL_DATA='$(INSTALL) -m 644' install
 
  ifeq ($(_DoClean),1)
 
 uninstall-sdcc:
-	test '$(SDCCHOME)' = . || rm -rf $(SDCCHOME)
+	test '$(sdcc_prefix)' = . || $(RM) -r $(sdcc_prefix)
 
 clean-sdcc:
-	rm -rf sdcc
+	$(RM) -r sdcc
 
 distclean-sdcc: clean-sdcc
-	rm -rf $(DOWNLOADS)/sdcc
+	$(RM) -r $(DOWNLOADS)/sdcc
 
  else	#  !_DoClean
 

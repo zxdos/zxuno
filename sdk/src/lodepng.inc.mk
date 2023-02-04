@@ -18,7 +18,10 @@ install-lodepng: | lodepng
 
 else	# !_DoBuild
 
-build-lodepng install-lodepng:;
+build-lodepng:;
+
+install-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install-headers
 
 endif	# !_DoBuild
 
@@ -35,41 +38,9 @@ distclean-lodepng: | lodepng
 
 else	# !_DoClean
 
-uninstall-lodepng clean-lodepng distclean-lodepng:;
+uninstall-lodepng: | lodepng
+	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall-headers
 
-endif	# !_DoClean
-
-# zx7b
-
-.PHONY: $(foreach a,build install uninstall clean distclean,$(a)-zx7b)
-
-ifeq ($(_DoBuild),1)
-
-build-zx7b: | zx7b
-	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix))
-
-install-zx7b: | zx7b
-	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) install
-
-else	# !_DoBuild
-
-build-zx7b install-zx7b:;
-
-endif	# !_DoBuild
-
-ifeq ($(_DoClean),1)
-
-uninstall-zx7b: | zx7b
-	$(MAKE) -w -C $| prefix=$(shell realpath --relative-to=$| $(prefix)) uninstall
-
-clean-zx7b: | zx7b
-	$(MAKE) -w -C $| clean
-
-distclean-zx7b: | zx7b
-	$(MAKE) -w -C $| distclean
-
-else	# !_DoClean
-
-uninstall-zx7b clean-zx7b distclean-zx7b:;
+clean-lodepng distclean-lodepng:;
 
 endif	# !_DoClean

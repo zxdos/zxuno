@@ -17,9 +17,11 @@
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 ;
-;-------------------------------------------------------------------------------
+; SPDX-FileType: SOURCE
+; SPDX-FileCopyrightText: 2022 Antonio Villena/McLeod_ideafix
+; SPDX-License-Identifier: GPL-3.0-only
 
-               output  RTC.SYS
+;               output  RTC.SYS
 
         define  SCL0SDA0    00b
         define  SCL0SDA1    01b

@@ -1,8 +1,8 @@
 #!/bin/bash -e
 # extract.sh - extract contents of an archive.
 #
-# SPDX-FileCopyrightText: 2021 Ivan Tatarinov <ivan-tat@ya.ru>
-#
+# SPDX-FileType: SOURCE
+# SPDX-FileCopyrightText: 2021, 2022 Ivan Tatarinov
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 declare -a errors
@@ -73,7 +73,7 @@ new_tmp_file() {
 
 # $1 = temporary directory name
 new_tmp_dir() {
-	tmp_files[$tmp]=d
+	tmp_files[$1]=d
 }
 
 # $1 = temporary file or directory name
@@ -118,7 +118,7 @@ Usage:
   $BASH_SOURCE [--sha256 SHA256] --type TYPE [--subdir SUBDIR] --output DIR [--use-tmp-dir] [--] input_file
 Where:
   --sha256 SHA256	check SHA256 message digest of input file
-  --type TYPE		type of input archive (.zip, .tar.gz, .tar.bz2, .7z)
+  --type TYPE		type of input archive (.zip, .tar.gz, .tar.bz2, .tar.xz, .7z)
   --subdir SUBDIR	specify SUBDIR sub-directory of input file to strip
   --output DIR		specify output directory
   --use-tmp-dir		use temporary directory
@@ -167,7 +167,7 @@ while [[ $# -gt 0 ]]; do
 				break
 			fi
 			case "$2" in
-			.zip|.tar.gz|.tar.bz2|.7z)
+			.zip|.tar.gz|.tar.bz2|.tar.xz|.7z)
 				o_type=$2
 				;;
 			*)
@@ -247,16 +247,19 @@ fi
 
 exit_on_errors
 
-tmp=`mktemp`
-new_tmp_file "$tmp"
-echo "$o_sha256  $o_input" >"$tmp"
-sha256sum -c "$tmp"
-rm_tmp_file "$tmp"
+if [[ -n "$o_sha256" ]]; then
+	tmp=`mktemp`
+	new_tmp_file "$tmp"
+	echo "$o_sha256  $o_input" >"$tmp"
+	sha256sum -c "$tmp"
+	rm_tmp_file "$tmp"
+fi
 
 if [[ $o_use_tmp -eq 0 ]]; then
 	if [[ "$o_subdir" != "$o_output" && "$o_subdir" != '.' ]]; then
 		rm -rf "$o_subdir"
 	fi
+	echo "Extracting archive, please wait..."
 	case "$o_type" in
 	.zip)
 		if [[ "$o_subdir" = '.' ]]; then
@@ -279,6 +282,14 @@ if [[ $o_use_tmp -eq 0 ]]; then
 			exit_on_errors
 		else
 			tar -xjf "$o_input"
+		fi
+		;;
+	.tar.xz)
+		if [[ "$o_subdir" = '.' ]]; then
+			add_error "Not implemented for '$o_type': subdir='$o_subdir'."
+			exit_on_errors
+		else
+			tar -xJf "$o_input"
 		fi
 		;;
 	.7z)
