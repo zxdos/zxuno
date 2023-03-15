@@ -2435,7 +2435,9 @@ enbur
         xor     a
         ld      (alto highb+1), a
       ENDIF
+      IF  recovery=0
         call    alto loadch
+      ENDIF
       IF  vertical=0
         ld      bc, $090a
       ELSE
