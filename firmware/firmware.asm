@@ -2279,6 +2279,11 @@ tosd45  inc     b
         djnz    tosd46
         cp      '1'
         jr      nz, tosd46
+      IF  version=4
+        ld      a, (ix+$1d)
+        add     a, 5
+        ld      (ix+$1d), a
+      ENDIF
         dec     (ix+$1c)
         jr      tosd5
 tosd46  dec     l
@@ -3208,8 +3213,9 @@ imyesn  call    bloq1
 ; Returns:
 ;   HL: address of bitstream
 ; ------------------------------------
-calbit  inc     b
+calbit  
     IF  version=1
+        inc     b
 calbi1  ld      a, 9
         cp      b
         ld      hl, $0040
@@ -3221,16 +3227,22 @@ calbi3  add     hl, de
         ret
     ELSE
       IF  version=4
+        xor     a
+        cp      b
+        inc     b
+        ld      hl, $0180
+        jr      nz, calbi2
 calbi1  ld      hl, $ff00
 calbi2  ld      de, $0900
 calbi3  add     hl, de
         djnz    calbi3
-        xor     a
+;        xor     a
         add     hl, hl
         adc     a, a
         ld      (alto highb+1), a
         ret
       ELSE
+        inc     b
 calbi1  ld      a, b
         IF  version=2
           cp      35
