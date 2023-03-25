@@ -128,6 +128,8 @@ ReadOK          ld      a, $40
                 exx
                 dec     ixl
                 jr      nz, Bucle
+                ld      a, ']'
+                rst     $10
                 ld      bc, zxuno_port
                 ld      hl, (Slot+1)
                 ld      a, core_addr
@@ -144,27 +146,27 @@ ReadOK          ld      a, $40
                 out     (c), a
                 include Print.inc
 wrflsh          ex      af, af'
-                xor     a
+                ld      a, 1
 wrfls1          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $21  ; envío sector erase
-                ld      h, 1
-                out     (c), h
+                out     (c), a
                 out     (c), d
                 out     (c), e
-                out     (c), a
+                out     (c), 0
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
 wrfls2          call    waits5
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
-                wreg    flash_spi, 2    ; page program
+                wreg    flash_spi, $12  ; page program
+                out     (c), a
                 out     (c), d
                 out     (c), e
-                out     (c), a
+                out     (c), 0
                 ld      a, $20
                 exx
                 ld      bc, zxuno_port+$100
