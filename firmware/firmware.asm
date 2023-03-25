@@ -2238,8 +2238,9 @@ tosd0   push    af
         inc     a
         dec     b
         dec     b
+        dec     b
         push    af
-        call    p, calbi1
+        call    p, calbit
         pop     af
         ld      (tmpbu2+$1e), hl
         ld      b, a
@@ -3217,14 +3218,14 @@ imyesn  call    bloq1
 calbit  
     IF  version=1
         inc     b
-calbi1  ld      a, 9
+        ld      a, 9
         cp      b
         ld      hl, $0040
-        jr      nc, calbi2
+        jr      nc, calbi1
         ld      hl, $0b80
-calbi2  ld      de, $0540
-calbi3  add     hl, de
-        djnz    calbi3
+calbi1  ld      de, $0540
+calbi2  add     hl, de
+        djnz    calbi2
         ret
     ELSE
       IF  version=4
@@ -3232,35 +3233,34 @@ calbi3  add     hl, de
         cp      b
         inc     b
         ld      hl, $0180
-        jr      nz, calbi2
-calbi1  ld      hl, $ff00
-calbi2  ld      de, $0900
-calbi3  add     hl, de
-        djnz    calbi3
-;        xor     a
+        jr      nz, calbi1
+        ld      hl, $ff00
+calbi1  ld      de, $0900
+calbi2  add     hl, de
+        djnz    calbi2
         add     hl, hl
         adc     a, a
         ld      (alto highb+1), a
         ret
       ELSE
         inc     b
-calbi1  ld      a, b
+        ld      a, b
         IF  version=2
           cp      35
-          jr      z, calbi2
-          jr      c, calbi3
-calbi2    sub     34
-calbi3    ld      b, a
+          jr      z, calbi1
+          jr      c, calbi2
+calbi1    sub     34
+calbi2    ld      b, a
           sbc     a, a
           inc     a
           ld      hl, $0240
           ld      de, $0740
         ELSE
           cp      21
-          jr      z, calbi2
-          jr      c, calbi3
-calbi2    sub     19
-calbi3    ld      b, a
+          jr      z, calbi1
+          jr      c, calbi2
+calbi1    sub     19
+calbi2    ld      b, a
           sbc     a, a
           inc     a
           ld      hl, $fec0
