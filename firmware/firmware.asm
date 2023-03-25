@@ -520,14 +520,10 @@ star17  ld      hl, (joykey)
         jp      conti
 
 runbit0 ld      a, l
-    IF  version=1 OR version=3
-        cp      45
-    ELSE
-      IF  version=2
+    IF  version=2
         cp      69
-      ELSE
-        cp      56
-      ENDIF
+    ELSE
+        cp      45
     ENDIF
         jr      z, bios
 runbit1 ld      (bitstr), a
