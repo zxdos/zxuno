@@ -81,17 +81,30 @@ FileName        ld      hl, 0
                 ret
 FileFound       ld      hl, Stat
                 esxdos  F_FSTAT
+                ld      hl, (Stat+7)
                 ld      a, (Stat+9)
-                cp      $29
+                add     hl, hl
+                adc     a, a
+                add     hl, hl
+                adc     a, a
+                ld      de, 0
+                sbc     hl, de
+                jr      z, Inc1
+                inc     a
+Inc1            cp      $a4
                 jr      c, LengthOk
                 call    Print
                 dz      'File too long'
                 ret
-LengthOk        call    Print
+LengthOk        cp      $5c
+                jr      c, UltSlot
+                ld      hl, Slot+2
+                ld      (hl), $d7
+UltSlot         ld      ixl, a
+                call    Print
                 db      13, 'Writing SPI flash', 13
-                dz      '[', 6, '      ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
-                ld      ixl, $15
-Slot            ld      de, $d700 ; $e900
+                dz      '['
+Slot            ld      de, $e900
                 exx
 Bucle           ld      a, 'o'
                 exx
@@ -121,8 +134,9 @@ ReadOK          ld      a, $40
                 out     (c), a
                 inc     a
                 inc     b
-                out     (c), h
+                inc     l
                 out     (c), l
+                out     (c), h
                 out     (c), 0
                 dec     b
                 out     (c), a
