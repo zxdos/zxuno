@@ -20,37 +20,6 @@
 
 ;               output  ZX1
 
-        define  romtbl  $d000
-        define  indexe  $e000
-        define  active  $e040
-
-        define  bitstr  active+1
-        define  quietb  bitstr+1
-        define  checkc  quietb+1
-        define  keyiss  checkc+1
-        define  timing  keyiss+1
-        define  conten  timing+1
-        define  divmap  conten+1
-        define  nmidiv  divmap+1
-        define  grapmo  nmidiv+1
-        define  layout  grapmo+1
-        define  joykey  layout+1
-        define  joydb9  joykey+1
-        define  split   joydb9+1
-        define  outvid  split+1
-        define  scanli  outvid+1
-        define  freque  scanli+1
-        define  cpuspd  freque+1
-        define  copt    cpuspd+1
-        define  cburst  copt+1
-
-        define  cmbpnt  $e100
-        define  cmbcor  $e1d0   ;lo: Y coord          hi: X coord
-        define  items   $e1d2   ;lo: totales          hi: en pantalla
-        define  offsel  $e1d4   ;lo: offset visible   hi: seleccionado
-        define  empstr  $e1d6
-        define  tmpbuf  $e200
-
                 include zxuno.def
                 include esxdos.def
 
@@ -101,19 +70,13 @@ Normal          ld      a, 0
                 out     (c), a
                 ld      a, 7            ;PLUGIN_OK|PLUGIN_RESTORE_SCREEN|PLUGIN_RESTORE_BUFFERS
                 ret
-Init            wreg    flash_cs, 1
-                ld      de, indexe
-                ld      hl, $0070
-                ld      a, 1
-                call    rdflsh
-                xor     a
+Init            xor     a
                 esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
                 dz      'SD card not inserted'
                 ret
-SDCard          ld      (Drive+1), a
-                ld      b, FA_READ      ; B = modo de apertura
+SDCard          ld      b, FA_READ      ; B = modo de apertura
 FileName        ld      hl, 0
                 esxdos  F_OPEN
                 ld      (Handle+1), a
@@ -163,6 +126,5 @@ ReadOK          ld      a, $40
                 inc     b
                 out     (c), a
                 include Print.inc
-                include rdflsh.inc
                 include wrflsh.inc
                 include rst28.inc

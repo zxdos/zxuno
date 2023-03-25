@@ -50,6 +50,7 @@ BINS=\
  CORCLEAN\
  COREBIOS\
  ZX1\
+ ZX3\
  DATE\
  RTCST\
  RTC.SYS\
@@ -196,6 +197,14 @@ build/ZX1: $(srcdir)/zx1.asm\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/ZX3: $(srcdir)/zx3.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rst28.inc\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<

@@ -20,37 +20,6 @@
 
 ;               output  ZX3
 
-        define  romtbl  $d000
-        define  indexe  $e000
-        define  active  $e040
-
-        define  bitstr  active+1
-        define  quietb  bitstr+1
-        define  checkc  quietb+1
-        define  keyiss  checkc+1
-        define  timing  keyiss+1
-        define  conten  timing+1
-        define  divmap  conten+1
-        define  nmidiv  divmap+1
-        define  grapmo  nmidiv+1
-        define  layout  grapmo+1
-        define  joykey  layout+1
-        define  joydb9  joykey+1
-        define  split   joydb9+1
-        define  outvid  split+1
-        define  scanli  outvid+1
-        define  freque  scanli+1
-        define  cpuspd  freque+1
-        define  copt    cpuspd+1
-        define  cburst  copt+1
-
-        define  cmbpnt  $e100
-        define  cmbcor  $e1d0   ;lo: Y coord          hi: X coord
-        define  items   $e1d2   ;lo: totales          hi: en pantalla
-        define  offsel  $e1d4   ;lo: offset visible   hi: seleccionado
-        define  empstr  $e1d6
-        define  tmpbuf  $e200
-
                 include zxuno.def
                 include esxdos.def
 
@@ -96,19 +65,13 @@ Normal          ld      a, 0
                 out     (c), a
                 ld      a, 7            ;PLUGIN_OK|PLUGIN_RESTORE_SCREEN|PLUGIN_RESTORE_BUFFERS
                 ret
-Init            wreg    flash_cs, 1
-                ld      de, indexe
-                ld      hl, $0070
-                ld      a, 1
-                call    rdflsh
-                xor     a
+Init            xor     a
                 esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
                 dz      'SD card not inserted'
                 ret
-SDCard          ld      (Drive+1), a
-                ld      b, FA_READ      ; B = modo de apertura
+SDCard          ld      b, FA_READ      ; B = modo de apertura
 FileName        ld      hl, 0
                 esxdos  F_OPEN
                 ld      (Handle+1), a
@@ -120,17 +83,15 @@ FileFound       ld      hl, Stat
                 esxdos  F_FSTAT
                 ld      a, (Stat+9)
                 cp      $29
-                jr      c, Lengthok
+                jr      c, LengthOk
                 call    Print
                 dz      'File too long'
                 ret
-
-Lengthok
-                call    Print
+LengthOk        call    Print
                 db      13, 'Writing SPI flash', 13
                 dz      '[', 6, '      ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ixl, $15
-Slot            ld      de, $f7c0
+Slot            ld      de, $d700 ; $e900
                 exx
 Bucle           ld      a, 'o'
                 exx
@@ -168,55 +129,6 @@ ReadOK          ld      a, $40
                 inc     b
                 out     (c), a
                 include Print.inc
-; ------------------------
-; Read from SPI flash
-; Parameters:
-;   DE: destination address
-;   HL: source address without last byte
-;    A: number of pages (256 bytes) to read
-; ------------------------
-rdflsh          ex      af, af'
-                xor     a
-                push    hl
-                wreg    flash_cs, 0     ; activamos spi, enviando un 0
-
-                wreg    flash_spi, $13  ; envio flash_spi un $13, orden de lectura
-highb           ld      a, 0
-                out     (c), a
-                pop     hl
-                push    hl
-                xor     a
-                out     (c), h
-                out     (c), l
-                out     (c), a
-                ex      af, af'
-                ex      de, hl
-                in      f, (c)
-rdfls1          ld      e, $20
-rdfls2          ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                ini
-                inc     b
-                dec     e
-                jr      nz, rdfls2
-                dec     a
-                jr      nz, rdfls1
-                wreg    flash_cs, 1
-                pop     hl
-                ret
-
 wrflsh          ex      af, af'
                 xor     a
 wrfls1          wreg    flash_cs, 0     ; activamos spi, enviando un 0
@@ -224,7 +136,7 @@ wrfls1          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $21  ; envío sector erase
-                ld      hl, (highb)
+                ld      h, 1
                 out     (c), h
                 out     (c), d
                 out     (c), e
