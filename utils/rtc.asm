@@ -142,6 +142,8 @@ Send1           ld      d, SCL0SDA1
                 out     (c), d
                 ld      d, SCL1SDA1
                 out     (c), d          ;Transmito un bit 1 para dejar SDA en modo de alta impedancia y que el receptor puedo ponerlo a 0
+                ld      d, SCL0SDA1
+                out     (c), d
                 ret                     ; S flag 0 = ACK received, S flag 1 = ACK not received
 
 RcvByte         ld      a, 1            ;byte a recibir en A. BC=puerto de datos del ZXUNO ya apuntando a I2CREG. Usa y modifica: A, D, flags
@@ -155,5 +157,7 @@ RcvBit          call    Send1           ;envío un pulso de reloj con SDA a alta
 Send0           ld      d, SCL0SDA0
                 out     (c), d
                 ld      d, SCL1SDA0
+                out     (c), d
+                ld      d, SCL0SDA0
                 out     (c), d
                 ret

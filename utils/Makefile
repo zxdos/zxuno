@@ -51,6 +51,7 @@ BINS=\
  COREBIOS\
  ZX1\
  DATE\
+ RTCST\
  RTC.SYS\
  ROMSBACK\
  ROMSUPGR\
@@ -203,6 +204,12 @@ build/DATE: $(srcdir)/date.asm\
  $(INCLUDEDIR)/zxuno.def\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/Print.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/RTCST: $(srcdir)/rtcst.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
