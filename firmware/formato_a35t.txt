@@ -1,0 +1,104 @@
+000000-004000 Boot Header Xilinx
+004000-100000 Firmware-ROMs (61 ROMs)
+--(004000-006000) ESXDOS
+--(006000-008000) ROM Directory
+--(008000-00C000) Firmware-BIOS
+--(00C000-100000) 61 Spectrum ROMs
+0100000 - Bitstream 1 (longitud 170000)
+0270000 - Bitstream 2
+0390000 - Bitstream 3
+04B0000 - Bitstream 4
+05D0000 - Bitstream 5
+06F0000 - Bitstream 6
+0810000 - Bitstream 7
+0930000 - Bitstream 8
+0A50000 - Bitstream 9
+0B70000 - Bitstream 10
+0C90000 - Bitstream 11
+0DB0000 - Bitstream 12
+0ED0000 - Bitstream 13
+0FF0000 - Bitstream 14
+1110000 - Bitstream 15
+1230000 - Bitstream 16
+1350000 - Bitstream 17
+1470000 - Bitstream 18
+1590000 - Bitstream 19
+16B0000 - Bitstream 20
+17D0000 - Bitstream 21
+18F0000 - Bitstream 22
+1A10000 - Bitstream 23
+1B30000 - Bitstream 24
+1C50000 - Bitstream 25
+1D70000 - Bitstream 26
+1E90000 - Bitstream 27 (longitud 170000)
+
+(006000-008000) ROM Directory
+--6000-6F40 61 ROM entries
+--7000-8000 Entry index and Bitstream names
+----7000-704F Entry index
+----7100-74C0 30 Bitstream names of Q256 (32 bytes each)
+----74C0-8000 Reserved
+
+ROM entry
+  00 slot offset
+  01 slot size
+  02 flags 1
+      Bits 0-1. Machine timings: 00=48K, 01=128K, 10=Pentagon
+      Bit 2. NMI DivMMC: 0=disabled, 1=enabled
+      Bit 3. DivMMC: 0=disabled, 1=enabled
+      Bit 4. Contention: 0=disabled, 1=enabled
+      Bit 5. Keyboard issue: 0=issue 2, 1=issue 3
+  03 flags 2
+      Bit 0. AY chip: 0=enabled, 1=disabled
+      Bit 1. 2nd AY chip (TurboSound): 0=enabled, 1=disabled
+      Bit 2. 7ffd port: 0=enabled, 1=disabled
+      Bit 3. 1ffd port: 0=enabled, 1=disabled
+      Bit 4. ROM low bit: 0=enabled, 1=disabled
+      Bit 5. ROM high bit: 0=enabled, 1=disabled
+      Bit 6. horizontal MMU in Timex: 0=disabled, 1=enabled
+      Bit 7. DivMMC and ZXMMC ports: 0=enabled, 1=disabled
+  08-0f crc16-ccitt values. Up to 4 16-bit values in reverse order
+  10-20 unused
+  20-3f Name of ROM in ASCII, space padded
+
+Tape format
+  Block 1. 0x51 length header
+  Block 2,3.. 16Kb length data blocks
+  Header format:
+    00 slot size
+    01 flags 1
+        Bits 0-1. Machine timings: 00=48K, 01=128K, 10=Pentagon
+        Bit 2. NMI DivMMC: 0=disabled, 1=enabled
+        Bit 3. DivMMC: 0=disabled, 1=enabled
+        Bit 4. Contention: 0=disabled, 1=enabled
+        Bit 5. Keyboard issue: 0=issue 2, 1=issue 3
+    02 flags 2 or special
+        Bit 0. AY chip: 0=enabled, 1=disabled
+        Bit 1. 2nd AY chip (TurboSound): 0=enabled, 1=disabled
+        Bit 2. 7ffd port: 0=enabled, 1=disabled
+        Bit 3. 1ffd port: 0=enabled, 1=disabled
+        Bit 4. ROM low bit: 0=enabled, 1=disabled
+        Bit 5. ROM high bit: 0=enabled, 1=disabled
+        Bit 6. horizontal MMU in Timex: 0=disabled, 1=enabled
+        Bit 7. DivMMC and ZXMMC ports: 0=enabled, 1=disabled
+        special=0x00 normal core or esxdos
+        special=0xcb spectrum core
+        special=0xca firmware
+    07-30 crc16-ccitt values. Up to 21 16-bit values in reverse order
+    31-50 Name in ASCII, space padded
+
+Each block follows the .TAP file standard. That is a header with 2+1 bytes
+for lenght+type and a tail of one byte with the checksum. For example:
+
+Lenght+2   Type (always FF)
+    v      v 
+    vvvvv vv
+    53 00 FF<01 3C 3C 00 00 00 00 FD 5E 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 5A 58 20 53 70 65 63 74 72 75 6D 20
+    34 38 4B 20 20 20 20 20 20 20 20 20 20 20 20 20
+    20 20 20 20>03 02 40 FF<F3 AF 11 FF FF C3 CB 11
+                ^^ ^^^^^ ^^Type
+                |    |    
+         Checksum  Length+2
