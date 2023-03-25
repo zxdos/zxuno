@@ -2130,13 +2130,17 @@ upgr34  ld      (hl), a
         ld      a, ixl
         rra
         jr      nz, upgr35
-    IF  version=1
+    IF  version<3
+      IF  version=1
         cp      45+5
-    ELSE
-      IF  version=2
-        cp      69+5
       ELSE
-        cp      56+5
+        cp      68+5
+      ENDIF
+    ELSE
+      IF  version=3
+        cp      55+5
+      ELSE
+        cp      27+5
       ENDIF
     ENDIF
         jr      z, upgr35
