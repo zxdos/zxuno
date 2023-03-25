@@ -81,12 +81,12 @@ FileName        ld      hl, 0
                 ret
 FileFound       ld      hl, Stat
                 esxdos  F_FSTAT
-                ld      hl, (Stat+7)
-                ld      a, (Stat+9)
-                add     hl, hl
-                adc     a, a
-                add     hl, hl
-                adc     a, a
+                ld      hl, (Stat+7)  ;4000
+                ld      a, (Stat+9)   ;0c
+                add     hl, hl        ;8000
+                adc     a, a          ;18
+                add     hl, hl        ;0000
+                adc     a, a          ;31
                 ld      de, 0
                 sbc     hl, de
                 jr      z, Inc1
@@ -146,12 +146,12 @@ ReadOK          ld      a, $40
                 out     (c), a
                 include Print.inc
 wrflsh          ex      af, af'
-                ld      a, 1
 wrfls1          wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, 6    ; envío write enable
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $21  ; envío sector erase
+                ld      a, 1
                 out     (c), a
                 out     (c), d
                 out     (c), e
@@ -163,6 +163,7 @@ wrfls2          call    waits5
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $12  ; page program
+                inc     a
                 out     (c), a
                 out     (c), d
                 out     (c), e
