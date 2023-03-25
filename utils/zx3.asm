@@ -1,7 +1,7 @@
-; mc.asm - multicore load any .ZX1 core on slot 9 or 45.
-; File must exists in current directory.  It must be run while using a "root" mode ROM.
+; multicore load any .ZX3 core on slot 9 or 45.
+; File must exists in current directory
 ;
-; Copyright (C) 2022 Antonio Villena
+; Copyright (C) 2023 Antonio Villena
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
-;               output  ZX1
+;               output  ZX3
 
         define  romtbl  $d000
         define  indexe  $e000
@@ -56,7 +56,7 @@
 
                 org     $8000
                 jr      NoPrint
-                db      'BP', 0, 0, 0, 0, 'ZX1 plugin - antoniovillena', 0
+                db      'BP', 0, 0, 0, 0, 'ZX3 plugin - antoniovillena', 0
 NoPrint         ld      (FileName+1), hl
                 ld      bc, zxuno_port
                 out     (c), 0
@@ -73,12 +73,7 @@ Nonlock         wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 in      a, (c)
                 in      a, (c)
                 wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
-                sub     $18
-                jr      z, Goodflsh
-                ld      hl, $2f80
-                ld      (Slot+1), hl
-                inc     a
-                inc     a
+                sub     $19
                 jr      z, Goodflsh
                 call    Print
                 dz      'Incorrect flash IC'
@@ -121,7 +116,17 @@ FileName        ld      hl, 0
                 call    Print
                 dz      'File not found'
                 ret
-FileFound       call    Print
+FileFound       ld      hl, Stat
+                esxdos  F_FSTAT
+                ld      a, (Stat+9)
+                cp      $29
+                jr      c, Lengthok
+                call    Print
+                dz      'File too long'
+                ret
+
+Lengthok
+                call    Print
                 db      13, 'Writing SPI flash', 13
                 dz      '[', 6, '      ]', 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
                 ld      ixl, $15
@@ -163,6 +168,117 @@ ReadOK          ld      a, $40
                 inc     b
                 out     (c), a
                 include Print.inc
-                include rdflsh.inc
-                include wrflsh.inc
+; ------------------------
+; Read from SPI flash
+; Parameters:
+;   DE: destination address
+;   HL: source address without last byte
+;    A: number of pages (256 bytes) to read
+; ------------------------
+rdflsh          ex      af, af'
+                xor     a
+                push    hl
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+
+                wreg    flash_spi, $13  ; envio flash_spi un $13, orden de lectura
+highb           ld      a, 0
+                out     (c), a
+                pop     hl
+                push    hl
+                xor     a
+                out     (c), h
+                out     (c), l
+                out     (c), a
+                ex      af, af'
+                ex      de, hl
+                in      f, (c)
+rdfls1          ld      e, $20
+rdfls2          ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                dec     e
+                jr      nz, rdfls2
+                dec     a
+                jr      nz, rdfls1
+                wreg    flash_cs, 1
+                pop     hl
+                ret
+
+wrflsh          ex      af, af'
+                xor     a
+wrfls1          wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, 6    ; envío write enable
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, $21  ; envío sector erase
+                ld      hl, (highb)
+                out     (c), h
+                out     (c), d
+                out     (c), e
+                out     (c), a
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+wrfls2          call    waits5
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, 6    ; envío write enable
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, 2    ; page program
+                out     (c), d
+                out     (c), e
+                out     (c), a
+                ld      a, $20
+                exx
+                ld      bc, zxuno_port+$100
+wrfls3          inc     b
+                outi
+                inc     b
+                outi
+                inc     b
+                outi
+                inc     b
+                outi
+                inc     b
+                outi
+                inc     b
+                outi
+                inc     b
+                outi
+                inc     b
+                outi
+                dec     a
+                jr      nz, wrfls3
+                exx
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                ex      af, af'
+                dec     a
+                jr      z, waits5
+                ex      af, af'
+                inc     e
+                ld      a, e
+                and     $0f
+                jr      nz, wrfls2
+                ld      hl, wrfls1
+                push    hl
+waits5          wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, 5    ; envío read status
+                in      a, (c)
+waits6          in      a, (c)
+                and     1
+                jr      nz, waits6
+                wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+                ret
                 include rst28.inc
+Stat
