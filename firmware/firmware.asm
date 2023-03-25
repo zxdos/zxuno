@@ -3231,11 +3231,11 @@ calbi2  add     hl, de
       IF  version=4
         xor     a
         cp      b
-        inc     b
         ld      hl, $0180
         jr      nz, calbi1
         ld      hl, $ff00
-calbi1  ld      de, $0900
+calbi1  inc     b
+        ld      de, $0900
 calbi2  add     hl, de
         djnz    calbi2
         add     hl, hl
