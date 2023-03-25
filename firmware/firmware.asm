@@ -2283,8 +2283,9 @@ tosd45  inc     b
         ld      a, (ix+$1d)
         add     a, 5
         ld      (ix+$1d), a
-      ENDIF
+      ELSE
         dec     (ix+$1c)
+      ENDIF
         jr      tosd5
 tosd46  dec     l
         ld      a, b
