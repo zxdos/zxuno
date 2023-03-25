@@ -81,14 +81,12 @@ FileName        ld      hl, 0
                 ret
 FileFound       ld      hl, Stat
                 esxdos  F_FSTAT
-                ld      hl, (Stat+7)  ;4000
-                ld      a, (Stat+9)   ;0c
-                add     hl, hl        ;8000
-                adc     a, a          ;18
-                add     hl, hl        ;0000
-                adc     a, a          ;31
-                ld      de, 0
-                sbc     hl, de
+                ld      hl, (Stat+7)
+                ld      a, (Stat+9)
+                add     hl, hl
+                rla
+                adc     hl, hl
+                rla
                 jr      z, Inc1
                 inc     a
 Inc1            cp      $a4
@@ -128,8 +126,6 @@ ReadOK          ld      a, $40
                 exx
                 dec     ixl
                 jr      nz, Bucle
-                ld      a, ']'
-                rst     $10
                 ld      bc, zxuno_port
                 ld      hl, (Slot+1)
                 ld      a, core_addr
