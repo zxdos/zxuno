@@ -4291,7 +4291,7 @@ wrfls1  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version>1 AND zesarux
+      IF  version>1 AND zesarux=0
         wreg    flash_spi, $21  ; envío sector erase
         ld      hl, (alto highb)
         out     (c), h
@@ -4307,7 +4307,7 @@ wrfls2  call    waits5
         wreg    flash_spi, 6    ; envío write enable
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
-      IF  version>1 AND zesarux
+      IF  version>1 AND zesarux=0
         wreg    flash_spi, $12  ; envío page program
         ld      hl, (alto highb)
         out     (c), h
