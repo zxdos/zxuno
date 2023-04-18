@@ -4533,12 +4533,14 @@ finav
 ; Compressed and RCS filtered logo
 ; -----------------------------------------------------------------------------
       IF  vertical=0
-        IF version=1
-          incbin  logo256x192.rcs.zx7b
-        ELSE
-         IF version=2
+        IF version<3
+          IF version=1
+            incbin  logo256x192.rcs.zx7b
+          ELSE
             incbin  logo256x192d.rcs.zx7b
-         ELSE
+          ENDIF
+        ELSE
+         IF version=3
           IF clones=0
             incbin  logo256x192dp.rcs.zx7b
           ELSE
@@ -4548,19 +4550,25 @@ finav
             incbin  logo256x192ut.rcs.zx7b
            ENDIF
           ENDIF
+         ELSE
+          incbin  logo256x192t.rcs.zx7b
          ENDIF
         ENDIF
 finlog  incbin  strings.bin.zx7b
       ELSE
         incbin  bezel.rcs.zx7b
 finbez
-        IF version=1
-          incbin  logo192x256.rcs.zx7b
-        ELSE
-          IF version=2
-            incbin  logo192x256d.rcs.zx7b
+        IF version<3
+          IF version=1
+            incbin  logo192x256.rcs.zx7b
           ELSE
+            incbin  logo192x256d.rcs.zx7b
+          ENDIF
+        ELSE
+          IF version=3
             incbin  logo192x256dp.rcs.zx7b
+          ELSE
+            incbin  logo192x256t.rcs.zx7b
           ENDIF
         ENDIF
 finlog  incbin  strings.bin.zx7b
