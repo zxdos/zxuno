@@ -85,17 +85,22 @@ FileFound       ld      hl, Stat
                 ld      a, (Stat+9)
                 add     hl, hl
                 rla
-                adc     hl, hl
-                rla
-                jr      z, Inc1
-                inc     a
-Inc1            cp      $ec
-                jr      c, LengthOk
+                cp      $9a
+                ccf
+                jr      nc, LengthOk
                 call    Print
                 dz      'File too long'
                 ret
-LengthOk        ld      hl, Slot+2
-                cp      $a4
+LengthOk        adc     hl, hl
+                rla
+                jr      z, Inc1
+                inc     a
+Inc1            ld      hl, Slot+2
+                cp      $ec
+                jr      c, AntPen
+                ld      (hl), $b3
+                jr      UltSlot
+AntPen          cp      $a4
                 jr      c, PenUlt
                 ld      (hl), $c5
                 jr      UltSlot
