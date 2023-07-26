@@ -1,7 +1,7 @@
 /*
  * Bit2Bin - strip .bit header and align binary to 16K.
  *
- * Copyright (C) 2019-2021 Antonio Villena
+ * Copyright (C) 2019-2023 Antonio Villena
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,15 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * SPDX-FileCopyrightText: Copyright (C) 2019-2021 Antonio Villena
- *
- * SPDX-License-Identifier: GPL-3.0-only
  */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,8 +22,8 @@
 
 #define PROGRAM "Bit2Bin"
 #define DESCRIPTION "strip .bit header and align binary to 16K."
-#define VERSION "0.05 (2020-02-19)"
-#define COPYRIGHT "Copyright (C) 2019-2021 Antonio Villena"
+#define VERSION "0.06 (2023-07-26)"
+#define COPYRIGHT "Copyright (C) 2019-2023 Antonio Villena"
 #define LICENSE \
 "This program is free software: you can redistribute it and/or modify\n" \
 "it under the terms of the GNU General Public License as published by\n" \
@@ -96,51 +88,25 @@ int main(int argc, char *argv[]) {
     printf("Cannot create output file: %s\n", argv[2]),
     exit(-1);
   j= i>>14;
-  if( j>71 ){
-    for ( i= 0; i<72; i++ )
+  if( j )
+    for ( i= 0; i<j; i++ )
       fread(mem, 1, 0x4000, fi),
       fwrite(mem, 1, 0x4000, fo);
-    fclose(fo);
-    argv[2][strlen(argv[2])-5]++;
-    if(argv[2][strlen(argv[2])-5]==':')
-      if(strlen(argv[2])==9)
-        argv[2]= "CORE10.ZX3";
-      else
-        argv[2][4]++,
-        argv[2][5]='0';
-    fo= fopen(argv[2], "wb+");
-    if( !fo )
-      printf("Cannot create output file: %s\n", argv[2]),
-      exit(-1);
-    for ( i= 0; i<j-72; i++ )
-      fread(mem, 1, 0x4000, fi),
-      fwrite(mem, 1, 0x4000, fo);
+  memset(mem, 0, 0x4000);
+  fread(mem, 1, length&0x3fff, fi),
+  fwrite(mem, 1, 0x4000, fo);
+  if( j<71 ){
     memset(mem, 0, 0x4000);
-    fread(mem, 1, length&0x3fff, fi),
-    fwrite(mem, 1, 0x4000, fo);
-    memset(mem, 0, 0x4000);
-    for ( i= 0; i<143-j; i++ )
-      fwrite(mem, 1, 0x4000, fo);
-  }
-  else{
-    if( j )
-      for ( i= 0; i<j; i++ )
-        fread(mem, 1, 0x4000, fi),
-        fwrite(mem, 1, 0x4000, fo);
-    memset(mem, 0, 0x4000);
-    fread(mem, 1, length&0x3fff, fi),
-    fwrite(mem, 1, 0x4000, fo);
-    memset(mem, 0, 0x4000);
-    if( j>48 )
+    if( j>48 )  // ZX3
       for ( i= 0; i<71-j; i++ )
         fwrite(mem, 1, 0x4000, fo);
-    else if( j>28 )
+    else if( j>28 )  // ZXD
       for ( i= 0; i<48-j; i++ )
         fwrite(mem, 1, 0x4000, fo);
-    else if( j>20 )
+    else if( j>20 )  // ZX2
       for ( i= 0; i<28-j; i++ )
         fwrite(mem, 1, 0x4000, fo);
-    else
+    else  // ZX1
       for ( i= 0; i<20-j; i++ )
         fwrite(mem, 1, 0x4000, fo);
   }
