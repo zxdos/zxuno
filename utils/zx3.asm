@@ -135,7 +135,7 @@ ReadOK          jr      c, Comprob
                 call    Print
                 dz      'Unknown core'
                 ret
-ReadId          ld      hl, $dffe
+ReadId          ld      hl, $bffe
                 ld      de, $d062
                 cp      %00100000
                 jr      z, Strcmp
