@@ -85,20 +85,31 @@ FileFound       ld      hl, Stat
                 ld      a, (Stat+9)
                 add     hl, hl
                 rla
-                adc     hl, hl
-                rla
-                jr      z, Inc1
-                inc     a
-Inc1            cp      $a4
-                jr      c, LengthOk
+                cp      $9a
+                ccf
+                jr      nc, LengthOk
                 call    Print
                 dz      'File too long'
                 ret
-LengthOk        cp      $5c
+LengthOk        adc     hl, hl
+                rla
+                jr      z, Inc1
+                inc     a
+Inc1            ld      hl, Slot+2
+                cp      $ec
+                jr      c, AntPen
+                ld      (hl), $b3
+                jr      UltSlot
+AntPen          cp      $a4
+                jr      c, PenUlt
+                ld      (hl), $c5
+                jr      UltSlot
+PenUlt          cp      $5c
                 jr      c, UltSlot
-                ld      hl, Slot+2
                 ld      (hl), $d7
 UltSlot         ld      ixl, a
+                ld      a, (hl)
+                ld      ixh, a
                 call    Print
                 db      13, 'Writing SPI flash', 13
                 dz      '['
@@ -118,14 +129,53 @@ Handle          ld      a, 0
                 call    Print
                 dz      'Read Error'
                 ret
-ReadOK          ld      a, $40
+ReadOK          jr      c, Comprob
+                ld      hl, ReadOK
+                ld      (hl), $30
+                ld      bc, zxuno_port
+                ld      a, newreg
+                out     (c), a
+                inc     b
+                in      a, (c)
+                and     %11100000
+                jr      nz, ReadId
+                call    Print
+                dz      'Unknown core'
+                ret
+ReadId          ld      hl, $bffe
+                ld      de, $d062
+                cp      %00100000
+                jr      z, Strcmp
+                ld      de, $1063
+                cp      %01000000
+                jr      z, Strcmp
+                ld      d, $60
+Strcmp          djnz    Listo
+                call    Print
+                dz      'Invalid core'
+                ret
+Listo           inc     l
+                inc     hl
+                inc     l
+                ld      a, (hl)
+                inc     l
+                cp      e
+                jr      nz, Strcmp
+                ld      a, (hl)
+                cp      d
+                jr      nz, Strcmp
+Comprob         ld      b, ixl
+                djnz    Lastbyte
+                ld      a, ixh
+                ld      ($ffff), a
+Lastbyte        ld      a, $40
                 ld      hl, $c000
                 exx
                 call    wrflsh
                 inc     de
                 exx
                 dec     ixl
-                jr      nz, Bucle
+                jp      nz, Bucle
                 ld      bc, zxuno_port
                 ld      hl, (Slot+1)
                 ld      a, core_addr
