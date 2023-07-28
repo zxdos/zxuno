@@ -534,7 +534,18 @@ star19  sub     $80
         jr      c, star16
         ld      (codcnt), a
         sub     '1'
-        cp      9
+      IF  version=4
+        cp      8
+        jr      nz, latslo
+        ld      hl, $ffff
+        ld      de, $c000
+        ld      a, 1
+        ld      (alto highb+1), a
+        call    alto rdflsh
+        ld      hl, ($c0fe)
+        jp      jmpcor
+      ENDIF
+latslo  cp      9
         jr      c, runbit1
         jp      z, alto easter
         cp      $19-'1'
@@ -1091,7 +1102,7 @@ runbit  ld      b, h
         dec     b
         pop     hl
       ELSE
-        ld      bc, zxuno_port
+jmpcor  ld      bc, zxuno_port
       ENDIF
         ld      e, core_addr
         out     (c), e
