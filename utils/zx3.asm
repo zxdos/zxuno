@@ -108,6 +108,8 @@ PenUlt          cp      $5c
                 jr      c, UltSlot
                 ld      (hl), $d7
 UltSlot         ld      ixl, a
+                ld      a, (hl)
+                ld      ixh, a
                 call    Print
                 db      13, 'Writing SPI flash', 13
                 dz      '['
@@ -162,7 +164,11 @@ Listo           inc     l
                 ld      a, (hl)
                 cp      d
                 jr      nz, Strcmp
-Comprob         ld      a, $40
+Comprob         ld      b, ixl
+                djnz    Lastbyte
+                ld      a, ixh
+                ld      ($ffff), a
+Lastbyte        ld      a, $40
                 ld      hl, $c000
                 exx
                 call    wrflsh
