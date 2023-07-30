@@ -572,28 +572,30 @@ star21  wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, 1    ; envío write register status
-      IF  version=4
         ld      hl, $0202
         ld      (menuop), hl
+      IF  version=4
         ld      l, $40
         out     (c), l
         out     (c), 0
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $05  ; envío write register status
+        in      a, (c)
+        in      a, (c)
+        wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
+        and     $40
       ELSE
-        ld      hl, $0202
-        ld      (menuop), hl
         out     (c), 0
         out     (c), l
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         wreg    flash_cs, 0     ; activamos spi, enviando un 0
         wreg    flash_spi, $35  ; envío write register status
-      ENDIF
         in      a, (c)
         in      a, (c)
         wreg    flash_cs, 1     ; desactivamos spi, enviando un 1
         and     2
+      ENDIF
         jr      z, star21
         xor     a
     ENDIF
