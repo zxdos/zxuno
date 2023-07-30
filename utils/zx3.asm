@@ -30,6 +30,9 @@ NoPrint         ld      (FileName+1), hl
                 ld      bc, zxuno_port
                 out     (c), 0
                 inc     b
+                in      a, (c)
+                and     %01111111
+                out     (c), a
                 in      f, (c)
                 jp      p, Nonlock
                 call    Print
@@ -164,11 +167,7 @@ Listo           inc     l
                 ld      a, (hl)
                 cp      d
                 jr      nz, Strcmp
-Comprob         ld      b, ixl
-                djnz    Lastbyte
-                ld      a, ixh
-                ld      ($ffff), a
-Lastbyte        ld      a, $40
+Comprob         ld      a, $40
                 ld      hl, $c000
                 exx
                 call    wrflsh
@@ -176,6 +175,47 @@ Lastbyte        ld      a, $40
                 exx
                 dec     ixl
                 jp      nz, Bucle
+                wreg    flash_cs, 0     ; activamos spi, enviando un 0
+                wreg    flash_spi, $13
+                ld      a, 1
+                out     (c), a
+                ld      hl, $fff0
+                xor     a
+                out     (c), h
+                out     (c), l
+                out     (c), a
+                ld      a, $10
+                ld      hl, $f000
+                in      f, (c)
+rdfls1          ld      e, $20
+rdfls2          ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                ini
+                inc     b
+                dec     e
+                jr      nz, rdfls2
+                dec     a
+                jr      nz, rdfls1
+                wreg    flash_cs, 1
+                ld      a, ixh
+                ld      ($ffff), a
+                ld      a, $10
+                ld      hl, $f000
+                exx
+                ld      de, $fff0
+                call    wrflsh
                 ld      bc, zxuno_port
                 ld      hl, (Slot+1)
                 ld      a, core_addr
