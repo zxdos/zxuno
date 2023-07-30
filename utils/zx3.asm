@@ -30,6 +30,9 @@ NoPrint         ld      (FileName+1), hl
                 ld      bc, zxuno_port
                 out     (c), 0
                 inc     b
+                in      a, (c)
+                and     %01111111
+                out     (c), a
                 in      f, (c)
                 jp      p, Nonlock
                 call    Print
