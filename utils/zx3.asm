@@ -86,22 +86,26 @@ FileFound       ld      hl, Stat
                 esxdos  F_FSTAT
                 ld      hl, (Stat+7)
                 ld      a, (Stat+9)
-                add     hl, hl
-                rla
-                cp      $9a
-                ccf
-                jr      nc, LengthOk
+                cp      $5e
+                jr      c, LengthOk
                 call    Print
                 dz      'File too long'
                 ret
-LengthOk        adc     hl, hl
+LengthOk        add     hl, hl
+                rla
+                adc     hl, hl
                 rla
                 jr      z, Inc1
                 inc     a
 Inc1            ld      hl, Slot+2
-                cp      $ec
+                jr      c, Cafac
+                cp      $34
+                jr      c, Tob3
+                ld      (hl), $a1
+                jr      UltSlot
+Cafac           cp      $ec
                 jr      c, AntPen
-                ld      (hl), $b3
+Tob3            ld      (hl), $b3
                 jr      UltSlot
 AntPen          cp      $a4
                 jr      c, PenUlt
