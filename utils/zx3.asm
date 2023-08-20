@@ -69,7 +69,6 @@ Normal          ld      a, 0
                 ld      a, 7            ;PLUGIN_OK|PLUGIN_RESTORE_SCREEN|PLUGIN_RESTORE_BUFFERS
                 ret
 Init            xor     a
-                ld      ixh, a
                 esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
@@ -99,6 +98,7 @@ LengthOk        add     hl, hl
                 jr      z, Inc1
                 inc     a
 Inc1            ld      hl, Slot+2
+                ld      ixh, 1
                 jr      nc, Cafac
                 inc     ixh
                 cp      $34
