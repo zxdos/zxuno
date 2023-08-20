@@ -69,6 +69,7 @@ Normal          ld      a, 0
                 ld      a, 7            ;PLUGIN_OK|PLUGIN_RESTORE_SCREEN|PLUGIN_RESTORE_BUFFERS
                 ret
 Init            xor     a
+                ld      ixh, a
                 esxdos  M_GETSETDRV     ; A = unidad actual
                 jr      nc, SDCard
                 call    Print
@@ -98,7 +99,8 @@ LengthOk        add     hl, hl
                 jr      z, Inc1
                 inc     a
 Inc1            ld      hl, Slot+2
-                jr      c, Cafac
+                jr      nc, Cafac
+                inc     ixh
                 cp      $34
                 jr      c, Tob3
                 ld      (hl), $a1
@@ -116,7 +118,7 @@ PenUlt          cp      $5c
                 ld      (hl), $d7
 UltSlot         ld      ixl, a
                 ld      a, (hl)
-                ld      ixh, a
+                ld      (Mybyte+1), a
                 call    Print
                 db      13, 'Writing SPI flash', 13
                 dz      '['
@@ -178,7 +180,9 @@ Comprob         ld      a, $40
                 inc     de
                 exx
                 dec     ixl
-                jp      nz, Bucle
+                jr      nz, TBucle
+                dec     ixh
+TBucle          jp      nz, Bucle
                 wreg    flash_cs, 0     ; activamos spi, enviando un 0
                 wreg    flash_spi, $13
                 ld      a, 1
@@ -213,7 +217,7 @@ rdfls2          ini
                 dec     a
                 jr      nz, rdfls1
                 wreg    flash_cs, 1
-                ld      a, ixh
+Mybyte          ld      a, 0
                 ld      ($ffff), a
                 ld      a, $10
                 ld      hl, $f000
