@@ -1284,7 +1284,7 @@ Se debe de utilizar una tarjeta microSD, con la primera partición en formato FA
 
 Una vez copiados los ficheros en la tarjeta, se necesita además el fichero `MULTCART.ROM` que se puede obtener en https://t.me/zxtresfpga
 
-Si no estuviera ya, <<#_cores,instalar el core de ColecoVision>> en el ZXTRES.
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de ColecoVision>> en el ZXTRES.
 
 ==== Teclado
 
@@ -1316,6 +1316,77 @@ En el menú multicartucho, usar los controles de dirección para elegir la ROM a
 <<<
 
 === Neo-Geo
+
+https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos para arcades así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), pero más tarde también estuvo disponible como videoconsola doméstica (AES o Advanced Entertainment System).
+
+La versión para ZXTRES (de somhi) está basada en la https://github.com/robinsonb5/NeoGeo_FPGA[versión DeMiStificada] de la https://github.com/MiSTer-devel/NeoGeo_MiSTer[versión original para MiSTer fpga].
+
+Algunas de las características del core son:
+
+- Soporte para MVS y AES
+- Soporte para http://unibios.free.fr/download.html[Universe BIOS]
+- Compatible con ROMS (no cifradas) en https://wiki.terraonion.com/index.php/Neobuilder_Guide[formato .neo]
+- Sólo salida RGB
+- Compatible con mandos de MegaDrive
+
+<<<
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con las imágenes ROM.
+
+Una vez copiados los ficheros en la tarjeta, se necesita una BIOS (por ejemplo http://unibios.free.fr/download.html[Universe BIOS]), con el nombre `neogeo.rom`, en la raíz.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Neo-Geo>> en el ZXTRES.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12` mostrar el menú de control del core
+- Cursor o un mando conectado al puerto izquierdo: Controles de dirección del jugador 1
+- `Ctrl Dcha` o el botón A del mando 1: Botón A del jugador 1
+- `Alt Dcha` o el botón B del mando 1: Botón B del jugador 1
+- `Win Dcha` o el botón C del mando 1: Botón C del jugador 1
+- `Mayús. Dcha` o el botón D del mando 1: Botón D del jugador 1
+- `Enter`: Botón Start del jugador 1
+- `W`, `A`, `S`, `D` o un mando conectado al puerto derecho: Controles de dirección del jugador 2
+- `Ctrl Izda` o el botón A del mando 1: Botón A del jugador 2
+- `Alt Izda` o el botón B del mando 1: Botón B del jugador 2
+- `Win Izda` o el botón C del mando 1: Botón C del jugador 2
+- `Mayús. Izda` o el botón D del mando 1: Botón D del jugador 2
+- `Bloq. Mayús.`: Botón Start del jugador 2
+
+<<<
+
+==== Guía básica
+
+Si se han copiado los ficheros correctos en la tarjeta microSD y se inicia el core, aparecerá una pantalla en blanco. Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+
+[.text-center]
+image:img/neogeo.jpg[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load Cart`: Para cargar desde la tarjeta microSD un fichero .neo
+- `Load Cart (skip ADPCM)``
+- `Load BIOS``: Para cargar desde la tarjeta microSD un fichero BIOS distinto de `neogeo.rom`
+- `Load Memory Card`
+- `Save Memory Card`
+- `Mount CD`: No disponible por el momento
+- `System Type`: MVS o AES
+- `CD Speed`: No disponible por el momento
+- `CD Region`: No disponible por el momento
+- `CD lid`: No disponible por el momento
+- `Video Mode`: NTSC o PAL
+- `Scanlines`: Para añadir, si se quiere, un efecto de líneas de exploración (scanlines)
+- `Blend`: Para activar si se quier, un efecto de suavizado de la imagen
+- `Swap Joystick`: Para intercambiar los controles del jugador 1 y el jugador 2
+- `Input`: No disponible por el momento
+- `[DIP]`: No dispnible por el momento
+- `Exit`: Cierra el menú
 
 <<<
 
@@ -1389,7 +1460,7 @@ Se debe de utilizar una tarjeta microSD, con la primera partición en formato FA
 
 Se puede copiar, si se desea, un fichero `ZX8X.ROM` (disponible the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[repositorio oficial] en el directorio `/zx81/roms`: se trata de los ficheros ZX81 rom (8k) + ZX80 rom (4k) concatenados.
 
-Si no estuviera ya, <<#_cores,instalar el core de ZX81>> en el ZXTRES.
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de ZX81>> en el ZXTRES.
 
 <<<
 
