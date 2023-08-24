@@ -5,10 +5,10 @@ Maxduino plays, in a very similar way to how https://es.wikipedia.org/wiki/Caset
 == Ports and buttons
 
 [.text-center]
-image:img/MiniduinoBack.jpg[pdfwidth=50%]
+image:img/MiniduinoBack.jpg[scaledwidth=50%]
 
 [.text-center]
-image:img/MiniduinoFront.jpg[pdfwidth=50%]
+image:img/MiniduinoFront.jpg[scaledwidth=50%]
 
 [cols=2*]
 |===
@@ -34,7 +34,7 @@ A SD is needed in order to store the tape files to play. Fast cards (Class 10 or
 
 The card must have the first partition formatted as FAT16 or FAT32.
 
-Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,ZXUNO+ audio input>>. It must have a 3.5 mm stereo jack on one side, and two mono output on the other side (one for each audio channel). The right audio mono is connected to the Miniduino.
+Besides the card, you have to plug an appropriate audio cable to <<#_ports_and_connectors,audio input>>. It must have a 3.5 mm stereo jack on one side, and two mono output on the other side (one for each audio channel). The right audio mono is connected to the Miniduino.
 
 If you have a device that can use motor control, you can also use a cable with a 2.6 mm jack.
 
@@ -52,7 +52,7 @@ The player shows file and directory entries in the order stored in the internal 
 Once the SD card with the data files is inserted, it's turned on plugging in the included USB power cable.
 
 [.text-center]
-image:img/MiniduinoLogo.jpg[pdfwidth=30%]
+image:img/MiniduinoLogo.jpg[scaledwidth=30%]
 
 Pressing down the control button shows the options menu which can set the following:
 
@@ -64,7 +64,7 @@ Pressing down the control button shows the options menu which can set the follow
 When not inside the options menu, the control button is used as a four directional control joystick, which has two different behaviours depending whether the player is stopped or paused.
 
 [.text-center]
-image:img/MiniduinoVersion.jpg[pdfwidth=30%]
+image:img/MiniduinoVersion.jpg[scaledwidth=30%]
 
 When the player is stopped (file and directories browser):
 
@@ -77,7 +77,7 @@ When the player is stopped (file and directories browser):
 Once a file is being played, stop playing it with the left button (Stop) or pause using the right button (Play/Pause).
 
 [.text-center]
-image:img/MiniduinoPlay.jpg[pdfwidth=30%]
+image:img/MiniduinoPlay.jpg[scaledwidth=30%]
 
 When in pause (tape block browser:
 
@@ -234,7 +234,7 @@ If everything has been done correctly the Miniduino will restart and show on the
 
 
 [.text-center]
-image:img/usbasp.jpg[pdfwidth=40%]
+image:img/usbasp.jpg[scaledwidth=40%]
 
 Also, firmware flashing is done from a computer (Windows, Mac, Linux) with https://www.arduino.cc/en/software[Arduino IDE] installed.
 
@@ -266,7 +266,7 @@ Check in the file `userconfig.h` that all logo entries are commented except for 
 Connect the Miniduino device to the USBasp programmer, making sure that the connector is in the right position (i.e VCC with VCC, MOSI with MOSI, GND witch GND, etc.), and connect the USB adapter to the computer
 
 [.text-center]
-image:img/usbasp_2.jpg[pdfwidth=50%]
+image:img/usbasp_2.jpg[scaledwidth=50%]
 
 Set the following options in the "Tools" menu:
 

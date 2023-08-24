@@ -5,10 +5,10 @@ Maxduino permite la reproducción, de una forma similar a como se manejaban las 
 == Puertos y Botones
 
 [.text-center]
-image:img/MiniduinoBack.jpg[pdfwidth=50%]
+image:img/MiniduinoBack.jpg[scaledwidth=50%]
 
 [.text-center]
-image:img/MiniduinoFront.jpg[pdfwidth=50%]
+image:img/MiniduinoFront.jpg[scaledwidth=50%]
 
 [cols=2*]
 |===
@@ -34,7 +34,7 @@ Se necesita una tarjeta SD para almacenar los archivos de cinta que se quiere re
 
 La tarjeta debe estar formateada con con la primera partición en formato FAT16 o FAT32.
 
-Además de la tarjeta, recordar utilizar un cable adecuado para la <<#_puertos_y_conectores,entrada de sonido del ZXUNO+>>, conectando el Miniduino.
+Además de la tarjeta, recordar utilizar un cable adecuado para la <<#_puertos_y_conectores,entrada de sonido>>, conectando el Miniduino.
 
 Para los equipos que soporten control por motor, también se puede utilizar un cable con un jack de 2,6 mm.
 
@@ -52,7 +52,7 @@ El reproductor muestra las entradas de archivos y directorios en el orden de la 
 Una vez insertada la tarjeta SD con ficheros de datos, el Miniduino se enciende conectando el cable de alimentación USB incluido.
 
 [.text-center]
-image:img/MiniduinoLogo.jpg[pdfwidth=30%]
+image:img/MiniduinoLogo.jpg[scaledwidth=30%]
 
 Si se pulsa directamente el botón de control, se accede al menú de opciones que permite modificar lo siguiente:
 
@@ -64,7 +64,7 @@ Si se pulsa directamente el botón de control, se accede al menú de opciones qu
 Estando fuera del menú de opciones, el botón de control se utiliza como una palanca de control de cuatro direcciones, que se comporta de dos maneras distintas, según esté la reproducción detenida (Stop) o en pausa (Pause).
 
 [.text-center]
-image:img/MiniduinoVersion.jpg[pdfwidth=30%]
+image:img/MiniduinoVersion.jpg[scaledwidth=30%]
 
 Con la reproducción detenida (navegación por archivos y directorios):
 
@@ -77,7 +77,7 @@ Con la reproducción detenida (navegación por archivos y directorios):
 Una vez un archivo está en reproducción, el botón izquierda (Stop), la detiene, y el botón derecho (Play/Pause) la pone en pausa.
 
 [.text-center]
-image:img/MiniduinoPlay.jpg[pdfwidth=30%]
+image:img/MiniduinoPlay.jpg[scaledwidth=30%]
 
 Con la reproducción en pausa (navegación por bloques de cinta):
 
@@ -238,7 +238,7 @@ Si todo se ha hecho correctamente se verá cómo el Miniduino se reinicia y en l
 - Programador USBASP
 
 [.text-center]
-image:img/usbasp.jpg[pdfwidth=40%]
+image:img/usbasp.jpg[scaledwidth=40%]
 
 Además, la instalación, se ha de hacer desde un ordenador (Windows, Mac, Linux) con el entorno https://www.arduino.cc/en/software[Arduino IDE].
 
@@ -269,7 +269,7 @@ Verificar en el fichero `userconfig.h` que estén comentadas todas las entradas 
 Conectar el Miniduino al adaptador USBasp, asegurándose de que la serigrafía de los dos conectores se corresponde (ej: VCC con VCC, MOSI con MOSI, GND con GND, etc.), y conectar el adaptador USB al equipo.
 
 [.text-center]
-image:img/usbasp_2.jpg[pdfwidth=50%]
+image:img/usbasp_2.jpg[scaledwidth=50%]
 
 Configurar en el menú "Herramientas" las opciones
 
