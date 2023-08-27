@@ -575,6 +575,11 @@ For more information on how to expand or modify the ROMs stored in flash memory,
 
 https://www.facebook.com/groups/DerbyPro[DerbyPro or Derby{pp}] is an enhanced firmware ROM for the ZX Spectrum based on v1.4 of the Derby development ROM. The Spectrum 128 (codename "Derby") was a Spanish machine commissioned by Investronica and launched in 1985. It came with a keypad that provided additional editing keys. In 1986 the UK version came out with a simplified version of 128 BASIC and no keypad. Derby++ is developed from the Spanish ROM to include the benefits of both versions without the drawbacks and support for new hardware developments.
 
+[.text-center]
+image:img/derbypro.png[pdfwidth=70%]
+
+<<<
+
 Features include:
 
 - 100% binary compatible 48K mode.
@@ -685,9 +690,14 @@ SE BASIC began developement in 1999 as the firmware for the https://sinclair.wik
 
 Version 3 (https://zxdesign.itch.io/opense[OpenSE BASIC]) replaced the original ROM code with an open source version derived from the https://github.com/cheveron/open81[ZX81] and  https://github.com/cheveron/samrom[SAM Coupé] ROMs. It's still maintained as an open source replacement firmware for the Spectrum, and is inlcuded in the main https://tracker.debian.org/pkg/opense-basic[Debian repository] for use with emulators.
 
+[.text-center]
+image:img/sebasic4.png[pdfwidth=70%]
+
 Version 4.0 added support for 80 column mode. Version 4.1 was an unsuccessful attempt to refactor the code. Starting in 2019, the latest version (4.2 Cordelia) was rebuilt from the ground up to take full advantage of the ZX Spectrum core of the ZX-Uno (and ZXTRES). While earlier versions retained a high level of compatiblity with Sinclair BASIC and software, this version has no support for Sinclair software and is closer in dialect to Atari BASIC.
 
 Version 4.2 requires that divMMC support is enabled with esxDOS or UnoDOS 3 installed. However, "dot" commands and the NMI browser are not supported.
+
+<<<
 
 Features include:
 
