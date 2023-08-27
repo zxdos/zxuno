@@ -120,7 +120,7 @@ To take advantage of its full potential you may also need:
 
 - Atari standard joystick such as a Sega Mega Drive (Gensis) game pad.
 - Audio cable with a stereo 3.5mm jack on one side and both audio channels split into two mono outputs on the other side if you want to use an audio player or recorder such as a Miniduino (<<#_miniduino,see more information later>>), a modern computer or a https://en.wikipedia.org/wiki/Cassette_tape[cassette tape recorder]. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).
-- microSD card 32GB capacity or less.
+- microSD card with 32GB capacity or less.
 - PS/2 mouse.
 - Speakers to connect to the audio output or a stereo jack converter to two red and white RCA connectors to connect to a TV,
 
@@ -159,7 +159,7 @@ The ZX Spectrum core can also have <<#_microsd_advanced_format_3e,the first part
 
 ===== Windows
 
-For simple configuration of microSD cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association].
+For simple configuration of microSD cards of the correct size (2GB or less for FAT16 or 32GB or less for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association].
 
 For other more complex configurations and depending on operating system version you can use the command line tool `diskpart` or the Windows Disk Management GUI.
 
@@ -211,7 +211,7 @@ exit
 
 ===== macOS
 
-For simple configuration of microSD cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association] or Disk Utility which is included with the operating system.
+For simple configuration of microSD cards of the correct size (2GB or less for FAT16 or 32GB or less for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association] or Disk Utility which is included with the operating system.
 
 In other case you should use the command line.
 
