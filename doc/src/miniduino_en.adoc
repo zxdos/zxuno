@@ -26,8 +26,6 @@ image:img/MiniduinoFront.jpg[scaledwidth=50%]
 |Screen
 |===
 
-<<<
-
 == Configuration
 
 An SD card is required to store the tape files to play. Fast cards (Class 10 or greater) aren't recommended because there can be problems while reading the data. High capacity (SDXC or greater) cards aren't recommended either.
@@ -44,8 +42,6 @@ Copy the tape files (`TAP`, `TZX`, `O`, `P`, `CAS`, `TSX` and so on) to the firs
 ====
 The player shows file and folder entries in the order stored in the internal FAT table, not alphabetically. If you want to see them ordered you must reorder the SD card structure with a utility such as https://fatsort.sourceforge.io/[FATsort], https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or another application.
 ====
-
-<<<
 
 == Use
 
@@ -71,8 +67,6 @@ When the player is stopped (file and directories browser):
 - Up and Down move through the current files and folders list.
 - Left (Stop) goes one level up in the folder tree.
 - Right (Play/Pause) enters a folder or, if the selection is a file, tries to play it.
-
-<<<
 
 When a file is playing you can stop it with the left button (Stop) or pause using the right button (Play/Pause).
 
@@ -108,15 +102,12 @@ Jorge Fuertes' https://github.com/jorgefuertes/retroconverter/releases[RetroConv
 ...retroconv audio_file.wav new_file.tzx
 ----
 
-<<<
 
 == Maxduino firmware upgrade
 
 The Maxduino firmware is periodically updated and improved. You can track the changes and improvements either at the  https://www.va-de-retro.com/foros/viewtopic.php?t=5541&start=9999[Va de Retro forums] or at the https://github.com/rcmolina/MaxDuino_BETA[GitHub project page]. To take advantage of this improvements, the Miniduino flash image must be flashed with the updated firmware version.
 
 There are two Miniduino models; one based on the STM32 microcontroller and the ther on the ATMega328P.
-
-<<<
 
 === STM32 Model
 
@@ -174,8 +165,6 @@ They must be changed to:
 dfuse_addr=""
 ----
 
-<<<
-
 ==== Upgrade
 
 After the environment is ready, download the software from the https://github.com/rcmolina/MaxDuino_BETA[official repository in GitHub].
@@ -219,8 +208,6 @@ Last, click on the firmware load button and wait for a few seconds while the pro
 
 If everything has been done correctly the Miniduino will restart and show on the screen the new firmware version.
 
-<<<
-
 === ATMega328P Model
 
 ==== Environment setup
@@ -259,8 +246,6 @@ Check in the file `userconfig.h` that all logo entries are commented except for 
 #define miniduino
 ...
 ----
-
-<<<
 
 Connect the Miniduino device to the USBasp programmer, making sure that the connector is in the right position (i.e VCC with VCC, MOSI with MOSI, GND witch GND, etc.), and connect the USB adapter to the computer
 

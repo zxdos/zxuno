@@ -19,13 +19,13 @@
 
 == Introduction
 
-The ZXTRES ZXTRES+ and ZXTRES++ are a continuation of the https://zxuno.speccy.org[ZX-Uno] hardware and software project created by Superfo AVillena McLeod Quest and Hark0. The ZX-Uno team created an FPGA board programmed to behave like a ZX Spectrum computer.
+The ZXTRES ZXTRES+ and ZXTRES++ are a continuation of the https://zxuno.speccy.org[ZX-Uno] hardware and software project created by Superfo, AVillena, McLeod, Quest and Hark0. The ZX-Uno team created an FPGA board programmed to behave like a ZX Spectrum computer.
 
 Over time the project grew and it's now possible to use different software configurations (cores) that work like different systems other than the ZX Spectrum. You can choose to start the ZXTRES with your desired configuration from all those available.
 
 The ZXTRES official web page is https://www.example.com[https://www.example.com]. **FIXME**
 
-Most of the functions and features of the ZXTRES ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary.
+Most of the functions and features of the ZXTRES, ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary.
 
 === Acknowledgements
 
@@ -134,7 +134,7 @@ This table shows the requirements of cores that use the microSD card.
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
-|[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.neo`)#|Requires BIOS
+|[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|Requires BIOS
 |[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
 |[.small]#zxsp#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|Requires ROM
 |[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
@@ -159,7 +159,7 @@ The ZX Spectrum core can also have <<#_microsd_advanced_format_3e,the first part
 
 ===== Windows
 
-For simple configuration of microSD cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ].
+For simple configuration of microSD cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association].
 
 For other more complex configurations and depending on operating system version you can use the command line tool `diskpart` or the Windows Disk Management GUI.
 
@@ -211,7 +211,7 @@ exit
 
 ===== macOS
 
-For simple configuration of microSD cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ] or Disk Utility which is included with the operating system.
+For simple configuration of microSD cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32) you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association] or Disk Utility which is included with the operating system.
 
 In other case you should use the command line.
 
@@ -473,6 +473,8 @@ From the _Main_ screen you can run several tests and define the default behaviou
 
 More technical information can be found at the https://www.zxuno.com/wiki/index.php/ZX_Spectrum[ZX-Uno Wiki].
 
+<<<
+
 ==== ROMs
 
 [.text-center]
@@ -681,11 +683,11 @@ https://source-solutions.github.io/sebasic4/[SE Basic IV] is a free open-source 
 
 SE BASIC began developement in 1999 as the firmware for the https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE], the ancestor of the Chloe 280SE. Early versions were patches applied to the original Spectrum ROM. From version 1, it used its own assembly file. From version 2, it added support for ULAplus.
 
-Version 3 (https://zxdesign.itch.io/opense[OpenSE BASIC]) replaced the original ROM code with an open source version derived from the https://github.com/cheveron/open81[ZX81] and  https://github.com/cheveron/samrom[SAM Coupé] ROMs. It's still maintained as an open source replacement firmware for the Spectrum. and is inlcuded in the main https://tracker.debian.org/pkg/opense-basic[Debian repository] for use with emulators.
+Version 3 (https://zxdesign.itch.io/opense[OpenSE BASIC]) replaced the original ROM code with an open source version derived from the https://github.com/cheveron/open81[ZX81] and  https://github.com/cheveron/samrom[SAM Coupé] ROMs. It's still maintained as an open source replacement firmware for the Spectrum, and is inlcuded in the main https://tracker.debian.org/pkg/opense-basic[Debian repository] for use with emulators.
 
 Version 4.0 added support for 80 column mode. Version 4.1 was an unsuccessful attempt to refactor the code. Starting in 2019, the latest version (4.2 Cordelia) was rebuilt from the ground up to take full advantage of the ZX Spectrum core of the ZX-Uno (and ZXTRES). While earlier versions retained a high level of compatiblity with Sinclair BASIC and software, this version has no support for Sinclair software and is closer in dialect to Atari BASIC.
 
-Version 4.2 requires that divMMC support `is enabled with esxDOS or UnoDOS 3 installed. However, "dot" commands and the NMI browser are not supported.
+Version 4.2 requires that divMMC support is enabled with esxDOS or UnoDOS 3 installed. However, "dot" commands and the NMI browser are not supported.
 
 Features include:
 
@@ -1217,6 +1219,8 @@ RomPack files can be easily edited with the http://guest:zxuno@svn.zxuno.comsvn/
 
 A core is a file with the information needed to configure the FPGA to behave like a specific system (ZX Spectrum and so on). In the ZXTRES this file can be loaded from several different places: the SPI Flash memory, a microSD card or from an external device (PC and so on) using a special cable.
 
+<<<
+
 ==== microSD card
 
 ===== Loading from the ZX Spectrum core
@@ -1235,8 +1239,6 @@ Copy the corresponding `ZX3` file to the desired location of the microSD card as
 Press `F5` to open Bob Fossil's NMI browser and get to the location of the Core with extension `ZX3`, select it and press `Enter`.
 
 If everything worked correctly, the bottom of the screen indicates the flashing progress (it's recorded in a temporary slot of the flash memory).
-
-<<<
 
 ==== SPI Flash Memory
 
@@ -1355,8 +1357,6 @@ Some core charactersistics are:
 - Support for ROMS (not encrypted) in https://wiki.terraonion.com/index.php/Neobuilder_Guide[`NEO` format].
 - Support for http://unibios.free.fr/download.html[Universe BIOS].
 
-<<<
-
 ==== microSD card format
 
 To store the ROM image files, use a microSDcard with the first partition in FAT16 or FAT32 format.
@@ -1364,6 +1364,8 @@ To store the ROM image files, use a microSDcard with the first partition in FAT1
 After the files have been copied to the microSD card, you need a BIOS (for example http://unibios.free.fr/download.html[Universe BIOS]), with the name `neogeo.rom`, in the root.
 
 If not already there, <<#_cores,install or run the Neo-Geo core>> on the ZXTRES.
+
+<<<
 
 ==== Keyboard
 
@@ -1557,7 +1559,7 @@ You can load a tape file selecting it from the menu then enter the command `LOAD
 Some monitors stop playing audio if the video signal is lost. You should connect headphones or a external speaker if you want to hear the sound while loading a tape.
 ====
 
-`.p` files with colourization and char are supported.
+`P` files with colourization and char are supported.
 
 For colourization to work CHROMA81 should be enabled before loading. For alternate chars QS CHRS should be enabled before loading.
 
@@ -1668,7 +1670,7 @@ include::miniduino_en.adoc[leveloffset=+3]
 
 == Troubleshooting
 
-=== Firmware images management
+=== Firmware image management
 
 There are several tools that you can use to create or edit the contents of `ZX1` and `ZX3` files.
 
@@ -1705,8 +1707,6 @@ You also need an SPI flash image file. This can be obtained from within the ZX S
 
 Where `FLASH.ZXD` is the path to the original file and `FLASHempty.ZXD` is the path to the new "clean" file.
 
-<<<
-
 *List the contents of an image*
 
 To view the contents of an image file called `FLASH.ZXD` (installed cores and some configuration information):
@@ -1715,6 +1715,8 @@ To view the contents of an image file called `FLASH.ZXD` (installed cores and so
 ----
 ... zx123_tool.py -i FLASH.ZXD -l
 ----
+
+<<<
 
 To show the contents of the same file including ZX Spectrun ROMs information:
 
@@ -1743,8 +1745,6 @@ To change the BIOS of a file called `FLASH.ZXD` using the BIOS file `FIRMWARE.ZX
 
 There are also options to set the BIOS boot delay time, the default core and the default Spectrum ROM. For more information, refer to the https://github.com/kounch/zx123_tool/[documentation].
 
-<<<
-
 *Add a Spectrum ROM to an image*
 
 To add a Spectrum ROM file called `48.ROM` with the name `Spec48` and using the slot number five:
@@ -1755,6 +1755,8 @@ To add a Spectrum ROM file called `48.ROM` with the name `Spec48` and using the 
 ----
 
 Refer to the https://github.com/kounch/zx123_tool/[documentation] for all possible options when adding a Spectrum ROM.
+
+<<<
 
 Among the information you provide when adding a ROM there are some flags. These configure the hardware options used when loading the ROM:
 
@@ -1796,8 +1798,6 @@ Among the information you provide when adding a ROM there are some flags. These 
 |Switch off ULAplus.
 |===
 
-<<<
-
 *Install a core to an image*
 
 To install a core in slot three from a file called `SPECNEXT.ZXD` with the name `SpecNext`:
@@ -1813,6 +1813,8 @@ To also set the core as the default:
 ----
 ...zx123_tool.py -i FLASH.ZXD -a 'CORE,3,SpecNext,SPECNEXT.ZXD' -c 3
 ----
+
+<<<
 
 *Change esxDOS ROM from an image*
 
@@ -1836,7 +1838,6 @@ You can combine several actions in one command line. For example to "clean" an i
 
 === Firmware recovery
 
-
 Sometimes it may happen that the ZXTRES stops booting, for example when installing an experimental core or when upgrading the ZX Spectrum Core or the BIOS. The ZXTRES board LEDs are on but there's no display and it doesn't do anything when trying the different key combinations to access BIOS setup and so on.
 
 When this happens there are several recovery methods to enable you to restore the firmware.
@@ -1852,8 +1853,6 @@ image:img/jtagzxtres.jpg[scaledwidth=80%]
 ====
 *Don't* connect the 3V line.
 ====
-
-<<<
 
 ==== Recovery using a Raspberry Pi
 
@@ -1893,8 +1892,6 @@ sudo make install
 cd ..
 rm -rf ./openocd-code
 ----
-
-<<<
 
 [start=3]
 . Connect the USB-Blaster or jump wires if using GPIO. In this case open the ZXTRES case and <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS` `TDI` `TDO` `TCK` and `GND`) using the wires to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
@@ -1937,8 +1934,6 @@ In this example the `31` `33` `35` `37` and `39` pins are used (corresponding to
 ----
 cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxtres/unbrick/
 ----
-
-<<<
 
 [start=6]
 . For GPIO connection edit a copy of `raspberrypi2-native.cfg`, updating `bcm2835gpio_jtag_nums` (uncommenting if necessary) with your JTAG and GPIO connection numbers at the line `bcm2835gpio_jtag_nums`:
@@ -1990,10 +1985,11 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 ====
 Remember to enter the correct name replacing `recovery_axx.bit` in the previous commands.
 ====
-<<<
 
 [start=11]
 . If everything worked correctly, you'll see that the FPGA LED change their state and the BIOS is shown on the display.
+
+<<<
 
 If there's no image on the display and you're not using DisplaPort, press `Scroll Lock` to switch between RGB and VGA modes in case the recovery BIOS started in the wrong mode for your setup.
 
@@ -2004,8 +2000,6 @@ image:img/recovery.png[scaledwidth=70%]
 . Insert the microSD card formatted as FAT16 o FAT32 and with the `FLASH.ZX3` file downloaded previously in the ZXTRES.
 
 . If using a USB-Blaster connection, disconnect the connector.
-
-<<<
 
 [start=14]
 . Select the `Upgrade Flash from SD` opiton. Press `Enter`, choose `Yes` and press `Enter` again to start the flash writing process.
