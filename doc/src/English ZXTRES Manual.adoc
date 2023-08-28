@@ -19,13 +19,13 @@
 
 == Introduction
 
-The ZXTRES ZXTRES+ and ZXTRES++ are a continuation of the https://zxuno.speccy.org[ZX-Uno] hardware and software project created by Superfo, AVillena, McLeod, Quest and Hark0. The ZX-Uno team created an FPGA board programmed to behave like a ZX Spectrum computer.
+The ZXTRES, ZXTRES+ and ZXTRES++ are a continuation of the https://zxuno.speccy.org[ZX-Uno] hardware and software project created by Superfo, AVillena, McLeod, Quest and Hark0. The ZX-Uno team created an FPGA board programmed to behave like a ZX Spectrum computer.
 
 Over time the project grew and it's now possible to use different software configurations (cores) that work like different systems other than the ZX Spectrum. You can choose to start the ZXTRES with your desired configuration from all those available.
 
 The ZXTRES official web page is https://www.example.com[https://www.example.com]. **FIXME**
 
-Most of the functions and features of the ZXTRES, ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary.
+Most of the functions and features of the ZXTRES, ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary. In this document, _controller_ means joystick or gamepad. Buttons are labelled alphabetically from `A` but labels on individual controllers may differ. 
 
 === Acknowledgements
 
@@ -49,11 +49,11 @@ image:img/ZXTRESfront.jpg[scaledwidth=90%]
 [align="center",width="80%",cols="1,4"]
 |===
 |1
-|Left joystick Port
+|Left controller port
 |2
 |microSD card Slot
 |3
-|Right joystick Port
+|Right controller port
 |4
 |Power socket
 |5
@@ -118,7 +118,7 @@ image:img/powerConnector.png[scaledwidth=20%]
 
 To take advantage of its full potential you may also need:
 
-- Atari standard joystick such as a Sega Mega Drive (Gensis) game pad.
+- Atari standard controller such as a Sega Mega Drive (Gensis) controller.
 - Audio cable with a stereo 3.5mm jack on one side and both audio channels split into two mono outputs on the other side if you want to use an audio player or recorder such as a Miniduino (<<#_miniduino,see more information later>>), a modern computer or a https://en.wikipedia.org/wiki/Cassette_tape[cassette tape recorder]. The right sound channel is used as input (EAR) and the left channel can be used as output (MIC).
 - microSD card with 32GB capacity or less.
 - PS/2 mouse.
@@ -370,11 +370,11 @@ image:./img/keyboardAV.png[scaledwidth=70%]
 
 Special keys that can be used during startup:
 
-- `Esc` or joystick button `2` (if a joystick with two or more fire buttons is connected): ZX Spectrum core ROM selection menu.
+- `Esc` or controller button `B` (if a controller with two or more buttons is connected): ZX Spectrum core ROM selection menu.
 - `F2`: Enter BIOS setup.
 - `1` to `9`: Load the core in the flash location corresponding to that number. On the latest BIOS versions `9` is used to load the core installed to the temporary slot used by the <<#_bob_fossil_browser,ZX3 plugin>>.
 - `R`: Load the ZX Spectrum core ROM in "real" mode; switching off esxDOS, new graphics modes and so on.
-- `Caps Lock`, `Cursor Down` or joystick `down` (if connected): Core selection menu.
+- `Caps Lock`, `Cursor Down` or controller `down` (if connected): Core selection menu.
 
 Special keys that can be used while running the main core (ZX Spectrum):
 
@@ -447,10 +447,10 @@ Using left and right cursor keys you can navigate through the BIOS setup screens
 
 Other special keys that can be used during startup:
 
-- `Esc` or joystick button `2` (if a joystick with two or more fire buttons is connected): ZX Spectrum core ROM selection menu.
+- `Esc` or controller button `B` (if a controller with two or more buttons is connected): ZX Spectrum core ROM selection menu.
 - `F2` Enter BIOS setup.
 - `1` to `9`: Load the core in the flash location corresponding to that number.  On the latest BIOS versions `9` is used to load the core installed to the temporary slot used by the <<#_bob_fossil_browser,ZX3 plugin>>.
-- `Caps Lock` or `Cursor down` or joystick `down` (if connected): Core selection menu.
+- `Caps Lock` or `Cursor down` or controller `down` (if connected): Core selection menu.
 - `R`: Load the ZX Spectrum core ROM in "real" mode, switching off esxDOS, new graphics modes and so on.
 
 <<<
@@ -508,8 +508,8 @@ image:img/bios5_zxtres.png[scaledwidth=70%]
 From the _Advanced_ screen you can configure:
 
 - Keyboard layout (Keyb Layout): For more informaiton, see <<#_keyboard,the corresponding section>>.
-- Joystick behaviour connected to the right port and also the emulated joystick using the numeric keypad (Joy Keypad): Kempston, Sinclair 1, Sinclair 2, Protek, Fuller or simulate the keys `Q`,` A` `O`,` P` `Space` and `M`.
-- behaviour of a joystick connected to the left port (Joy DE9): Kempston, Sinclair 1, Sinclair 2, Protek, Fuller or simulate the keys `Q`,` A` `O`,` P` `Space` and `M`.
+- Controller behaviour connected to the right port (DE9) and also the emulated controller using the numeric keypad (Joy Keypad): Kempston, Sinclair 1, Sinclair 2, Protek, Fuller or simulate the keys `Q`,` A` `O`,` P` `Space` and `M`.
+- behaviour of a controller connected to the left port (DE9): Kempston, Sinclair 1, Sinclair 2, Protek, Fuller or simulate the keys `Q`,` A` `O`,` P` `Space` and `M`.
 - Video output: PAL, NTSC or VGA (DisplayPort is always active).
 - Scanline simulation: enabled or switched off.
 - VGA horizontal frequency: 50, 51 and so on.
@@ -550,7 +550,7 @@ Some of its main characteristics include:
 - TurboSound-AY support.
 - SpecDrum support.
 - Each channel (A, B and C) of the two AY-3-8912, beeper and SpecDrum chips can be directed to the left, right, both or neither outputs enabling the implementation of configurations such as ACB, ABC and so on.
-- Real joystick and keyboard joystick support with Kempston, Sinclair 1 and 2, Cursor, Fuller and QAOPSpcM protocol.
+- Real controller and keyboard-emulated controller support with Kempston, Sinclair 1 and 2, Cursor, Fuller and QAOPSpcM protocol.
 - Turbo mode support at 7MHz, 14MHz and 28MHz.
 - Keyboard support (PS/2 protocol) and user-configurable mapping from within the ZX Spectrum core itself.
 - PS/2 mouse support emulating the Kempston Mouse protocol.
@@ -1137,7 +1137,7 @@ As noted in the installation section, there are a several "dot" commands that ar
 - `dmaplayw`: Play a `WAV` file that is 8-bits unsigned and sampled at 15625 Hz.
 - `esprst`: Reset the WiFi ESP8266(ESP-12) module.
 - `iwconfig`: Configure the WiFi module.
-- `joyconf`: Configure and test for keyboard and DE9 joysticks.
+- `joyconf`: Configure and test for keyboard and DE9 controllers.
 - `keymap`: Load a different keyboard map definition.
 - `loadpzx`: Load a `PZX` tape file.
 - `loadtap`: Load a `TAP` file using the `PZX` integration.
@@ -1332,11 +1332,11 @@ When the core is active:
 
 - 'Esc': Soft reset.
 - `0` to `9`: Button 0 to 9 for player 1 and player 2.
-- Cursor or `Q`, `A`, `E`, `R` or joystick 1: Directional controls for player 1.
-- `U`, `J`, `O`, `P` or joystick 2: Directional controls for player 2.
-- `Z` or joystick button `1` main fire button: Fire Button `1` for player 1.
-- `M` or joystick button `2` main fire button: Fire button `1` for player 2.
-- `X` or joystick button `1` secondary fire button: Fire button `1` for player 1 and player 2.
+- Cursor or `Q`, `A`, `E`, `R` or left controller directions: Directional controls for player 1.
+- `U`, `J`, `O`, `P` or right controller directions: Directional controls for player 2.
+- `Z` or controller button `A`: Main fire button `1` for player 1.
+- `M` or controller button `B`: Main fire button `1` for player 2.
+- `X` or controller button `A`: Secondary fire button `1` for player 1 and player 2.
 - `T`: Button '*'.
 - `Y`: Button '#'.
 
@@ -1349,13 +1349,13 @@ On startup the BIOS ROM is loaded from the microSD card and then the multicart R
 [.text-center]
 image:img/coleco.jpg[scaledwidth=70%]
 
-From the multicart menu use the directional controls to choose a ROM and then press fire button `1` to load. Pressing 'Esc' restarts the core and reloads the ROM selection menu.
+From the multicart menu use the directional controls to choose a ROM and then push button `A` to load. Pressing 'Esc' restarts the core and reloads the ROM selection menu.
 
 <<<
 
 === Neo-Geo
 
-https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] is the name of a 16-bit cartridge-based system for arcade as well as home video game consoles released in 1990 by the Japanese video game company SNK. The Neo-Geo system was originally created as a platform for arcade machines (MVS or Multi Video System), but was later also available as a home game console (AES or Advanced Entertainment System).
+https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] is the name of a 16-bit cartridge-based system for arcade as well as home video game consoles released in 1990 by the Japanese video game company SNK. The Neo-Geo system was created as both a platform for arcade machines (MVS or Multi Video System) and as a home game console (AES or Advanced Entertainment System).
 
 The ZXTRES version (by somhi) is based on the https://github.com/robinsonb5/NeoGeo_FPGA[DeMiStified version] of the https://github.com/MiSTer-devel/NeoGeo_MiSTer[original version for MiSTer FPGA].
 
@@ -1385,16 +1385,16 @@ When the core is active:
 
 - `F12` displays the core control menu.
 - Cursor or a controller connected to the left port: Player 1 direction controls.
-- `Right Ctrl` or button A on controller 1: Player 1's A button.
-- `Right Alt` or the B button on controller 1: Player 1's B button.
-- `Right Win` or button C on controller 1: Player 1's button C.
-- `Righ Shift` or D button on controller 1: Player 1's D button.
+- `Right Ctrl` or controller 1 button `A`: Player 1 button `A`.
+- `Right Alt` or controller 1 button `B`: Player 1 button `B`.
+- `Right Win` or controller 1 button `C`: Player 1's button C.
+- `Right Shift` or controller 1 button `D`: Player 1's D button.
 - `Start`: Start button of player 1.
 - `W`, `A`, `S`, `D` or a controller connected to the right port: Player 2 Directional Controls.
-- `Left Ctrl` or the A button on controller 1: Player 2's A button.
-- `Left Alt` or the B button on controller 1: Player 2's B button.
-- `Left Win` or button C on controller 1: Player 2's button C.
-- `Left Shift` or D button on controller 1: Player's D button 2.
+- `Left Ctrl` or controller 2 button `A`: Player 2's A button.
+- `Left Alt` or controller 2 button  `B`: Player 2's B button.
+- `Left Win` or controller 2 button `C`: Player 2's button C.
+- `Left Shift` or controller 2 button `D`: Player's D button 2.
 - `Caps Lock`: Start button of player 2.
 
 <<<
@@ -1482,7 +1482,7 @@ Features:
 - 8KB with CHR$128/UDG addon (not tested).
 - 16k/32k/48k RAM packs.
 - Chroma 81 (colour support).
-- Joystick types: Cursor, Sinclar, ZX81 and ZXpand.
+- Controller types: Cursor, Sinclar, ZX81 and ZXpand.
 - Load alternative ROMs.
 - PAL/NTSC timings.
 - Program loading using the audio input.
@@ -1521,7 +1521,7 @@ image:img/keyboardZX81.jpg[scaledwidth=80%]
 When the core is active:
 
 - `F1`: Enable or switch off the alternative chararacters.
-- `F5` or joystick button `2`: Show or hide configuration menu.
+- `F5` or controller button `A`: Show or hide configuration menu.
 - `F9`: Enable or switch off the MIC audio output (some games make annoying sounds when enabled).
 - `F10`: Enable or switch off playing the audio input through the audio output to hear loading sounds while loading.
 - `Scroll Lock`: Switch between RGB and VGA video output.
@@ -1532,7 +1532,7 @@ When the core is active:
 
 ==== Overview
 
-Press `F5` or joystick button `2` to show or hide the configuration menu. Use the cursor keys and `Enter` to select menu options.
+Press `F5` or controller button `A` to show or hide the configuration menu. Use the cursor keys and `Enter` to select menu options.
 
 [.text-center]
 image:img/zx81.jpg[scaledwidth=70%]
