@@ -1,0 +1,9 @@
+SPDX-FileName: rcs
+
+SPDX-FileType: BINARY
+
+SPDX-FileCopyrightText: Copyright (C) 2013, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: rcs version 1.03 (18 Jan 2013) - SCR filter to RCS (and inverse).

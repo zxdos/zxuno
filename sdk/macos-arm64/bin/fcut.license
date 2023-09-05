@@ -1,0 +1,9 @@
+SPDX-FileName: fcut
+
+SPDX-FileType: BINARY
+
+SPDX-FileCopyrightText: Copyright (C) 2015, 2021 Antonio Villena
+
+SPDX-License-Identifier: GPL-3.0-only
+
+SPDX-FileComment: fcut version 1.00 (20 Jun 2015) - a file hexadecimal cutter.

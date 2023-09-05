@@ -28,6 +28,7 @@ Directory | Description
 `opt` | Optionally installed bundles (like SDK).
 `src` | The source code of local and downloadable tools. See Makefiles for details.
 `windows-x86` | Compiled binaries of tools and libraries for Windows x86 (32 bit) platform.
+`macos-arm64` | Compiled binaries of tools and libraries for macOS Ventura (ARM) platform.
 
 ## 1.1. Copyright and licensing information for files
 
