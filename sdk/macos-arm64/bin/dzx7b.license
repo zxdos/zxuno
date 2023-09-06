@@ -1,0 +1,9 @@
+SPDX-FileName: dzx7b
+
+SPDX-FileType: BINARY
+
+SPDX-FileCopyrightText: Copyright (c) 2015 Einar Saukas. All rights reserved.
+
+SPDX-License-Identifier: BSD-3-Clause
+
+SPDX-FileComment: dzx7b version 1.0 (2015) - LZ77/LZSS backwards decompressor.
