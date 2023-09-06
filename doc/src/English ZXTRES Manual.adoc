@@ -362,7 +362,7 @@ image:./img/keyboardEsp.png[scaledwidth=70%]
 ==== Spectrum
 
 [.text-center]
-image:./img/keyboardAV.png[scaledwidth=70%]
+image:./img/keyboardAv.png[scaledwidth=70%]
 
 <<<
 
@@ -2037,7 +2037,7 @@ If no image is shown and you're not using DisplaPort, press `Scroll Lock` again 
 === Scan Codes
 
 [.text-center]
-image:img/scancodes.png[scaledwidth=80%]
+image:img/ScanCodes.png[scaledwidth=80%]
 
 <<<
 
