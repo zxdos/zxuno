@@ -24,7 +24,7 @@ Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible us
 
 La página oficial de la familia ZXTRES es .
 
-La mayoría de las funciones y características de ZXTRES, ZXTRES+ y ZXTRES++ son las mismas, así que, en este documento, se hablará, en general, de ZXTRES, indicando las diferencias con los demás donde sea necesario.
+La mayoría de las funciones y características de ZXTRES, ZXTRES+ y ZXTRES++ son las mismas, así que, en este documento, se hablará, en general, de ZXTRES, indicando las diferencias con los demás donde sea necesario. Además, _mando_ se utiliza para hablar de un joystick o gamepad. Los botones los mandos se etiquetan alfabéticamente a partir de la letra "A", notar sin embargo que las etiquetas de cada mando particular pueden variar.
 
 === Agradecimientos
 
@@ -48,11 +48,11 @@ image:img/ZXTRESfront.jpg[scaledwidth=90%]
 [align="center",width="80%",cols="1,4"]
 |===
 |1
-|Puerto de Joystick Izquierdo
+|Puerto de Mando Izquierdo
 |2
 |Ranura microSD
 |3
-|Puerto de Joystick Derecho
+|Puerto de Mando Derecho
 |4
 |Enchufe de Alimentación
 |5
@@ -119,7 +119,7 @@ Para poder aprovechar todo su potencial, es útil tener también:
 
 - Una tarjeta microSD, de 32GB de capacidad o menos
 - Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV
-- Al menos un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive
+- Al menos un mando norma Atari, como por ejemplo, un gamepad DB9 de Megadrive
 - Un ratón PS/2
 - Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
 
@@ -373,8 +373,8 @@ image:./img/keyboardAv.png[scaledwidth=70%]
 Teclas especiales durante el arranque:
 
 - `F2` Entrar en la BIOS
-- `Bloq. Mayús` o `Cursor abajo` o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
-- `Esc` o, si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
+- `Bloq. Mayús` o `Cursor abajo` o, si hay un mando conectado, pulsar la dirección hacia abajo: Menú de selección de cores
+- `Esc` o, si hay un mando de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
 - `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc.
 - `/` (del teclado numérico): Carga la ROM por defecto del core de ZX Spectrum en modo "root"
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número. En las versiones más recientes de BIOS, la tecla `9` carga el core del slot temporal utilizado por el <<#_navegador_de_bob_fossil,plugin ZX3>>.
@@ -451,8 +451,8 @@ Usando las teclas de cursor izquierda y derecha, se puede navegar por las pantal
 
 Otras teclas que se pueden pulsar durante el arranque de la BIOS son:
 
-- `Bloq. Mayús` o `Cursor abajo`, o `Caps Shif+6` o `Caps Shift+2` o, si hay un joystick conectado, pulsar la dirección hacia abajo: Menú de selección de cores
-- `Esc` o `Caps Shift+Espacio`, o si hay un joystick de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
+- `Bloq. Mayús` o `Cursor abajo`, o `Caps Shif+6` o `Caps Shift+2` o, si hay un mando conectado, pulsar la dirección hacia abajo: Menú de selección de cores
+- `Esc` o `Caps Shift+Espacio`, o si hay un mando de dos o más botones conectado, pulsar el botón de disparo 2: Menú de selección de ROMS del core de ZX Spectrum
 - `R`: Carga la rom del core de ZX Spectrum en modo "real" deshabilitando esxdos, nuevos modos gráficos, etc. (combinado con `Esc` a continuación permite elegir otra ROM distinta)
 - `/` (del teclado numérico) o `Symbol Shift+V`: Carga la ROM por defecto del core de ZX Spectrum en modo "root" (combinado con `Esc` a continuación permite elegir otra ROM distinta)
 - Número del `1` al `9`: Cargar el core en la ubicación de la Flash correspondiente a dicho número. En las versiones más recientes de BIOS, la tecla `9` carga el core del slot temporal utilizado por el <<#_navegador_de_bob_fossil,plugin ZX3>>.
@@ -510,8 +510,8 @@ image:img/bios5_zxtres.png[scaledwidth=70%]
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
 
 - Distribución del teclado (Keyb Layout): Ver <<#_teclado,el apartado correspondiente >> para más información)
-- Comportamiento de un joystick conectado al puerto de joystick derecho, y también del joystick emulado con el teclado numérico (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
-- Comportamiento de un joystick conectado al puerto de joystick izquierdo (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
+- Comportamiento de un mando conectado al puerto de mando derecho, y también del mando emulado con el teclado numérico (Joy Keypad): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
+- Comportamiento de un mando conectado al puerto de mando izquierdo (Joy DB9): Kempston, Sinclair Joystick 1, Sinclair Joystick 2, Protek, Fuller o simular las teclas `Q`, `A`, `O`, `P`, `Espacio` y `M`
 - Salida de vídeo (Video): PAL, NTSC o VGA (DisplayPort está siempre activo)
 - Simulación de línea de exploración (Scanlines): Activas (Enabled) o inactivas (Disabled)
 - Frecuencia horizontal de VGA (Frequency): 50, 51, etc.
@@ -552,7 +552,7 @@ Estas son algunas de sus principales características:
 - Soporte Turbo Sound
 - Soporte de SpecDrum
 - Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la implementación de configuraciones tales como ACB, ABC, etc.
-- Soporte de joystick real y joystick en teclado con protocolo Kempston, Sinclair 1 y 2, Cursor, Fuller y QAOPSpcM.
+- Soporte de mando real y mando emulado en teclado con protocolo de joystick Kempston, Sinclair 1 y 2, Cursor, Fuller y QAOPSpcM.
 - Soporte de modo turbo a 7MHz, 14MHz, 28MHz
 - Soporte de teclado con protocolo PS/2 y mapa del mismo configurable desde el propio Spectrum.
 - Soporte de ratón PS/2 emulando el protocolo Kempston Mouse.
@@ -1137,7 +1137,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `dmaplayw`: Reproduce un archivo de audio .WAV, que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
 - `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
 - `iwconfig`: Configura el módulo WiFi.
-- `joyconf`: Configura y prueba los joysticks de teclado y DB9.
+- `joyconf`: Configura y prueba los mandos de teclado y DB9.
 - `keymap`: Sirve para cargar una definición de teclado diferente.
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `loadtap`: Para cargar un archivo de imagen de cinta usando la integración con .PZX.
@@ -1346,11 +1346,11 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de ColecoVision>> en e
 
 Durante la ejecución del core:
 
-- Cursor o `Q`, `A`, `E`, `R` o el joystick 1: Controles de dirección del jugador 1
-- `Z` o el botón de joystick 1: Botón de disparo 1 del jugador 1
-- `U`, `J`, `O`, `P` o el joystick 2: Controles de dirección del jugador 2
-- `M` o el botón de joystick 2: Botón de disparo 1 del jugador 2
-- `X` o el botón secundario de joystick 1: Botón de disparo 2 del jugador 1 y del jugador 2
+- Cursor o `Q`, `A`, `E`, `R` o el mando 1: Controles de dirección del jugador 1
+- `Z` o el botón `A` del mando 1: Botón de disparo 1 del jugador 1
+- `U`, `J`, `O`, `P` o el mando 2: Controles de dirección del jugador 2
+- `M` o el botón `A` del mando 2: Botón de disparo 1 del jugador 2
+- `X` o el botón `B` del mando 1: Botón de disparo 2 del jugador 1 y del jugador 2
 - `0` a `9`: Botones del 0 al 9 del jugador 1 y el jugador 2
 - `T`: Botón '*'
 - `Y`: Botón '#'
@@ -1371,7 +1371,7 @@ En el menú multicartucho, usar los controles de dirección para elegir la ROM a
 
 === Neo-Geo
 
-https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos para arcades así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), pero también estaba disponible como videoconsola doméstica (AES o Advanced Entertainment System).
+https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos para arcades así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), así como videoconsola doméstica (AES o Advanced Entertainment System).
 
 La versión para ZXTRES (de somhi) está basada en la https://github.com/robinsonb5/NeoGeo_FPGA[versión DeMiStificada] de la https://github.com/MiSTer-devel/NeoGeo_MiSTer[versión original para MiSTer fpga].
 
@@ -1401,16 +1401,16 @@ Durante la ejecución del core:
 
 - `F12` mostrar el menú de control del core
 - Cursor o un mando conectado al puerto izquierdo: Controles de dirección del jugador 1
-- `Ctrl Dcha` o el botón A del mando 1: Botón A del jugador 1
-- `Alt Dcha` o el botón B del mando 1: Botón B del jugador 1
-- `Win Dcha` o el botón C del mando 1: Botón C del jugador 1
-- `Mayús. Dcha` o el botón D del mando 1: Botón D del jugador 1
+- `Ctrl Dcha` o el botón `A` del mando 1: Botón A del jugador 1
+- `Alt Dcha` o el botón `B` del mando 1: Botón B del jugador 1
+- `Win Dcha` o el botón `C` del mando 1: Botón C del jugador 1
+- `Mayús. Dcha` o el botón `D` del mando 1: Botón D del jugador 1
 - `Enter`: Botón Start del jugador 1
 - `W`, `A`, `S`, `D` o un mando conectado al puerto derecho: Controles de dirección del jugador 2
-- `Ctrl Izda` o el botón A del mando 1: Botón A del jugador 2
-- `Alt Izda` o el botón B del mando 1: Botón B del jugador 2
-- `Win Izda` o el botón C del mando 1: Botón C del jugador 2
-- `Mayús. Izda` o el botón D del mando 1: Botón D del jugador 2
+- `Ctrl Izda` o el botón `A` del mando 2: Botón A del jugador 2
+- `Alt Izda` o el botón `B` del mando 2: Botón B del jugador 2
+- `Win Izda` o el botón `C` del mando 2: Botón C del jugador 2
+- `Mayús. Izda` o el botón `D` del mando 2: Botón D del jugador 2
 - `Bloq. Mayús.`: Botón Start del jugador 2
 
 <<<
@@ -1502,7 +1502,7 @@ Características:
 - CHROMA81
 - Turbo en modo lento: NoWait, x2, x8
 - Chip de sonido YM2149 (compatible con ZON X-81)
-- Múltiples joysticks (Cursor, Sinclar, ZX81, ZXpand)
+- Emulacion de múltiples joysticks con un mando (Cursor, Sinclar, ZX81, ZXpand)
 - Timings PAL y NTSC
 - Turbo carga de ficheros .o y .p
 - Carga de ROM alternativa
@@ -1537,7 +1537,7 @@ image:img/keyboardZX81.jpg[scaledwidth=80%]
 Durante la ejecución del core:
 
 - `F1`: Habilitar o deshabilitar los caracteres alternativos
-- `F5` o el botón 2 del joystick para mostrar u ocultar el menú.
+- `F5` o el botón `B` del mando para mostrar u ocultar el menú.
 - `F9`: Deshabilita o habilita la salida MIC al conector de audio, porque algunos juegos generan un ruido molesto
 - `F10`: Habilita o deshabilita sonido de entrada por la salida de audio, para escuchar la cinta si se carga por audio
 - `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
@@ -1548,7 +1548,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Pulsando `F5` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar opciones del menú.
+Pulsando `F5` o el botón `B` del mando se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center]
 image:img/zx81.jpg[scaledwidth=70%]
