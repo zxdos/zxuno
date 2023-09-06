@@ -372,7 +372,7 @@ Special keys that can be used during startup:
 
 - `Esc` or controller button `B` (if a controller with two or more buttons is connected): ZX Spectrum core ROM selection menu.
 - `F2`: Enter BIOS setup.
-- `1` to `9`: Load the core in the flash location corresponding to that number. On the latest BIOS versions `9` is used to load the core installed to the temporary slot used by the <<#_bob_fossil_browser,ZX3 plugin>>.
+- `1` to `9`: Load the core in the flash location corresponding to that number. On the latest BIOS versions `9` is used to load the core installed to the temporary slot used by the <<#_bob_fossil_nmi_browser,ZX3 plugin>>.
 - `R`: Load the ZX Spectrum core ROM in "real" mode; switching off esxDOS, new graphics modes and so on.
 - `Caps Lock`, `Cursor Down` or controller `down` (if connected): Core selection menu.
 
@@ -449,7 +449,7 @@ Other special keys that can be used during startup:
 
 - `Esc` or controller button `B` (if a controller with two or more buttons is connected): ZX Spectrum core ROM selection menu.
 - `F2` Enter BIOS setup.
-- `1` to `9`: Load the core in the flash location corresponding to that number.  On the latest BIOS versions `9` is used to load the core installed to the temporary slot used by the <<#_bob_fossil_browser,ZX3 plugin>>.
+- `1` to `9`: Load the core in the flash location corresponding to that number.  On the latest BIOS versions `9` is used to load the core installed to the temporary slot used by the <<#_bob_fossil_nmi_browser,ZX3 plugin>>.
 - `Caps Lock` or `Cursor down` or controller `down` (if connected): Core selection menu.
 - `R`: Load the ZX Spectrum core ROM in "real" mode, switching off esxDOS, new graphics modes and so on.
 
@@ -1142,7 +1142,7 @@ As noted in the installation section, there are a several "dot" commands that ar
 - `loadpzx`: Load a `PZX` tape file.
 - `loadtap`: Load a `TAP` file using the `PZX` integration.
 - `playmid`: Play a `MID` music files using the MIDI addon.
-- `playrmov`: Play <<#_making_rdm_radastan_movie_files,radastanian format video files `RDM`)>>. This command doesn't work in 48K mode.
+- `playrmov`: Play <<#_creating_radastanian_movie_files,radastanian format video files `RDM`)>>. This command doesn't work in 48K mode.
 - `romsupgr`: Load from a RomPack filel called `ROMS.ZX1` in the root folder of the microSD card all ZX Spectrum core ROMS into SPI flash memory.
 - `upgr16m`: Load the content of a `FLASH.ZX1` file in the root folder of the microSD card to a 16 Meg SPI Flash memory.
 - `upgrzx2` or `upgrzxd`: Write the content of a `FLASH_32.ZX2` or `FLASH_32.ZXD` file in the root folder of the microSD card to a 32 Meg SPI Flash memory.
@@ -1614,7 +1614,7 @@ Depending on the operating system (Windows, macOS or Linux) there are several pr
 
 This program for Windows, macOS and Linux can directly play a `TZX` tape file through the computer's audio output.
 
-You can download the application for Windows from https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository]) or compile the source code as <<#_compile_source_code_macOS_or_linux,explained later>>.
+You can download the application for Windows from https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository]) or compile the source code as <<#_compile_source_code_(macos_and_linux),explained later>>.
 
 . Connect the audio cable between the computer audio output and ZXTRES audio input (remember to use only the right mono channel to the PC Mac and so on output).
 . Type on the computer or select the tape loading option. For examle for ZX Spectrum 48K typing `J` then twice `"` and then `Enter` to do the classic `LOAD "" + Enter`.
@@ -2027,7 +2027,7 @@ This process can't be undone and replaces all previously installed cores, the BI
 
 [NOTE]
 ====
-If no image is shown and you're not using DisplaPort, press `Scroll Lock` again to switch between RGB and VGA modes. In this case you must enter the BIOS and change <<#_advanced the right advanced setting>> that matches your display.
+If no image is shown and you're not using DisplaPort, press `Scroll Lock` again to switch between RGB and VGA modes. In this case you must enter the BIOS and change <<#_advanced,the right advanced setting>> that matches your display.
 ====
 
 <<<
