@@ -151,14 +151,14 @@ A la hora de poner el nombre a una partición que se vaya a utilizar con esxdos,
 
 [TIP]
 ====
-Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_tarjeta_microsd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
+Para el core de Spectrum, también es posible tener <<#_formato_avanzado_de_la_tarjeta_microsd_3e,una primera partición en formato +3DOS y luego otra(s) en formato FAT16 o FAT32>>, para su uso con una ROM de +3e.
 ====
 
 <<<
 
 ===== Windows
 
-Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
+Para configuraciones sencillas, y tarjetas del tamaño adecuado (2GB o menos para FAT16 y 32GB o menos para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
 
 Para otras configuraciones, y según la versión de sistema operativo de que se disponga, se podrá utilizar la herramienta de línea de comandos `diskpart` o bien la interfaz gráfica de administración de discos del sistema.
 
@@ -208,13 +208,13 @@ exit
 
 <<<
 
-===== MacOS
+===== macOS
 
-Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association] o la Utilidad de Discos incluida con el sistema operativo.
+Para configuraciones sencillas, y tarjetas del tamaño adecuado (2GB o menos para FAT16 y 32GB o menos para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association] o la Utilidad de Discos incluida con el sistema operativo.
 
 Para configuraciones más complejas, será necesario utilizar la línea de comandos.
 
-Por ejemplo, en MacOS, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 2GB o menos de tamaño), que figura como `disk6` en la lista de dispositivos:
+Por ejemplo, en macOS, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 2GB o menos de tamaño), que figura como `disk6` en la lista de dispositivos:
 
 [source,shell]
 ----
@@ -257,7 +257,7 @@ diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXTRES 4G "MS-DOS FAT32" EX
 
 [NOTE]
 ====
-Para el core de Amstrad CPC, en este caso, al elegir exactamente un tamaño de partición de 4G, MacOS elegirá por defecto un tamaño de cluster de 4096. Para un tamaño inferior, podría ser necesario volver a formatear la primera partición con unos comandos similares a estos:
+Para el core de Amstrad CPC, en este caso, al elegir exactamente un tamaño de partición de 4G, macOS elegirá por defecto un tamaño de cluster de 4096. Para un tamaño inferior, podría ser necesario volver a formatear la primera partición con unos comandos similares a estos:
 
 [source,shell]
 ----
@@ -268,7 +268,7 @@ newfs_msdos -F 32 -v ZXTRES -b 4096 /dev/rdisk6s1
 
 [TIP]
 ====
-Por defecto, MacOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la partición de la microSD se llama `ZXTRES`):
+Por defecto, macOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la partición de la microSD se llama `ZXTRES`):
 
 [source,shell]
 ----
@@ -346,6 +346,11 @@ Para que el mapa se conserve después de un master reset, hay que tener seleccio
 
 Para más información, consultar https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
 
+[NOTE]
+====
+<<#_se_basic_iv>> utiliza su propio sistema nativo para configurar el mapa de teclado y también tiene https://github.com/source-solutions/sebasic4/wiki/Keyboard-layouts[mapas propios].
+====
+
 *Español*
 
 [.text-center]
@@ -359,7 +364,7 @@ image:./img/keyboardEng.png[scaledwidth=70%]
 *Spectrum*
 
 [.text-center]
-image:./img/keyboardAV.png[scaledwidth=70%]
+image:./img/keyboardAv.png[scaledwidth=70%]
 
 <<<
 
@@ -470,7 +475,7 @@ En la primera pantalla de configuración, además de poder ejecutar distintas pr
 - Soporte NMI para DivMMC
 - Soporte para nuevos modos gráficos (ULAPlus, Timex, Radastan)
 
-Se puede consultar información más tecnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
+Se puede consultar información más técnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
 
 <<<
 
@@ -529,7 +534,7 @@ Finalmente, desde la última pantalla se puede:
 
 == ZX Spectrum
 
-El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustibuir por otro que no sea de ZX Spectrum, ya que el ZXTRES lo utiliza para su funcionamiento.
+El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustituir por otro que no sea de ZX Spectrum, ya que el ZXTRES lo utiliza para su funcionamiento.
 
 Estas son algunas de sus principales características:
 
@@ -549,7 +554,7 @@ Estas son algunas de sus principales características:
 - Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la implementación de configuraciones tales como ACB, ABC, etc.
 - Soporte de joystick real y joystick en teclado con protocolo Kempston, Sinclair 1 y 2, Cursor, Fuller y QAOPSpcM.
 - Soporte de modo turbo a 7MHz, 14MHz, 28MHz
-- Soporte de teclado con protocolo PS/2 y mapeado configurable desde el propio Spectrum.
+- Soporte de teclado con protocolo PS/2 y mapa del mismo configurable desde el propio Spectrum.
 - Soporte de ratón PS/2 emulando el protocolo Kempston Mouse.
 - Posibilidad de salida de vídeo en modo RGB 15kHz, VGA y DisplayPort
 - Frecuencia de refresco vertical seleccionable para la compatibilidad con monitores VGA
@@ -559,7 +564,7 @@ Estas son algunas de sus principales características:
 - Soporte Wi-Fi (UART)
 - Soporte MIDI (General MIDI) vía middleboard
 - Carga de ficheros `PZX` desde la SD simulando carga de cinta
-- Varios modos de gestión del desentrelazado en la salida DisplayPort incluyendo una opción para mezclar (blend) los colres. Esto sólo está disponible en los cores para ZXTRES+ y ZXTRES++
+- Varios modos de gestión del desentrelazado en la salida DisplayPort incluyendo una opción para mezclar (blend) los colores. Esto sólo está disponible en los cores para ZXTRES+ y ZXTRES++
 
 <<<
 
@@ -573,9 +578,25 @@ Véase el <<#_roms_3,apartado de actualizaciones>> para más información sobre 
 
 https://www.facebook.com/groups/DerbyPro[DerbyPro o Derby{pp}] es una ROM mejorada para el ZX Spectrum, basada en la versión 1.4 de la ROM de desarrollo Derby. El Spectrum 128 (nombre en código "Derby") fue una máquina española, encargada por Investronica y lanzada en 1985. Incluía un teclado aparte que añadía varias teclas de edición extra. En 1986 se lanzó la versión para Reino Unido con una versión simplificada de 128 BASIC y sin teclado extra. Derby++ se basa en la ROM española para incluir lo mejor de las dos versiones, sin sus inconvenientes, y con soporte para nuevo hardware.
 
-Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.facebook.com/groups/DerbyPro[grupo púbilco oficial de Facebook].
+[.text-center]
+image:img/derbypro.png[pdfwidth=70%]
 
-Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos de esxdos desde 128 BASIC, así que se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
+<<<
+
+Algunas de sus características incluyen:
+
+- Modo 48K con compatibilidad binaria al 100%
+- Comando PLAY con soporte para 6 canales
+- Acceso al navegador NMI de esxDOS desde el menú de arranque
+- 128 BASIC con correcciones, comandos adicionales y editor de texto a pantalla completa
+- Soporte para esxDOS en 128 BASIC
+- Acceso vía menú a TR-DOS
+- Comando PALETTE para ULAplus
+- Ejecución de la mayor parte del software para Spectrum sin tener que hacer un cambio de configuración en la BIOS
+
+Se puede descargar la ROM, un manual de usuario y otros ficheros del https://www.facebook.com/groups/DerbyPro[grupo público oficial de Facebook].
+
+Como es una ROM de 64K con soporte para nuevo hardware, se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
 
 [%header,cols=2*]
 |===
@@ -635,7 +656,7 @@ En el caso de usar una ROM con la opción de introducir POKEs, se hace de la sig
 
 Las ROMs con la opción de carga ultrarrápida necesitan archivos de cinta especiales que se generan desde ficheros `TAP` de carga normal, de juegos que no tengan protección de carga o modo turbo.
 
-Para crear una cinta de carga ultrarrápida se necesitan las utilidates de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para MacOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
+Para crear una cinta de carga ultrarrápida se necesitan las utilidades de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para macOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
 
 En otro caso, es posible compilar desde https://github.com/antoniovillena/CargandoLeches[el código fuente disponible en el repositorio oficial]. Por ejemplo, para compilar en Linux usando `gcc` basta con usar estos comandos:
 
@@ -665,39 +686,60 @@ Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches
 
 ==== SE Basic IV
 
-https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto. SE Basic IV se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también lo hace en ZX-Uno y similares.
+https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto para la arquitectura Z80. Aunque aspira a tener un alto grado de compatibilidad con Microsoft BASIC, hay algunas diferencias.
+Se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también es compatible con el core de ZX Spectrum del ZXTRES.
 
-SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrurm, pero posteriormente se ha reescrito basándose en la https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81].
+SE Basic comenzó en 1999 como firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE], el antecesor al Chloe 280SE. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrum. Desde la versión 1 utiliza su propio fichero ensamblador. Desde la versión 2, soporta ULAplus.
 
-La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC], todavía se mantiene como un firmware de código abierto para el Spectrum. Se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
+La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC] reemplazó el código ROM original con una versión de código abierto derivada de las ROMs del https://github.com/cheveron/open81[ZX81] y el https://github.com/cheveron/samrom[SAM Coupé]. Todavía se mantiene como un firmware de código abierto para el Spectrum y se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
 
-La versión IV es una nueva rama de la versión anterior, creada principalmente porque no quedaba espacio para añadir nuevas características a la ROM de 16K. La primera versión (4.0 Anya) añadió una segunda ROM de 16K con soporte para el modo hi-res de Timex. La sintaxis era aún bastante compatible con Sinclair BASIC. La versión 4.2 fue reconstruida específicamente para el Chloe 280SE, eliminó el soporte para dispositivos antiguos como las cintas, añadió soporte integrado y compatibilidad total con el kernel de esxdos, y migró a la sintaxis de Microsoft BASIC.
+[.text-center]
+image:img/sebasic4.png[pdfwidth=70%]
 
-Aunque guarda una base común de código con muchas versiones de Sinclair BASIC (la ROM TS1000), hay varias diferencias significativas:
+La versión 4.0 añadió soporte para un modo de 80 columnas. La versión 4.1 fue un intento fallido de refactorizar el código. A partir de 2019, la última versión (4.2 Cordelia) se reconstruyó desde cero para aprovechar al completo el core de ZX Spectrum del ZX-Uno (y ZXTRES). Aunque las versiones anteriores mantenían un gran nivel de compatibilidad con Sinclair BASIC y otro software, esta nueva versión ya no tiene soporte para software de Sinclair y es mucho más parecida en sintaxis a Atari BASIC.
 
-- Soporte para páginas de códigos(8-bit ASCII).
-- Traducción de los mensajes de error.
-- 38 tokens nuevos.
-- Presentación en una terminal estándar (80 x 24).
-- Introducción de caracteres de terminal (CTRL, META).
-- Buffer de teclado.
-- Soporte para teclados completos.
-- Soporte completo de las características adicionales del core de Spectrum de ZX-Uno
+La versión 4.2 requiere que divMMC esté activo con esxDOS o UnoDOS 3 instalado. Sin embargo, ni los <<#_comandos_de_esxdos,comandos "DOT">> ni  el navegador NMI están soportados.
 
-Las principales diferencias con Microsoft BASIC son:
+Algunas de sus características son:
 
-- Abreviación de tokens.
-- Comprobación de sintaxis en cada entrada.
-- Normalmente los paréntesis son opcionales.
-- Introducción de número con el estilo Motorola:
-  % – binario
-  @ – octal
-  $ – hexadecimal
-- Evaluación de expresiones siempre activa.
-- Operadores lógicos y bit a bit separados.
-- Tipado automático de datos.
+- Modos de vídeo con paleta de 40 columnas (16 colores) y 80 column (2 colores)
+- Evaluación de expresiones siempre activa (uso de variables como nombres de fichero)
+- Formato de empaquetado de aplicaciones con soporte para convertir programas BASIC en apps
+- Tipos automáticos de datos
+- Lógica a nivel de bit (AND, NOT, OR, XOR).
+- Sistema de ayuda incorporado
+- Troceado de cadenas a elegir entre Microsoft (LEFT$, MID$, RIGHT$) o Sinclair (TO)
+- Caracteres compuestos (soporta Vietnamita).
+- Sistema de archivos basado en discos (nada de cintas).
+- Gestión de errores (ON ERROR..., TRACE).
+- Control de flujo (IF...THEN...ELSE, WHILE...WEND).
+- Acceso aleatorio completo a ficheros desde BASIC (OPEN, CLOSE, SEEK).
+- Soporte para teclado de tamaño completo (Supr, Inicio, Fin y demás).
+- Modos gráficos en el modo de 40 columnas (CIRCLE, DRAW, PLOT).
+- Traducción de conjuntos de caracteres, mensajes de error y mapas de teclado
+- Nombres de variable largos
+- Notación de números estilo Motorola (%; binario, @; octal, $; hexadecimal)
+- BREAK NMI
+- Validación de sintaxis según se introduce
+- Comando PLAY con soporte para PSG de 6 canales y MIDI
+- Funciones recursivas definidas por el usuario
+- Actualizaciones inteligentes de firmware
+- Abreviación de tokens y atajos (&; AND, ~; NOT; |; OR, ?; PRINT, '; REM')
+- Capacidad para deshacer NEW (OLD).
+- Canales definidos por el usuario
+- Conjuntos de caracteres definidos por el usuario (256 caracteres)
+- Macros definidas por el usuario
+- Modos de pantalla  definidos por el usuario
 
-Se puede encontrar mucha más información, incluyendo el manual de usuario, etc. en https://github.com/cheveron/sebasic4/wiki[la wiki oficial].
+[NOTE]
+====
+Para que la opción de actualización de firmware funcion, se ha de instalar SE Basic IV en los slot 2 y 3
+====
+
+[CAUTION]
+====
+El uso de la actualización de firmware reemplaza la versión de esxDOS con la última versión de UnoDOS 3
+====
 
 <<<
 
@@ -741,7 +783,7 @@ En IDEDOS, cada partición puede tener un tamaño entre 1 y 16 Megabytes (16 mil
 
 A continuación se explica una forma de dividir una tarjeta en dos o tres partes, con la primera partición IDEDOS (1GB de tamaño), la segunda FAT16 (4GB) y la tercera FAT32 (resto del espacio de la tarjeta).
 
-En la segunda particion se puede instalar, tal y como se explicó anteriormente <<#_esxdos,exsdos>> y otros programas.
+En la segunda partición se puede instalar, tal y como se explicó anteriormente <<#_esxdos,exsdos>> y otros programas.
 
 ==== Windows
 
@@ -757,7 +799,7 @@ Se puede utilizar el administrador de discos de Windows. Los pasos a seguir ser�
 
 <<<
 
-==== MacOS
+==== macOS
 
 Será necesario utilizar la línea de comandos. Lo primero es determinar el disco a formatear:
 
@@ -1075,7 +1117,7 @@ Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cu
 
 [NOTE]
 ====
-El gestor de esxdos muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
+El gestor de esxdos muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y macOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
 [CAUTION]
@@ -1101,12 +1143,16 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `loadtap`: Para cargar un archivo de imagen de cinta usando la integración con .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
 - `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
-- `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Sólo funciona correctamente en ZX-Uno y ZXDOS (no utilizar en ZXDOS+, ZXTRES o similares). Se debe ejecutar desde una ROM en modo "root".
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root".
 - `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
+
+[CAUTION]
+====
+El comando `romsback` sólo está diseñado para ZX-Uno y no se debe usar con ZXTRES
+====
 
 <<<
 
@@ -1114,7 +1160,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 
 El comando `PLAYRMOV` reproduce vídeos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN].
 
-En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o MacOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
+En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o macOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
 
 [source,shell]
 ----
@@ -1184,7 +1230,7 @@ Para hacer el proceso contrario (guardar las ROMs en un fichero RomPack llamado 
 La versión actual de `romsback`, en ZXTRES, sólo almacena correctamente en RomPack los primeros 35 slots de ROM ocupados.
 ====
 
-Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux.
+Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en macOS como en Linux.
 
 === Cores
 
@@ -1211,6 +1257,14 @@ Se ha de copiar el fichero `.ZX3` correspondiente en el lugar que se desee de la
 Si todo va bien, en la parte inferior de la pantalla se indicará el progreso de grabación en la SPI Flash (se graba en un slot temporal).
 
 En el caso de que no se hubiese arrancado en modo root bastará con reiniciar (ctrl+alt+backspace) dejando pulsado "/" y probar de nuevo.
+
+[TIP]
+====
+Con algunos dispositivos conectados a los puertos de los mandos, puede aparecer un borde rojo parpadeante al iniciar el navegador. Esto se soluciona desactivando el joystick Kempston en su configuración (con el <<#_comandos_de_esxdos,comando "DOT">> `.brwscfg`).
+
+[.text-center]
+image:img/brwscfg.jpg[scaledwidth=70%]
+====
 
 <<<
 
@@ -1317,7 +1371,7 @@ En el menú multicartucho, usar los controles de dirección para elegir la ROM a
 
 === Neo-Geo
 
-https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos para arcades así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), pero más tarde también estuvo disponible como videoconsola doméstica (AES o Advanced Entertainment System).
+https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos para arcades así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), pero también estaba disponible como videoconsola doméstica (AES o Advanced Entertainment System).
 
 La versión para ZXTRES (de somhi) está basada en la https://github.com/robinsonb5/NeoGeo_FPGA[versión DeMiStificada] de la https://github.com/MiSTer-devel/NeoGeo_MiSTer[versión original para MiSTer fpga].
 
@@ -1570,11 +1624,11 @@ El funcionamiento es exactamente igual que se hacía con los equipos originales:
 
 ==== Ordenador
 
-Según el sistema operativo (Windows, MacOS, Linux) existen múltiples alternativas de programas que pueden, o bien reproducir directamente un archivo de cinta (`TAP`, `TZX`, `PZX`, etc.) y emitir el sonido por la salida de auriculares, o bien crear un fichero de sonido (`WAV`, `VOC`, `AU`, etc.) que se puede reproducir también con programas de música o sonido.
+Según el sistema operativo (Windows, macOS, Linux) existen múltiples alternativas de programas que pueden, o bien reproducir directamente un archivo de cinta (`TAP`, `TZX`, `PZX`, etc.) y emitir el sonido por la salida de auriculares, o bien crear un fichero de sonido (`WAV`, `VOC`, `AU`, etc.) que se puede reproducir también con programas de música o sonido.
 
 ===== PlayTZX
 
-Este programa para Windows, MacOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador.
+Este programa para Windows, macOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador.
 
 Se puede descargar el fichero binario (por ejemplo, para Windows desde https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] y para Mac desde https://github.com/kounch/playtzx/releases[este repositorio de GitHub]) o compilar el código fuente como se explica <<#_compilar_código_fuente_macos_o_linux,a continuación>>.
 
@@ -1598,7 +1652,7 @@ Si todo va bien, se irá viendo en la consola los distintos bloque de carga de l
 En Linux, el programa utiliza como salida el dispositivo `/dev/dsp`, así que, en versiones más modernas, es posible, por ejemplo, que haya que cargar módulos como `snd_pcm_oss` (en el caso de sistemas que utilicen ALSA), para que funcione correctamente.
 ====
 
-====== Compilar código fuente (MacOS o Linux)
+====== Compilar código fuente (macOS o Linux)
 
 Verificar que están instaladas las herramientas de desarrollo, incluyendo un compilador de C (`gcc`, `clang` herramientas de desarrollaor de línea de comandos en Mac, etc.) y https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
 
@@ -2019,7 +2073,7 @@ Si no se obtiene imagen, y no se está utilizando DisplayPort, pulsar de nuevo `
 === Scan Codes
 
 [.text-center]
-image:img/scancodes.png[scaledwidth=80%]
+image:img/ScanCodes.png[scaledwidth=80%]
 
 <<<
 
