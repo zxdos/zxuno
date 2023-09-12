@@ -76,7 +76,7 @@ image:img/ZXTRESback.jpg[scaledwidth=90%]
 |9
 |Audio out
 |10
-|USB port (only for use with middleboard installed)
+|USB port (only for use with for <<#_middle_board,middle board>> installed)
 |11
 |RGB/VGA out
 |12
@@ -93,7 +93,7 @@ image:img/ZXTRESbottom.jpg[scaledwidth=90%]
 [align="center",width="80%",cols="1,4"]
 |===
 |15
-|Reset button
+|BOOTSEL button for <<#_middle_board,middle board>>
 |16
 |Sound selection switch (DeltaSigma or I2S)
 |===
@@ -134,9 +134,10 @@ This table shows the requirements of cores that use the microSD card.
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
+|[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|Requires ROM
 |[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|Requires BIOS
 |[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
-|[.small]#zxsp#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|Requires ROM
+|[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|Requires ROM
 |[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
 |===
 
@@ -385,8 +386,8 @@ Special keys that can be used while running the main core (ZX Spectrum):
 - `F8`: Rewind a `PZX` file to the previous mark.
 - `F10`: Graph(ics).
 - `F12`: Turbo boost (speeds up CPU to 28MHz).
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
-- `Ctrl+Alt+Supr`: Soft reset.
+- `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+- `Ctrl+Alt+Supr`: Soft reset (restart the core).
 - `Scroll Lock`: Switches between RGB and VGA video modes. DisplayPort is always enabled.
 - `Home`: Switches between the several DisplayPort deinterlacing modes (Blend Off Auto and On). This option is only available for ZXTRES+ and ZXTRES++ core versions.
 - `End`: Select one of the monochrome colour modes.
@@ -410,11 +411,12 @@ image:./img/esxdos.png[scaledwidth=70%]
 
 <<<
 
-You should add the ZXTRES-specific esxDOS commands. These can be obtained from the project source page (https://github.com/zxdos/zxuno/tree/master/SD[here], https://github.com/zxdos/zxuno/tree/master/[here] and https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/upgrade[here]):
+You should add the ZXTRES-specific esxDOS commands. These can be obtained from the project source page (https://github.com/zxtres/dot_commands/[here], https://github.com/zxdos/zxuno/tree/master/SD/BIN[here] and https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/upgrade[here]):
 
     back16m
     backzx2
     backzxd
+    core
     corebios
     dmaplayw
     esprst
@@ -559,7 +561,9 @@ Some of its main characteristics include:
 - Multicore boot support: from the ZX Spectrum core you can select an address of the SPI Flash and the FPGA will load a core from there.
 - Different colour modes including monochrome.
 - I^2^S and DeltaSigma audio output.
-- MIDI Support (General MIDI) using the middleboard.
+- Wi-fi Support (UART) using the middle board.
+- MIDI Support (General MIDI) using the middle board.
+- RTC Support using the middle board.
 - `PZX` file loading from microSD card emulating tape audio.
 - Multiple deinterlacing modes for DisplayPort including an option to blend the colours. This is only available for ZXTRES+ and ZXTRES++ core versions.
 
@@ -1133,6 +1137,7 @@ As noted in the installation section, there are a several "dot" commands that ar
 
 - `back16m`: Dumps to a `FLASH.ZX1` file in the root folder of the microSD card the contents of a 16 Meg SPI Flash memory. After the command is done, you must enter `.ls` so that the cache is written to the microSD card. Otherwise the length of the file is wrongly set to 0.
 - `backzx2` or `backzxd`: Creates a `FLASH_32.ZX2` or `FLASH_32.ZXD` file in the root folder of the microSD card with the contents of a 32 Meg SPI Flash memory. After the command is done, you must enter `.ls` so that the cache is wrtten to the microSD card. Otherwise the length of the file is wrongly set to 0.
+- `core`: Restarts the FPGA and loads the specified core from the SPI Flash
 - `corebios`: Simultaneously update the ZX Spectrum core and BIOS.
 - `dmaplayw`: Play a `WAV` file that is 8-bits unsigned and sampled at 15625 Hz.
 - `esprst`: Reset the WiFi ESP8266(ESP-12) module.
@@ -1141,18 +1146,146 @@ As noted in the installation section, there are a several "dot" commands that ar
 - `keymap`: Load a different keyboard map definition.
 - `loadpzx`: Load a `PZX` tape file.
 - `loadtap`: Load a `TAP` file using the `PZX` integration.
-- `playmid`: Play a `MID` music files using the MIDI addon.
+- `playmid`: Play a `MID` music file using the for <<#_middle_board,middle board>>.
 - `playrmov`: Play <<#_creating_radastanian_movie_files,radastanian format video files `RDM`)>>. This command doesn't work in 48K mode.
 - `romsupgr`: Load from a RomPack filel called `ROMS.ZX1` in the root folder of the microSD card all ZX Spectrum core ROMS into SPI flash memory.
 - `upgr16m`: Load the content of a `FLASH.ZX1` file in the root folder of the microSD card to a 16 Meg SPI Flash memory.
 - `upgrzx2` or `upgrzxd`: Write the content of a `FLASH_32.ZX2` or `FLASH_32.ZXD` file in the root folder of the microSD card to a 32 Meg SPI Flash memory.
-- `zxuc`: Configure all options of BIOS that also can be stored in the microSD in configuration files that can be loaded later.
+- `zxuc`: Configure all options of BIOS that also can be stored in the microSD in configuration files that can be loaded later (available to download from https://github.com/Utodev/ZXUC/tree/master/downloads[Utodev repository]).
 - `zxunocfg`: Configurae certain features such as timings contention keyboard type CPU speed video type or vertical frequency.
 
 [CAUTION]
 ====
 The `romsback` command is designed for the ZX-Uno and ZX-Dos and must not be used with the ZXTRES.
 ====
+
+[TIP]
+====
+Most of these commands are available to download from https://github.com/zxtres/dot_commands[ZXTRES] official repository or https://github.com/zxdos/zxuno/tree/master/SD/BIN[ZX-Uno repository].
+====
+
+<<<
+
+=== Wi-Fi
+
+The <<#_middle_board,optional middle board>> has an ESP-12 module with a Wi-Fi https://es.wikipedia.org/wiki/ESP8266[ESP8266] chip that can be easily used with a ZX Spectrum core (like EXP28 290723) which has synthesized an https://es.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART] device, that allows communication with the module.
+
+There are two "DOT" commands for configuring software access to the module. They can be downloaded from https://github.com/zxdos/zxuno/tree/master/SD/BIN/[GitHub official repository]:
+
+- `esprst`, which restarts the module
+- `iwconfig`, to register the Wi-Fi network name (SSID) and password, keeping them in the file `/sys/config/iw.cfg` for other programs to use it.
+
+For example:
+[source,shell]
+----
+.iwconfig mywifi mypassword
+----
+
+[CAUTION]
+====
+Since the selected VGA frequency affects the master clock frequency, for the communication between the core and the Wi-Fi module to work correctly, it has to be set at 50 (see the <<#_advanced,BIOS settings chapter>>).
+====
+
+[TIP]
+====
+All the Wi-Fi software which is explained later is available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[ZX-Uno distributions by desubikado]
+====
+
+==== Network tools for ZX-Uno pack
+
+These are ZX Spectrum programs, developed by Nihirash and that are https://nihirash.net/projects/[in his web].
+
+- `netman`: Utility to configure the ESP Wi-Fi chip for other programs from Nihirash. Does not work in 48K mode. Available to download https://github.com/nihirash/netman-zx[at GitHub].
+- `Moon Rabbit`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode. Available to download https://github.com/nihirash/moon-rabbit-zx[at GitHub]
+- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz
+- `wget`: Utility to download files with HTTP (does not work with HTTPS)
+- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/#about[IRATA.ONLINE] web
+
+==== FTP-Uno
+
+FTP client developed by Yombo, available https://github.com/yomboprime/FTP_Uno[at GitHub].
+
+Configuration steps:
+
+. Edit `FTP.CFG` file with all the required information (SSID and password, FTP server, etc.)
+. Copy `FTP.CFG` inside `/SYS/CONFIG/` in SD card
+. Also copy `ftpUno.tap` to any place in the card
+. Start up the ZX-Uno and load the tape file `ftpUno.tap`
+
+<<<
+
+==== UART Terminal
+
+Program example included with https://github.com/yomboprime/ZXYLib[ZXYLib] C library, developed by yombo, that let's you send directly typed characters using the UART, and also see the result. Available to download https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[at this link].
+
+Once the file `UARTTERM.tap` is in the card and loaded, you can type several specific commands for ESP8266 chip. For example:
+
+- `AT`. To check if ther is communication. `OK` would be the result if everything is fine
+- `AT+RST`. To restart the chip. Exactly what <<#_wi_fi,`esprst`>> command does
+- `AT+GMR`. To see some information, like firmware version, etc.
+- `AT+CWMODE_CUR=1`. Put temporarily the chip into Wi-Fi client mode, until next restart
+- `AT+CWMODE_DEF=1`. Put temporarily the chip into Wi-Fi client mode, and save it as default
+- `AT+CWJAP_CUR="<WiFiNetwork>","<WiFiPassword>"`, where `<WiFiNetwork>` Wi-Fi ID of the network to connect to, and `<WiFiPassword>` the access password, connects temporarily to that network
+- `AT+CWJAP_DEF="<WiFiNetwork>","<WiFiPassword>"`, connects to the network, and saves the settings as default in the chip flash memory
+- `AT+CWAUTOCONN=1` sets the chip to connect automatically on boot to the default network (`AT+CWAUTOCONN=0` disables it)
+
+You can see all the available commands reading the https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[official documentation].
+
+<<<
+
+=== MIDI
+
+The <<#_middle_board,optional middle board>> has also built-in a https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller] programmed to work as a MIDI synthesizer, which can be used easily with a ZX Spectrum core that has a synthesized device that allows communication with the module (like the EXP28 290723 core).
+
+You can use the <<#_esxdos_commands,"DOT" command >> https://github.com/zxtres/dot_commands/tree/main/playmid[.playmid] to listen to MIDI files.
+
+[NOTE]
+====
+It may happen that `.playmid` plays some MIDI file a little slower or with distorted playback speed, this is because playback of a this kind of file occasionally involves https://zxuno.com/forum/viewtopic.php?t=3963 [expensive calculations on the Z80, as well as because of inherent hardware limitations] of the ZX Spectrum and the AY-3-8912 chip.
+
+To alleviate this, you can change the ZXUNO CPU speed with the `.zxunocfg -sSPEED` command (with SPEED ranging from 0 to 3, where 3 is the fastest) before using `.playmid`, so that you have more CPU power to process the MIDI file.
+====
+
+It is also possible to test it from ZX Spectrum 128K BASIC (having previously disabled access to the SD card - for example with the "DOT" `.zxuc` command), for example with this command which plays a musical scale with the sound of a piano:
+
+[source,basic]
+----
+PLAY "T160","","","Y1Z192Z0V15O5cdefgabC"
+----
+
+[TIP]
+====
+Changing `0` in `Z0` to another number, from 0 to 127, changes the instrument to be used to play the scale.
+====
+
+==== Bob Fossil NMI Browser
+
+To be able to use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil NMI Browser] to play MIDI you need:
+
+- `.playmid` "DOT" command installed.
+- The latest http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[browser stable version].
+- Browser MID plugin.
+
+Copy the corresponding `.MID` file to the desired location on the microSD card, as well as the appropriate MID plugin file (in the `BIN\BPLUGINS` folder) and the "DOT" `playmid` command file (in the `BIN` folder).
+
+. Start the ZXTRES Spectrum core.
+. Press `F5` to open Bob Fossil's NMI browser and then navigate to the location of the `.MID` file, select it and press ENTER.
+
+You can press `Space` to stop playback at any time.
+
+==== ZX MIDI player
+
+This ZX Spectrum program has been https://github.com/UzixLS/zx-midiplayer[developed by Eugene Lozovoy] and has the following features:
+
+- Compatible with MID(SMF) file formats type 0, type 1 and RMI;
+- Supports files up to 64Kb
+- Support for up to 60 tracks in file (for heavier files, a turbo CPU frequency is desirable)
+- Support for multiple CPU frequencies - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz
+- Support for DivMMC (and derivatives), ZXMMC, Z-Controller- FAT32 file system support
+
+<<<
+
+=== RTC
 
 <<<
 
@@ -1239,7 +1372,7 @@ From the main ZX Spectrum core it's possible to load other cores.
 
 ====== Bob Fossil NMI browser
 
-To use the Bob Fossil NMI browser to load cores you need:
+To use the https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[Bob Fossil NMI browser] to load cores you need:
 
 - The latest stable version (http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip).
 - The ZX3 plugin that can load Cores in ZX3 format https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3.
@@ -1249,6 +1382,22 @@ Copy the corresponding `ZX3` file to the desired location of the microSD card as
 Press `F5` to open Bob Fossil's NMI browser and get to the location of the Core with extension `ZX3`, select it and press `Enter`.
 
 If everything worked correctly, the bottom of the screen indicates the flashing progress (it's recorded in a temporary slot of the flash memory).
+
+====== Bob Fossil NMI browser (with Middle Board)
+
+The <<#_middle_board,optional middle board>> has a built-in https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller] programmed to read from the microSD and perform direct loading of cores into the FPGA.
+
+In order to use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil's browser for this type of loading], the following is required:
+
+- The latest http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[stable version]
+- The BIT plugin to to load Cores in BIT format (https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/BIT).
+
+Copy the corresponding `.BIT` file to the desired location on the microSD card, as well as the BIT plugin file (inside the `BIN\BPLUGINS` folder).
+
+. Start the ZXTRES Spectrum core.
+. Press `F5` to open the browser and then navigate to the location of the Core with `.BIT` extension, select it and press ENTER.
+
+If all goes well, after a few seconds, the core will be loaded into the FPGA and then the FPGA will be restarted to execute it.
 
 ==== SPI Flash Memory
 
@@ -1330,7 +1479,7 @@ See the <<#_cores,corresponding section>> for instructions of how to install the
 
 When the core is active:
 
-- 'Esc': Soft reset.
+- 'Esc': Soft reset (restart the core).
 - `0` to `9`: Button 0 to 9 for player 1 and player 2.
 - Cursor or `Q`, `A`, `E`, `R` or left controller directions: Directional controls for player 1.
 - `U`, `J`, `O`, `P` or right controller directions: Directional controls for player 2.
@@ -1350,6 +1499,75 @@ On startup the BIOS ROM is loaded from the microSD card and then the multicart R
 image:img/coleco.jpg[scaledwidth=70%]
 
 From the multicart menu use the directional controls to choose a ROM and then push button `A` to load. Pressing 'Esc' restarts the core and reloads the ROM selection menu.
+
+<<<
+
+=== Elan Enterprise
+
+The https://es.wikipedia.org/wiki/Enterprise_128[Enterprise] was a home computer developed by the British company Intelligent Software and marketed by Enterprise Computers from 1983.
+
+The ZXTRES version has been developed by https://github.com/Kyp069/ep[Kyp069].
+
+Some characteristics of this core are:
+
+- Implements 1024 KB of RAM.
+- Support for loading a virtual disk image (.vhd file). At boot time the EP.VHD file is automatically loaded if found in the root directory of the SD card.
+- RGB output
+- External joystick is implemented on the DB9 and internal joystick on the cursor keys, with support for two trigger buttons.
+
+==== microSD card format
+
+A microSD card, with the first partition in FAT16 or FAT32 format, should be used to store the ROM file and the virtual disk images you wish to use.
+
+The ROM file should be copied to the root directory of the SD card as `ep.rom`. Furthermore it is also prepared to work with .VHD (disk image) files, such as the one available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549 [the ZX-Uno distributions from desubikado],
+
+See the <<#_cores,corresponding section>> for instructions of how to install the Elan Enterprise core in the ZXTRES.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+When the core is active:
+
+- F12`: Display the core control menu.
+- F1`: Show the file browser if the current drive is F:. Once in the file browser, you can change partition by pressing the partition letter (F, G, H, etc).
+- C+F9`: Hard reset the core and reattach the virtual disk drive.
+- F9` or `Ctrl+Alt+Del`: Soft Reset (resets the Core).
+- F11` or `Ctrl+Alt+Del`: Hard Reset (resets the FPGA)
+
+==== Overview
+
+When the correct ROM file is present on the microSD card the machine is started.
+
+[.text-center]
+image:img/enterprise.png[scaledwidth=70%]
+
+Press `F12` to display the menu with the different core options.
+
+[.text-center]
+image:img/enterprisefile.jpg[scaledwidth=70%]
+
+These are the main ones:
+
+- `Available RAM`: Allows you to change the amount of RAM available for the core.
+- `CPU Speed`: To increase or decrease the CPU speed.
+- `Load ROM`: To load a ROM file.
+- `Mount A:`: To mount a `DSK` disk image.
+- `Mount SD`: To mount a `VHD` disk image (needs a hard reset by pressing `C+F9` for the system to start using it)
+
+When a VHD disk image is mounted pressing `F1` or executing the :FILE command (`:` is obtained by pressing +'+), starts a file browser. Pressing another drive letter (G, H, etc) switches to it.
+
+Executable files are `COM``.
+
+It is also possible to load programs without using the browser. Here is an example:
+
+[source]
+----
+:h:
+:cd b
+cd bricky
+:load bricky.com
+----
 
 <<<
 
@@ -1521,12 +1739,12 @@ image:img/keyboardZX81.jpg[scaledwidth=80%]
 When the core is active:
 
 - `F1`: Enable or switch off the alternative chararacters.
-- `F5` or controller button `A`: Show or hide configuration menu.
+- `F5` or controller button `B`: Show or hide configuration menu.
 - `F9`: Enable or switch off the MIC audio output (some games make annoying sounds when enabled).
 - `F10`: Enable or switch off playing the audio input through the audio output to hear loading sounds while loading.
 - `Scroll Lock`: Switch between RGB and VGA video output.
-- `Ctrl+Alt+Supr`: Soft reset.
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `Ctrl+Alt+Supr`: Soft reset (restart the core).
+- `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA).
 
 <<<
 
@@ -1586,11 +1804,113 @@ CHROMA81: Enabled.
 
 <<<
 
-=== zxsp
+=== ZX Spectrum +3 (zxp3)
+
+https://en.wikipedia.org/wiki/ZX_Spectrum#ZX_Spectrum_+3
+
+The https://es.wikipedia.org/wiki/ZX_Spectrum_128_%2B3 [ZX Spectrum +3] was manufactured by Amstrad and released in 1987. It was similar in appearance to the +2 but featured a 3-inch floppy disk drive from the tape drive, and had a black casing. It was the only Spectrum capable of running the CP/M operating system without additional hardware.
+
+The ZXTRES version has been made by kyp069.
+
+Features:
+
+- Turbosound
+- Tape loading
+- Two floppy drives
+- ZXMMC disk image support
+- Kempston joystick with two trigger buttons
+- Joysticks Interface 2
+- RGB PAL or VGA video output (50 Hz)
+- Supports any +3 compatible ROM, such as Amstrad standard ROM and Garry Lancaster's +3e ROM
+
+==== microSD Card Format
+
+A microSD card, with the first partition in FAT16 or FAT32 format, should be used to store the disk image or ROM files to be loaded.
+
+The default ROM file should be copied to the root directory of the SD card as `zxp3.rom`. In addition, it is also prepared to work with a VHD (disk image) file formatted internally in the +3DOS file system, such as the one available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549 [the ZX-Uno distributions from desubikado],
+
+If not already there, <<#_cores,install or run the core zxp3>> on the ZXTRES.
+
+<<<
+
+==== Keyboard
+
+The keyboard is not mapped to the standard PS/2 layout, and keeps the layout of the original machine. So, for example, to get `"` you have to press `Shift+P` or to delete, `Shift+0`.
+
+===== Special keys and buttons
+
+During core execution:
+
+- `F12` to show or hide the menu.
+- `Scroll Lock` or presssing and holding `F12` for one second: switch between RGB and VGA video mode.
+- Ctrl+Alt+Del` or `F9`: Soft Reset (resets the Core)
+- Ctrl+Alt+Backspace` or `F8`: Hard reset (resets the FPGA). Backspace is the backspace delete key, above `Enter`.
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options.
+
+[.text-center]
+image:img/zxp3.jpg[scaledwidth=70%]
+
+- `Load ROM`: To load or change the loaded ROM
+- `Mount drive A:`: To mount a DSK file to the first drive
+- `Mount drive B:`: To mount a DSK file to the second drive
+- `Mount SD:`: To mount a VHD file as main drive (needs a hard reset by pressing `C+F9` for the system to start using it)
+- `Reset FPGA`: To reset the FPGA
+
+Controller 1 behaves simultaneously with Kempston protocol (with two trigger buttons) and Sinclair (1,2,3,4,5) with second trigger button (`z`). The controller connected to port 2 behaves with Sinclair protocol (6,7,8,9,0) and second trigger button (`x`).
 
 <<<
 
 == Other hardware
+
+=== Middle Board
+
+An intermediate board can be installed in a ZXTRES as an optional component that expands the hardware capabilities to include support for:
+
+- <<#_wi_fi,Wi-Fi>> (via https://es.wikipedia.org/wiki/ESP8266[ESP8266])
+- <<#_midi,MIDI>> (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[RP2040 microcontroller]), 
+- <<#_rtc,RTC (real time clock)>>
+- <<#_bob_fossil_nmi_browser,direct loading of cores>>> from microSD card (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontroller RP2040])
+- USB keyboards and controllers (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller]).
+
+[.text-center]
+image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+
+==== Upgrade
+
+==== Recovery via USB
+
+In some situations it may be necessary to reinstall the bootstrap firmware for some https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller] on the board.
+
+*Hardware required*:
+
+- Computer with USB and compatible with Raspberry Pi Pico.
+- Cable with one  USB-A end (to connect to the ZXTRES) and the other end suitable for connecting to the computer (USB-C, USB-A, etc.)
+
+*Software required*:
+
+- Obtain the appropriate UF2 file for the microcontroller to be recovered:
+
+** `rp2s.uf2` for boards with a single microcontroller.
+** `rp2m-bootstrap.uf2` for rp2040 MIDI (boards with two microcontrollers)
+** `rp2u-bootstrap.uf2` for rp2040 USB (boards with two microcontrollers)
+
+*Steps to follow*:
+
+. Turn off the ZXTRES if it is on, and connect with the USB cable to the computer.
+. In the case of boards with two microcontrollers, set the switch to the appropriate position for the rp2040 to be recovered, being position 1 for USB and position 2 for MIDI.
+
+[.text-center]
+image:img/bootselsw.jpg[scaledwidth=60%]
+
+[start=3]
+. Turn on the ZXTRES while pressing the <<#_ports_and_connectors,BOOTSEL>> button on the bottom of the case.
+. Copy the corresponding UF2 file to the drive that will be available on the computer.
+. Finally, in the case of boards with two microcontrollers, if necessary, return the switch to position 1 (USB).
 
 === Loading from tape
 
@@ -2071,7 +2391,15 @@ https://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi on ZX-Uno]
 
 https://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[ZX-Uno Core Test UART (WiFi)]
 
-https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
+https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[Distribución para ZX-Uno (ver. 30.06.2023) Summer of '23 Edition]
+
+https://nihirash.net/projects/[Nihirash Projects]
+
+https://www.zxuno.com/forum/viewtopic.php?f=25&t=4079[Addon Wi-Fi en el foro de ZX-Uno]
+
+https://zxuno.com/forum/viewtopic.php?t=4108[Cliente PLATO en el foro de ZX-Uno] 
+
+https://zxuno.com/forum/viewtopic.php?t=3963[Sobre el MIDI addon en el foro de ZX-Uno]
 
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
 

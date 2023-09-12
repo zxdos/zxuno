@@ -75,7 +75,7 @@ image:img/ZXTRESback.jpg[scaledwidth=90%]
 |9
 |Salida de Sonido
 |10
-|Puerto USB (Sólo utilizable con middleboard instalada)
+|Puerto USB (sólo utilizable con <<#_tarjeta_intermedia_middle_board,Tarjeta intermedia>> instalada)
 |11
 |Salida RGB/VGA
 |12
@@ -92,7 +92,7 @@ image:img/ZXTRESbottom.jpg[scaledwidth=90%]
 [align="center",width="80%",cols="1,4"]
 |===
 |15
-|Botón de reset
+|Botón BOOTSEL para <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
 |16
 |Interruptor selector de sonido (DeltaSigma o I2S)
 |===
@@ -134,9 +134,10 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
 |[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
+|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|Necesita ROM
 |[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.neo`)#|Necesita BIOS
 |[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
-|[.small]#zxsp#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|Necesita ROM
+|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|Necesita ROM
 |===
 
 [NOTE]
@@ -388,8 +389,8 @@ Teclas especiales que se pueden utilizar durante la ejecución del core principa
 - `F8`: Rebobinar el archivo .PZX hasta la marca anterior
 - `F10`: Graph
 - `F12`: Turbo Boost. Pone a la CPU a 28MHz 
-- `Ctrl+Alt+Backspace`: Hard reset. Backspace es la tecla de borrar hacia atrás, encima de `Enter`
-- `Ctrl+Alt+Supr`: Soft reset
+- `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core).
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `Bloq. Despl.`: cambia de modo vídeo RGB a VGA y viceversa (DisplayPort está siempre activo)
 - `Inicio`: Alterna entre los distintos modos de gestión del desentrelazado en DisplayPort (Blend, Off, Auto y On). Esta opción sólo está disponible en los cores para ZXTRES+ y ZXTRES++
 - `Fin`: Activa los distintos modos de color monocromo
@@ -413,11 +414,12 @@ image:./img/esxdos.png[scaledwidth=70%]
 
 <<<
 
-Es recomendable, además, añadir los comandos esxdos específicos para ZXTRES. Estos se pueden obtener en la página con el código fuente del proyecto (https://github.com/zxdos/zxuno/tree/master/SD[aquí], https://github.com/zxdos/zxuno/tree/master/[aquí] y https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/upgrade[aquí]), y son los siguientes:
+Es recomendable, además, añadir los comandos esxdos específicos para ZXTRES. Estos se pueden obtener en la página con el código fuente del proyecto (https://github.com/zxtres/dot_commands/[aquí], https://github.com/zxdos/zxuno/tree/master/SD/BIN[aquí], y https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/upgrade[aquí]), y son los siguientes:
 
     back16m
     backzx2
     backzxd
+    core
     corebios
     dmaplayw
     esprst
@@ -561,8 +563,9 @@ Estas son algunas de sus principales características:
 - Soporte de arranque multicore: desde el Spectrum se puede seleccionar una dirección de la SPI Flash y la FPGA cargará un core desde ahí
 - Modos de color incluyendo monocromo o fósforo verde/naranja
 - Salida de audio I^2^S y DeltaSigma
-- Soporte Wi-Fi (UART)
-- Soporte MIDI (General MIDI) vía middleboard
+- Soporte Wi-Fi (UART) vía <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
+- Soporte MIDI (General MIDI) vía <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
+- Soporte RTC (reloj en tiempo real) vía <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
 - Carga de ficheros `PZX` desde la SD simulando carga de cinta
 - Varios modos de gestión del desentrelazado en la salida DisplayPort incluyendo una opción para mezclar (blend) los colores. Esto sólo está disponible en los cores para ZXTRES+ y ZXTRES++
 
@@ -1133,6 +1136,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 
 - `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
 - `backzx2` o `backzxd`: Genera un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
+- `core`: Reinicia la FPGA cargando el core especificado de la SPI Flash
 - `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
 - `dmaplayw`: Reproduce un archivo de audio .WAV, que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
 - `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
@@ -1141,18 +1145,147 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `keymap`: Sirve para cargar una definición de teclado diferente.
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `loadtap`: Para cargar un archivo de imagen de cinta usando la integración con .PZX.
-- `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
+- `playmid`: Reproduce archivos musicales .MID con la <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>> 
 - `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root".
-- `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
+- `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones seleccionadas en archivos de configuración que pueden posteriormente ser cargados (se puede obtener https://github.com/Utodev/ZXUC/tree/master/downloads[en el repositorio de Utodev]).
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
 
 [CAUTION]
 ====
 El comando `romsback` sólo está diseñado para ZX-Uno y no se debe usar con ZXTRES
 ====
+
+[TIP]
+====
+La mayoría de estos comandos se pueden obtener en el https://github.com/zxtres/dot_commands[repositorio oficial de ZXTRES] o https://github.com/zxdos/zxuno/tree/master/SD/BIN[el de ZX-Uno].
+====
+
+<<<
+
+=== Wi-Fi
+
+La <<#_tarjeta_intermedia_middle_board,tarjeta intermedia opcional>> (o Middle Board) tiene incorporado un módulo ESP-12 con un chip Wi-Fi https://es.wikipedia.org/wiki/ESP8266[ESP8266], que se puede utilizar fácilmente con un core de ZX Spectrum (por ejemplo, el core EXP28 290723) que tenga sintetizado un dispositivo https://es.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART], que permite la comunicacion con el módulo.
+
+Para configurar de forma básica el acceso al módulo, existen dos <<#_comandos_de_esxdos,comandos "DOT">> que se pueden obtener desde https://github.com/zxdos/zxuno/tree/master/SD/BIN/[el repositorio oficial en GitHub]:
+
+- `esprst`, que sirve para reiniciar el módulo
+- `iwconfig`, que se utiliza para indicar el identificador (SSID) y la contraseña de la red Wi-Fi a la que conectarse, que quedarán almacenados en el fichero `/sys/config/iw.cfg` para que puedan usarlos otros programas.
+
+Por ejemplo:
+[source,shell]
+----
+.iwconfig miwifi miclavedeacceso
+----
+
+[CAUTION]
+====
+Debido a que la la frecuencia seleccionada para VGA afecta a la frecuencia del reloj maestro, para que el módulo Wi-Fi se comunique correctamente con el core, esta debe estar configurada a 50 (véase el <<#_advanced,apartado dedicado a la configuración de la BIOS>>).
+====
+
+[TIP]
+====
+Todo el software de Wi-Fi que se indica a contiuación está disponible con https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[las distribuciones para ZX-Uno de desubikado]
+====
+
+==== Network tools for ZX-Uno
+
+Se trata de un conjunto de programas para ZX Spectrum, desarrollados por Nihirash algunos de los cuales se pueden https://nihirash.net/projects/[ver en su web].
+
+- `netman`: Utilidad sencilla para configurar la conexión Wi-Fi para el resto de programas. No funciona en modo 48K. Disponible para descarga https://github.com/nihirash/netman-zx[en GitHub].
+- `Moon Rabbit`: Cliente de https://es.wikipedia.org/wiki/Gopher[Gopher]. No funciona en modo 48K. Disponible para descarga https://github.com/nihirash/moon-rabbit-zx[en GitHub]
+- `irc`: Cliente de https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat]. Funciona mejor a 14 Mhz.
+- `wget`: Utilidad para descargar ficheros vía HTTP (no funciona con HTTPS).
+- `platoUNO`: Cliente de https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO]. También funciona mejor a 14 Mhz. Para más información sobre el uso moderno de PLATO, es interesante ver los artículos en https://zxuno.com/forum/viewtopic.php?t=4108[el foro de ZX-Uno] así como la web de https://www.irata.online/#about[IRATA.ONLINE].
+
+==== FTP-Uno
+
+Cliente de FTP desarrollado para ZX Spectrum por Yombo, disponible https://github.com/yomboprime/FTP_Uno[en GitHub].
+
+Para utilizarlo, se deben seguir los siguientes pasos:
+
+. Editar el archivo `FTP.CFG` con los datos necesarios (Wi-Fi, servidor FTP al que conectar, etc.)
+. Copiar `FTP.CFG` en `/SYS/CONFIG/` en la tarjeta microSD
+. Copiar también `ftpUno.tap` al lugar que desee de la tarjeta
+. Iniciar el ZXDOS+ y cargar el archivo de cinta `ftpUno.tap`
+
+<<<
+
+==== UART Terminal
+
+Se trata de un programa de ejemplo para ZX Spectrum incluido con la biblioteca de funciones C https://github.com/yomboprime/ZXYLib[ZXYLib] desarrollada por yombo, y que permite enviar directamente pulsaciones de teclado a través del UART, y ver el resultado. Se puede descargar https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[en este enlace].
+
+Una vez copiado el fichero de cinta `UARTTERM.tap` y cargado, se pueden teclear distintos comandos específicos para el chip ESP8266. Por ejemplo:
+
+- `AT`. Para verificar si hay comunicación con el chipo. El resultado normal, si todo está bien, sería `OK`
+- `AT+RST`. Para reiniciar el chip. Es exactamente lo mismo que hace el comando <<#_wi_fi,`esprst`>>
+- `AT+GMR`. Para ver información relativa al chip, versión de firmware instalado, etc
+- `AT+CWMODE_CUR=1`. Para configurar el chip en modo cliente Wi-Fi de forma temporal, hasta el próximo reinicio
+- `AT+CWMODE_DEF=1`. Para configurar el chip en modo cliente Wi-Fi y guardar el ajuste como opción por defecto
+- `AT+CWJAP_CUR="<RedWiFi>","<ContraseñaWiFi>"`, donde `<RedWiFi>` es el ID de a red Wi-Fi donde conectar, y `<ContraseñaWiFi>` la contraseña de acceso, conecta temporalente a la red indicada
+- `AT+CWJAP_DEF="<RedWiFi>","<ContraseñaWiFi>"`, conecta a la red indicada, y la guarda como red por defecto en la memoria del chip
+- `AT+CWAUTOCONN=1` configura el chip para conectarse a la red Wi-Fi por defecto al encenderse (`AT+CWAUTOCONN=0` desactiva esta opción)
+
+Se pueden consultar todos los comandos disponibles en https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[la documentación oficial del fabricante].
+
+<<<
+
+=== MIDI
+
+La <<#_tarjeta_intermedia_middle_board,tarjeta intermedia opcional>> (o Middle Board) tiene tiene incorporado un https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontrolador RP2040] programado para funcionar como sintetizador MIDI, y que se puede utilizar fácilmente con un core de ZX Spectrum (por ejemplo, el core EXP28 290723) que tenga sintetizado un dispositivo que permita la comunicacion con el módulo.
+
+Para utilizarlo se puede usar el <<#_comandos_de_esxdos,comando "DOT">> https://github.com/zxtres/dot_commands/tree/main/playmid[.playmid].
+
+[NOTE]
+====
+Puede ocurrir que `.playmid` reproduzca algunos ficheros MIDI un poco más lento o con la velocidad de reproducción distorsionada, esto es porque la reproducción de un fichero MIDI implica, de vez en cuando, https://zxuno.com/forum/viewtopic.php?t=3963[realizar cálculos costosos en el Z80, así como limitaciones inherentes al hardware] de ZX Spectrum y el chip AY-3-8912.
+
+Para paliarlo, se puede cambiar la velocidad de la CPU del ZXUNO con el comando `.zxunocfg -sVELOCIDAD` (con VELOCIDAD de 0 a 3, donde 3 es la más rápida) antes de usar `.playmid`, para así tener más potencia de CPU para procesar el fichero MIDI.
+====
+
+También es posible probarlo desde BASIC de ZX Spectrum 128K (habiendo desahabilitado previamente el acceso a la tarjeta SD - por ejemplo con el comando "DOT" `.zxuc`), por ejemplo, con este comando que toca una escala musical con el sonido de un piano:
+
+[source,basic]
+----
+PLAY "T160","","","Y1Z192Z0V15O5cdefgabC"
+----
+
+[TIP]
+====
+Cambiar `0` en `Z0` por otro número, de 0 a 127, cambia el instrumento a utilizar para reproducir la escala
+====
+
+==== Navegador de Bob Fossil
+
+Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[navegador de Bob Fossil] para reproducir MIDI:
+
+- El comando "DOT" `.playmid` instalado
+- La última http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[versión estable]
+- El plugin MID para el navegador
+
+Se ha de copiar el fichero `.MID` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin MID adecuado (en la carpeta `BIN\BPLUGINS`) y el fichero del comando "DOT" `playmid` (en la carpeta `BIN`).
+
+. Iniciar el core Spectrum de ZXTRES.
+. Pulsar `F5` para abrir el navegador de Bob Fossil y luego navegar hasta la ubicación del fichero con extensión `.MID`, seleccionarlo y pulsar ENTER.
+
+Se puede pulsar `Espacio` para detener la reproducción en cualquier momento.
+
+==== ZX MIDI player
+
+Este programa para ZX Spectrum ha sido https://github.com/UzixLS/zx-midiplayer[desarrollado por Eugene Lozovoy] y tiene las siguientes características:
+
+- Compatible con los formatos de archivo MID(SMF) tipo 0, tipo 1 y RMI;
+- Soporta archivos de hasta 64Kb
+- Soporte de hasta 60 pistas en archivo (para archivos más pesados, es deseable una frecuencia de CPU turbo)
+- Soporte para varias frecuencias de CPU - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz
+- Soporte para DivMMC (y derivados), ZXMMC, Z-Controller
+- Compatibilidad con el sistema de archivos FAT32
+
+<<<
+
+=== RTC
 
 <<<
 
@@ -1234,7 +1367,7 @@ Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:
 
 === Cores
 
-Un core consiste en un fichero con la información necesaria para que la FPGA se comporte como el sistema a implementar (ZX Spectrum, etc.). En ZXTRES, este fichero es posible cargarlo desde varios lugares distintos: la memorria SPI Flash, una tarjeta microSD, o desde algún dispositivo externo (PC, etc.) utilizando un cable especial.
+Un core consiste en un fichero con la información necesaria para que la FPGA se comporte como el sistema a implementar (ZX Spectrum, etc.). En ZXTRES, este fichero es posible cargarlo desde varios lugares distintos: la memoria SPI Flash, una tarjeta microSD, o desde algún dispositivo externo (PC, etc.) utilizando un cable especial.
 
 ==== Tarjeta microSD
 
@@ -1244,19 +1377,17 @@ Desde el core principal de ZX Spectrum es posible cargar otros cores
 
 ====== Navegador de Bob Fossil
 
-Para poder utilizar el navegador de Bob Fossil para cargar cores, se necesita lo siguiente:
+Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[navegador de Bob Fossil] para cargar cores, se necesita lo siguiente:
 
 - La última versión estable (http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip)
 - El plugin ZX3 para poder cargar Cores en formato ZX3 https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3
 
 Se ha de copiar el fichero `.ZX3` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN\BPLUGINS``).
 
-. Iniciar el core Spectrum de ZXTRES en modo root (pulsando `/` durante el arranque de la BIOS hasta que se ponga el borde rojo).
-. Pulsar `F5` para abrir el navegador de Bob Fossil y navegar hasta la ubicación del Core con extensión `.ZX3`, seleccionarlo y pulsar ENTER.
+. Iniciar el core Spectrum de ZXTRES.
+. Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.ZX3`, seleccionarlo y pulsar ENTER.
 
 Si todo va bien, en la parte inferior de la pantalla se indicará el progreso de grabación en la SPI Flash (se graba en un slot temporal).
-
-En el caso de que no se hubiese arrancado en modo root bastará con reiniciar (ctrl+alt+backspace) dejando pulsado "/" y probar de nuevo.
 
 [TIP]
 ====
@@ -1265,6 +1396,22 @@ Con algunos dispositivos conectados a los puertos de los mandos, puede aparecer 
 [.text-center]
 image:img/brwscfg.jpg[scaledwidth=70%]
 ====
+
+====== Navegador de Bob Fossil (con tarjeta intermedia)
+
+La <<#_tarjeta_intermedia_middle_board,tarjeta intermedia opcional>> (o Middle Board) tiene incorporado un https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontrolador RP2040] programado para poder leer desde la microSD y realizar la carga directa de cores en la FPGA.
+
+Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[navegador de Bob Fossil para este tipo de carga], se necesita lo siguiente:
+
+- La última http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[versión estable]
+- El plugin BIT para poder cargar Cores en formato BIT https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/BIT
+
+Se ha de copiar el fichero `.BIT` correspondiente en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN\BPLUGINS``).
+
+. Iniciar el core Spectrum de ZXTRES.
+. Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.BIT`, seleccionarlo y pulsar ENTER.
+
+Si todo va bien, tras unos pocos segundos, se realizará la carga del core en la FPGA y luego se reiniciará esta para lanzarlo.
 
 <<<
 
@@ -1354,7 +1501,7 @@ Durante la ejecución del core:
 - `0` a `9`: Botones del 0 al 9 del jugador 1 y el jugador 2
 - `T`: Botón '*'
 - `Y`: Botón '#'
-- 'Esc': Soft Reset
+- 'Esc': Soft Reset (reinicia el Core).
 
 <<<
 
@@ -1366,6 +1513,73 @@ Al iniciar, la ROM de la BIOS se carga desde la tarjeta microSD, así como la RO
 image:img/coleco.jpg[scaledwidth=70%]
 
 En el menú multicartucho, usar los controles de dirección para elegir la ROM a cargar, y luego el botón de disparo 1 para cargar la ROM elegida. Pulsando `Esc` se reinicia el core y se vuelve a cargar el menú de selección de ROM.
+
+<<<
+
+=== Elan Enterprise
+
+El https://es.wikipedia.org/wiki/Enterprise_128[Enterprise] fue un ordenador doméstico desarrollado por la empresa británica Intelligent Software y comercializado por Enterprise Computers a apartir de 1983.
+
+La versión para ZXTRES ha sido desarrollada por https://github.com/Kyp069/ep[Kyp069].
+
+Algunas de las características del core son:
+
+- Implementa 1024 KB de RAM.
+- Soporte para cargar una imagen de disco virtual (fichero .vhd). En el arranque ya se carga automáticamente el fichero EP.VHD en caso de encontrarlo en el directorio raíz de la tarjeta SD
+- Salida RGB
+- Tiene implementado el joystick externo en el DB9 y el joystick interno en las teclas de cursor, con soporte para dos botones de disparo
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar el ficheros con la ROM y las imágenes de disco virtual que se desee utilizar.
+
+El fichero ROM debe ser copiado en el directorio raíz de la SD como `ep.rom`. Además también está preparadp para trabajar con ficheros .VHD (imagen de disco), como por ejemplo el que está disponible con https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[las distribuciones para ZX-Uno de desubikado],
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Elan Enterprise>> en el ZXTRES.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: mostrar el menú de control del core
+- `F1`: Muestra el navegador de archivos si la unidad actual es la F:. Ya dentro del navegador de archivos se puede cambiar de partición con solo pulsar la letra de esta (F, G, H, etc).
+- `C+F9`: Hace un Hard reset del core y vuelve a montar la unidad de discos virtual.
+- `F9` o `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
+- `F11` o `Ctrl+Alt+Supr`: Hard reset (reinicia la FPGA)
+
+==== Guía básica
+
+Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+
+[.text-center]
+image:img/enterprise.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Available RAM`: Permite cambiar la cantidad de RAM disponible dentro del core
+- `CPU Speed`: Para aumentar o dismunir la velocidad de la CPU
+- `Load ROM`: Para cargar un fichero de ROM
+- `Mount A:`: Para montar una imagen de disco `DSK`
+- `Mount SD`: Para montar una imagen de disco `VHD` (se ha de hacer hard reset pulsando `C+F9` para que el sistema la utilice)
+
+Si hay una imagen de disco VHD montada, pulsando `F1` o ejecutando el comando :FILE (`:` se obtiene pulsando +´+) se accede al navegador de archivos. Si se pulsa la letra de otra unidad (G, H, etc) se cambia a esta.
+
+[.text-center]
+image:img/enterprisefile.jpg[scaledwidth=70%]
+
+Los archivos ejecutables son `COM``.
+
+También es posible cargar programas sin usar el navegador. Un ejemplo:
+
+[source]
+----
+:h:
+:cd b
+:cd bricky
+:load bricky.com
+----
 
 <<<
 
@@ -1536,19 +1750,19 @@ image:img/keyboardZX81.jpg[scaledwidth=80%]
 
 Durante la ejecución del core:
 
+- `F5` o el botón `B` del mando 1 para mostrar u ocultar el menú de configuración
 - `F1`: Habilitar o deshabilitar los caracteres alternativos
-- `F5` o el botón `B` del mando para mostrar u ocultar el menú.
 - `F9`: Deshabilita o habilita la salida MIC al conector de audio, porque algunos juegos generan un ruido molesto
 - `F10`: Habilita o deshabilita sonido de entrada por la salida de audio, para escuchar la cinta si se carga por audio
 - `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
-- `Ctrl+Alt+Supr`: Reset
-- `Ctrl+Alt+Backspace`: Hard reset.
+- `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
 ==== Guía básica
 
-Pulsando `F5` o el botón `B` del mando se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar opciones del menú.
+Pulsando `F5` o el botón `B` del mando 1 se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center]
 image:img/zx81.jpg[scaledwidth=70%]
@@ -1602,11 +1816,113 @@ CHROMA81: enabled
 
 <<<
 
-=== zxsp
+=== ZX Spectrum +3 (zxp3)
+
+El https://es.wikipedia.org/wiki/ZX_Spectrum_128_%2B3[ZX Spectrum +3] fue fabricado por Amstrad y salió al mercado en 1987. Ttenía un aspecto similar al +2 pero incorporaba una unidad de disquete de 3 pulgadas de la unidad de cinta, y tenía una carcasa negra. Fue el único Spectrum capaz de ejecutar el sistema operativo CP/M sin hardware adicional.
+
+La versión para ZXTRES ha sido creada por kyp069.
+
+Características:
+
+- Turbosound
+- Carga de cintas
+- Dos unidades de disquete
+- Soporte para imágenes de disco ZXMMC
+- Joystick Kempston con dos botones de disparo
+- Joysticks Interface 2
+- Salida de vídeo RGB PAL o VGA (50 Hz)
+- Soporta cualquier ROM compatible con +3, como la ROM estándar de Amstrad y la ROM +3e de Garry Lancaster
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros de imagen de disco o ROM que se deseen cargar.
+
+El fichero ROM por defecto debe ser copiado en el directorio raíz de la SD como `zxp3.rom`. Además también está preparadp para trabajar con un fichero .VHD (imagen de disco) formateado internamente en el sistema de ficheros +3DOS, como por ejemplo el que está disponible con https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[las distribuciones para ZX-Uno de desubikado].
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core zxp3>> en el ZXTRES.
+
+<<<
+
+==== Teclado
+
+El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la distribución de la máquina original. Así, por ejemplo, para obtener `"` se ha de pulsar `Mayús+P` o para borrar, `Mayús+0`.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12` para mostrar u ocultar el menú.
+- `Bloq. Despl.`: cambiar entre modo de vídeo RGB y VGA
+- `Ctrl+Alt+Supr` o  `F9`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace` o `F8`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+
+[.text-center]
+image:img/zxp3.jpg[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load ROM`: Permite cambiar la ROM
+- `Mount drive A:`: Para montar un fichero DSK en la primera unidad
+- `Mount drive B:`: Para montar un fichero DSK en la segunda unidad
+- `Mount SD:`: Para montar un fichero VHD como disco (se ha de hacer reset para que el sistema lo utilice),
+- `Reset FPGA`: para reiniciar la FPGA
+
+Por otra parte el mando 1 se comporta simultáneamente con protocolo Kempston (con dos botones de disparo) y Sinclair (1,2,3,4,5) con segundo botón de disparo (`z`). El mando conectado al puerto 2 se comporta con protocolo Sinclair (6,7,8,9,0) y segundo botón de disparo (`x`).
 
 <<<
 
 == Otro Hardware
+
+=== Tarjeta intermedia (Middle Board)
+
+Se puede instalar como componente opcional en un ZXTRES una tarjeta intermedia que expande las capacidades de hardware incluyendo soporte para:
+
+- <<#_wi_fi,Wi-Fi>> (vía https://es.wikipedia.org/wiki/ESP8266[ESP8266])
+- <<#_midi,MIDI>> (vía https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontrolador RP2040]), 
+- <<#_rtc,RTC (reloj en tiempo real)>>
+- <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,carga directa de cores>> desde la tarjeta microSD (vía https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontrolador RP2040])
+- Teclados y mandos USB (vía https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontrolador RP2040]).
+
+[.text-center]
+image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+
+==== Actualización
+
+==== Recuperación vía USB
+
+En algunas situaciones puede ser necesario reinstalar el firmaware de arranque (bootstrap) de algún https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontrolador RP2040] de la tarjeta.
+
+*Material necesario*:
+
+- Ordenador con USB y compatible con Raspberry Pi Pico
+- Cable con un extremo USB-A (para conectar con el ZXTRES) y el otro extremo adecuado para conectar con el ordenador (USB-C, USB-A, etc.)
+
+*Software necesario*:
+
+- Obtener el archivo UF2 adecuado para el microcontrolador a recuperar:
+
+** `rp2s.uf2` para tarjetas con un único microcontrolador
+** `rp2m-bootstrap.uf2` para rp2040 MIDI (tarjetas con dos microcontroladores)
+** `rp2u-bootstrap.uf2` para rp2040 USB (tarjetas con dos microcontroladores)
+
+*Pasos a seguir*:
+
+. Apagar el ZXTRES si estuviera encendido, y conectar con el cable USB al ordenador
+. En el caso de tarjetas con dos microcontroladores, poner el interruptor en la posición adecuada para el rp2040 a recuperar, siendo la posición 1 para USB y la posición 2 para MIDI
+
+[.text-center]
+image:img/bootselsw.jpg[scaledwidth=60%]
+
+[start=3]
+. Encender el ZXTRES mientras se pulsa el <<#_puertos_y_conectores,botón BOOTSEL>> de la parte inferior de la carcasa
+. Copiar el fichero UF2 correspondiente a la unidad de disco que aparecerá disponible en el ordenador
+. Finalmente, en el caso de tarjetas con dos microcontroladores, si fuera necesario, volver a poner el interruptor en la posición 1 (USB)
 
 === Carga desde cinta
 
@@ -2107,7 +2423,15 @@ https://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi en ZX-Uno]
 
 https://svn.zxuno.com/svn/zxuno/cores/spectrum_v2_spartan6/test19_multi_uart/[Core de ZX-Uno Test UART (WiFi)]
 
-https://nihirash.net/network-tools-for-zx-uno-pack/[Network tools for ZX-Uno pack]
+https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[Distribución para ZX-Uno (ver. 30.06.2023) Summer of '23 Edition]
+
+https://nihirash.net/projects/[Nihirash Projects]
+
+https://www.zxuno.com/forum/viewtopic.php?f=25&t=4079[Addon Wi-Fi en el foro de ZX-Uno]
+
+https://zxuno.com/forum/viewtopic.php?t=4108[Cliente PLATO en el foro de ZX-Uno] 
+
+https://zxuno.com/forum/viewtopic.php?t=3963[Sobre el MIDI addon en el foro de ZX-Uno]
 
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
 
