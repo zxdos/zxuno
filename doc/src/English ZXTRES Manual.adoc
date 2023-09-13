@@ -1199,7 +1199,9 @@ These are ZX Spectrum programs, developed by Nihirash and that are https://nihir
 - `Moon Rabbit`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode. Available to download https://github.com/nihirash/moon-rabbit-zx[at GitHub]
 - `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz
 - `wget`: Utility to download files with HTTP (does not work with HTTPS)
-- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/#about[IRATA.ONLINE] web
+- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/%23about[IRATA.ONLINE] web
+
+<<<
 
 ==== FTP-Uno
 
@@ -1211,8 +1213,6 @@ Configuration steps:
 . Copy `FTP.CFG` inside `/SYS/CONFIG/` in SD card
 . Also copy `ftpUno.tap` to any place in the card
 . Start up the ZX-Uno and load the tape file `ftpUno.tap`
-
-<<<
 
 ==== UART Terminal
 
@@ -1235,7 +1235,7 @@ You can see all the available commands reading the https://www.espressif.com/sit
 
 === MIDI
 
-The <<#_middle_board,optional middle board>> has also built-in a https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller] programmed to work as a MIDI synthesizer, which can be used easily with a ZX Spectrum core that has a synthesized device that allows communication with the module (like the EXP28 290723 core).
+The <<#_middle_board,optional middle board>> has also built-in a https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device [RP2040 microcontroller] programmed to work as a MIDI synthesizer, which can be used easily with a ZX Spectrum core that has a synthesized device that allows communication with the module (like the EXP28 290723 core).
 
 You can use the <<#_esxdos_commands,"DOT" command >> https://github.com/zxtres/dot_commands/tree/main/playmid[.playmid] to listen to MIDI files.
 
@@ -1385,7 +1385,7 @@ If everything worked correctly, the bottom of the screen indicates the flashing 
 
 ====== Bob Fossil NMI browser (with Middle Board)
 
-The <<#_middle_board,optional middle board>> has a built-in https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller] programmed to read from the microSD and perform direct loading of cores into the FPGA.
+The <<#_middle_board,optional middle board>> has a built-in https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device [RP2040 microcontroller] programmed to read from the microSD and perform direct loading of cores into the FPGA.
 
 In order to use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil's browser for this type of loading], the following is required:
 
@@ -1535,17 +1535,16 @@ When the core is active:
 - F9` or `Ctrl+Alt+Del`: Soft Reset (resets the Core).
 - F11` or `Ctrl+Alt+Del`: Hard Reset (resets the FPGA)
 
+<<<
+
 ==== Overview
 
 When the correct ROM file is present on the microSD card the machine is started.
 
-[.text-center]
-image:img/enterprise.png[scaledwidth=70%]
-
 Press `F12` to display the menu with the different core options.
 
 [.text-center]
-image:img/enterprisefile.jpg[scaledwidth=70%]
+image:img/enterprise.png[scaledwidth=70%]
 
 These are the main ones:
 
@@ -1554,6 +1553,11 @@ These are the main ones:
 - `Load ROM`: To load a ROM file.
 - `Mount A:`: To mount a `DSK` disk image.
 - `Mount SD`: To mount a `VHD` disk image (needs a hard reset by pressing `C+F9` for the system to start using it)
+
+<<<
+
+[.text-center]
+image:img/enterprisefile.jpg[scaledwidth=70%]
 
 When a VHD disk image is mounted pressing `F1` or executing the :FILE command (`:` is obtained by pressing +'+), starts a file browser. Pressing another drive letter (G, H, etc) switches to it.
 
@@ -1676,6 +1680,8 @@ When the core is active:
 ====
 The previously mentioned effects with keys `2` and `3` are not visible on the original 15 kHz output.
 ====
+
+<<<
 
 ==== Overview
 
@@ -1806,7 +1812,7 @@ CHROMA81: Enabled.
 
 === ZX Spectrum +3 (zxp3)
 
-https://en.wikipedia.org/wiki/ZX_Spectrum#ZX_Spectrum_+3
+https://en.wikipedia.org/wiki/ZX_Spectrum%23ZX_Spectrum_+3
 
 The https://es.wikipedia.org/wiki/ZX_Spectrum_128_%2B3 [ZX Spectrum +3] was manufactured by Amstrad and released in 1987. It was similar in appearance to the +2 but featured a 3-inch floppy disk drive from the tape drive, and had a black casing. It was the only Spectrum capable of running the CP/M operating system without additional hardware.
 
@@ -1872,19 +1878,17 @@ Controller 1 behaves simultaneously with Kempston protocol (with two trigger but
 An intermediate board can be installed in a ZXTRES as an optional component that expands the hardware capabilities to include support for:
 
 - <<#_wi_fi,Wi-Fi>> (via https://es.wikipedia.org/wiki/ESP8266[ESP8266])
-- <<#_midi,MIDI>> (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[RP2040 microcontroller]), 
+- <<#_midi,MIDI>> (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[RP2040 microcontroller]), 
 - <<#_rtc,RTC (real time clock)>>
-- <<#_bob_fossil_nmi_browser,direct loading of cores>>> from microSD card (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device[microcontroller RP2040])
-- USB keyboards and controllers (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller]).
+- <<#_bob_fossil_nmi_browser,direct loading of cores>> from microSD card (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontroller RP2040])
+- USB keyboards and controllers (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[RP2040 microcontroller])
 
 [.text-center]
 image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
 
-==== Upgrade
-
 ==== Recovery via USB
 
-In some situations it may be necessary to reinstall the bootstrap firmware for some https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html#rp2040-device [RP2040 microcontroller] on the board.
+In some situations it may be necessary to reinstall the bootstrap firmware for some https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device [RP2040 microcontroller] on the board.
 
 *Hardware required*:
 
@@ -1912,6 +1916,8 @@ image:img/bootselsw.jpg[scaledwidth=60%]
 . Copy the corresponding UF2 file to the drive that will be available on the computer.
 . Finally, in the case of boards with two microcontrollers, if necessary, return the switch to position 1 (USB).
 
+<<<
+
 === Loading from tape
 
 Some cores can load from an external device such as a cassette tape player, just like the original machines.
@@ -1934,9 +1940,9 @@ Depending on the operating system (Windows, macOS or Linux) there are several pr
 
 This program for Windows, macOS and Linux can directly play a `TZX` tape file through the computer's audio output.
 
-You can download the application for Windows from https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository]) or compile the source code as <<#_compile_source_code_(macos_and_linux),explained later>>.
+You can download the application for Windows from https://worldofspectrum.net/utilities/%23tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository] or compile the source code as <<#_compile_source_code_macos_and_linux,explained later>>.
 
-. Connect the audio cable between the computer audio output and ZXTRES audio input (remember to use only the right mono channel to the PC Mac and so on output).
+. Connect the audio cable between the computer audio output and ZXTRES audio input (remember to use only the right mono channel to the PC Mac and so on output). 
 . Type on the computer or select the tape loading option. For examle for ZX Spectrum 48K typing `J` then twice `"` and then `Enter` to do the classic `LOAD "" + Enter`.
 . Start playing a tape file with this command (you may need to try several times adjusting the player volume).
 
@@ -2265,6 +2271,8 @@ In this example the `31` `33` `35` `37` and `39` pins are used (corresponding to
 cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxtres/unbrick/
 ----
 
+<<<
+
 [start=6]
 . For GPIO connection edit a copy of `raspberrypi2-native.cfg`, updating `bcm2835gpio_jtag_nums` (uncommenting if necessary) with your JTAG and GPIO connection numbers at the line `bcm2835gpio_jtag_nums`:
 
@@ -2316,10 +2324,10 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 Remember to enter the correct name replacing `recovery_axx.bit` in the previous commands.
 ====
 
+<<<
+
 [start=11]
 . If everything worked correctly, you'll see that the FPGA LED change their state and the BIOS is shown on the display.
-
-<<<
 
 If there's no image on the display and you're not using DisplaPort, press `Scroll Lock` to switch between RGB and VGA modes in case the recovery BIOS started in the wrong mode for your setup.
 
@@ -2330,6 +2338,8 @@ image:img/recovery.png[scaledwidth=70%]
 . Insert the microSD card formatted as FAT16 o FAT32 and with the `FLASH.ZX3` file downloaded previously in the ZXTRES.
 
 . If using a USB-Blaster connection, disconnect the connector.
+
+<<<
 
 [start=14]
 . Select the `Upgrade Flash from SD` opiton. Press `Enter`, choose `Yes` and press `Enter` again to start the flash writing process.
@@ -2383,9 +2393,9 @@ https://github.com/zxdos/zxdos-plus/tree/master/zxunops2[zxunops2]
 
 https://docs.google.com/spreadsheets/d/17-ifpHcy932_AP7SAv9uBLxg-2ZptcdgTvQ8ILXQLM4/htmlview[Almost (In-) Complete List of esxDOS DOT-Commands]
 
-https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10#p25076[Cargando Leches 2.0]
+https://www.va-de-retro.com/foros/viewtopic.php?t=1718&start=10%23p25076[Cargando Leches 2.0]
 
-http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671&hilit=wifi#p200075671[WiFi (RetroWiki)]
+http://retrowiki.es/viewtopic.php?f=83&t=200032578&p=200075671%23p200075671[WiFi (RetroWiki)]
 
 https://www.zxuno.com/forum/viewtopic.php?f=35&t=44[WiFi on ZX-Uno]
 
@@ -2405,6 +2415,6 @@ https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instru
 
 https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Radastanian Vídeos]
 
-https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234&hilit=kyp#p28234[New core zx48]
+https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[New core zx48]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - user's guide]
