@@ -390,7 +390,7 @@ Teclas especiales que se pueden utilizar durante la ejecución del core principa
 - `F7`: Reproducir o Pausa en la reproducción de archivos .PZX
 - `F8`: Rebobinar el archivo .PZX hasta la marca anterior
 - `F10`: Graph
-- `F12`: Turbo Boost. Pone a la CPU a 28MHz 
+- `F12`: Turbo Boost. Pone a la CPU a 28 MHz 
 - `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core).
 - `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 - `Bloq. Despl.`: cambia de modo vídeo RGB a VGA y viceversa (DisplayPort está siempre activo)
@@ -557,10 +557,10 @@ Estas son algunas de sus principales características:
 - Soporte de SpecDrum
 - Cada canal A,B,C de los dos chips AY-3-8912, beeper y SpecDrum pueden dirigirse a las salidas izquierda, derecha, ambas o ninguna, permitiendo la implementación de configuraciones tales como ACB, ABC, etc.
 - Soporte de mando real y mando emulado en teclado con protocolo de joystick Kempston, Sinclair 1 y 2, Cursor, Fuller y QAOPSpcM.
-- Soporte de modo turbo a 7MHz, 14MHz, 28MHz
+- Soporte de modo turbo a 7 MHz, 14 MHz, 28 MHz
 - Soporte de teclado con protocolo PS/2 y mapa del mismo configurable desde el propio Spectrum.
 - Soporte de ratón PS/2 emulando el protocolo Kempston Mouse.
-- Posibilidad de salida de vídeo en modo RGB 15kHz, VGA y DisplayPort
+- Posibilidad de salida de vídeo en modo RGB 15 kHz, VGA y DisplayPort
 - Frecuencia de refresco vertical seleccionable para la compatibilidad con monitores VGA
 
 <<<
@@ -1188,11 +1188,6 @@ Por ejemplo:
 .iwconfig miwifi miclavedeacceso
 ----
 
-[CAUTION]
-====
-Debido a que la la frecuencia seleccionada para VGA afecta a la frecuencia del reloj maestro, para que el módulo Wi-Fi se comunique correctamente con el core, esta debe estar configurada a 50 (véase el <<#_advanced,apartado dedicado a la configuración de la BIOS>>).
-====
-
 [TIP]
 ====
 Todo el software de Wi-Fi que se indica a contiuación está disponible con https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[las distribuciones para ZX-Uno de desubikado]
@@ -1204,9 +1199,9 @@ Se trata de un conjunto de programas para ZX Spectrum, desarrollados por Nihiras
 
 - `netman`: Utilidad sencilla para configurar la conexión Wi-Fi para el resto de programas. No funciona en modo 48K. Disponible para descarga https://github.com/nihirash/netman-zx[en GitHub].
 - `Moon Rabbit`: Cliente de https://es.wikipedia.org/wiki/Gopher[Gopher]. No funciona en modo 48K. Disponible para descarga https://github.com/nihirash/moon-rabbit-zx[en GitHub]
-- `irc`: Cliente de https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat]. Funciona mejor a 14 Mhz.
+- `irc`: Cliente de https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat]. Funciona mejor a 14 MHz.
 - `wget`: Utilidad para descargar ficheros vía HTTP (no funciona con HTTPS).
-- `platoUNO`: Cliente de https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO]. También funciona mejor a 14 Mhz. Para más información sobre el uso moderno de PLATO, es interesante ver los artículos en https://zxuno.com/forum/viewtopic.php?t=4108[el foro de ZX-Uno] así como la web de https://www.irata.online/%23about[IRATA.ONLINE].
+- `platoUNO`: Cliente de https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO]. También funciona mejor a 14 MHz. Para más información sobre el uso moderno de PLATO, es interesante ver los artículos en https://zxuno.com/forum/viewtopic.php?t=4108[el foro de ZX-Uno] así como la web de https://www.irata.online/%23about[IRATA.ONLINE].
 
 <<<
 
@@ -1287,7 +1282,7 @@ Este programa para ZX Spectrum ha sido https://github.com/UzixLS/zx-midiplayer[d
 - Compatible con los formatos de archivo MID(SMF) tipo 0, tipo 1 y RMI;
 - Soporta archivos de hasta 64Kb
 - Soporte de hasta 60 pistas en archivo (para archivos más pesados, es deseable una frecuencia de CPU turbo)
-- Soporte para varias frecuencias de CPU - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz
+- Soporte para varias frecuencias de CPU - 3.5 MHz, 3.54 MHz, 7 MHz, 14 MHz, 28 MHz
 - Soporte para divMMC (y derivados), ZXMMC, Z-Controller
 - Compatibilidad con el sistema de archivos FAT32
 
@@ -1806,7 +1801,7 @@ image:img/zx81_2.jpg[scaledwidth=70%]
 - Vídeo inverso (Inverse Video): Off/On
 - Borde negro (Black Border): Off/On
 - Modo de velocidad (Slow mode speed): Original/No Wait/x2
-- Frecuencia de vídeo (Video frequency): 50Hz/60Hz
+- Frecuencia de vídeo (Video frequency): 50 Hz/60 Hz
 
 Desde BASIC, se puede cargar desde un fichero de cinta, que se haya seleccionado desde el menú, con el comando `LOAD""` y pulsando `Enter`.
 

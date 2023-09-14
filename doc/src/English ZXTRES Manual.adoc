@@ -385,7 +385,7 @@ Special keys that can be used while running the main core (ZX Spectrum):
 - `F7`: Play or pause when playing `PZX` files.
 - `F8`: Rewind a `PZX` file to the previous mark.
 - `F10`: Graph(ics).
-- `F12`: Turbo boost (speeds up CPU to 28MHz).
+- `F12`: Turbo boost (speeds up CPU to 28 MHz).
 - `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
 - `Ctrl+Alt+Supr`: Soft reset (restart the core).
 - `Scroll Lock`: Switches between RGB and VGA video modes. DisplayPort is always enabled.
@@ -553,10 +553,10 @@ Some of its main characteristics include:
 - SpecDrum support.
 - Each channel (A, B and C) of the two AY-3-8912, beeper and SpecDrum chips can be directed to the left, right, both or neither outputs enabling the implementation of configurations such as ACB, ABC and so on.
 - Real controller and keyboard-emulated controller support with Kempston, Sinclair 1 and 2, Cursor, Fuller and QAOPSpcM protocol.
-- Turbo mode support at 7MHz, 14MHz and 28MHz.
+- Turbo mode support at 7 MHz, 14 MHz and 28 MHz.
 - Keyboard support (PS/2 protocol) and user-configurable mapping from within the ZX Spectrum core itself.
 - PS/2 mouse support emulating the Kempston Mouse protocol.
-- Video output in RGB 15kHz, VGA and DisplayPort.
+- Video output in RGB 15 kHz, VGA and DisplayPort.
 - User selectable vertical refresh rate to improve compatibility with VGA monitors.
 - Multicore boot support: from the ZX Spectrum core you can select an address of the SPI Flash and the FPGA will load a core from there.
 - Different colour modes including monochrome.
@@ -1181,11 +1181,6 @@ For example:
 .iwconfig mywifi mypassword
 ----
 
-[CAUTION]
-====
-The VGA frequency affects the master clock frequency. For communication between the core and the Wi-Fi module to work correctly, the frequency must be set to 50 Hz (see the <<#_advanced,BIOS settings chapter>>).
-====
-
 [TIP]
 ====
 All the Wi-Fi software (explained later) is available with the https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[ZX-Uno distributions by desubikado].
@@ -1197,9 +1192,9 @@ These ZX Spectrum programs, developed by Nihirash, are available https://nihiras
 
 - `netman`: Configures the ESP Wi-Fi chip for other programs from Nihirash. It doesn't work in 48K mode. Available to download https://github.com/nihirash/netman-zx[from GitHub].
 - `Moon Rabbit`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Doesn't work in 48K mode. Available to download https://github.com/nihirash/moon-rabbit-zx[from GitHub].
-- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz CPU clock.
+- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 MHz CPU clock.
 - `wget`: Utility to download files with HTTP (does not work with HTTPS)
-- `platoUNO`: https://en.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz CPU clock. For more information about PLATO, refer to the https://www.irata.online/%23about[IRATA.ONLINE] website.
+- `platoUNO`: https://en.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 MHz CPU clock. For more information about PLATO, refer to the https://www.irata.online/%23about[IRATA.ONLINE] website.
 
 <<<
 
@@ -1283,7 +1278,7 @@ This ZX Spectrum program was https://github.com/UzixLS/zx-midiplayer[developed b
 - Compatible with MID(SMF) file formats type 0, type 1 and RMI;
 - Supports files up to 64Kb.
 - Support for up to 60 tracks in a file (for heavier files, a turbo CPU frequency is desirable).
-- Support for multiple CPU frequencies - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz.
+- Support for multiple CPU frequencies - 3.5 MHz, 3.54 MHz, 7 MHz, 14 MHz, 28 MHz.
 - Support for divMMC (and derivatives), ZXMMC, Z-Controller- FAT32 file system support.
 
 <<<
@@ -1787,7 +1782,7 @@ image:img/zx81_2.jpg[scaledwidth=70%]
 - Inverse Video: Off, On.
 - Black Border: Off, On.
 - Slow mode speed: Original, No Wait, x2.
-- Video frequency: 50Hz, 60Hz.
+- Video frequency: 50 Hz, 60 Hz.
 
 You can load a tape file selecting it from the menu then enter the command `LOAD""` and `Enter`.
 
