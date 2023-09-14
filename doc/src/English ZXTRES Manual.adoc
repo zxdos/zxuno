@@ -699,7 +699,7 @@ image:img/sebasic4.png[pdfwidth=70%]
 
 Version 4.0 added support for 80 column mode. Version 4.1 was an unsuccessful attempt to refactor the code. Starting in 2019, the latest version (4.2 Cordelia) was rebuilt from the ground up to take full advantage of the ZX Spectrum core of the ZX-Uno (and ZXTRES). While earlier versions retained a high level of compatibility with Sinclair BASIC and software, this version has no support for Sinclair software and is closer in dialect to Atari BASIC.
 
-Version 4.2 requires that divMMC support is enabled with esxDOS or UnoDOS 3 installed. However, "dot" commands and the NMI browser are not supported.
+Version 4.2 requires that divMMC support is enabled with esxDOS or UnoDOS 3 installed. However, <<#_esxdos_commands,"dot" command >> commands and the NMI browser are not supported.
 
 <<<
 
@@ -1133,7 +1133,7 @@ The NMI browser shows file and folder entries in the order stored in the interna
 
 ==== ZXTRES Commands
 
-As noted in the installation section, there are a several "dot" commands that are exclusive to the ZXTRES:
+As noted in the installation section, there are a several <<#_esxdos_commands,"dot" command >> commands that are exclusive to the ZXTRES:
 
 - `back16m`: Dumps to a `FLASH.ZX1` file in the root folder of the microSD card the contents of a 16 Meg SPI Flash memory. After the command is done, you must enter `.ls` so that the cache is written to the microSD card. Otherwise the length of the file is wrongly set to 0.
 - `backzx2` or `backzxd`: Creates a `FLASH_32.ZX2` or `FLASH_32.ZXD` file in the root folder of the microSD card with the contents of a 32 Meg SPI Flash memory. After the command is done, you must enter `.ls` so that the cache is wrtten to the microSD card. Otherwise the length of the file is wrongly set to 0.
@@ -1168,12 +1168,12 @@ Most of these commands are available to download from https://github.com/zxtres/
 
 === Wi-Fi
 
-The <<#_middle_board,optional middle board>> has an ESP-12 module with a Wi-Fi https://es.wikipedia.org/wiki/ESP8266[ESP8266] chip that can be easily used with a ZX Spectrum core (like EXP28 290723) which has synthesized an https://es.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART] device, that allows communication with the module.
+The <<#_middle_board,optional middle board>> includes an ESP-12 Wi-Fi https://es.wikipedia.org/wiki/ESP8266[ESP8266] chip. To communicate with the chip, a core that synthesize a https://en.wikipedia.org/wiki/Universal_Asynchronous_Receiver-Transmitter[UART] device, (such as the EXP28 290723 ZX Spectrum core) is required.
 
-There are two "DOT" commands for configuring software access to the module. They can be downloaded from https://github.com/zxdos/zxuno/tree/master/SD/BIN/[GitHub official repository]:
+There are two <<#_esxdos_commands,"dot" command >> commands for configuring software access to the module. They can be downloaded from https://github.com/zxdos/zxuno/tree/master/SD/BIN/[GitHub official repository]:
 
-- `esprst`, which restarts the module
-- `iwconfig`, to register the Wi-Fi network name (SSID) and password, keeping them in the file `/sys/config/iw.cfg` for other programs to use it.
+- `esprst` restarts the module.
+- `iwconfig` registers the Wi-Fi network name (SSID) and password, keeping them in the file `/sys/config/iw.cfg` for other programs to use.
 
 For example:
 [source,shell]
@@ -1183,70 +1183,70 @@ For example:
 
 [CAUTION]
 ====
-Since the selected VGA frequency affects the master clock frequency, for the communication between the core and the Wi-Fi module to work correctly, it has to be set at 50 (see the <<#_advanced,BIOS settings chapter>>).
+The VGA frequency affects the master clock frequency. For communication between the core and the Wi-Fi module to work correctly, the frequency must be set to 50 Hz (see the <<#_advanced,BIOS settings chapter>>).
 ====
 
 [TIP]
 ====
-All the Wi-Fi software which is explained later is available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[ZX-Uno distributions by desubikado]
+All the Wi-Fi software (explained later) is available with the https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[ZX-Uno distributions by desubikado].
 ====
 
 ==== Network tools for ZX-Uno pack
 
-These are ZX Spectrum programs, developed by Nihirash and that are https://nihirash.net/projects/[in his web].
+These ZX Spectrum programs, developed by Nihirash, are available https://nihirash.net/projects/[from his website]:
 
-- `netman`: Utility to configure the ESP Wi-Fi chip for other programs from Nihirash. Does not work in 48K mode. Available to download https://github.com/nihirash/netman-zx[at GitHub].
-- `Moon Rabbit`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Does not work in 48K mode. Available to download https://github.com/nihirash/moon-rabbit-zx[at GitHub]
-- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz
+- `netman`: Configures the ESP Wi-Fi chip for other programs from Nihirash. It doesn't work in 48K mode. Available to download https://github.com/nihirash/netman-zx[from GitHub].
+- `Moon Rabbit`: https://es.wikipedia.org/wiki/Gopher[Gopher] client. Doesn't work in 48K mode. Available to download https://github.com/nihirash/moon-rabbit-zx[from GitHub].
+- `irc`: https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] client. Works better at 14 Mhz CPU clock.
 - `wget`: Utility to download files with HTTP (does not work with HTTPS)
-- `platoUNO`: https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz. For more information about PLATO, check https://www.irata.online/%23about[IRATA.ONLINE] web
+- `platoUNO`: https://en.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO] client. Also works better at 14 Mhz CPU clock. For more information about PLATO, refer to the https://www.irata.online/%23about[IRATA.ONLINE] website.
 
 <<<
 
 ==== FTP-Uno
 
-FTP client developed by Yombo, available https://github.com/yomboprime/FTP_Uno[at GitHub].
+FTP client developed by Yombo, available https://github.com/yomboprime/FTP_Uno[from GitHub].
 
 Configuration steps:
 
-. Edit `FTP.CFG` file with all the required information (SSID and password, FTP server, etc.)
-. Copy `FTP.CFG` inside `/SYS/CONFIG/` in SD card
-. Also copy `ftpUno.tap` to any place in the card
-. Start up the ZX-Uno and load the tape file `ftpUno.tap`
+. Edit `FTP.CFG` file with all the required information (SSID and password, FTP server, and so on).
+. Copy `FTP.CFG` inside the `/SYS/CONFIG/` folder on the microSD card.
+. Copy `ftpUno.tap` to any folder on the card.
+. Power on the ZXTRES and load the tape file `ftpUno.tap`
 
 ==== UART Terminal
 
-Program example included with https://github.com/yomboprime/ZXYLib[ZXYLib] C library, developed by yombo, that let's you send directly typed characters using the UART, and also see the result. Available to download https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[at this link].
+Program example included with https://github.com/yomboprime/ZXYLib[ZXYLib] C library, developed by yombo, that let's you send directly typed characters using the UART, and also see the result. Available to download https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[from this link].
 
-Once the file `UARTTERM.tap` is in the card and loaded, you can type several specific commands for ESP8266 chip. For example:
+After the file `UARTTERM.tap` is in the card and loaded, you can type several specific commands for ESP8266 chip. For example:
 
-- `AT`. To check if ther is communication. `OK` would be the result if everything is fine
-- `AT+RST`. To restart the chip. Exactly what <<#_wi_fi,`esprst`>> command does
-- `AT+GMR`. To see some information, like firmware version, etc.
-- `AT+CWMODE_CUR=1`. Put temporarily the chip into Wi-Fi client mode, until next restart
-- `AT+CWMODE_DEF=1`. Put temporarily the chip into Wi-Fi client mode, and save it as default
-- `AT+CWJAP_CUR="<WiFiNetwork>","<WiFiPassword>"`, where `<WiFiNetwork>` Wi-Fi ID of the network to connect to, and `<WiFiPassword>` the access password, connects temporarily to that network
-- `AT+CWJAP_DEF="<WiFiNetwork>","<WiFiPassword>"`, connects to the network, and saves the settings as default in the chip flash memory
-- `AT+CWAUTOCONN=1` sets the chip to connect automatically on boot to the default network (`AT+CWAUTOCONN=0` disables it)
+- `AT`: Check communication. Returns `OK` if everything is working.
+- `AT+RST`: Restart the chip, like the <<#_wi_fi,`esprst`>> command.
+- `AT+GMR`: Display information such as firmware version and so on.
+- `AT+CWMODE_CUR=1`: Temporarily put the chip into Wi-Fi client mode until the next restart.
+- `AT+CWMODE_DEF=1`: Put the chip into Wi-Fi client mode, and save it as the default in the chip flash memory.
+- `AT+CWJAP_CUR="<WiFiNetwork>","<WiFiPassword>"`: Temporarily connect to a network where `<WiFiNetwork>` is the Wi-Fi ID and `<WiFiPassword>` is the access password.
+- `AT+CWJAP_DEF="<WiFiNetwork>","<WiFiPassword>"`: Connect to a network, and saves the settings as default in the chip flash memory.
+- `AT+CWAUTOCONN=1`: Set the chip to connect automatically on boot to the default network (`AT+CWAUTOCONN=0` deactivates it).
 
-You can see all the available commands reading the https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[official documentation].
+For full details of all the available commands, refer to the https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[official documentation].
 
 <<<
 
 === MIDI
 
-The <<#_middle_board,optional middle board>> has also built-in a https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device [RP2040 microcontroller] programmed to work as a MIDI synthesizer, which can be used easily with a ZX Spectrum core that has a synthesized device that allows communication with the module (like the EXP28 290723 core).
+The <<#_middle_board,optional middle board>> also has a built-in https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device [RP2040 microcontroller] programmed to work as a GM-MIDI synthesizer. This can be used with a core that enables communication with the module (such as the EXP28 290723 ZX Spectrum core).
 
-You can use the <<#_esxdos_commands,"DOT" command >> https://github.com/zxtres/dot_commands/tree/main/playmid[.playmid] to listen to MIDI files.
+You can use the <<#_esxdos_commands,"dot" command >> https://github.com/zxtres/dot_commands/tree/main/playmid[.playmid] to listen to MIDI files in the supported format (**FIXME**).
 
 [NOTE]
 ====
-It may happen that `.playmid` plays some MIDI file a little slower or with distorted playback speed, this is because playback of a this kind of file occasionally involves https://zxuno.com/forum/viewtopic.php?t=3963 [expensive calculations on the Z80, as well as because of inherent hardware limitations] of the ZX Spectrum and the AY-3-8912 chip.
+Sometimes `.playmid` may play a MIDI file slower or with an uneven playback speed. This is because playing this kind of file can involve https://zxuno.com/forum/viewtopic.php?t=3963 [expensive calculations on the Z80] and due to inherent hardware limitations (the ZX Spectrum core's synthesized AY-3-8912 chip that handles serial communiction with the MIDI chip).
 
-To alleviate this, you can change the ZXUNO CPU speed with the `.zxunocfg -sSPEED` command (with SPEED ranging from 0 to 3, where 3 is the fastest) before using `.playmid`, so that you have more CPU power to process the MIDI file.
+To remedy this, change the CPU speed with the `.zxunocfg -sSPEED` command (with SPEED ranging from 0 to 3, where 3 is the fastest) before using `.playmid`, so that you have more CPU power to process the MIDI file.
 ====
 
-It is also possible to test it from ZX Spectrum 128K BASIC (having previously disabled access to the SD card - for example with the "DOT" `.zxuc` command), for example with this command which plays a musical scale with the sound of a piano:
+It is also possible to use MIDI with the 128 BASIC `PLAY` command. You can access 128 BASIC from the <<#_derbypro, DerbyPro>> ROM. If you are using a 128K Spectrum ROM, deactivate the microSD card in the BIOS or using the <<#_esxdos_commands,"dot" command >> `.zxuc` command. This command plays a musical scale with the sound of a piano:
 
 [source,basic]
 ----
@@ -1255,33 +1255,36 @@ PLAY "T160","","","Y1Z192Z0V15O5cdefgabC"
 
 [TIP]
 ====
-Changing `0` in `Z0` to another number, from 0 to 127, changes the instrument to be used to play the scale.
+Changing `0` in `Z0` to another number (from 0 to 127) changes the instrument used to play the scale.
 ====
+
+The `PLAY` command in <<#_se_basic_iv, SE Basic IV>> also supports MIDI, but it has a different https://github.com/source-solutions/sebasic4/wiki/Language-reference#PLAY[syntax].
+
 
 ==== Bob Fossil NMI Browser
 
-To be able to use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil NMI Browser] to play MIDI you need:
+To use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil's NMI Browser] to play MIDI you need:
 
-- `.playmid` "DOT" command installed.
+- `.playmid` <<#_esxdos_commands,"dot" command >> command installed.
 - The latest http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[browser stable version].
 - Browser MID plugin.
 
-Copy the corresponding `.MID` file to the desired location on the microSD card, as well as the appropriate MID plugin file (in the `BIN\BPLUGINS` folder) and the "DOT" `playmid` command file (in the `BIN` folder).
+Copy the corresponding `.MID` file to the desired location on the microSD card, together with the appropriate MID plugin file (in the `BIN/BPLUGINS` folder) and the <<#_esxdos_commands,"dot" command >> `playmid` command file (in the `BIN` folder).
 
-. Start the ZXTRES Spectrum core.
-. Press `F5` to open Bob Fossil's NMI browser and then navigate to the location of the `.MID` file, select it and press ENTER.
+. Start the ZXTRES ZX Spectrum core.
+. Press `F5` to open Bob Fossil's NMI browser and then navigate to the location of the `.MID` file, select it and press `Enter``.
 
 You can press `Space` to stop playback at any time.
 
 ==== ZX MIDI player
 
-This ZX Spectrum program has been https://github.com/UzixLS/zx-midiplayer[developed by Eugene Lozovoy] and has the following features:
+This ZX Spectrum program was https://github.com/UzixLS/zx-midiplayer[developed by Eugene Lozovoy] and has the following features:
 
 - Compatible with MID(SMF) file formats type 0, type 1 and RMI;
-- Supports files up to 64Kb
-- Support for up to 60 tracks in file (for heavier files, a turbo CPU frequency is desirable)
-- Support for multiple CPU frequencies - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz
-- Support for DivMMC (and derivatives), ZXMMC, Z-Controller- FAT32 file system support
+- Supports files up to 64Kb.
+- Support for up to 60 tracks in a file (for heavier files, a turbo CPU frequency is desirable).
+- Support for multiple CPU frequencies - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz.
+- Support for divMMC (and derivatives), ZXMMC, Z-Controller- FAT32 file system support.
 
 <<<
 
@@ -1291,7 +1294,7 @@ This ZX Spectrum program has been https://github.com/UzixLS/zx-midiplayer[develo
 
 === Creating RaDastanian movie files
 
-The `playrmov` "dot" command plays Radastanian format (`RDM`) video files. To convert your own videos you need `makevideoradas`, a utility that's available at this https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository].
+The `playrmov` <<#_esxdos_commands,"dot" command >> command plays Radastanian format (`RDM`) video files. To convert your own videos you need `makevideoradas`, a utility that's available at this https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository].
 
 If you're using Windows there's already an executable file (`makevideoras.exe`). For Linux or macOS you must have the command line developer utilities installed to compile an executable.
 
@@ -1377,7 +1380,7 @@ To use the https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[Bob Fossil NMI 
 - The latest stable version (http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip).
 - The ZX3 plugin that can load Cores in ZX3 format https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3.
 
-Copy the corresponding `ZX3` file to the desired location of the microSD card as well as the appropriate ZX3 plugin (in the folder `BIN\BPLUGINS`).
+Copy the corresponding `ZX3` file to the desired location of the microSD card as well as the appropriate ZX3 plugin (in the folder `BIN/BPLUGINS`).
 
 Press `F5` to open Bob Fossil's NMI browser and get to the location of the Core with extension `ZX3`, select it and press `Enter`.
 
@@ -2405,11 +2408,11 @@ https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[Distribución para ZX-U
 
 https://nihirash.net/projects/[Nihirash Projects]
 
-https://www.zxuno.com/forum/viewtopic.php?f=25&t=4079[Addon Wi-Fi en el foro de ZX-Uno]
+https://www.zxuno.com/forum/viewtopic.php?f=25&t=4079[Wi-Fi addon at the ZX-Uno forum]
 
-https://zxuno.com/forum/viewtopic.php?t=4108[Cliente PLATO en el foro de ZX-Uno] 
+https://zxuno.com/forum/viewtopic.php?t=4108[PLATO client at the ZX-Uno forum] 
 
-https://zxuno.com/forum/viewtopic.php?t=3963[Sobre el MIDI addon en el foro de ZX-Uno]
+https://zxuno.com/forum/viewtopic.php?t=3963[MIDI addon at the ZX-Uno forum]
 
 https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf[ESP8266 AT Instruction Set]
 
@@ -2417,4 +2420,4 @@ https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Radastanian Vídeos
 
 https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[New core zx48]
 
-https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - user's guide]
+https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - User's Guide]
