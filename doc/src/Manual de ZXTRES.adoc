@@ -694,7 +694,7 @@ Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches
 
 ==== SE Basic IV
 
-https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto para la arquitectura Z80. Aunque aspira a tener un alto grado de compatibilidad con Microsoft BASIC, hay algunas diferencias.
+https://source-solutions.github.io/sebasic4/[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto para la arquitectura Z80. Aunque aspira a tener un alto grado de compatibilidad con Microsoft BASIC, hay algunas diferencias.
 Se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también es compatible con el core de ZX Spectrum del ZXTRES.
 
 SE Basic comenzó en 1999 como firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE], el antecesor al Chloe 280SE. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrum. Desde la versión 1 utiliza su propio fichero ensamblador. Desde la versión 2, soporta ULAplus.
@@ -1219,7 +1219,7 @@ Para utilizarlo, se deben seguir los siguientes pasos:
 . Editar el archivo `FTP.CFG` con los datos necesarios (Wi-Fi, servidor FTP al que conectar, etc.)
 . Copiar `FTP.CFG` en `/SYS/CONFIG/` en la tarjeta microSD
 . Copiar también `ftpUno.tap` al lugar que desee de la tarjeta
-. Iniciar el ZXDOS+ y cargar el archivo de cinta `ftpUno.tap`
+. Iniciar el ZXTRES y cargar el archivo de cinta `ftpUno.tap`
 
 ==== UART Terminal
 
@@ -1242,7 +1242,7 @@ Se pueden consultar todos los comandos disponibles en https://www.espressif.com/
 
 === MIDI
 
-La <<#_tarjeta_intermedia_middle_board,tarjeta intermedia opcional>> (o Middle Board) tiene tiene incorporado un https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040] programado para funcionar como sintetizador MIDI, y que se puede utilizar fácilmente con un core de ZX Spectrum (por ejemplo, el core EXP28 290723) que tenga sintetizado un dispositivo que permita la comunicacion con el módulo.
+La <<#_tarjeta_intermedia_middle_board,tarjeta intermedia opcional>> (o Middle Board) tiene tiene incorporado un https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040] programado para funcionar como sintetizador GM-MIDI, y que se puede utilizar fácilmente con un core de ZX Spectrum (por ejemplo, el core EXP28 290723) que tenga sintetizado un dispositivo que permita la comunicacion con el módulo.
 
 Para utilizarlo se puede usar el <<#_comandos_de_esxdos,comando "DOT">> https://github.com/zxtres/dot_commands/tree/main/playmid[.playmid].
 
@@ -1250,10 +1250,10 @@ Para utilizarlo se puede usar el <<#_comandos_de_esxdos,comando "DOT">> https://
 ====
 Puede ocurrir que `.playmid` reproduzca algunos ficheros MIDI un poco más lento o con la velocidad de reproducción distorsionada, esto es porque la reproducción de un fichero MIDI implica, de vez en cuando, https://zxuno.com/forum/viewtopic.php?t=3963[realizar cálculos costosos en el Z80, así como limitaciones inherentes al hardware] de ZX Spectrum y el chip AY-3-8912.
 
-Para paliarlo, se puede cambiar la velocidad de la CPU del ZXUNO con el comando `.zxunocfg -sVELOCIDAD` (con VELOCIDAD de 0 a 3, donde 3 es la más rápida) antes de usar `.playmid`, para así tener más potencia de CPU para procesar el fichero MIDI.
+Para paliarlo, se puede cambiar la velocidad de la CPU del ZXTRES con el comando `.zxunocfg -sVELOCIDAD` (con VELOCIDAD de 0 a 3, donde 3 es la más rápida) antes de usar `.playmid`, para así tener más potencia de CPU para procesar el fichero MIDI.
 ====
 
-También es posible probarlo desde BASIC de ZX Spectrum 128K (habiendo desahabilitado previamente el acceso a la tarjeta SD - por ejemplo con el comando "DOT" `.zxuc`), por ejemplo, con este comando que toca una escala musical con el sonido de un piano:
+También es posible probarlo desde BASIC de ZX Spectrum 128 (habiendo desahabilitado previamente el acceso a la tarjeta SD - por ejemplo con el comando "DOT" `.zxuc`), por ejemplo, con este comando que toca una escala musical con el sonido de un piano:
 
 [source,basic]
 ----
@@ -1273,10 +1273,10 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 - La última http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[versión estable]
 - El plugin MID para el navegador
 
-Se ha de copiar el fichero `.MID` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin MID adecuado (en la carpeta `BIN\BPLUGINS`) y el fichero del comando "DOT" `playmid` (en la carpeta `BIN`).
+Se ha de copiar el fichero `.MID` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin MID adecuado (en la carpeta `BIN/BPLUGINS`) y el fichero del comando "DOT" `playmid` (en la carpeta `BIN`).
 
-. Iniciar el core Spectrum de ZXTRES.
-. Pulsar `F5` para abrir el navegador de Bob Fossil y luego navegar hasta la ubicación del fichero con extensión `.MID`, seleccionarlo y pulsar ENTER.
+. Iniciar el core ZX Spectrum de ZXTRES.
+. Pulsar `F5` para abrir el navegador de Bob Fossil y luego navegar hasta la ubicación del fichero con extensión `.MID`, seleccionarlo y pulsar `Enter``.
 
 Se puede pulsar `Espacio` para detener la reproducción en cualquier momento.
 
@@ -1288,7 +1288,7 @@ Este programa para ZX Spectrum ha sido https://github.com/UzixLS/zx-midiplayer[d
 - Soporta archivos de hasta 64Kb
 - Soporte de hasta 60 pistas en archivo (para archivos más pesados, es deseable una frecuencia de CPU turbo)
 - Soporte para varias frecuencias de CPU - 3.5MHz, 3.54MHz, 7MHz, 14MHz, 28MHz
-- Soporte para DivMMC (y derivados), ZXMMC, Z-Controller
+- Soporte para divMMC (y derivados), ZXMMC, Z-Controller
 - Compatibilidad con el sistema de archivos FAT32
 
 <<<
@@ -1390,7 +1390,7 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 - La última versión estable (http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip)
 - El plugin ZX3 para poder cargar Cores en formato ZX3 https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3
 
-Se ha de copiar el fichero `.ZX3` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN\BPLUGINS``).
+Se ha de copiar el fichero `.ZX3` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN/BPLUGINS``).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.ZX3`, seleccionarlo y pulsar ENTER.
@@ -1416,7 +1416,7 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 - La última http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[versión estable]
 - El plugin BIT para poder cargar Cores en formato BIT https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/BIT
 
-Se ha de copiar el fichero `.BIT` correspondiente en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN\BPLUGINS``).
+Se ha de copiar el fichero `.BIT` correspondiente en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN/BPLUGINS``).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.BIT`, seleccionarlo y pulsar ENTER.
