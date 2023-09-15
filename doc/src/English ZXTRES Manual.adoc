@@ -133,11 +133,12 @@ This table shows the requirements of cores that use the microSD card.
 [align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
+|[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
-|[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|Requires ROM
-|[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|Requires BIOS
+|[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
+|[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|[.small]#Requires BIOS#
 |[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
-|[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|Requires ROM
+|[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
 |[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
 |===
 
@@ -1449,6 +1450,72 @@ This process can't be undone and it replaces all previously installed cores, the
 
 == Other cores
 
+=== Amiga minimig AGA
+
+https://en.wikipedia.org/wiki/Commodore_Amiga [Commodore Amiga] was a personal computer marketed by Commodore International between 1985 and 1994. It was very popular due to its price and multimedia capabilities. Its system is unique in that it was the first multitasking and multimedia computer aimed at the general public.
+
+The ZXTRES core is based on minimig (short for Mini Amiga), which is an open source re-implementation originally authored by Dennis van Weeren. The AGA variant has been updated with AGA chipset capabilities, allowing it to emulate newer Amiga models.
+
+Some of the core features are:
+
+- Chipset variants : OCS, ECS, AGA
+- chipRAM : 0.5MB - 2.0MB, SlowRAM : 0.0MB - 1.5MB and fastRAM : 0.0MB - 24MB
+- CPU : 68000, 68010, 68020
+- Kickstart support : 1.2 - 3.1
+- HRTmon 
+- 1-4 floppies with normal and turbo speeds
+- 1-2 hard disk images
+- Only works in VGA emulating: PAL / NTSC
+- PS/2 mouse support
+
+<<<
+
+==== microSD card format
+
+A microSD card, with the first partition in FAT32 format, should be used to store all the necessary files. The `832OSDAD.BIN` file available at https://github.com/zxtres/cores/tree/main/minimig[ZXTRES cores repository] should be copied to the root of the microSD card, together with an Amiga https://es.wikipedia.org/wiki/Kickstart [Kickstart] ROM file, named as `KICK.ROM`.
+
+Optionally, to display an animation at the start of the core, you can also copy to the root the files `minimig.art`,`minimig.bal` and `minimig.cop` which can be obtained from the https://retroramblings.net/?page_id=1422[official Minimig AGA page for Turbo Chameleon 64].
+
+It is also interesting to copy floppy disk image files (`ADF`) and/or https://www.winuae.net[WinUAE] virtual hard disk files (`HDF`) to the microSD.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `F12`: show and hide the core control menu.
+- `Bloq. Num.`: Turn on or off the use of the numeric keypad as a mouse.
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with different core options.
+
+[.text-center]
+image:img/minimig.jpg[scaledwidth=70%]
+
+These are the main ones:
+
+- `df0`, `df1`, and so on: To select an `ADF` floppy disk image.
+- Floppy Disk Settings: For setting the number of floppy disks and other options.
+- Primary Hard Disk: To configure where the primary disk data is located (usually an `HDF` file).
+- Secondary Hard Disk `Secondary Hard Disk`: To configure where the data on the secondary disk is located.
+- Exit`: Exits the configuration menu.
+
+Using the arrow keys on your keyboard you can access more configuration options:
+
+- `Load Configuration`: To load configuration data saved previously
+- `Save Configuration: To save the current configuration. If this is done in the default space (`default`), it is the one that will be used every time the core is started.
+- `Chipset Settings`: Here you can choose the CPU, turbo mode, video type (PAL or NTSC), Chipset to simulate.
+- `Memory Settings``: To configure the different amounts of RAM memory, as well as the ROM file to be used.
+- `Video Settings``: To activate or deactivate video filters, deinterlacing, etc.
+- `Reset`: Resets the core to the default settings.
+- `Reboot`: Reboot the core with the current settings.
+
+<<<
+
 === ColecoVision
 
 https://en.wikipedia.org/wiki/ColecoVision[ColecoVision] is Coleco Industries' home video-game console that was released in August 1982.
@@ -2416,3 +2483,5 @@ https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Radastanian Vídeos
 https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[New core zx48]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - User's Guide]
+
+https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]

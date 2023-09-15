@@ -133,11 +133,12 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
 |[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
+|[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
-|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|Necesita ROM
-|[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.neo`)#|Necesita BIOS
+|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
+|[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.neo`)#|[.small]#Necesita BIOS#
 |[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
-|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|Necesita ROM
+|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
 |===
 
 [NOTE]
@@ -622,7 +623,7 @@ Como es una ROM de 64K con soporte para nuevo hardware, se pueden usar estas opc
 
 ==== CargandoLeches
 
-https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
+https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarrápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
 
 Desde la versión 2.0, el proyecto pasó de ser una única ROM a varias, cada una con distintas opciones. Así, es posible elegir diferentes combinaciones que pueden incluir:
 
@@ -1472,6 +1473,73 @@ Este proceso sustituye todos los cores instalados, la BIOS, así como las ROMs d
 
 == Otros cores
 
+=== Amiga minimig AGA
+
+https://es.wikipedia.org/wiki/Commodore_Amiga[Commodore Amiga] fue un ordenador personal comercializado por Commodore International entre 1985 y 1994. Debido a su precio y sus capacidades multimedia obtuvo una gran popularidad. Su sistema tiene la particularidad que fuese el primer ordenador multitarea y multimedia orientado al gran público.
+
+La versión para ZXTRES está basada en minimig (abreviatura de Mini Amiga), que es una reimplementación de código abierto cuyo autor original es Dennis van Weeren. La variante AGA ha sido actualizada con capacidades de chipset AGA, lo que le permite emular modelos más recientes de Amiga.
+
+Algunas de las características del core son:
+
+- Variantes de chipset : OCS, ECS, AGA
+- ChipRAM : 0.5MB - 2.0MB, SlowRAM : 0.0MB - 1.5MB y fastRAM : 0,0MB - 24MB
+- CPU : 68000, 68010, 68020
+- Soporte para kickstart : 1.2 - 3.1
+- HRTmon 
+- 1-4 disquetes con velocidades normal y turbo
+- 1-2 imágenes de disco duro
+- Sólo funciona en VGA emulando: PAL / NTSC
+- Soporte para ratones PS/2
+
+<<<
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT32, para almacenar todos los ficheros necesarios. Para el funcionamiento correcto del core se ha de copiar a la raíz de la tarjeta microSD, al menos, el fichero `832OSDAD.BIN` disponible en el https://github.com/zxtres/cores/tree/main/minimig[repositorio de cores de ZXTRES], junto con un fichero ROM de https://es.wikipedia.org/wiki/Kickstart[Kickstart] de Amiga, con el nombre `KICK.ROM`.
+
+Opcionalmente, para que se muestre una animación en el inicio del core, se pueden copiar también a la raíz los ficheros `minimig.art`,`minimig.bal` y `minimig.cop` que se pueden obtener de la https://retroramblings.net/?page_id=1422[página oficial de Minimig AGA para Turbo Chameleon 64].
+
+También es interesante copiar al lugar que se desee de la microSD, los ficheros de imagen de disquete (`ADF`) o de disco duro virtual de https://www.winuae.net[WinUAE] (`HDF`) que se quieran utilizar.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: mostrar y ocultar el menú de control del core
+- `Bloq. Num.`:  Encenter o apagar  el uso del teclado numérico como ratón
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+
+[.text-center]
+image:img/minimig.jpg[scaledwidth=70%]
+
+Estas son las principales:
+
+- `df0`, `df1`, etc.: Para seleccionar una imagen de disquete `ADF`.
+- `Floppy Disk Settings`: Para configurar el número de disqueteras y otras opciones
+- `Primary Hard Disk`: Para poder configurar dónde están los datos del disco primario (normalmente un fichero `HDF`)
+- `Secondary Hard Disk`: Para poder configurar dónde están los datos del disco secundario
+- `Exit`: Sale del menú de configuración
+
+Usando las flechas de cursor del teclado se puede acceder a más opciones de configuración:
+
+- `Load Configuration`: Para cargar los datos de una configuración
+- `Save Configuration`: Para guardar la configuración actual. Si se hace en el espacio por defecto (`default`), es la que se utilizará cada vez que se inicie el core
+- `Chipset Settings`: Aquí se puede elegir la CPU, modo turbo, tipo de vídeo (PAL o NTSC), Chipset a simular
+- `Memory Settings`: Para configurar las distintas cantidades de memoria RAM, así como el fichero de ROM a utilizar
+- `Video Settings`: Para activar o desactivar filtros de vídeo, desentrelazado, etc.
+
+- `Reset`: Reinicia el core con las opciones por defecto
+- `Reboot` Reinicia el core con la configuración actual
+
+<<<
+
 === ColecoVision
 
 https://es.wikipedia.org/wiki/ColecoVision[ColecoVision] es una consola de videojuegos lanzada al mercado por la empresa Coleco.
@@ -1548,7 +1616,7 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Elan Enterprise>> e
 
 Durante la ejecución del core:
 
-- `F12`: mostrar el menú de control del core
+- `F12`: mostrar y ocultar el menú de control del core
 - `F1`: Muestra el navegador de archivos si la unidad actual es la F:. Ya dentro del navegador de archivos se puede cambiar de partición con solo pulsar la letra de esta (F, G, H, etc).
 - `C+F9`: Hace un Hard reset del core y vuelve a montar la unidad de discos virtual.
 - `F9` o `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
@@ -2455,3 +2523,5 @@ https://www.zonadepruebas.com/viewtopic.php?t=4796&start=110[Vídeos Radastanian
 https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[Nuevo core zx48]
 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
+
+https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]
