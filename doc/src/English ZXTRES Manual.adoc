@@ -1885,6 +1885,74 @@ These are the main ones:
 
 === PC XT
 
+The https://en.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT] or PC/XT was the second model in IBM's PC line.
+
+The https://github.com/zxtres/PCXT_DeMiSTify[ZXTRES core] has been implemented by @somhi using the https://github.com/MiSTer-devel/PCXT_MiSTer[PC XT for MiSTer FPGA] core by @spark2k06.
+
+Some of its features are:
+
+- 8088 CPU with these speed settings: 4.77 MHz, 7.16 MHz, 9.54 MHz cycle accurate, and PC/AT 286 at 3.5MHz equivalent (max. speed).
+- Audio: Adlib, Tandy, Game Blaster, Speaker.
+- CGA graphics 32kB VRAM.
+- Controller support.
+- EMS memory up to 2Mb.
+- Main memory 640Kb + 384Kb UMB memory.
+- MDA monochrome.
+- Mouse support into COM2 serial port, this works like any Microsoft mouse.
+- RGB 15 kHz video output (using the VGA port).
+- Selectable BIOS (Tandy 1000 / PCXT, IBM5160, Yuko ST, pcxt31, Tandy, micro8088, XT-IDE, ...).
+- Support for IBM Tandy 1000.
+- Support for IBM PCXT 5160 and clones
+- Tandy graphics with 128Kb of shared VRAM.
+- VGA video output.
+- XT-IDE support.
+
+<<<
+
+==== microSD Card Format
+
+A microSD card, with the first partition in FAT16 or FAT32 format, should be used to store disk image and BIOS files.
+
+For the BIOS files to load automatically, they must be in the root of the SD card with the following names:
+
+- `PCXT.ROM` for the PCXT BIOS.
+- `TANDY.ROM` for the TANDY 1000 BIOS
+- `XT-IDE.ROM` for the XT-IDE BIOS (needed to load a system from a `VHD` image).
+
+In addition, it is also prepared to work with DOS file system formatted .VHD (disk image) files, such as the one available at https://github.com/MiSTer-devel/PCXT_MiSTer/raw/main/games/PCXT/hd_image.zip[the core code repository].
+
+If disk image files with the names `PCXT1.VHD` (primary IDE) and `PCXT2.VHD` (secondary IDE) are copied to the card root, they will be loaded automatically at core startup, without having use the configuration menu.
+
+If not already present, <<#_cores,install or run the PC XT core>> on the ZXTRES.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `F12`: Show or hide the core control menu.
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Pressing `F12` will display the menu with the different Core options.
+
+[text-center]
+image:img/pcxt_zxtres.png[scaledwidth=70%]
+
+These are the main ones:
+
+- `Model`: To choose between PC XT and Tandy.
+- `CPU Speed`: CPU speed. 4.77 MHz offers the best compatibility, 3.5 Mhz the best speed.
+- `Mount IDE 1`: To mount a VHD file as primary disk.
+- `Mount IDE 2`: To mount a VHD file as a secondary disk.
+- `BIOS``: To define the different BIOS types. The XT-IDE BIOS is required to load the OS from VHD disks.
+- `Audio`: To indicate the audio emulation to use (Adlib, SB, etc.) as well as the volume.
+- `Video`: To modify the different video options.
+- `Exit`: Closes the core options menu.
 
 <<<
 
