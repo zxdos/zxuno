@@ -134,8 +134,10 @@ This table shows the requirements of cores that use the microSD card.
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
+|[.small]#Atari 2600#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
 |[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
+|[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
 |[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|[.small]#Requires BIOS#
 |[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
 |[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
@@ -1465,7 +1467,7 @@ Some of the core features are:
 - HRTmon 
 - 1-4 floppies with normal and turbo speeds
 - 1-2 hard disk images
-- Only works in VGA emulating: PAL / NTSC
+- VGA video output emulating: PAL / NTSC
 - PS/2 mouse support
 
 <<<
@@ -1477,6 +1479,8 @@ A microSD card, with the first partition in FAT32 format, should be used to stor
 Optionally, to display an animation at the start of the core, you can also copy to the root the files `minimig.art`,`minimig.bal` and `minimig.cop` which can be obtained from the https://retroramblings.net/?page_id=1422[official Minimig AGA page for Turbo Chameleon 64].
 
 It is also interesting to copy floppy disk image files (`ADF`) and/or https://www.winuae.net[WinUAE] virtual hard disk files (`HDF`) to the microSD.
+
+If not already there, <<#_cores,install or run the Amiga (minimig) core>> on the ZXTRES.
 
 ==== Keyboard
 
@@ -1516,6 +1520,64 @@ Using the arrow keys on your keyboard you can access more configuration options:
 
 <<<
 
+=== Atari 2600
+
+https://en.wikipedia.org/wiki/Atari_2600[Atari 2600]  is a home video game console originally branded as the Atari Video Computer System (Atari VCS).
+
+ZXTRES core version is developed by avlixa.
+
+Some of the features of the core are:
+
+- DisplaPort video output.
+- RGB video output (using the VGA port).
+- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_encoders,here>> for more information)
+- VGA video output.
+
+==== microSD card format
+
+You need a microSD card with the first partition in FAT16 or FAT32 format to store ROM image files of the games to load.
+
+If not already there, <<#_cores,install or run the Atari 2600 core>> on the ZXTRES.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+During the core execution:
+
+- `W`, `A`, `S`, `D` or joystick 1: Directional controls for player 1
+- `F` or joystick 1 fire button: Player 1 fire button
+- `I`, `J`, `K`, `L` or joystick 2: Directional controls for player 2
+- `H` or joystick 2 fire button: Player 2 fire button
+- `Scroll Lock`: change between RGB and VGA video mode
+- F11` or `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+
+<<<
+
+==== Overview
+
+Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
+
+[.text-center]
+image:img/a2600.jpg[pdfwidth=70%]
+
+The following options are available:
+
+- Reset core
+- Scanlines
+- RGB Mode (PAL/NTSC)
+- Color
+- Difficulty A
+- Difficulty B
+- Select
+- Start
+- Load ROM
+- Joystick
+- Paddle Accuracy
+- Exit
+
+<<<
+
 === ColecoVision
 
 https://en.wikipedia.org/wiki/ColecoVision[ColecoVision] is Coleco Industries' home video-game console that was released in August 1982.
@@ -1526,7 +1588,7 @@ Some characteristics of this core are:
 
 - BIOS ROM is loaded from microSD card.
 - Supports multicart ROM also loaded from microSD.
-- Only works with VGA.
+- VGA video output.
 
 ==== microSD card format
 
@@ -1536,7 +1598,7 @@ They can be downloaded from https://github.com/fbelavenuto/colecofpga/tree/maste
 
 After copying the files to the microSD card you must add also the file `MULTCART.ROM` that can be downloaded from https://t.me/zxtresfpga.
 
-See the <<#_cores,corresponding section>> for instructions of how to install the ColecoVision core in the ZXTRES.
+If not already there, <<#_cores,install or run the Colecovision core>> on the ZXTRES.
 
 ==== Keyboard
 
@@ -1577,8 +1639,8 @@ Some characteristics of this core are:
 
 - Implements 1024 KB of RAM.
 - Support for loading a virtual disk image (.vhd file). At boot time the EP.VHD file is automatically loaded if found in the root directory of the SD card.
-- RGB output
 - External joystick is implemented on the DB9 and internal joystick on the cursor keys, with support for two trigger buttons.
+- RGB video output (using the VGA port).
 
 ==== microSD card format
 
@@ -1586,7 +1648,7 @@ A microSD card, with the first partition in FAT16 or FAT32 format, should be use
 
 The ROM file should be copied to the root directory of the SD card as `ep.rom`. Furthermore it is also prepared to work with .VHD (disk image) files, such as the one available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549 [the ZX-Uno distributions from desubikado],
 
-See the <<#_cores,corresponding section>> for instructions of how to install the Elan Enterprise core in the ZXTRES.
+If not already there, <<#_cores,install or run the Elan Enterprise core>> on the ZXTRES.
 
 ==== Keyboard
 
@@ -1598,7 +1660,7 @@ When the core is active:
 - F1`: Show the file browser if the current drive is F:. Once in the file browser, you can change partition by pressing the partition letter (F, G, H, etc).
 - C+F9`: Hard reset the core and reattach the virtual disk drive.
 - F9` or `Ctrl+Alt+Del`: Soft Reset (resets the Core).
-- F11` or `Ctrl+Alt+Del`: Hard Reset (resets the FPGA)
+- F11` or `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
 
 <<<
 
@@ -1640,6 +1702,64 @@ cd bricky
 
 <<<
 
+=== Jupiter ACE
+
+The https://en.wikipedia.org/wiki/Jupiter_Ace[Jupiter ACE] was a british micro computer produced by Jupiter Cantab in the early 1980s.
+
+The https://github.com/zxtres/jupiter_ace[ZXTRES core] has been developed by McLeod, starting from the https://zxuno.com/forum/viewtopic.php?f=40&t=75&p=539[original version for ZX-Uno], mainly as a documented example of how to port cores to ZXTRES.
+
+Some characteristics of this core are:
+
+- 51K user memory.
+- AY-3-8912 sound chip at ZX Spectrum 128K I/O ports.
+- Colour module as described in https://worldradiohistory.com/UK/Electronics-Today-UK/80s/Electronics-Today-1984-04.pdf[Electronics Today UK], expanded with programmable border colour.
+- DisplaPort video output.
+- Readable pattern RAM.
+- RGB PAL video output (using the VGA port).
+- Tape loading using the audio input.
+- VGA video output.
+- Writable ROM memory (to install alternate ROMs).
+
+==== microSD card format
+
+This core does not use the SD card.
+
+If not already there, <<#_cores,install or run the Jupiter ACE core>> on the ZXTRES.
+
+
+==== Keyboard
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `Home` : Scanines on/off
+- `End`: Select one of the monochrome colour modes.
+- `Scroll Lock`: Switches between RGB (PAL) video mode and VGA (DisplayPort is always active).
+- `Ctrl+Alt+Delete`: Soft Reset (resets the Core)
+- `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+
+==== Overview
+
+From within Forth, you can load from a external tape or other external audio device with the comand `LOAD <nombre>`.
+
+[CAUTION]
+====
+Jupiter ACE `TAP` files are different from ZX Spectrum files, and, to be used with some players, they have to be previously converted to `TZX` with the `acetap2zx` utility available at https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/jupiter_ace/utils[ZX-Uno repository] (User `guest`, password `zxuno`).
+====
+
+Once the tape has finished loading, type the corresponding command to start the program.
+
+[NOTE]
+====
+Instead of BASIC like other systems, Jupiter ACE uses https://en.wikipedia.org/wiki/Forth[Forth]. To see the commands currently available (including those that will start a program loaded from tape, you have to type `vlist`.
+====
+
+[.text-center]
+image:img/ace_vlist.png[pdfwidth=70%]
+
+<<<
+
 === Neo-Geo
 
 https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] is the name of a 16-bit cartridge-based system for arcade as well as home video game consoles released in 1990 by the Japanese video game company SNK. The Neo-Geo system was created as both a platform for arcade machines (MVS or Multi Video System) and as a home game console (AES or Advanced Entertainment System).
@@ -1650,7 +1770,7 @@ Some core charactersistics are:
 
 - Compatible with Sega Mega Drive (Genesis) controllers.
 - MVS and AES support.
-- RGB output only.
+- RGB video output (using the VGA port).
 - Support for ROMS (not encrypted) in https://wiki.terraonion.com/index.php/Neobuilder_Guide[`NEO` format].
 - Support for http://unibios.free.fr/download.html[Universe BIOS].
 
@@ -1776,9 +1896,11 @@ Features:
 - PAL/NTSC timings.
 - Program loading using the audio input.
 - QS CHRS (not tested).
+- RGB video output (using the VGA port).
 - Turbo in Slow mode: NoWait, x2 and x8.
 - Turbo loading of `O` and `P` files.
 - YM2149 sound chip (ZON X-81 compatible).
+- VGA video output.
 - ZX80/ZX81 selectable (ZX80 currently working only in RGB mode).
 
 ==== microSD card format
@@ -1815,7 +1937,7 @@ When the core is active:
 - `F10`: Enable or switch off playing the audio input through the audio output to hear loading sounds while loading.
 - `Scroll Lock`: Switch between RGB and VGA video output.
 - `Ctrl+Alt+Supr`: Soft reset (restart the core).
-- `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA).
+- Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
 
 <<<
 
@@ -1885,13 +2007,14 @@ The ZXTRES version has been made by kyp069.
 
 Features:
 
+- 50 Hz VGA video output
 - Turbosound
 - Tape loading
 - Two floppy drives
 - ZXMMC disk image support
 - Kempston joystick with two trigger buttons
 - Joysticks Interface 2
-- RGB PAL or VGA video output (50 Hz)
+- RGB PAL video output (using the VGA port)
 - Supports any +3 compatible ROM, such as Amstrad standard ROM and Garry Lancaster's +3e ROM
 
 ==== microSD Card Format
@@ -1915,8 +2038,7 @@ During core execution:
 - `F12` to show or hide the menu.
 - `Scroll Lock` or presssing and holding `F12` for one second: switch between RGB and VGA video mode.
 - Ctrl+Alt+Del` or `F9`: Soft Reset (resets the Core)
-- Ctrl+Alt+Backspace` or `F8`: Hard reset (resets the FPGA). Backspace is the backspace delete key, above `Enter`.
-
+- Ctrl+Alt+Backspace` or `F8`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
 <<<
 
 ==== Overview

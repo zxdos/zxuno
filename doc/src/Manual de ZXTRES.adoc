@@ -134,7 +134,9 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
 |[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
+|[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
+|[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
 |[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
 |[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.neo`)#|[.small]#Necesita BIOS#
 |[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
@@ -421,6 +423,7 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXTRES. 
 
     back16m
     backzx2
+    backzx3
     backzxd
     core
     corebios
@@ -437,6 +440,7 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXTRES. 
     romsupgr
     upgr16m
     upgrzx2
+    upgrzx3
     upgrzxd
     zxuc
     zxunocfg
@@ -1141,7 +1145,7 @@ En el caso de utilizarse también la tarjeta con un core de PC XT, **no se debe 
 Tal y como se ha explicado en la parte de instalación, existe una serie de comandos que son exclusivos para ZXTRES, y que se describen a continuación:
 
 - `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
-- `backzx2` o `backzxd`: Genera un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
+- `backzx3`, `backzx2` o `backzxd`: Genera un fichero `FLASH_32.ZX3`, `FLASH_32.ZX2` o `FLASH_32.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
 - `core`: Reinicia la FPGA cargando el core especificado de la SPI Flash
 - `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
 - `dmaplayw`: Reproduce un archivo de audio .WAV, que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
@@ -1155,7 +1159,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
-- `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root".
+- `upgrzx3`, `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH_32.ZX3`, `FLASH_32.ZX2` o `FLASH_32.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root".
 
 <<<
 
@@ -1456,7 +1460,7 @@ Si todo se ha hecho correctamente, al encender el ZXTRES se verá cómo esxdos d
 
 === Memoria Flash
 
-También es posible actualizar la memoria flash de la FPGA. Por el momento desde el menú de la BIOS sólo es posible utilizar imágenes de 16MiB. Para poder usar una imagen de 32MiB, se ha de usar el comando `UPGRZXD` de <<#_esxdos,esxdos>> y un fichero con el nombre `FLASH.ZXD`.
+También es posible actualizar la memoria flash de la FPGA. Por el momento desde el menú de la BIOS sólo es posible utilizar imágenes de 16MiB. Para poder usar una imagen de 32MiB, se ha de usar el comando `UPGRZX3` de <<#_esxdos,esxdos>> y un fichero con el nombre `FLASH_32.ZX3`.
 
 Copiar el archivo de imagen (de 16MiB) `FLASH.ZX3` en la raíz de la tarjeta microSD.
 
@@ -1488,7 +1492,7 @@ Algunas de las características del core son:
 - HRTmon 
 - 1-4 disquetes con velocidades normal y turbo
 - 1-2 imágenes de disco duro
-- Sólo funciona en VGA emulando: PAL / NTSC
+- Salida de vídeo VGA emulando PAL/NTSC
 - Soporte para ratones PS/2
 
 <<<
@@ -1500,6 +1504,8 @@ Se debe de utilizar una tarjeta microSD, con la primera partición en formato FA
 Opcionalmente, para que se muestre una animación en el inicio del core, se pueden copiar también a la raíz los ficheros `minimig.art`,`minimig.bal` y `minimig.cop` que se pueden obtener de la https://retroramblings.net/?page_id=1422[página oficial de Minimig AGA para Turbo Chameleon 64].
 
 También es interesante copiar al lugar que se desee de la microSD, los ficheros de imagen de disquete (`ADF`) o de disco duro virtual de https://www.winuae.net[WinUAE] (`HDF`) que se quieran utilizar.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Amiga (minimig)>> en el ZXTRES.
 
 ==== Teclado
 
@@ -1540,6 +1546,64 @@ Usando las flechas de cursor del teclado se puede acceder a más opciones de con
 
 <<<
 
+
+=== Atari 2600
+
+La https://es.wikipedia.org/wiki/Atari_2600[Atari 2600] es una videoconsola lanzada al mercado bajo el nombre de Atari VCS (Video Computer System).
+
+La versión para ZXTRES está desarrollada por avlixa.
+
+Algunas de las características del core son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Compatible con joystick(s), teclado y ratón
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con las imágenes ROM que se deseen cargar.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Atari 2600>> en el ZXTRES.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `W`, `A`, `S`, `D` o el joystick 1: Controles de dirección del jugador 1
+- `F` o el botón de disparo del joystick 1: Disparo del jugador 1
+- `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
+- `H` o el botón de disparo del joystick 2: Disparo del jugador 2
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `Ctrl+Alt+Backspace`: Hard reset.
+
+<<<
+
+==== Guía básica
+
+Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor  y `Enter` para elegir y seleccionar en el menú.
+
+[.text-center]
+image:img/a2600.jpg[pdfwidth=70%]
+
+En él se pueden activar, desactivar o configurar las siguientes opciones:
+
+- Reiniciar el core (Reset)
+- Línea de exploración (Scanlines)
+- Modo RGB (PAL/NTSC)
+- Color (Color)
+- Dificultad A (Difficulty A)
+- Dificultad B (Difficulty B)
+- Select
+- Start
+- Cargar ROM (Load ROM)
+- Joystick
+- Precisión de paddle (Paddle Accuracy)
+- Salir del menú (Exit)
+
+<<<
+
 === ColecoVision
 
 https://es.wikipedia.org/wiki/ColecoVision[ColecoVision] es una consola de videojuegos lanzada al mercado por la empresa Coleco.
@@ -1550,7 +1614,7 @@ Algunas de las características del core son:
 
 - La ROM de la BIOS se carga desde la tarjeta microSD
 - Soporta ROM multicartucho, que también se carga desde la microSD
-- Sólo funciona en VGA
+- Salida de vídeo VGA
 
 ==== Formato de Tarjeta microSD
 
@@ -1599,7 +1663,7 @@ Algunas de las características del core son:
 
 - Implementa 1024 KB de RAM.
 - Soporte para cargar una imagen de disco virtual (fichero .vhd). En el arranque ya se carga automáticamente el fichero EP.VHD en caso de encontrarlo en el directorio raíz de la tarjeta SD
-- Salida RGB
+- Salida de vídeo RGB (utilizando el puerto VGA)
 - Tiene implementado el joystick externo en el DB9 y el joystick interno en las teclas de cursor, con soporte para dos botones de disparo
 
 ==== Formato de Tarjeta microSD
@@ -1620,7 +1684,7 @@ Durante la ejecución del core:
 - `F1`: Muestra el navegador de archivos si la unidad actual es la F:. Ya dentro del navegador de archivos se puede cambiar de partición con solo pulsar la letra de esta (F, G, H, etc).
 - `C+F9`: Hace un Hard reset del core y vuelve a montar la unidad de discos virtual.
 - `F9` o `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
-- `F11` o `Ctrl+Alt+Supr`: Hard reset (reinicia la FPGA)
+- `F11` o `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
 <<<
 
@@ -1660,6 +1724,64 @@ También es posible cargar programas sin usar el navegador. Un ejemplo:
 
 <<<
 
+=== Jupiter ACE
+
+El https://es.wikipedia.org/wiki/Jupiter_Ace[Jupiter ACE] fue un microordenador británico lanzado al mercado en 1982 por la empresa Jupiter Cantab.
+
+El https://github.com/zxtres/jupiter_ace[core para ZXTRES] ha sido desarrollado por McLeod, partiendo de la https://zxuno.com/forum/viewtopic.php?f=40&t=75&p=539[versión original para ZX-Uno], principalmente como un ejemplo documentado de cómo portar cores a ZXTRES.
+
+Tiene, entre otras, las siguientes características:
+
+- Salida de vídeo DisplaPort
+- Salida de vídeo VGA
+- Salida de vídeo RGBPAL (utilizando el puerto VGA)
+- Soporte para carga desde dispositivos de audio externo
+- 51K de memoria de usuario
+- Memoria ROM de lectura/escritura (para poder instalar ROMs alternativas)
+- Módulo de color como el descrito en https://worldradiohistory.com/UK/Electronics-Today-UK/80s/Electronics-Today-1984-04.pdf[Electronics Today UK], ampliado con color de borde programable.
+- Chip de sonido AY-3-8912 en los puertos de E/S de 128K del ZX Spectrum.
+
+==== Formato de Tarjeta SD
+
+Este core no utiliza la tarjeta SD.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Jupiter ACE>> en el ZXTRES.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Inicio` : Líneas on/off
+- `Fin` : Activa los distintos modos de color monocromo
+- `Bloq. Despl.`: cambia de modo vídeo RGB (PAL) a VGA y viceversa (DisplayPort está siempre activo)
+- `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+<<<
+
+==== Guía básica
+
+Desde Forth, se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `LOAD <nombre>`.
+
+[CAUTION]
+====
+Los ficheros `TAP` de Jupiter ACE son diferentes de los de ZX Spectrum, y, para poder utilizarse con algunos reproductores, han de ser convertidos previamente a `TZX` con la utilidad `acetap2zx` disponible en el https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/jupiter_ace/utils[repositorio de ZX-Uno] (Usuario `guest`, contraseña `zxuno`).
+====
+
+Una vez la cinta ha cargado, escribir el comando necesario para iniciar el programa.
+
+[NOTE]
+====
+En lugar de BASIC como otros sistemas, el Jupiter ACE utiliza https://es.wikipedia.org/wiki/Forth[Forth]. Para ver los comandos disponibles (incluyendo los que inician un programa cargado desde cinta), se tiene que utilizar `vlist`.
+====
+
+[.text-center]
+image:img/ace_vlist.png[pdfwidth=70%]
+
+<<<
+
 === Neo-Geo
 
 https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos para arcades así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), así como videoconsola doméstica (AES o Advanced Entertainment System).
@@ -1671,7 +1793,7 @@ Algunas de las características del core son:
 - Soporte para MVS y AES
 - Soporte para http://unibios.free.fr/download.html[Universe BIOS]
 - Compatible con ROMS (no cifradas) en https://wiki.terraonion.com/index.php/Neobuilder_Guide[formato .neo]
-- Sólo salida RGB
+- Salida de vídeo RGB (utilizando el puerto VGA)
 - Compatible con mandos de MegaDrive
 
 <<<
@@ -1788,6 +1910,8 @@ La versión para ZXTRES ha sido creada por avlixa, basada en la página de Grant
 
 Características:
 
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
 - Se puede elegir entre ZX80 y ZX81 (ZX80 sólo con salida RGB por el momento)
 - 16k/32k/48k RAM packs
 - 8KB con addon CHR$128/UDG (sin probar)
@@ -1909,7 +2033,8 @@ Características:
 - Soporte para imágenes de disco ZXMMC
 - Joystick Kempston con dos botones de disparo
 - Joysticks Interface 2
-- Salida de vídeo RGB PAL o VGA (50 Hz)
+- Salida de vídeo VGA
+- Salida de vídeo RGB a 50 Hz (utilizando el puerto VGA)
 - Soporta cualquier ROM compatible con +3, como la ROM estándar de Amstrad y la ROM +3e de Garry Lancaster
 
 ==== Formato de Tarjeta microSD
@@ -2133,7 +2258,7 @@ Mientras que en otros sistemas operativos debería bastar con algo parecido a:
 python3 ./zx123_tool.py
 ----
 
-También hará falta un archivo de imagen flash. Este se puede obtener desde el core de Spectrum, en modo "root", con alguno de los comandos `back16m`, `backzx2` o `backzxd`. Tras obtener el fichero generado en la microSD, se puede "limpiar" dejando sólo el core de Spectrum y la primera ROM de Spectrum con un comando similar a este:
+También hará falta un archivo de imagen flash. Este se puede obtener desde el core de Spectrum, en modo "root", con alguno de los comandos `back16m`, `backzx3`, `backzx2` o `backzxd`. Tras obtener el fichero generado en la microSD, se puede "limpiar" dejando sólo el core de Spectrum y la primera ROM de Spectrum con un comando similar a este:
 
 [source,shell]
 ----
