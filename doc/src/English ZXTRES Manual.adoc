@@ -134,6 +134,7 @@ This table shows the requirements of cores that use the microSD card.
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
+|[.small]#Amstrad CPC#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
 |[.small]#Atari 2600#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
 |[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
@@ -1520,6 +1521,53 @@ Using the arrow keys on your keyboard you can access more configuration options:
 
 <<<
 
+=== Amstrad CPC 464
+
+The https://en.wikipedia.org/wiki/Amstrad_CPC#CPC_464[Amstrad CPC 464] was the first of a series of 8-bit home computers produced by Amstrad. The ZX-Uno version has been https://www.zxuno.com/forum/viewtopic.php?f=59&t=1346[made by McLeod].
+
+The https://github.com/zxtres/jupiter_ace[ZXTRES core] has been developed by McLeod, starting from the https://zxuno.com/forum/viewtopic.php?f=40&t=75&p=539[original version for ZX-Uno], mainly as a documented example of how to port cores to ZXTRES.
+
+Core features:
+
+- 32KB ROM.
+- 64KB RAM.
+- AY-3-8912 sound chip.
+- Colour module as described in https://worldradiohistory.com/UK/Electronics-Today-UK/80s/Electronics-Today-1984-04.pdf[Electronics Today UK], expanded with programmable border colour.
+- DisplaPort video output.
+- RGB PAL video output (using the VGA port).
+- Support for one controller
+- Tape loading using the audio input.
+- VGA video output (50 Hz).
+- Writable ROM memory (to install alternate ROMs).
+
+==== SD card format
+
+This core does not use the SD card.
+
+If not already there, <<#_cores,install or run the Amstrad CPC core>> on the ZXTRES.
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `Del`: `CLR`.
+- `Home` : Scanlines on/off
+- `End`: Select one of the monochrome colour modes.
+- `Print Scr` or `Left Windows`: `COPY`
+- `Scroll Lock`: Switches between RGB (PAL) video mode and VGA (DisplayPort is always active).
+- `Ctrl+Alt+Delete`: Soft Reset (resets the Core)
+- `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+
+==== Overview
+
+[.text-center]
+image:img/cpc464.png[pdfwidth=70%]
+
+When using BASIC, you can load a external tape or other external audio device with the command `RUN"`.
+Unlike the original machine, you can hear the audio while playing the tape.
+
+<<<
+
 === Atari 2600
 
 https://en.wikipedia.org/wiki/Atari_2600[Atari 2600]  is a home video game console originally branded as the Atari Video Computer System (Atari VCS).
@@ -1530,7 +1578,7 @@ Some of the features of the core are:
 
 - DisplaPort video output.
 - RGB video output (using the VGA port).
-- Support for joysticks, keyboard, mouse and rotary encoder controls (see <<#_rotary_encoders,here>> for more information)
+- Support for joysticks, keyboard, mouse
 - VGA video output.
 
 ==== microSD card format
@@ -1733,7 +1781,7 @@ If not already there, <<#_cores,install or run the Jupiter ACE core>> on the ZXT
 
 When the core is active:
 
-- `Home` : Scanines on/off
+- `Home` : Scanlines on/off
 - `End`: Select one of the monochrome colour modes.
 - `Scroll Lock`: Switches between RGB (PAL) video mode and VGA (DisplayPort is always active).
 - `Ctrl+Alt+Delete`: Soft Reset (resets the Core)
@@ -1832,6 +1880,11 @@ These are the main ones:
 - `Input`: Currently unavailable.
 - `[DIP]`: Currently unavailable.
 - `Exit`: Closes the menu.
+
+<<<
+
+=== PC XT
+
 
 <<<
 
