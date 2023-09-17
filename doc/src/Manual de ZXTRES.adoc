@@ -134,11 +134,13 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
 |[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
+|[.small]#Amstrad CPC#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
 |[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
 |[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
 |[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
 |[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.neo`)#|[.small]#Necesita BIOS#
+|[.small]#PC XT#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita BIOS#
 |[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
 |[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
 |===
@@ -1546,6 +1548,53 @@ Usando las flechas de cursor del teclado se puede acceder a más opciones de con
 
 <<<
 
+=== Amstrad CPC 464
+
+El https://es.wikipedia.org/wiki/Amstrad_CPC_464[Amstrad CPC 464] fue un ordenador doméstico creado y comercializado por la empresa británica Amstrad Consumer Plc a partir del año 1984.
+
+La https://github.com/zxtres/amstrad_cpc[versión para ZXTRES] ha sido desarrollado por McLeod, partiendo de la https://www.zxuno.com/forum/viewtopic.php?f=59&t=1346[versión original para ZX-Uno], principalmente como un ejemplo documentado de cómo portar cores a ZXTRES.
+
+Características del core:
+
+- Salida de vídeo DisplaPort
+- Salida de vídeo VGA (50 Hz)
+- Salida de vídeo RGB PAL (utilizando el puerto VGA)
+- Soporte para carga desde dispositivos de audio externo
+- 64KB de RAM
+- 32Kb de ROM
+- Soporte para un mando
+- Chip de sonido AY-3-8912.
+
+==== Formato de Tarjeta microSD
+
+Este core no utiliza la tarjeta SD.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Amstrad CPC>> en el ZXTRES.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `Supr`: `CLR`.
+- `Impr. Pant` o `Windows Izquierda` : `COPY`
+- `Inicio` : Scanlines on/off
+- `Fin` : Activa los distintos modos de color monocromo
+- `Bloq. Despl.`: cambia de modo vídeo RGB (PAL) a VGA y viceversa (DisplayPort está siempre activo)
+- `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+<<<
+
+==== Guía básica
+
+[.text-center]
+image:img/cpc464.png[pdfwidth=70%]
+
+Desde BASIC, se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `RUN"`. Al contrario que en la máquina original, durante la reproducción se puede escuchar el audio de la cinta.
+
+<<<
 
 === Atari 2600
 
@@ -1741,7 +1790,7 @@ Tiene, entre otras, las siguientes características:
 - Módulo de color como el descrito en https://worldradiohistory.com/UK/Electronics-Today-UK/80s/Electronics-Today-1984-04.pdf[Electronics Today UK], ampliado con color de borde programable.
 - Chip de sonido AY-3-8912 en los puertos de E/S de 128K del ZX Spectrum.
 
-==== Formato de Tarjeta SD
+==== Formato de Tarjeta microSD
 
 Este core no utiliza la tarjeta SD.
 
@@ -1753,7 +1802,7 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Jupiter ACE>> en el
 
 Durante la ejecución del core:
 
-- `Inicio` : Líneas on/off
+- `Inicio` : Scanlines on/off
 - `Fin` : Activa los distintos modos de color monocromo
 - `Bloq. Despl.`: cambia de modo vídeo RGB (PAL) a VGA y viceversa (DisplayPort está siempre activo)
 - `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
@@ -1854,6 +1903,80 @@ Estas son las principales:
 - `Input`: No disponible por el momento
 - `[DIP]`: No dispnible por el momento
 - `Exit`: Cierra el menú
+
+<<<
+
+=== PC XT
+
+El https://es.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer XT] o PC/XT fue el segundo modelo de la línea PC de IBM.
+
+El https://github.com/zxtres/PCXT_DeMiSTify[core de ZXTRES] ha sido implementado @somhi a partir del core https://github.com/MiSTer-devel/PCXT_MiSTer[PC XT para MiSTer FPGA] de @spark2k06
+
+Algunas de sus características son:
+
+- CPU 8088 a 4,77 MHz, 7,16 MHz, 9,54 MHz de y PC/AT 286 a 3,5 MHz equivalentes
+- Selección de BIOS (Tandy 1000 / PCXT). Selección de BIOS compatible (IBM5160, Yuko ST, pcxt31, Tandy, micro8088, XT-IDE, ...)
+- Compatibilidad con XT-IDE
+- Soporte para IBM Tandy 1000
+- Soporte para IBM PCXT 5160 y clones
+- Memoria principal 640Kb + 384Kb de memoria UMB
+- Memoria EMS de hasta 2Mb
+- Salida de vídeo VGA
+- Salida de vídeo RGB 15 kHz (utilizando el puerto VGA)
+- Gráficos Tandy con 128Kb de VRAM compartida (no disponible en todos los puertos debido a los recursos de BRAM)
+- Gráficos CGA 32kB VRAM
+- MDA monocromo
+- Salida de vídeo compuesto (real)
+- Audio: Adlib, Tandy, Game Blaster, Altavoz
+- Soporte para joystick
+- Soporte para ratón en el puerto serie COM2, funciona como cualquier ratón Microsoft. Solo hace falta un driver para configurarlo, como CTMOUSE 1.9 (disponible en la carpeta hdd), con el comando CTMOUSE /s2
+
+<<<
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros de imagen de disco y BIOS que se deseen cargar.
+
+Para que los archivos de BIOS se carguen de forma automática, han de estar en la la raíz de la tarjeta SD con los siguientes nombres:
+
+- `PCXT.ROM` para la BIOS PCXT
+- `TANDY.ROM` para la BIOS TANDY 1000
+- `XTIDE.ROM` para la BIOS XT-IDE (necesaria para cargar un sistema desde una imagen `VHD`)
+
+Además también está preparadp para trabajar con ficheros .VHD (imagen de disco) formateado internamente en el sistema de ficheros DOS, como por ejemplo el que está disponible en https://github.com/MiSTer-devel/PCXT_MiSTer/raw/main/games/PCXT/hd_image.zip[el repositorio de código del core].
+
+Al igual que los ficheros de BIOS, si se crean en la raiz de la tarjeta ficheros de imagen de disco con los nombres `PCXT1.VHD` (IDE primario) y `PCXT2.VHD` (IDE secundario), se cargarán automáticamente al iniciar el core, sin tener que recurrir al menú de configuración.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de PC XT>> en el ZXTRES.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: mostrar u oculstar el menú de control del core
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía Básica
+
+Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+
+[.text-center]
+image:img/pcxt_zxtres.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Model`: Para elegir entre PC XT y Tandy
+- `CPU Speed`: Velocidad de la CPU. 4.77 MHz ofrece la mejor compatibilidad, 3.5 Mhz la mejor velocidad
+- `Mount IDE 1`: Para montar un fichero VHD como disco primario
+- `Mount IDE 2`:Para montar un fichero VHD como disco secundario
+- `BIOS`: Para definir los distintos tipos de BIOS. La BIOS XT-IDE es necesaria para cargar el SO desde discos VHD
+- `Audio`: Para indicar la emulación de audio a utilizar (Adlib, SB, etc.) así como el volumen
+- `Video`: Para modificar las distintas opciones de vídeo
+- `Exit`: Cierra el menú de opciones del core
 
 <<<
 
