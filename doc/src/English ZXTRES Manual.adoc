@@ -143,6 +143,7 @@ This table shows the requirements of cores that use the microSD card.
 |[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
 |[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
 |[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
+|[.small]#ZX Spectrum Next#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Can read esxdos ROM from microSD#
 |===
 
 [NOTE]
@@ -2138,15 +2139,15 @@ Features:
 - RGB PAL video output (using the VGA port)
 - Supports any +3 compatible ROM, such as Amstrad standard ROM and Garry Lancaster's +3e ROM
 
+<<<
+
 ==== microSD Card Format
 
 A microSD card, with the first partition in FAT16 or FAT32 format, should be used to store the disk image or ROM files to be loaded.
 
 The default ROM file should be copied to the root directory of the SD card as `zxp3.rom`. In addition, it is also prepared to work with a VHD (disk image) file formatted internally in the +3DOS file system, such as the one available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549 [the ZX-Uno distributions from desubikado],
 
-If not already there, <<#_cores,install or run the core zxp3>> on the ZXTRES.
-
-<<<
+If not already there, <<#_cores,install or run the zxp3 core>> on the ZXTRES.
 
 ==== Keyboard
 
@@ -2160,6 +2161,7 @@ During core execution:
 - `Scroll Lock` or presssing and holding `F12` for one second: switch between RGB and VGA video mode.
 - Ctrl+Alt+Del` or `F9`: Soft Reset (resets the Core)
 - Ctrl+Alt+Backspace` or `F8`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+
 <<<
 
 ==== Overview
@@ -2176,6 +2178,90 @@ image:img/zxp3.jpg[scaledwidth=70%]
 - `Reset FPGA`: To reset the FPGA
 
 Controller 1 behaves simultaneously with Kempston protocol (with two trigger buttons) and Sinclair (1,2,3,4,5) with second trigger button (`z`). The controller connected to port 2 behaves with Sinclair protocol (6,7,8,9,0) and second trigger button (`x`).
+
+<<<
+
+=== ZX Spectrum Next
+
+https://www.specnext.com[ZX Spectrum Next] is an FPGA based project, which would like to be to be the evolution of the Sinclair ZX Spectrum line of computers. It brings new features while keeping hardware and software compatibility with previous ZX Spectrum computers.
+
+Specially thanks to avlixa, there exists a ZX Spectrum Next core synthesized for ZXTRES.
+
+The core, for the moment does not have any of these features:
+
+- Internal beeper
+- EDGE expansion Connector
+- RTC module
+- Membrane keyboard
+- Flashing additional cores or upgrading the Next core from within the Next core
+- MIC out
+- HDMI Video
+- UART communication using the joystick port
+- Raspberry Pi support
+
+It can also have these features, which do not exist in the original core:
+
+- Different colour modes including monochrome
+
+The user manual is available to download at https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[the official web page].
+
+<<<
+
+==== microSD card format
+
+You have to use a microSD card with the first partition formatted as FAT16 or FAT32, and inside, the standard esxDOS distribution, matching ZXTRES BIOS version (see <<#_esxdos,esxdos corresponding section>> for more info).
+
+Download NextZXOS distribution https://www.specnext.com/latestdistro/[from the official page].
+
+Extract NextZXOS in the root of the microSD card.
+
+If not already there, <<#_cores,install or run the ZX Spectrum Next core>> on the ZXTRES.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+While the core is running:
+
+- `F4` (`Caps Shift+Symbol Shift+4` on gomaDOS+): Soft Reset
+- `F7` (`Caps Shift+Symbol Shift+7` on gomaDOS+): Select one of the monochrome color modes
+- `F9` (`Caps Shift+Symbol Shift+9` on gomaDOS+): NMI
+- Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+
+<<<
+
+==== Overview
+
+On first boot, some help screens will show up. After pressing `Space` key, NextZXOS Startup Menu appears.
+
+[.text-center]
+image:img/next_zxtres.png[pdfwidth=70%]
+
+You can navigate the menu with the cursor keys, `5`, `6`, `7` and `8` keys, or a joystick (if configured as Kempston, MD or cursor). `Enter` or the joystick button chooses one element.
+
+[TIP]
+====
+During the core startup, you can force select the analogue video output use by pressing `R` for RGB and `V` for VGA.
+====
+
+`More...` shows a second menu with more options.
+
+[.text-center]
+image:img/next2_zxtres.png[pdfwidth=70%]
+
+<<<
+
+If you choose `Browser`, NextZXOS Browser will start, and then you can see the contents of the microSD card and load a file (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
+
+[.text-center]
+image:img/next3_zxtres.png[pdfwidth=70%]
+
+[NOTE]
+====
+It is not possible to load TRD files directly from the Browser (NextZXOS must be configured to load a "personality" with esxdos).
+====
+
+For more information, see the https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[official user manual].
 
 <<<
 
@@ -2728,3 +2814,7 @@ https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[New core 
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - User's Guide]
 
 https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]
+
+https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
+
+https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next with ZXDOS]

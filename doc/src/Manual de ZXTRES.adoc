@@ -143,6 +143,7 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#PC XT#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita BIOS#
 |[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
 |[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
+|[.small]#ZX Spectrum Next#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Puede utilizar esxdos en la microSD#
 |===
 
 [NOTE]
@@ -2204,6 +2205,94 @@ Por otra parte el mando 1 se comporta simultáneamente con protocolo Kempston (c
 
 <<<
 
+=== ZX Spectrum Next
+
+https://www.specnext.com[ZX Spectrum Next] es un proyecto, basado en FPGA, que aspira a ser la evolución de los ordenadores Sinclair ZX Spectrum, manteniendo la compatibilidad hardware y software con los modelos anteriores, pero añadiendo nuevas características.
+
+Principalmente gracias a avlixa, existe una versión del core de ZX Spectrum Next sintetizada para usarse con ZXTRES.
+
+El core para ZXTRES no tiene, por el momento, implementada ninguna de las siguientes caracteristicas:
+
+- Beeper interno
+- Conector de expansión EDGE
+- Módulo RTC
+- Teclado de membrana
+- Grabación de cores adicionales o actualización del propio core Next desde el core Next
+- Salida MIC
+- vídeo HDMI
+- Utilización de puerto de conexión joystick para comunicación UART
+- Soporte para Raspberry Pi
+
+Por otra parte, puede disponer de las siguientes características, que no existen en el core original:
+
+- Modos de color incluyendo monocromo o fósforo verde/naranja
+
+El manual de uso se puede descargar desde https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[la página oficial].
+
+<<<
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32, y que tenga instalada la distribución de esxdos correspondiente a la configuración actual de BIOS (ver <<#_esxdos,el apartado correspondiente de esxdos>> para más información).
+
+Obtener la distribución de NextZXOS https://www.specnext.com/latestdistro/[en la página oficial].
+
+Descomprimir el contenido de NextZXOS en la tarjeta microSD.
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core de ZX Spectrum Next>> en el ZXTRES.
+
+==== Teclado
+
+El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la distribución de la máquina original. Así, por ejemplo, para obtener `"` se ha de pulsar `Ctrl+P` o para activar el modo extendido, `Mayús+Ctrl`.
+
+===== Teclas especiales y botones
+
+Notar que no hay botón físico de Reset o Drive.
+
+Durante la ejecución del core:
+
+- `F4`: Soft Reset
+- `F7`: Activa los distintos modos de color monocromo
+- `F9`: NMI
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+<<<
+
+==== Guía básica
+
+Al iniciarse la primera vez, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
+
+[.text-center]
+image:img/next_zxtres.png[pdfwidth=70%]
+
+Se puede navegar utilizando las teclas de cursor, las teclas `5`, `6`, `7` y `8`, o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
+
+[TIP]
+====
+Durante el arranque, se puede forzar la salida de vídeo analógica a utilizar, pulsando `R` para RGB y `V` para VGA.
+====
+
+La opción `More...` muestra un segundo menú con más opciones.
+
+[.text-center]
+image:img/next2_zxtres.png[pdfwidth=70%]
+
+<<<
+
+Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
+
+[.text-center]
+image:img/next3_zxtres.png[pdfwidth=70%]
+
+[NOTE]
+====
+Por defecto, no es posible cargar ficheros TRD dede el navegador (se debe configurar NextZXOS para cargar una "personalidad" con esxdos).
+====
+
+Para más información, consultar el https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[manual de uso oficial].
+
+<<<
+
 == Otro Hardware
 
 === Tarjeta intermedia (Middle Board)
@@ -2773,3 +2862,7 @@ https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[Nuevo cor
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
 
 https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]
+
+https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
+
+https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next en ZXDOS]
