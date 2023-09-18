@@ -26,24 +26,12 @@
 ; Compatible compilers:
 ;   SjAsmPlus, <https://github.com/z00m128/sjasmplus>
 
-                ; definition of "zxdos" flag
                 include back32m.def
-
-;             IF zxdos=1
-;               output  BACKZX2
-;             ELSE
-;               output  BACKZXD
-;             ENDIF
-
                 include zxuno.def
                 include esxdos.def
 
-        define  VERSION "0.1.1"
-              IF zxdos=1
-        define  FLASH_FILE "FLASH_32.ZX2"
-              ELSE
-        define  FLASH_FILE "FLASH_32.ZXD"
-              ENDIF
+        define  VERSION "0.1.2"
+        define  FLASH_FILE "FLASH_32.ZX", extension
 
                 org     $2000           ; comienzo de la ejecución de los comandos ESXDOS
 

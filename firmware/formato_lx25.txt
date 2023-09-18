@@ -72,6 +72,10 @@ ROM entry
       Bit 5. ROM high bit: 0=enabled, 1=disabled
       Bit 6. horizontal MMU in Timex: 0=disabled, 1=enabled
       Bit 7. DivMMC and ZXMMC ports: 0=enabled, 1=disabled
+  04 flags 3
+      Bit 0. ULAplus: 0=enabled, 1=disabled
+      Bit 1. Timex: 0=enabled, 1=disabled
+      Bit 2. Radastanian: 0=enabled, 1=disabled
   08-0f crc16-ccitt values. Up to 4 16-bit values in reverse order
   10-20 unused
   20-3f Name of ROM in ASCII, space padded

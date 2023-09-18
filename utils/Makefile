@@ -46,11 +46,13 @@ BINS=\
  BACK16M\
  BACKZX2\
  BACKZXD\
+ BACKZX3\
  BACKUP\
  CORCLEAN\
  COREBIOS\
  ZX1\
  ZX3\
+ BIT\
  DATE\
  RTCST\
  RTC.SYS\
@@ -59,6 +61,7 @@ BINS=\
  UPGR16M\
  UPGRZX2\
  UPGRZXD\
+ UPGRZX3\
  UPGRADE\
  ZXUNOCFG
 
@@ -89,7 +92,7 @@ build/BACKZX2: $(srcdir)/back32m.asm\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
  | build
-	echo ' define zxdos 1' >back32m.def
+	echo ' define extension "2"' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f back32m.def
 
@@ -100,7 +103,18 @@ build/BACKZXD: $(srcdir)/back32m.asm\
  $(INCLUDEDIR)/rdflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
  | build
-	echo ' define zxdos 0' >back32m.def
+	echo ' define extension "D"' >back32m.def
+	$(AS) $(AFLAGS) --raw=$@ $<
+	rm -f back32m.def
+
+build/BACKZX3: $(srcdir)/back32m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/rdflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
+	echo ' define extension "3"' >back32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f back32m.def
 
@@ -167,7 +181,7 @@ build/UPGRZX2: $(srcdir)/upgr32m.asm\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
  | build
-	echo ' define zxdos 1' >upgr32m.def
+	echo ' define extension "2"' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f upgr32m.def
 
@@ -178,7 +192,18 @@ build/UPGRZXD: $(srcdir)/upgr32m.asm\
  $(INCLUDEDIR)/wrflsh.inc\
  $(INCLUDEDIR)/rst28.inc\
  | build
-	echo ' define zxdos 0' >upgr32m.def
+	echo ' define extension "D"' >upgr32m.def
+	$(AS) $(AFLAGS) --raw=$@ $<
+	rm -f upgr32m.def
+
+build/UPGRZX3: $(srcdir)/upgr32m.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
+ $(INCLUDEDIR)/Print.inc\
+ $(INCLUDEDIR)/wrflsh.inc\
+ $(INCLUDEDIR)/rst28.inc\
+ | build
+	echo ' define extension "3"' >upgr32m.def
 	$(AS) $(AFLAGS) --raw=$@ $<
 	rm -f upgr32m.def
 
@@ -206,6 +231,12 @@ build/ZX3: $(srcdir)/zx3.asm\
  $(INCLUDEDIR)/esxdos.def\
  $(INCLUDEDIR)/Print.inc\
  $(INCLUDEDIR)/rst28.inc\
+ | build
+	$(AS) $(AFLAGS) --raw=$@ $<
+
+build/BIT: $(srcdir)/bit.asm\
+ $(INCLUDEDIR)/zxuno.def\
+ $(INCLUDEDIR)/esxdos.def\
  | build
 	$(AS) $(AFLAGS) --raw=$@ $<
 
