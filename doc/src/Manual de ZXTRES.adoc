@@ -94,7 +94,7 @@ image:img/ZXTRESbottom.jpg[scaledwidth=90%]
 |15
 |Botón BOOTSEL para <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
 |16
-|Interruptor selector de sonido (DeltaSigma o I2S)
+|Interruptor selector de sonido (https://es.wikipedia.org/wiki/Modulación_Sigma-Delta[Sigma-Delta] o https://es.wikipedia.org/wiki/I²S[I^2^S])
 |===
 
 <<<
@@ -122,6 +122,11 @@ Para poder aprovechar todo su potencial, es útil tener también:
 - Al menos un mando norma Atari, como por ejemplo, un gamepad DB9 de Megadrive
 - Un ratón PS/2
 - Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
+
+[NOTE]
+====
+Si se utiliza un adaptador VGA a https://es.wikipedia.org/wiki/Euroconector[Euroconector o SCART] activo, este emplea pines no utilizados del puerto VGA para transmitir el audio, pero sólo si no hay nada conectado al puerto jack de 3,5 mm de salida de sonido.
+====
 
 <<<
 
@@ -575,7 +580,7 @@ Estas son algunas de sus principales características:
 
 - Soporte de arranque multicore: desde el Spectrum se puede seleccionar una dirección de la SPI Flash y la FPGA cargará un core desde ahí
 - Modos de color incluyendo monocromo o fósforo verde/naranja
-- Salida de audio I^2^S y DeltaSigma
+- Salida de audio https://es.wikipedia.org/wiki/I²S[I^2^S] y https://es.wikipedia.org/wiki/Modulación_Sigma-Delta[Sigma-Delta]
 - Soporte Wi-Fi (UART) vía <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
 - Soporte MIDI (General MIDI) vía <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
 - Soporte RTC (reloj en tiempo real) vía <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
@@ -1497,6 +1502,7 @@ Algunas de las características del core son:
 - 1-2 imágenes de disco duro
 - Salida de vídeo VGA emulando PAL/NTSC
 - Soporte para ratones PS/2
+- Sólo audio I^2^S
 
 <<<
 
@@ -1564,7 +1570,8 @@ Características del core:
 - 64KB de RAM
 - 32Kb de ROM
 - Soporte para un mando
-- Chip de sonido AY-3-8912.
+- Chip de sonido AY-3-8912
+- Audio I^2^S y Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -1608,6 +1615,7 @@ Algunas de las características del core son:
 - Salida de vídeo VGA
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Compatible con joystick(s), teclado y ratón
+- Sólo audio I^2^S
 
 ==== Formato de Tarjeta microSD
 
@@ -1665,6 +1673,7 @@ Algunas de las características del core son:
 - La ROM de la BIOS se carga desde la tarjeta microSD
 - Soporta ROM multicartucho, que también se carga desde la microSD
 - Salida de vídeo VGA
+- Sólo audio I^2^S
 
 ==== Formato de Tarjeta microSD
 
@@ -1715,6 +1724,7 @@ Algunas de las características del core son:
 - Soporte para cargar una imagen de disco virtual (fichero .vhd). En el arranque ya se carga automáticamente el fichero EP.VHD en caso de encontrarlo en el directorio raíz de la tarjeta SD
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Tiene implementado el joystick externo en el DB9 y el joystick interno en las teclas de cursor, con soporte para dos botones de disparo
+- Sólo audio I^2^S
 
 ==== Formato de Tarjeta microSD
 
@@ -1789,7 +1799,8 @@ Tiene, entre otras, las siguientes características:
 - 51K de memoria de usuario
 - Memoria ROM de lectura/escritura (para poder instalar ROMs alternativas)
 - Módulo de color como el descrito en https://worldradiohistory.com/UK/Electronics-Today-UK/80s/Electronics-Today-1984-04.pdf[Electronics Today UK], ampliado con color de borde programable.
-- Chip de sonido AY-3-8912 en los puertos de E/S de 128K del ZX Spectrum.
+- Chip de sonido AY-3-8912 en los puertos de E/S de 128K del ZX Spectrum
+- Audio I^2^S y Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -1845,6 +1856,7 @@ Algunas de las características del core son:
 - Compatible con ROMS (no cifradas) en https://wiki.terraonion.com/index.php/Neobuilder_Guide[formato .neo]
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Compatible con mandos de MegaDrive
+- Audio I^2^S y Sigma-Delta
 
 <<<
 
@@ -1931,6 +1943,7 @@ Algunas de sus características son:
 - Audio: Adlib, Tandy, Game Blaster, Altavoz
 - Soporte para joystick
 - Soporte para ratón en el puerto serie COM2, funciona como cualquier ratón Microsoft. Solo hace falta un driver para configurarlo, como CTMOUSE 1.9 (disponible en la carpeta hdd), con el comando CTMOUSE /s2
+- Audio I^2^S y Sigma-Delta
 
 <<<
 
@@ -2048,6 +2061,7 @@ Características:
 - Turbo carga de ficheros .o y .p
 - Carga de ROM alternativa
 - Carga de programas a través de la entrada de audio
+- Sólo audio I^2^S
 
 ==== Formato de Tarjeta microSD
 
@@ -2223,9 +2237,10 @@ El core para ZXTRES no tiene, por el momento, implementada ninguna de las siguie
 - Utilización de puerto de conexión joystick para comunicación UART
 - Soporte para Raspberry Pi
 
-Por otra parte, puede disponer de las siguientes características, que no existen en el core original:
+Por otra parte, dispone de las siguientes características, que no existen en el core original:
 
 - Modos de color incluyendo monocromo o fósforo verde/naranja
+- Sólo Audio I^2^S
 
 El manual de uso se puede descargar desde https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[la página oficial].
 
@@ -2806,10 +2821,584 @@ Si no se obtiene imagen, y no se está utilizando DisplayPort, pulsar de nuevo `
 
 == Referencias
 
-=== Scan Codes
+=== Spectrum
+
+==== Scan Codes
 
 [.text-center]
-image:img/ScanCodes.png[scaledwidth=80%]
+image:img/ScanCodes.png[scaledwidth=75%]
+
+<<<
+
+==== Registros E/S para control de ZXTRES
+
+En el core de Spectrum se dispone de los puertos `$FC3B` y `$FD3B`, registrados y asignados por el https://sinclair.wiki.zxnet.co.uk/wiki/ZXI_standard[comité ZXI]. A través de estos puertos se accede a un total de 256 registros de E/S diferentes exclusivos para la familia del ZX-Uno.
+
+El puerto `$FC3B` (`64571`) guarda la dirección (`$00` - `$FF`) del registro de E/S al que se quiere acceder. Puede leerse para saber cuál es la última dirección de registro asignada.
+
+El puerto `$FD3B` (`64827`) es el puerto de acceso al registro seleccionado con el puerto anterior. Su sentido (lectura/escritura) dependerá de la implementación de cada registro.
+
+Cada operación de lectura proporciona el siguiente carácter ASCII de la cadena que contiene la revisión actual del core del ZX-Uno. Cuando la cadena termina,lecturas posteriores emiten bytes con el valor 0 (al menos se emite uno de ellos) hasta que vuelve a comenzar la cadena. Este puntero vuelve a 0 automáticamente tras un reset o una escritura en el registro `$FC3B`. Los caracteres entregados que forman parte de la cadena son ASCII estándar imprimibles (códigos `32`-`127`). Cualquier otro valor es indicativo de que este registro no está operativo.
+
+
+Por ejemplo, para asignar el banco 16 de la SRAM al espacio de direcciones `$C000` - `$FFFF` durante el modo boot, mediante el registro MASTERMAPPER, se haría así:
+
+[source,asm]
+----
+ld bc,$fc3b     ;Puerto para establecer el número de registro a usar
+ld a,1          ;Registro $01 (MASTERMAPPER)
+out (c),a       ;Se selecciona. A partir de ahora, cualquier acceso a $FD3B está usando MASTERMAPPER
+inc b           ;Puerto de acceso al registro ($FD3B, basta con incrementar B)
+ld a,16         ;Banco 16 de la SRAM
+out (c),a       ;Se escribe en el registro MASTERMAPPER
+----
+
+Los registros implementados en la familia del ZX-Uno se describen a continuación.
+
+<<<
+
+===== `$00` MASTERCONF
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000001`|`00000001`
+|===
+
+Formato binario (en *negrita*, los campos que sólamente pueden alterarse cuando LOCK=0):
+|===
+|[.small]#*LOCK*#|[.small]#MODE1#|[.small]#DISCONT#|[.small]#MODE0#|[.small]#I2KB#|[.small]#*DISNMI*#|[.small]#*DIVEN*#|[.small]#*BOOTM*#
+|===
+* `BOOTM`: a 1 indica que ZX-Uno está en modo boot (modo configuración). El modo boot sólo tiene sentido mientras se está ejecutando el firmware de arranque, donde se permite configurar algunos aspectos de ZX-Uno antes de pasar al modo ejecución. MASTERCONF siempre puede ser leído, tanto en modo boot como en modo ejecución. Se pone a 0 manualmente por programa, y en ese momento, ZX-Uno entra en modo ejecución.
+* `DIVEN`: a 0 indica que DIVMMC no está habilitado en el sistema, aunque los puertos de acceso a la interfaz SPI del slot SD/MMC siguen estando disponibles. La memoria usada por DIVMMC queda disponible para otros usos. A 1 indica que DIVMMC está habilitada. Si se habilita, antes de pasar al modo ejecución hay que cargar una imagen de ESXDOS en el banco de RAM correspondiente. El valor por defecto de este bit es 0.
+* `DISNMI`: a 1 indica que la función NMI de DIVMMC no estará disponible. NMI funcionará, pero no causará que ESXDOS se automapee, dejando así el control de NMI en manos de la ROM principal del sistema. Bit añadido para mejorar la compatibilidad de DIVMMC con SE Basic IV. Su valor por defecto es 0 (ESXDOS maneja los eventos NMI).
+* `I2KB`: a 1 configura la ULA para que devuelva un valor acorde con un Spectrum issue 2 al leer el puerto de teclado ($FE). A 0, el valor devuelto es compatible con issue 3 y posteriores. Por defecto su valor es 0.
+* `MODE1`,`MODE0`: especifica el modo de timing de la ULA para acomodarse a diferentes modelos de Spectrum. 00 = ULA ZX Spectrum 48K PAL, 01 = ZX Spectrum 128K/+2 gris, 10 = Pentagon 128, 11 = 48K NTSC (262 scans).
+* `DISCONT`: indica si se debe producir contienda de memoria en la memoria de video. 0 para habilitar contienda (compatibilidad con 48K y 128K). 1 para deshabilitar contienda (compatibilidad con Pentagon 128)
+* `LOCK`: Cuando vale 1, impide que se puedan hacer más cambios a ciertos bits del registro MASTERCONF, e impide además acceder a la SPI Flash. Este bit se pone a 0 sólo mediante un reset maestro (Ctrl-Alt-BkSpace) o al apagar y encender el clon.
+
+<<<
+
+===== `$01` MASTERMAPPER
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+De este registro sólo se usan sus 5 bits inferiores (valores $00 a $1F). El valor guardado es el número de un banco de 16KB de SRAM que será paginado en las direcciones $C000-$FFFF durante el modo boot. Los valores de este registro no tienen ningún efecto cuando ZX-Uno está en modo ejecución. 32 valores diferentes para este registro permiten direccionar hasta 512KB de SRAM. Si ZX-Uno se amplía con más memoria, se usarán más bits en este registro. La máxima cantidad de memoria manejable es de 4MB.
+
+===== `$02` FLASHSPI
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000000`
+|===
+
+Puerto de acceso al registro SPI conectado a la SPI Flash. Escribiendo un valor en este registro, se envía a la SPI Flash, si ésta está seleccionada. Leyendo un valor de este registro, se lee el último valor enviado por la SPI Flash, y además, la misma operación de lectura provoca que la SPI envíe un nuevo valor (que sería leído con la siguiente operación de lectura a este registro). Por esta razón, en operaciones de lectura de bloques, el primer byte leído con este puerto debe descartarse.
+
+===== `$03` FLASHCS
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000001`
+|===
+
+Sólo se emplea el bit 0. El valor escrito en este registro determinado el estado de la línea CS de la Flash SPI (0 = Flash seleccionada, 1 = flash no seleccionada).
+
+===== `$04` SCANCODE
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|No cambia
+|===
+
+En lectura, permite obtener el valor del último scancode generado por el teclado. En escritura permite enviar comandos al teclado.
+
+<<<
+
+===== `$05` KEYSTAT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura|No cambia|No cambia|No cambia
+|===
+
+Varios bits que indican si hay o no una nueva tecla pulsada, o soltada, y si ésta es una tecla extendida o normal.
+|===
+|BSY|0|0|0|ERR|RLS|EXT|PEN
+|===
+
+* BSY: a 1 para indicar que hay una transmisión de datos al puerto PS/2 aún en proceso. Se debe esperar a que valga 0 para iniciar una nueva transmisión.
+* ERR: a 1 para indicar que la última transmisión a o desde el puerto PS/2 tuvo errores.
+* RLS: a 1 para indicar que el último evento pertenece a una tecla que ha sido soltada.
+* EXT: a 1 para indicar que el último evento pertenece a una tecla con código extendido (E0+scancode)
+* PEN: a 1 para indicar que hay un dato nuevo listo para ser leído en el registro SCANCODE. Tras leer KEYSTAT, este bit pasa a valer 0.
+
+===== `$06` JOYCONF
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00100001`
+|===
+
+Los bits 0 a 2 indican el modo de funcionamiento del joystick mapeado en teclado (o del segundo joystick físico si hay splitter). Los bits 4 a 6 indican el modo de funcionamiento del joystick físico (conector DB-9 lateral). El bit 3 indica el autofuego del segundo joystick o keypad. El bit 7 indica el autofuego del joystick principal. Los valores son: 000 = Disabled, 001 = Kempston, 010 = Sinclair 1, 011 = Sinclair 2, 100 = Protek/Cursor/AGF, 101 = Fuller, 110 = OPQAspM, 111 = reservado.
+
+===== `$07` KEYMAP
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|Ver descripción|Ver descripción|Ver descripción
+|===
+
+En lectura, cada acceso proporciona el siguiente byte del mapa de teclado cargado en ZX-Uno actualmente. En escritura, el byte correspondiente al mapa de teclado marcado por la posición actual es modificado. En ambos casos, el puntero de direcciones se incrementa automáticamente para señalar al siguiente byte del mapa de teclado. Este puntero vuelve a 0 automáticamente tras un reset, una escritura en el registro $FC3B, o cuando se termina el mapa de teclado. El mapa de teclado, en la implementación actual, ocupa 16384 bytes.
+
+===== `$09` MOUSEDATA
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|No cambia
+|===
+
+Registro de datos del puerto PS/2 del ratón. Usado para leer o enviar comandos directos al ratón PS/2. Por ejemplo: para inicializar el ratón, debe enviarse el valor $F4 a este registro.
+
+===== `$0A` MOUSESTATUS
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|No cambia
+|===
+
+Registro de estado del puerto PS/2 del ratón. Se definen los siguientes bits:
+|==
+|BSY|0|0|0|ERR|0|0|PEN
+|==
+* BSY: a 1 para indicar que hay una transmisión de datos al puerto PS/2 aún en proceso. Se debe esperar a que valga 0 para iniciar una nueva transmisión.
+* ERR: a 1 para indicar que la última transmisión a o desde el puerto PS/2 tuvo errores.
+* PEN: a 1 para indicar que hay un dato nuevo listo para ser leído en el registro MOUSEDATA. Tras leer MOUSESTATUS, este bit pasa a valer 0.
+
+<<<
+
+===== `$0B` SCANDBLCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000000`
+|===
+
+Registro de control del scandoubler y control de la velocidad del sistema. Se definen los siguientes bits:
+|===
+|TURBO|COPT|FREQ|ENSCAN|VGA
+|===
+* TURBO: 00 para seleccionar 3.5 MHz, 01 para seleccionar 7 MHz, 10 para seleccionar 14 MHz y 11 para seleccionar 28 MHz. Estos bits también son actualizados con el valor de los bits D0-D3 del puerto $8E3B, usado en el ZX Prism para seleccionar las distintas velocidades para la CPU.
+* COPT: selecciona la forma de generar los sincronismos compuestos para RGB y video compuesto: 0 para usar el tipo de sincronismo original del Spectrum. 1 para usar pulsos de sincronismo según el estándar PAL
+* FREQ: estos tres bits definen la frecuencia del reloj maestro, del cual derivan el resto de relojes del circuito. Entre otras, se define también aquí la frecuencia de refresco vertical, que puede usarse para mejorar la compatibilidad con algunos monitores VGA que no soportan una frecuencia de refresco vertical de 50Hz. Los valores de refresco vertical son los siguientes:
+** 000 : 50Hz para modo 48K y Pentagon
+** 001 : 50Hz para modo 128K
+** 010 : 52 Hz
+** 011 : 53 Hz
+** 100 : 55 Hz
+** 101 : 57 Hz
+** 110 : 59 Hz
+** 111 : 60 Hz
+* ENSCAN: a 1 para habilitar el efecto de scanlines en el modo VGA. No tiene efecto si el modo VGA está deshabilitado.
+* VGA: a 1 para habilitar el scandoubler. La salida del scandoubler es la misma que la salida RGB normal, pero doblando la frecuencia de retrazo horizontal. A 0 para usar una salida de 15kHz RGB / video compuesto.
+
+<<<
+
+===== `$0C` RASTERLINE
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`11111111`|`11111111`|`11111111`
+|===
+
+Almacena los 8 bits menos significativos de la línea de pantalla en la que se desea provocar un disparo de una interrupción enmascarable. Un valor 0 para este registro (con LINE8 también igual a 0) establece que la interrupción ráster se disparará, si está habilitada, justo al comenzar el borde derecho de la línea anterior a la primera línea de pantalla en la que comienza la zona de "paper". Dicho en otras palabras: el conteo de líneas de esta interrupción asume que una línea de pantalla se compone de: borde derecho + intervalo de blanking horizontal + borde izquierdo + zona de paper. Si se asume de esta forma, el disparo de la interrupción se haría al comienzo de la línea seleccionada.
+Un valor para RASTERLINE igual a 192 (con LINE8 igual a 0) dispara la interrupción ráster al comienzo del borde inferior. Los números de línea para el fin del borde inferior y comienzo del borde superior dependen de los timings empleados. El mayor valor posible en la práctiva para RASTERLINE corresponde a una interrupción ráster disparada en la última línea del borde superior (ver RASTERCTRL)
+
+===== `$0D` RASTERCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000001`|`00000001`|`00000001`
+|===
+
+|Registro de control y estado de la interrupción ráster. Se definen los siguientes bits.
+|===
+|INT|0|0|0|0|DISVINT|ENARINT|LINE8
+|===
+* INT: este bit sólo está disponible en lectura. Vale 1 durante 32 ciclos de reloj a partir del momento en que se dispara la interrupción ráster. Este bit está disponible aunque el procesador tenga las interrupciones deshabilitadas. No está disponible si el bit ENARINT vale 0.
+* DISVINT: a 1 para deshabilitar las interrupciones enmascarables por retrazo vertical (las originales de la ULA). Tras un reset, este bit vale 0.
+* ENARINT: a 1 para habilitar las interrupciones enmascarables por línea ráster. Tras un reset, este bit vale 0.
+* LINE8: guarda el bit 8 del valor de RASTERLINE, para poder definir cualquier valor entre 0 y 511, aunque en la práctica, el mayor valor está limitado por el número de líneas generadas por la ULA (311 en modo 48K, 310 en modo 128K, 319 en modo Pentagon). Si se establece un número de línea superior al límite, la interrupción ráster no se producirá.
+
+<<<
+
+===== `$0E` DEVCONTROL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+Registro de habilitacion/deshabilitacion de distintas caracteristicas. Se definen los siguientes bits.
+|===
+|DISD|ENMMU|DIROMSEL1F|DIROMSEL7F|DI1FFD|DI7FFD|DITAY|DIAY
+|===
+* DISD: a 1 para deshabilitar la interfaz hardware SPI para SD (usada en DivMMC y ZXMMC). Deshabilitando esta interfaz se liberan los puertos $1F en escritura, $3F, $E7 y $EB. Tras reset maestro, vale 0.
+* ENMMU: a 1 para habilitar la MMU horizontal usada en el Timex Sinclair. Habilitando esta interfaz se usa el bit 7 del puerto $FF, se usa el puerto $F4 y una lectura al puerto $FF devuelve el ultimo valor escrito en el. Tras reset maestro, vale 0.
+* DIROM1F: el valor de este bit se enmascara con el valor del bit 2 del puerto $1FFD según la operación ~DIROM1F & $1FFD[2]. El resultado neto es que si este bit vale 1, el sistema trabajará como si el valor del bit 2 del puerto $1FFD fuera siempre 0, independientemente del valor que se escriba en él. Tras reset maestro, vale 0, que permite que los cambios al bit 2 de $1FFD sean tenidos en cuenta.
+* DIROM7F: el valor de este bit se enmascara con el valor del bit 4 del puerto $7FFD según la operación ~DIROM7F & $7FFD[4]. El resultado neto es que si este bit vale 1, el sistema trabajará como si el valor del bit 4 del puerto $7FFD fuera siempre 0, independientemente del valor que se escriba en él. Tras reset maestro, vale 0, que permite que los cambios al bit 4 de $7FFD sean tenidos en cuenta.
+* DI1FFD: a 1 para deshabilitar el sistema de paginación compatible con +2A/+3. Deshabilitando esta interfaz se libera el puerto $1FFD en escritura. Tenga en cuenta que la decodificación del puerto $7FFD, si está activa, es diferente dependiendo de si el puerto $1FFD está activo o no.
+* DI7FFD: a 1 para deshabilitar el sistema de paginación compatible con 128K. La deshabilitación de este sistema implica la deshabilitación del sistema de paginación del +2A/+3 aunque no se haya desactivado explicitamente.
+* DITAY: a 1 para deshabilitar el segundo chip AY, deshabilitando así el modo Turbo Sound.
+* DIAY: a 1 para deshabilitar el chip principal AY. La deshabilitación de este chip implica la deshabilitación del segundo chip AY, aunque no se haya deshabilitado explicitamente.
+
+<<<
+
+===== `$0F` DEVCTRL2
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+|Registro de habilitacion/deshabilitacion de distintas caracteristicas (continuación de DEVCONTROL). Se definen los siguientes bits.
+|===
+|Resv|Resv|SPLITTER|DIMIXER|DISPECDRUM|DIRADAS|DITIMEX|DIULAPLUS
+|===
+* Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
+* SPLITTER: a 1 para habilitar el splitter de joystick.
+* DIMIXER: a 1 se deshabilita la salida de sonido.
+* DISPECDRUM: a 1 se deshabilita el soporte de SpecDrum/Covox.
+* DIRADAS: a 1 para deshabilitar el modo radastaniano. Tenga en cuenta que si el modo radastaniano no se deshabilita, pero se deshabilita la ULAplus, al intentar usar el modo radastaniano, el datapath usado en la ULA no será el esperado y el comportamiento de la pantalla en este caso no está documentado.
+* DITIMEX: a 1 para deshabilitar los modos de pantalla compatible Timex. Cualquier escritura al puerto $FF es por tanto ignorada. Si la MMU del Timex está habilitada, una lectura al puerto $FF devolverá 0.
+* DIULAPLUS: a 1 para deshabilitar la ULAplus. Cualquier escritura a los puertos de ULAplus se ignora. Las lecturas a dichos puertos devuelven el valor del bus flotante. No obstante tenga en cuenta que el mecanismo de contención para este puerto sigue funcionando aunque esté deshabilitado.
+
+===== `$10` MEMREPORT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$40` RADASCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Registro para establecer el modo radastaniano y establecer sus características. Las escrituras a este registro son ignoradas si el bit correspondiente en DEVCTRL2 está activo. Se definen los siguientes bits
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|EN1|EN0
+|===
+* Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
+* EN1, EN0: ambos bits deben valer 1 para habilitar el modo radastaniano. Si EN0 está habilitado, pero EN1 está deshabilitado, el resto de bits, del 2 al 7, está definido según lo implementado en el emulador ZEsarUX (consultar la documentación de César Hernández sobre esto).
+
+===== `$41` RADASOFFSET
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Contiene el número de bytes que hay que añadir a la dirección base de la pantalla (4000h, 6000h, C000h o E000h según la configuración) para obtener la dirección donde se encuentran los dos primeros píxeles en modo radastaniano. Es un registro de 14 bits. Para escribir un valor, primero se escriben los 8 bits menos significativos, seguidos inmediatamente de los 8 bits más significativos (los 2 bits más significativos de este valor se ignoran).
+Si el valor de offset es tal que hace que al explorar la memoria de pantalla para crear la imagen se llegue al final de una página de 16KB, la exploración continuará al principio de esa misma página.
+
+===== `$42` RADASPADDING
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+|Contiene el número de bytes - 64 que ocupa un scanline en modo radastaniano. Es decir, si este registro vale 0, la longitud en bytes de un scanline es de 64 bytes (128 pixeles). Si este registro vale 4, la longitud de un scanline es de 68 bytes (136 píxeles). Si vale 255, la longitud de un scanline es de 64+255=319 bytes, o 638 píxeles.
+Si el valor de offset es tal que hace que al explorar la memoria de pantalla para crear la imagen se llegue al final de una página de 16KB, la exploración continuará al principio de esa misma página.
+
+===== `$43` RADASPALBANK
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Registro para establecer qué sección de la paleta de ULAplus se usará para definir los colores en el modo radastaniano, y cómo se comportará el borde.
+|===
+|Resv|Resv|Resv|Resv|Resv|BOR3 |RADPALQUARTER
+|===
+* Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
+* BOR3: dentro de la paleta actual seleccionada, indica si el color del borde se tomará de las entradas 0 a 7 (0) o de las entradas 8 a 15 (1). Puede considerarse como el bit 3 del color del borde en modo radastaniano.
+* RADPALQUARTER: dos bits que indican qué sección de la paleta de ULAplus se va a usar para el modo radastaniano. 00 para usar la sección de entradas 0 a 15. 01 para las entradas 16 a 31, 10 para las entradas 32 a 47 y 11 para usar las entradas 48 a 63.
+
+===== `$80` HOFFS48K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$38`
+|===
+
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de 48K
+
+===== `$81` VOFFS48K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$01`
+|===
+
+Valor de ajuste de centrado vertical de la pantalla para la ULA de 48K
+
+===== `$82` HOFFS128K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$3A`
+|===
+
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de 128K
+
+===== `$83` VOFFS128K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$01`
+|===
+
+Valor de ajuste de centrado vertical de la pantalla para la ULA de 128K
+
+===== `$84`
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|`HOFFSPEN`
+|Lectura/Escritura|No cambia|No cambia|`$37`
+|===
+
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de Pentagon
+
+===== `$85` VOFFSPEN
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$00`
+|===
+
+Valor de ajuste de centrado vertical de la pantalla para la ULA de Pentagon
+
+===== `$A0` DMACTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A1` DMASRC
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A2` DMADST
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$A3` DMAPRE
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A4` DMALEN
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A5` DMAPROB
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A6` DMASTAT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$C6` UARTDATA
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$C7` UARTSTAT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$C8` - `$DF` RESERVED
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|Definido por el usuario|Definido por el usuario|Definido por el usuario
+|===
+
+Rango de registros de ZXUNO reservados para experimentos o uso privado.
+
+===== `$F0` SRAMADDR
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$F1` MADDRINC
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura| 
+|No cambia
+|`00000000`
+|`00000000`
+
+===== `$F2` SRAMDATA
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura
+|
+|No cambia
+|`00000000`
+|`00000000`
+
+===== `$F3` VDECKCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$F7` AUDIOMIX
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`10011111`
+|===
+
+Control de la mezcla de los canales izquierdo/derecho partiendo de los 4 canales del AY-8912. Se definen los siguientes grupos de 2 bits cada uno:
+|===
+|CHANNELA|CHANNELB|CHANNELC|BEEPDRUM
+|===
+* BEEPDRUM : Canal para Beeper y Specdrum.
+* El significado de cada grupo de 2 bits es: 00 = Silencio, 01 = Canal derecho, 10 = Canal izquierdo, 11 = Ambos
+
+===== `$FB` AD724
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000000`
+|===
+
+Control del modo de funcionamiento del chip encoder AD724. Se definen los siguientes bits:
+|==
+|Resv|Resv|Resv|Resv|Resv|Resv|Resv|MODE
+|==
+* Resv : el significado de estos bits está reservado y no debe alterarse.
+* MODE : modo de funcionamiento del AD724. 0 = codifica norma PAL. 1 = codifica norma NTSC
+
+===== `$FC` COREADDR
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$058000`
+|===
+
+Almacena la dirección, dentro de la memoria SPI, de inicio del core a arrancar. Para almacenar una dirección diferente, se han de realizar tres escrituras a este registro, conteniendo los tres bytes de la dirección, en orden de más a o menos significativo. En lectura, cada acceso a este registro devuelve una parte de la última dirección almacenada, de la parte más significativa a la menos significativa.
+
+===== `$FD` COREBOOT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Escritura|No cambia|No cambia|No cambia
+|===
+
+Registro de control de arranque. Escribiendo un 1 en el bit 0 de este registro (el resto de bits están reservados y deben quedarse a 0) hace que se desencadene el mecanismo interno de la FPGA que permite arrancar otro core. La dirección de comienzo de este segundo core será la última que se escribiera usando el registro COREADDR.
+
+===== `$FE` SCRATCH
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+====== `$FF` COREID
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura|Ver descripción|Ver descripción|Ver descripción
+|===
 
 <<<
 
@@ -2826,6 +3415,8 @@ https://www.zxuno.com/wiki/index.php/ZX_Spectrum[Core ZX Spectrum]
 https://worldofspectrum.org/zxplus3e/index.html[The ZX Spectrum +3e Homepage]
 
 https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with PC (FAT) partitions]
+
+https://www.zxuno.com/wiki/index.php?title=Boot_Firmware[Wiki de ZX-Uno]
 
 https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Layouts de teclado]
 
@@ -2866,3 +3457,5 @@ https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]
 https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
 https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next en ZXDOS]
+
+https://www.zxuno.com/wiki/index.php?title=ZX_Spectrum[Spectrum en Wiki de ZX-Uno]
