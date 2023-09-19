@@ -95,7 +95,7 @@ image:img/ZXTRESbottom.jpg[scaledwidth=90%]
 |15
 |BOOTSEL button for <<#_middle_board,middle board>>
 |16
-|Sound selection switch (DeltaSigma or I2S)
+|Sound selection switch (https://en.wikipedia.org/wiki/Delta-sigma_modulation[Sigma-Delta] or https://en.wikipedia.org/wiki/I²S[I^2^S])
 |===
 
 <<<
@@ -123,6 +123,11 @@ To take advantage of its full potential you may also need:
 - microSD card with 32GB capacity or less.
 - PS/2 mouse.
 - Speakers to connect to the audio output or a stereo jack converter to two red and white RCA connectors to connect to a TV,
+
+[NOTE]
+====
+If an active VGA to https://en.wikipedia.org/wiki/SCART[SCART] adapter is connected, it will use some free pins of the VGA port to transmit audio, but only when there is nothing connected to the 3.5 mm jack audio output port.
+====
 
 <<<
 
@@ -565,7 +570,7 @@ Some of its main characteristics include:
 - User selectable vertical refresh rate to improve compatibility with VGA monitors.
 - Multicore boot support: from the ZX Spectrum core you can select an address of the SPI Flash and the FPGA will load a core from there.
 - Different colour modes including monochrome.
-- I^2^S and DeltaSigma audio output.
+- https://en.wikipedia.org/wiki/I²S[I^2^S] and https://en.wikipedia.org/wiki/Delta-sigma_modulation[Sigma-Delta] audio output.
 - Wi-fi Support (UART) using the middle board.
 - MIDI Support (General MIDI) using the middle board.
 - RTC Support using the middle board.
@@ -1260,7 +1265,6 @@ Changing `0` in `Z0` to another number (from 0 to 127) changes the instrument us
 
 The `PLAY` command in <<#_se_basic_iv, SE Basic IV>> also supports MIDI, but it has a different https://github.com/source-solutions/sebasic4/wiki/Language-reference#PLAY[syntax].
 
-
 ==== Bob Fossil NMI Browser
 
 To use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil's NMI Browser] to play MIDI you need:
@@ -1460,7 +1464,7 @@ https://en.wikipedia.org/wiki/Commodore_Amiga [Commodore Amiga] was a personal c
 
 The ZXTRES core is based on minimig (short for Mini Amiga), which is an open source re-implementation originally authored by Dennis van Weeren. The AGA variant has been updated with AGA chipset capabilities, allowing it to emulate newer Amiga models.
 
-Some of the core features are:
+Some core characteristics are:
 
 - Chipset variants : OCS, ECS, AGA
 - chipRAM : 0.5MB - 2.0MB, SlowRAM : 0.0MB - 1.5MB and fastRAM : 0.0MB - 24MB
@@ -1471,6 +1475,7 @@ Some of the core features are:
 - 1-2 hard disk images
 - VGA video output emulating: PAL / NTSC
 - PS/2 mouse support
+- Only I^2^S audio
 
 <<<
 
@@ -1540,6 +1545,7 @@ Core features:
 - Tape loading using the audio input.
 - VGA video output (50 Hz).
 - Writable ROM memory (to install alternate ROMs).
+- I^2^S and Sigma-Delta audio
 
 ==== SD card format
 
@@ -1579,8 +1585,9 @@ Some of the features of the core are:
 
 - DisplaPort video output.
 - RGB video output (using the VGA port).
-- Support for joysticks, keyboard, mouse
+- Support for joysticks, keyboard, mouse.
 - VGA video output.
+- Only I^2^S audio.
 
 ==== microSD card format
 
@@ -1638,6 +1645,7 @@ Some characteristics of this core are:
 - BIOS ROM is loaded from microSD card.
 - Supports multicart ROM also loaded from microSD.
 - VGA video output.
+- Only I^2^S audio.
 
 ==== microSD card format
 
@@ -1690,6 +1698,7 @@ Some characteristics of this core are:
 - Support for loading a virtual disk image (.vhd file). At boot time the EP.VHD file is automatically loaded if found in the root directory of the SD card.
 - External joystick is implemented on the DB9 and internal joystick on the cursor keys, with support for two trigger buttons.
 - RGB video output (using the VGA port).
+- Only I^2^S audio.
 
 ==== microSD card format
 
@@ -1768,13 +1777,13 @@ Some characteristics of this core are:
 - Tape loading using the audio input.
 - VGA video output.
 - Writable ROM memory (to install alternate ROMs).
+- I^2^S and Sigma-Delta audio.
 
 ==== microSD card format
 
 This core does not use the SD card.
 
 If not already there, <<#_cores,install or run the Jupiter ACE core>> on the ZXTRES.
-
 
 ==== Keyboard
 
@@ -1815,13 +1824,14 @@ https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] is the name of a 16-bit cartridge
 
 The ZXTRES version (by somhi) is based on the https://github.com/robinsonb5/NeoGeo_FPGA[DeMiStified version] of the https://github.com/MiSTer-devel/NeoGeo_MiSTer[original version for MiSTer FPGA].
 
-Some core charactersistics are:
+Some core characteristics are:
 
 - Compatible with Sega Mega Drive (Genesis) controllers.
 - MVS and AES support.
 - RGB video output (using the VGA port).
 - Support for ROMS (not encrypted) in https://wiki.terraonion.com/index.php/Neobuilder_Guide[`NEO` format].
 - Support for http://unibios.free.fr/download.html[Universe BIOS].
+- I^2^S and Sigma-Delta audio.
 
 ==== microSD card format
 
@@ -1890,7 +1900,7 @@ The https://en.wikipedia.org/wiki/IBM_Personal_Computer_XT[IBM Personal Computer
 
 The https://github.com/zxtres/PCXT_DeMiSTify[ZXTRES core] has been implemented by @somhi using the https://github.com/MiSTer-devel/PCXT_MiSTer[PC XT for MiSTer FPGA] core by @spark2k06.
 
-Some of its features are:
+Some core characteristics are:
 
 - 8088 CPU with these speed settings: 4.77 MHz, 7.16 MHz, 9.54 MHz cycle accurate, and PC/AT 286 at 3.5MHz equivalent (max. speed).
 - Audio: Adlib, Tandy, Game Blaster, Speaker.
@@ -1907,6 +1917,7 @@ Some of its features are:
 - Tandy graphics with 128Kb of shared VRAM.
 - VGA video output.
 - XT-IDE support.
+- I^2^S and Sigma-Delta audio.
 
 <<<
 
@@ -2024,6 +2035,7 @@ Features:
 - YM2149 sound chip (ZON X-81 compatible).
 - VGA video output.
 - ZX80/ZX81 selectable (ZX80 currently working only in RGB mode).
+- Only I^2^S audio.
 
 ==== microSD card format
 
@@ -2199,9 +2211,10 @@ The core, for the moment does not have any of these features:
 - UART communication using the joystick port
 - Raspberry Pi support
 
-It can also have these features, which do not exist in the original core:
+It also has these other features, which do not exist in the original core:
 
 - Different colour modes including monochrome
+- Only I^2^S audio
 
 The user manual is available to download at https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[the official web page].
 
@@ -2758,10 +2771,583 @@ If no image is shown and you're not using DisplaPort, press `Scroll Lock` again 
 
 == References
 
-=== Scan Codes
+=== Spectrum
+
+==== Scan Codes
 
 [.text-center]
-image:img/ScanCodes.png[scaledwidth=80%]
+image:img/ScanCodes.png[scaledwidth=75%]
+
+<<<
+
+==== ZXTRES control I/O registers
+
+In the Spectrum core the `$FC3B` and `$FD3B` ports are reserved and assigned by the https://sinclair.wiki.zxnet.co.uk/wiki/ZXI_standard[ZXI committee]. A total of 256 different I/O registers unique to the ZX-Uno family are accessed through these ports.
+
+Port `$FC3B` (`64571`) stores the address (`$00` - `$FF`) of the I/O register to be accessed. It can be read to find out which register address was last allocated.
+
+Port `$FD3B` (`64827`) is the access port to the register selected with the previous port. Its meaning (read/write) depends on the implementation of each register.
+
+For example, to allocate bank 16 of the SRAM to the address space `$C000` - `$FFFFFF` during boot mode, using the MASTERMAPPER register, would be as follows:
+
+[source,asm]
+----
+ld bc,$fc3b     ;Port to set register number to use
+ld a,1          ;Register $01 (MASTERMAPPER)
+out (c),a       ;Selected. From now on, any access to $FD3B is using MASTERMAPPER
+inc b           ;Register access port ($FD3B, just increment B)
+ld a,16         ;SRAM Bank 16
+out (c),a       ;Write to the MASTERMAPPER register
+----
+
+The registers implemented in the ZX-Uno family are described below.
+
+<<<
+
+===== `$00` MASTERCONF
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000001`|`00000001`
+|===
+
+Binary format (fields in *bold* can only be altered when LOCK=0):
+|===
+|[.small]#*LOCK*#|[.small]#MODE1#|[.small]#DISCONT#|[.small]#MODE0#|[.small]#I2KB#|[.small]#*DISNMI*#|[.small]#*DIVEN*#|[.small]#*BOOTM*#
+|===
+* `BOOTM`: 1 indicates that the ZX-Uno is in boot mode (configuration mode). Boot mode only makes sense while the boot firmware is running, where some aspects of the ZX-Uno are allowed to be configured before going into run mode. MASTERCONF can always be read, both in boot mode and in run mode. It is set to 0 manually per program, at which point ZX-Uno enters run mode.
+* `DIVEN`: set to 0 indicates that DIVMMC is not enabled in the system, although the SPI interface access ports of the SD/MMC slot are still available. The memory used by DIVMMC remains available for other uses. 1 indicates that DIVMMC is enabled. If enabled, an ESXDOS image must be loaded into the corresponding RAM bank before entering run mode. The default value of this bit is 0.
+* `DISNMI`: set to 1 indicates that the DIVMMC NMI function will not be available. NMI will work, but will not cause ESXDOS to automate, thus leaving NMI control to the main system ROM. Bit added to improve DIVMMC compatibility with SE Basic IV. Defaults to 0 (ESXDOS handles NMI events).
+* `I2KB``: a1 sets the ULA to return a value consistent with a Spectrum issue 2 when reading the keyboard port ($FE). When 0, the returned value is compatible with issue 3 and later. It defaults to 0.
+* `MODE1`,`MODE0`: specifies the ULA timing mode to accommodate different Spectrum models. 00 = ULA ZX Spectrum 48K PAL, 01 = ZX Spectrum 128K/+2 grey, 10 = Pentagon 128, 11 = 48K NTSC (262 scans).
+* `DISCONT`: indicates whether memory contention should occur in the video memory. 0 to enable contention (48K and 128K compatibility). 1 to disable contention (Pentagon 128 compatibility).
+* `LOCK`: When set to 1, it prevents further changes to certain bits in the MASTERCONF register, and also prevents access to the SPI Flash. This bit is reset to 0 only by a master reset (Ctrl-Alt-BkSpace) or by powering the clone off and on.
+
+<<<
+
+===== `$01` MASTERMAPPER
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+Only the lower 5 bits (values $00 to $1F) of this register are used. The value stored is the number of a 16KB bank of SRAM that will be paged at addresses $C000-$FFFFFF during boot mode. The values in this register have no effect when the ZX-Uno is in run mode. 32 different values for this register allow addressing up to 512KB of SRAM. If ZX-Uno is expanded with more memory, more bits in this register will be used. The maximum manageable amount of memory is 4MB.
+
+===== `$02` FLASHSPI
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000000`
+|===
+
+Puerto de acceso al registro SPI conectado a la SPI Flash. Escribiendo un valor en este registro, se envía a la SPI Flash, si ésta está seleccionada. Leyendo un valor de este registro, se lee el último valor enviado por la SPI Flash, y además, la misma operación de lectura provoca que la SPI envíe un nuevo valor (que sería leído con la siguiente operación de lectura a este registro). Por esta razón, en operaciones de lectura de bloques, el primer byte leído con este puerto debe descartarse.
+
+===== `$03` FLASHCS
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000001`
+|===
+
+Only bit 0 is used. The value written to this register determines the status of the CS line of the SPI Flash (0 = Flash selected, 1 = Flash not selected).
+
+===== `$04` SCANCODE
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|Does not change
+|===
+
+When reading, it allows to obtain the value of the last scancode generated by the keyboard. When writing, it allows to send commands to the keyboard.
+
+<<<
+
+===== `$05` KEYSTAT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read|Does not change|Does not change|Does not change
+|===
+
+Several bits showing whether or not there is a new key pressed, or released, and whether this is an extended or normal key.
+|===
+|BSY|0|0|0|ERR|RLS|EXT|PEN
+|===
+
+* BSY: Uses 1 when a data transmission to the PS/2 port is still in progress. Wait for a value of 0 to start a new transmission.
+* ERR: 1 when the last transmission to or from the PS/2 port had errors.
+* RLS: 1 when the last event belongs to a key that has been released.
+* EXT: 1 when the last event belongs to a key with extended code (E0+scancode).
+* PEN: 1 when there is new data ready to be read in the SCANCODE register. After reading KEYSTAT, this bit is set to 0.
+
+===== `$06` JOYCONF
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00100001`
+|===
+
+Bits 0 to 2 show the operating mode of the keyboard mapped joystick (or of the second physical joystick if there is a splitter). Bits 4 to 6 for the operating mode of the physical joystick (DB-9 connector on the side). Bit 3 means autofire of the second joystick or keypad. Bit 7 means autofire of the main joystick. The values are: 000 = Disabled, 001 = Kempston, 010 = Sinclair 1, 011 = Sinclair 2, 100 = Protek/Cursor/AGF, 101 = Fuller, 110 = OPQAspM, 111 = reserved.
+
+===== `$07` KEYMAP
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Read later|Read later|Read later
+|===
+
+On read, each access provides the next byte of the currently loaded ZX-Uno keymap. On write, the byte corresponding to the keymap marked by the current position is modified. In both cases, the address pointer is automatically incremented to point to the next byte of the keymap. This pointer returns to 0 automatically after a reset, a write to the $FC3B register, or when the keymap is terminated. The keymap, in the current implementation, occupies 16384 bytes.
+
+<<<
+
+===== `$09` MOUSEDATA
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|Does not change
+|===
+
+Mouse PS/2 port data register. Used to read or send direct commands to the PS/2 mouse. For example: to initialise the mouse, the value $F4 must be sent to this register.
+
+===== `$0A` MOUSESTATUS
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|Does not change
+|===
+
+PS/2 mouse port status register. The following bits are set:
+|==
+|BSY|0|0|0|ERR|0|0|PEN
+|==
+* BSY: set to 1 when a data transmission to the PS/2 port is still in progress. Wait for a value of 0 to start a new transmission.
+* ERR: set to 1 when the last transmission to or from the PS/2 port had errors.
+* PEN: set to 1 when new data is ready to be read from the MOUSEDATA register. After reading MOUSESTATUS, this bit is set to 0.
+
+<<<
+
+===== `$0B` SCANDBLCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000000`
+|===
+
+Scandoubler control register and system speed. The following bits are defined:
+|===
+|TURBO|COPT|FREQ|FREQ|ENSCAN|VGA
+|===
+* TURBO: 00 to select 3.5 MHz, 01 to select 7 MHz, 10 to select 14 MHz and 11 to select 28 MHz. These bits are also updated with the value of bits D0-D3 of port $8E3B, used in the ZX Prism to select the different speeds for the CPU.
+* COPT: selects the way to generate the composite syncs for RGB and composite video: 0 to use the original Spectrum sync type. 1 to use sync pulses according to the PAL standard.
+* FREQ: these three bits define the frequency of the master clock, from which all other clocks in the circuit are derived. Among others, the vertical refresh rate is also defined here, which can be used to improve compatibility with some VGA monitors that do not support a vertical refresh rate of 50Hz. The vertical refresh rate values are as follows:
+** 000 : 50Hz for 48K and Pentagon mode.
+** 001 : 50Hz for 128K mode
+** 010 : 52 Hz
+** 011 : 53 Hz
+** 100 : 55 Hz
+** 101 : 57 Hz
+** 110 : 59 Hz
+** 111 : 60 Hz
+* ENSCAN: to 1 to enable the scanline effect in VGA mode. No effect if VGA mode is disabled.
+* VGA: set to 1 to enable the scandoubler. The scandoubler output is the same as the normal RGB output, but with a doubling of the horizontal delay frequency. Set to 0 to use 15kHz RGB / composite video output.
+
+<<<
+
+===== `$0C` RASTERLINE
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`11111111`|`11111111`|`11111111`
+|===
+
+Stores the least significant 8 bits of the screen line where maskable interrupt should be triggered. A value of 0 for this register (with LINE8 also equal to 0) sets the raster interrupt to be triggered, if enabled, right at the start of the right edge of the line before the first screen line where the "paper" area begins. In other words: the line count of this interrupt assumes that a screen line is composed of: right edge + horizontal blanking interval + left edge + paper zone. If this assumption is made, the interrupt would be triggered at the beginning of the selected line.
+A value for RASTERLINE equal to 192 (with LINE8 equal to 0) triggers the raster interrupt at the beginning of the bottom edge. The line numbers for the end of the bottom edge and start of the top edge depend on the timings used. The highest value possible in practice for RASTERLINE corresponds to a raster interrupt triggered at the last line of the top edge (see RASTERCTRL).
+
+===== `$0D` RASTERCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000001`|`00000001`|`00000001`
+|===
+
+Raster Interrupt Status and Control Register. The following bits are defined.
+|===
+|INT|0|0|0|0|0|DISVINT|ENARINT|LINE8
+|===
+* INT: this bit is only available on read. It is set to 1 for 32 clock cycles from the time the raster interrupt is triggered. This bit is available even if the processor has interrupts disabled. It is not available if the ENARINT bit is set to 0.
+* DISVINT: set to 1 to disable the vertical retrace maskable interrupts (the original ULA interrupts). After a reset, this bit is set to 0.
+* ENARINT: set to 1 to enable raster line maskable interrupts. After a reset, this bit is set to 0.
+* LINE8: saves bit 8 of the RASTERLINE value, so that any value between 0 and 511 can be set, although in practice, the largest value is limited by the number of lines generated by the ULA (311 in 48K mode, 310 in 128K mode, 319 in Pentagon mode). If a line number higher than the limit is set, the raster interrupt will not occur.
+
+<<<
+
+===== `$0E` DEVCONTROL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+Enable/disable register for different features. The following bits are defined.
+|===
+|DISD|ENMMU|DIROMSEL1F|DIROMSEL7F|DI1FFD|DI7FFD|DI7FFD|DITAY|DIAY
+|===
+* DISD: Set to 1 to disable the SPI hardware interface for SD (used in DivMMC and ZXMMC). Disabling this interface frees ports $1F on write, $3F, $E7 and $EB. After master reset, it is set to 0.
+* ENMMU: set to 1 to enable the horizontal MMU used on the Timex Sinclair. Enabling this interface uses bit 7 of port $FF, port $F4 is used and a read to port $FF returns the last value written to it. After master reset, it is 0.
+* DIROM1F: the value of this bit is masked with the value of bit 2 of port $1FFD according to the operation ~DIROM1F & $1FFD[2]. The net result is that if this bit is set to 1, the system will work as if the value of bit 2 of port $1FFD is always 0, regardless of the value written to it. After master reset, it is set to 0, which allows changes to bit 2 of $1FFD to be taken into account.
+* DIROM7F: the value of this bit is masked with the value of bit 4 of port $7FFD according to the operation ~DIROM7F & $7FFD[4]. The net result is that if this bit is set to 1, the system will work as if the value of bit 4 of port $7FFD is always 0, regardless of the value written to it. After master reset, it is set to 0, which allows changes to bit 4 of $7FFD to be taken into account.
+* DI1FFD: set to 1 to disable the +2A/+3 compatible paging system. Disabling this interface frees the $1FFD port on write. Note that the decoding of port $7FFD, if active, is different depending on whether port $1FFD is active or not.
+* DI7FFD: to 1 to disable the 128K compatible paging system. Disabling this system disables the +2A/+3 paging system even if it is not explicitly disabled.
+* DITAY: set to 1 to disable the second AY chip, thus disabling Turbo Sound mode.
+* DIAY: set to 1 to disable the main AY chip. Disabling this chip disables the second AY chip, even if it is not explicitly disabled.
+
+<<<
+
+===== `$0F` DEVCTRL2
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+|Enable/disable register of different features (continuation of DEVCONTROL). The following bits are defined.
+|===
+|Resv|Resv|SPLITTER|DIMIXER|DISPECDRUM|DIRADES|DITIMEX|DIULAPLUS
+|===
+* Resv: This bit is reserved. In the current implementation, a 0 must be written to it if the register value is updated.
+* SPLITTER: set to 1 to enable joystick splitter.
+* DIMIXER: set to 1 to disable sound output.
+* DISPECDRUM: set to 1 to disable SpecDrum/Covox support.
+* DIRADAS: set to 1 to disable radastanian mode. Note that if radastanian mode is not disabled, but ULAplus is disabled, when attempting to use radastanian mode, the datapath used in the ULA will not be as expected and the display behaviour in this case is not documented.
+* DITIMEX: to 1 to disable Timex compatible display modes. Any writes to the $FF port are therefore ignored. If the Timex MMU is enabled, a read to port $FF will return 0.
+* DIULAPLUS: set to 1 to disable the ULAplus. Any writes to the ULAplus ports are ignored. Reads to those ports return the value of the floating bus. Note however that the contention mechanism for this port still works even if it is disabled.
+
+===== `$10` MEMREPORT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$40` RADASCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Register for setting the radastanian mode and  its characteristics. Writes to this register are ignored if the corresponding bit in DEVCTRL2 is set. The following bits are defined
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|EN1|EN0
+|===
+* Resv: This bit is reserved. In the current implementation, a 0 must be written to it if the register value is updated.
+* EN1, EN0: Both bits must be set to 1 to enable Radastanian mode. If EN0 is enabled, but EN1 is disabled, the rest of the bits, from 2 to 7, are defined as implemented in the https://github.com/chernandezba/zesarux[ZEsarUX emulator] (see César Hernández's documentation on this).
+
+===== `$41` RADASOFFSET
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Contains the number of bytes to be added to the base address of the screen (4000h, 6000h, C000h or E000h depending on the configuration) to obtain the address where the first two pixels are located in Radastanian mode. It is a 14-bit register. To write a value, the 8 least significant bits are written first, followed immediately by the 8 most significant bits (the 2 most significant bits of this value are ignored).
+If the offset value is such that scanning the screen memory to create the image reaches the end of a 16KB page, scanning will continue at the beginning of that same page.
+
+===== `$42` RADASPADDING
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Contains the number of bytes - 64 that a scanline occupies in Radastanian mode. That is, if this register is 0, the length in bytes of a scanline is 64 bytes (128 pixels). If this register is 4, the length of a scanline is 68 bytes (136 pixels). If it is 255, the length of a scanline is 64+255=319 bytes, or 638 pixels.
+If the offset value is such that scanning the screen memory to create the image reaches the end of a 16KB page, scanning will continue at the beginning of that same page.
+
+<<<
+
+===== `$43` RADASPALBANK
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Register used to set which section of the ULAplus palette will define the colours in Radastanian mode, and how the border will behave.
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|BOR3 |RADPALQUARTER
+|===
+* Resv: This bit is reserved. In the current implementation, a 0 must be written to it if the register value is updated.
+* BOR3: Within the currently selected palette, indicates whether the border colour will be taken from entries 0 to 7 (0) or from entries 8 to 15 (1). It can be considered as bit 3 of the border colour in Radastanian mode.
+* RADPALQUARTER: two bits indicating which section of the ULAplus palette is to be used for the Radastanian mode. 00 for using the section of inputs 0 to 15. 01 for inputs 16 to 31, 10 for inputs 32 to 47 and 11 for using inputs 48 to 63.
+
+===== `$80` HOFFS48K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$38`
+|===
+
+Horizontal screen centering adjustment value for 48K ULA.
+
+===== `$81` VOFFS48K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$01`
+|===
+
+Vertical screen centering adjustment value for 48K ULA.
+
+===== `$82` HOFFS128K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$3A`
+|===
+
+Horizontal screen centering adjustment value for 128K ULA.
+
+===== `$83` VOFFS128K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$01`
+|===
+
+Vertical screen centering adjustment value for 128K ULA.
+
+===== `$84`
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|`HOFFSPEN`
+|Read/Write|Does not change|Does not change|`$37`
+|===
+
+Horizontal screen centering adjustment value for Pentagon ULA.
+
+===== `$85` VOFFSPEN
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$00`
+|===
+
+Vertical screen centering adjustment value for Pentagon ULA.
+
+===== `$A0` DMACTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A1` DMASRC
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A2` DMADST
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$A3` DMAPRE
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A4` DMALEN
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A5` DMAPROB
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A6` DMASTAT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$C6` UARTDATA
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$C7` UARTSTAT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$C8` - `$DF` RESERVED
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Definido por el usuario|Definido por el usuario|Definido por el usuario
+|===
+
+ZXUNO registers reserved for experiments or private use.
+
+===== `$F0` SRAMADDR
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$F1` MADDRINC
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+
+===== `$F2` SRAMDATA
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Lectura/Escritura|Does not change|`00000000`|`00000000`
+
+===== `$F3` VDECKCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$F7` AUDIOMIX
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`10011111`
+|===
+
+Control of the left/right channel mix from the 4 channels of the AY-8912. The following groups of 2 bits each are defined:
+|===
+|=== |CHANNELA|CHANNELB|CHANNELC|BEEPDRUM
+|===
+* BEEPDRUM : Channel for Beeper and Specdrum.
+* The meaning of each group of 2 bits is: 00 = Mute, 01 = Right channel, 10 = Left channel, 11 = Both.
+
+<<<
+
+===== `$FB` AD724
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000000`
+|===
+
+Control of the operating mode of the AD724 encoder chip. The following bits are defined:
+|==
+|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|MODE
+|==
+* Resv : the meaning of these bits is reserved and must not be altered.
+* MODE : operating mode of the AD724. 0 = encodes PAL standard. 1 = encodes NTSC standard.
+
+===== `$FC` COREADDR
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$058000`
+|===
+Stores the address, within SPI memory, of the start of the core to be booted. To store a different address, three writes must be made to this register, containing the three bytes of the address, in order from most significant to least significant. On read, each access to this register returns a part of the last stored address, from the most significant part to the least significant part.
+
+===== `$FD` COREBOOT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read|Does not change|Does not change|Does not change
+|===
+
+Boot control register. Writing a 1 to bit 0 of this register (all other bits are reserved and must remain at 0) triggers the FPGA's internal mechanism to start another core. The start address of this second core will be the last one written using the COREADDR register.
+
+===== `$FE` SCRATCH
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+<<<
+
+====== `$FF` COREID
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read|Read later|Read later|Read later
+|===
+
+Each read operation provides the next ASCII character of the string containing the current revision of the ZX-Uno core. When the string ends, subsequent reads output bytes with the value 0 (at least on) until the string starts again. This pointer returns to 0 automatically after a reset or a write to the `$FC3B` register. The delivered characters that are part of the string are standard printable ASCII (codes `32`-`127`). Any other value indicates that this register is not operational.
 
 <<<
 
@@ -2778,6 +3364,8 @@ https://www.zxuno.com/wiki/index.php/ZX_Spectrum[ZX Spectrum core]
 https://worldofspectrum.org/zxplus3e/index.html[The ZX Spectrum +3e Homepage]
 
 https://worldofspectrum.org/zxplus3e/sharingdisks.html[Sharing a +3e disk with PC (FAT) partitions]
+
+https://www.zxuno.com/wiki/index.php?title=Boot_Firmware[ZX-Uno Wiki]
 
 https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[Keyboard Layouts]
 
@@ -2818,3 +3406,5 @@ https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]
 https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
 https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next with ZXDOS]
+
+https://www.zxuno.com/wiki/index.php?title=ZX_Spectrum[About Spectrum at ZX-Uno Wiki]

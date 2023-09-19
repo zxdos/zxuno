@@ -2838,9 +2838,6 @@ El puerto `$FC3B` (`64571`) guarda la dirección (`$00` - `$FF`) del registro de
 
 El puerto `$FD3B` (`64827`) es el puerto de acceso al registro seleccionado con el puerto anterior. Su sentido (lectura/escritura) dependerá de la implementación de cada registro.
 
-Cada operación de lectura proporciona el siguiente carácter ASCII de la cadena que contiene la revisión actual del core del ZX-Uno. Cuando la cadena termina,lecturas posteriores emiten bytes con el valor 0 (al menos se emite uno de ellos) hasta que vuelve a comenzar la cadena. Este puntero vuelve a 0 automáticamente tras un reset o una escritura en el registro `$FC3B`. Los caracteres entregados que forman parte de la cadena son ASCII estándar imprimibles (códigos `32`-`127`). Cualquier otro valor es indicativo de que este registro no está operativo.
-
-
 Por ejemplo, para asignar el banco 16 de la SRAM al espacio de direcciones `$C000` - `$FFFF` durante el modo boot, mediante el registro MASTERMAPPER, se haría así:
 
 [source,asm]
@@ -3035,7 +3032,7 @@ Un valor para RASTERLINE igual a 192 (con LINE8 igual a 0) dispara la interrupci
 |Lectura/Escritura|`00000001`|`00000001`|`00000001`
 |===
 
-|Registro de control y estado de la interrupción ráster. Se definen los siguientes bits.
+Registro de control y estado de la interrupción ráster. Se definen los siguientes bits.
 |===
 |INT|0|0|0|0|DISVINT|ENARINT|LINE8
 |===
@@ -3112,7 +3109,7 @@ Registro para establecer el modo radastaniano y establecer sus características.
 |Resv|Resv|Resv|Resv|Resv|Resv|EN1|EN0
 |===
 * Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
-* EN1, EN0: ambos bits deben valer 1 para habilitar el modo radastaniano. Si EN0 está habilitado, pero EN1 está deshabilitado, el resto de bits, del 2 al 7, está definido según lo implementado en el emulador ZEsarUX (consultar la documentación de César Hernández sobre esto).
+* EN1, EN0: ambos bits deben valer 1 para habilitar el modo radastaniano. Si EN0 está habilitado, pero EN1 está deshabilitado, el resto de bits, del 2 al 7, está definido según lo implementado en el https://github.com/chernandezba/zesarux[emulador ZEsarUX] (consultar la documentación de César Hernández sobre esto).
 
 ===== `$41` RADASOFFSET
 
@@ -3133,7 +3130,7 @@ Si el valor de offset es tal que hace que al explorar la memoria de pantalla par
 |Lectura/Escritura|`00000000`|`00000000`|`00000000`
 |===
 
-|Contiene el número de bytes - 64 que ocupa un scanline en modo radastaniano. Es decir, si este registro vale 0, la longitud en bytes de un scanline es de 64 bytes (128 pixeles). Si este registro vale 4, la longitud de un scanline es de 68 bytes (136 píxeles). Si vale 255, la longitud de un scanline es de 64+255=319 bytes, o 638 píxeles.
+Contiene el número de bytes - 64 que ocupa un scanline en modo radastaniano. Es decir, si este registro vale 0, la longitud en bytes de un scanline es de 64 bytes (128 pixeles). Si este registro vale 4, la longitud de un scanline es de 68 bytes (136 píxeles). Si vale 255, la longitud de un scanline es de 64+255=319 bytes, o 638 píxeles.
 Si el valor de offset es tal que hace que al explorar la memoria de pantalla para crear la imagen se llegue al final de una página de 16KB, la exploración continuará al principio de esa misma página.
 
 ===== `$43` RADASPALBANK
@@ -3160,7 +3157,7 @@ Registro para establecer qué sección de la paleta de ULAplus se usará para de
 |Lectura/Escritura|No cambia|No cambia|`$38`
 |===
 
-Valor de ajuste de centrado horizontal de la pantalla para la ULA de 48K
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de 48K.
 
 ===== `$81` VOFFS48K
 
@@ -3170,7 +3167,7 @@ Valor de ajuste de centrado horizontal de la pantalla para la ULA de 48K
 |Lectura/Escritura|No cambia|No cambia|`$01`
 |===
 
-Valor de ajuste de centrado vertical de la pantalla para la ULA de 48K
+Valor de ajuste de centrado vertical de la pantalla para la ULA de 48K.
 
 ===== `$82` HOFFS128K
 
@@ -3180,7 +3177,7 @@ Valor de ajuste de centrado vertical de la pantalla para la ULA de 48K
 |Lectura/Escritura|No cambia|No cambia|`$3A`
 |===
 
-Valor de ajuste de centrado horizontal de la pantalla para la ULA de 128K
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de 128K.
 
 ===== `$83` VOFFS128K
 
@@ -3190,7 +3187,7 @@ Valor de ajuste de centrado horizontal de la pantalla para la ULA de 128K
 |Lectura/Escritura|No cambia|No cambia|`$01`
 |===
 
-Valor de ajuste de centrado vertical de la pantalla para la ULA de 128K
+Valor de ajuste de centrado vertical de la pantalla para la ULA de 128K.
 
 ===== `$84`
 
@@ -3201,7 +3198,7 @@ Valor de ajuste de centrado vertical de la pantalla para la ULA de 128K
 |Lectura/Escritura|No cambia|No cambia|`$37`
 |===
 
-Valor de ajuste de centrado horizontal de la pantalla para la ULA de Pentagon
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de Pentagon.
 
 ===== `$85` VOFFSPEN
 
@@ -3211,7 +3208,7 @@ Valor de ajuste de centrado horizontal de la pantalla para la ULA de Pentagon
 |Lectura/Escritura|No cambia|No cambia|`$00`
 |===
 
-Valor de ajuste de centrado vertical de la pantalla para la ULA de Pentagon
+Valor de ajuste de centrado vertical de la pantalla para la ULA de Pentagon.
 
 ===== `$A0` DMACTRL
 
@@ -3310,21 +3307,14 @@ Rango de registros de ZXUNO reservados para experimentos o uso privado.
 [align="center",options="header"]
 |===
 |Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
-|Lectura/Escritura| 
-|No cambia
-|`00000000`
-|`00000000`
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
 
 ===== `$F2` SRAMDATA
 
 [align="center",options="header"]
 |===
 |Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
-|Lectura/Escritura
-|
-|No cambia
-|`00000000`
-|`00000000`
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
 
 ===== `$F3` VDECKCTRL
 
@@ -3348,6 +3338,8 @@ Control de la mezcla de los canales izquierdo/derecho partiendo de los 4 canales
 |===
 * BEEPDRUM : Canal para Beeper y Specdrum.
 * El significado de cada grupo de 2 bits es: 00 = Silencio, 01 = Canal derecho, 10 = Canal izquierdo, 11 = Ambos
+
+<<<
 
 ===== `$FB` AD724
 
@@ -3392,6 +3384,8 @@ Registro de control de arranque. Escribiendo un 1 en el bit 0 de este registro (
 |Lectura/Escritura|No cambia|`00000000`|`00000000`
 |===
 
+<<<
+
 ====== `$FF` COREID
 
 [align="center",options="header"]
@@ -3399,6 +3393,8 @@ Registro de control de arranque. Escribiendo un 1 en el bit 0 de este registro (
 |Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
 |Lectura|Ver descripción|Ver descripción|Ver descripción
 |===
+
+Cada operación de lectura proporciona el siguiente carácter ASCII de la cadena que contiene la revisión actual del core del ZX-Uno. Cuando la cadena termina,lecturas posteriores emiten bytes con el valor 0 (al menos se emite uno de ellos) hasta que vuelve a comenzar la cadena. Este puntero vuelve a 0 automáticamente tras un reset o una escritura en el registro `$FC3B`. Los caracteres entregados que forman parte de la cadena son ASCII estándar imprimibles (códigos `32`-`127`). Cualquier otro valor es indicativo de que este registro no está operativo.
 
 <<<
 
