@@ -22,7 +22,7 @@ ZXTRES, ZXTRES+ y ZXTRES++ son la continuación de https://zxuno.speccy.org[ZX-U
 
 Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible usar distintas configuraciones de software (cores) y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXTRES con la configuración que se desee de entre varias disponibles.
 
-La página oficial de la familia ZXTRES es .
+La página oficial de la familia ZXTRES es https://www.forofpga.es/viewforum.php?f=251[https://www.forofpga.es/viewforum.php?f=251].
 
 La mayoría de las funciones y características de ZXTRES, ZXTRES+ y ZXTRES++ son las mismas, así que, en este documento, se hablará, en general, de ZXTRES, indicando las diferencias con los demás donde sea necesario. Además, _mando_ se utiliza para hablar de un joystick o gamepad. Los botones los mandos se etiquetan alfabéticamente a partir de la letra "A", notar sin embargo que las etiquetas de cada mando particular pueden variar.
 
@@ -286,7 +286,7 @@ Por defecto, macOS indexa y guarda información extra en archivos de los discos 
 ----
 mdutil -i off /Volumes/ZXTRES
 cd /Volumes/ZXTRES
-rm -rf .{,_.}{fseventsd,Spotlight-V*,Trashes}
+rm -rf .{,_.}{fseventsd,Spotlight-V\*,Trashes}
 mkdir .fseventsd
 touch .fseventsd/no_log .metadata_never_index .Trashes
 cd -
@@ -1502,7 +1502,7 @@ Algunas de las características del core son:
 - 1-2 imágenes de disco duro
 - Salida de vídeo VGA emulando PAL/NTSC
 - Soporte para ratones PS/2
-- Sólo audio I^2^S
+- Sólo audio Sigma-Delta
 
 <<<
 
@@ -1615,7 +1615,7 @@ Algunas de las características del core son:
 - Salida de vídeo VGA
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Compatible con joystick(s), teclado y ratón
-- Sólo audio I^2^S
+- Sólo audio Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -1673,7 +1673,7 @@ Algunas de las características del core son:
 - La ROM de la BIOS se carga desde la tarjeta microSD
 - Soporta ROM multicartucho, que también se carga desde la microSD
 - Salida de vídeo VGA
-- Sólo audio I^2^S
+- Sólo audio Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -1724,7 +1724,7 @@ Algunas de las características del core son:
 - Soporte para cargar una imagen de disco virtual (fichero .vhd). En el arranque ya se carga automáticamente el fichero EP.VHD en caso de encontrarlo en el directorio raíz de la tarjeta SD
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Tiene implementado el joystick externo en el DB9 y el joystick interno en las teclas de cursor, con soporte para dos botones de disparo
-- Sólo audio I^2^S
+- Sólo audio Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -2061,7 +2061,7 @@ Características:
 - Turbo carga de ficheros .o y .p
 - Carga de ROM alternativa
 - Carga de programas a través de la entrada de audio
-- Sólo audio I^2^S
+- Sólo audio Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -2240,7 +2240,7 @@ El core para ZXTRES no tiene, por el momento, implementada ninguna de las siguie
 Por otra parte, dispone de las siguientes características, que no existen en el core original:
 
 - Modos de color incluyendo monocromo o fósforo verde/naranja
-- Sólo Audio I^2^S
+- Sólo audio Sigma-Delta
 
 El manual de uso se puede descargar desde https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[la página oficial].
 

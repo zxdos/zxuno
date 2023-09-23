@@ -23,7 +23,7 @@ The ZXTRES, ZXTRES+ and ZXTRES++ are a continuation of the https://zxuno.speccy.
 
 Over time the project grew and it's now possible to use different software configurations (cores) that work like different systems other than the ZX Spectrum. You can choose to start the ZXTRES with your desired configuration from all those available.
 
-The ZXTRES official web page is https://www.example.com[https://www.example.com]. **FIXME**
+The ZXTRES official web page is https://www.forofpga.es/viewforum.php?f=251[https://www.forofpga.es/viewforum.php?f=251].
 
 Most of the functions and features of the ZXTRES, ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary. In this document, _controller_ means joystick or gamepad. Buttons are labelled alphabetically from `A` but labels on individual controllers may differ. 
 
@@ -286,7 +286,7 @@ The Spotlight feature in macOS enables you to search the items on the microSD ca
 ----
 mdutil -i off /Volumes/ZXTRES
 cd /Volumes/ZXTRES
-rm -rf .{,_.}{fseventsd,Spotlight-V*,Trashes}
+rm -rf .{,_.}{fseventsd,Spotlight-V\*,Trashes}
 mkdir .fseventsd
 touch .fseventsd/no_log .metadata_never_index .Trashes
 cd -
@@ -1587,7 +1587,7 @@ Some of the features of the core are:
 - RGB video output (using the VGA port).
 - Support for joysticks, keyboard, mouse.
 - VGA video output.
-- Only I^2^S audio.
+- Only Sigma-Delta audio.
 
 ==== microSD card format
 
@@ -1645,7 +1645,7 @@ Some characteristics of this core are:
 - BIOS ROM is loaded from microSD card.
 - Supports multicart ROM also loaded from microSD.
 - VGA video output.
-- Only I^2^S audio.
+- Only Sigma-Delta audio.
 
 ==== microSD card format
 
@@ -1698,7 +1698,7 @@ Some characteristics of this core are:
 - Support for loading a virtual disk image (.vhd file). At boot time the EP.VHD file is automatically loaded if found in the root directory of the SD card.
 - External joystick is implemented on the DB9 and internal joystick on the cursor keys, with support for two trigger buttons.
 - RGB video output (using the VGA port).
-- Only I^2^S audio.
+- Only Sigma-Delta audio.
 
 ==== microSD card format
 
@@ -2035,7 +2035,7 @@ Features:
 - YM2149 sound chip (ZON X-81 compatible).
 - VGA video output.
 - ZX80/ZX81 selectable (ZX80 currently working only in RGB mode).
-- Only I^2^S audio.
+- Only Sigma-Delta audio.
 
 ==== microSD card format
 
