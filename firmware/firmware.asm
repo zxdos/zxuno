@@ -2685,7 +2685,14 @@ otv2    call    alto subnn
         call    wrflsh
         inc     de
         ld      (tmpbu2+$1e), de
-        exx
+      IF version=4
+        ld      a, e
+        or      d
+        jr      nz, otv3
+        inc     a
+        ld      (alto highb+1), a
+      ENDIF
+otv3    exx
         ld      ix, $e000
         pop     de
         pop     hl
