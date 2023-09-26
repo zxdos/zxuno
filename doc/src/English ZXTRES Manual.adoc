@@ -1837,6 +1837,11 @@ Some core characteristics are:
 
 To store the ROM image files, use a microSDcard with the first partition in FAT16 or FAT32 format.
 
+[TIP]
+====
+To build .neo files from original ROM files, there are multiple tools that can convert from https://github.com/city41/neosdconv [MAME format] or https://gitlab.com/loic.petit/darksoft-to-neosd/ [Darksoft format].
+====
+
 After the files have been copied to the microSD card, you need a BIOS (for example http://unibios.free.fr/download.html[Universe BIOS]), with the name `neogeo.rom`, in the root.
 
 If not already there, <<#_cores,install or run the Neo-Geo core>> on the ZXTRES.

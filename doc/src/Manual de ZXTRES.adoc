@@ -1864,6 +1864,11 @@ Algunas de las características del core son:
 
 Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con las imágenes ROM.
 
+[TIP]
+====
+Para construir ficheros .neo desde ficeros ROM originales, existen múltiples herramientas para convertir desde https://github.com/city41/neosdconv[formato MAME] o https://gitlab.com/loic.petit/darksoft-to-neosd/[formato Darksoft].
+====
+
 Una vez copiados los ficheros en la tarjeta, se necesita una BIOS (por ejemplo http://unibios.free.fr/download.html[Universe BIOS]), con el nombre `neogeo.rom`, en la raíz.
 
 Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Neo-Geo>> en el ZXTRES.
