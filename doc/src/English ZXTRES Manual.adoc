@@ -140,6 +140,7 @@ This table shows the requirements of cores that use the microSD card.
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
 |[.small]#Amstrad CPC#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
+|[.small]#Arcade#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.ARC` and `.ROM`)#|
 |[.small]#Atari 2600#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
 |[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
@@ -1475,7 +1476,7 @@ Some core characteristics are:
 - 1-2 hard disk images
 - VGA video output emulating: PAL / NTSC
 - PS/2 mouse support
-- Only I^2^S audio
+- Only Sigma-Delta audio
 
 <<<
 
@@ -1502,7 +1503,7 @@ When the core is active:
 
 ==== Overview
 
-Press `F12` to display the menu with different core options.
+Press `F12` to display the menu with different core options. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/minimig.jpg[scaledwidth=70%]
@@ -1575,6 +1576,233 @@ Unlike the original machine, you can hear the audio while playing the tape.
 
 <<<
 
+<<<
+
+=== Arcade (Capcom Play System 1 )
+
+https://en.wikipedia.org/wiki/CP_System[CP System], CPS-1, or Capcom Play System 1 is an arcade system board made by Capcom, which was used for several arcade systems.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtcps[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card.
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl`, `Alt` and `Space` or Controller 1: Player one buttons 1, 2 and 3
+- `Z`, `X`, `C` or controller 1: Player one buttons 4, 5, 6
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A`, `S` and `Q` or controller 2: Player two buttons 1, 2 and 3
+- `W`, `I`, `K` or controller 2: Player two buttons 4, 5, 6
+- `1` and `2`: to start game player 1 or player 2
+- `5` and `6`: to insert a coin
+- `P` : Pause
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jtcps1.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC``: To load an ARC file from the microSD card.
+- `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `Sensitivity`: Adjusts the sensitivity.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Turbo`: Enables or disables turbo mode.
+- `Original Filter`: Applies (if defined) the original filter of the ROMs in use at that moment.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<
+
+=== Arcade (Double Dragon)
+
+Double Dragon is a https://en.wikipedia.org/wiki/Double_Dragon_(video_game)[video game released for arcade machines] in 1987, developed by Technos Japan.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtdd[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTDD.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl`, `Alt` and `Space` or Controller 1: Player one buttons 1, 2 and 3
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A`, `S` and `Q` or controller 2: Player two buttons 1, 2 and 3
+- `1` and `2`: to start game player 1 or player 2
+- `5` and `6`: to insert a coin
+- `P` : Pause
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jtdd.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC``: To load an ARC file from the microSD card.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `Pause`: Enters and exits pause mode.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Turbo`: Enables or disables turbo mode.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<
+
+=== Arcade (Kicker)
+
+Kicker (or Shao-lin's Road) is a https://en.wikipedia.org/wiki/Shao-lin's_Road[video game released for arcade machines] in 1985, by Konami.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtkicker[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- The video output keeps the original orientation.
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JKICKER.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player directional controls
+- `Ctrl`, `Alt` and `Space` or Controller 1: Player buttons 1, 2 and 3
+- `1` and `2`: to start game one or two player games
+- `5` and `6`: to insert a coin
+- `P` : Pause
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jtkicker.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC``: To load an ARC file from the microSD card.
+- `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<
+
+=== Arcade (Pang)
+
+The https://en.wikipedia.org/wiki/Buster_Bros.[arcade version of Pang], known as Pang! and Pomping World is a one or two player game designed by Mitchell Corporation in 1989.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtpang[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Pang%20(World).mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTPANG.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
+
+==== Keyboard
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl` or Controller 1 button 1: Player one button
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A` or controller 2 button 1: Player two button
+- `1` and `2`: to start one player or two player game
+- `5`: to insert a coin
+- `P` : Pause
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jtpang.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC``: To load an ARC file from the microSD card.
+- `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `Test Mode`: To enable or disable test mode
+- `Pause`: Enters and exits pause mode.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<<
+
 === Atari 2600
 
 https://en.wikipedia.org/wiki/Atari_2600[Atari 2600]  is a home video game console originally branded as the Atari Video Computer System (Atari VCS).
@@ -1601,12 +1829,13 @@ If not already there, <<#_cores,install or run the Atari 2600 core>> on the ZXTR
 
 During the core execution:
 
+- `Esc`: Display the core control menu.
 - `W`, `A`, `S`, `D` or joystick 1: Directional controls for player 1
 - `F` or joystick 1 fire button: Player 1 fire button
 - `I`, `J`, `K`, `L` or joystick 2: Directional controls for player 2
 - `H` or joystick 2 fire button: Player 2 fire button
 - `Scroll Lock`: change between RGB and VGA video mode
-- F11` or `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+- `F11` or `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
 
 <<<
 
@@ -1697,8 +1926,9 @@ Some characteristics of this core are:
 - Implements 1024 KB of RAM.
 - Support for loading a virtual disk image (.vhd file). At boot time the EP.VHD file is automatically loaded if found in the root directory of the SD card.
 - External joystick is implemented on the DB9 and internal joystick on the cursor keys, with support for two trigger buttons.
-- RGB video output (using the VGA port).
 - Only Sigma-Delta audio.
+- RGB video output (using the VGA port).
+- VGA video output.
 
 ==== microSD card format
 
@@ -1714,11 +1944,12 @@ If not already there, <<#_cores,install or run the Elan Enterprise core>> on the
 
 When the core is active:
 
-- F12`: Display the core control menu.
-- F1`: Show the file browser if the current drive is F:. Once in the file browser, you can change partition by pressing the partition letter (F, G, H, etc).
-- C+F9`: Hard reset the core and reattach the virtual disk drive.
-- F9` or `Ctrl+Alt+Del`: Soft Reset (resets the Core).
-- F11` or `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+- `F12`: Display the core control menu.
+- `F1`: Show the file browser if the current drive is F:. Once in the file browser, you can change partition by pressing the partition letter (F, G, H, etc).
+- `C+F9`: Hard reset the core and reattach the virtual disk drive.
+- `F9` or `Ctrl+Alt+Del`: Soft Reset (resets the Core).
+- `F11` or `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+- `F12` (long press): Toggle between RGB and VGA mode
 
 <<<
 
@@ -1726,7 +1957,7 @@ When the core is active:
 
 When the correct ROM file is present on the microSD card the machine is started.
 
-Press `F12` to display the menu with the different core options.
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
 [.text-center]
 image:img/enterprise.png[scaledwidth=70%]
@@ -1837,11 +2068,6 @@ Some core characteristics are:
 
 To store the ROM image files, use a microSDcard with the first partition in FAT16 or FAT32 format.
 
-[TIP]
-====
-To build .neo files from original ROM files, there are multiple tools that can convert from https://github.com/city41/neosdconv [MAME format] or https://gitlab.com/loic.petit/darksoft-to-neosd/ [Darksoft format].
-====
-
 After the files have been copied to the microSD card, you need a BIOS (for example http://unibios.free.fr/download.html[Universe BIOS]), with the name `neogeo.rom`, in the root.
 
 If not already there, <<#_cores,install or run the Neo-Geo core>> on the ZXTRES.
@@ -1860,19 +2086,23 @@ When the core is active:
 - `Right Alt` or controller 1 button `B`: Player 1 button `B`.
 - `Right Win` or controller 1 button `C`: Player 1's button C.
 - `Right Shift` or controller 1 button `D`: Player 1's D button.
+- `5`: Insert coin for player 1 (MVS).
 - `Start`: Start button of player 1.
 - `W`, `A`, `S`, `D` or a controller connected to the right port: Player 2 Directional Controls.
 - `Left Ctrl` or controller 2 button `A`: Player 2's A button.
 - `Left Alt` or controller 2 button  `B`: Player 2's B button.
 - `Left Win` or controller 2 button `C`: Player 2's button C.
 - `Left Shift` or controller 2 button `D`: Player's D button 2.
+- `6`: Insert coin for player 2 (MVS).
 - `Caps Lock`: Start button of player 2.
 
 <<<
 
 ==== Overview
 
-When the correct files are present on the microSD card and the core is started, a blank screen is displayed. Press `F12` to display the menu with the different core options.
+When the correct files are present on the microSD card and the core is started, a blank screen is displayed.
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
 [text-center]
 image:img/neogeo.jpg[scaledwidth=70%]
@@ -1955,7 +2185,7 @@ When the core is active:
 
 ==== Overview
 
-Pressing `F12` will display the menu with the different Core options.
+Pressing `F12` will display the menu with the different Core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
 [text-center]
 image:img/pcxt_zxtres.png[scaledwidth=70%]
@@ -2183,7 +2413,7 @@ During core execution:
 
 ==== Overview
 
-Press `F12` to display the menu with the different core options.
+Press `F12` to display the menu with the different core options. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/zxp3.jpg[scaledwidth=70%]
@@ -2219,7 +2449,7 @@ The core, for the moment does not have any of these features:
 It also has these other features, which do not exist in the original core:
 
 - Different colour modes including monochrome
-- Only I^2^S audio
+- Only Sigma-Delta audio
 
 The user manual is available to download at https://www.specnext.com/zx-spectrum-next-user-manual-first-edition/[the official web page].
 
@@ -3353,6 +3583,30 @@ Boot control register. Writing a 1 to bit 0 of this register (all other bits are
 |===
 
 Each read operation provides the next ASCII character of the string containing the current revision of the ZX-Uno core. When the string ends, subsequent reads output bytes with the value 0 (at least on) until the string starts again. This pointer returns to 0 automatically after a reset or a write to the `$FC3B` register. The delivered characters that are part of the string are standard printable ASCII (codes `32`-`127`). Any other value indicates that this register is not operational.
+
+<<<
+
+=== Arcade
+
+==== MRA Tool
+
+This is a tool that mergees https://www.mamedev.org[MAME] ROM files, using an MRA configuration file as a reference. It is also useful to create many kinds of binary blobs. It can be downloaded from https://github.com/kounch/mra-tools-c/tree/master/release[GitHub].
+
+To generate the corresponding ROM and ARC files for use with a ZXTRES arcade core
+
+[source,shell]
+----
+...mra <file.mra> -A -z <directory ROMs> -O <result directory>
+----
+
+Where `<file.mra>` is the path to the MRA file to use as reference, `< ROMs directory` is the location where the MAME ZIP files with ROM images are, and `<destination directory>` is the place where you want the new ARC and ROM files to be created.
+
+For a description of the different parameters of the tool:
+
+[source,shell]
+----
+...mra -h
+----
 
 <<<
 

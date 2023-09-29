@@ -140,6 +140,7 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
 |[.small]#Amstrad CPC#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
+|[.small]#Arcade#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ARC` y `.ROM`)#|
 |[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
 |[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
@@ -1493,6 +1494,9 @@ La versión para ZXTRES está basada en minimig (abreviatura de Mini Amiga), que
 
 Algunas de las características del core son:
 
+- Salida de vídeo VGA emulando PAL/NTSC
+- Soporte para ratones PS/2
+- Sólo audio Sigma-Delta
 - Variantes de chipset : OCS, ECS, AGA
 - ChipRAM : 0.5MB - 2.0MB, SlowRAM : 0.0MB - 1.5MB y fastRAM : 0,0MB - 24MB
 - CPU : 68000, 68010, 68020
@@ -1500,9 +1504,6 @@ Algunas de las características del core son:
 - HRTmon 
 - 1-4 disquetes con velocidades normal y turbo
 - 1-2 imágenes de disco duro
-- Salida de vídeo VGA emulando PAL/NTSC
-- Soporte para ratones PS/2
-- Sólo audio Sigma-Delta
 
 <<<
 
@@ -1529,7 +1530,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
 [.text-center]
 image:img/minimig.jpg[scaledwidth=70%]
@@ -1604,6 +1605,230 @@ Desde BASIC, se puede cargar desde una cinta (u otro dispositivo externo de audi
 
 <<<
 
+=== Arcade (Capcom Play System 1 )
+
+https://es.wikipedia.org/wiki/CP_System[CP System], CPS-1, o Capcom Play System 1 es una placa arcade hecha por Capcom, que se utilizó para múltiples máquinas recreativas.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtcps[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar unos ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con, al menos, un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o el mando 1: Botones 1, 2 y 3 del jugador uno
+- `Z`, `X`, `C` o el mando 1: Botones 4, 5, 6 del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A`, `S` y `Q` o el mando 2: Botones 1, 2 y 3 del jugador dos
+- `W`, `I`, `K` o el mando 2: Botones 4, 5, 6 del jugador dos
+- `1` y `2`: para iniciar partida jugador 1 o jugador 2
+- `5` y `6` para insertar una moneda
+- `P : Pausa`
+- 'F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtcps1.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el texto del menú de opciones, así como el comportamiento de los controles de dirección
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `Sensitivity`: Ajusta la sensibilidad
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Turbo`: Activa o desactiva el modo turbo
+- `Original Filter`: Aplica (si estuviera definido) el filtro original de las ROMs en uso en ese momento
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
+=== Arcade (Double Dragon)
+
+Double Dragon es un https://es.wikipedia.org/wiki/Double_Dragon[videojuego lanzado para máquinas recreativas] en 1987, desarrollado por Technos Japan.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de lahttps://github.com/jotego/jtdd[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTDD.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core.
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o el mando 1: Botones 1,2 y 3 del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A`, `S` y `Q` o el mando 2: Botones 1, 2 y 3 del jugador dos
+- `1` y `2`: Iniciar partida jugador 1 o jugador 2
+- `5` y `6`: Insertar una moneda
+- `P : Pausa`
+- 'F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtdd.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `Pause`: Para detener el core
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Turbo`: Activa o desactiva el modo turbo
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
+=== Arcade (Kicker)
+
+Kicker (o Shao-lin's Road) es un https://en.wikipedia.org/wiki/Shao-lin's_Road[videojuego lanzado para máquinas recreativas] en 1985, por Konami.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtkicker[versión original de Jotego].
+
+Algunas de sus características son:
+
+- La salida de vídeo mantiene la rotación del original
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre KICKER.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador
+- `Ctrl`, `Alt` y `Espacio` o el mando 1: Botones 1,2 y 3 del jugador
+- `1` y `2`: Iniciar partida de 1 o 2 jugadores
+- `5` y `6`: Insertar una moneda
+- `P : Pausa`
+- 'F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtkicker.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el texto del menú de opciones, así como el comportamiento de los controles de dirección
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
+=== Arcade (Pang)
+
+La https://es.wikipedia.org/wiki/Pang[versión arcade de Pang], conocida como Pang! y Pomping World es un juego de uno o dos jugadores diseñado por Mitchell Corporation en 1989.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtpang[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/blob/master/mra/Pang%20(World).mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTPANG.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl`, o el mando 1: Botón 1 del jugador uno
+- `I`,`J`,`K`,`L` o mando 2: Movimiento del jugador dos
+- `A` o el mando 2: Botón 1 del jugador dos
+- `1` y `2`: para partida de 1 o 2 jugadores
+- `5` para insertar una moneda
+- 'F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtpang.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el comportamiento de los controles de dirección
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `Test Mode`: Activa o desactiva el modo de prueba
+- `Pause`: Activa o desactiva la pausa
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
 === Atari 2600
 
 La https://es.wikipedia.org/wiki/Atari_2600[Atari 2600] es una videoconsola lanzada al mercado bajo el nombre de Atari VCS (Video Computer System).
@@ -1629,6 +1854,7 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Atari 2600>> en el 
 
 Durante la ejecución del core:
 
+- `Esc` mostrar el menú de control del core
 - `W`, `A`, `S`, `D` o el joystick 1: Controles de dirección del jugador 1
 - `F` o el botón de disparo del joystick 1: Disparo del jugador 1
 - `I`, `J`, `K`, `L` o el joystick 2: Controles de dirección del jugador 2
@@ -1720,11 +1946,13 @@ La versión para ZXTRES ha sido desarrollada por https://github.com/Kyp069/ep[Ky
 
 Algunas de las características del core son:
 
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Sólo audio Sigma-Delta
 - Implementa 1024 KB de RAM.
 - Soporte para cargar una imagen de disco virtual (fichero .vhd). En el arranque ya se carga automáticamente el fichero EP.VHD en caso de encontrarlo en el directorio raíz de la tarjeta SD
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Tiene implementado el joystick externo en el DB9 y el joystick interno en las teclas de cursor, con soporte para dos botones de disparo
-- Sólo audio Sigma-Delta
 
 ==== Formato de Tarjeta microSD
 
@@ -1745,12 +1973,13 @@ Durante la ejecución del core:
 - `C+F9`: Hace un Hard reset del core y vuelve a montar la unidad de discos virtual.
 - `F9` o `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
 - `F11` o `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
 <<<
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
 [.text-center]
 image:img/enterprise.png[scaledwidth=70%]
@@ -1864,11 +2093,6 @@ Algunas de las características del core son:
 
 Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con las imágenes ROM.
 
-[TIP]
-====
-Para construir ficheros .neo desde ficeros ROM originales, existen múltiples herramientas para convertir desde https://github.com/city41/neosdconv[formato MAME] o https://gitlab.com/loic.petit/darksoft-to-neosd/[formato Darksoft].
-====
-
 Una vez copiados los ficheros en la tarjeta, se necesita una BIOS (por ejemplo http://unibios.free.fr/download.html[Universe BIOS]), con el nombre `neogeo.rom`, en la raíz.
 
 Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Neo-Geo>> en el ZXTRES.
@@ -1885,19 +2109,21 @@ Durante la ejecución del core:
 - `Alt Dcha` o el botón `B` del mando 1: Botón B del jugador 1
 - `Win Dcha` o el botón `C` del mando 1: Botón C del jugador 1
 - `Mayús. Dcha` o el botón `D` del mando 1: Botón D del jugador 1
+- `5`: Insertar moneda jugador 1 (MVS)
 - `Enter`: Botón Start del jugador 1
 - `W`, `A`, `S`, `D` o un mando conectado al puerto derecho: Controles de dirección del jugador 2
 - `Ctrl Izda` o el botón `A` del mando 2: Botón A del jugador 2
 - `Alt Izda` o el botón `B` del mando 2: Botón B del jugador 2
 - `Win Izda` o el botón `C` del mando 2: Botón C del jugador 2
 - `Mayús. Izda` o el botón `D` del mando 2: Botón D del jugador 2
+- `6`: Insertar moneda jugador 2 (MVS)
 - `Bloq. Mayús.`: Botón Start del jugador 2
 
 <<<
 
 ==== Guía básica
 
-Si se han copiado los ficheros correctos en la tarjeta microSD y se inicia el core, aparecerá una pantalla en blanco. Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+Si se han copiado los ficheros correctos en la tarjeta microSD y se inicia el core, aparecerá una pantalla en blanco. Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
 
 [.text-center]
 image:img/neogeo.jpg[scaledwidth=70%]
@@ -1981,7 +2207,7 @@ Durante la ejecución del core:
 
 ==== Guía Básica
 
-Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
 
 [.text-center]
 image:img/pcxt_zxtres.png[scaledwidth=70%]
@@ -2207,7 +2433,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostará el menú con las distintas opciones del Core.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
 [.text-center]
 image:img/zxp3.jpg[scaledwidth=70%]
@@ -3400,6 +3626,30 @@ Registro de control de arranque. Escribiendo un 1 en el bit 0 de este registro (
 |===
 
 Cada operación de lectura proporciona el siguiente carácter ASCII de la cadena que contiene la revisión actual del core del ZX-Uno. Cuando la cadena termina,lecturas posteriores emiten bytes con el valor 0 (al menos se emite uno de ellos) hasta que vuelve a comenzar la cadena. Este puntero vuelve a 0 automáticamente tras un reset o una escritura en el registro `$FC3B`. Los caracteres entregados que forman parte de la cadena son ASCII estándar imprimibles (códigos `32`-`127`). Cualquier otro valor es indicativo de que este registro no está operativo.
+
+<<<
+
+=== Arcade
+
+==== MRA Tool
+
+Esta es una herramienta que sirve para fusionar ficheros ROM de https://www.mamedev.org[MAME] de distintas maneras, usando un fichero de configuración MRA. También es útil para generar todo tipo de blobs binarios. Se puede descargar desde https://github.com/kounch/mra-tools-c/tree/master/release[GitHub], y se utiliza de la siguiente manera.
+
+Para generar los correspondientes ficheros ROM y ARC para su uso con un core arcade de ZXTRES
+
+[source,shell]
+----
+...mra <fichero.mra> -A -z <directorio ROMs> -O <directorio resultado>
+----
+
+Donde `<fichero.mra>` es la ruta al fichero MRA a tomar como referencia, `<directorio ROMs` es la ubicación donde estén los ficheros ZIP com imágenes ROM de MAME, y `<directorio destino>` es la ubicación donde se desea que se creen los nuevos archivos ARC y ROM.
+
+Para obtener una descripción de los distintos parámetros de uso de la herramienta:
+
+[source,shell]
+----
+...mra -h
+----
 
 <<<
 
