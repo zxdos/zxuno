@@ -1384,7 +1384,16 @@ Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:
 
 === Cores
 
-Un core consiste en un fichero con la información necesaria para que la FPGA se comporte como el sistema a implementar (ZX Spectrum, etc.). En ZXTRES, este fichero es posible cargarlo desde varios lugares distintos: la memoria SPI Flash, una tarjeta microSD, o desde algún dispositivo externo (PC, etc.) utilizando un cable especial.
+Un core consiste en la información necesaria para que la FPGA se comporte como el sistema a implementar (ZX Spectrum, etc.). En ZXTRES, esta información se puede cargar desde varios lugares distintos: la memoria SPI Flash incorporada, una tarjeta microSD, o desde algún dispositivo externo (PC, etc.) utilizando un cable programador especial (JTAG). Para ello, existen varios tipos de fichero:
+
+- Fichero BIT generado desde una herramienta de síntesis. Normalmente se distribuye con la extensión `.BIT` y se puede cargar en la FPGA con un programador, o desde la  microSD, si se dispone de una <<#_tarjeta_intermedia_middle_board,tarjeta intermedia opcional>> (o Middle Board) usando el <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>> de esxdos. 
+- Fichero BIN (generado desde un fichero BIT). Normalmente se distribuye con la extensión `.ZX3`, y se puede cargar en la FPGA utilizando el <<#_navegador_de_bob_fossil,plugin ZX3>> de esxdos, usando temporalmente la SPI Flash.
+- Fichero BIN expandido, y posiblemente en varios trozos de 1,2MiB (exactamente 1179648 bytes), con la extensión `.ZX3` y que se puede grabar, usando la BIOS, en <<#_memoria_spi_flash,memoria SPI Flash>> para luego cargarse desde dicha SPI flash a la FPGA.
+
+[TIP]
+====
+Los ficheros BIN se pueden renombrar con la extensión `.BIT` y también cargarse en la FPGA usando el <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>> de esxdos.
+====
 
 ==== Tarjeta microSD
 
@@ -1398,8 +1407,9 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 
 - La última versión estable (http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip)
 - El plugin ZX3 para poder cargar Cores en formato ZX3 https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3
+- Un fichero BIN completo (sin dividir en trozos), con la extensión `.ZX3`
 
-Se ha de copiar el fichero `.ZX3` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN/BPLUGINS``).
+Se ha de copiar el fichero `.ZX3` (fichero .BIN completo) correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN/BPLUGINS``).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.ZX3`, seleccionarlo y pulsar ENTER.
@@ -1424,8 +1434,9 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 
 - La última http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[versión estable]
 - El plugin BIT para poder cargar Cores en formato BIT https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/BIT
+- Un fichero de core en formato .BIN o .BIT, con la extensión `.BIT`.
 
-Se ha de copiar el fichero `.BIT` correspondiente en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN/BPLUGINS``).
+Se ha de copiar el fichero con la extensión `.BIT` en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN/BPLUGINS``).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.BIT`, seleccionarlo y pulsar ENTER.
@@ -1436,13 +1447,13 @@ Si todo va bien, tras unos pocos segundos, se realizará la carga del core en la
 
 ==== Memoria SPI Flash
 
-Hay 27 espacios de 1MB disponibles para almacenar cores, estando reservados los primeros espacios para el de ZX Spectrum principal (esto no impide tener más cores de ZX Spectrum en otros espacios además de los primeros).
+Hay 27 espacios de 1,2MiB (exactamente 1179648 bytes) disponibles para almacenar cores, estando reservados los primeros espacios para el de ZX Spectrum principal (esto no impide tener más cores de ZX Spectrum en otros espacios además de los primeros).
 
 Los cores oficiales están https://github.com/zxtres/cores[disponibles para descargar] en el repositorio en GitHub.
 
 Para actualizar o instalar un nuevo core en la SPI Flash hay varias alternativas.
 
-La primera forma consiste en obtener la última versión de los ficheros que lo definen. Si el tamaño que ocupa es superior a 1179648 bytes, se tendrá que trocear adecuadamente. Cada uno de los trozos será ahora un fichero que hay que llamar `COREXXy.ZX3`, donde XX _siempre_ es un número de dos digitos. La parte `y` del nombre se ignora, así que se pueden usar nombres más largos y descriptivos (como, por ejemplo, `CORE04_ejemplo_parte1.ZX3`).
+La primera forma consiste en obtener la última versión de los ficheros que lo definen. Si el tamaño que ocupa es superior a 1179648 bytes, se tendrá que trocear adecuadamente. Cada uno de los trozos será ahora un fichero de ese tamañp, al que hay que renombrar como `COREXXy.ZX3`, donde XX _siempre_ es un número de dos digitos. La parte `y` del nombre se ignora, así que se pueden usar nombres más largos y descriptivos (por ejemplo `CORE04_ejemplo_parte1.ZX3`).
 
 Copiar los ficheros en la raíz de la tarjeta microSD, encender y pulsar `F2` para entrar en la BIOS. Elegir `Upgrade`, seleccionar la fila correspondiente al número de espacio elegido (por ejemplo, la 4), pulsar enter y luego __"SD file"__. El sistema leerá el fichero `COREnn...` y avisará cuando esté actualizado, aunque antes preguntará el nombre (con el que se verá en la lista para elegir en el arranque y en el listado de la BIOS). Habitualmente, en el caso de cores que ocupan varios espacios se reserva el nombre de core para la primera parte y el resto de partes se registran con un mensaje recordando que no se deben utilizar. Una vez instalado, se podrá utilizar al arrancar, seleccionando siempre el primero de los espacios que use el core.
 
@@ -1605,6 +1616,65 @@ Desde BASIC, se puede cargar desde una cinta (u otro dispositivo externo de audi
 
 <<<
 
+=== Arcade (Atari Tetris)
+
+La máquina recreativa de https://es.wikipedia.org/wiki/Tetris[Tetris], licenciada y distribuida por Atari, en 1988.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/MrX-8B/MiSTer-Arcade-AtariTetris[versión original para MiSTer].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/MiSTer-devel/Arcade-ATetris_MiSTer[repositorio] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre ATARIS.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core.
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl` o botón A del mando 1: Botón del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A` o botón A del mando 2: Botón del jugador dos
+- `1` y `2`: Iniciar partida jugador 1 o jugador 2
+- `5` y `6`: Insertar una moneda
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
+
+[.text-center]
+image:img/ataritetris.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load *.`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Service`: Activa o desactiva el modo de mantenimiento
+- `Scanlines`: Sólo en el caso de salida de vídeo VGA, para configurar líneas de exploración (scanlines)
+- `Blend`: Para aplicar un filtro que suaviza la imagen
+- `Joystick swap`: Permite intercambiar el orden de los mandos conectados
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
 === Arcade (Capcom Play System 1 )
 
 https://es.wikipedia.org/wiki/CP_System[CP System], CPS-1, o Capcom Play System 1 es una placa arcade hecha por Capcom, que se utilizó para múltiples máquinas recreativas.
@@ -1619,11 +1689,16 @@ Algunas de sus características son:
 
 ==== Formato de Tarjeta microSD
 
-El core necesita para funcionar unos ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con, al menos, un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+El core necesita para funcionar unos ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con, al menos, un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
 
-Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
 
 Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD.
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
 
 ==== Teclado
 
@@ -1631,20 +1706,20 @@ Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD
 
 - `F12` mostrar el menú de control del core
 - Cursor o el mando 1: Controles de dirección del jugador uno
-- `Ctrl`, `Alt` y `Espacio` o el mando 1: Botones 1, 2 y 3 del jugador uno
-- `Z`, `X`, `C` o el mando 1: Botones 4, 5, 6 del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C el mando 1: Botones 1, 2 y 3 del jugador uno
+- `Z`, `X`, `C` o botones X, Y, Z del mando 1: Botones 4, 5, 6 del jugador uno
 - `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
-- `A`, `S` y `Q` o el mando 2: Botones 1, 2 y 3 del jugador dos
-- `W`, `I`, `K` o el mando 2: Botones 4, 5, 6 del jugador dos
+- `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
+- `W`, `I`, `K` o botones X, Y, Z del mando 2: Botones 4, 5, 6 del jugador dos
 - `1` y `2`: para iniciar partida jugador 1 o jugador 2
 - `5` y `6` para insertar una moneda
 - `P : Pausa`
-- 'F3`: Soft Reset (reinicia el Core)
+- `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
 [.text-center]
 image:img/jtcps1.jpg[scaledwidth=50%]
@@ -1667,7 +1742,7 @@ Estas son las principales:
 
 Double Dragon es un https://es.wikipedia.org/wiki/Double_Dragon[videojuego lanzado para máquinas recreativas] en 1987, desarrollado por Technos Japan.
 
-La versión para ZXTRES ha sido desarrollada por somhic, adaptando de lahttps://github.com/jotego/jtdd[versión original de Jotego].
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/jotego/jtdd[versión original de Jotego].
 
 Algunas de sus características son:
 
@@ -1677,11 +1752,16 @@ Algunas de sus características son:
 
 ==== Formato de Tarjeta microSD
 
-El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
 
-Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[repositorio del creador] del core original.
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[repositorio del creador] del core original.
 
 Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTDD.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core.
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
 
 ==== Teclado
 
@@ -1689,20 +1769,18 @@ Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD
 
 - `F12` mostrar el menú de control del core
 - Cursor o el mando 1: Controles de dirección del jugador uno
-- `Ctrl`, `Alt` y `Espacio` o el mando 1: Botones 1,2 y 3 del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1,2 y 3 del jugador uno
 - `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
-- `A`, `S` y `Q` o el mando 2: Botones 1, 2 y 3 del jugador dos
+- `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
 - `1` y `2`: Iniciar partida jugador 1 o jugador 2
 - `5` y `6`: Insertar una moneda
 - `P : Pausa`
-- 'F3`: Soft Reset (reinicia el Core)
+- `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
-
-<<<
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
 [.text-center]
 image:img/jtdd.jpg[scaledwidth=50%]
@@ -1723,7 +1801,7 @@ Estas son las principales:
 
 Kicker (o Shao-lin's Road) es un https://en.wikipedia.org/wiki/Shao-lin's_Road[videojuego lanzado para máquinas recreativas] en 1985, por Konami.
 
-La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtkicker[versión original de Jotego].
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/jotego/jtkicker[versión original de Jotego].
 
 Algunas de sus características son:
 
@@ -1734,30 +1812,35 @@ Algunas de sus características son:
 
 ==== Formato de Tarjeta microSD
 
-El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
 
-Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[repositorio del creador] del core original.
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[repositorio del creador] del core original.
 
 Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre KICKER.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
 
 ==== Teclado
 
 ===== Teclas especiales y botones
 
 - `F12` mostrar el menú de control del core
-- Cursor o el mando 1: Controles de dirección del jugador
-- `Ctrl`, `Alt` y `Espacio` o el mando 1: Botones 1,2 y 3 del jugador
+- Cursor o el mando 1: Controles de dirección
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1,2 y 3
 - `1` y `2`: Iniciar partida de 1 o 2 jugadores
 - `5` y `6`: Insertar una moneda
 - `P : Pausa`
-- 'F3`: Soft Reset (reinicia el Core)
+- `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
 <<<
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
 [.text-center]
 image:img/jtkicker.jpg[scaledwidth=50%]
@@ -1773,11 +1856,11 @@ Estas son las principales:
 
 <<<
 
-=== Arcade (Pang)
+=== Arcade (Out Run)
 
-La https://es.wikipedia.org/wiki/Pang[versión arcade de Pang], conocida como Pang! y Pomping World es un juego de uno o dos jugadores diseñado por Mitchell Corporation en 1989.
+https://es.wikipedia.org/wiki/Out_Run[Out Run] es un videojuego de carreras publicado inicialmente para máquinas recreativas en 1986.
 
-La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtpang[versión original de Jotego].
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/jotego/jtcores/tree/master/cores/outrun[versión original de Jotego].
 
 Algunas de sus características son:
 
@@ -1787,11 +1870,78 @@ Algunas de sus características son:
 
 ==== Formato de Tarjeta microSD
 
-El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
 
-Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponible en el https://github.com/jotego/jtbin/blob/master/mra/Pang%20(World).mra[repositorio del creador] del core original.
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Out%20Run%20(sitdown-upright%2C%20Rev%20B).mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTOUTRUN.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección
+- `Ctrl`, o el botón A del mando 1: Acelerador
+- `Alt`, o el botón B del mando 1: Freno
+- `1` o el botón Y del mando 1: comienzo de partida
+- `5` o el botón X del mando 1 para insertar una moneda
+- `F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtoutrun.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `FX Volume`: Volumen de los efectos de sonido
+- `FX`: Activar o desactivar efectos de sonido
+- `FM`: Activar o desactivar efectos de sonido FM
+- `Test Mode`: Activa o desactiva el modo de prueba
+- `Pause`: Activa o desactiva la pausa
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
+=== Arcade (Pang)
+
+La https://es.wikipedia.org/wiki/Pang[versión arcade de Pang], conocida como Pang! y Pomping World es un juego de uno o dos jugadores diseñado por Mitchell Corporation en 1989.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/jotego/jtpang[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Pang%20(World).mra[repositorio del creador] del core original.
 
 Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTPANG.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
 
 ==== Teclado
 
@@ -1799,19 +1949,19 @@ Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD
 
 - `F12` mostrar el menú de control del core
 - Cursor o el mando 1: Controles de dirección del jugador uno
-- `Ctrl`, o el mando 1: Botón 1 del jugador uno
+- `Ctrl`, o el botón A del mando 1: botón del jugador uno
 - `I`,`J`,`K`,`L` o mando 2: Movimiento del jugador dos
-- `A` o el mando 2: Botón 1 del jugador dos
+- `A` o el botón A del mando 2: botón del jugador dos
 - `1` y `2`: para partida de 1 o 2 jugadores
 - `5` para insertar una moneda
-- 'F3`: Soft Reset (reinicia el Core)
+- `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
 <<<
 
 ==== Guía básica
 
-Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
 [.text-center]
 image:img/jtpang.jpg[scaledwidth=50%]
@@ -1866,7 +2016,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Pulsando `Esc` o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor  y `Enter` para elegir y seleccionar en el menú.
+Pulsando `Esc` o el botón B del joystick se muestra el menú de configuración. Se usan las teclas de cursor  y `Enter` para elegir y seleccionar en el menú.
 
 [.text-center]
 image:img/a2600.jpg[pdfwidth=70%]
@@ -1923,7 +2073,7 @@ Durante la ejecución del core:
 - `0` a `9`: Botones del 0 al 9 del jugador 1 y el jugador 2
 - `T`: Botón '*'
 - `Y`: Botón '#'
-- 'Esc': Soft Reset (reinicia el Core).
+- `Esc`: Soft Reset (reinicia el Core).
 
 <<<
 
@@ -2123,7 +2273,7 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Si se han copiado los ficheros correctos en la tarjeta microSD y se inicia el core, aparecerá una pantalla en blanco. Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+Si se han copiado los ficheros correctos en la tarjeta microSD y se inicia el core, aparecerá una pantalla en blanco. Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
 [.text-center]
 image:img/neogeo.jpg[scaledwidth=70%]
@@ -2207,7 +2357,7 @@ Durante la ejecución del core:
 
 ==== Guía Básica
 
-Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón 2 del mando selecciona un elemento.
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
 [.text-center]
 image:img/pcxt_zxtres.png[scaledwidth=70%]
@@ -2889,6 +3039,7 @@ image:img/jtagzxtres.jpg[scaledwidth=80%]
 *Software necesario*:
 
 - Imagen Flash y recovery para ZXTRES, del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. Notar que existe un fichero distinto para cada tipo de dispositivo:
+
 ** `recovery_a35.bit` para ZXTRES
 ** `recovery_a100.bit` para ZXTRES+
 ** `recovery_a200.bit` para ZXTRES++
