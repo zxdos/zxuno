@@ -139,7 +139,8 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
 |[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
-|[.small]#Amstrad CPC#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
+|[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
+|[.small]#Amstrad CPC 6128#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, Imágenes de disco (`.DSK`)#|[.small]#Necesita ROMs#
 |[.small]#Arcade#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ARC` y `.ROM`)#|
 |[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
@@ -1616,6 +1617,86 @@ Desde BASIC, se puede cargar desde una cinta (u otro dispositivo externo de audi
 
 <<<
 
+=== Amstrad CPC 6128
+
+El https://es.wikipedia.org/wiki/Amstrad_CPC_6128[Amstrad CPC 6128] fue el ordenador sucesor del CPC 464. Como novedad, aparte de tener más memoria RAM, incorporaba unidad de disco.
+
+La https://github.com/ZXMicroJack/amstrad-cpc[versión para ZXTRES] ha sido desarrollada por MicroJack, partiendo de la versión para ZX-Uno del core de Amstrad CPC 464, creada por McLeod.
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB PAL (utilizando el puerto VGA)
+- Soporte para imágenes de disco desde la microSD
+- Soporte para carga desde dispositivos de audio externo
+- 128KB de RAM
+- Soporte para un mando
+- Audio I^2^S y Sigma-Delta
+- Modo de color y monocromo (fósforo verde)
+
+==== Formato de Tarjeta microSD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32.
+
+Además son necesarios los ficheros ROM siguientes (se pueden obtener http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[en la wiki oficial] de otro proyecto más antiguo o en su https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[repositorio de GitHub]:
+
+- `OS6128.ROM`
+- `BASIC1-1.ROM`
+- `AMSDOS.ROM`
+
+También es interesante disponer de uno o más ficheros con imágenes de disco (`DSK`) con el software que se quiera ejecutar.
+
+Copiar los ficheros `ROM` a un directorio llamado AMSTRAD en la raíz de la tarjeta SD. Copiar también los ficheros `DSK` al lugar que se desee dentro de la tarjeta.
+
+[NOTE]
+====
+Los tipos de fichero de imágenes de disco soportados son:
+
+- Formato RAW: 40 pistas, 9 sectores, sectores de 512 bytes, y asumiendo una numeración secuencial de sectores, empezando por 0xc1
+- CPC Emu: Tanto en formato estándar como extendido. Limitado a bloques de sector de 512 bytes. Máximo de 80 pistas, 10 sectores y 839,5k de tamaño de imagen
+
+Aún no hay soporte para imágenes protegidas contra copia.
+====
+
+<<<
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12` mostrar y ocultar el menú de selección de imágenes de disco
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `Fin` : Alterna entre los modos de color y monocromo fósforo verde
+- `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú que permite asignar ficheros DSK a las unidades de disco. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
+
+[.text-center]
+image:img/cpc6128.png[scaledwidth=50%]
+
+<<<
+
+Una vez seleccionada una imagen, escribir el comando `CAT` para ver el contenido del fichero DSK cargado actualmente.
+
+[.text-center]
+image:img/cpc.png[pdfwidth=70%]
+
+Escribir el comando `RUN"<nombre>` para cargar un programa del disco
+
+[.text-center]
+image:img/cpc2.png[pdfwidth=70%]
+
+Usar los comandos `|b` y `|a` para seleccionar las unidades de disco B: y A: respectivamente (el símbolo `|` se obtiene pulsando `Mayúsculas` y la tecla situada a la derecha de la `P`).
+
+También es posible cargar desde una cinta (u otro dispositivo externo de audio) escribiendo primero el comando `|TAP`. A continuación, usar el comando `RUN"` para comenzar la carga.
+
+<<<
+
 === Arcade (Atari Tetris)
 
 La máquina recreativa de https://es.wikipedia.org/wiki/Tetris[Tetris], licenciada y distribuida por Atari, en 1988.
@@ -1881,6 +1962,8 @@ Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD
 El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
 ====
 
+<<<
+
 ==== Teclado
 
 ===== Teclas especiales y botones
@@ -1889,10 +1972,16 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - Cursor o el mando 1: Controles de dirección
 - `Ctrl`, o el botón A del mando 1: Acelerador
 - `Alt`, o el botón B del mando 1: Freno
+- `Espacio` o el botón C del mando 1: Marcha baja
 - `1` o el botón Y del mando 1: comienzo de partida
 - `5` o el botón X del mando 1 para insertar una moneda
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+[NOTE]
+====
+El cambio de marcha siempre se encuentra en la posición alta y, para cambiar a la posición baja, se debe mantener pulsado el botón correspondiente. En cuanto este se deja de pulsar, se vuelve de nuevo automáticamente a la posición alta.
+====
 
 <<<
 
@@ -3855,6 +3944,8 @@ https://www.zxuno.com/forum/viewtopic.php?f=52&t=4074&p=28234%23p28234[Nuevo cor
 https://github.com/rcmolina/MaxDuino_BETA/blob/master/MANUAL%20por%20desUBIKado/MAXDUINO%20Gu%C3%ADa%20de%20uso.pdf[Maxduino - guía de uso]
 
 https://retroramblings.net/?page_id=1422[Minimig AGA for Turbo Chameleon 64]
+
+https://github.com/ZXMicroJack/amstrad-cpc[Core Amstrad CPC 6128]]
 
 https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 
