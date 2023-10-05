@@ -1391,6 +1391,11 @@ Un core consiste en la información necesaria para que la FPGA se comporte como 
 - Fichero BIN (generado desde un fichero BIT). Normalmente se distribuye con la extensión `.ZX3`, y se puede cargar en la FPGA utilizando el <<#_navegador_de_bob_fossil,plugin ZX3>> de esxdos, usando temporalmente la SPI Flash.
 - Fichero BIN expandido, y posiblemente en varios trozos de 1,2MiB (exactamente 1179648 bytes), con la extensión `.ZX3` y que se puede grabar, usando la BIOS, en <<#_memoria_spi_flash,memoria SPI Flash>> para luego cargarse desde dicha SPI flash a la FPGA.
 
+[WARNING]
+====
+El plugin BIT no funciona correctamente si el core de Spectrum está configurado con una velocidad superior a los 3,5MHz
+====
+
 [TIP]
 ====
 Los ficheros BIN se pueden renombrar con la extensión `.BIT` y también cargarse en la FPGA usando el <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>> de esxdos.
@@ -1410,22 +1415,14 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 - El plugin ZX3 para poder cargar Cores en formato ZX3 https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3
 - Un fichero BIN completo (sin dividir en trozos), con la extensión `.ZX3`
 
+<<<
+
 Se ha de copiar el fichero `.ZX3` (fichero .BIN completo) correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN/BPLUGINS``).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.ZX3`, seleccionarlo y pulsar ENTER.
 
 Si todo va bien, en la parte inferior de la pantalla se indicará el progreso de grabación en la SPI Flash (se graba en un slot temporal).
-
-[TIP]
-====
-Con algunos dispositivos conectados a los puertos de los mandos, puede aparecer un borde rojo parpadeante al iniciar el navegador. Esto se soluciona desactivando el joystick Kempston en su configuración (con el <<#_comandos_de_esxdos,comando "DOT">> `.brwscfg`).
-
-[.text-center]
-image:img/brwscfg.jpg[scaledwidth=70%]
-====
-
-<<<
 
 ====== Navegador de Bob Fossil (con tarjeta intermedia)
 
@@ -1444,6 +1441,14 @@ Se ha de copiar el fichero con la extensión `.BIT` en el lugar que se desee de 
 
 Si todo va bien, tras unos pocos segundos, se realizará la carga del core en la FPGA y luego se reiniciará esta para lanzarlo.
 
+[TIP]
+====
+Con algunos dispositivos conectados a los puertos de los mandos, puede aparecer un borde rojo parpadeante al iniciar el navegador. Esto se soluciona desactivando el joystick Kempston en su configuración (con el <<#_comandos_de_esxdos,comando "DOT">> `.brwscfg`).
+
+[.text-center]
+image:img/brwscfg.jpg[scaledwidth=70%]
+====
+
 <<<
 
 ==== Memoria SPI Flash
@@ -1455,6 +1460,11 @@ Los cores oficiales están https://github.com/zxtres/cores[disponibles para desc
 Para actualizar o instalar un nuevo core en la SPI Flash hay varias alternativas.
 
 La primera forma consiste en obtener la última versión de los ficheros que lo definen. Si el tamaño que ocupa es superior a 1179648 bytes, se tendrá que trocear adecuadamente. Cada uno de los trozos será ahora un fichero de ese tamañp, al que hay que renombrar como `COREXXy.ZX3`, donde XX _siempre_ es un número de dos digitos. La parte `y` del nombre se ignora, así que se pueden usar nombres más largos y descriptivos (por ejemplo `CORE04_ejemplo_parte1.ZX3`).
+
+[TIP]
+====
+La utilidad de comandos https://github.com/zxtres/tools/blob/main/Bit2Bin.c[Bit2Bin_zx3], disponible en los https://github.com/zxtres/tools/tree/main/bin[repositorios de GitHub de ZXTRES], puede crear trozos adecuados desde un fichero BIT o BIN completo.
+====
 
 Copiar los ficheros en la raíz de la tarjeta microSD, encender y pulsar `F2` para entrar en la BIOS. Elegir `Upgrade`, seleccionar la fila correspondiente al número de espacio elegido (por ejemplo, la 4), pulsar enter y luego __"SD file"__. El sistema leerá el fichero `COREnn...` y avisará cuando esté actualizado, aunque antes preguntará el nombre (con el que se verá en la lista para elegir en el arranque y en el listado de la BIOS). Habitualmente, en el caso de cores que ocupan varios espacios se reserva el nombre de core para la primera parte y el resto de partes se registran con un mensaje recordando que no se deben utilizar. Una vez instalado, se podrá utilizar al arrancar, seleccionando siempre el primero de los espacios que use el core.
 
@@ -2461,6 +2471,74 @@ Estas son las principales:
 - `Audio`: Para indicar la emulación de audio a utilizar (Adlib, SB, etc.) así como el volumen
 - `Video`: Para modificar las distintas opciones de vídeo
 - `Exit`: Cierra el menú de opciones del core
+
+<<<
+
+=== SAM Coupé
+
+El https://es.wikipedia.org/wiki/SAM_Coupé[SAM Coupé] fue un ordenador doméstico desarrollado y comercializado a partir de 1989 por Miles Gordon Technology, basado en el Sinclair ZX Spectrum.
+
+El https://github.com/ZXMicroJack/sam-coupe[core de ZXTRES] ha sido desarrollado por MicroJack, basándose en el https://www.zonadepruebas.com/viewtopic.php?t=6443[core original para ZX-Uno] de McLeod, y tiene las siguientes características:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Simulación de línea de exploración (Scanlines)
+- Soporte para imágenes de disco desde la microSD
+- Soporte para carga desde dispositivos de audio externo
+- Soporte para un mando
+- Audio I^2^S y Sigma-Delta
+
+==== Formato de Tarjeta SD
+
+Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32.
+
+Es interesante disponer de uno o más ficheros con imágenes de disco con el software que se quiera ejecutar.
+
+[NOTE]
+====
+Los ficheros de imágenes de disco soportados son en formato MGT, (819,200 bytes), así como DSK y SAD, siempre y cuando sean de ese mismo tamaño.
+
+No hay soporte para imágenes protegidas contra copia.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: Mostrar y ocultar el menú de selección de imágenes de disco
+- `F5`:  Generar NMI
+- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
+- `-` del teclado numérico : Scanlines on/off
+- `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú que permite asignar ficheros DSK a las unidades de disco. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
+
+[.text-center]
+image:img/samcoupe_zxtres.png[scaledwidth=50%]
+
+Una vez seleccionada una imagen, pulsar la tecla `9` del teclado numérico o escribir el comando `BOOT` para intentar iniciar automáticamente el contenido del disco.
+
+[TIP]
+====
+Imágenes de disco en otros formatos puede que fallen con el mensaje de error `53 No DOS, 0: 1`.
+
+Algunas de estas se pueden convertir con la utilidad https://simonowen.com/samdisk/[samdisk] para que funcionen.
+====
+
+[TIP]
+====
+Algunas otras imágenes que fallan también se pueden iniciar con el siguiente método:
+
+. Insertar una imagen de disco que inicie correctamente
+. Usar el comando `BOOT 1`
+. Cambiar la imagen de disco por la que estaba fallando
+. Usar el la tecla `9` del teclado numérico o escribir el comando `BOOT` 
+====
 
 <<<
 
