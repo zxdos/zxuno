@@ -1098,7 +1098,7 @@ Los principales comandos "DOT" commands son los siguientes:
 
 - `128`: Para pasar al modo 128K desde el modo 48K.
 - `cd`: Cambiar el directorio actual de trabajo.
-- `chmod`: cambiar los atributos de los ficheros de la tarjeta microSD.
+- `chmod`: Cambiar los atributos de los ficheros de la tarjeta microSD.
 - `cp`: Copiar un archivo.
 - `divideo`: Reproduce un archivo de vídeo Divideo (.DVO).
 - `drives`: Mostrar las unidades disponibles.
@@ -1707,6 +1707,64 @@ También es posible cargar desde una cinta (u otro dispositivo externo de audio)
 
 <<<
 
+=== Arcade (1942)
+
+https://es.wikipedia.org/wiki/1942_(videojuego)[1942] es un videojuego, lanzado para máquinas recreativas en 1984.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la ttps://github.com/jotego/jtcores/tree/master/cores/1942[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/MiSTer-devel/Arcade-ATetris_MiSTer[repositorio] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JT1942.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core.
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl` o botón A del mando 1: Botón del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A` o botón A del mando 2: Botón del jugador dos
+- `1` y `2`: Iniciar partida jugador 1 o jugador 2
+- `5` y `6`: Insertar una moneda
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
+
+[.text-center]
+image:img/jt1942.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `Pause`: Para detener el core
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
 === Arcade (Atari Tetris)
 
 La máquina recreativa de https://es.wikipedia.org/wiki/Tetris[Tetris], licenciada y distribuida por Atari, en 1988.
@@ -1725,7 +1783,7 @@ El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/I
 
 Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/MiSTer-devel/Arcade-ATetris_MiSTer[repositorio] del core original.
 
-Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre ATARIS.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core.
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre TETRIS.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core.
 
 [TIP]
 ====
@@ -1766,7 +1824,7 @@ Estas son las principales:
 
 <<<
 
-=== Arcade (Capcom Play System 1 )
+=== Arcade (Capcom Play System 1)
 
 https://es.wikipedia.org/wiki/CP_System[CP System], CPS-1, o Capcom Play System 1 es una placa arcade hecha por Capcom, que se utilizó para múltiples máquinas recreativas.
 
@@ -1829,6 +1887,67 @@ Estas son las principales:
 
 <<<
 
+=== Arcade (Capcom Play System 1.5)
+
+Capcom Play System 1.5 o https://en.wikipedia.org/wiki/CP_System#CP_System_Dash[CP System Dash] es una revisión mejorada de CPS-1.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtcps[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar unos ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con, al menos, un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD.
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C el mando 1: Botones 1, 2 y 3 del jugador uno
+- `Z`, `X`, `C` o botones X, Y, Z del mando 1: Botones 4, 5, 6 del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
+- `W`, `I`, `K` o botones X, Y, Z del mando 2: Botones 4, 5, 6 del jugador dos
+- `1` y `2`: para iniciar partida jugador 1 o jugador 2
+- `5` y `6` para insertar una moneda
+- `P : Pausa`
+- `F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtcps15.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el texto del menú de opciones, así como el comportamiento de los controles de dirección
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `Test Mode`: Activa o deactiva el modo de prueba
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Turbo`: Activa o desactiva el modo turbo
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
 === Arcade (Double Dragon)
 
 Double Dragon es un https://es.wikipedia.org/wiki/Double_Dragon[videojuego lanzado para máquinas recreativas] en 1987, desarrollado por Technos Japan.
@@ -1847,7 +1966,7 @@ El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/I
 
 Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[repositorio del creador] del core original.
 
-Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTDD.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core.
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTDD.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core.
 
 [TIP]
 ====
@@ -1907,7 +2026,7 @@ El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/I
 
 Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[repositorio del creador] del core original.
 
-Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre KICKER.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre KICKER.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core. 
 
 [TIP]
 ====
@@ -1965,7 +2084,7 @@ El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/I
 
 Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Out%20Run%20(sitdown-upright%2C%20Rev%20B).mra[repositorio del creador] del core original.
 
-Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTOUTRUN.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTOUTRUN.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core. 
 
 [TIP]
 ====
@@ -2035,7 +2154,7 @@ El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/I
 
 Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Pang%20(World).mra[repositorio del creador] del core original.
 
-Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTPANG.ARC, junto con el fichero ROM correspondiente, ambos se cargaran de forma automática al inicio del core. 
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTPANG.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core. 
 
 [TIP]
 ====
@@ -2705,6 +2824,53 @@ CHROMA81: enabled
 
 <<<
 
+=== ZX Spectrum (zx)
+
+Implementación de ZX Spectrum creada por kyp069, que busca la mayor fidelidad posible por encima de añadirle más funcionalidades.
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- ZX Spectrum 48K
+- ZX Spectrum 128K
+- DivMMC (esxdos 0.8.9)
+- Joystick Kempston usando el mando 1
+- Ratón Kempston
+- Audio I^2^S y Sigma-Delta
+
+==== Formato de Tarjeta microSD
+
+Se puede utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para utilizar con esxdos (verión 0.8.9).
+
+Si no estuviera ya, <<#_cores,instalar o ejecutar el core zx>> en el ZXTRES.
+
+<<<
+
+==== Teclado
+
+El teclado no está completamente mapeado a la distribución PS/2 estándar, y mantiene la distribución de las máquinas originales, donde la tecla `Ctrl` se corresponde con `Symbol Shift`. Así, por ejemplo, para obtener `"` se ha de pulsar `Ctrl+P`.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F1`: Elegir el modelo 48K
+- `F2`: Elegir el modelo 128K
+- `F4`: Alternar entre early/late timings
+- `F5`: NMI
+- `F6`: Desactivar o activar automapper de DivMMC
+- `F7`: Desactivar o activar la tarjeta microSD para DivMMC
+- `F8`: Desactivar o activar el ratón Kempston
+- `Bloq. Despl.`: Cambiar entre modo de vídeo RGB y VGA
+- `Ctrl+Alt+Supr` o  `F9`: Soft Reset (reinicia el Core)
+- `Ctrl+Alt+Backspace` o `F11`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
+
+[.text-center]
+image:img/zx.png[scaledwidth=70%]
+
+<<<
+
 === ZX Spectrum +3 (zxp3)
 
 El https://es.wikipedia.org/wiki/ZX_Spectrum_128_%2B3[ZX Spectrum +3] fue fabricado por Amstrad y salió al mercado en 1987. Ttenía un aspecto similar al +2 pero incorporaba una unidad de disquete de 3 pulgadas de la unidad de cinta, y tenía una carcasa negra. Fue el único Spectrum capaz de ejecutar el sistema operativo CP/M sin hardware adicional.
@@ -2742,7 +2908,7 @@ El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la dis
 Durante la ejecución del core:
 
 - `F12` para mostrar u ocultar el menú.
-- `Bloq. Despl.`: cambiar entre modo de vídeo RGB y VGA
+- `Bloq. Despl.`: Cambiar entre modo de vídeo RGB y VGA
 - `Ctrl+Alt+Supr` o  `F9`: Soft Reset (reinicia el Core)
 - `Ctrl+Alt+Backspace` o `F8`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
@@ -3525,9 +3691,9 @@ Registro de datos del puerto PS/2 del ratón. Usado para leer o enviar comandos 
 |===
 
 Registro de estado del puerto PS/2 del ratón. Se definen los siguientes bits:
-|==
+|===
 |BSY|0|0|0|ERR|0|0|PEN
-|==
+|===
 * BSY: a 1 para indicar que hay una transmisión de datos al puerto PS/2 aún en proceso. Se debe esperar a que valga 0 para iniciar una nueva transmisión.
 * ERR: a 1 para indicar que la última transmisión a o desde el puerto PS/2 tuvo errores.
 * PEN: a 1 para indicar que hay un dato nuevo listo para ser leído en el registro MOUSEDATA. Tras leer MOUSESTATUS, este bit pasa a valer 0.
@@ -3899,9 +4065,9 @@ Control de la mezcla de los canales izquierdo/derecho partiendo de los 4 canales
 |===
 
 Control del modo de funcionamiento del chip encoder AD724. Se definen los siguientes bits:
-|==
+|===
 |Resv|Resv|Resv|Resv|Resv|Resv|Resv|MODE
-|==
+|===
 * Resv : el significado de estos bits está reservado y no debe alterarse.
 * MODE : modo de funcionamiento del AD724. 0 = codifica norma PAL. 1 = codifica norma NTSC
 
@@ -3968,6 +4134,111 @@ Para obtener una descripción de los distintos parámetros de uso de la herramie
 ----
 ...mra -h
 ----
+
+<<<
+
+==== Juegos por core
+
+A continuación se enumeran distintos juegos de máquina recreativa, según el core asociado, e indicando el nombre correspondiente de MAME.
+
+===== 1942
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|1942|1942
+|===
+
+===== Atari Tetris
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Tetris|atetris
+|===
+
+===== Capcom Play System 1
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|1941: Counter Attack|1941
+|Adventure Quiz Capcom World 2|cworld2j
+|Captain Commando|captcomm
+|Carrier Air Wing|cawing
+|Dynasty Wars|dynwar
+|Final Fight|ffight
+|Forgotten Worlds|forgottn
+|Ghouls'n Ghosts|ghouls
+|Gulun.Pa!|gulunpa
+|Knights of the Round|knights
+|Magic Sword: Heroic Fantasy|msword
+|Magical Pumpkin: Puroland de Daibouken|mpumpkin
+|Mega Man: The Power Battle|megaman
+|Mega Twins|mtwins
+|Mercs|mercs
+|Nemo|nemo
+|Pang! 3|pang3
+|Pnickies|pnickj
+|Pokonyan! Balloon|pokonyan
+|Quiz & Dragons: Capcom Quiz Game|qad
+|Quiz Tonosama no Yabou 2: Zenkoku-ban|qtono2j
+|Street Fighter II; Hyper Fighting|sf2hf
+|Street Fighter II: Champion Edition|sf2ce
+|Street Fighter II: The World Warrior|sf2
+|Street Fighter Zero|sfzch
+|Strider|strider
+|The King of Dragons|kod
+|Three Wonders|3wonders
+|U.N. Squadron|unsquad
+|Varth: Operation Thunderstorm|varth
+|Willow|willow
+|===
+
+===== Capcom Play System 1.5
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Cadillacs and Dinosaurs|dino.rom
+|Muscle Bomber Duo: Ultimate Team Battle|mbombrd.rom
+|Saturday Night Slam Masters|slammast.rom
+|Tenchi wo Kurau II_ Sekiheki no Tatakai|wofch.rom
+|The Punisher|punisher.rom
+|Warriors of Fate|wof.rom
+|===
+
+===== Double Dragon
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Double Dragon|Double Dragon|ddragon
+|===
+
+===== Kicker
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Kicker|Kicker|kicker
+|===
+
+===== Out Run
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Out Run|Out Run|outrun
+|===
+
+===== Pang
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Pang!|Pang|pang
+|===
 
 <<<
 
