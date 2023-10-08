@@ -1,4 +1,4 @@
-= ZXTRES ZXTRES+ and ZXTRES++ Manual
+= ZXTRES, ZXTRES+ and ZXTRES++ Manual
 :author: kounch
 :editor: aowendev
 :revnumber: 1.0.0b
