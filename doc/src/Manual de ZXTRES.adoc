@@ -1,6 +1,6 @@
 = Manual de ZXTRES, ZXTRES+ y ZXTRES++
 :author: kounch
-:revnumber: 1.0.0
+:revnumber: 1.0.0b
 :doctype: book
 :docinfo: shared
 :notitle:
@@ -14,6 +14,8 @@
 :toc: left
 :toc-title: Índice
 :toclevels: 4
+:version-label: Versión
+:last-update-label: Última actualización
 
 <<<
 
