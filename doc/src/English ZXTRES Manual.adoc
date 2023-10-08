@@ -3,6 +3,7 @@
 :editor: aowendev
 :revnumber: 1.0.0
 :doctype: book
+:docinfo: shared
 :notitle:
 :front-cover-image: image:img/portada_zxtres.jpg[]
 :email: kounch@users.noreply.github.com
@@ -1578,7 +1579,7 @@ Unlike the original machine, you can hear the audio while playing the tape.
 
 <<<
 
-=== Arcade (Capcom Play System 1 )
+=== Arcade (Capcom Play System 1)
 
 https://en.wikipedia.org/wiki/CP_System[CP System], CPS-1, or Capcom Play System 1 is an arcade system board made by Capcom, which was used for several arcade systems.
 
@@ -3163,9 +3164,9 @@ Mouse PS/2 port data register. Used to read or send direct commands to the PS/2 
 |===
 
 PS/2 mouse port status register. The following bits are set:
-|==
+|===
 |BSY|0|0|0|ERR|0|0|PEN
-|==
+|===
 * BSY: set to 1 when a data transmission to the PS/2 port is still in progress. Wait for a value of 0 to start a new transmission.
 * ERR: set to 1 when the last transmission to or from the PS/2 port had errors.
 * PEN: set to 1 when new data is ready to be read from the MOUSEDATA register. After reading MOUSESTATUS, this bit is set to 0.
@@ -3539,9 +3540,9 @@ Control of the left/right channel mix from the 4 channels of the AY-8912. The fo
 |===
 
 Control of the operating mode of the AD724 encoder chip. The following bits are defined:
-|==
+|===
 |Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|MODE
-|==
+|===
 * Resv : the meaning of these bits is reserved and must not be altered.
 * MODE : operating mode of the AD724. 0 = encodes PAL standard. 1 = encodes NTSC standard.
 
@@ -3588,6 +3589,7 @@ Each read operation provides the next ASCII character of the string containing t
 
 === Arcade
 
+
 ==== MRA Tool
 
 This is a tool that mergees https://www.mamedev.org[MAME] ROM files, using an MRA configuration file as a reference. It is also useful to create many kinds of binary blobs. It can be downloaded from https://github.com/kounch/mra-tools-c/tree/master/release[GitHub].
@@ -3607,6 +3609,143 @@ For a description of the different parameters of the tool:
 ----
 ...mra -h
 ----
+
+<<<
+
+==== Games by core
+
+Different arcade games are listed below, based on the core, and including the name of the corresponding MAME name.
+
+===== 1942
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|1942|1942
+|===
+
+===== Atari Tetris
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Tetris|atetris
+|===
+
+===== Capcom Play System 1
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|1941: Counter Attack|1941
+|Adventure Quiz Capcom World 2|cworld2j
+|Captain Commando|captcomm
+|Carrier Air Wing|cawing
+|Dynasty Wars|dynwar
+|Final Fight|ffight
+|Forgotten Worlds|forgottn
+|Ghouls'n Ghosts|ghouls
+|Gulun.Pa!|gulunpa
+|Knights of the Round|knights
+|Magic Sword: Heroic Fantasy|msword
+|Magical Pumpkin: Puroland de Daibouken|mpumpkin
+|Mega Man: The Power Battle|megaman
+|Mega Twins|mtwins
+|Mercs|mercs
+|Nemo|nemo
+|Pang! 3|pang3
+|Pnickies|pnickj
+|Pokonyan! Balloon|pokonyan
+|Quiz & Dragons: Capcom Quiz Game|qad
+|Quiz Tonosama no Yabou 2: Zenkoku-ban|qtono2j
+|Street Fighter II; Hyper Fighting|sf2hf
+|Street Fighter II: Champion Edition|sf2ce
+|Street Fighter II: The World Warrior|sf2
+|Street Fighter Zero|sfzch
+|Strider|strider
+|The King of Dragons|kod
+|Three Wonders|3wonders
+|U.N. Squadron|unsquad
+|Varth: Operation Thunderstorm|varth
+|Willow|willow
+|===
+
+===== Capcom Play System 1.5
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Cadillacs and Dinosaurs|dino.rom
+|Muscle Bomber Duo: Ultimate Team Battle|mbombrd.rom
+|Saturday Night Slam Masters|slammast.rom
+|Tenchi wo Kurau II_ Sekiheki no Tatakai|wofch.rom
+|The Punisher|punisher.rom
+|Warriors of Fate|wof.rom
+|===
+
+===== Double Dragon
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Double Dragon|Double Dragon|ddragon
+|===
+
+===== Kicker
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Kicker|Kicker|kicker
+|===
+
+===== Out Run
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Out Run|Out Run|outrun
+|===
+
+===== Pang
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Pang!|Pang|pang
+|===
+
+===== Sega System 16B
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Alien Syndrome|aliensyn.rom
+|Altered Beast |altbeast.rom
+|Aurail|aurail.rom
+|Bay Route|bayroute.rom
+|Bullet|bullet.rom
+|Cotton|cotton.rom
+|Dunk Shot|dunkshot.rom
+|Dynamite Dux|ddux.rom
+|E-Swat - Cyber Police|eswat.rom
+|Excite League|exctleag.rom
+|Fantasy Zone II - The Tears of Opa-Opa|fantzn2x.rom
+|Flash Point|fpoint.rom
+|Golden Axe|goldnaxe.rom
+|MVP|mvp.rom
+|Passing Shot|passsht.rom
+|Riot City|riotcity.rom
+|RyuKyu|ryukyu.rom
+|Sonic Boom|sonicbom.rom
+|Sukeban Jansi Ryuko|sjryuko.rom
+|Super League|suprleag.rom
+|Time Scanner|timescan.rom
+|Toryumon|toryumon.rom
+|Tough Turf|tturfu.rom
+|Wonder Boy III - Monster Lair|wb3.rom
+|Wrestle War|wrestwar.rom
+|===
 
 <<<
 

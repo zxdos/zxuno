@@ -2,6 +2,7 @@
 :author: kounch
 :revnumber: 1.0.0
 :doctype: book
+:docinfo: shared
 :notitle:
 :front-cover-image: image:img/portada_zxtres.jpg[]
 :email: kounch@users.noreply.github.com
@@ -20,7 +21,7 @@
 
 ZXTRES, ZXTRES+ y ZXTRES++ son la continuación de https://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
-Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible usar distintas configuraciones de software (cores) y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXTRES con la configuración que se desee de entre varias disponibles.
+Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible usar distintas configuraciones de software (cores) y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir al arrancar el ZXTRES la configuración que se desee de entre varias disponibles.
 
 La página oficial de la familia ZXTRES es https://www.forofpga.es/viewforum.php?f=251[https://www.forofpga.es/viewforum.php?f=251].
 
@@ -1979,7 +1980,7 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 - `F12` mostrar el menú de control del core
 - Cursor o el mando 1: Controles de dirección del jugador uno
-- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1,2 y 3 del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1, 2 y 3 del jugador uno
 - `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
 - `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
 - `1` y `2`: Iniciar partida jugador 1 o jugador 2
@@ -2039,7 +2040,7 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 - `F12` mostrar el menú de control del core
 - Cursor o el mando 1: Controles de dirección
-- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1,2 y 3
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1, 2 y 3
 - `1` y `2`: Iniciar partida de 1 o 2 jugadores
 - `5` y `6`: Insertar una moneda
 - `P : Pausa`
@@ -2189,6 +2190,71 @@ Estas son las principales:
 - `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
 - `Rotate Controls`: Para girar el comportamiento de los controles de dirección
 - `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `Test Mode`: Activa o desactiva el modo de prueba
+- `Pause`: Activa o desactiva la pausa
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
+=== Arcade (Sega System 16B)
+
+La https://es.wikipedia.org/wiki/Sega_System_16[Sega System 16B] es la segunda variante de una placa de arcade lanzada en 1985 por Sega.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/jotego/jts16[versión original de Jotego].
+
+Algunas de sus características son:
+
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imagenes ROM] de los chips de la maquina arcade original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/blob/master/mra/Out%20Run%20(sitdown-upright%2C%20Rev%20B).mra[repositorio del creador] del core original.
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD. 
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección del jugador uno
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1, 2 y 3 del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
+- `1` y `2`: Iniciar partida jugador 1 o jugador 2
+- `5` y `6`: Insertar una moneda
+- `P : Pausa`
+- `F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
+
+[.text-center]
+image:img/jts16b.jpg[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el comportamiento de los controles de dirección
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `FX Volume`: Volumen de los efectos de sonido
+- `FX`: Activar o desactivar efectos de sonido
+- `FM`: Activar o desactivar efectos de sonido FM
 - `Test Mode`: Activa o desactiva el modo de prueba
 - `Pause`: Activa o desactiva la pausa
 - `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
@@ -2929,7 +2995,7 @@ Estas son las principales:
 - `Mount SD:`: Para montar un fichero VHD como disco (se ha de hacer reset para que el sistema lo utilice),
 - `Reset FPGA`: para reiniciar la FPGA
 
-Por otra parte el mando 1 se comporta simultáneamente con protocolo Kempston (con dos botones de disparo) y Sinclair (1,2,3,4,5) con segundo botón de disparo (`z`). El mando conectado al puerto 2 se comporta con protocolo Sinclair (6,7,8,9,0) y segundo botón de disparo (`x`).
+Por otra parte el mando 1 se comporta simultáneamente con protocolo Kempston (con dos botones de disparo) y Sinclair (1, 2, 3, 4, 5) con segundo botón de disparo (`z`). El mando conectado al puerto 2 se comporta con protocolo Sinclair (6, 7, 8, 9, 0) y segundo botón de disparo (`x`).
 
 <<<
 
@@ -4238,6 +4304,38 @@ A continuación se enumeran distintos juegos de máquina recreativa, según el c
 |===
 |Nombre Juego|Nombre ROM
 |Pang!|Pang|pang
+|===
+
+===== Sega System 16B
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Alien Syndrome|aliensyn.rom
+|Altered Beast |altbeast.rom
+|Aurail|aurail.rom
+|Bay Route|bayroute.rom
+|Bullet|bullet.rom
+|Cotton|cotton.rom
+|Dunk Shot|dunkshot.rom
+|Dynamite Dux|ddux.rom
+|E-Swat - Cyber Police|eswat.rom
+|Excite League|exctleag.rom
+|Fantasy Zone II - The Tears of Opa-Opa|fantzn2x.rom
+|Flash Point|fpoint.rom
+|Golden Axe|goldnaxe.rom
+|MVP|mvp.rom
+|Passing Shot|passsht.rom
+|Riot City|riotcity.rom
+|RyuKyu|ryukyu.rom
+|Sonic Boom|sonicbom.rom
+|Sukeban Jansi Ryuko|sjryuko.rom
+|Super League|suprleag.rom
+|Time Scanner|timescan.rom
+|Toryumon|toryumon.rom
+|Tough Turf|tturfu.rom
+|Wonder Boy III - Monster Lair|wb3.rom
+|Wrestle War|wrestwar.rom
 |===
 
 <<<
