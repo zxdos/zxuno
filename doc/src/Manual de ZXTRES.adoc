@@ -3109,7 +3109,7 @@ image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[sc
 
 ==== Recuperación vía USB
 
-En algunas situaciones puede ser necesario reinstalar el firmaware de arranque (bootstrap) de algún https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040] de la tarjeta.
+En algunas situaciones puede ser necesario reinstalar el firmware de arranque (bootstrap) de algún https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040] de la tarjeta.
 
 *Material necesario*:
 
@@ -3405,8 +3405,6 @@ Notar que se pueden acumular varias órdenes en una única línea de comandos. P
 
 <<<
 
-<<<
-
 === Recuperación del firmware
 
 En algunos casos (por ejemplo al instalar un core experimental o hacer una actualización del core de ZX Spectrum o la BIOS) puede suceder que el ZXTRES deje de arrancar. Se encienden los LEDs pero no hay imagen ni responde a las distintas combinaciones de teclado para acceder a la BIOS, etc.
@@ -3415,10 +3413,13 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 
 ==== Preparación del cableado
 
-En los siguientes pasos de recuperación se habla de conectar cables puente o USB-Blaster a la placa de ZXTRES. Para ello, usar la siguiente imagen como referencia.
+En los siguientes pasos se habla de conectar cables puente o USB-Blaster a la placa de ZXTRES. Para ello, usar las siguientes imágenes como referencia.
 
 [.text-center]
-image:img/jtagzxtres.jpg[scaledwidth=80%]
+image:img/jtagzxtres.jpg[scaledwidth=40%]
+
+[.text-center]
+image:img/usbblasterzxtres.jpg[scaledwidth=60%]
 
 [WARNING]
 ====
@@ -3426,6 +3427,135 @@ image:img/jtagzxtres.jpg[scaledwidth=80%]
 ====
 
 <<<
+
+==== Recuperación usando macOS o Linux y USB-Blaster
+
+*Material necesario*:
+
+- Sistema Operativo Linux o macOS, en una máquina física o en una máquina virtual, con conexión USB y acceso a internet (únicamente para descargar el software)
+- Adaptador USB-Blaster
+- Tarjeta microSD para el ZXTRES con la primera partición en formato FAT16 o FAT32
+- Teclado y monitor para conectar el ZXTRES
+
+*Software necesario*:
+
+- Imagen Flash y recovery para ZXTRES, del https://github.com/zxtres/cores/tree/main/recovery[repositorio oficial de Github]. Notar que existe una descarga distinta para cada tipo de dispositivo:
+
+** `recovery_a35.zip` para ZXTRES
+** `recovery_a100.zip` para ZXTRES+
+** `recovery_a200.zip` para ZXTRES++
+
+- En el caso de Linux, además, hace falta un fichero de reglas de udev https://github.com/trabucayre/openFPGALoader/blob/master/99-openfpgaloader.rules[disponible aquí].
+
+*Pasos a seguir*:
+
+. Instalar https://openocd.org[Open On-Chip Debugger (OpenOCD)] en el sistema usando el gestor de paquetes correspondiente. Por ejemplo, para Arch Linux:
+
+[source,shell]
+----
+pacman -S openocd
+----
+
+Para Debian Linux:
+
+[source,shell]
+----
+apt-get install openocd
+----
+
+Para macOS (usando https://brew.sh[Homebrew]):
+
+[source,shell]
+----
+brew install open-ocd
+----
+
+[start=2]
+. Sólo en el caso de Linux, añadir permisos a los usuarios para poder acceder al programador JTAG, para ello, ejecutar estos comandos para copiar el fichero de reglas y activarlo:
+
+[source,shell]
+----
+groupadd plugdev
+sudo cp 99-openfpgaloader.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+usermod -a $USER -G plugdev
+----
+
+<<<
+
+[start=3]
+. Conectar el USB-Blaster al ordenador, y los cables correspondientes al ZXTRES <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si ya estuviera conectado, desconectar y volver a conectar para asegurarse de que se activan las reglas de udev.
+
+. Obtener el fichero `recovery.bit` del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. En nuestro ejemplo, se dejará en `/home/zxtres/unbrick/` (y en `/Users/zxtres/unbrick/` en el caso de macOS).
+
+. Encender el ZXTRES.
+
+. Asegurarse de que se está en el directorio donde se encuentra el archivo `recovery.bit`, y lanzar el comando que carga la BIOS en modo recuperación
+
+En Linux:
+
+[source,shell]
+----
+cd /home/zxtres/unbrick
+sudo openocd -f /usr/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /usr/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+En macOS:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openocd -f /opt/homebrew/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /opt/homebrew/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+[TIP]
+====
+Recordar reemplazar en los comandos anteriores `recovery.bit` por el nombre del fichero adecuado para la placa a recuperar.
+====
+
+<<<
+
+[start=7]
+. Si todo funciona correctamente, se verá cómo cambia el estado de los LED de la FPGA y se ve la imagen de la BIOS en el monitor.
+
+En el caso de que no se vea imagen, y si no se está utilizando DisplayPort, pulsar `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
+
+[.text-center]
+image:img/recovery.png[scaledwidth=70%]
+
+[start=8]
+. Insertar en el ZXTRES la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZX3` descargado anteriormente.
+
+. Desconectar el cable USB-Blaster.
+
+<<<
+
+[start=10]
+. Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
+
+[.text-center]
+image:img/recovery2.png[scaledwidth=70%]
+
+[WARNING]
+====
+Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
+====
+
+[TIP]
+====
+Recordar que también es posible navegar por las opciones de la BIOS utilizando un mando conectado en el puerto derecho.
+====
+
+[start=11]
+. Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXTRES vuelve a arrancar correctamente.
+
+[NOTE]
+====
+Si no se obtiene imagen, y no se está utilizando DisplayPort, pulsar de nuevo `Bloq. Despl.` para cambiar entre modo de video compuesto y VGA. En este caso, sería necesario acceder a la BIOS y cambiar el <<#_advanced, ajuste avanzado correspondiente>> para indicar la configuración de nuestro monitor.
+====
+
+<<<
+
 
 ==== Recuperación usando una Raspberry Pi
 
@@ -3469,6 +3599,17 @@ rm -rf ./openocd-code
 <<<
 
 [start=3]
+. Añadir permisos a los usuarios para poder acceder al programador JTAG, para ello, descargar el fichero de reglas https://github.com/trabucayre/openFPGALoader/blob/master/99-openfpgaloader.rules[`99-openfpgaloader.rules`] y ejecutar estos comandos:
+
+[source,shell]
+----
+groupadd plugdev
+sudo cp 99-openfpgaloader.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+usermod -a $USER -G plugdev
+----
+
+[start=4]
 . Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXTRES y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
@@ -3500,12 +3641,9 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 |`39`
 |===
 
-[start=4]
+[start=5]
 . Copiar en la Raspberry Pi el fichero `recovery_axx.bit` obtenido anteriormente del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. En nuestro ejemplo, se dejará en `/home/pi/zxtres/unbrick/`
 
-<<<
-
-[start=5]
 . Para la conexión usando GPIO, realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está `recovery.bit`. Este paso no es necesario si se usa USB-Blaster.
 
 [source,shell]
@@ -3513,7 +3651,7 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxtres/unbrick/
 ----
 
-[start=6]
+[start=7]
 . Para la conexión vía GPIO, editar la copia de `raspberrypi2-native.cfg` actualizando `bcm2835gpio_jtag_nums` (y descomentando, si fuera necesario), según como se haya hecho la conexión entre JTAG y GPIO en la línea `bcm2835gpio_jtag_nums`. En nuestro ejemplo:
 
 [source]
@@ -3522,7 +3660,7 @@ cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/z
 bcm2835gpio_jtag_nums 26 6 13 19
 ----
 
-[start=7]
+[start=8]
 . Comentar, si no lo está, la línea `bcm2835gpio_swd_nums` (de nuevo, no necesario si la conexión es con USB-Blaster):
 
 [source]
@@ -3530,7 +3668,7 @@ bcm2835gpio_jtag_nums 26 6 13 19
 #bcm2835gpio_swd_nums 11 25
 ----
 
-[start=8]
+[start=9]
 . Añadir, al final, la línea `adapter speed 250` (no necesario para uso con USB-Blaster):
 
 [source]
@@ -3538,12 +3676,12 @@ bcm2835gpio_jtag_nums 26 6 13 19
 adapter speed 250
 ----
 
-[start=9]
+[start=10]
 . Encender el ZXTRES
 
 <<<
 
-[start=10]
+[start=11]
 . Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery_axx.bit`, y lanzar el comando que carga la BIOS en modo recuperación, indicando, si fuera necesario, la ruta al archivo `raspberrypi2-native.cfg` que habíamos editado anteriormente
 
 Para conexión vía GPIO:
@@ -3567,7 +3705,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 Recordar reemplazar en los comandos anteriores `recovery_axx.bit` por el nombre del fichero adecuado para la placa a recuperar.
 ====
 
-[start=11]
+[start=12]
 . Si todo va bien, veremos cómo cambia el estado de los LED de la FPGA y veremos la imagen de la BIOS en el monitor.
 
 En el caso de que no se vea imagen, y si no se está utilizando DisplayPort, pulsar `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
@@ -3577,7 +3715,7 @@ image:img/recovery.png[scaledwidth=70%]
 
 <<<
 
-[start=12]
+[start=13]
 . Insertar en el ZXTRES la tarjeta SD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZX3` descargado anteriormente.
 
 . Si se está utilizando USB-Blaster, desconectar el cable.
@@ -3592,7 +3730,7 @@ image:img/recovery2.png[scaledwidth=70%]
 Este proceso sustituirá todos los cores instalados, la BIOS, así como las ROMs de ZX Spectrum y la configuración por lo que haya en la imagen, y no se puede deshacer.
 ====
 
-[start=15]
+[start=16]
 . Tras unos minutos, el proceso finalizará, y podremos comprobar como, al apagar y encender, el ZXTRES vuelve a arrancar correctamente.
 
 [NOTE]
