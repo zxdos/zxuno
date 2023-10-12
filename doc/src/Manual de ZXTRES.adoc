@@ -3423,7 +3423,7 @@ image:img/usbblasterzxtres.jpg[scaledwidth=60%]
 
 [WARNING]
 ====
-*NO* se ha de conectar la línea de 3V
+*NUNCA* se ha de conectar la línea de 3V (VCC)
 ====
 
 <<<
@@ -3449,25 +3449,43 @@ image:img/usbblasterzxtres.jpg[scaledwidth=60%]
 
 *Pasos a seguir*:
 
-. Instalar https://openocd.org[Open On-Chip Debugger (OpenOCD)] en el sistema usando el gestor de paquetes correspondiente. Por ejemplo, para Arch Linux:
+. Instalar https://openocd.org[Open On-Chip Debugger (OpenOCD)] o bien https://trabucayre.github.io/openFPGALoader/guide/install.html[openFPGALoader] en el sistema usando el gestor de paquetes correspondiente.
+
+Por ejemplo, para  OpenOCD en Arch Linux:
 
 [source,shell]
 ----
 pacman -S openocd
 ----
 
-Para Debian Linux:
+Para openFPGALoader en Arch Linux:
+
+[source,shell]
+----
+pacman -S openfpgaloader
+----
+
+Para OpenOCD en Debian Linux:
 
 [source,shell]
 ----
 apt-get install openocd
 ----
 
-Para macOS (usando https://brew.sh[Homebrew]):
+Para OpenOCD en macOS (usando https://brew.sh[Homebrew]):
 
 [source,shell]
 ----
 brew install open-ocd
+----
+
+<<<
+
+Para openFPGALoader en macOS (usando https://brew.sh[Homebrew]):
+
+[source,shell]
+----
+brew install openfpgaloader
 ----
 
 [start=2]
@@ -3481,8 +3499,6 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 usermod -a $USER -G plugdev
 ----
 
-<<<
-
 [start=3]
 . Conectar el USB-Blaster al ordenador, y los cables correspondientes al ZXTRES <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si ya estuviera conectado, desconectar y volver a conectar para asegurarse de que se activan las reglas de udev.
 
@@ -3492,7 +3508,7 @@ usermod -a $USER -G plugdev
 
 . Asegurarse de que se está en el directorio donde se encuentra el archivo `recovery.bit`, y lanzar el comando que carga la BIOS en modo recuperación
 
-En Linux:
+En Linux con OpenOCD:
 
 [source,shell]
 ----
@@ -3500,12 +3516,20 @@ cd /home/zxtres/unbrick
 sudo openocd -f /usr/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /usr/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
 ----
 
-En macOS:
+En macOS con OpenOCD:
 
 [source,shell]
 ----
 cd /Users/zxtres/unbrick
 openocd -f /opt/homebrew/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /opt/homebrew/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+En Linux o macOS con OpenFPGALoader:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openFPGALoader -c usb-blaster recovery.bit
 ----
 
 [TIP]
@@ -3563,7 +3587,6 @@ Si no se obtiene imagen, y no se está utilizando DisplayPort, pulsar de nuevo `
 
 - Raspberry Pi (con tarjeta SD, teclado, monitor, fuente de alimentación, etc.) y con conexión a internet
 - 5 https://es.wikipedia.org/wiki/Cable_puente[cables puente para prototipos] (idealmente, hembra en los dos extremos) y, opcionalmente, un adaptador USB-Blaster
-- Un destornillador de estrella adecuado
 - Tarjeta SD para el ZXTRES con la primera partición en formato FAT16 o FAT32
 - Teclado y monitor para conectar el ZXTRES
 
@@ -3571,9 +3594,9 @@ Si no se obtiene imagen, y no se está utilizando DisplayPort, pulsar de nuevo `
 
 - Imagen Flash y recovery para ZXTRES, del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. Notar que existe un fichero distinto para cada tipo de dispositivo:
 
-** `recovery_a35.bit` para ZXTRES
-** `recovery_a100.bit` para ZXTRES+
-** `recovery_a200.bit` para ZXTRES++
+** `recovery_a35.zip` para ZXTRES
+** `recovery_a100.zip` para ZXTRES+
+** `recovery_a200.zip` para ZXTRES++
 
 *Pasos a seguir*:
 
@@ -3610,7 +3633,7 @@ usermod -a $USER -G plugdev
 ----
 
 [start=4]
-. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si se va a hacer la conexión usando GPIO, abrir la carcasa del ZXTRES y conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si se va a hacer la conexión usando GPIO, conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
@@ -3642,7 +3665,7 @@ En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (corresp
 |===
 
 [start=5]
-. Copiar en la Raspberry Pi el fichero `recovery_axx.bit` obtenido anteriormente del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. En nuestro ejemplo, se dejará en `/home/pi/zxtres/unbrick/`
+. Copiar en la Raspberry Pi el fichero `recovery.bit` obtenido anteriormente del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. En nuestro ejemplo, se dejará en `/home/pi/zxtres/unbrick/`
 
 . Para la conexión usando GPIO, realizar una copia del archivo de configuración de Open OCD, en el mismo lugar donde está `recovery.bit`. Este paso no es necesario si se usa USB-Blaster.
 
@@ -3682,14 +3705,14 @@ adapter speed 250
 <<<
 
 [start=11]
-. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery_axx.bit`, y lanzar el comando que carga la BIOS en modo recuperación, indicando, si fuera necesario, la ruta al archivo `raspberrypi2-native.cfg` que habíamos editado anteriormente
+. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.bit`, y lanzar el comando que carga la BIOS en modo recuperación, indicando, si fuera necesario, la ruta al archivo `raspberrypi2-native.cfg` que habíamos editado anteriormente
 
 Para conexión vía GPIO:
 
 [source,shell]
 ----
 cd /home/pi/zxtres/unbrick
-sudo openocd -f /home/pi/zxtres/unbrick/raspberrypi2-native.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery_axx.bit; shutdown"
+sudo openocd -f /home/pi/zxtres/unbrick/raspberrypi2-native.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit; shutdown"
 ----
 
 Con USB-Blaster:
@@ -3697,12 +3720,12 @@ Con USB-Blaster:
 [source,shell]
 ----
 cd /home/pi/zxtres/unbrick
-sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery_axx.bit; shutdown"
+sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit; shutdown"
 ----
 
 [TIP]
 ====
-Recordar reemplazar en los comandos anteriores `recovery_axx.bit` por el nombre del fichero adecuado para la placa a recuperar.
+Recordar reemplazar en los comandos anteriores `recovery.bit` por el nombre del fichero adecuado para la placa a recuperar.
 ====
 
 [start=12]

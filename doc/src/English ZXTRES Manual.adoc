@@ -2826,12 +2826,167 @@ When this happens there are several recovery methods to enable you to restore th
 You can use these images as a reference in some recovery steps when using jump wires or USB-Blaster connections to the ZXTRES board.
 
 [.text-center]
-image:img/jtagzxtres.jpg[scaledwidth=80%]
+image:img/jtagzxtres.jpg[scaledwidth=40%]
+
+[.text-center]
+image:img/usbblasterzxtres.jpg[scaledwidth=60%]
 
 [WARNING]
 ====
-*Don't* connect the 3V line.
+*NEVER* connect the 3V line (VCC).
 ====
+
+==== Recovery using a Linux or macOS
+
+*Hardware required*:
+
+- Linux or macOS operating system in a physical or virtual machine with USB and access to internet (only to download the software).
+- A USB-Blaster cable.
+- A microSD card with the first partition formatted as FAT16 or FAT32 for the ZXTRES.
+- Keyboard and display for the ZXTRES.
+
+*Software required*:
+
+- Flash image and recovery file for ZXTRES from https://github.com/zxtres/cores/tree/main/recovery[the main Github repository]. Note, there are different files for each device:
+
+** `recovery_a35.zip` for ZXTRES
+** `recovery_a100.zip` for ZXTRES+
+** `recovery_a200.zip` for ZXTRES++
+
+- For Linux, a special udev rules file is also needed. https://github.com/trabucayre/openFPGALoader/blob/master/99-openfpgaloader.rules[Available here] to download.
+
+*Instruction steps*:
+
+. Install https://openocd.org[Open On-Chip Debugger (OpenOCD)] or https://trabucayre.github.io/openFPGALoader/guide/install.html[openFPGALoader] to the system using a package manager.
+
+
+For example, to install OpenOCD on Arch Linux:
+
+[source,shell]
+----
+pacman -S openocd
+----
+
+For openFPGALoader on Arch Linux:
+
+[source,shell]
+----
+pacman -S openfpgaloader
+----
+
+For OpenOCD on Debian Linux:
+
+[source,shell]
+----
+apt-get install openocd
+----
+
+For OpenOCD on macOS (using https://brew.sh[Homebrew]):
+
+[source,shell]
+----
+brew install open-ocd
+----
+
+<<<
+
+For openFPGALoader on macOS (using https://brew.sh[Homebrew]):
+
+[source,shell]
+----
+brew install openfpgaloader
+----
+
+[start=2]
+. Only for Linux, also add permissions to the current user to have access to the JTAG programmer. Use this commands to copy the previously downloaded file and activate the rules:
+
+[source,shell]
+----
+groupadd plugdev
+sudo cp 99-openfpgaloader.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+usermod -a $USER -G plugdev
+----
+
+[start=3]
+. Connect the USB-Blaster, to the computer, and the other end to the ZXTRES <<#_jtag_cable_connections,as explained before>>. If already connected, disconnect and conect to use the new udev rules.
+
+. Copy the file called `recovery.bit` previously downloaded from https://github.com/zxtres/cores/tree/main/recovery[the main Github repository] to the Raspberry Pi. In this example it's at `/home
+
+. Power on the ZXTRES.
+
+. Ensure that you're in the folder where `recovery.bit` is located and run the command that loads the BIOS on recovery mode.
+
+For Linux using OpenOCD:
+[source,shell]
+----
+cd /home/zxtres/unbrick
+sudo openocd -f /usr/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /usr/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+For macOS using OpenOCD:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openocd -f /opt/homebrew/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /opt/homebrew/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+For Linux or macOS using OpenFPGALoader:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openFPGALoader -c usb-blaster recovery.bit
+----
+
+[TIP]
+====
+Remember to enter the correct name replacing `recovery.bit` in the previous commands.
+====
+
+<<<
+
+[start=7]
+. If everything worked correctly, you'll see that the FPGA LED change their state and the BIOS is shown on the display.
+
+If there's no image on the display and you're not using DisplaPort, press `Scroll Lock` to switch between RGB and VGA modes in case the recovery BIOS started in the wrong mode for your setup.
+
+[.text-center]
+image:img/recovery.png[scaledwidth=70%]
+
+[start=8]
+. Insert the microSD card formatted as FAT16 o FAT32 and with the `FLASH.ZX3` file downloaded previously in the ZXTRES.
+
+. Disconnect the USB-Blaster.
+
+<<<
+
+[start=10]
+. Select the `Upgrade Flash from SD` opiton. Press `Enter`, choose `Yes` and press `Enter` again to start the flash writing process.
+
+[.text-center]
+image:img/recovery2.png[scaledwidth=70%]
+
+[WARNING]
+====
+This process can't be undone and replaces all previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
+====
+
+[TIP]
+====
+Remember that it is also possible to navigate through the BIOS options using a controller connected to the right port.
+====
+
+[start=11]
+. After some minutes the process ends and on power cycling the ZXTRES it should start.
+
+[NOTE]
+====
+If no image is shown and you're not using DisplaPort, press `Scroll Lock` again to switch between RGB and VGA modes. In this case you must enter the BIOS and change <<#_advanced,the right advanced setting>> that matches your display.
+====
+
+<<<
 
 ==== Recovery using a Raspberry Pi
 
@@ -2847,9 +3002,11 @@ image:img/jtagzxtres.jpg[scaledwidth=80%]
 
 Flash image and recovery file for ZXTRES from https://github.com/zxtres/cores/tree/main/recovery[the main Github repository]. Note, there are different files for each device:
 
-** `recovery_a35.bit` for ZXTRES
-** `recovery_a100.bit` for ZXTRES+
-** `recovery_a200.bit` for ZXTRES++
+** `recovery_a35.zip` for ZXTRES
+** `recovery_a100.zip` for ZXTRES+
+** `recovery_a200.zip` for ZXTRES++
+
+- For Linux, a special udev rules file is also needed. https://github.com/trabucayre/openFPGALoader/blob/master/99-openfpgaloader.rules[Available here] to download.
 
 *Instruction steps*:
 
@@ -2872,8 +3029,21 @@ cd ..
 rm -rf ./openocd-code
 ----
 
+<<<
+
 [start=3]
-. Connect the USB-Blaster or jump wires if using GPIO. In this case open the ZXTRES case and <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS` `TDI` `TDO` `TCK` and `GND`) using the wires to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
+. Add permissions to the current user to have access to the JTAG programmer. Use this commands to copy the previously downloaded file and activate the rules:
+
+[source,shell]
+----
+groupadd plugdev
+sudo cp 99-openfpgaloader.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+usermod -a $USER -G plugdev
+----
+
+[start=4]
+. Connect the USB-Blaster or jump wires if using GPIO. In this case <<#_jtag_cable_connections,as explained before>> connect the FPGA JTAG lines (`TMS` `TDI` `TDO` `TCK` and `GND`) using the wires to the Raspberry Pi https://es.wikipedia.org/wiki/GPIO[GPIO] pins.
 
 If using a GPIO connection, take note of the chosen pins and ensure that `GND` is connected with `GND`.
 
@@ -2904,8 +3074,8 @@ In this example the `31` `33` `35` `37` and `39` pins are used (corresponding to
 |`39`
 |===
 
-[start=4]
-. Copy the file called `recovery_axx.bit` previously downloaded from https://github.com/zxtres/cores/tree/main/recovery[the main Github repository] to the Raspberry Pi. In this example it's at `/home/pi/zxtres/unbrick/`
+[start=5]
+. Copy the file called `recovery.bit` previously downloaded from https://github.com/zxtres/cores/tree/main/recovery[the main Github repository] to the Raspberry Pi. In this example it's at `/home/pi/zxtres/unbrick/`
 
 . If using GPIO, make a copy of the Open OCD configuration file to the folder where `recovery.bit` is located.
 
@@ -2914,9 +3084,7 @@ In this example the `31` `33` `35` `37` and `39` pins are used (corresponding to
 cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/zxtres/unbrick/
 ----
 
-<<<
-
-[start=6]
+[start=7]
 . For GPIO connection edit a copy of `raspberrypi2-native.cfg`, updating `bcm2835gpio_jtag_nums` (uncommenting if necessary) with your JTAG and GPIO connection numbers at the line `bcm2835gpio_jtag_nums`:
 
 [source]
@@ -2925,7 +3093,7 @@ cp /usr/local/share/openocd/scripts/interface/raspberrypi2-native.cfg /home/pi/z
 bcm2835gpio_jtag_nums 26 6 13 19
 ----
 
-[start=7]
+[start=8]
 . Ensure the line `bcm2835gpio_swd_nums` is commented out (not necessary for USB-Blaster):
 
 [source]
@@ -2933,7 +3101,7 @@ bcm2835gpio_jtag_nums 26 6 13 19
 #bcm2835gpio_swd_nums 11 25
 ----
 
-[start=8]
+[start=9]
 . Add `adapter speed 250` to the end of the file the line (not necessary for USB-Blaster):
 
 [source]
@@ -2941,17 +3109,17 @@ bcm2835gpio_jtag_nums 26 6 13 19
 adapter speed 250
 ----
 
-[start=9]
+[start=10]
 . Power on the ZXTRES.
 
-. Ensure that on the Raspberry Pi you're in the folder where `recovery_axx.bit` is located and run the command that loads the BIOS on recovery mode using the path to the previously edited `raspberrypi2-native.cfg`.
+. Ensure that on the Raspberry Pi you're in the folder where `recovery.bit` is located and run the command that loads the BIOS on recovery mode using the path to the previously edited `raspberrypi2-native.cfg`.
 
 For GPIO connection:
 
 [source,shell]
 ----
 cd /home/pi/zxtres/unbrick
-sudo openocd -f /home/pi/zxtres/unbrick/raspberrypi2-native.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery_axx.bit; shutdown"
+sudo openocd -f /home/pi/zxtres/unbrick/raspberrypi2-native.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit; shutdown"
 ----
 
 For USB-Blaster connection:
@@ -2959,17 +3127,17 @@ For USB-Blaster connection:
 [source,shell]
 ----
 cd /home/pi/zxtres/unbrick
-sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery_axx.bit; shutdown"
+sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /home/pi/zxtres/unbrick/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit; shutdown"
 ----
 
 [TIP]
 ====
-Remember to enter the correct name replacing `recovery_axx.bit` in the previous commands.
+Remember to enter the correct name replacing `recovery.bit` in the previous commands.
 ====
 
 <<<
 
-[start=11]
+[start=12]
 . If everything worked correctly, you'll see that the FPGA LED change their state and the BIOS is shown on the display.
 
 If there's no image on the display and you're not using DisplaPort, press `Scroll Lock` to switch between RGB and VGA modes in case the recovery BIOS started in the wrong mode for your setup.
@@ -2977,14 +3145,14 @@ If there's no image on the display and you're not using DisplaPort, press `Scrol
 [.text-center]
 image:img/recovery.png[scaledwidth=70%]
 
-[start=12]
+[start=13]
 . Insert the microSD card formatted as FAT16 o FAT32 and with the `FLASH.ZX3` file downloaded previously in the ZXTRES.
 
 . If using a USB-Blaster connection, disconnect the connector.
 
 <<<
 
-[start=14]
+[start=15]
 . Select the `Upgrade Flash from SD` opiton. Press `Enter`, choose `Yes` and press `Enter` again to start the flash writing process.
 
 [.text-center]
@@ -2995,7 +3163,12 @@ image:img/recovery2.png[scaledwidth=70%]
 This process can't be undone and replaces all previously installed cores, the BIOS, the ZX Spectrum ROMs and their configuration with the data in the image file.
 ====
 
-[start=15]
+[TIP]
+====
+Remember that it is also possible to navigate through the BIOS options using a controller connected to the right port.
+====
+
+[start=16]
 . After some minutes the process ends and on power cycling the ZXTRES it should start.
 
 [NOTE]
