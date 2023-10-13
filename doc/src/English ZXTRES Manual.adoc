@@ -1278,7 +1278,7 @@ To use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossil's NMI B
 Copy the corresponding `.MID` file to the desired location on the microSD card, together with the appropriate MID plugin file (in the `BIN/BPLUGINS` folder) and the <<#_esxdos_commands,"dot" command >> `playmid` command file (in the `BIN` folder).
 
 . Start the ZXTRES ZX Spectrum core.
-. Press `F5` to open Bob Fossil's NMI browser and then navigate to the location of the `.MID` file, select it and press `Enter``.
+. Press `F5` to open Bob Fossil's NMI browser and then navigate to the location of the `.MID` file, select it and press `Enter`.
 
 You can press `Space` to stop playback at any time.
 
@@ -1369,7 +1369,21 @@ RomPack files can be easily edited with the http://guest:zxuno@svn.zxuno.comsvn/
 
 === Cores
 
-A core is a file with the information needed to configure the FPGA to behave like a specific system (ZX Spectrum and so on). In the ZXTRES this file can be loaded from several different places: the SPI Flash memory, a microSD card or from an external device (PC and so on) using a special cable.
+A core is a file with the information needed to configure the FPGA to behave like a specific system (ZX Spectrum and so on). In the ZXTRES this file can be loaded from several different places: the SPI Flash memory, a microSD card or from an external device (PC and so on) using a special cable (JTAG). For this purpose, there are several file types:
+
+- BIT file generated from a synthesis tool. It is usually distributed with the extension `.BIT` and can be loaded into the FPGA with a programmer, or from the microSD, if you have an <<#_middle_board,optional middle board>> using the <<#_bob_fossil_nmi_browser,BIT plugin>> from esxdos. 
+- BIN file (generated from a BIT file). Normally distributed with the extension `.ZX3`, and can be loaded into the FPGA using the <<#_bob_fossil_nmi_browser,ZX3 plugin>> from esxdos, temporarily using the SPI Flash.
+- Expanded BIN file, perhaps in several 1.2MiB chunks (exactly 1179648 bytes), with the extension `.ZX3` and which can be written, using the BIOS, to <<#_spi_flash_memory,SPI Flash memory>> and then loaded from the SPI flash to the FPGA.
+
+[WARNING]
+====
+The BIT plugin does not work correctly if the Spectrum core is set to a speed higher than 3.5MHz.
+====
+
+[TIP]
+====
+BIN files can be renamed with the `.BIT` extension and also loaded to the FPGA using the <<#_bob_fossil_nmi_browser,BIT_plugin>> from esxdos.
+====
 
 <<<
 
@@ -1385,8 +1399,9 @@ To use the https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[Bob Fossil NMI 
 
 - The latest stable version (http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip).
 - The ZX3 plugin that can load Cores in ZX3 format https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/ZX3.
+- A full (unsplit) BIN file with the `.ZX3` extension
 
-Copy the corresponding `ZX3` file to the desired location of the microSD card as well as the appropriate ZX3 plugin (in the folder `BIN/BPLUGINS`).
+Copy the corresponding `ZX3` (full .BIN) file to the desired location of the microSD card as well as the appropriate ZX3 plugin (in the folder `BIN/BPLUGINS`).
 
 Press `F5` to open Bob Fossil's NMI browser and get to the location of the Core with extension `ZX3`, select it and press `Enter`.
 
@@ -1400,25 +1415,39 @@ In order to use https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011 [Bob Fossi
 
 - The latest http://www.thefossilrecord.co.uk/wp-content/uploads/zx/BROWSE_latest.zip[stable version]
 - The BIT plugin to to load Cores in BIT format (https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/BIT).
+- A .BIN or .BIT file with the `.BIT` extension
 
-Copy the corresponding `.BIT` file to the desired location on the microSD card, as well as the BIT plugin file (inside the `BIN\BPLUGINS` folder).
+Copy the file with the`.BIT` extension to the desired location on the microSD card, as well as the BIT plugin file (inside the `BIN\BPLUGINS` folder).
 
 . Start the ZXTRES Spectrum core.
 . Press `F5` to open the browser and then navigate to the location of the Core with `.BIT` extension, select it and press ENTER.
 
 If all goes well, after a few seconds, the core will be loaded into the FPGA and then the FPGA will be restarted to execute it.
 
+[TIP]
+====
+Some devices, when connected to the joystick ports, may cause a flashing red border when starting the browser. This is solved by disabling the Kempston joystick in your configuration (with the <<#_esxdos_commands,"DOT" command>> `.brwscfg`).
+
+[.text-center]
+image:img/brwscfg.jpg[scaledwidth=70%]
+====
+
 ==== SPI Flash Memory
 
-There are 27 spaces where you can store cores, with the first spaces being reserved for the main ZX Spectrum (this doesn't prevent having more ZX Spectrum cores in other spaces as well of the first ones).
+There are 27 spaces of exactly 1,2MiB (1179648 bytes) where you can store cores, with the first spaces being reserved for the main ZX Spectrum (this doesn't prevent having more ZX Spectrum cores in other spaces as well of the first ones).
 
 Official cores are https://github.com/zxtres/cores[available to download] from GitHub repository.
 
 To update or install a new core in the SPI Flash there are several possibilities.
 
-The first options is to obtain the latest version of the files that define the core. If the space used is greater than 1179648 bytes it must be split accordingly into several files. Each of these pieces must be a file called `COREXXy.ZX3` where `XX` is _always_ a two digit number. The `y` part of the name is ignored so you can use longer and more descriptive names (for example `CORE04_example_part1.ZX3`).
+The first options is to obtain the latest version of the files that define the core. If the space used is greater than 1179648 bytes it must be split in chunks accordingly into several files. Each of these pieces must be a file called `COREXXy.ZX3` where `XX` is _always_ a two digit number. The `y` part of the name is ignored so you can use longer and more descriptive names (for example `CORE04_example_part1.ZX3`).
 
 Copy the files to the root of the microSD card, power on and press `F2` to enter the BIOS. Choose `Upgrade`, select the row corresponding to the chosen core space (for example 4), press enter and then __" SD file "__. The system reads the file `COREnn ..` and notifies you when it's updated. However, first it asks for the name (to be shown in the list to choose from at startup and in the BIOS list). For cores using more than one space, typically the name of the core is only used for the first space and the remaining spaces are registered with some text warning not to use them. After it's installed you can use the core on boot by choosing the first space used by the core.
+
+[TIP]
+====
+The command line utility https://github.com/zxtres/tools/blob/main/Bit2Bin.c[Bit2Bin_zx3], available at https://github.com/zxtres/tools/tree/main/bin[the ZXTRES GitHub repositories], can create suitable chunks from a complete BIT or BIN file.
+====
 
 [WARNING]
 ====
@@ -1522,8 +1551,8 @@ Using the arrow keys on your keyboard you can access more configuration options:
 - `Load Configuration`: To load configuration data saved previously
 - `Save Configuration: To save the current configuration. If this is done in the default space (`default`), it is the one that will be used every time the core is started.
 - `Chipset Settings`: Here you can choose the CPU, turbo mode, video type (PAL or NTSC), Chipset to simulate.
-- `Memory Settings``: To configure the different amounts of RAM memory, as well as the ROM file to be used.
-- `Video Settings``: To activate or deactivate video filters, deinterlacing, etc.
+- `Memory Settings`: To configure the different amounts of RAM memory, as well as the ROM file to be used.
+- `Video Settings`: To activate or deactivate video filters, deinterlacing, etc.
 - `Reset`: Resets the core to the default settings.
 - `Reboot`: Reboot the core with the current settings.
 
@@ -1555,12 +1584,14 @@ This core does not use the SD card.
 
 If not already there, <<#_cores,install or run the Amstrad CPC core>> on the ZXTRES.
 
+==== Keyboard
+
 ===== Special keys and buttons
 
 When the core is active:
 
 - `Del`: `CLR`.
-- `Home` : Scanlines on/off
+- `Home`: Scanlines on/off
 - `End`: Select one of the monochrome colour modes.
 - `Print Scr` or `Left Windows`: `COPY`
 - `Scroll Lock`: Switches between RGB (PAL) video mode and VGA (DisplayPort is always active).
@@ -1576,6 +1607,206 @@ When using BASIC, you can load a external tape or other external audio device wi
 Unlike the original machine, you can hear the audio while playing the tape.
 
 <<<
+
+=== Amstrad CPC 6128
+
+https://es.wikipedia.org/wiki/Amstrad_CPC_6128[Amstrad CPC 6128] was the successor computer to the CPC 464. As a novelty, apart from having more RAM, it incorporated a disk drive.
+
+The https://github.com/ZXMicroJack/amstrad-cpc[ZXTRES version] has been developed by MicroJack, based on the ZX-Uno version of the Amstrad CPC 464 core, created by McLeod.
+
+Some of its features are:
+
+- VGA video output
+- PAL RGB video output (using the VGA port)
+- Support for disk images from microSD
+- Support for loading from external audio devices
+- 128KB of RAM
+- Support for a controller
+- I^2^S and Sigma-Delta Audio
+- Colour and monochrome mode (green phosphor)
+
+==== SD card format
+
+A microSD card, with the first partition in FAT!6 or FAT32 format, should be used to store all the necessary files.
+
+Also the following ROM files are needed which you you can get http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[from the official wiki] from another older project or from their https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[GitHub repository]:
+
+- `OS6128.ROM`
+- `BASIC1-1.ROM`
+- `AMSDOS.ROM`
+
+It is also useful to have one or more disk image files (`DSK`) with software that you want to run.
+
+The `ROM` files should be copied to a directory named `AMSTRAD` in the root of the microSD. The `DSK` can be copied to any place in the card.
+
+[NOTE]
+====
+The supported disk image file types are:
+
+- RAW format: 40 tracks, 9 sectors, 512 byte sectors, and assuming sequential sector numbering, starting at 0xc1.
+- CPC Emu: Both standard and extended format. Limited to 512-byte sector blocks. Maximum of 80 tracks, 10 sectors and 839.5k image size.
+
+There's no support for copy protected images yet.
+====
+
+If not already there, <<#_cores,install or run the Amstrad CPC6128 core>> on the ZXTRES.
+
+<<<
+
+==== Keyboard
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `F12` show and hide the disk image selection menu
+- `Scroll Lock`: Switches between RGB video mode and VGA 
+- `End`: Select between monochrome and colour modes.
+- `Ctrl+Alt+Delete`: Soft Reset (resets the Core)
+- `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
+
+==== Overview
+
+
+Pressing `F12` will display the menu where you can assign DSK files to the disk drivers. Cursor keys to choose menu options and `Enter` to select and choose an element.
+
+[.text-center]
+image:img/cpc6128.png[scaledwidth=50%]
+
+<<<
+
+Once an image is selected, type the `CAT` command to view the contents of the currently loaded DSK file.
+
+[.text-center]
+image:img/cpc.png[pdfwidth=70%]
+
+Type the `RUN"<name>` command to load a program from disk.
+
+[.text-center]
+image:img/cpc2.png[pdfwidth=70%]
+
+Use the `|b` and `|a` commands to select the B: and A: drives respectively (the `|` symbol is obtained by pressing `Shift` and the key to the right of the `P` key).
+
+It is also possible to load from tape (or other external audio device) by first typing the command `|TAP`. Then use the `RUN` command to start loading.
+
+<<<
+
+=== Arcade (1942)
+
+https://en.wikipedia.org/wiki/1942_(video_game)[1942] is a videogame, released as an arcade video game in 1984. 
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtcores/tree/master/cores/1942[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- The video output keeps the original orientation.
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JT1942.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
+
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
+==== Keyboard
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl`, `Alt` or Controller 1: Player one buttons 1 and 2
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A`, `S` or controller 2: Player two buttons 1 and 2
+- `1` and `2`: to start game player 1 or player 2
+- `5` and `6`: to insert a coin
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jt1942.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC`: To load an ARC file from the microSD card.
+- `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `Pause`: Enters and exits pause mode.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<
+
+=== Arcade (Atari Tetris)
+
+The  https://en.wikipedia.org/wiki/[Tetris] arcade machine, licensed and distributed by Atari, in 1988.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/MrX-8B/MiSTer-Arcade-AtariTetris[original version for MiSTer].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as TETRIS.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
+
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
+==== Keyboard
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl`, or Controller 1: Player one button
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A` or controller 2: Player two button
+- `1` and `2`: to start game player 1 or player 2
+- `5` and `6`: to insert a coin
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/ataritetris.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load *`: To load an ARC file from the microSD card.
+- `Service`: Enables or disable the service mode.
+- `Scanlines`: To add a scanline effect, if desired.
+- `Blend`: To activate, if desired, an image smoothing effect.
+- `Joystick swap`: To swap the controls of player 1 and player 2.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
 
 <<<
 
@@ -1599,6 +1830,11 @@ Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as r
 
 ARC and ROM files can be placed anywhere in the microSD card.
 
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
 ===== Special keys and buttons
 
 - `F12`: display the core control menu
@@ -1610,7 +1846,7 @@ ARC and ROM files can be placed anywhere in the microSD card.
 - `W`, `I`, `K` or controller 2: Player two buttons 4, 5, 6
 - `1` and `2`: to start game player 1 or player 2
 - `5` and `6`: to insert a coin
-- `P` : Pause
+- `P`: Pause
 - `F3`: Soft Reset (restarts the Core)
 - `F12` (long press): Toggle between RGB and VGA mode
 
@@ -1625,13 +1861,75 @@ image:img/jtcps1.jpg[scaledwidth=50%]
 
 The following options are available:
 
-- `Load ARC``: To load an ARC file from the microSD card.
+- `Load ARC`: To load an ARC file from the microSD card.
 - `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
 - `Video Mode`: Only for VGA video output, to select different filters to the image.
 - `Sensitivity`: Adjusts the sensitivity.
 - `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
 - `Turbo`: Enables or disables turbo mode.
 - `Original Filter`: Applies (if defined) the original filter of the ROMs in use at that moment.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<
+
+=== Arcade (Capcom Play System 1.5)
+
+https://en.wikipedia.org/wiki/CP_System[CP System], CPS-1, or https://en.wikipedia.org/wiki/CP_System#CP_System_Dash[CP System Dash] is an enhanced revision of CPS-1.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtcps[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card.
+
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl`, `Alt` and `Space` or Controller 1: Player one buttons 1, 2 and 3
+- `Z`, `X`, `C` or controller 1: Player one buttons 4, 5, 6
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A`, `S` and `Q` or controller 2: Player two buttons 1, 2 and 3
+- `W`, `I`, `K` or controller 2: Player two buttons 4, 5, 6
+- `1` and `2`: to start game player 1 or player 2
+- `5` and `6`: to insert a coin
+- `P`: Pause
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jtcps15.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC`: To load an ARC file from the microSD card.
+- `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `Sensitivity`: Adjusts the sensitivity.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Turbo`: Enables or disables turbo mode.
 - `Reset`: Soft Reset (resets the Core).
 - `Exit`: Closes the options menu.
 
@@ -1657,6 +1955,11 @@ Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as r
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTDD.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
 ==== Keyboard
 
 ===== Special keys and buttons
@@ -1668,7 +1971,7 @@ ARC and ROM files can be placed anywhere in the microSD card. However, if there'
 - `A`, `S` and `Q` or controller 2: Player two buttons 1, 2 and 3
 - `1` and `2`: to start game player 1 or player 2
 - `5` and `6`: to insert a coin
-- `P` : Pause
+- `P`: Pause
 - `F3`: Soft Reset (restarts the Core)
 - `F12` (long press): Toggle between RGB and VGA mode
 
@@ -1683,7 +1986,7 @@ image:img/jtdd.jpg[scaledwidth=50%]
 
 The following options are available:
 
-- `Load ARC``: To load an ARC file from the microSD card.
+- `Load ARC`: To load an ARC file from the microSD card.
 - `Video Mode`: Only for VGA video output, to select different filters to the image.
 - `Pause`: Enters and exits pause mode.
 - `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
@@ -1714,6 +2017,11 @@ Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as r
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JKICKER.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
 ==== Keyboard
 
 ===== Special keys and buttons
@@ -1723,7 +2031,7 @@ ARC and ROM files can be placed anywhere in the microSD card. However, if there'
 - `Ctrl`, `Alt` and `Space` or Controller 1: Player buttons 1, 2 and 3
 - `1` and `2`: to start game one or two player games
 - `5` and `6`: to insert a coin
-- `P` : Pause
+- `P`: Pause
 - `F3`: Soft Reset (restarts the Core)
 - `F12` (long press): Toggle between RGB and VGA mode
 
@@ -1738,9 +2046,77 @@ image:img/jtkicker.jpg[scaledwidth=50%]
 
 The following options are available:
 
-- `Load ARC``: To load an ARC file from the microSD card.
+- `Load ARC`: To load an ARC file from the microSD card.
 - `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
 - `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<
+
+=== Arcade (Out Run)
+
+https://en.wikipedia.org/wiki/Out_Run[Out Run] is a racing video game originally released for arcade machines in 1986.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtcores/tree/master/cores/outrun[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTOUTRUN.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
+
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
+==== Keyboard
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Directional controls
+- `Ctrl` o Controller 1 Button A: Accelerate
+- `Alt` o Controller 1 Button B: Brake
+- `Space` o Controller 1 Button C: Gear Low
+- `1` or controller 1 Button X: to start game player 1 or player 2
+- `5` or controller 1 Button Y`: to insert a coin
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+[NOTE]
+====
+The gearshift is always in the high position, and to change to the low position, the corresponding button must be pressed and held down. As soon as the button is released, it automatically returns to the high position.
+====
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/joutrun.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC`: To load an ARC file from the microSD card.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `FX Volume`: Sound effects volume.
+- `FX`: Enable or disable sound effects.
+- `FM`: Enable or disable FM sound effects.
+- `Test Mode`: Enable or disable test mode.
+- `Pause`: Enters and exits pause mode.
 - `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
 - `Reset`: Soft Reset (resets the Core).
 - `Exit`: Closes the options menu.
@@ -1767,6 +2143,11 @@ Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as r
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTPANG.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
 ==== Keyboard
 
 ===== Special keys and buttons
@@ -1778,7 +2159,7 @@ ARC and ROM files can be placed anywhere in the microSD card. However, if there'
 - `A` or controller 2 button 1: Player two button
 - `1` and `2`: to start one player or two player game
 - `5`: to insert a coin
-- `P` : Pause
+- `P`: Pause
 - `F3`: Soft Reset (restarts the Core)
 - `F12` (long press): Toggle between RGB and VGA mode
 
@@ -1793,10 +2174,73 @@ image:img/jtpang.jpg[scaledwidth=50%]
 
 The following options are available:
 
-- `Load ARC``: To load an ARC file from the microSD card.
+- `Load ARC`: To load an ARC file from the microSD card.
 - `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
 - `Video Mode`: Only for VGA video output, to select different filters to the image.
-- `Test Mode`: To enable or disable test mode
+- `Test Mode`: To enable or disable test mode.
+- `Pause`: Enters and exits pause mode.
+- `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
+- `Reset`: Soft Reset (resets the Core).
+- `Exit`: Closes the options menu.
+
+<<<<
+
+=== Arcade (Sega System 16B)
+
+The https://en.wikipedia.org/wiki/Sega_System_16[Sega System 16B] is the second variant of an arcade board released in 1985 by Sega.
+
+The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jts16[original version by Jotego].
+
+Some core features:
+
+- Real controller and keyboard-emulated controller support.
+- RGB video output (using the VGA port).
+- VGA video output.
+
+==== SD card format
+
+The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
+
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+ARC and ROM files can be placed anywhere in the microSD card.
+
+[TIP]
+====
+The core starts by default using the VGA output. If you want the RGB output at 15KHz, create a file in the root of the card with the name `15KHZ.CFG`.
+====
+
+===== Special keys and buttons
+
+- `F12`: display the core control menu
+- Cursor or controller 1: Player 1 directional controls
+- `Ctrl`, `Alt` and `Space` or Controller 1: Player one buttons 1, 2 and 3
+- `R`,`F`,`G`,`D` or controller 2: Player two movement
+- `A`, `S` and `Q` or controller 2: Player two buttons 1, 2 and 3
+- `1` and `2`: to start game player 1 or player 2
+- `5` and `6`: to insert a coin
+- `P`: Pause
+- `F3`: Soft Reset (restarts the Core)
+- `F12` (long press): Toggle between RGB and VGA mode
+
+<<<
+
+==== Overview
+
+Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
+
+[.text-center]
+image:img/jts16b.jpg[scaledwidth=50%]
+
+The following options are available:
+
+- `Load ARC`: To load an ARC file from the microSD card.
+- `Rotate Controls`: To rotate the text of the options menu, as well as the behavior of the directional controls.
+- `Video Mode`: Only for VGA video output, to select different filters to the image.
+- `FX Volume`: Sound effects volume.
+- `FX`: Enable or disable sound effects.
+- `FM`: Enable or disable FM sound effects.
+- `Test Mode`: Enable or disable test mode.
 - `Pause`: Enters and exits pause mode.
 - `DIP Switches`: Access to view and modify the state of the DIP switches defined in the ARC file.
 - `Reset`: Soft Reset (resets the Core).
@@ -1842,7 +2286,7 @@ During the core execution:
 
 ==== Overview
 
-Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
+Pressing `Esc` or controller button B shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
 image:img/a2600.jpg[pdfwidth=70%]
@@ -1978,7 +2422,7 @@ image:img/enterprisefile.jpg[scaledwidth=70%]
 
 When a VHD disk image is mounted pressing `F1` or executing the :FILE command (`:` is obtained by pressing +'+), starts a file browser. Pressing another drive letter (G, H, etc) switches to it.
 
-Executable files are `COM``.
+Executable files are `COM`.
 
 It is also possible to load programs without using the browser. Here is an example:
 
@@ -2023,7 +2467,7 @@ If not already there, <<#_cores,install or run the Jupiter ACE core>> on the ZXT
 
 When the core is active:
 
-- `Home` : Scanlines on/off
+- `Home`: Scanlines on/off
 - `End`: Select one of the monochrome colour modes.
 - `Scroll Lock`: Switches between RGB (PAL) video mode and VGA (DisplayPort is always active).
 - `Ctrl+Alt+Delete`: Soft Reset (resets the Core)
@@ -2197,10 +2641,78 @@ These are the main ones:
 - `CPU Speed`: CPU speed. 4.77 MHz offers the best compatibility, 3.5 Mhz the best speed.
 - `Mount IDE 1`: To mount a VHD file as primary disk.
 - `Mount IDE 2`: To mount a VHD file as a secondary disk.
-- `BIOS``: To define the different BIOS types. The XT-IDE BIOS is required to load the OS from VHD disks.
+- `BIOS`: To define the different BIOS types. The XT-IDE BIOS is required to load the OS from VHD disks.
 - `Audio`: To indicate the audio emulation to use (Adlib, SB, etc.) as well as the volume.
 - `Video`: To modify the different video options.
 - `Exit`: Closes the core options menu.
+
+<<<
+
+=== SAM Coupé
+
+The https://en.wikipedia.org/wiki/SAM_Coupé[SAM Coupe] was a home computer developed and marketed on 1989 by Miles Gordon Technology, based on the Sinclair ZX Spectrum.
+
+The https://github.com/ZXMicroJack/sam-coupe[ZXTRES core] was developed by MicroJack, based on McLeod's https://www.zonadepruebas.com/viewtopic.php?t=6443[original ZX-Uno core], and has the following features:
+
+- VGA video output
+- RGB video output (using the VGA port)
+- Scanline simulation (Scanlines)
+- Support for disk images from microSD
+- Support for loading from external audio devices
+- Support for one controller
+- I^2^S and Sigma-Delta Audio
+
+==== SD Card Format
+
+You must use a microSD card with the first partition in FAT16 or FAT32 format.
+
+It is useful to cpoy one or more disk image files with the software you want to run.
+
+[NOTE]
+====
+Supported disk image files are in MGT format, (819,200 bytes), as well as DSK and SAD, as long as they are of the same size.
+
+Copy-protected images are not supported.
+====
+
+==== Keyboard
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `F12`: Show and hide the disk image selection menu.
+- `F5`: Generate NMI.
+- `Scroll Lock`: Switch between RGB and VGA video modes.
+- `-` from the numeric keypad : Scanlines on/off.
+- `Ctrl+Alt+Del`: Soft Reset (resets the Core).
+- `Ctrl+Alt+Backspace`: Hard reset (resets the FPGA). Backspace is the delete key, above `Enter`.
+
+==== Overview
+
+Pressing `F12` will bring up the menu that allows you to assign DSK files to disk drives. You can navigate using the cursor keys. `Enter` selects an item.
+
+[text-center]
+image:img/samcoupe_zxtres.png[scaledwidth=50%]
+
+Once an image is selected, press the `9` key on the numeric keypad or type the `BOOT` command to attempt to automatically run the contents of the disc.
+
+[TIP]
+====
+Disk images in other formats may fail with the error message `53 No DOS, 0: 1`.
+
+Some of these can be converted with the utility https://simonowen.com/samdisk/[samdisk] to make them work.
+====
+
+[TIP]
+====
+Other images not working can also be booted with the following method:
+
+. Insert a disk image that boots correctly.
+. Use the `BOOT 1` command.
+. Replace the failed disk image with the failed one.
+. Use the `9` key on the numeric keypad or type the command `BOOT`.
+====
 
 <<<
 
@@ -2367,6 +2879,53 @@ CHROMA81: Enabled.
 
 <<<
 
+=== ZX Spectrum (zx)
+
+ZX Spectrum implementation created by kyp069, which aims to have the highest possible fidelity over adding more features.
+
+Some of its features are:
+
+- VGA video output
+- RGB video output (using the VGA port)
+- ZX Spectrum 48K
+- ZX Spectrum 128K
+- DivMMC (esxdos 0.8.9)
+- Kempston joystick using controller 1
+- Kempston Mouse
+- Audio I^2^S and Sigma-Delta
+
+==== microSD Card Format
+
+You can use a microSD card, with the first partition in FAT16 or FAT32 format, for use with esxdos (version 0.8.9).
+
+If not already present, <<#_cores,install or run the zx core>> on the ZXTRES.
+
+<<<
+
+==== Keyboard
+
+The keyboard is not completely mapped to the standard PS/2 layout, and keeps the layout of the original machines, where the `Ctrl` key corresponds to `Symbol Shift`. So, for example, to get `"` you have to press `Ctrl+P`.
+
+===== Special keys and buttons
+
+When the core is active:
+
+- `F1`: Select the 48K model.
+- `F2`: Select the 128K model
+- `F4`: Toggle between early/late timings
+- `F5`: NMI
+- `F6`: Disable or enable DivMMC automapper
+- `F7`: Disable/enable microSD card for DivMMC
+- `F8`: Disable or enable Kempston Mouse
+- `Scroll Lock`: Toggle between RGB and VGA video modes
+- `Ctrl+Alt+Del or `F9`: Soft Reset (resets the Core)
+- `Ctrl+Alt+Backspace` or `F11`: Hard reset (resets the FPGA). Backspace is the delete key, above `Enter`.
+
+[.text-center]
+image:img/zx.png[scaledwidth=70%]
+
+<<<
+
 === ZX Spectrum +3 (zxp3)
 
 https://en.wikipedia.org/wiki/ZX_Spectrum%23ZX_Spectrum_+3
@@ -2425,7 +2984,7 @@ image:img/zxp3.jpg[scaledwidth=70%]
 - `Mount SD:`: To mount a VHD file as main drive (needs a hard reset by pressing `C+F9` for the system to start using it)
 - `Reset FPGA`: To reset the FPGA
 
-Controller 1 behaves simultaneously with Kempston protocol (with two trigger buttons) and Sinclair (1,2,3,4,5) with second trigger button (`z`). The controller connected to port 2 behaves with Sinclair protocol (6,7,8,9,0) and second trigger button (`x`).
+Controller 1 behaves simultaneously with Kempston protocol (with two trigger buttons) and Sinclair (1, 2, 3, 4, 5) with second trigger button (`z`). The controller connected to port 2 behaves with Sinclair protocol (6, 7, 8, 9, 0) and second trigger button (`x`).
 
 <<<
 
@@ -2817,13 +3376,16 @@ You can combine several actions in one command line. For example to "clean" an i
 
 === Firmware recovery
 
-Sometimes it may happen that the ZXTRES stops booting, for example when installing an experimental core or when upgrading the ZX Spectrum Core or the BIOS. The ZXTRES board LEDs are on but there's no display and it doesn't do anything when trying the different key combinations to access BIOS setup and so on.
+Sometimes it may happen that the ZXTRES stops booting, for example when installing an experimental core or when upgrading the ZX Spectrum Core or the BIOS. The ZXTRES board LEDs are on but there's no display and it doesn't do anything when trying the different key combinations to access BIOS setup and so on. When this happens there are several recovery methods to enable you to restore the firmware.
 
-When this happens there are several recovery methods to enable you to restore the firmware.
+[TIP]
+====
+The <<#_jtag,references>> section has information about using JTAG programmer cables different than USB-Blaster.
+====
 
 ==== JTAG cable connections
 
-You can use these images as a reference in some recovery steps when using jump wires or USB-Blaster connections to the ZXTRES board.
+You can use these images as a reference in some recovery steps when using jump wires or USB-Blaster connections to the ZXTRES board, to connect TMS, TDI, TDO, TCK and GND.
 
 [.text-center]
 image:img/jtagzxtres.jpg[scaledwidth=40%]
@@ -2836,7 +3398,7 @@ image:img/usbblasterzxtres.jpg[scaledwidth=60%]
 *NEVER* connect the 3V line (VCC).
 ====
 
-==== Recovery using a Linux or macOS
+==== Recovery using Linux or macOS
 
 *Hardware required*:
 
@@ -3228,7 +3790,7 @@ Binary format (fields in *bold* can only be altered when LOCK=0):
 * `BOOTM`: 1 indicates that the ZX-Uno is in boot mode (configuration mode). Boot mode only makes sense while the boot firmware is running, where some aspects of the ZX-Uno are allowed to be configured before going into run mode. MASTERCONF can always be read, both in boot mode and in run mode. It is set to 0 manually per program, at which point ZX-Uno enters run mode.
 * `DIVEN`: set to 0 indicates that DIVMMC is not enabled in the system, although the SPI interface access ports of the SD/MMC slot are still available. The memory used by DIVMMC remains available for other uses. 1 indicates that DIVMMC is enabled. If enabled, an ESXDOS image must be loaded into the corresponding RAM bank before entering run mode. The default value of this bit is 0.
 * `DISNMI`: set to 1 indicates that the DIVMMC NMI function will not be available. NMI will work, but will not cause ESXDOS to automate, thus leaving NMI control to the main system ROM. Bit added to improve DIVMMC compatibility with SE Basic IV. Defaults to 0 (ESXDOS handles NMI events).
-* `I2KB``: a1 sets the ULA to return a value consistent with a Spectrum issue 2 when reading the keyboard port ($FE). When 0, the returned value is compatible with issue 3 and later. It defaults to 0.
+* `I2KB`: a1 sets the ULA to return a value consistent with a Spectrum issue 2 when reading the keyboard port ($FE). When 0, the returned value is compatible with issue 3 and later. It defaults to 0.
 * `MODE1`,`MODE0`: specifies the ULA timing mode to accommodate different Spectrum models. 00 = ULA ZX Spectrum 48K PAL, 01 = ZX Spectrum 128K/+2 grey, 10 = Pentagon 128, 11 = 48K NTSC (262 scans).
 * `DISCONT`: indicates whether memory contention should occur in the video memory. 0 to enable contention (48K and 128K compatibility). 1 to disable contention (Pentagon 128 compatibility).
 * `LOCK`: When set to 1, it prevents further changes to certain bits in the MASTERCONF register, and also prevents access to the SPI Flash. This bit is reset to 0 only by a master reset (Ctrl-Alt-BkSpace) or by powering the clone off and on.
@@ -3922,6 +4484,128 @@ Different arcade games are listed below, based on the core, and including the na
 
 <<<
 
+=== JTAG
+
+There are several projects that to modify the EEPROM of cheap USB boards with FTDI chips with JTAG protocol speaking capability, so that they behave like clones of an official https://digilent.com/shop/fpga-boards/programmers/[JTAG programming cable].
+
+The supported chips are https://www.ftdichip.com/old2020/Products/ICs/FT2232H.html[FT2232H] and https://www.ftdichip.com/old2020/Products/ICs/FT232H.htm[FT232H].
+
+You need a Linux system, either physical or virtual, and with USB to make the EEPROM modification. Once done, it can be used with any other operating system such as Windows or macOS.
+
+==== EEPROM modification
+
+Libftdi and the ftdi-eeprom utility have to be installed on the Linux system.
+
+For example for Debian Linux:
+
+[source,shell]
+-----
+apt-get install libftdi1 ftdi-eeprom
+-----
+
+For Arch Linux:
+
+[source,shell]
+-----
+pacman -S libftdi
+-----
+
+==== FT232H
+
+Download the https://github.com/vanbwodonk/ft2232hl-jtag-clone/tree/main/eeprom_binary[new firmware from Github].
+
+Connect the USB board to the system and obtain the identifier using the `dmesg` command:
+
+[source,shell]
+-----
+dmesg
+... usb -: New USB device found, idVendor=0403, idProduct=6014, bcdDevice=...
+(..,)
+... usb -: Manufacturer: FTDI
+-----
+
+Find this identification data in the corresponding file (`flash_alinx_ft232h.conf`, `flash_digilent_hs2.conf` or `flash_digilent_smt1.conf`), and use that file for the following steps.
+
+<<<
+
+Update the EEPROM content.
+
+[source,shell]
+----
+ftdi_eeprom --flash-eeprom flash_(...).conf
+----
+
+[TIP]
+====
+Note that a backup of the EEPROM contents can be made with the following command
+
+[source,shell]
+----
+ftdi_eeprom --read-eeprom flash_(...).conf
+----
+
+This will overwrite the corresponding `.bin` file, so, to do the update later, the originally downloaded file will have to be retrieved again.
+====
+
+Fisconnect and connect the USB and check with `dmesg` that the firmware is identified as Diligent.
+
+[source,shell]
+----
+dmesg
+(...)
+... usb -: Product: Digilent USB Device
+... usb -: Manufacturer: Digilent
+... usb -: (...)
+----
+
+For OpenOCD use, download the configuration file from the https://github.com/zxtres/wiki/blob/main/Files/OpenOCD_0.10.0-11/FT2232H_FT232H.cfg[ZXTRES GitHub repository], to the working directory (in the examples, `/home/zxtres/unbrick` or `/Users/zxtres/unbrick` for macOS).
+
+==== Wiring connection
+
+===== FT232H
+
+Use this picture as a reference to connect TMS, TDI, TDO, TCK and GND.
+
+[.text-center]
+image:img/ft232zxtres.png[scaledwidth=60%]
+
+[WARNING]
+====
+*NEVER* connect the 3V line (VCC)
+====
+
+<<<
+
+==== Use with OpenOCD and OpenFPGALoader
+
+===== FT232H
+
+The commands to use are the same as explained in the <<#_firmware_recovery,recovery instructions>>, but using references to FT2232H, FT232H instead of `usb-blaster`.
+
+[source,shell]
+----
+cd /home/zxtres/unbrick
+sudo openocd -f FT2232H_FT232H.cfg -f /usr/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+On macOS with OpenOCD:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openocd -f FT2232H_FT232H.cfg -f /opt/homebrew/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+On Linux or macOS with OpenFPGALoader:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openFPGALoader -c ft232 recovery.bit
+----
+
+<<<
+
 === Links
 
 https://zxuno.speccy.org/index.shtml[ZX-Uno]
@@ -3979,3 +4663,7 @@ https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next with ZXDOS]
 
 https://www.zxuno.com/wiki/index.php?title=ZX_Spectrum[About Spectrum at ZX-Uno Wiki]
+
+https://github.com/erd0spy/ft232h_to_digilent_fpga_programmer[Cracking FT232H to make Digilent JTAG Programmer]
+
+https://github.com/vanbwodonk/ft2232hl-jtag-clone/tree/main[FT2232HL-jtag-clone]

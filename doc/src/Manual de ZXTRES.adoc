@@ -1289,7 +1289,7 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 Se ha de copiar el fichero `.MID` correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin MID adecuado (en la carpeta `BIN/BPLUGINS`) y el fichero del comando "DOT" `playmid` (en la carpeta `BIN`).
 
 . Iniciar el core ZX Spectrum de ZXTRES.
-. Pulsar `F5` para abrir el navegador de Bob Fossil y luego navegar hasta la ubicación del fichero con extensión `.MID`, seleccionarlo y pulsar `Enter``.
+. Pulsar `F5` para abrir el navegador de Bob Fossil y luego navegar hasta la ubicación del fichero con extensión `.MID`, seleccionarlo y pulsar `Enter`.
 
 Se puede pulsar `Espacio` para detener la reproducción en cualquier momento.
 
@@ -1420,7 +1420,7 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 
 <<<
 
-Se ha de copiar el fichero `.ZX3` (fichero .BIN completo) correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN/BPLUGINS``).
+Se ha de copiar el fichero `.ZX3` (fichero .BIN completo) correspondiente en el lugar que se desee de la tarjeta microSD, así como el plugin ZX3 adecuado (en la carpeta `BIN/BPLUGINS`).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.ZX3`, seleccionarlo y pulsar ENTER.
@@ -1437,7 +1437,7 @@ Para poder utilizar el https://www.zxuno.com/forum/viewtopic.php?f=39&t=4011[nav
 - El plugin BIT para poder cargar Cores en formato BIT https://github.com/zxdos/zxuno/blob/master/SD/BIN/BPLUGINS/BIT
 - Un fichero de core en formato .BIN o .BIT, con la extensión `.BIT`.
 
-Se ha de copiar el fichero con la extensión `.BIT` en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN/BPLUGINS``).
+Se ha de copiar el fichero con la extensión `.BIT` en el lugar que se desee de la tarjeta microSD, así como el fichero del plugin BIT (en la carpeta `BIN/BPLUGINS`).
 
 . Iniciar el core Spectrum de ZXTRES.
 . Pulsar `F5` para abrir el navegador y luego navegar hasta la ubicación del Core con extensión `.BIT`, seleccionarlo y pulsar ENTER.
@@ -1612,9 +1612,9 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Amstrad CPC>> en el
 Durante la ejecución del core:
 
 - `Supr`: `CLR`.
-- `Impr. Pant` o `Windows Izquierda` : `COPY`
-- `Inicio` : Scanlines on/off
-- `Fin` : Activa los distintos modos de color monocromo
+- `Impr. Pant` o `Windows Izquierda`: `COPY`
+- `Inicio`: Scanlines on/off
+- `Fin`: Activa los distintos modos de color monocromo
 - `Bloq. Despl.`: cambia de modo vídeo RGB (PAL) a VGA y viceversa (DisplayPort está siempre activo)
 - `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
 - `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
@@ -1651,7 +1651,7 @@ Algunas de sus características son:
 
 Se debe de utilizar una tarjeta microSD con la primera partición en formato FAT16 o FAT32.
 
-Además son necesarios los ficheros ROM siguientes (se pueden obtener http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[en la wiki oficial] de otro proyecto más antiguo o en su https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[repositorio de GitHub]:
+Además son necesarios los ficheros ROM siguientes que se pueden obtener http://www.cpcwiki.eu/index.php/FPGAmstrad#How_to_assemble_it[en la wiki oficial] de otro proyecto más antiguo o en su https://github.com/renaudhelias/FPGAmstrad/raw/master/OS6128_BASIC1-1_AMSDOS_MAXAM.zip[repositorio de GitHub]:
 
 - `OS6128.ROM`
 - `BASIC1-1.ROM`
@@ -1679,9 +1679,9 @@ Aún no hay soporte para imágenes protegidas contra copia.
 
 Durante la ejecución del core:
 
-- `F12` mostrar y ocultar el menú de selección de imágenes de disco
-- `Bloq. Despl.`: para cambiar entre modo de vídeo RGB y VGA
-- `Fin` : Alterna entre los modos de color y monocromo fósforo verde
+- `F12`: Mostrar y ocultar el menú de selección de imágenes de disco
+- `Bloq. Despl.`: Para cambiar entre modo de vídeo RGB y VGA
+- `Fin`: Alterna entre los modos de color y monocromo fósforo verde
 - `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
 - `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
@@ -1714,10 +1714,11 @@ También es posible cargar desde una cinta (u otro dispositivo externo de audio)
 
 https://es.wikipedia.org/wiki/1942_(videojuego)[1942] es un videojuego, lanzado para máquinas recreativas en 1984.
 
-La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la ttps://github.com/jotego/jtcores/tree/master/cores/1942[versión original de Jotego].
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando de la https://github.com/jotego/jtcores/tree/master/cores/1942[versión original de Jotego].
 
 Algunas de sus características son:
 
+- La salida de vídeo mantiene la rotación del original
 - Salida de vídeo VGA
 - Salida de vídeo RGB (utilizando el puerto VGA)
 - Soporte de mando real y mando emulado en teclado
@@ -1741,9 +1742,9 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 - `F12` mostrar el menú de control del core
 - Cursor o el mando 1: Controles de dirección del jugador uno
-- `Ctrl` o botón A del mando 1: Botón del jugador uno
+- `Ctrl`, `Alt` o botones A, B del mando 1: Botones del jugador uno
 - `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
-- `A` o botón A del mando 2: Botón del jugador dos
+- `A`,  `S`o botones A, B del mando 2: Botones del jugador dos
 - `1` y `2`: Iniciar partida jugador 1 o jugador 2
 - `5` y `6`: Insertar una moneda
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
@@ -1760,6 +1761,7 @@ image:img/jt1942.jpg[scaledwidth=50%]
 Estas son las principales:
 
 - `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el texto del menú de opciones, así como el comportamiento de los controles de dirección
 - `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
 - `Pause`: Para detener el core
 - `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
@@ -2435,7 +2437,7 @@ Si hay una imagen de disco VHD montada, pulsando `F1` o ejecutando el comando :F
 [.text-center]
 image:img/enterprisefile.jpg[scaledwidth=70%]
 
-Los archivos ejecutables son `COM``.
+Los archivos ejecutables son `COM`.
 
 También es posible cargar programas sin usar el navegador. Un ejemplo:
 
@@ -2479,8 +2481,8 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de Jupiter ACE>> en el
 
 Durante la ejecución del core:
 
-- `Inicio` : Scanlines on/off
-- `Fin` : Activa los distintos modos de color monocromo
+- `Inicio`: Scanlines on/off
+- `Fin`: Activa los distintos modos de color monocromo
 - `Bloq. Despl.`: cambia de modo vídeo RGB (PAL) a VGA y viceversa (DisplayPort está siempre activo)
 - `Ctrl+Alt+Supr`: Soft Reset (reinicia el Core)
 - `Ctrl+Alt+Backspace`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
@@ -2567,8 +2569,8 @@ image:img/neogeo.jpg[scaledwidth=70%]
 Estas son las principales:
 
 - `Load Cart`: Para cargar desde la tarjeta microSD un fichero .neo
-- `Load Cart (skip ADPCM)``
-- `Load BIOS``: Para cargar desde la tarjeta microSD un fichero BIOS distinto de `neogeo.rom`
+- `Load Cart (skip ADPCM)`
+- `Load BIOS`: Para cargar desde la tarjeta microSD un fichero BIOS distinto de `neogeo.rom`
 - `Load Memory Card`
 - `Save Memory Card`
 - `Mount CD`: No disponible por el momento
@@ -3407,13 +3409,16 @@ Notar que se pueden acumular varias órdenes en una única línea de comandos. P
 
 === Recuperación del firmware
 
-En algunos casos (por ejemplo al instalar un core experimental o hacer una actualización del core de ZX Spectrum o la BIOS) puede suceder que el ZXTRES deje de arrancar. Se encienden los LEDs pero no hay imagen ni responde a las distintas combinaciones de teclado para acceder a la BIOS, etc.
+En algunos casos (por ejemplo al instalar un core experimental o hacer una actualización del core de ZX Spectrum o la BIOS) puede suceder que el ZXTRES deje de arrancar. Se encienden los LEDs pero no hay imagen ni responde a las distintas combinaciones de teclado para acceder a la BIOS, etc. En esta situación, existen diferentes métodos de recuperación que permiten volver a instalar el firmware.
 
-En esta situación, existen diferentes métodos de recuperación que permiten volver a instalar el firmware.
+[TIP]
+====
+En la sección de <<#_jtag,referencias>> hay información para poder usar otros programadores JTAG distintos de USB-Blaster.
+====
 
-==== Preparación del cableado
+==== Preparación del cableado JTAG
 
-En los siguientes pasos se habla de conectar cables puente o USB-Blaster a la placa de ZXTRES. Para ello, usar las siguientes imágenes como referencia.
+En los siguientes pasos se habla de conectar cables puente o USB-Blaster a la placa de ZXTRES. Para ello, usar las siguientes imágenes como referencia para conectar TMS, TDI, TDO, TCK y GND.
 
 [.text-center]
 image:img/jtagzxtres.jpg[scaledwidth=40%]
@@ -3500,7 +3505,7 @@ usermod -a $USER -G plugdev
 ----
 
 [start=3]
-. Conectar el USB-Blaster al ordenador, y los cables correspondientes al ZXTRES <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si ya estuviera conectado, desconectar y volver a conectar para asegurarse de que se activan las reglas de udev.
+. Conectar el USB-Blaster al ordenador, y los cables correspondientes al ZXTRES <<#_preparación_del_cableado_jtag,tal y como se explica anteriormente>>. Si ya estuviera conectado, desconectar y volver a conectar para asegurarse de que se activan las reglas de udev.
 
 . Obtener el fichero `recovery.bit` del https://github.com/zxtres/cores/tree/main/recovery[repositorio principal de Github]. En nuestro ejemplo, se dejará en `/home/zxtres/unbrick/` (y en `/Users/zxtres/unbrick/` en el caso de macOS).
 
@@ -3633,7 +3638,7 @@ usermod -a $USER -G plugdev
 ----
 
 [start=4]
-. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado,tal y como se explica anteriormente>>. Si se va a hacer la conexión usando GPIO, conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
+. Conectar el USB-Blaster o los cables puente para GPIO <<#_preparación_del_cableado_jtag,tal y como se explica anteriormente>>. Si se va a hacer la conexión usando GPIO, conectar las líneas de JTAG de la FPGA (`TMS`, `TDI`, `TDO`, `TCK` y `GND`), con los cables, a los pines https://es.wikipedia.org/wiki/GPIO[GPIO] de la Raspberry Pi.
 
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
@@ -4503,6 +4508,126 @@ A continuación se enumeran distintos juegos de máquina recreativa, según el c
 
 <<<
 
+=== JTAG
+
+Existen varios proyectos que permiten modificar la EEPROM de placas USB con chips FTDI con capacidad para hablar protocolo JTAG, de forma que se comporten como clones de un https://digilent.com/shop/fpga-boards/programmers/[cable programador JTAG] oficial, de forma más económica.
+
+Los chips soportados son https://www.ftdichip.com/old2020/Products/ICs/FT2232H.html[FT2232H] y https://www.ftdichip.com/old2020/Products/ICs/FT232H.htm[FT232H].
+
+Se necesita un sistema con Linux, bien físico, ben virtual, y con USB para poder realizar la modificación de la EEPROM. Una vez actualizada, se puede utilzar con cualuier otro sistema operativo comoWindows o macOS.
+
+==== Modificación de EEPROM
+
+En primer lugar, se ha de instalar libftdi y la utilidad ftdi-eeprom en el sistema Linux.
+
+Por ejemplo para Debian Linux:
+
+[source,shell]
+-----
+apt-get install libftdi1 ftdi-eeprom
+-----
+
+Para Arch Linux:
+
+[source,shell]
+-----
+pacman -S libftdi
+-----
+
+==== FT232H
+
+Descargar el https://github.com/vanbwodonk/ft2232hl-jtag-clone/tree/main/eeprom_binary[nuevo firmware desde GitHub].
+
+Conectar la placa USB al sistema y obtener el identificador usando el comando `dmesg`:
+
+[source,shell]
+-----
+dmesg
+... usb -: New USB device found, idVendor=0403, idProduct=6014, bcdDevice=...
+(..,)
+... usb -: Manufacturer: FTDI
+-----
+
+Localizar los datos encontrados en el fichero correspondiente (`flash_alinx_ft232h.conf`, `flash_digilent_hs2.conf` o `flash_digilent_smt1.conf`), y utilizar este fichero para los siguientes pasos.
+
+<<<
+
+Actualizar el contenido de la EEPROM.
+
+[source,shell]
+----
+ftdi_eeprom --flash-eeprom flash_(...).conf
+----
+
+[TIP]
+====
+Notar que se puede realizar una copia previa del contenido de la EEPROM con el comando siguiente
+
+[source,shell]
+----
+ftdi_eeprom --read-eeprom flash_(...).conf
+----
+
+Esto modificará el fichero `.bin` correspondiente, así que, para poder hacer luego la actualización, se tendrá que recuperar el fichero descargado originalmente.
+====
+
+Ahora, desconectar y conectar el USB y comprobar de nuevo con `dmesg` que el firmware se identifica como Diligent.
+
+[source,shell]
+----
+dmesg
+(...)
+... usb -: Product: Digilent USB Device
+... usb -: Manufacturer: Digilent
+... usb -: (...)
+----
+
+Para el uso con OpenOCD, descargar el fichero de configuración del https://github.com/zxtres/wiki/blob/main/Files/OpenOCD_0.10.0-11/FT2232H_FT232H.cfg[repositorio de GitHub de ZXTRES], al directorio de trabajo (en los ejemplos, `/home/zxtres/unbrick` o `/Users/zxtres/unbrick` para macOS).
+
+==== Conexión del cableado
+
+===== FT232H
+
+Usar la siguiente imagen como referencia para conectar TMS, TDI, TDO, TCK y GND.
+
+[.text-center]
+image:img/ft232zxtres.png[scaledwidth=60%]
+
+[WARNING]
+====
+*NUNCA* se ha de conectar la línea de 3V (VCC)
+====
+
+==== Uso con OpenOCD y OpenFPGALoader
+
+===== FT232H
+
+Los comandos a utilizar son los mismos que se indican en las <<#_recuperación_del_firmware, instrucciones de recuperación>>, pero usando referencias a FT2232H, FT232H en vez de `usb-blaster`
+
+[source,shell]
+----
+cd /home/zxtres/unbrick
+sudo openocd -f FT2232H_FT232H.cfg -f /usr/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+En macOS con OpenOCD:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openocd -f FT2232H_FT232H.cfg -f /opt/homebrew/share/openocd/scripts/cpld/xilinx-xc7.cfg -c "init; pld load 0 recovery.bit;"
+----
+
+En Linux o macOS con OpenFPGALoader:
+
+[source,shell]
+----
+cd /Users/zxtres/unbrick
+openFPGALoader -c ft232 recovery.bit
+----
+
+<<<
+
 === Enlaces
 
 https://zxuno.speccy.org/index.shtml[ZX-Uno]
@@ -4562,3 +4687,9 @@ https://www.forofpga.es/viewtopic.php?t=349[Core ZXNEXT en ZXDOS]
 https://gitlab.com/thesmog358/tbblue/-/blob/master/docs/zxdos/zxdoscoreinstall.txt[ZX Spectrum Next en ZXDOS]
 
 https://www.zxuno.com/wiki/index.php?title=ZX_Spectrum[Spectrum en Wiki de ZX-Uno]
+
+https://github.com/erd0spy/ft232h_to_digilent_fpga_programmer[Cracking FT232H to make Digilent JTAG Programmer]
+
+https://github.com/vanbwodonk/ft2232hl-jtag-clone/tree/main[FT2232HL-jtag-clone]
+
+https://gist.github.com/rikka0w0/24b58b54473227502fa0334bbe75c3c1[FT2232 to Digilent JTag for Xilinx FPGAs (ISE/Vivado)]
