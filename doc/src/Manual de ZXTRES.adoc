@@ -3204,6 +3204,8 @@ Si todo se ha hecho correctamente, se habrá generado el fichero `playtzx` que s
 
 En general, existen muy pocas alternativas (o ninguna) alternativas de programas que puedan reproducir directamente un archivo de cinta en un dispositivo móvil, así que, normalmente, será necesario convertir a un fichero de audio el contenido de la cinta antes de intentar cargarla con uno de estos aparatos.
 
+https://zxtape.net es una web, compatible con dispositivos móviles, con soporte para reproducir ficheros TAP y TZX
+
 https://github.com/semack/zx_tape_player[ZX Tape Player] es una App para sistemas iOS y Android que es capaz de reproducir directamente a través de la salida de auriculares
 
 https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX] es otra App similar, pero sólo para sistemas Android.
