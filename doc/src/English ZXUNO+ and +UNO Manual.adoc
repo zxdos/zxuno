@@ -1,11 +1,11 @@
 = ZXUNO+ and +UNO Manual
 :author: kounch
-:revnumber: 1.4.1
+:revnumber: 1.5.0
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portadauno.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.4
+:Revision: 1.5
 :description: English ZXUNO+ and +UNO Manual
 :keywords: Manual, English, ZXUNO+, +UNO
 :icons: font
@@ -44,23 +44,23 @@ Without the previous work of all of these people (and more), this manual wouldn'
 ==== ZXUNO+
 
 [.text-center]
-image:./img/zxunofront.png[pdfwidth=65%]
+image:./img/zxunofront.png[scaledwidth=65%]
 
 [.text-center]
-image:./img/zxunoback.png[pdfwidth=65%]
+image:./img/zxunoback.png[scaledwidth=65%]
 
 [.text-center]
-image:./img/zxunoboard.png[pdfwidth=65%]
+image:./img/zxunoboard.png[scaledwidth=65%]
 
 <<<
 
 ==== +UNO
 
 [.text-center]
-image:img/plusuno_frontal.jpg[pdfwidth=45%]
+image:img/plusuno_frontal.jpg[scaledwidth=45%]
 
 [.text-center]
-image:img/plusuno_trasera.jpg[pdfwidth=70%]
+image:img/plusuno_trasera.jpg[scaledwidth=70%]
 
 ==== Description
 
@@ -105,12 +105,12 @@ image:img/plusuno_trasera.jpg[pdfwidth=70%]
 This is the pinout or RJ-45 connector to use as VGA output on a ZXUNO+:
 
 [.text-center]
-image:img/rj45pinout.png[pdfwidth=50%]
+image:img/rj45pinout.png[scaledwidth=50%]
 
 This are the pin numbers for RJ-45 connector to use as RGB out with a SCART connector on a ZXUNO+:
 
 [.text-center]
-image:img/rj45scart.png[pdfwidth=50%]
+image:img/rj45scart.png[scaledwidth=50%]
 
 <<<
 
@@ -202,7 +202,7 @@ This table shows special requirements of the cores that use the SD card.
 
 ===== Windows
 
-For simple configurations, and cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ].
+For simple configurations, and cards of the right size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ].
 
 For other, more complex, configurations, and depending on operating system version, you may use the command line tool `diskpart` or Windows Disk Management GUI.
 
@@ -225,7 +225,7 @@ To create two 4GB FAT16 partitions (for example, to use with MSX core) and leave
 select disk 6
 clean
 create part primary size=4000
-set id = 06
+set id=06
 active
 format fs=FAT label=ZXUNOPLUS quick
 create part primary size=4000
@@ -242,7 +242,7 @@ To create one 4GB FAT16 partition (for example, to use with Amstrad CPC 6128 cor
 select disk 6
 clean
 create part primary size=4000
-set id = 0b
+set id=0b
 active
 format fs=FAT32 label=ZXUNOPLUS unit=4k quick
 create part primary
@@ -252,9 +252,9 @@ exit
 
 <<<
 
-===== MacOS
+===== macOS
 
-For simple configurations, and cards of the correct size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ] or Disk Utility, which is included with the operating system.
+For simple configurations, and cards of the right size (less than 2GB for FAT16 or less than 32GB for FAT32), you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association ] or Disk Utility, which is included with the operating system.
 
 In other case, you should use the command line.
 
@@ -301,7 +301,7 @@ diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXUNOPLUS 4G "MS-DOS FAT32"
 
 [NOTE]
 ====
-In this example, since the partition has a size of exactly 4G, MacOS will use a cluster size of 4096, which is the one needed for the Amstrad CPC 6128 core. For a smaller size, you may have to format again the first partition with some commands like these:
+In this example, since the partition has a size of exactly 4G, macOS will use a cluster size of 4096, which is the one needed for the Amstrad CPC 6128 core. For a smaller size, you may have to format again the first partition with some commands like these:
 
 [source,shell]
 ----
@@ -312,7 +312,7 @@ newfs_msdos -F 32 -v ZXUNOPLUS -b 4096 /dev/rdisk6s1
 
 [TIP]
 ====
-The Spotlight feature in MacOS you to search the items on the SD card, creating a number of hidden files. You can disable the indexing with these commands (assuming that the SD partition is named `ZXUNOPLUS`):
+The Spotlight feature in macOS you to search the items on the SD card, creating a number of hidden files. You can disable the indexing with these commands (assuming that the SD partition is named `ZXUNOPLUS`):
 
 [source,shell]
 ----
@@ -608,17 +608,17 @@ For more information, see https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[t
 *Spanish*
 
 [.text-center]
-image:./img/keyboardEsp.png[pdfwidth=70%]
+image:./img/keyboardEsp.png[scaledwidth=70%]
 
 *English*
 
 [.text-center]
-image:./img/keyboardEng.png[pdfwidth=70%]
+image:./img/keyboardEng.png[scaledwidth=70%]
 
 *Spectrum*
 
 [.text-center]
-image:./img/keyboardAV.png[pdfwidth=70%]
+image:./img/keyboardAV.png[scaledwidth=70%]
 
 <<<
 
@@ -655,7 +655,7 @@ Special keys that can be used while running the main core (ZX Spectrum):
 You can also connect a mouse to the PS/2 port. The switch inside a +UNO, near the Wi-Fi chip and keys `1` and `2`, selects between a direct connection of the mouse, or if a PS/2 splitter cable is needed (when using the mouse along with a PS/2 keyboard).
 
 [.text-center]
-image:./img/plusuno_switch.jpg[pdfwidth=70%]
+image:./img/plusuno_switch.jpg[scaledwidth=70%]
 
 <<<
 
@@ -672,7 +672,7 @@ Once downloaded and extracted, you have to copy the directories `BIN`, `SYS` and
 If everything has been done correctly, when you turn on the ZXUNO+ Spectrum core, you will see how esxdos detects the card and loads the necessary components to work.
 
 [.text-center]
-image:./img/esxdos.png[pdfwidth=70%]
+image:./img/esxdos.png[scaledwidth=70%]
 
 <<<
 
@@ -701,7 +701,7 @@ It is also recommended to add the specific esxdos commands for ZXUNO+. These can
 === BIOS
 
 [.text-center]
-image:./img/boot.png[pdfwidth=80%]
+image:./img/boot.png[scaledwidth=80%]
 
 Pressing the `F2` key during boot will access the BIOS setup. The BIOS firmware is the first program that runs when the ZXUNO+ is turned on. The main purpose of BIOS is to start and test the hardware and load one of the installed cores.
 
@@ -723,7 +723,7 @@ Other useful keys to use on startup are:
 ==== Main
 
 [.text-center]
-image:img/bios.png[pdfwidth=70%]
+image:img/bios.png[scaledwidth=70%]
 
 In the first configuration screen, in addition to being able to run several tests, you can define the default behavior for the following:
 
@@ -743,14 +743,14 @@ More technical information can be found on https://www.zxuno.com/wiki/index.php/
 ==== ROMs
 
 [.text-center]
-image:img/bios2.png[pdfwidth=70%]
+image:img/bios2.png[scaledwidth=70%]
 
 The second screen shows the installed ZX Spectrum ROMs. You can reorder (Move Up, Move Down), rename or delete each of them, as well as choose the one that will be loaded by default at startup (Set Active ).
 
 ==== Upgrade
 
 [.text-center]
-image:img/bios3.png[pdfwidth=70%]
+image:img/bios3.png[scaledwidth=70%]
 
 _Upgrade_ screen is used to perform the different updates of the Flash memory content: esxdos, BIOS, Cores, etc. (see <<#_upgrade,the section corresponding to upgrades>> for more information).
 
@@ -759,7 +759,7 @@ _Upgrade_ screen is used to perform the different updates of the Flash memory co
 ==== Boot
 
 [.text-center]
-image:img/bios4.png[pdfwidth=70%]
+image:img/bios4.png[scaledwidth=70%]
 
 In the _Boot_ screen you can choose which one of the installed cores is loaded by default at startup.
 
@@ -773,7 +773,7 @@ Never set a Spectrum core (apart from the main one, the first core in the flash.
 ==== Advanced
 
 [.text-center]
-image:img/bios5.png[pdfwidth=70%]
+image:img/bios5.png[scaledwidth=70%]
 
 The Advanced configuration screen is used to edit the following settings:
 
@@ -847,7 +847,7 @@ This table explains how the joystick buttons are assigned:
 ==== Exit
 
 [.text-center]
-image:img/bios6.png[pdfwidth=70%]
+image:img/bios6.png[scaledwidth=70%]
 
 Finally, from the last screen you can:
 
@@ -896,20 +896,36 @@ See the <<#_roms_3,updates section>> for more information on how to expand or mo
 
 ==== DerbyPro
 
-https://www.facebook.com/groups/DerbyPro[DerbyPro or Derby{pp}] is an enhanced firmware ROM for the ZX Spectrum, based on v1.4 of the Derby development ROM. The Spectrum 128 (codename "Derby") was a Spanish machine commissioned by Investronica and launched in 1985. It came with a keypad that provided additional editing keys. In 1986, the UK version came out with a simplified version of 128 BASIC and no keypad. Derby++ is developed from the Spanish ROM to include the benefits of both versions, without the drawbacks, and support for new hardware developments.
+https://www.facebook.com/groups/DerbyPro[DerbyPro or Derby{pp}] is an enhanced firmware ROM for the ZX Spectrum based on v1.4 of the Derby development ROM. The Spectrum 128 (codename "Derby") was a Spanish machine commissioned by Investronica and launched in 1985. It came with a keypad that provided additional editing keys. In 1986 the UK version came out with a simplified version of 128 BASIC and no keypad. Derby++ is developed from the Spanish ROM to include the benefits of both versions without the drawbacks and support for new hardware developments.
+
+[.text-center]
+image:img/derbypro.png[pdfwidth=70%]
+
+<<<
+
+Features include:
+
+- 100% binary compatible 48K mode.
+- 6-channel PLAY commmand.
+- Access the esxDOS NMI browser from the boot menu.
+- Debugged 128 BASIC with additinoal commands and full scren string editor.
+- esxDOS support in 128 BASIC.
+- Menu access to TR-DOS.
+- PALETTE command for ULAplus.
+- Run most Spectrum software without the need to switch configuration in the BIOS.
 
 You can download the ROM, a user manual and other files from the https://www.facebook.com/groups/DerbyPro[official Facebook Public Group].
 
-This 64K ROM has support for new hardware, including the use of esxdos commands from 128 BASIC, so these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
+Because it's a 64K ROM with support for new hardware these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
 
-[%header,cols=2*]
+[align="center",width="60%",%header,cols=2*]
 |===
 |Flag
 |Meaning
 |`d`
-|Enable DivMMC
+|Enable divMMC
 |`n`
-|Enable NMI DivMMC (esxdos Menu)
+|Enable NMI divMMC (esxDOS Menu)
 |`t`
 |Use 128K timings
 |===
@@ -961,7 +977,7 @@ When using a ROM with POKE option enabled:
 The ROMs with ultrafast loading enabled, need special tape audio data which is made from normal loading `TAP` files, without protections or turbo loading.
 
 In order to create an ultrafast loading tape you need  `leches` and `CgLeches` command line utilities. Those can be obtained, for Windows, from the
-https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[official repository]. You can also obtain an unofficial version for MacOS from  https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[this other repository].
+https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[official repository]. You can also obtain an unofficial version for macOS from  https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[this other repository].
 
 In any other case, you can compile from the https://github.com/antoniovillena/CargandoLeches[source code at the official repository]. For example, in Linux, to compile using `gcc` you only need these commands:
 
@@ -991,39 +1007,61 @@ Due to hardware limitations, `TZX` files made with `CgLeches` do not work with a
 
 ==== SE Basic IV
 
-https://github.com/cheveron/sebasic4[SE Basic IV] is a free open-source Z80 interpreter for Microsoft BASIC. SE Basic IV is designed to run on the https://www.patreon.com/chloe280se[Chloe 280SE] but it can also run on ZX-Uno and similar computers.
+https://source-solutions.github.io/sebasic4/[SE Basic IV] is a free open-source BASIC interpreter for the Z80 architecture. Although it aims for a high degree of compatibility with Microsoft BASIC, there are some differences. It's designed to run on the https://www.patreon.com/chloe280se[Chloe 280SE] but it's also compatible with the ZX Spectrum core of the ZXUNO+.
 
-SE Basic was originally conceived as a new firmware for the https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. The earliest versions of SE Basic were patches applied to the original ZX Spectrum ROM, but later versions have been rewritten based on the https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[open source TS1000 / ZX81 improved ROM].
+SE BASIC began development in 1999 as the firmware for the https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE], the ancestor of the Chloe 280SE. Early versions were patches applied to the original Spectrum ROM. From version 1, it used its own assembly file. From version 2, it added support for ULAplus.
 
-Version 3, also known as https://zxdesign.itch.io/opense[OpenSE BASIC], is still maintained as an open source replacement firmware for the Spectrum. It’s https://tracker.debian.org/pkg/opense-basic[included in the main Debian repository] for use with emulators.
+Version 3 (https://zxdesign.itch.io/opense[OpenSE BASIC]) replaced the original ROM code with an open source version derived from the https://github.com/cheveron/open81[ZX81] and https://github.com/cheveron/samrom[SAM Coupé] ROMs. It's still maintained as an open source replacement firmware for the Spectrum, and is included in the main https://tracker.debian.org/pkg/opense-basic[Debian repository] for use with emulators.
 
-Version IV is a fork of the previous version, done because there was no room left to add new features to the 16K ROM. The initial release (4.0 Anya) added another 16K ROM with support for Timex hi-res mode. The syntax was still largely Sinclair BASIC compatible at this point. Version 4.2 was rebuilt specifically for the Chloe 280SE, dropping support for legacy devices such as tape, adding full compatibility and integrated support for the esxdos kernel, and migrating to Microsoft BASIC syntax.
+[.text-center]
+image:img/sebasic4.png[scaledwidth=70%]
 
-While it shares a common code base with many versions of Sinclair BASIC (the TS1000 ROM), it differs from them in significant ways:
+Version 4.0 added support for 80 column mode. Version 4.1 was an unsuccessful attempt to refactor the code. Starting in 2019, the latest version (4.2 Cordelia) was rebuilt from the ground up to take full advantage of the ZX Spectrum core of the ZX-Uno (and ZXUNO+). While earlier versions retained a high level of compatibility with Sinclair BASIC and software, this version has no support for Sinclair software and is closer in dialect to Atari BASIC.
 
-- Code page (8-bit ASCII) support.
-- Error message localization.
-- 38 additional tokens.
-- Standard terminal display (80 x 24).
-- Terminal character entry (CTRL, META).
-- Keyboard buffer.
-- Full sized keyboard support.
-- Designed to take full advantage of the additional features of ZX-Uno Spectrum core
+Version 4.2 requires that divMMC support is enabled with esxDOS or UnoDOS 3 installed. However, <<#_esxdos_commands,"dot" command >> commands and the NMI browser are not supported.
 
-The main differences from Microsoft BASIC are:
+<<<
 
-- Token abbreviation.
-- On-entry syntax checking.
-- Typically, brackets are optional.
-- Motorola style number entry:
-  % – binary
-  @ – octal
-  $ – hexadecimal
-- Always-on expression evaluation.
-- Separate logical and bitwise operators.
+Features include:
+
+- 40 column (16 colour) and 80 column (2 colour) paletted video modes.
+- Always-on expression evaluation (use variables as filenames).
+- Application package format with support for turning BASIC programs into apps.
 - Automatic data typing.
+- Bitwise logic (AND, NOT, OR, XOR).
+- Built-in help system.
+- Choice of Microsoft (LEFT$, MID$, RIGHT$) or Sinclair (TO) string slicing.
+- Composable characters (supports Vietnamese).
+- Disk-based filesystem (no tapes).
+- Error handling (ON ERROR..., TRACE).
+- Flow control (IF...THEN...ELSE, WHILE...WEND).
+- Full random file access from BASIC (OPEN, CLOSE, SEEK).
+- Full-size keyboard support (DEL, HOME, END and so on).
+- Graphics commands in 40 column mode (CIRCLE, DRAW, PLOT).
+- Localisation of character sets, error messages, and keyboard layouts.
+- Long variable names.
+- Motorola style number entry (%; binary, @; octal, $; hexadecimal).
+- NMI BREAK.
+- On-entry syntax checking.
+- PLAY command with 6-channel PSG and MIDI support.
+- Recursive user-defined functions.
+- Smart firmware updates.
+- Token abbreviation and shortcuts (&; AND, ~; NOT; |; OR, ?; PRINT, '; REM').
+- Undo NEW (OLD).
+- User-defined channels.
+- User-defined character sets (256 characters).
+- User-defined macros.
+- User-defined screen modes.
 
-You can find much more information, including the user manual, etc. at https://github.com/cheveron/sebasic4/wiki[the official wiki page].
+[NOTE]
+====
+For the smart firmware update option to work, SE Basic IV must be installed in the second and third 16K ROM slots.
+====
+
+[CAUTION]
+====
+Using the smart firmware update feature replaces the version of esxDOS you're using with the latest version of UnoDOS 3.
+====
 
 <<<
 
@@ -1081,7 +1119,7 @@ You can use Windows Disk Management utility. The steps are:
 
 . Optionally, create another primary partition using the remaining space and format as FAT32
 
-==== MacOS
+==== macOS
 
 You will have to use the command line. The first task is to find out which device is the disk to format:
 
@@ -1346,7 +1384,7 @@ For more information about the different +3e disk commands , you can check https
 
 <<<
 
-=== esxdos
+=== esxdos Commands
 
 ==== Basic Guide
 
@@ -1398,7 +1436,7 @@ In addition, esxdos also has an NMI manager, an application that loads when NMI 
 
 [NOTE]
 ====
-The esxdos manager shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the SD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
+The esxdos manager shows file and directory entries in the order stored in the internal FAT table, and not alphabetically. If you want to see them ordered, you have to reorder the SD card structure with a utility like Fat Sorter for Windows, https://fatsort.sourceforge.io/[FATsort] for Linux and macOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or other.
 ====
 
 [TIP]
@@ -1496,7 +1534,7 @@ You can see all the available commands reading the https://www.espressif.com/sit
 
 The `PLAYRMOV` "DOT" command plays radastanian format video files. To convert your own videos, you need `makevideoradas`, a utility that is available at https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[SVN repository].
 
-If using Windows, there is already an executable file (`makevideoras.exe`). For Linux or MacOS, you must have installed command line developer utilities in order to compile an executable
+If using Windows, there is already an executable file (`makevideoras.exe`). For Linux or macOS, you must have installed command line developer utilities in order to compile an executable
 
 [source,shell]
 ----
@@ -1623,14 +1661,14 @@ Get the root filesystem image file from this location:
 
 [source]
 ----
-./build-filesystem/rootfs
+./Standalone/filesystem-src/rootfs
 ----
 
 ==== How to use
 
 You need a MBR partition table on the SD card. You can set up one or two primary partitions <<#_sd_card_formatting,as usual>> (the first one with a functional esxdos installation), leaving enough space at the end to add one 32MB (Type `7E`) primary partition for the root file system and one 4MB (Type `7F`) primary partition for swap.
 
-Copy the rootfs filesystem to the type `7E` partition. You can use the `dd` utility, included with Linux, MacOS, etc. (and also http://www.chrysocome.net/dd[ported to Windows]).
+Copy the rootfs filesystem to the type `7E` partition. You can use the `dd` utility, included with Linux, macOS, etc. (and also http://www.chrysocome.net/dd[ported to Windows]).
 
 After you find the device name for the `7E` partition, use that as destination for the `rootfs` file. For example, for `/dev/rdisks3`:
 
@@ -1646,7 +1684,7 @@ Copy the `FUZIX` command into the `BIN` directory and copy `FUZIX.BIN` to the to
 Boot into a Spectrum core with a 128K ROM and with esxdos, then type '.fuzix', and press `Enter`.
 
 [.text-center]
-image:./img/fuzix01.png[pdfwidth=70%]
+image:./img/fuzix01.png[scaledwidth=70%]
 
 [TIP]
 ====
@@ -1656,26 +1694,26 @@ Your keyboard configuration on BIOS should be using an english layout, or you wo
 After a few seconds, the system should detect the SD card and find the partitions. In this example, the root is the third partition of SD 0.
 
 [.text-center]
-image:./img/fuzix02.png[pdfwidth=70%]
+image:./img/fuzix02.png[scaledwidth=70%]
 
 <<<
 
 Type the rootfs partition (e.g. `hd3`) and press `Enter`.
 
 [.text-center]
-image:./img/fuzix03.png[pdfwidth=70%]
+image:./img/fuzix03.png[scaledwidth=70%]
 
 Set up date (press `Enter`) and time (press `Enter`).
 
 [.text-center]
-image:./img/fuzix04.png[pdfwidth=70%]
+image:./img/fuzix04.png[scaledwidth=70%]
 
 <<<
 
 Login with `root` user and no password.
 
 [.text-center]
-image:./img/fuzix05.png[pdfwidth=70%]
+image:./img/fuzix05.png[scaledwidth=70%]
 
 Now you have a Fuzix shell.
 
@@ -1714,7 +1752,7 @@ Remember that <<#_special_keys_and_buttons,if the ZXUNO+ is started while pressi
 
 To do the opposite process (save the ROMs in a RomPack file named `ROMS.ZX1`), you can use the` .romsback` command.
 
-RomPack files can be easily edited with the https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack] utility. Although it is a Windows program, it works perfectly, for example using https://www.winehq.org[Wine] or similar programs, either on MacOS or Linux.
+RomPack files can be easily edited with the https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack] utility. Although it is a Windows program, it works perfectly, for example using https://www.winehq.org[Wine] or similar programs, either on macOS or Linux.
 
 <<<
 
@@ -1986,14 +2024,14 @@ While the core is running:
 Pressing `Space+F1` a core reset occurs and then the boot menu appears, where the existing boot options in the `config.ini` file are shown.
 
 [.text-center]
-image:img/tbblue1.jpg[pdfwidth=70%]
+image:img/tbblue1.jpg[scaledwidth=70%]
 
 <<<
 
 Then, pressing `E`, you can access to the other core configuration options. You can change them with the cursor keys and the `Space` key. Press `Enter` to finish.
 
 [.text-center]
-image:img/tbblue2.jpg[pdfwidth=70%]
+image:img/tbblue2.jpg[scaledwidth=70%]
 
 <<<
 
@@ -2054,14 +2092,14 @@ While the core is running:
 The keyboard uses the following mapping:
 
 [.text-center]
-image:img/keyboardAtom.jpg[pdfwidth=90%]
+image:img/keyboardAtom.jpg[scaledwidth=90%]
 
 <<<
 
 ==== Basic Guide
 
 [.text-center]
-image:img/atom.png[pdfwidth=70%]
+image:img/atom.png[scaledwidth=70%]
 
 Once it's running, press `Shift+F10`, or type `*MENU` and `Enter`, to show a menu where you can choose and load Atom Software Archive programs from the card.
 
@@ -2112,7 +2150,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/electron.png[pdfwidth=70%]
+image:img/electron.png[scaledwidth=70%]
 
 Once the SD card is inserted and the core running, if `BEEB.MMB` file was created correctly, on start, you should see:
 
@@ -2205,7 +2243,7 @@ During core execution:
 ==== Basic Guide
 
 [.text-center]
-image:img/cpc464.png[pdfwidth=70%]
+image:img/cpc464.png[scaledwidth=70%]
 
 When using BASIC, you can load a external tape (or <<#_miniduino,other external audio device>>) with the command `RUN"`.
 Unlike the original machine, you can hear the audio while playing the tape.
@@ -2254,12 +2292,12 @@ During core execution:
 Use the `CAT` command to see the contents of the currently loaded DSK file.
 
 [.text-center]
-image:img/cpc.png[pdfwidth=70%]
+image:img/cpc.png[scaledwidth=70%]
 
 Type the command `RUN"<name>` to load a program from disk
 
 [.text-center]
-image:img/cpc2.png[pdfwidth=70%]
+image:img/cpc2.png[scaledwidth=70%]
 
 Press `Page Up` key to reset and load the next `DSK` file.
 
@@ -2292,7 +2330,7 @@ Take note that, on an Apple I, there is no delete key. Due to the way that the v
 Upon start, the Apple I  boots with https://www.sbprojects.net/projects/apple1/wozmon.php[Woz Monitor] (ROM loaded at `0xFF00`)
 
 [.text-center]
-image:img/apple1_1.png[pdfwidth=70%]
+image:img/apple1_1.png[scaledwidth=70%]
 
 <<<
 
@@ -2316,7 +2354,7 @@ E000:4C
 ----
 
 [.text-center]
-image:img/apple1_2.png[pdfwidth=70%]
+image:img/apple1_2.png[scaledwidth=70%]
 
 <<<
 
@@ -2355,7 +2393,7 @@ COPY /B image1.nib + image2.nib + (...) + image20.nib apple2_20discs.img
 
 Dump the new file to the SD card, for example, using http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
 
-===== MacOS and Linux
+===== macOS and Linux
 
 Concatenate the disk images (with a maximum of 20) using `cat`:
 
@@ -2469,7 +2507,7 @@ While the core is running:
 Pressing `F12` (`Caps Shift+Symbol Shift+W` on +UNO) shows or hides the configuration menu. Cursor keys  and `Enter` (or joystick and fire button) to select and choose menu options.
 
 [.text-center]
-image:img/a800xl.jpg[pdfwidth=70%]
+image:img/a800xl.jpg[scaledwidth=70%]
 
 The following options are available:
 
@@ -2536,7 +2574,7 @@ For example, the sequence `15 1C 44 4D 29` would match `Q A O P Space`
 Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys  and `Enter` to select and choose menu options.
 
 [.text-center]
-image:img/a2600uno.jpg[pdfwidth=70%]
+image:img/a2600uno.jpg[scaledwidth=70%]
 
 The following options are available:
 
@@ -2589,7 +2627,7 @@ Since the `MMB` file has the same name as the one for <<#_acorn_electron,Acorn E
 ==== Keyboard
 
 [.text-center]
-image:img/keyboardbbc.png[pdfwidth=80%]
+image:img/keyboardbbc.png[scaledwidth=80%]
 
 ===== Special keys and buttons
 
@@ -2606,7 +2644,7 @@ While the core is running:
 ==== Basic guide
 
 [.text-center]
-image:img/bbcmicro.png[pdfwidth=70%]
+image:img/bbcmicro.png[scaledwidth=70%]
 
 Once the SD card is inserted and the core running, if `BEEB.MMB` file was created correctly, on start, you should see:
 
@@ -2696,7 +2734,7 @@ While running the core:
 ==== Basic Guide
 
 [.text-center]
-image:img/lynx.png[pdfwidth=70%]
+image:img/lynx.png[scaledwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with commands like:
 
@@ -2767,7 +2805,7 @@ While the core is running:
 Pressing `Esc` shows or hides the configuration menu. Use the cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
-image:img/chip8uno.jpg[pdfwidth=70%]
+image:img/chip8uno.jpg[scaledwidth=70%]
 
 The following options are available:
 
@@ -2821,7 +2859,7 @@ While the core is running:
 On startup, BIOS ROM is loaded from the card, and then the multicart ROM.
 
 [.text-center]
-image:img/colecouno.jpg[pdfwidth=70%]
+image:img/colecouno.jpg[scaledwidth=70%]
 
 At multicart menu, use the directional controls to choose one ROM, and then fire button 1 to load. Pressing 'Esc' restarts the core and loads the ROM selection menu again.
 
@@ -2862,7 +2900,7 @@ While the core is running:
 On boot, a question is asked about the memory size. Usually, after pressing `Enter` the BASIC interpreter is started.
 
 [.text-center]
-image:img/cgenie.png[pdfwidth=70%]
+image:img/cgenie.png[scaledwidth=70%]
 
 From BASIC, you can load software from a external tape (or <<#_miniduino,other external audio device>>) with the following commands.
 
@@ -2875,7 +2913,7 @@ To load machine code, type `SYSTEM` and then `Enter`. Afterwards, type the first
 While a program is loading one `*` and two `**` are alternately displayed on the upper right corner of the screen.
 
 [.text-center]
-image:img/cgenieload.png[pdfwidth=70%]
+image:img/cgenieload.png[scaledwidth=70%]
 
 <<<
 
@@ -2928,7 +2966,7 @@ COPY /B imagen1.d64 + dummyto256.bin + imagen2.d64 + dummyto256.bin + (...) c16r
 
 Dump the new file to the SD card, for example, using http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
 
-===== MacOS and Linux
+===== macOS and Linux
 
 Concatenate the disk images using `cat`:
 
@@ -2978,7 +3016,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/c16.png[pdfwidth=70%]
+image:img/c16.png[scaledwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed.
 
@@ -3043,7 +3081,7 @@ COPY /B image1.d64 + dummyto256.bin + image2.d64 + dummyto256.bin + (...) c64raw
 
 Dump the new file to the SD card, for example, using http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
 
-===== MacOS and Linux
+===== macOS and Linux
 
 Concatenate the disk images using `cat`:
 
@@ -3096,7 +3134,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/c64.png[pdfwidth=70%]
+image:img/c64.png[scaledwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed.
 
@@ -3152,7 +3190,7 @@ While running the core:
 ==== Basic Guide
 
 [.text-center]
-image:img/pet.jpg[pdfwidth=70%]
+image:img/pet.jpg[scaledwidth=70%]
 
 You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed.
 
@@ -3205,7 +3243,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/vic20.png[pdfwidth=70%]
+image:img/vic20.png[scaledwidth=70%]
 
 You can load from a external tape (or other external audio device) with the command `LOAD`. One it's finished, type `RUN` and press `Enter` if needed.
 
@@ -3294,7 +3332,7 @@ While the core is running:
 ==== Basic guide
 
 [.text-center]
-image:img/galaksija.png[pdfwidth=70%]
+image:img/galaksija.png[scaledwidth=70%]
 
 While in BASIC, you can enable the loading programs from the SD card with this command:
 
@@ -3371,7 +3409,7 @@ While the core is running:
 On startup, you are asked for the upper memory limit. Press `Enter` to continue.
 
 [.text-center]
-image:img/ht1080z.png[pdfwidth=70%]
+image:img/ht1080z.png[scaledwidth=70%]
 
 [TIP]
 ====
@@ -3395,7 +3433,7 @@ or, if you don't want the screen to be cleared
 ----
 
 [.text-center]
-image:img/ht1080z_2.png[pdfwidth=70%]
+image:img/ht1080z_2.png[scaledwidth=70%]
 
 After that, with instructions like `CD` and `DIR` you can access where the `CAS` file to load is located. Then, to load a `.CAS` file, you only have to type the name, without extension (for example, for a file named `GAME.CAS` you have to type `GAME`).
 
@@ -3474,7 +3512,7 @@ Instead of BASIC like other systems, Jupiter ACE uses https://en.wikipedia.org/w
 ====
 
 [.text-center]
-image:img/ace_vlist.png[pdfwidth=70%]
+image:img/ace_vlist.png[scaledwidth=70%]
 
 <<<
 
@@ -3562,7 +3600,7 @@ To change the video mode between 50Hz and 60Hz (and thus play at correct speed P
 To go to BASIC from MSX-DOS you must execute `BASIC` command.
 
 [.text-center]
-image:img/msx.png[pdfwidth=70%]
+image:img/msx.png[scaledwidth=70%]
 
 From within BASIC, you can load from a external tape (or <<#_miniduino,other external audio device>>) with the commands `RUN"CAS:"`, `BLOAD"CAS:",R` or `CLOAD`.
 
@@ -3669,7 +3707,7 @@ While the core is running:
 You *must* use two jump wires to expansion port pins `P58` and `P51`, both connected to `GND`:
 
 [.text-center]
-image:img/mz700puente.jpg[pdfwidth=70%]
+image:img/mz700puente.jpg[scaledwidth=70%]
 
 The MZ-700 had switches to determine the tape status (PLAY) and the country code. The core uses EXT9(`P51`) for PLAY and EXT6(`P58`) for the country. They are both needed since there are some games that use the japanese character set (wire to `P58` *not* connected) or the european character set (wire to `P58` connected), and because the tape loading routines detect the status (`P51` *not connected*, `Stop` mode, `P51` *connected*, `Play` mode).
 
@@ -3688,7 +3726,7 @@ To load a tape from the monitor with a (u <<#_miniduino,external audio device>>)
 With, at least, `P51` connected to `GND`, type `L` y `Enter` and the start the audio tape.
 
 [.text-center]
-image:img/mz700load.png[pdfwidth=70%]
+image:img/mz700load.png[scaledwidth=70%]
 
 You can hear the audio while loading the tape. Take note, that, since the core isn't finished, there are many programs that do not work. Usually small programas load better.
 
@@ -3755,7 +3793,7 @@ For example, the sequence `15 1C 44 4D 29 22` would match `Q A O P Space X`, and
 Pressing `Esc` or joystick button 2 shows or hides the configuration menu. To navigate the menu and activate or choose any option, use the cursor keys and `Enter`.
 
 [.text-center]
-image:img/nesuno.jpg[pdfwidth=70%]
+image:img/nesuno.jpg[scaledwidth=70%]
 
 The following options are available:
 
@@ -3800,7 +3838,7 @@ Due to the requirements of this core, it is not enough having a membrane keyboar
 Ondra has a 37-key keyboard, where the use of modifier keys allows each key to serve 2 or 3 different characters. Each modifier key must be pressed (and held) before pressing the character key to be modified.
 
 [.text-center]
-image:img/keyboardondra.png[pdfwidth=70%]
+image:img/keyboardondra.png[scaledwidth=70%]
 
 ===== Special keys and buttons
 
@@ -3813,7 +3851,7 @@ image:img/keyboardondra.png[pdfwidth=70%]
 ==== Basic guide
 
 [.text-center]
-image:img/ondraspo1.png[pdfwidth=70%]
+image:img/ondraspo1.png[scaledwidth=70%]
 
 Once you have started the core, you can load it from a tape (or other external audio device) by pressing the `Enter` key (if you have typed anything, erase it all using `Ctrl+Left Cursor`). The display will then start to flash and the following text will be shown:
 
@@ -3823,7 +3861,7 @@ Once you have started the core, you can load it from a tape (or other external a
 ----
 
 [.text-center]
-image:img/ondraspo1.png[pdfwidth=70%]
+image:img/ondraspo1.png[scaledwidth=70%]
 
 Start tape playback and the text on the screen will change during loading.
 
@@ -3861,7 +3899,7 @@ COPY /B image1.nib + image2.nib + (...) + image20.nib oric_discs.img
 
 Dump the new file to the SD card, for example, using http://hddguru.com/software/HDD-Raw-Copy-Tool/[HDD Raw Copy Tool].
 
-===== MacOS and Linux
+===== macOS and Linux
 
 Concatenate the disk images (with a maximum of 20) using `cat`:
 
@@ -3885,7 +3923,7 @@ sudo dd if=oric_discs.img of=/dev/...
 This is the keyboard layout:
 
 [.text-center]
-image:img/keyboardoric.png[pdfwidth=80%]
+image:img/keyboardoric.png[scaledwidth=80%]
 
 =====  Special keys and buttons
 
@@ -3903,7 +3941,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/oric.png[pdfwidth=70%]
+image:img/oric.png[scaledwidth=70%]
 
 You can load and enable DOS-8D with the command:
 
@@ -3947,7 +3985,7 @@ This core does not use the SD card.
 The keyboard layout tries to mimic as much as possible a real Oric Atmos.
 
 [.text-center]
-image:img/keyboardoric.png[pdfwidth=80%]
+image:img/keyboardoric.png[scaledwidth=80%]
 
 <<<
 
@@ -3974,7 +4012,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/oric.png[pdfwidth=70%]
+image:img/oric.png[scaledwidth=70%]
 
 From BASIC, you can load software from a external tape (or <<#_miniduino,other external audio device>>) using the command `CLOAD` and `Enter`. A message will show on screen
 
@@ -4079,7 +4117,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/pcxt.png[pdfwidth=70%]
+image:img/pcxt.png[scaledwidth=70%]
 
 . Start the ZX-Uno
 . For a +UNO, change the keyboard mode to `PC XT` keyboard mode (`Caps Shift+Symbol Shift+U`, and then `9`)
@@ -4134,7 +4172,7 @@ While the core is running:
 Pressing `Esc` or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
-image:img/ponguno.jpg[pdfwidth=70%]
+image:img/ponguno.jpg[scaledwidth=70%]
 
 The following options are available:
 
@@ -4183,7 +4221,7 @@ While the core is running:
 ==== Basic Guide
 
 [.text-center]
-image:img/samcoupe.png[pdfwidth=70%]
+image:img/samcoupe.png[scaledwidth=70%]
 
 You can only load software from a external tape (or from <<#_miniduino,other external audio device>>) with the command `LOAD""` (or pressing `7` of the numeric keyboard, which is like pressing `F7` of the SAM Coupé keyboard).
 
@@ -4234,7 +4272,7 @@ While the core is running:
 Pressing `F12` shows or hides the file selector. Use the cursor keys and `Enter` to load the selected file.
 
 [.text-center]
-image:img/sms.png[pdfwidth=70%]
+image:img/sms.png[scaledwidth=70%]
 
 <<<
 
@@ -4297,7 +4335,7 @@ During the core execution:
 By default, Vectrex starts with the built in game (Mine Storm).
 
 [.text-center]
-image:img/vectrex.png[pdfwidth=70%]
+image:img/vectrex.png[scaledwidth=70%]
 
 Pressing `Esc` shows or hides the configuration menu. Cursor keys and `Enter` are used to select and choose menu options.
 
@@ -4350,7 +4388,7 @@ During the core execution:
 Pressing `Esc` (`Caps Shift+Space` on +UNO) or joystick button 2 shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
 
 [.text-center]
-image:img/videopacuno.png[pdfwidth=70%]
+image:img/videopacuno.png[scaledwidth=70%]
 
 The following options are available:
 
@@ -4404,7 +4442,7 @@ This core does not use the SD card
 The keyboard isn't mapped and the original machine keys layout is kept. For example, to obtain a `"` you have to type `Shift+P` or `Shift+0` to delete.
 
 [.text-center]
-image:img/keyboardZX81.jpg[pdfwidth=90%]
+image:img/keyboardZX81.jpg[scaledwidth=90%]
 
 ==== Basic Guide
 
@@ -4453,12 +4491,12 @@ The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For
 **ZX80**
 
 [.text-center]
-image:img/keyboardZX80.jpg[pdfwidth=80%]
+image:img/keyboardZX80.jpg[scaledwidth=80%]
 
 **ZX81**
 
 [.text-center]
-image:img/keyboardZX81.jpg[pdfwidth=80%]
+image:img/keyboardZX81.jpg[scaledwidth=80%]
 
 ===== Special keys and buttons
 
@@ -4479,7 +4517,7 @@ During the core execution:
 Pressing `F5` (`Caps Shift+Symbol Shift+5` on +UNO) or joystick button 2 shows or hides the configuration menu. Cursor keys (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` and `Caps Shift+8` on +UNO, `PC XT` keyboard mode) and `Enter` to select and choose menu options.
 
 [.text-center]
-image:img/zx8180.jpg[pdfwidth=70%]
+image:img/zx8180.jpg[scaledwidth=70%]
 
 The following options are available:
 
@@ -4492,7 +4530,7 @@ The following options are available:
 <<<
 
 [.text-center]
-image:img/zx8180_2.jpg[pdfwidth=70%]
+image:img/zx8180_2.jpg[scaledwidth=70%]
 
 - Computer Model: ZX80/ZX81
 - Main RAM: 16K/32K
@@ -4547,7 +4585,7 @@ A rotary encoder has 5 wires: Earth Ground (not connected), Vcc (`+`), GND (`0V`
 `A` and `B` are connected to pins 1 and 2 for the first encoder, 3 and 4 for the second one. This way you can have up to 4 encoders connected using both joystick ports.
 
 [.text-center]
-image:img/db9joy.png[pdfwidth=40%]
+image:img/db9joy.png[scaledwidth=40%]
 
 This way, the connections should be:
 
@@ -4592,11 +4630,11 @@ The use is exactly the same as when using the original computers:
 
 ==== Computer
 
-Depending on the operating system (Windows, MacOS, Linux) there are several programs that can either play a tape file (`TAP`, `TZX`, `PZX`, etc.) and output the sound through a headphone output, or create an audio file (`WAV`, `VOC`, `AU`, etc.) that can be played using a music or audio program.
+Depending on the operating system (Windows, macOS, Linux) there are several programs that can either play a tape file (`TAP`, `TZX`, `PZX`, etc.) and output the sound through a headphone output, or create an audio file (`WAV`, `VOC`, `AU`, etc.) that can be played using a music or audio program.
 
 ===== PlayTZX
 
-This program for Windows, MacOS or Linux, can play directly a `TZX` tape file through the audio output of the computer.
+This program for Windows, macOS or Linux, can play directly a `TZX` tape file through the audio output of the computer.
 
 You can download the binary file (for example), for Windows from https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository]) or compile the source code as <<#_compile_source_code_macos_or_linux,explained later>>.
 
@@ -4618,7 +4656,7 @@ If everything works fine, you will see at the shell the name of the different ta
 On Linux, the program uses as output the device `/dev/dsp`, this may require to load a module like `snd_pcm_oss` (on systems using ALSA).
 ====
 
-====== Compile source code (MacOS or Linux)
+====== Compile source code (macOS or Linux)
 
 To compile, the first thing is checking that the developer tools are installed on the system, including a C compiler (`gcc`, `clang`, command line developer tools for Mac, etc.) and https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
 
@@ -4636,6 +4674,8 @@ If all goes well, a new file named `playtzx` will be created, which you can copy
 ==== Mobile phone, tablet, MP3 player, etc.
 
 There are a very few apps (or none) that can directly play a tape file on a mobile device so, in many cases, the only option is to convert it to an audio file before playing it.
+
+https://zxtape.net is a website, mobile device compatible, which can play TZP and TZX files
 
 https://play.google.com/store/apps/details?id=com.baltazarstudios.playzxtapes[PlayZX] is an App for Android which can play tape files through the headphone output.
 
@@ -4861,7 +4901,7 @@ When this happens, there are several recovery methods that let you install again
 Later, in some of the recovery steps, when talking about jump wires or USB-Blaster connections to the ZXUNO+ board, you can use these images as reference.
 
 [.text-center]
-image:img/jtagzxunoplus.jpg[pdfwidth=80%]
+image:img/jtagzxunoplus.jpg[scaledwidth=80%]
 
 [WARNING]
 ====
@@ -4918,7 +4958,7 @@ rm -rf ./openocd-code
 Is using a GPIO connection, take note of the chosen pins, making sure that `GND` is connected with `GND`.
 
 [.text-center]
-image:img/gpio.jpg[pdfwidth=70%]
+image:img/gpio.jpg[scaledwidth=70%]
 
 In this example, the `31`, `33`, `35`, `37` and `39` pins will be used (corresponding to `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` and `GND`), like this:
 
@@ -5009,7 +5049,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center]
-image:img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[scaledwidth=70%]
 
 [start=12]
 . Insert in the ZXUNO+ the SD card formatted as FAT16 o FAT32, and with the `FLASH.ZX1` file https://github.com/zxdos/zxuno/raw/master/modflash/FLASH.ZX1[downloaded previously].
@@ -5022,7 +5062,7 @@ image:img/recovery.png[pdfwidth=70%]
 . Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
 
 [.text-center]
-image:img/recovery2.png[pdfwidth=70%]
+image:img/recovery2.png[scaledwidth=70%]
 
 [WARNING]
 ====
@@ -5066,7 +5106,7 @@ If no image is shown, press again `Scroll Lock` (`Caps Shift+Symbol Shift+G` on 
 
 <<<
 
-==== Recovery using MacOS and USB-Blaster cable
+==== Recovery using macOS and USB-Blaster cable
 
 *Hardware required*:
 
@@ -5130,7 +5170,7 @@ Make sure, when using `detect`, that the device is shown as detected. You may ne
 ====
 
 [.text-center]
-image:img/recovery_mac_1.png[pdfwidth=90%]
+image:img/recovery_mac_1.png[scaledwidth=90%]
 
 <<<
 
@@ -5140,7 +5180,7 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center]
-image:img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[scaledwidth=70%]
 
 [start=10]
 . Insert in the ZXUNO+ the SD card formatted as FAT16 o FAT32, and with the `FLASH.ZX1` file downloaded previously.
@@ -5153,7 +5193,7 @@ image:img/recovery.png[pdfwidth=70%]
 . Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
 
 [.text-center]
-image:img/recovery2.png[pdfwidth=70%]
+image:img/recovery2.png[scaledwidth=70%]
 
 [WARNING]
 ====
@@ -5243,7 +5283,7 @@ pld load recovery.bit
 If there is no image on the display, press `Scroll Lock` (`Caps Shift+Symbol Shift+G` on +UNO) to switch between RGB and VGA modes, just in case the recovery BIOS did start in the wrong mode for our setup.
 
 [.text-center]
-image:img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[scaledwidth=70%]
 
 [start=10]
 . Insert in the ZXUNO+ the SD card formatted as FAT16 o FAT32, and with the `FLASH.ZX1` file downloaded previously.
@@ -5256,7 +5296,7 @@ image:img/recovery.png[pdfwidth=70%]
 . Select the option `Upgrade Flash from SD`. Press Enter, choose `Yes`, and press Enter again to start the Flash writing process.
 
 [.text-center]
-image:img/recovery2.png[pdfwidth=70%]
+image:img/recovery2.png[scaledwidth=70%]
 
 [WARNING]
 ====
@@ -5300,7 +5340,589 @@ For a +UNO, since the recovery image uses a PS/2 configuration as default, follo
 === Scan Codes
 
 [.text-center]
-image:img/scancodes.png[pdfwidth=80%]
+image:img/scancodes.png[scaledwidth=80%]
+
+<<<
+
+== References
+
+=== Spectrum
+
+==== Scan Codes
+
+[.text-center]
+image:img/ScanCodes.png[scaledwidth=75%]
+
+<<<
+
+==== ZX-Uno control I/O registers
+
+In the Spectrum core the `$FC3B` and `$FD3B` ports are reserved and assigned by the https://sinclair.wiki.zxnet.co.uk/wiki/ZXI_standard[ZXI committee]. A total of 256 different I/O registers unique to the ZX-Uno family are accessed through these ports.
+
+Port `$FC3B` (`64571`) stores the address (`$00` - `$FF`) of the I/O register to be accessed. It can be read to find out which register address was last allocated.
+
+Port `$FD3B` (`64827`) is the access port to the register selected with the previous port. Its meaning (read/write) depends on the implementation of each register.
+
+For example, to allocate bank 16 of the SRAM to the address space `$C000` - `$FFFFFF` during boot mode, using the MASTERMAPPER register, would be as follows:
+
+[source,asm]
+----
+ld bc,$fc3b     ;Port to set register number to use
+ld a,1          ;Register $01 (MASTERMAPPER)
+out (c),a       ;Selected. From now on, any access to $FD3B is using MASTERMAPPER
+inc b           ;Register access port ($FD3B, just increment B)
+ld a,16         ;SRAM Bank 16
+out (c),a       ;Write to the MASTERMAPPER register
+----
+
+The registers implemented in the ZX-Uno family are described below.
+
+<<<
+
+===== `$00` MASTERCONF
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000001`|`00000001`
+|===
+
+Binary format (fields in *bold* can only be altered when LOCK=0):
+|===
+|[.small]#*LOCK*#|[.small]#MODE1#|[.small]#DISCONT#|[.small]#MODE0#|[.small]#I2KB#|[.small]#*DISNMI*#|[.small]#*DIVEN*#|[.small]#*BOOTM*#
+|===
+* `BOOTM`: 1 indicates that the ZX-Uno is in boot mode (configuration mode). Boot mode only makes sense while the boot firmware is running, where some aspects of the ZX-Uno are allowed to be configured before going into run mode. MASTERCONF can always be read, both in boot mode and in run mode. It is set to 0 manually per program, at which point ZX-Uno enters run mode.
+* `DIVEN`: set to 0 indicates that DIVMMC is not enabled in the system, although the SPI interface access ports of the SD/MMC slot are still available. The memory used by DIVMMC remains available for other uses. 1 indicates that DIVMMC is enabled. If enabled, an ESXDOS image must be loaded into the corresponding RAM bank before entering run mode. The default value of this bit is 0.
+* `DISNMI`: set to 1 indicates that the DIVMMC NMI function will not be available. NMI will work, but will not cause ESXDOS to automate, thus leaving NMI control to the main system ROM. Bit added to improve DIVMMC compatibility with SE Basic IV. Defaults to 0 (ESXDOS handles NMI events).
+* `I2KB`: a1 sets the ULA to return a value consistent with a Spectrum issue 2 when reading the keyboard port ($FE). When 0, the returned value is compatible with issue 3 and later. It defaults to 0.
+* `MODE1`,`MODE0`: specifies the ULA timing mode to accommodate different Spectrum models. 00 = ULA ZX Spectrum 48K PAL, 01 = ZX Spectrum 128K/+2 grey, 10 = Pentagon 128, 11 = 48K NTSC (262 scans).
+* `DISCONT`: indicates whether memory contention should occur in the video memory. 0 to enable contention (48K and 128K compatibility). 1 to disable contention (Pentagon 128 compatibility).
+* `LOCK`: When set to 1, it prevents further changes to certain bits in the MASTERCONF register, and also prevents access to the SPI Flash. This bit is reset to 0 only by a master reset (Ctrl-Alt-BkSpace) or by powering the clone off and on.
+
+<<<
+
+===== `$01` MASTERMAPPER
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+Only the lower 5 bits (values $00 to $1F) of this register are used. The value stored is the number of a 16KB bank of SRAM that will be paged at addresses $C000-$FFFFFF during boot mode. The values in this register have no effect when the ZX-Uno is in run mode. 32 different values for this register allow addressing up to 512KB of SRAM. If ZX-Uno is expanded with more memory, more bits in this register will be used. The maximum manageable amount of memory is 4MB.
+
+===== `$02` FLASHSPI
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000000`
+|===
+
+Puerto de acceso al registro SPI conectado a la SPI Flash. Escribiendo un valor en este registro, se envía a la SPI Flash, si ésta está seleccionada. Leyendo un valor de este registro, se lee el último valor enviado por la SPI Flash, y además, la misma operación de lectura provoca que la SPI envíe un nuevo valor (que sería leído con la siguiente operación de lectura a este registro). Por esta razón, en operaciones de lectura de bloques, el primer byte leído con este puerto debe descartarse.
+
+===== `$03` FLASHCS
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000001`
+|===
+
+Only bit 0 is used. The value written to this register determines the status of the CS line of the SPI Flash (0 = Flash selected, 1 = Flash not selected).
+
+===== `$04` SCANCODE
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|Does not change
+|===
+
+When reading, it allows to obtain the value of the last scancode generated by the keyboard. When writing, it allows to send commands to the keyboard.
+
+<<<
+
+===== `$05` KEYSTAT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read|Does not change|Does not change|Does not change
+|===
+
+Several bits showing whether or not there is a new key pressed, or released, and whether this is an extended or normal key.
+|===
+|BSY|0|0|0|ERR|RLS|EXT|PEN
+|===
+
+* BSY: Uses 1 when a data transmission to the PS/2 port is still in progress. Wait for a value of 0 to start a new transmission.
+* ERR: 1 when the last transmission to or from the PS/2 port had errors.
+* RLS: 1 when the last event belongs to a key that has been released.
+* EXT: 1 when the last event belongs to a key with extended code (E0+scancode).
+* PEN: 1 when there is new data ready to be read in the SCANCODE register. After reading KEYSTAT, this bit is set to 0.
+
+===== `$06` JOYCONF
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00100001`
+|===
+
+Bits 0 to 2 show the operating mode of the keyboard mapped joystick (or of the second physical joystick if there is a splitter). Bits 4 to 6 for the operating mode of the physical joystick (DB-9 connector on the side). Bit 3 means autofire of the second joystick or keypad. Bit 7 means autofire of the main joystick. The values are: 000 = Disabled, 001 = Kempston, 010 = Sinclair 1, 011 = Sinclair 2, 100 = Protek/Cursor/AGF, 101 = Fuller, 110 = OPQAspM, 111 = reserved.
+
+===== `$07` KEYMAP
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Read later|Read later|Read later
+|===
+
+On read, each access provides the next byte of the currently loaded ZX-Uno keymap. On write, the byte corresponding to the keymap marked by the current position is modified. In both cases, the address pointer is automatically incremented to point to the next byte of the keymap. This pointer returns to 0 automatically after a reset, a write to the $FC3B register, or when the keymap is terminated. The keymap, in the current implementation, occupies 16384 bytes.
+
+<<<
+
+===== `$09` MOUSEDATA
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|Does not change
+|===
+
+Mouse PS/2 port data register. Used to read or send direct commands to the PS/2 mouse. For example: to initialise the mouse, the value $F4 must be sent to this register.
+
+===== `$0A` MOUSESTATUS
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|Does not change
+|===
+
+PS/2 mouse port status register. The following bits are set:
+|===
+|BSY|0|0|0|ERR|0|0|PEN
+|===
+* BSY: set to 1 when a data transmission to the PS/2 port is still in progress. Wait for a value of 0 to start a new transmission.
+* ERR: set to 1 when the last transmission to or from the PS/2 port had errors.
+* PEN: set to 1 when new data is ready to be read from the MOUSEDATA register. After reading MOUSESTATUS, this bit is set to 0.
+
+<<<
+
+===== `$0B` SCANDBLCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000000`
+|===
+
+Scandoubler control register and system speed. The following bits are defined:
+|===
+|TURBO|COPT|FREQ|FREQ|ENSCAN|VGA
+|===
+* TURBO: 00 to select 3.5 MHz, 01 to select 7 MHz, 10 to select 14 MHz and 11 to select 28 MHz. These bits are also updated with the value of bits D0-D3 of port $8E3B, used in the ZX Prism to select the different speeds for the CPU.
+* COPT: selects the way to generate the composite syncs for RGB and composite video: 0 to use the original Spectrum sync type. 1 to use sync pulses according to the PAL standard.
+* FREQ: these three bits define the frequency of the master clock, from which all other clocks in the circuit are derived. Among others, the vertical refresh rate is also defined here, which can be used to improve compatibility with some VGA monitors that do not support a vertical refresh rate of 50Hz. The vertical refresh rate values are as follows:
+** 000 : 50Hz for 48K and Pentagon mode.
+** 001 : 50Hz for 128K mode
+** 010 : 52 Hz
+** 011 : 53 Hz
+** 100 : 55 Hz
+** 101 : 57 Hz
+** 110 : 59 Hz
+** 111 : 60 Hz
+* ENSCAN: to 1 to enable the scanline effect in VGA mode. No effect if VGA mode is disabled.
+* VGA: set to 1 to enable the scandoubler. The scandoubler output is the same as the normal RGB output, but with a doubling of the horizontal delay frequency. Set to 0 to use 15kHz RGB / composite video output.
+
+<<<
+
+===== `$0C` RASTERLINE
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`11111111`|`11111111`|`11111111`
+|===
+
+Stores the least significant 8 bits of the screen line where maskable interrupt should be triggered. A value of 0 for this register (with LINE8 also equal to 0) sets the raster interrupt to be triggered, if enabled, right at the start of the right edge of the line before the first screen line where the "paper" area begins. In other words: the line count of this interrupt assumes that a screen line is composed of: right edge + horizontal blanking interval + left edge + paper zone. If this assumption is made, the interrupt would be triggered at the beginning of the selected line.
+A value for RASTERLINE equal to 192 (with LINE8 equal to 0) triggers the raster interrupt at the beginning of the bottom edge. The line numbers for the end of the bottom edge and start of the top edge depend on the timings used. The highest value possible in practice for RASTERLINE corresponds to a raster interrupt triggered at the last line of the top edge (see RASTERCTRL).
+
+===== `$0D` RASTERCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000001`|`00000001`|`00000001`
+|===
+
+Raster Interrupt Status and Control Register. The following bits are defined.
+|===
+|INT|0|0|0|0|0|DISVINT|ENARINT|LINE8
+|===
+* INT: this bit is only available on read. It is set to 1 for 32 clock cycles from the time the raster interrupt is triggered. This bit is available even if the processor has interrupts disabled. It is not available if the ENARINT bit is set to 0.
+* DISVINT: set to 1 to disable the vertical retrace maskable interrupts (the original ULA interrupts). After a reset, this bit is set to 0.
+* ENARINT: set to 1 to enable raster line maskable interrupts. After a reset, this bit is set to 0.
+* LINE8: saves bit 8 of the RASTERLINE value, so that any value between 0 and 511 can be set, although in practice, the largest value is limited by the number of lines generated by the ULA (311 in 48K mode, 310 in 128K mode, 319 in Pentagon mode). If a line number higher than the limit is set, the raster interrupt will not occur.
+
+<<<
+
+===== `$0E` DEVCONTROL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+Enable/disable register for different features. The following bits are defined.
+|===
+|DISD|ENMMU|DIROMSEL1F|DIROMSEL7F|DI1FFD|DI7FFD|DI7FFD|DITAY|DIAY
+|===
+* DISD: Set to 1 to disable the SPI hardware interface for SD (used in DivMMC and ZXMMC). Disabling this interface frees ports $1F on write, $3F, $E7 and $EB. After master reset, it is set to 0.
+* ENMMU: set to 1 to enable the horizontal MMU used on the Timex Sinclair. Enabling this interface uses bit 7 of port $FF, port $F4 is used and a read to port $FF returns the last value written to it. After master reset, it is 0.
+* DIROM1F: the value of this bit is masked with the value of bit 2 of port $1FFD according to the operation ~DIROM1F & $1FFD[2]. The net result is that if this bit is set to 1, the system will work as if the value of bit 2 of port $1FFD is always 0, regardless of the value written to it. After master reset, it is set to 0, which allows changes to bit 2 of $1FFD to be taken into account.
+* DIROM7F: the value of this bit is masked with the value of bit 4 of port $7FFD according to the operation ~DIROM7F & $7FFD[4]. The net result is that if this bit is set to 1, the system will work as if the value of bit 4 of port $7FFD is always 0, regardless of the value written to it. After master reset, it is set to 0, which allows changes to bit 4 of $7FFD to be taken into account.
+* DI1FFD: set to 1 to disable the +2A/+3 compatible paging system. Disabling this interface frees the $1FFD port on write. Note that the decoding of port $7FFD, if active, is different depending on whether port $1FFD is active or not.
+* DI7FFD: to 1 to disable the 128K compatible paging system. Disabling this system disables the +2A/+3 paging system even if it is not explicitly disabled.
+* DITAY: set to 1 to disable the second AY chip, thus disabling Turbo Sound mode.
+* DIAY: set to 1 to disable the main AY chip. Disabling this chip disables the second AY chip, even if it is not explicitly disabled.
+
+<<<
+
+===== `$0F` DEVCTRL2
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+|Enable/disable register of different features (continuation of DEVCONTROL). The following bits are defined.
+|===
+|Resv|Resv|SPLITTER|DIMIXER|DISPECDRUM|DIRADES|DITIMEX|DIULAPLUS
+|===
+* Resv: This bit is reserved. In the current implementation, a 0 must be written to it if the register value is updated.
+* SPLITTER: set to 1 to enable joystick splitter.
+* DIMIXER: set to 1 to disable sound output.
+* DISPECDRUM: set to 1 to disable SpecDrum/Covox support.
+* DIRADAS: set to 1 to disable radastanian mode. Note that if radastanian mode is not disabled, but ULAplus is disabled, when attempting to use radastanian mode, the datapath used in the ULA will not be as expected and the display behaviour in this case is not documented.
+* DITIMEX: to 1 to disable Timex compatible display modes. Any writes to the $FF port are therefore ignored. If the Timex MMU is enabled, a read to port $FF will return 0.
+* DIULAPLUS: set to 1 to disable the ULAplus. Any writes to the ULAplus ports are ignored. Reads to those ports return the value of the floating bus. Note however that the contention mechanism for this port still works even if it is disabled.
+
+===== `$10` MEMREPORT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$40` RADASCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Register for setting the radastanian mode and  its characteristics. Writes to this register are ignored if the corresponding bit in DEVCTRL2 is set. The following bits are defined
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|EN1|EN0
+|===
+* Resv: This bit is reserved. In the current implementation, a 0 must be written to it if the register value is updated.
+* EN1, EN0: Both bits must be set to 1 to enable Radastanian mode. If EN0 is enabled, but EN1 is disabled, the rest of the bits, from 2 to 7, are defined as implemented in the https://github.com/chernandezba/zesarux[ZEsarUX emulator] (see César Hernández's documentation on this).
+
+===== `$41` RADASOFFSET
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Contains the number of bytes to be added to the base address of the screen (4000h, 6000h, C000h or E000h depending on the configuration) to obtain the address where the first two pixels are located in Radastanian mode. It is a 14-bit register. To write a value, the 8 least significant bits are written first, followed immediately by the 8 most significant bits (the 2 most significant bits of this value are ignored).
+If the offset value is such that scanning the screen memory to create the image reaches the end of a 16KB page, scanning will continue at the beginning of that same page.
+
+===== `$42` RADASPADDING
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Contains the number of bytes - 64 that a scanline occupies in Radastanian mode. That is, if this register is 0, the length in bytes of a scanline is 64 bytes (128 pixels). If this register is 4, the length of a scanline is 68 bytes (136 pixels). If it is 255, the length of a scanline is 64+255=319 bytes, or 638 pixels.
+If the offset value is such that scanning the screen memory to create the image reaches the end of a 16KB page, scanning will continue at the beginning of that same page.
+
+<<<
+
+===== `$43` RADASPALBANK
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|`00000000`|`00000000`|`00000000`
+|===
+
+Register used to set which section of the ULAplus palette will define the colours in Radastanian mode, and how the border will behave.
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|BOR3 |RADPALQUARTER
+|===
+* Resv: This bit is reserved. In the current implementation, a 0 must be written to it if the register value is updated.
+* BOR3: Within the currently selected palette, indicates whether the border colour will be taken from entries 0 to 7 (0) or from entries 8 to 15 (1). It can be considered as bit 3 of the border colour in Radastanian mode.
+* RADPALQUARTER: two bits indicating which section of the ULAplus palette is to be used for the Radastanian mode. 00 for using the section of inputs 0 to 15. 01 for inputs 16 to 31, 10 for inputs 32 to 47 and 11 for using inputs 48 to 63.
+
+===== `$80` HOFFS48K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$38`
+|===
+
+Horizontal screen centering adjustment value for 48K ULA.
+
+===== `$81` VOFFS48K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$01`
+|===
+
+Vertical screen centering adjustment value for 48K ULA.
+
+===== `$82` HOFFS128K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$3A`
+|===
+
+Horizontal screen centering adjustment value for 128K ULA.
+
+===== `$83` VOFFS128K
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$01`
+|===
+
+Vertical screen centering adjustment value for 128K ULA.
+
+===== `$84`
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|`HOFFSPEN`
+|Read/Write|Does not change|Does not change|`$37`
+|===
+
+Horizontal screen centering adjustment value for Pentagon ULA.
+
+===== `$85` VOFFSPEN
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$00`
+|===
+
+Vertical screen centering adjustment value for Pentagon ULA.
+
+===== `$A0` DMACTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A1` DMASRC
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A2` DMADST
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$A3` DMAPRE
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A4` DMALEN
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A5` DMAPROB
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$A6` DMASTAT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$C6` UARTDATA
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$C7` UARTSTAT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$C8` - `$DF` RESERVED
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Definido por el usuario|Definido por el usuario|Definido por el usuario
+|===
+
+ZXUNO registers reserved for experiments or private use.
+
+===== `$F0` SRAMADDR
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$F1` MADDRINC
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+
+===== `$F2` SRAMDATA
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Lectura/Escritura|Does not change|`00000000`|`00000000`
+
+===== `$F3` VDECKCTRL
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+===== `$F7` AUDIOMIX
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`10011111`
+|===
+
+Control of the left/right channel mix from the 4 channels of the AY-8912. The following groups of 2 bits each are defined:
+|===
+|=== |CHANNELA|CHANNELB|CHANNELC|BEEPDRUM
+|===
+* BEEPDRUM : Channel for Beeper and Specdrum.
+* The meaning of each group of 2 bits is: 00 = Mute, 01 = Right channel, 10 = Left channel, 11 = Both.
+
+<<<
+
+===== `$FB` AD724
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`00000000`
+|===
+
+Control of the operating mode of the AD724 encoder chip. The following bits are defined:
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|Resv|MODE
+|===
+* Resv : the meaning of these bits is reserved and must not be altered.
+* MODE : operating mode of the AD724. 0 = encodes PAL standard. 1 = encodes NTSC standard.
+
+===== `$FC` COREADDR
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|Does not change|`$058000`
+|===
+Stores the address, within SPI memory, of the start of the core to be booted. To store a different address, three writes must be made to this register, containing the three bytes of the address, in order from most significant to least significant. On read, each access to this register returns a part of the last stored address, from the most significant part to the least significant part.
+
+===== `$FD` COREBOOT
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read|Does not change|Does not change|Does not change
+|===
+
+Boot control register. Writing a 1 to bit 0 of this register (all other bits are reserved and must remain at 0) triggers the FPGA's internal mechanism to start another core. The start address of this second core will be the last one written using the COREADDR register.
+
+===== `$FE` SCRATCH
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read/Write|Does not change|`00000000`|`00000000`
+|===
+
+<<<
+
+====== `$FF` COREID
+
+[align="center",options="header"]
+|===
+|Direction|Value after user reset|Value after master reset|Value after poweron
+|Read|Read later|Read later|Read later
+|===
+
+Each read operation provides the next ASCII character of the string containing the current revision of the ZX-Uno core. When the string ends, subsequent reads output bytes with the value 0 (at least on) until the string starts again. This pointer returns to 0 automatically after a reset or a write to the `$FC3B` register. The delivered characters that are part of the string are standard printable ASCII (codes `32`-`127`). Any other value indicates that this register is not operational.
 
 <<<
 
