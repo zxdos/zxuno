@@ -195,7 +195,7 @@ To create two FAT16 partitions (for example to use MSX core) and have the rest o
 select disk 6
 clean
 create part primary size=4000
-set id = 06
+set id=06
 active
 format fs=FAT label=ZXTRES quick
 create part primary size=4000
@@ -212,7 +212,7 @@ To create one FAT32 4GB partition (for example to use with Amstrad CPC 6128 core
 select disk 6
 clean
 create part primary size=4000
-set id = 0b
+set id=0b
 active
 format fs=FAT32 label=ZXTRES unit=4k quick
 create part primary
@@ -2106,7 +2106,7 @@ The gearshift is always in the high position, and to change to the low position,
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
 [.text-center]
-image:img/joutrun.jpg[scaledwidth=50%]
+image:img/jtoutrun.jpg[scaledwidth=50%]
 
 The following options are available:
 
@@ -2214,11 +2214,11 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 - `F12`: display the core control menu
 - Cursor or controller 1: Player 1 directional controls
-- `Ctrl`, `Alt` and `Space` or Controller 1: Player one buttons 1, 2 and 3
+- `Ctrl`, `Alt` and `Space` or Controller 1 buttons A, B, C: Player one buttons 1, 2 and 3
 - `R`,`F`,`G`,`D` or controller 2: Player two movement
-- `A`, `S` and `Q` or controller 2: Player two buttons 1, 2 and 3
-- `1` and `2`: to start game player 1 or player 2
-- `5` and `6`: to insert a coin
+- `A`, `S` and `Q` or controller 2 buttons A, B, C: Player two buttons 1, 2 and 3
+- `1` and `2` or controller button Y: to start game player 1 or player 2
+- `5` and `6` or controller button X: to insert a coin
 - `P`: Pause
 - `F3`: Soft Reset (restarts the Core)
 - `F12` (long press): Toggle between RGB and VGA mode

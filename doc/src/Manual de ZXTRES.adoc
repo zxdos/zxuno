@@ -198,7 +198,7 @@ Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el 
 select disk 6
 clean
 create part primary size=4000
-set id = 06
+set id=06
 active
 format fs=FAT label=ZXTRES quick
 create part primary size=4000
@@ -215,7 +215,7 @@ Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Am
 select disk 6
 clean
 create part primary size=4000
-set id = 0b
+set id=0b
 active
 format fs=FAT32 label=ZXTRES unit=4k quick
 create part primary
@@ -2236,8 +2236,8 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1, 2 y 3 del jugador uno
 - `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
 - `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
-- `1` y `2`: Iniciar partida jugador 1 o jugador 2
-- `5` y `6`: Insertar una moneda
+- `1` y `2` o botón Y de un mando: Iniciar partida jugador 1 o jugador 2
+- `5` y `6` o botón X de un mando: Insertar una moneda
 - `P : Pausa`
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
