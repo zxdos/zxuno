@@ -1,6 +1,6 @@
 = Manual de ZXDOS+ y gomaDOS+
 :author: kounch
-:revnumber: 1.6.2
+:revnumber: 1.6.3
 :doctype: book
 :notitle:
 :front-cover-image: image:img/portada.jpg[]
@@ -20,7 +20,7 @@
 
 ZXDOS+ y gomaDOS+ son la continuación de https://zxuno.speccy.org[ZX-Uno] un proyecto de hardware y software basado en una placa FPGA programada para trabajar como un ordenador ZX Spectrum, y creado por el equipo de ZX-Uno: Superfo, AVillena, McLeod, Quest y Hark0.
 
-Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir arrancar el ZXDOS+ con la configuración que se desee de entre todas las instaladas.
+Con el paso del tiempo, el proyecto ha ido creciendo, de forma que es posible instalar distintas configuraciones de software (cores) en la memoria flash de la FPGA, y que trabajan como otros sistemas distintos del ZX Spectrum, pudiendo elegir al arrancar el ZXDOS+ la configuración que se desee de entre todas las instaladas.
 
 La página oficial de ZXDOS+ y gomaDOS+ es https://zxdos.forofpga.es.
 
@@ -33,7 +33,7 @@ Gran parte del contenido de este documento se basa en información compartida an
 - En https://www.forofpga.es/[foroFPGA]
 - En el https://www.zxuno.com/forum/[foro de ZX-Uno]
 - En los varios FAQ existentes, principalmente la versión original https://uto.speccy.org/zxunofaq.html[de @uto_dev], y la versión más moderna http://desubikado.sytes.net/zx-uno-faq-version-desubikado/[de @desUBIKado]
-- En el https://t.me/zxuno[canal oficial de Telegram de ZX-Uno]
+- En los canales oficiales de Telegram de https://t.me/zxuno[ZX-Uno] y https://t.me/zxdosfpga[ZXDOS]
 
 Sin el trabajo previo de todas estas personas (y más), ese manual no podría existir.
 
@@ -44,17 +44,17 @@ Sin el trabajo previo de todas estas personas (y más), ese manual no podría ex
 ==== ZXDOS+
 
 [.text-center]
-image:img/ZXDOSfront.jpg[pdfwidth=90%]
+image:img/ZXDOSfront.jpg[scaledwidth=90%]
 
 [.text-center]
-image:img/ZXDOSback.jpg[pdfwidth=90%]
+image:img/ZXDOSback.jpg[scaledwidth=90%]
 
 <<<
 
 ==== gomaDOS+
 
 [.text-center]
-image:img/gomaDosBack.jpg[pdfwidth=90%]
+image:img/gomaDosBack.jpg[scaledwidth=90%]
 
 ==== Descripción
 
@@ -100,11 +100,15 @@ Para poder poner en marcha un ZXDOS+ o gomaDOS+ hace falta, al menos, lo siguien
 
 Para poder aprovechar todo su potencial, es útil tener también:
 
-- Una tarjeta microSD, no necesariamente muy grande
+- Una tarjeta microSD, de 32GB de capacidad o menos
 - Unos altavoces de PC para conectar a la salida de audio, o un cable jack-stereo a dos conectores RCA rojo/blanco para conectar a la TV (opcional en gomaDOS+, ya que tiene beeper incorporado)
 - Un joystick norma Atari, como por ejemplo, un gamepad DB9 de Megadrive (se necesita el adaptador de joystick en el caso de gomaDOS+)
 - Un ratón PS/2 (se necesista adaptador PS/2 a USB en el caso de gomaDOS+)
 - Un cable con un jack estéreo de 3,5 mm en un extremo y los dos canales de sonido divididos en dos salidas mono en el otro, si se quiere usar algún dispositivo de reproducción y/o grabación de audio, como por ejemplo un Miniduino (<<#_miniduino,ver la sección correspondiente más adelante>>), un PC/Mac/Raspberry PI, etc. o un reproductor/grabador de https://es.wikipedia.org/wiki/Casete[cassette]. El canal derecho se utiliza como entrada (EAR) y el canal izquierdo se puede usar como salida de grabación (MIC).
+[NOTE]
+====
+Si se utiliza un adaptador VGA a https://es.wikipedia.org/wiki/Euroconector[Euroconector o SCART] activo, este emplea pines no utilizados del puerto VGA para transmitir el audio, pero sólo si no hay nada conectado al puerto jack de 3,5 mm de salida de sonido.
+====
 
 <<<
 
@@ -160,7 +164,7 @@ Para el core de Spectrum, tambén es posible tener <<#_formato_avanzado_de_la_ta
 
 ===== Windows
 
-Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
+Para configuraciones sencillas, y tarjetas del tamaño adecuado (2GB o menos para FAT16 y 32GB o menos para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association].
 
 Para otras configuraciones, y según la versión de sistema operativo de que se disponga, se podrá utilizar la herramienta de línea de comandos `diskpart` o bien la interfaz gráfica de administración de discos del sistema.
 
@@ -183,7 +187,7 @@ Para crear dos primeras particiones FAT16 de 4GB (por ejemplo, para usar con el 
 select disk 6
 clean
 create part primary size=4000
-set id  = 06
+set id=06
 active
 format fs=FAT label=ZXDOSPLUS quick
 create part primary size=4000
@@ -200,7 +204,7 @@ Para crear una partición FAT32 de 4GB (por ejemplo, para usar con el core de Am
 select disk 6
 clean
 create part primary size=4000
-set id  = 0b
+set id=0b
 active
 format fs=FAT32 label=ZXDOSPLUS unit=4k quick
 create part primary
@@ -210,13 +214,13 @@ exit
 
 <<<
 
-===== MacOS
+===== macOS
 
-Para configuraciones sencillas, y tarjetas del tamaño adecuado (menos de 2GB para FAT16 o menos de 32GB para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association] o la Utilidad de Discos incluida con el sistema operativo.
+Para configuraciones sencillas, y tarjetas del tamaño adecuado (2GB o menos para FAT16 y 32GB o menos para FAT32), se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta de formato oficial de la SD Association] o la Utilidad de Discos incluida con el sistema operativo.
 
 Para configuraciones más complejas, será necesario utilizar la línea de comandos.
 
-Por ejemplo, en MacOS, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 2GB o menos de tamaño), que figura como `disk6` en la lista de dispositivos:
+Por ejemplo, en macOS, para formatear una tarjeta con una única partición FAT16 (si la tarjeta es de 2GB o menos de tamaño), que figura como `disk6` en la lista de dispositivos:
 
 [source,shell]
 ----
@@ -259,7 +263,7 @@ diskutil partitionDisk /dev/disk6 MBR "MS-DOS FAT32" ZXDOSPLUS 4G "MS-DOS FAT32"
 
 [NOTE]
 ====
-Para el core de Amstrad CPC, en este caso, al elegir exactamente un tamaño de partición de 4G, MacOS elegirá por defecto un tamaño de cluster de 4096. Para un tamaño inferior, podría ser necesario volver a formatear la primera partición con unos comandos similares a estos:
+Para el core de Amstrad CPC, en este caso, al elegir exactamente un tamaño de partición de 4G, macOS elegirá por defecto un tamaño de cluster de 4096. Para un tamaño inferior, podría ser necesario volver a formatear la primera partición con unos comandos similares a estos:
 
 [source,shell]
 ----
@@ -270,7 +274,7 @@ newfs_msdos -F 32 -v ZXDOSPLUS -b 4096 /dev/rdisk6s1
 
 [TIP]
 ====
-Por defecto, MacOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la partición de la microSD se llama `ZXDOSPLUS`):
+Por defecto, macOS indexa y guarda información extra en archivos de los discos externos. Esto se puede minimizar usando estos comandos (suponiendo que la partición de la microSD se llama `ZXDOSPLUS`):
 
 [source,shell]
 ----
@@ -563,20 +567,27 @@ Para que el mapa se conserve después de un master reset, hay que tener seleccio
 
 Para más información, consultar https://www.zxuno.com/forum/viewtopic.php?f=37&t=208[este mensaje en el foro de ZX-Uno].
 
+[NOTE]
+====
+<<#_se_basic_iv>> utiliza su propio sistema nativo para configurar el mapa de teclado y también tiene https://github.com/source-solutions/sebasic4/wiki/Keyboard-layouts[mapas propios].
+====
+
+<<<
+
 *Español*
 
 [.text-center]
-image:./img/keyboardEsp.png[pdfwidth=70%]
+image:./img/keyboardEsp.png[scaledwidth=70%]
 
 *Inglés*
 
 [.text-center]
-image:./img/keyboardEng.png[pdfwidth=70%]
+image:./img/keyboardEng.png[scaledwidth=70%]
 
 *Spectrum*
 
 [.text-center]
-image:./img/keyboardAV.png[pdfwidth=70%]
+image:./img/keyboardAV.png[scaledwidth=70%]
 
 <<<
 
@@ -622,7 +633,7 @@ Una vez descargado y descomprimido, se han de copiar, a la raíz de la tarjeta, 
 Si todo se ha hecho correctamente, al encender el core Spectrum de ZXDOS+ se verá cómo esxdos detecta la tarjeta y carga los componentes necesarios para funcionar.
 
 [.text-center]
-image:./img/esxdos.png[pdfwidth=70%]
+image:./img/esxdos.png[scaledwidth=70%]
 
 <<<
 
@@ -631,6 +642,7 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. 
     back16m
     backzx2
     backzxd
+    core
     corebios
     dmaplayw
     esprst
@@ -655,7 +667,7 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXDOS+. 
 === BIOS
 
 [.text-center]
-image:./img/boot.png[pdfwidth=80%]
+image:./img/boot.png[scaledwidth=80%]
 
 Si se pulsa la tecla `F2` (`Caps Shift+1` en gomaDOS+) durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXDOS+. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
 
@@ -674,7 +686,7 @@ Otras teclas que se pueden pulsar durante el arranque de la BIOS son:
 ==== Main
 
 [.text-center]
-image:img/bios.png[pdfwidth=70%]
+image:img/bios.png[scaledwidth=70%]
 
 En la primera pantalla de configuración, además de poder ejecutar distintas pruebas, se puede definir el comportamiento por defecto para lo siguiente:
 
@@ -687,28 +699,28 @@ En la primera pantalla de configuración, además de poder ejecutar distintas pr
 - Soporte NMI para DivMMC
 - Soporte para nuevos modos gráficos (ULAPlus, Timex, Radastan)
 
-Se puede consultar información más tecnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
+Se puede consultar información más técnica en https://www.zxuno.com/wiki/index.php/ZX_Spectrum[la Wiki de ZX-Uno].
 
 <<<
 
 ==== ROMs
 
 [.text-center]
-image:img/bios2.png[pdfwidth=70%]
+image:img/bios2.png[scaledwidth=70%]
 
 La segunda pantalla muestra las ROMs de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
 
 ==== Upgrade
 
 [.text-center]
-image:img/bios3.png[pdfwidth=70%]
+image:img/bios3.png[scaledwidth=70%]
 
 La pantalla _Upgrade_ se utiliza para realizar las distintas actualizaciones del contenido de la memoria Flash: esxdos, BIOS, Cores, etc. (véase <<#_actualizaciones,el apartado correspondiente a actualizaciones>> para más información).
 
 ==== Boot
 
 [.text-center]
-image:img/bios4.png[pdfwidth=70%]
+image:img/bios4.png[scaledwidth=70%]
 
 En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que cargue por defecto en el arranque.
 
@@ -717,7 +729,7 @@ En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que c
 ==== Advanced
 
 [.text-center]
-image:img/bios5.png[pdfwidth=70%]
+image:img/bios5.png[scaledwidth=70%]
 
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
 
@@ -735,7 +747,7 @@ La pantalla de configuración avanzada sirve para modificar los siguientes ajust
 ==== Exit
 
 [.text-center]
-image:img/bios6.png[pdfwidth=70%]
+image:img/bios6.png[scaledwidth=70%]
 
 Finalmente, desde la última pantalla se puede:
 
@@ -746,7 +758,7 @@ Finalmente, desde la última pantalla se puede:
 
 == ZX Spectrum
 
-El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustibuir por otro que no sea de ZX Spectrum, ya que el ZXDOS+ lo utiliza para su funcionamiento.
+El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustituir por otro que no sea de ZX Spectrum, ya que el ZXDOS+ lo utiliza para su funcionamiento.
 
 Estas son algunas de sus principales características:
 
@@ -790,9 +802,25 @@ Véase el <<#_roms_3,apartado de actualizaciones>> para más información sobre 
 
 https://www.facebook.com/groups/DerbyPro[DerbyPro o Derby{pp}] es una ROM mejorada para el ZX Spectrum, basada en la versión 1.4 de la ROM de desarrollo Derby. El Spectrum 128 (nombre en código "Derby") fue una máquina española, encargada por Investronica y lanzada en 1985. Incluía un teclado aparte que añadía varias teclas de edición extra. En 1986 se lanzó la versión para Reino Unido con una versión simplificada de 128 BASIC y sin teclado extra. Derby++ se basa en la ROM española para incluir lo mejor de las dos versiones, sin sus inconvenientes, y con soporte para nuevo hardware.
 
-Se puede descargar la ROM, un manual de usuario y otos ficheros del https://www.facebook.com/groups/DerbyPro[grupo púbilco oficial de Facebook].
+[.text-center]
+image:img/derbypro.png[scaledwidth=70%]
 
-Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos de esxdos desde 128 BASIC, así que se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
+<<<
+
+Algunas de sus características incluyen:
+
+- Modo 48K con compatibilidad binaria al 100%
+- Comando PLAY con soporte para 6 canales
+- Acceso al navegador NMI de esxDOS desde el menú de arranque
+- 128 BASIC con correcciones, comandos adicionales y editor de texto a pantalla completa
+- Soporte para esxDOS en 128 BASIC
+- Acceso vía menú a TR-DOS
+- Comando PALETTE para ULAplus
+- Ejecución de la mayor parte del software para Spectrum sin tener que hacer un cambio de configuración en la BIOS
+
+Se puede descargar la ROM, un manual de usuario y otros ficheros del https://www.facebook.com/groups/DerbyPro[grupo público oficial de Facebook].
+
+Como es una ROM de 64K con soporte para nuevo hardware, se pueden usar estas opciones al <<#_zx123_tool,añadirla a la SPI flash>>:
 
 [%header,cols=2*]
 |===
@@ -810,7 +838,7 @@ Esta ROM de 64K tiene soporte para nuevo hardware, incluyendo el uso de comandos
 
 ==== CargandoLeches
 
-https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
+https://github.com/antoniovillena/CargandoLeches[CargandoLeches] es un conjunto de ROMs de ZX Spectrum originalmente pensadas para cargar juegos a una velocidad de 15 a 20 veces superior a lo normal. En lugar de una cinta se requiere una fuente de audio digital como un ordenador, un dispositivo móvil, un reproductor MP3, etc. También tiene una rutina que detecta el método de carga y si no se trata de una carga ultrarrápida, ejecuta el código de la ROM original. En cargas que no sean CargandoLeches no se nota por tanto la diferencia entre usar esta ROM y la ROM original.
 
 Desde la versión 2.0, el proyecto pasó de ser una única ROM a varias, cada una con distintas opciones. Así, es posible elegir diferentes combinaciones que pueden incluir:
 
@@ -821,7 +849,7 @@ Desde la versión 2.0, el proyecto pasó de ser una única ROM a varias, cada un
 
 El conjunto completo de ROMs está disponible para descargar desde el repositorio en GitHub https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[aquí].
 
-Dependiendo de la ROM elegida, los ajustes a indicar cuando se <<#_zx123_tool,añada a la SPI flash>> pueden variar. Por ejemplo, para la ROM `48le_ea_re_po` (que tiene habilitadas todas las opciones), se pueden usar estos ajustes  (no hay que habilitar NMI DivMMC porque el editor de POKEs ya lo utiliza):
+Dependiendo de la ROM elegida, los ajustes a indicar cuando se <<#_zx123_tool,añada a la SPI flash>> pueden variar. Por ejemplo, para la ROM `48le_ea_re_po` (que tiene habilitadas todas las opciones), se pueden usar estos ajustes (no hay que habilitar NMI DivMMC porque el editor de POKEs ya lo utiliza):
 
 [%header,cols=2*]
 |===
@@ -852,7 +880,7 @@ En el caso de usar una ROM con la opción de introducir POKEs, se hace de la sig
 
 Las ROMs con la opción de carga ultrarrápida necesitan archivos de cinta especiales que se generan desde ficheros `TAP` de carga normal, de juegos que no tengan protección de carga o modo turbo.
 
-Para crear una cinta de carga ultrarrápida se necesitan las utilidates de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para MacOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
+Para crear una cinta de carga ultrarrápida se necesitan las utilidades de línea de comandos `leches` y `CgLeches`. Estas se pueden conseguir, para Windows, https://github.com/antoniovillena/CargandoLeches/tree/master/binaries[en el repositorio oficial]. Para macOS es posible descargar una versión no oficial https://github.com/kounch/CargandoLeches/tree/master/binaries/MacOS[en este otro repositorio].
 
 En otro caso, es posible compilar desde https://github.com/antoniovillena/CargandoLeches[el código fuente disponible en el repositorio oficial]. Por ejemplo, para compilar en Linux usando `gcc` basta con usar estos comandos:
 
@@ -882,39 +910,60 @@ Debido a limitaciones en el hardware, los ficheros `TZX` generados con `CgLeches
 
 ==== SE Basic IV
 
-https://github.com/cheveron/sebasic4[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto. SE Basic IV se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también lo hace en ZX-Uno y similares.
+https://source-solutions.github.io/sebasic4/[SE Basic IV] es un intérprete de Microsoft BASIC, gratuito y de código abierto para la arquitectura Z80. Aunque aspira a tener un alto grado de compatibilidad con Microsoft BASIC, hay algunas diferencias.
+Se ha diseñado para funcionar en un https://www.patreon.com/chloe280se[Chloe 280SE] pero también es compatible con el core de ZX Spectrum del ZXDOS+.
 
-SE Basic se pensó en sus orígenes como un nuevo firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE]. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrurm, pero posteriormente se ha reescrito basándose en la  https://groups.google.com/g/comp.sys.sinclair/c/F90HbKTDkRk[ROM mejorada y de código abierto TS1000 / ZX81].
+SE Basic comenzó en 1999 como firmware para el https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_SE[ZX Spectrum SE], el antecesor al Chloe 280SE. Las primeras versiones eran modificaciones aplicadas sobre la ROM original del ZX Spectrum. Desde la versión 1 utiliza su propio fichero ensamblador. Desde la versión 2, soporta ULAplus.
 
-La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC], todavía se mantiene como un firmware de código abierto para el Spectrum. Se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
+La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC] reemplazó el código ROM original con una versión de código abierto derivada de las ROMs del https://github.com/cheveron/open81[ZX81] y el https://github.com/cheveron/samrom[SAM Coupé]. Todavía se mantiene como un firmware de código abierto para el Spectrum y se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
 
-La versión IV es una nueva rama de la versión anterior, creada principalmente porque no quedaba espacio para añadir nuevas características a la ROM de 16K. La primera versión (4.0 Anya) añadió una segunda ROM de 16K con soporte para el modo hi-res de Timex. La sintaxis era aún bastante compatible con Sinclair BASIC. La versión 4.2 fue reconstruida específicamente para el Chloe 280SE, eliminó el soporte para dispositivos antiguos como las cintas, añadió soporte integrado y compatibilidad total con el kernel de esxdos, y migró a la sintaxis de Microsoft BASIC.
+[.text-center]
+image:img/sebasic4.png[scaledwidth=70%]
 
-Aunque guarda una base común de código con muchas versiones de Sinclair BASIC (la ROM TS1000), hay varias diferencias significativas:
+La versión 4.0 añadió soporte para un modo de 80 columnas. La versión 4.1 fue un intento fallido de refactorizar el código. A partir de 2019, la última versión (4.2 Cordelia) se reconstruyó desde cero para aprovechar al completo el core de ZX Spectrum del ZX-Uno (y ZXDOS+). Aunque las versiones anteriores mantenían un gran nivel de compatibilidad con Sinclair BASIC y otro software, esta nueva versión ya no tiene soporte para software de Sinclair y es mucho más parecida en sintaxis a Atari BASIC.
 
-- Soporte para páginas de códigos(8-bit ASCII).
-- Traducción de los mensajes de error.
-- 38 tokens nuevos.
-- Presentación en una terminal estándar (80 x 24).
-- Introducción de caracteres de terminal (CTRL, META).
-- Buffer de teclado.
-- Soporte para teclados completos.
-- Soporte completo de las características adicionales del core de Spectrum de ZX-Uno
+La versión 4.2 requiere que divMMC esté activo con esxDOS o UnoDOS 3 instalado. Sin embargo, ni los <<#_comandos_de_esxdos,comandos "DOT">> ni el navegador NMI están soportados.
 
-Las principales diferencias con Microsoft BASIC son:
+Algunas de sus características son:
 
-- Abreviación de tokens.
-- Comprobación de sintaxis en cada entrada.
-- Normalmente los paréntesis son opcionales.
-- Introducció de número con el estilo Motorola:
-  % – binario
-  @ – octal
-  $ – hexadecimal
-- Evaluación de expresiones siempre activa.
-- Operadores lógicos y bit a bit separados.
-- Tipado automático de datos.
+- Modos de vídeo con paleta de 40 columnas (16 colores) y 80 column (2 colores)
+- Evaluación de expresiones siempre activa (uso de variables como nombres de fichero)
+- Formato de empaquetado de aplicaciones con soporte para convertir programas BASIC en apps
+- Tipos automáticos de datos
+- Lógica a nivel de bit (AND, NOT, OR, XOR).
+- Sistema de ayuda incorporado
+- Troceado de cadenas a elegir entre Microsoft (LEFT$, MID$, RIGHT$) o Sinclair (TO)
+- Caracteres compuestos (soporta Vietnamita).
+- Sistema de archivos basado en discos (nada de cintas).
+- Gestión de errores (ON ERROR..., TRACE).
+- Control de flujo (IF...THEN...ELSE, WHILE...WEND).
+- Acceso aleatorio completo a ficheros desde BASIC (OPEN, CLOSE, SEEK).
+- Soporte para teclado de tamaño completo (Supr, Inicio, Fin y demás).
+- Modos gráficos en el modo de 40 columnas (CIRCLE, DRAW, PLOT).
+- Traducción de conjuntos de caracteres, mensajes de error y mapas de teclado
+- Nombres de variable largos
+- Notación de números estilo Motorola (%; binario, @; octal, $; hexadecimal)
+- BREAK NMI
+- Validación de sintaxis según se introduce
+- Comando PLAY con soporte para PSG de 6 canales y MIDI
+- Funciones recursivas definidas por el usuario
+- Actualizaciones inteligentes de firmware
+- Abreviación de tokens y atajos (&; AND, ~; NOT; |; OR, ?; PRINT, '; REM')
+- Capacidad para deshacer NEW (OLD).
+- Canales definidos por el usuario
+- Conjuntos de caracteres definidos por el usuario (256 caracteres)
+- Macros definidas por el usuario
+- Modos de pantalla definidos por el usuario
 
-Se puede encontrar mucha más información, incluyendo el manual de usuario, etc. en https://github.com/cheveron/sebasic4/wiki[la wiki oficial].
+[NOTE]
+====
+Para que la opción de actualización de firmware funcion, se ha de instalar SE Basic IV en los slot 2 y 3
+====
+
+[CAUTION]
+====
+El uso de la actualización de firmware reemplaza la versión de esxDOS con la última versión de UnoDOS 3
+====
 
 <<<
 
@@ -946,7 +995,7 @@ Una de las ROM que se pueden cargar con el core de ZX Spectrum es la de ZX Spect
 
 El +3e usa su propio esquema de particionado (llamado IDEDOS) para dividir el disco duro en diferentes particiones donde se pueden almacenar datos. Se necesita una version 1.28 o superior de la ROM para poder compartir particiones IDEDOS con particiones MBR. En otro caso, se ha dedicar la tarjeta completa al particionado IDEDOS.
 
-[IMPORTANT]
+[WARNING]
 ====
 El esquema de particionado que se presentará a continuación sólo se podrá utilizar con el core de Spectrum. Otros cores que necesiten acceso a la tarjeta SD posiblemente fallen o no se inicien correctamente, si se encuentra insertada una SD con este formato.
 ====
@@ -958,7 +1007,7 @@ En IDEDOS, cada partición puede tener un tamaño entre 1 y 16 Megabytes (16 mil
 
 A continuación se explica una forma de dividir una tarjeta en dos o tres partes, con la primera partición IDEDOS (1GB de tamaño), la segunda FAT16 (4GB) y la tercera FAT32 (resto del espacio de la tarjeta).
 
-En la segunda particion se puede instalar, tal y como se explicó anteriormente <<#_esxdos,exsdos>> y otros programas.
+En la segunda partición se puede instalar, tal y como se explicó anteriormente <<#_esxdos,exsdos>> y otros programas.
 
 ==== Windows
 
@@ -974,7 +1023,7 @@ Se puede utilizar el administrador de discos de Windows. Los pasos a seguir ser�
 
 <<<
 
-==== MacOS
+==== macOS
 
 Será necesario utilizar la línea de comandos. Lo primero es determinar el disco a formatear:
 
@@ -1250,7 +1299,7 @@ Los principales comandos "DOT" commands son los siguientes:
 
 - `128`: Para pasar al modo 128K desde el modo 48K.
 - `cd`: Cambiar el directorio actual de trabajo.
-- `chmod`: cambiar los atributos de los ficheros de la tarjeta microSD.
+- `chmod`: Cambiar los atributos de los ficheros de la tarjeta microSD.
 - `cp`: Copiar un archivo.
 - `divideo`: Reproduce un archivo de vídeo Divideo (.DVO).
 - `drives`: Mostrar las unidades disponibles.
@@ -1285,19 +1334,24 @@ Algunos comandos extendidos de BASIC son:
 - `GO TO` para cambiar de unidad y/o directorio (ej: `GO TO hd1` o `GO TO hd0"juegos"`)
 - `CAT` para mostrar el contenido de una unidad
 - `LOAD` para cargar un fichero desde una unidad (programa en BASIC, pantalla, código, etc. por ejemplo `LOAD *"Pantalla.scr" SCREEN$`)
-- `SAVE` para guardar datos en un fichero  (Ej: `SAVE *"Programa.bas"`)
+- `SAVE` para guardar datos en un fichero (Ej: `SAVE *"Programa.bas"`)
 - `ERASE` para borrar un fichero
 
 Además, esxdos incluye un gestor NMI, es decir, una aplicación que se carga cuando se pulsa NMI (F5) y que facilita la navegación por la tarjeta microSD y la carga de algunos tipos de archivo (TAP, Z80, TRD, etc.). Pulsando la tecla "H" se accede a una pantalla de ayuda, en la que se indican todas las teclas disponibles.
 
 [NOTE]
 ====
-El gestor de esxdos muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
+El gestor de esxdos muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y macOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
 [CAUTION]
 ====
 En el caso de utilizarse también la tarjeta con el core de <<#_pc_xt,PC XT>>, **no se debe utilizar ninguna utilidad de reordenación de FAT** ya que esto puede provocar que deje de arrancar correctamente DOS en dicho core.
+====
+
+[TIP]
+====
+Existen navegadores alternativos como https://spectrumcomputing.co.uk/forums/viewtopic.php?f=9&t=2553[Long Filename Browser de Bob Fossil] o http://board.esxdos.org/viewtopic.php?id=94[New NMI Handler de Dr. Slump] que incorporan funcionalidades y características que no tiene el gestor de esxdos original
 ====
 
 <<<
@@ -1309,20 +1363,26 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `back16m`: Copia a un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root". Tras terminar su ejecución hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta.
 - `backzx2` o `backzxd`: Genera un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` en el directorio raíz de la tarjeta microSD el contenido de una memoria SPI Flash de 32 megas. Se debe ejecutar desde una ROM en modo "root". Cuando termine hay que ejecutar el comando `.ls` para que se termine de grabar la cache en la tarjeta microSD. Si no se hace, la longitud del archivo se quedará en 0 de forma errónea.
 - `corebios`: Para hacer una actualización conjunta del core de ZX Spectrum y de la BIOS.
-- `dmaplayw`: Reproduce un archivo de audio .WAV,  que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
+- `dmaplayw`: Reproduce un archivo de audio .WAV, que debe ser de 8 bits, sin signo y muestreado a 15625 Hz.
 - `esprst`: Resetea el módulo WiFi ESP8266(ESP-12).
 - `iwconfig`: Configura el módulo WiFi.
 - `joyconf`: Configura y prueba los joysticks de teclado y DB9.
 - `keymap`: Sirve para cargar una definición de teclado diferente.
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
+- `loadtap`: Para cargar un archivo de imagen de cinta usando la integración con .PZX.
 - `playmid`: Reproduce archivos musicales .MID en el addon MIDI.
 - `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsback`: Copia a un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD todas las ROMS del core ZX Spectrum almacenadas en la memoria SPI Flash. Sólo funciona correctamente en ZX-Uno y ZXDOS (no utilizar en ZXDOS+ o gomaDOS+). Se debe ejecutar desde una ROM en modo "root".
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
 - `upgr16m`: Copia el contenido de un fichero `FLASH.ZX1` en el directorio raíz de la tarjeta microSD a una memoria SPI Flash de 16 megas. Se debe ejecutar desde una ROM en modo "root".
 - `upgrzx2` o `upgrzxd`: Copia el contenido de un fichero `FLASH_32.ZX2` o `FLASH_32.ZXD` a una memoria SPI Flash de 32 megas.Versión del comando upgrade exclusivo para memorias SPI Flash de 32 Megas. Se debe ejecutar desde una ROM en modo "root".
-- `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones  seleccionadas en archivos de configuración que pueden posteriormente ser cargados.
+- `zxuc`: Configura todas las opciones de la BIOS, permitiendo grabar en la microSD las opciones seleccionadas en archivos de configuración que pueden posteriormente ser cargados (se puede obtener https://github.com/Utodev/ZXUC/tree/master/downloads[en el repositorio de Utodev]).
 - `zxunocfg`: Configura determinados aspectos del funcionamiento del ZX-Uno como los timings, la contención, el tipo de teclado, la velocidad de la CPU, el tipo y frecuencia vertical del vídeo.
+
+[TIP]
+====
+La mayoría de estos comandos se pueden obtener en el https://github.com/zxdos/zxuno/tree/master/SD/BIN[el repositorio oficial de ZX-Uno].
+====
 
 <<<
 
@@ -1346,21 +1406,28 @@ Por ejemplo:
 Debido a que la la frecuencia seleccionada para VGA afecta a la frecuencia del reloj maestro, para que el módulo Wi-Fi se comunique correctamente con el core, esta debe estar configurada a 50 (véase el <<#_advanced,apartado dedicado a la configuración de la BIOS>>).
 ====
 
+[TIP]
+====
+Todo el software de Wi-Fi que se indica a contiuación está disponible con https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[las distribuciones para ZX-Uno de desubikado]
+====
+
 <<<
 
-==== Network tools for ZX-Uno pack
+==== Network tools for ZX-Uno
 
-Se trata de un conjunto de programas, desarrollados por Nihirash y que se pueden https://nihirash.net/network-tools-for-zx-uno-pack/[descargar] https://nihirash.net/ugophy-1-0-and-nettools-for-zx-spectrum/#more-71[de su web].
+Se trata de un conjunto de programas para ZX Spectrum, desarrollados por Nihirash algunos de los cuales se pueden https://nihirash.net/projects/[ver en su web].
 
-- `netman`: Utilidad sencilla para configurar la conexión Wi-Fi para el resto de programas. No funciona en modo 48K.
-- `uGophy`: Cliente de https://es.wikipedia.org/wiki/Gopher[Gopher]. No funciona en modo 48K.
-- `irc`: Cliente de https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat]. Funciona mejor a 14 Mhz.
+- `netman`: Utilidad sencilla para configurar la conexión Wi-Fi para el resto de programas. No funciona en modo 48K. Disponible para descarga https://github.com/nihirash/netman-zx[en GitHub].
+- `Moon Rabbit`: Cliente de https://es.wikipedia.org/wiki/Gopher[Gopher]. No funciona en modo 48K. Disponible para descarga https://github.com/nihirash/moon-rabbit-zx[en GitHub]
+- `irc`: Cliente de https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat]. Funciona mejor a 14 MHz.
 - `wget`: Utilidad para descargar ficheros vía HTTP (no funciona con HTTPS).
-- `platoUNO`: Cliente de https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO]. También funciona mejor a 14 Mhz. Para más información sobre el uso moderno de PLATO, es interesante la web de https://www.irata.online/#about[IRATA.ONLINE].
+- `platoUNO`: Cliente de https://es.wikipedia.org/wiki/Programmed_Logic_Automated_Teaching_Operations[PLATO]. También funciona mejor a 14 MHz. Para más información sobre el uso moderno de PLATO, es interesante ver los artículos en https://zxuno.com/forum/viewtopic.php?t=4108[el foro de ZX-Uno] así como la web de https://www.irata.online/%23about[IRATA.ONLINE].
+
+<<<
 
 ==== FTP-Uno
 
-Cliente de FTP desarrollado por Yombo, disponible https://github.com/yomboprime/FTP_Uno[en GitHub].
+Cliente de FTP desarrollado para ZX Spectrum por Yombo, disponible https://github.com/yomboprime/FTP_Uno[en GitHub].
 
 Para utilizarlo, se deben seguir los siguientes pasos:
 
@@ -1373,7 +1440,7 @@ Para utilizarlo, se deben seguir los siguientes pasos:
 
 ==== UART Terminal
 
-Se trata de un programa de ejemplo incluido con la biblioteca de funciones C https://github.com/yomboprime/ZXYLib[ZXYLib] desarrollada por yombo, y que permite enviar directamente pulsaciones de teclado a través del UART, y ver el resultado. Se puede descargar https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[en este enlace].
+Se trata de un programa de ejemplo para ZX Spectrum incluido con la biblioteca de funciones C https://github.com/yomboprime/ZXYLib[ZXYLib] desarrollada por yombo, y que permite enviar directamente pulsaciones de teclado a través del UART, y ver el resultado. Se puede descargar https://github.com/yomboprime/ZXYLib/raw/master/UARTTERM.tap[en este enlace].
 
 Una vez copiado el fichero de cinta `UARTTERM.tap` y cargado, se pueden teclear distintos comandos específicos para el chip ESP8266. Por ejemplo:
 
@@ -1394,7 +1461,7 @@ Se pueden consultar todos los comandos disponibles en https://www.espressif.com/
 
 El comando `PLAYRMOV` reproduce vídeos en formato radastaniano. Para poder convertir nuestros propios vídeos, se debe obtener la utilidad `makevideoradas` desde el https://svn.zxuno.com/svn/zxuno/software/modo_radastan/videos_radastanianos/[Repositorio SVN].
 
-En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o MacOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
+En el caso de Windows, en el propio repositorio hay un ejecutable (`makevideoras.exe`) ya preparado. Para Linux o macOS, será necesario tener las herramientas de desarrollo correspondientes y compilarlo.
 
 [source,shell]
 ----
@@ -1501,14 +1568,14 @@ Obtener el archivo de imagen en esta ubicación:
 
 [source]
 ----
-./build-filesystem/rootfs
+./Standalone/filesystem-src/rootfs
 ----
 
 ==== Cómo utilizarlo
 
 Hace falta que la tarjeta microSD tenga una tabla de particiones MBR. Se pueden configurar una o dos particiones primarias <<#_formato_de_la_tarjeta_microsd,de la forma habitual>> (la primera de ellas con una instalación funcional de esxdos), dejando suficiente espacio libre al final para añadir una partición de 32MB (Tipo `7E`) para el sistema de archivos raíz y otra partición de 4MB (Tipo `4E`) para el espacio de intercambio (swap).
 
-Volcar el contenido del sistema de archivos raíz en la partición `7E`. Para ello, se puede usar la utilidad `dd`, incluida en Linux, MacOS, etc. (y también http://www.chrysocome.net/dd[convertida para Windows]).
+Volcar el contenido del sistema de archivos raíz en la partición `7E`. Para ello, se puede usar la utilidad `dd`, incluida en Linux, macOS, etc. (y también http://www.chrysocome.net/dd[convertida para Windows]).
 
 Una vez determinado el nombre del dispositivo asociado a la partición `7E` se debe usar esta como destino del fichero `rootfs`. Por ejemplo, para `/dev/rdisks3`:
 
@@ -1524,7 +1591,7 @@ Copiar el fichero `FUZIX` dentro del directorio `BIN` y copiar `FUZIX.BIN` al di
 Iniciar un core de Spectrum con una ROM de 128K y con esxdos, escribir `.fuzix`, y pulsar `Enter`.
 
 [.text-center]
-image:./img/fuzix01.png[pdfwidth=70%]
+image:./img/fuzix01.png[scaledwidth=70%]
 
 [TIP]
 ====
@@ -1534,26 +1601,26 @@ La configuración del teclado en la BIOS debería ser con una disposición en in
 Al cabo de unos pocos segundos, el sistema debería detectar la tarjeta microSD y encontrar las particiones. En este ejemplo, la raíz está en la tercera partición de SD 0.
 
 [.text-center]
-image:./img/fuzix02.png[pdfwidth=70%]
+image:./img/fuzix02.png[scaledwidth=70%]
 
 <<<
 
 Escribir el identificador de la partición raiz (por ejemplo, `hd3`) y pulsar `Enter`.
 
 [.text-center]
-image:./img/fuzix03.png[pdfwidth=70%]
+image:./img/fuzix03.png[scaledwidth=70%]
 
 Definir la fecha (pulsar `Enter`) y la hora (pulsar `Enter`).
 
 [.text-center]
-image:./img/fuzix04.png[pdfwidth=70%]
+image:./img/fuzix04.png[scaledwidth=70%]
 
 <<<
 
 Iniciar sesión con el usuario `root` y sin contraseña.
 
 [.text-center]
-image:./img/fuzix05.png[pdfwidth=70%]
+image:./img/fuzix05.png[scaledwidth=70%]
 
 Con esto ya se dispone de una consola de Fuzix.
 
@@ -1597,7 +1664,7 @@ Para hacer el proceso contrario (guardar las ROMs en un fichero RomPack llamado 
 La versión actual de `romsback`, en ZXDOS+, sólo almacena correctamente en RomPack los primeros 35 slots de ROM ocupados.
 ====
 
-Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en MacOS como en Linux.
+Los ficheros RomPack se pueden editar fácilmente con la utilidad https://guest:zxuno@svn.zxuno.com/svn/zxuno/software/ZX1RomPack/[ZX1RomPack]. Aunque es un programa de Windows, funciona perfectamente, por ejemplo, usando https://www.winehq.org[Wine] o programas similares, tanto en macOS como en Linux.
 
 === Cores
 
@@ -1791,14 +1858,14 @@ Durante la ejecución del core:
 Al iniciarse la primera vez, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
 
 [.text-center]
-image:img/next.png[pdfwidth=70%]
+image:img/next.png[scaledwidth=70%]
 
 Se puede navegar utilizando las teclas de cursor, las teclas `5`, `6`, `7` y `8`, o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
 
 La opción `More...` muestra un segundo menú con más opciones.
 
 [.text-center]
-image:img/next2.png[pdfwidth=70%]
+image:img/next2.png[scaledwidth=70%]
 
 <<<
 
@@ -1806,7 +1873,7 @@ Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es pos
 
 [NOTE]
 ====
-El navegador muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y MacOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
+El navegador muestra las entradas de archivos y directorios en el orden de la tabla FAT interna, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y macOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
 [CAUTION]
@@ -1815,7 +1882,7 @@ En el caso de utilizarse también la tarjeta con el core de <<#_pc_xt,PC XT>>, *
 ====
 
 [.text-center]
-image:img/next3.png[pdfwidth=70%]
+image:img/next3.png[scaledwidth=70%]
 
 [INFO]
 ====
@@ -1923,16 +1990,16 @@ Para cambiar el modo de vídeo entre 50Hz y 60Hz (para ejecución correcta de pr
 Para acceder a BASIC desde MSX-DOS, ejecutar el comando `BASIC`.
 
 [.text-center]
-image:img/msx.png[pdfwidth=70%]
+image:img/msx.png[scaledwidth=70%]
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con los comandos `RUN"CAS:"`, `BLOAD"CAS:",R` o `CLOAD`.
 
-[IMPORTANT]
+[WARNING]
 ====
 Para que la carga desde audio funcione, el modo turbo tiene que estar desactivado.
 ====
 
-Para acceder a  MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
+Para acceder a MSX-DOS desde BASIC, ejecutar `CALL SYSTEM`.
 
 <<<
 
@@ -2009,12 +2076,12 @@ Durante la ejecución del core:
 Escribir el comando `CAT` para ver el contenido del fichero DSK cargado actualmente.
 
 [.text-center]
-image:img/cpc.png[pdfwidth=70%]
+image:img/cpc.png[scaledwidth=70%]
 
 Escribir el comando `RUN"<nombre>` para cargar un programa del disco
 
 [.text-center]
-image:img/cpc2.png[pdfwidth=70%]
+image:img/cpc2.png[scaledwidth=70%]
 
 Usar la tecla `Re Pág` para hacer reset y cargar el siguiente archivo `DSK` en orden alfabético.
 
@@ -2034,7 +2101,7 @@ Ahora, se puede organizar la información en la tarjeta microSD de dos maneras d
 
 . Descomprimir todo el contenido del archivo en la raíz de la tarjeta. El contenido del directorio `SYS` es compatible con el directorio `SYS` de esxdos, siendo posible combinar los dos en uno solo.
 
-. Organizar la información de una manera más reducida en la raíz, utilizando sólo dos directorios. Crear un directorio `ATOM` en la raíz de la tarjeta, y copiar en su interior todo el contenido del archivo, excepto el directorio `MANPAGES` que se tendrá que poner también en  la raíz de la microSD. Luego, copiar los ficheros del archivo `trick_ATOM_folder` (disponible https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[en el foro de ZX-Uno]), reemplazando todos los que se encuentren con el mismo nombre. Así, quedará una estructura como la siguiente:
+. Organizar la información de una manera más reducida en la raíz, utilizando sólo dos directorios. Crear un directorio `ATOM` en la raíz de la tarjeta, y copiar en su interior todo el contenido del archivo, excepto el directorio `MANPAGES` que se tendrá que poner también en la raíz de la microSD. Luego, copiar los ficheros del archivo `trick_ATOM_folder` (disponible https://www.zxuno.com/forum/viewtopic.php?f=16&t=4006[en el foro de ZX-Uno]), reemplazando todos los que se encuentren con el mismo nombre. Así, quedará una estructura como la siguiente:
 
 ----
         /
@@ -2070,7 +2137,7 @@ Las combinaciones específicas de gomaDOS+ que se indican a continuación se cor
 Durante la ejecución del core:
 
 - `Mayús+F10`: Muestra el menú de Atom Software Archive
-- `F10`  (`Caps Shift+Symbol Shift+0` en gomaDOS+): Soft Reset
+- `F10` (`Caps Shift+Symbol Shift+0` en gomaDOS+): Soft Reset
 - `F1` (`Caps Shift+Symbol Shift+1` en gomaDOS+): Modo turbo 1Mhz
 - `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Modo turbo 2Mhz
 - `F3` (`Caps Shift+Symbol Shift+3` en gomaDOS+): Modo turbo 4Mhz
@@ -2079,19 +2146,19 @@ Durante la ejecución del core:
 El teclado está mapeado en inglés, según el siguiente esquema:
 
 [.text-center]
-image:img/keyboardAtom.jpg[pdfwidth=90%]
+image:img/keyboardAtom.jpg[scaledwidth=90%]
 
 <<<
 
 ==== Guía básica
 
 [.text-center]
-image:img/atom.png[pdfwidth=70%]
+image:img/atom.png[scaledwidth=70%]
 
 Tras iniciar el core, en algunos casos, puede suceder que se muestre una pantalla llena de `@`. Basta con retirar e insertar, o simplemente insertar, la tarjeta microSD, para que empiece a funcionar.
 
 [.text-center]
-image:img/acorn.jpg[pdfwidth=70%]
+image:img/acorn.jpg[scaledwidth=70%]
 
 Una vez iniciado, pulsar `Mayús+F10`, o bien escribir `*MENU` y `Enter`, para mostrar el menú desde el que se pueden cargar los programas de Atom Software Archive de la tarjeta.
 
@@ -2129,7 +2196,7 @@ Durante la ejecución del core:
 Tras pulsar `F12` (`Caps Shift+Symbol Shift+W` en gomaDOS+), aparece el menú de opciones.
 
 [.text-center]
-image:img/c64.jpg[pdfwidth=70%]
+image:img/c64.jpg[scaledwidth=70%]
 
 Desde dicho menú se puede
 
@@ -2177,7 +2244,7 @@ Este core no utiliza la tarjeta microSD.
 
 Durante la ejecución del core:
 
-- `Q` y `A` o `Cursor Izquierdo` y `Cursor Derecho`  (o un joystick): Control de movimiento
+- `Q` y `A` o `Cursor Izquierdo` y `Cursor Derecho` (o un joystick): Control de movimiento
 - `Z` o `X` `Tecla Windows Izquierda` y `Espacio` (o botones 1 y 2 del joystick): Disparos 1 y 2, así como inserción de moneda y botón `Start`
 - `F2` (`Caps Shift+Symbol Shift+2` en gomaDOS+): Cambia el modo de vídeo entre RGB y VGA
 - `-` (del teclado numérico): Activa o desactiva la simulación de línea de exploración (Scanlines)
@@ -2190,7 +2257,7 @@ Durante la ejecución del core:
 Por defecto se inicia con los controles normales, para el uso de pantallas verticales.
 
 [.text-center]
-image:img/phoenix.png[pdfwidth=70%]
+image:img/phoenix.png[scaledwidth=70%]
 
 Si se tiene la pantalla en horizontal (lo más habitual), la imagen se ve de lado, pero para ayudar en el control, y que sea más natural y acorde con lo que se ve, pulsando `Tab` se consigue que las direcciones arriba-abajo estén intercambiadas con izquierda-derecha. Afecta por igual al joystick y al teclado.
 
@@ -2221,7 +2288,7 @@ Durante la ejecución del core:
 - `Esc` o botón 2 del joystick (`Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Mostrar u ocultar el menú de configuración
 - `Ctrl+Alt+Backspace` (`Caps Shift+Symbol Shift+B` en gomaDOS+, en modo de teclado `ZX Spectrum`): Hard reset. Backspace es la tecla de borrar hacia atrás, encima del enter
 - `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+, en modo de teclado `ZX Spectrum`): cambia de modo vídeo RGB a VGA y viceversa
-- `F3` o `F12` (`Caps Shift+Symbol Shift+3` o `Caps Shift+Symbol Shift+W`  en gomaDOS+): Reinicio del juego
+- `F3` o `F12` (`Caps Shift+Symbol Shift+3` o `Caps Shift+Symbol Shift+W` en gomaDOS+): Reinicio del juego
 - Número del `1` al `7`: Cambiar el tipo de juego
 - Joystick 2 (derecha): Control de paleta de la derecha (Jugador 1).
 - Joystick 1 (izquierda): Control de paleta de la izquierda (Jugador 2)
@@ -2237,7 +2304,7 @@ Durante la ejecución del core:
 Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center]
-image:img/pong.jpg[pdfwidth=70%]
+image:img/pong.jpg[scaledwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
 
@@ -2294,7 +2361,7 @@ Durante la ejecución del core:
 Pulsando `Esc` se muestra el menú de configuración. Para desplazarse por el menú y activar o elegir alguna opción, se utilizan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`), y `Enter`.
 
 [.text-center]
-image:img/nes.jpg[pdfwidth=70%]
+image:img/nes.jpg[scaledwidth=70%]
 
 En él se pueden activar o desactivar las siguientes opciones:
 
@@ -2342,7 +2409,7 @@ Durante la ejecución del core:
 ==== Guía básica
 
 [.text-center]
-image:img/lynx.png[pdfwidth=70%]
+image:img/lynx.png[scaledwidth=70%]
 
 Desde BASIC, se suele cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) con la secuencia de comandos:
 
@@ -2398,7 +2465,7 @@ Durante la ejecución del core:
 - `U`, `J`, `O`, `P` o el joystick 2: Controles de dirección del jugador 2
 - `M` o el botón de joystick 2: Botón de disparo 1 del jugador 2
 - `X` o el botón secundario de joystick 1: Botón de disparo 2 del jugador 1 y del jugador 2
-- `0` a `9`:  Botones del 0 al 9 del jugador 1 y el jugador 2
+- `0` a `9`: Botones del 0 al 9 del jugador 1 y el jugador 2
 - `T`: Botón '*'
 - `Y`: Botón '#'
 - 'Esc' (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`): Soft Reset
@@ -2410,7 +2477,7 @@ Durante la ejecución del core:
 Al iniciar, la ROM de la BIOS se carga desde la tarjeta microSD, así como la ROM multicartucho.
 
 [.text-center]
-image:img/coleco.jpg[pdfwidth=70%]
+image:img/coleco.jpg[scaledwidth=70%]
 
 En el menú multicartucho, usar los controles de dirección para elegir la ROM a cargar, y luego el botón de disparo 1 para cargar la ROM elegida. Pulsando `Esc` (`Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se reinicia el core y se vuelve a cargar el menú de selección de ROM.
 
@@ -2455,7 +2522,7 @@ Durante la ejecución del core:
 Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `Atari800`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `Atari800`) y `Enter` para elegir y seleccionar en el menú.
 
 [.text-center]
-image:img/a2600.jpg[pdfwidth=70%]
+image:img/a2600.jpg[scaledwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -2518,7 +2585,7 @@ Durante la ejecución del core:
 Pulsando `Esc` o el botón 2 del joystick (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar en el menú.
 
 [.text-center]
-image:img/videopac.jpg[pdfwidth=70%]
+image:img/videopac.jpg[scaledwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -2594,12 +2661,12 @@ El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la dis
 **ZX80**
 
 [.text-center]
-image:img/keyboardZX80.jpg[pdfwidth=80%]
+image:img/keyboardZX80.jpg[scaledwidth=80%]
 
 **ZX81**
 
 [.text-center]
-image:img/keyboardZX81.jpg[pdfwidth=80%]
+image:img/keyboardZX81.jpg[scaledwidth=80%]
 
 ===== Teclas especiales y botones
 
@@ -2620,7 +2687,7 @@ Durante la ejecución del core:
 Pulsando `F5` (`Caps Shift+Symbol Shift+5` en gomaDOS+) o el botón 2 del joystick se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar opciones del menú.
 
 [.text-center]
-image:img/zx81.jpg[pdfwidth=70%]
+image:img/zx81.jpg[scaledwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -2633,7 +2700,7 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 <<<
 
 [.text-center]
-image:img/zx81_2.jpg[pdfwidth=70%]
+image:img/zx81_2.jpg[scaledwidth=70%]
 
 - Elegir el modelo de computador (Computer Model): ZX80/ZX81
 - Tamaño de RAM (Main RAM): 16K/32K
@@ -2720,7 +2787,7 @@ Se puede utilizar el programa https://mh-nexus.de/en/hxd/[HxD (editor hexadecima
 
 Seguir los siguientes pasos:
 
-. Tras identificar el disco de la tarjeta (en este ejemplo, `sdb`),  invocar `fdisk` para ver el tamaño
+. Tras identificar el disco de la tarjeta (en este ejemplo, `sdb`), invocar `fdisk` para ver el tamaño
 
 [source,shell]
 ----
@@ -2747,11 +2814,11 @@ En lugar del final de la tarjeta, si hay espacio libre antes de la primera parti
 sudo dd if=Next186_BIOS_zxdos_ddr3.COM of=/dev/sdb bs=512 seek=10
 ----
 
-===== MacOS
+===== macOS
 
 Pasos a seguir:
 
-. Tras identificar el disco de la tarjeta (en este ejemplo, `disk6`),  invocar `fdisk` para ver el tamaño en sectores
+. Tras identificar el disco de la tarjeta (en este ejemplo, `disk6`), invocar `fdisk` para ver el tamaño en sectores
 
 [source,shell]
 ----
@@ -2801,7 +2868,7 @@ Durante la ejecución del core:
 ==== Guía Básica
 
 [.text-center]
-image:img/pcxt.png[pdfwidth=70%]
+image:img/pcxt.png[scaledwidth=70%]
 
 <<<
 
@@ -2845,7 +2912,7 @@ Durante la ejecución del core:
 Pulsando `Esc` (o `Caps Shift+Espacio` en gomaDOS+, en modo de teclado `PC XT`) se muestra el menú de configuración. Se usan las teclas de cursor (`Caps Shift+5`, `Caps Shift+6`, `Caps Shift+7` y `Caps Shift+8` en gomaDOS+, en modo de teclado `PC XT`) y `Enter` para elegir y seleccionar las distintas opciones.
 
 [.text-center]
-image:img/chip8.jpg[pdfwidth=70%]
+image:img/chip8.jpg[scaledwidth=70%]
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -2884,7 +2951,7 @@ La disposición de las teclas en el teclado de PC intenta ser lo más parecida a
 La distribución del teclado está en inglés (así, por ejemplo, la tecla `-` se corresponde con `'`, al lado del número `0`).
 
 [.text-center]
-image:img/keyboardoric.png[pdfwidth=80%]
+image:img/keyboardoric.png[scaledwidth=80%]
 
 <<<
 
@@ -2911,7 +2978,7 @@ Durante la ejecución del core:
 ==== Guía básica
 
 [.text-center]
-image:img/oric.png[pdfwidth=70%]
+image:img/oric.png[scaledwidth=70%]
 
 Desde BASIC, se puede cargar desde una cinta (u <<#_miniduino,otro dispositivo externo de audio>>) usando el comando `CLOAD ""` y `Enter`. A continuación, aparecerá en pantalla el mensaje
 
@@ -2958,7 +3025,7 @@ Los codificadores tienen 5 cables: Tierra (no conectada), Vcc (`+`), GND (`0V`ó
 Las conexiones `A` y `B` se conectan en los pines 1 y 2 para el primer codificador, y 3 y 4 para el segundo. Así se pueden tener hasta 4 codificadores conectados entre los 2 puertos de joystick.
 
 [.text-center]
-image:img/db9joy.png[pdfwidth=40%]
+image:img/db9joy.png[scaledwidth=40%]
 
 De esta manera, las conexiones serían:
 
@@ -2980,7 +3047,7 @@ La forma de elegir la configuración es la siguiente:
 
 - Para 1 o 2 codificadores en el puerto 2 de joystick, seleccionar la opción `1/2 Paddle in J2`.
 - Para 2 codificadores, uno en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`. Esta opción también sirve para conectar 2 paddle tipo driving de Atari 2600.
-- Para  4 codificadores, dos en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`.
+- Para 4 codificadores, dos en cada puerto de joystick, seleccionar la opción `2/4 Paddle in J1&J2`.
 - Para 1 o 2 codificadores en el puerto 2 de joystick junto con el ratón (en este caso los codificadores se asocian para los jugadores 2 y 4), seleccionar la opción `Mouse PS/2`.
 
 Se recomienda no realizar la conexión hasta haber seleccionado la opción deseada, ya que los codificadores actúan sobre el botón arriba/abajo del joystick y por tanto no permiten manejar el menú. Otra opción sería añadir un interruptor on/off en el codificador que deshabilite la alimentación y así no emita señal mientras se realiza la selección de menú.
@@ -3003,11 +3070,11 @@ El funcionamiento es exactamente igual que se hacía con los equipos originales:
 
 ==== Ordenador
 
-Según el sistema operativo (Windows, MacOS, Linux) existen múltiples alternativas de programas que pueden, o bien reproducir directamente un archivo de cinta (`TAP`, `TZX`, `PZX`, etc.) y emitir el sonido por la salida de auriculares, o bien crear un fichero de sonido (`WAV`, `VOC`, `AU`, etc.) que se puede reproducir también con programas de música o sonido.
+Según el sistema operativo (Windows, macOS, Linux) existen múltiples alternativas de programas que pueden, o bien reproducir directamente un archivo de cinta (`TAP`, `TZX`, `PZX`, etc.) y emitir el sonido por la salida de auriculares, o bien crear un fichero de sonido (`WAV`, `VOC`, `AU`, etc.) que se puede reproducir también con programas de música o sonido.
 
 ===== PlayTZX
 
-Este programa para Windows, MacOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador.
+Este programa para Windows, macOS o Linux, permite reproducir un fichero de cinta `TZX` a través de la salida de sonido del ordenador.
 
 Se puede descargar el fichero binario (por ejemplo, para Windows desde https://worldofspectrum.net/utilities/#tzxtools[World of Spectrum Classic] y para Mac desde https://github.com/kounch/playtzx/releases[este repositorio de GitHub]) o compilar el código fuente como se explica <<#_compilar_código_fuente_macos_o_linux,a continuación>>.
 
@@ -3031,7 +3098,7 @@ Si todo va bien, se irá viendo en la consola los distintos bloque de carga de l
 En Linux, el programa utiliza como salida el dispositivo `/dev/dsp`, así que, en versiones más modernas, es posible, por ejemplo, que haya que cargar módulos como `snd_pcm_oss` (en el caso de sistemas que utilicen ALSA), para que funcione correctamente.
 ====
 
-====== Compilar código fuente (MacOS o Linux)
+====== Compilar código fuente (macOS o Linux)
 
 Verificar que están instaladas las herramientas de desarrollo, incluyendo un compilador de C (`gcc`, `clang` herramientas de desarrollaor de línea de comandos en Mac, etc.) y https://es.wikipedia.org/wiki/GNU_build_system[GNU Autotools].
 
@@ -3049,6 +3116,8 @@ Si todo se ha hecho correctamente, se habrá generado el fichero `playtzx` que s
 ==== Teléfono móvil, tableta, reproductor de sonido MP3, etc.
 
 En general, existen muy pocas alternativas (o ninguna) alternativas de programas que puedan reproducir directamente un archivo de cinta en un dispositivo móvil, así que, normalmente, será necesario convertir a un fichero de audio el contenido de la cinta antes de intentar cargarla con uno de estos aparatos.
+
+https://zxtape.net es una web, compatible con dispositivos móviles, con soporte para reproducir ficheros TAP y TZX
 
 https://github.com/semack/zx_tape_player[ZX Tape Player] es una App para sistemas iOS y Android que es capaz de reproducir directamente a través de la salida de auriculares
 
@@ -3135,15 +3204,15 @@ La distribución NextPI sólo está probada para usarse con Raspberry Pi Zero. N
 
 ===== Conexión
 
-A pesar de usar el mismo conector  *la conexión con este addon no es compatible con las Raspberry PI Zero para ZX Spectrum Next*.
+A pesar de usar el mismo conector *la conexión con este addon no es compatible con las Raspberry PI Zero para ZX Spectrum Next*.
 
 Como se puede ver en el esquema de más adelante, una Raspberry Pi Zero compatible con el addon se sitúa, entre otras cosas, con la parte de la placa donde están los puertos y el adaptador de microSD en la parte de abajo, mientras que la versión para ZX Spectrum Next, se encuentran en la parte de arriba.
 
 [.text-center]
-image:img/pizero.jpg[pdfwidth=40%] image:img/pi_no.jpg[pdfwidth=40%]
+image:img/pizero.jpg[scaledwidth=40%] image:img/pi_no.jpg[scaledwidth=40%]
 
 [.text-center]
-image:img/pizeroback.jpg[pdfwidth=40%] image:img/pi_no_back.jpg[pdfwidth=40%]
+image:img/pizeroback.jpg[scaledwidth=40%] image:img/pi_no_back.jpg[scaledwidth=40%]
 
 [CAUTION]
 ====
@@ -3151,7 +3220,7 @@ Una conexión incorrecta de alguno de los pines (5V o 3,3V) con alimentación el
 ====
 
 [.text-center]
-image:img/pizeroaddon.jpg[pdfwidth=70%]
+image:img/pizeroaddon.jpg[scaledwidth=70%]
 
 [NOTE]
 ====
@@ -3174,16 +3243,16 @@ Para la versión de NextPI disponible al escribir estas líneas (0.99D RTM), no 
 |`UART RX (GPIO 15)`
 |`10`
 |Conexión Serie
-|`PCM CLK  (GPIO 18)`
+|`PCM CLK (GPIO 18)`
 |`12`
 |Conexión de audio
-|`PCM FS  (GPIO 19)`
+|`PCM FS (GPIO 19)`
 |`35`
 |Conexión de audio
-|`PCM DIN  (GPIO 20)`
+|`PCM DIN (GPIO 20)`
 |`38`
 |Conexión de audio
-|`PCM DOUT  (GPIO 21)`
+|`PCM DOUT (GPIO 21)`
 |`40`
 |Conexión de audio
 |===
@@ -3203,7 +3272,7 @@ Se ha de tener cuidado de utilizar una fuente únicamente con uno de los dos, el
 Para comprobar que la comunicación serie con la Raspberry Pi funciona, se puede utilizar el programa `Terminex`, que está disponible en la distribución de Next en `/DEMOS/UART/TERMINEX/TERMINEX.SNX`. Aparecerá una pantalla como la siguiente
 
 [.text-center]
-image:img/terminex.png[pdfwidth=60%]
+image:img/terminex.png[scaledwidth=60%]
 
 Si la conexión es correcta y la Raspberry Pi está completamente encendida (desde que se enciende, puede llegar a tardar entre 1 y 2 minutos en estar disponible), debería aparecer una consola con el texto:
 
@@ -3397,12 +3466,12 @@ En esta situación, existen diferentes métodos de recuperación que permiten vo
 En los siguientes pasos de recuperación se habla de conectar cables puente o USB-Blaster a la placa de ZXDOS+ o gomaDOS+. Para ello, usar las siguientes imágenes como referencia.
 
 [.text-center]
-image:img/jtag.jpg[pdfwidth=25%] image:img/jtaggomados.jpg[pdfwidth=40%]
+image:img/jtag.jpg[scaledwidth=25%] image:img/jtaggomados.jpg[scaledwidth=40%]
 
 Notar que, en algunos modelos, el conector de JTAG está con los pines por la parte de debajo.
 
 [.text-center]
-image:img/jtag02.jpg[pdfwidth=25%] image:img/jtag03.jpg[pdfwidth=25%] image:img/jtag04.jpg[pdfwidth=25%]
+image:img/jtag02.jpg[scaledwidth=25%] image:img/jtag03.jpg[scaledwidth=25%] image:img/jtag04.jpg[scaledwidth=25%]
 
 
 [CAUTION]
@@ -3460,7 +3529,7 @@ rm -rf ./openocd-code
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
 [.text-center]
-image:img/gpio.jpg[pdfwidth=70%]
+image:img/gpio.jpg[scaledwidth=70%]
 
 En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (correspondientes a `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` y `GND`), de la siguiente manera:
 
@@ -3541,7 +3610,7 @@ Con USB-Blaster:
 
 [source,shell]
 ----
-sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg  -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.zxd.bit ; exit"
+sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cfg -f /usr/local/share/openocd/scripts/cpld/xilinx-xc6s.cfg -c "init; xc6s_program xc6s.tap; pld load 0 recovery.zxd.bit ; exit"
 ----
 
 <<<
@@ -3552,7 +3621,7 @@ sudo openocd -f /usr/local/share/openocd/scripts/interface/altera-usb-blaster.cf
 En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
-image:img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[scaledwidth=70%]
 
 [start=12]
 . Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZXD` https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[descargado anteriormente].
@@ -3565,7 +3634,7 @@ image:img/recovery.png[pdfwidth=70%]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
 [.text-center]
-image:img/recovery2.png[pdfwidth=70%]
+image:img/recovery2.png[scaledwidth=70%]
 
 [WARNING]
 ====
@@ -3598,7 +3667,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 . De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
-- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
+- `Advanced` -> `video`: `VGA` (sólo si no teníamos imagen)
 . Guardar los cambios de la BIOS:
 - `Exit` -> `Save changes and exit`
 .Apagar completamente el gomaDOS+ y volver a encenderlo
@@ -3606,7 +3675,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 
 <<<
 
-==== Recuperación usando MacOS y Cable USB-Blaster
+==== Recuperación usando macOS y Cable USB-Blaster
 
 *Material necesario*:
 
@@ -3615,9 +3684,9 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 
 *Software necesario*:
 
-- Sistema MacOS
+- Sistema macOS
 - Carpeta data adicional para UrJTAG, obtenido desde https://github.com/zxdos/zxdos-plus/blob/master/lx25/urjtag.zip[aqui]
-- https://brew.sh[Homebrew para MacOS]
+- https://brew.sh[Homebrew para macOS]
 - UrJTAG: según las instrucciones de https://n4abi.com/posts/2018-07-08-de0-nano-urjtag.html[este enlace]:
 
 *Pasos a seguir*:
@@ -3670,7 +3739,7 @@ En el comando detect es importante que aparezca el dispositivo detectado. Puede 
 ====
 
 [.text-center]
-image:img/recovery_mac_1.png[pdfwidth=90%]
+image:img/recovery_mac_1.png[scaledwidth=90%]
 
 <<<
 
@@ -3680,7 +3749,7 @@ image:img/recovery_mac_1.png[pdfwidth=90%]
 En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
-image:img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[scaledwidth=70%]
 
 [start=10]
 . Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZXD` https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[descargado anteriormente].
@@ -3693,7 +3762,7 @@ image:img/recovery.png[pdfwidth=70%]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
 [.text-center]
-image:img/recovery2.png[pdfwidth=70%]
+image:img/recovery2.png[scaledwidth=70%]
 
 [WARNING]
 ====
@@ -3726,7 +3795,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 . De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
-- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
+- `Advanced` -> `video`: `VGA` (sólo si no teníamos imagen)
 . Guardar los cambios de la BIOS:
 - `Exit` -> `Save changes and exit`
 .Apagar completamente el gomaDOS+ y volver a encenderlo
@@ -3766,7 +3835,7 @@ En Linux, usando el mismo software UrJTAG, el proceso deberia ser similar, aunqu
 
 . Encender el ZXDOS+ o el gomaDOS+
 
-. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.zxd.bit`, y lanzar  `jtag.exe`.
+. Asegurarnos de que estamos en el directorio donde se encuentra el archivo `recovery.zxd.bit`, y lanzar `jtag.exe`.
 
 . Aparecerá una consola donde se han de escribir los comandos:
 
@@ -3785,7 +3854,7 @@ pld load recovery.zxd.bit
 En el caso de que no se vea imagen, pulsar `Bloq. Despl.` (`Caps Shift+Symbol Shift+G` en gomaDOS+) para cambiar entre modo de vídeo RGB y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
 [.text-center]
-image:img/recovery.png[pdfwidth=70%]
+image:img/recovery.png[scaledwidth=70%]
 
 [start=10]
 . Insertar en el ZXDOS+ la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZXD` https://github.com/zxdos/zxdos-plus/raw/master/lx25/FLASH.zip[descargado anteriormente].
@@ -3798,7 +3867,7 @@ image:img/recovery.png[pdfwidth=70%]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
 [.text-center]
-image:img/recovery2.png[pdfwidth=70%]
+image:img/recovery2.png[scaledwidth=70%]
 
 [WARNING]
 ====
@@ -3831,7 +3900,7 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 . De nuevo, si no hay imagen, cambiar entre modo VGA y modo vídeo RGB (`Caps Shift+Symbol Shift+G`)
 . Navegar por la BIOS y configurar las siguientes opciones:
 - `Advanced` -> `Keyboard Layout`: `Spectrum`
-- `Advanced` -> `video`: `VGA`  (sólo si no teníamos imagen)
+- `Advanced` -> `video`: `VGA` (sólo si no teníamos imagen)
 . Guardar los cambios de la BIOS:
 - `Exit` -> `Save changes and exit`
 .Apagar completamente el gomaDOS+ y volver a encenderlo
@@ -3840,6 +3909,585 @@ En el caso de gomaDOS+, como la configuración de la imagen de recuperación por
 <<<
 
 == Referencias
+
+=== Spectrum
+
+==== Scan Codes
+
+[.text-center]
+image:img/ScanCodes.png[scaledwidth=75%]
+
+<<<
+
+==== Registros E/S para control de ZXDOS+
+
+En el core de Spectrum se dispone de los puertos `$FC3B` y `$FD3B`, registrados y asignados por el https://sinclair.wiki.zxnet.co.uk/wiki/ZXI_standard[comité ZXI]. A través de estos puertos se accede a un total de 256 registros de E/S diferentes exclusivos para la familia del ZX-Uno.
+
+El puerto `$FC3B` (`64571`) guarda la dirección (`$00` - `$FF`) del registro de E/S al que se quiere acceder. Puede leerse para saber cuál es la última dirección de registro asignada.
+
+El puerto `$FD3B` (`64827`) es el puerto de acceso al registro seleccionado con el puerto anterior. Su sentido (lectura/escritura) dependerá de la implementación de cada registro.
+
+Por ejemplo, para asignar el banco 16 de la SRAM al espacio de direcciones `$C000` - `$FFFF` durante el modo boot, mediante el registro MASTERMAPPER, se haría así:
+
+[source,asm]
+----
+ld bc,$fc3b     ;Puerto para establecer el número de registro a usar
+ld a,1          ;Registro $01 (MASTERMAPPER)
+out (c),a       ;Se selecciona. A partir de ahora, cualquier acceso a $FD3B está usando MASTERMAPPER
+inc b           ;Puerto de acceso al registro ($FD3B, basta con incrementar B)
+ld a,16         ;Banco 16 de la SRAM
+out (c),a       ;Se escribe en el registro MASTERMAPPER
+----
+
+Los registros implementados en la familia del ZX-Uno se describen a continuación.
+
+<<<
+
+===== `$00` MASTERCONF
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000001`|`00000001`
+|===
+
+Formato binario (en *negrita*, los campos que sólamente pueden alterarse cuando LOCK=0):
+|===
+|[.small]#*LOCK*#|[.small]#MODE1#|[.small]#DISCONT#|[.small]#MODE0#|[.small]#I2KB#|[.small]#*DISNMI*#|[.small]#*DIVEN*#|[.small]#*BOOTM*#
+|===
+* `BOOTM`: a 1 indica que ZX-Uno está en modo boot (modo configuración). El modo boot sólo tiene sentido mientras se está ejecutando el firmware de arranque, donde se permite configurar algunos aspectos de ZX-Uno antes de pasar al modo ejecución. MASTERCONF siempre puede ser leído, tanto en modo boot como en modo ejecución. Se pone a 0 manualmente por programa, y en ese momento, ZX-Uno entra en modo ejecución.
+* `DIVEN`: a 0 indica que DIVMMC no está habilitado en el sistema, aunque los puertos de acceso a la interfaz SPI del slot SD/MMC siguen estando disponibles. La memoria usada por DIVMMC queda disponible para otros usos. A 1 indica que DIVMMC está habilitada. Si se habilita, antes de pasar al modo ejecución hay que cargar una imagen de ESXDOS en el banco de RAM correspondiente. El valor por defecto de este bit es 0.
+* `DISNMI`: a 1 indica que la función NMI de DIVMMC no estará disponible. NMI funcionará, pero no causará que ESXDOS se automapee, dejando así el control de NMI en manos de la ROM principal del sistema. Bit añadido para mejorar la compatibilidad de DIVMMC con SE Basic IV. Su valor por defecto es 0 (ESXDOS maneja los eventos NMI).
+* `I2KB`: a 1 configura la ULA para que devuelva un valor acorde con un Spectrum issue 2 al leer el puerto de teclado ($FE). A 0, el valor devuelto es compatible con issue 3 y posteriores. Por defecto su valor es 0.
+* `MODE1`,`MODE0`: especifica el modo de timing de la ULA para acomodarse a diferentes modelos de Spectrum. 00 = ULA ZX Spectrum 48K PAL, 01 = ZX Spectrum 128K/+2 gris, 10 = Pentagon 128, 11 = 48K NTSC (262 scans).
+* `DISCONT`: indica si se debe producir contienda de memoria en la memoria de video. 0 para habilitar contienda (compatibilidad con 48K y 128K). 1 para deshabilitar contienda (compatibilidad con Pentagon 128)
+* `LOCK`: Cuando vale 1, impide que se puedan hacer más cambios a ciertos bits del registro MASTERCONF, e impide además acceder a la SPI Flash. Este bit se pone a 0 sólo mediante un reset maestro (Ctrl-Alt-BkSpace) o al apagar y encender el clon.
+
+<<<
+
+===== `$01` MASTERMAPPER
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+De este registro sólo se usan sus 5 bits inferiores (valores $00 a $1F). El valor guardado es el número de un banco de 16KB de SRAM que será paginado en las direcciones $C000-$FFFF durante el modo boot. Los valores de este registro no tienen ningún efecto cuando ZX-Uno está en modo ejecución. 32 valores diferentes para este registro permiten direccionar hasta 512KB de SRAM. Si ZX-Uno se amplía con más memoria, se usarán más bits en este registro. La máxima cantidad de memoria manejable es de 4MB.
+
+===== `$02` FLASHSPI
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000000`
+|===
+
+Puerto de acceso al registro SPI conectado a la SPI Flash. Escribiendo un valor en este registro, se envía a la SPI Flash, si ésta está seleccionada. Leyendo un valor de este registro, se lee el último valor enviado por la SPI Flash, y además, la misma operación de lectura provoca que la SPI envíe un nuevo valor (que sería leído con la siguiente operación de lectura a este registro). Por esta razón, en operaciones de lectura de bloques, el primer byte leído con este puerto debe descartarse.
+
+===== `$03` FLASHCS
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000001`
+|===
+
+Sólo se emplea el bit 0. El valor escrito en este registro determinado el estado de la línea CS de la Flash SPI (0 = Flash seleccionada, 1 = flash no seleccionada).
+
+===== `$04` SCANCODE
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|No cambia
+|===
+
+En lectura, permite obtener el valor del último scancode generado por el teclado. En escritura permite enviar comandos al teclado.
+
+<<<
+
+===== `$05` KEYSTAT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura|No cambia|No cambia|No cambia
+|===
+
+Varios bits que indican si hay o no una nueva tecla pulsada, o soltada, y si ésta es una tecla extendida o normal.
+|===
+|BSY|0|0|0|ERR|RLS|EXT|PEN
+|===
+
+* BSY: a 1 para indicar que hay una transmisión de datos al puerto PS/2 aún en proceso. Se debe esperar a que valga 0 para iniciar una nueva transmisión.
+* ERR: a 1 para indicar que la última transmisión a o desde el puerto PS/2 tuvo errores.
+* RLS: a 1 para indicar que el último evento pertenece a una tecla que ha sido soltada.
+* EXT: a 1 para indicar que el último evento pertenece a una tecla con código extendido (E0+scancode)
+* PEN: a 1 para indicar que hay un dato nuevo listo para ser leído en el registro SCANCODE. Tras leer KEYSTAT, este bit pasa a valer 0.
+
+===== `$06` JOYCONF
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00100001`
+|===
+
+Los bits 0 a 2 indican el modo de funcionamiento del joystick mapeado en teclado (o del segundo joystick físico si hay splitter). Los bits 4 a 6 indican el modo de funcionamiento del joystick físico (conector DB-9 lateral). El bit 3 indica el autofuego del segundo joystick o keypad. El bit 7 indica el autofuego del joystick principal. Los valores son: 000 = Disabled, 001 = Kempston, 010 = Sinclair 1, 011 = Sinclair 2, 100 = Protek/Cursor/AGF, 101 = Fuller, 110 = OPQAspM, 111 = reservado.
+
+===== `$07` KEYMAP
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|Ver descripción|Ver descripción|Ver descripción
+|===
+
+En lectura, cada acceso proporciona el siguiente byte del mapa de teclado cargado en ZX-Uno actualmente. En escritura, el byte correspondiente al mapa de teclado marcado por la posición actual es modificado. En ambos casos, el puntero de direcciones se incrementa automáticamente para señalar al siguiente byte del mapa de teclado. Este puntero vuelve a 0 automáticamente tras un reset, una escritura en el registro $FC3B, o cuando se termina el mapa de teclado. El mapa de teclado, en la implementación actual, ocupa 16384 bytes.
+
+===== `$09` MOUSEDATA
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|No cambia
+|===
+
+Registro de datos del puerto PS/2 del ratón. Usado para leer o enviar comandos directos al ratón PS/2. Por ejemplo: para inicializar el ratón, debe enviarse el valor $F4 a este registro.
+
+===== `$0A` MOUSESTATUS
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|No cambia
+|===
+
+Registro de estado del puerto PS/2 del ratón. Se definen los siguientes bits:
+|===
+|BSY|0|0|0|ERR|0|0|PEN
+|===
+* BSY: a 1 para indicar que hay una transmisión de datos al puerto PS/2 aún en proceso. Se debe esperar a que valga 0 para iniciar una nueva transmisión.
+* ERR: a 1 para indicar que la última transmisión a o desde el puerto PS/2 tuvo errores.
+* PEN: a 1 para indicar que hay un dato nuevo listo para ser leído en el registro MOUSEDATA. Tras leer MOUSESTATUS, este bit pasa a valer 0.
+
+<<<
+
+===== `$0B` SCANDBLCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000000`
+|===
+
+Registro de control del scandoubler y control de la velocidad del sistema. Se definen los siguientes bits:
+|===
+|TURBO|COPT|FREQ|ENSCAN|VGA
+|===
+* TURBO: 00 para seleccionar 3.5 MHz, 01 para seleccionar 7 MHz, 10 para seleccionar 14 MHz y 11 para seleccionar 28 MHz. Estos bits también son actualizados con el valor de los bits D0-D3 del puerto $8E3B, usado en el ZX Prism para seleccionar las distintas velocidades para la CPU.
+* COPT: selecciona la forma de generar los sincronismos compuestos para RGB y video compuesto: 0 para usar el tipo de sincronismo original del Spectrum. 1 para usar pulsos de sincronismo según el estándar PAL
+* FREQ: estos tres bits definen la frecuencia del reloj maestro, del cual derivan el resto de relojes del circuito. Entre otras, se define también aquí la frecuencia de refresco vertical, que puede usarse para mejorar la compatibilidad con algunos monitores VGA que no soportan una frecuencia de refresco vertical de 50Hz. Los valores de refresco vertical son los siguientes:
+** 000 : 50Hz para modo 48K y Pentagon
+** 001 : 50Hz para modo 128K
+** 010 : 52 Hz
+** 011 : 53 Hz
+** 100 : 55 Hz
+** 101 : 57 Hz
+** 110 : 59 Hz
+** 111 : 60 Hz
+* ENSCAN: a 1 para habilitar el efecto de scanlines en el modo VGA. No tiene efecto si el modo VGA está deshabilitado.
+* VGA: a 1 para habilitar el scandoubler. La salida del scandoubler es la misma que la salida RGB normal, pero doblando la frecuencia de retrazo horizontal. A 0 para usar una salida de 15kHz RGB / video compuesto.
+
+<<<
+
+===== `$0C` RASTERLINE
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`11111111`|`11111111`|`11111111`
+|===
+
+Almacena los 8 bits menos significativos de la línea de pantalla en la que se desea provocar un disparo de una interrupción enmascarable. Un valor 0 para este registro (con LINE8 también igual a 0) establece que la interrupción ráster se disparará, si está habilitada, justo al comenzar el borde derecho de la línea anterior a la primera línea de pantalla en la que comienza la zona de "paper". Dicho en otras palabras: el conteo de líneas de esta interrupción asume que una línea de pantalla se compone de: borde derecho + intervalo de blanking horizontal + borde izquierdo + zona de paper. Si se asume de esta forma, el disparo de la interrupción se haría al comienzo de la línea seleccionada.
+Un valor para RASTERLINE igual a 192 (con LINE8 igual a 0) dispara la interrupción ráster al comienzo del borde inferior. Los números de línea para el fin del borde inferior y comienzo del borde superior dependen de los timings empleados. El mayor valor posible en la práctiva para RASTERLINE corresponde a una interrupción ráster disparada en la última línea del borde superior (ver RASTERCTRL)
+
+===== `$0D` RASTERCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000001`|`00000001`|`00000001`
+|===
+
+Registro de control y estado de la interrupción ráster. Se definen los siguientes bits.
+|===
+|INT|0|0|0|0|DISVINT|ENARINT|LINE8
+|===
+* INT: este bit sólo está disponible en lectura. Vale 1 durante 32 ciclos de reloj a partir del momento en que se dispara la interrupción ráster. Este bit está disponible aunque el procesador tenga las interrupciones deshabilitadas. No está disponible si el bit ENARINT vale 0.
+* DISVINT: a 1 para deshabilitar las interrupciones enmascarables por retrazo vertical (las originales de la ULA). Tras un reset, este bit vale 0.
+* ENARINT: a 1 para habilitar las interrupciones enmascarables por línea ráster. Tras un reset, este bit vale 0.
+* LINE8: guarda el bit 8 del valor de RASTERLINE, para poder definir cualquier valor entre 0 y 511, aunque en la práctica, el mayor valor está limitado por el número de líneas generadas por la ULA (311 en modo 48K, 310 en modo 128K, 319 en modo Pentagon). Si se establece un número de línea superior al límite, la interrupción ráster no se producirá.
+
+<<<
+
+===== `$0E` DEVCONTROL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+Registro de habilitacion/deshabilitacion de distintas caracteristicas. Se definen los siguientes bits.
+|===
+|DISD|ENMMU|DIROMSEL1F|DIROMSEL7F|DI1FFD|DI7FFD|DITAY|DIAY
+|===
+* DISD: a 1 para deshabilitar la interfaz hardware SPI para SD (usada en DivMMC y ZXMMC). Deshabilitando esta interfaz se liberan los puertos $1F en escritura, $3F, $E7 y $EB. Tras reset maestro, vale 0.
+* ENMMU: a 1 para habilitar la MMU horizontal usada en el Timex Sinclair. Habilitando esta interfaz se usa el bit 7 del puerto $FF, se usa el puerto $F4 y una lectura al puerto $FF devuelve el ultimo valor escrito en el. Tras reset maestro, vale 0.
+* DIROM1F: el valor de este bit se enmascara con el valor del bit 2 del puerto $1FFD según la operación ~DIROM1F & $1FFD[2]. El resultado neto es que si este bit vale 1, el sistema trabajará como si el valor del bit 2 del puerto $1FFD fuera siempre 0, independientemente del valor que se escriba en él. Tras reset maestro, vale 0, que permite que los cambios al bit 2 de $1FFD sean tenidos en cuenta.
+* DIROM7F: el valor de este bit se enmascara con el valor del bit 4 del puerto $7FFD según la operación ~DIROM7F & $7FFD[4]. El resultado neto es que si este bit vale 1, el sistema trabajará como si el valor del bit 4 del puerto $7FFD fuera siempre 0, independientemente del valor que se escriba en él. Tras reset maestro, vale 0, que permite que los cambios al bit 4 de $7FFD sean tenidos en cuenta.
+* DI1FFD: a 1 para deshabilitar el sistema de paginación compatible con +2A/+3. Deshabilitando esta interfaz se libera el puerto $1FFD en escritura. Tenga en cuenta que la decodificación del puerto $7FFD, si está activa, es diferente dependiendo de si el puerto $1FFD está activo o no.
+* DI7FFD: a 1 para deshabilitar el sistema de paginación compatible con 128K. La deshabilitación de este sistema implica la deshabilitación del sistema de paginación del +2A/+3 aunque no se haya desactivado explicitamente.
+* DITAY: a 1 para deshabilitar el segundo chip AY, deshabilitando así el modo Turbo Sound.
+* DIAY: a 1 para deshabilitar el chip principal AY. La deshabilitación de este chip implica la deshabilitación del segundo chip AY, aunque no se haya deshabilitado explicitamente.
+
+<<<
+
+===== `$0F` DEVCTRL2
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+|Registro de habilitacion/deshabilitacion de distintas caracteristicas (continuación de DEVCONTROL). Se definen los siguientes bits.
+|===
+|Resv|Resv|SPLITTER|DIMIXER|DISPECDRUM|DIRADAS|DITIMEX|DIULAPLUS
+|===
+* Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
+* SPLITTER: a 1 para habilitar el splitter de joystick.
+* DIMIXER: a 1 se deshabilita la salida de sonido.
+* DISPECDRUM: a 1 se deshabilita el soporte de SpecDrum/Covox.
+* DIRADAS: a 1 para deshabilitar el modo radastaniano. Tenga en cuenta que si el modo radastaniano no se deshabilita, pero se deshabilita la ULAplus, al intentar usar el modo radastaniano, el datapath usado en la ULA no será el esperado y el comportamiento de la pantalla en este caso no está documentado.
+* DITIMEX: a 1 para deshabilitar los modos de pantalla compatible Timex. Cualquier escritura al puerto $FF es por tanto ignorada. Si la MMU del Timex está habilitada, una lectura al puerto $FF devolverá 0.
+* DIULAPLUS: a 1 para deshabilitar la ULAplus. Cualquier escritura a los puertos de ULAplus se ignora. Las lecturas a dichos puertos devuelven el valor del bus flotante. No obstante tenga en cuenta que el mecanismo de contención para este puerto sigue funcionando aunque esté deshabilitado.
+
+===== `$10` MEMREPORT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$40` RADASCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Registro para establecer el modo radastaniano y establecer sus características. Las escrituras a este registro son ignoradas si el bit correspondiente en DEVCTRL2 está activo. Se definen los siguientes bits
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|EN1|EN0
+|===
+* Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
+* EN1, EN0: ambos bits deben valer 1 para habilitar el modo radastaniano. Si EN0 está habilitado, pero EN1 está deshabilitado, el resto de bits, del 2 al 7, está definido según lo implementado en el https://github.com/chernandezba/zesarux[emulador ZEsarUX] (consultar la documentación de César Hernández sobre esto).
+
+===== `$41` RADASOFFSET
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Contiene el número de bytes que hay que añadir a la dirección base de la pantalla (4000h, 6000h, C000h o E000h según la configuración) para obtener la dirección donde se encuentran los dos primeros píxeles en modo radastaniano. Es un registro de 14 bits. Para escribir un valor, primero se escriben los 8 bits menos significativos, seguidos inmediatamente de los 8 bits más significativos (los 2 bits más significativos de este valor se ignoran).
+Si el valor de offset es tal que hace que al explorar la memoria de pantalla para crear la imagen se llegue al final de una página de 16KB, la exploración continuará al principio de esa misma página.
+
+===== `$42` RADASPADDING
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Contiene el número de bytes - 64 que ocupa un scanline en modo radastaniano. Es decir, si este registro vale 0, la longitud en bytes de un scanline es de 64 bytes (128 pixeles). Si este registro vale 4, la longitud de un scanline es de 68 bytes (136 píxeles). Si vale 255, la longitud de un scanline es de 64+255=319 bytes, o 638 píxeles.
+Si el valor de offset es tal que hace que al explorar la memoria de pantalla para crear la imagen se llegue al final de una página de 16KB, la exploración continuará al principio de esa misma página.
+
+===== `$43` RADASPALBANK
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|`00000000`|`00000000`|`00000000`
+|===
+
+Registro para establecer qué sección de la paleta de ULAplus se usará para definir los colores en el modo radastaniano, y cómo se comportará el borde.
+|===
+|Resv|Resv|Resv|Resv|Resv|BOR3 |RADPALQUARTER
+|===
+* Resv: Este bit está reservado. En la implementación actual, debe escribirse un 0 en él si se actualiza el valor del registro.
+* BOR3: dentro de la paleta actual seleccionada, indica si el color del borde se tomará de las entradas 0 a 7 (0) o de las entradas 8 a 15 (1). Puede considerarse como el bit 3 del color del borde en modo radastaniano.
+* RADPALQUARTER: dos bits que indican qué sección de la paleta de ULAplus se va a usar para el modo radastaniano. 00 para usar la sección de entradas 0 a 15. 01 para las entradas 16 a 31, 10 para las entradas 32 a 47 y 11 para usar las entradas 48 a 63.
+
+===== `$80` HOFFS48K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$38`
+|===
+
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de 48K.
+
+===== `$81` VOFFS48K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$01`
+|===
+
+Valor de ajuste de centrado vertical de la pantalla para la ULA de 48K.
+
+===== `$82` HOFFS128K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$3A`
+|===
+
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de 128K.
+
+===== `$83` VOFFS128K
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$01`
+|===
+
+Valor de ajuste de centrado vertical de la pantalla para la ULA de 128K.
+
+===== `$84`
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|`HOFFSPEN`
+|Lectura/Escritura|No cambia|No cambia|`$37`
+|===
+
+Valor de ajuste de centrado horizontal de la pantalla para la ULA de Pentagon.
+
+===== `$85` VOFFSPEN
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$00`
+|===
+
+Valor de ajuste de centrado vertical de la pantalla para la ULA de Pentagon.
+
+===== `$A0` DMACTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A1` DMASRC
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A2` DMADST
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+<<<
+
+===== `$A3` DMAPRE
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A4` DMALEN
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A5` DMAPROB
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$A6` DMASTAT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$C6` UARTDATA
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$C7` UARTSTAT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$C8` - `$DF` RESERVED
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|Definido por el usuario|Definido por el usuario|Definido por el usuario
+|===
+
+Rango de registros de ZXUNO reservados para experimentos o uso privado.
+
+===== `$F0` SRAMADDR
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$F1` MADDRINC
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+
+===== `$F2` SRAMDATA
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+
+===== `$F3` VDECKCTRL
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+===== `$F7` AUDIOMIX
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`10011111`
+|===
+
+Control de la mezcla de los canales izquierdo/derecho partiendo de los 4 canales del AY-8912. Se definen los siguientes grupos de 2 bits cada uno:
+|===
+|CHANNELA|CHANNELB|CHANNELC|BEEPDRUM
+|===
+* BEEPDRUM : Canal para Beeper y Specdrum.
+* El significado de cada grupo de 2 bits es: 00 = Silencio, 01 = Canal derecho, 10 = Canal izquierdo, 11 = Ambos
+
+<<<
+
+===== `$FB` AD724
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`00000000`
+|===
+
+Control del modo de funcionamiento del chip encoder AD724. Se definen los siguientes bits:
+|===
+|Resv|Resv|Resv|Resv|Resv|Resv|Resv|MODE
+|===
+* Resv : el significado de estos bits está reservado y no debe alterarse.
+* MODE : modo de funcionamiento del AD724. 0 = codifica norma PAL. 1 = codifica norma NTSC
+
+===== `$FC` COREADDR
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|No cambia|`$058000`
+|===
+
+Almacena la dirección, dentro de la memoria SPI, de inicio del core a arrancar. Para almacenar una dirección diferente, se han de realizar tres escrituras a este registro, conteniendo los tres bytes de la dirección, en orden de más a o menos significativo. En lectura, cada acceso a este registro devuelve una parte de la última dirección almacenada, de la parte más significativa a la menos significativa.
+
+===== `$FD` COREBOOT
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Escritura|No cambia|No cambia|No cambia
+|===
+
+Registro de control de arranque. Escribiendo un 1 en el bit 0 de este registro (el resto de bits están reservados y deben quedarse a 0) hace que se desencadene el mecanismo interno de la FPGA que permite arrancar otro core. La dirección de comienzo de este segundo core será la última que se escribiera usando el registro COREADDR.
+
+===== `$FE` SCRATCH
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura/Escritura|No cambia|`00000000`|`00000000`
+|===
+
+<<<
+
+====== `$FF` COREID
+
+[align="center",options="header"]
+|===
+|Sentido|Valor tras reset de usuario|Valor tras reset maestro|Valor tras poweron
+|Lectura|Ver descripción|Ver descripción|Ver descripción
+|===
+
+Cada operación de lectura proporciona el siguiente carácter ASCII de la cadena que contiene la revisión actual del core del ZX-Uno. Cuando la cadena termina,lecturas posteriores emiten bytes con el valor 0 (al menos se emite uno de ellos) hasta que vuelve a comenzar la cadena. Este puntero vuelve a 0 automáticamente tras un reset o una escritura en el registro `$FC3B`. Los caracteres entregados que forman parte de la cadena son ASCII estándar imprimibles (códigos `32`-`127`). Cualquier otro valor es indicativo de que este registro no está operativo.
+
+<<<
+
+=== Enlaces
 
 https://zxuno.speccy.org/index.shtml[ZX-Uno]
 
