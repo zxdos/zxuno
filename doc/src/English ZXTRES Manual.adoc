@@ -26,7 +26,7 @@ Over time the project grew and it's now possible to use different software confi
 
 The ZXTRES official web page is https://www.forofpga.es/viewforum.php?f=251[https://www.forofpga.es/viewforum.php?f=251].
 
-Most of the functions and features of the ZXTRES, ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary. In this document, _controller_ means joystick or gamepad. Buttons are labelled alphabetically from `A` but labels on individual controllers may differ. 
+Most of the functions and features of the ZXTRES, ZXTRES+ and ZXTRES++ are the same, so this document typically refers to the ZXTRES indicating the differences when necessary. In this document, _controller_ means joystick or gamepad. Buttons are labelled alphabetically from `A` but labels on individual controllers may differ.
 
 === Acknowledgements
 
@@ -1371,7 +1371,7 @@ RomPack files can be easily edited with the http://guest:zxuno@svn.zxuno.comsvn/
 
 A core is a file with the information needed to configure the FPGA to behave like a specific system (ZX Spectrum and so on). In the ZXTRES this file can be loaded from several different places: the SPI Flash memory, a microSD card or from an external device (PC and so on) using a special cable (JTAG). For this purpose, there are several file types:
 
-- BIT file generated from a synthesis tool. It is usually distributed with the extension `.BIT` and can be loaded into the FPGA with a programmer, or from the microSD, if you have an <<#_middle_board,optional middle board>> using the <<#_bob_fossil_nmi_browser,BIT plugin>> from esxdos. 
+- BIT file generated from a synthesis tool. It is usually distributed with the extension `.BIT` and can be loaded into the FPGA with a programmer, or from the microSD, if you have an <<#_middle_board,optional middle board>> using the <<#_bob_fossil_nmi_browser,BIT plugin>> from esxdos.
 - BIN file (generated from a BIT file). Normally distributed with the extension `.ZX3`, and can be loaded into the FPGA using the <<#_bob_fossil_nmi_browser,ZX3 plugin>> from esxdos, temporarily using the SPI Flash.
 - Expanded BIN file, perhaps in several 1.2MiB chunks (exactly 1179648 bytes), with the extension `.ZX3` and which can be written, using the BIOS, to <<#_spi_flash_memory,SPI Flash memory>> and then loaded from the SPI flash to the FPGA.
 
@@ -1391,7 +1391,7 @@ BIN files can be renamed with the `.BIT` extension and also loaded to the FPGA u
 
 ===== Loading from the ZX Spectrum core
 
-From the main ZX Spectrum core it's possible to load other cores. 
+From the main ZX Spectrum core it's possible to load other cores.
 
 ====== Bob Fossil NMI browser
 
@@ -1426,7 +1426,7 @@ If all goes well, after a few seconds, the core will be loaded into the FPGA and
 
 [TIP]
 ====
-Some devices, when connected to the joystick ports, may cause a flashing red border when starting the browser. This is solved by disabling the Kempston joystick in your configuration (with the <<#_esxdos_commands,"DOT" command>> `.brwscfg`).
+Some devices, when connected to the joystick ports, may cause a flashing red border when starting the browser. This may be solved by disabling the Kempston joystick in your configuration (with the <<#_esxdos_commands,"DOT" command>> `.brwscfg`) or, sometimes, __connecting simultaneously a controller to the second port__.
 
 [.text-center]
 image:img/brwscfg.jpg[scaledwidth=70%]
@@ -1489,6 +1489,13 @@ This process can't be undone and it replaces all previously installed cores, the
 
 == Other cores
 
+As explained before, you can use other <<#_cores,cores>> besides the ZX Spectrum default.
+
+[NOTE]
+====
+Many of the cores show file and folder entries in the order stored in the microSD internal FAT table and not alphabetically. If you want to see them ordered you ha to reorder the microSD card structure with a utility such as https://fatsort.sourceforge.io/[FATsort], https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] or another application.
+====
+
 === Amiga minimig AGA
 
 https://en.wikipedia.org/wiki/Commodore_Amiga [Commodore Amiga] was a personal computer marketed by Commodore International between 1985 and 1994. It was very popular due to its price and multimedia capabilities. Its system is unique in that it was the first multitasking and multimedia computer aimed at the general public.
@@ -1501,7 +1508,7 @@ Some core characteristics are:
 - chipRAM : 0.5MB - 2.0MB, SlowRAM : 0.0MB - 1.5MB and fastRAM : 0.0MB - 24MB
 - CPU : 68000, 68010, 68020
 - Kickstart support : 1.2 - 3.1
-- HRTmon 
+- HRTmon
 - 1-4 floppies with normal and turbo speeds
 - 1-2 hard disk images
 - VGA video output emulating: PAL / NTSC
@@ -1660,13 +1667,12 @@ If not already there, <<#_cores,install or run the Amstrad CPC6128 core>> on the
 When the core is active:
 
 - `F12` show and hide the disk image selection menu
-- `Scroll Lock`: Switches between RGB video mode and VGA 
+- `Scroll Lock`: Switches between RGB video mode and VGA
 - `End`: Select between monochrome and colour modes.
 - `Ctrl+Alt+Delete`: Soft Reset (resets the Core)
 - `Ctrl+Alt+Backspace`: Hard reset (restart the FPGA). Backspace is the delete key located in the top-right portion of the keyboard above `Enter`.
 
 ==== Overview
-
 
 Pressing `F12` will display the menu where you can assign DSK files to the disk drivers. Cursor keys to choose menu options and `Enter` to select and choose an element.
 
@@ -1693,7 +1699,7 @@ It is also possible to load from tape (or other external audio device) by first 
 
 === Arcade (1942)
 
-https://en.wikipedia.org/wiki/1942_(video_game)[1942] is a videogame, released as an arcade video game in 1984. 
+https://en.wikipedia.org/wiki/1942_(video_game)[1942] is a videogame, released as an arcade video game in 1984.
 
 The ZXTRES core has been made by somhic, adapting the https://github.com/jotego/jtcores/tree/master/cores/1942[original version by Jotego].
 
@@ -1708,7 +1714,12 @@ Some core features:
 
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
-Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[creator's repository].
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JT1942.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
@@ -1767,7 +1778,12 @@ Some core features:
 
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
-Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[creator's repository].
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/MiSTer-devel/Arcade-ATetris_MiSTer[repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as TETRIS.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
@@ -1827,6 +1843,11 @@ Some core features:
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
 Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card.
 
@@ -1891,6 +1912,11 @@ The core needs files with the original arcade machine chips https://en.wikipedia
 
 Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
 
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
+
 ARC and ROM files can be placed anywhere in the microSD card.
 
 [TIP]
@@ -1951,7 +1977,12 @@ Some core features:
 
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
-Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[creator's repository].
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTDD.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
@@ -2013,7 +2044,12 @@ Some core features:
 
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
-Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Kicker.mra[creator's repository].
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JKICKER.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
@@ -2071,7 +2107,12 @@ Some core features:
 
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
-Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Double%20Dragon%20(Japan).mra[creator's repository].
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTOUTRUN.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
@@ -2139,7 +2180,12 @@ Some core features:
 
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
-Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/blob/master/mra/Pang%20(World).mra[creator's repository].
+Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card. However, if there's a directory named JOTEGO directory in the root of the card, and inside there are the ARC file named as JTPANG.ARC, together with the corresponding ROM file, both will be loaded automatically when the core starts.
 
@@ -2202,6 +2248,11 @@ Some core features:
 The core needs files with the original arcade machine chips https://en.wikipedia.org/wiki/ROM_image[ROM images], merged into a single .ROM file, together with at least one .ARC file containing the name of the ROM file to be loaded, as well as the configuration of the https://en.wikipedia.org/wiki/DIP_switch[DIP switches] configuration for the original machine.
 
 Both ROM and ARC files can be created using <<#_mra_tool,MRA Tool>>, taking as reference the MRA files available in the original core https://github.com/jotego/jtbin/tree/master/mra[creator's repository].
+
+[TIP]
+====
+The https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] utility allows you to build the ARC and ROM file structure suitable for use with Jotego cores by downloading everything you need from the internet.
+====
 
 ARC and ROM files can be placed anywhere in the microSD card.
 
@@ -2475,7 +2526,7 @@ When the core is active:
 
 ==== Overview
 
-From within Forth, you can load from a external tape or other external audio device with the comand `LOAD <nombre>`.
+From within Forth, you can load from a external tape or other external audio device with the comand `LOAD <name>`.
 
 [CAUTION]
 ====
@@ -3080,7 +3131,7 @@ For more information, see the https://www.specnext.com/zx-spectrum-next-user-man
 An intermediate board can be installed in a ZXTRES as an optional component that expands the hardware capabilities to include support for:
 
 - <<#_wi_fi,Wi-Fi>> (via https://es.wikipedia.org/wiki/ESP8266[ESP8266])
-- <<#_midi,MIDI>> (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[RP2040 microcontroller]), 
+- <<#_midi,MIDI>> (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[RP2040 microcontroller])
 - <<#_rtc,RTC (real time clock)>>
 - <<#_bob_fossil_nmi_browser,direct loading of cores>> from microSD card (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontroller RP2040])
 - USB keyboards and controllers (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[RP2040 microcontroller])
@@ -3144,7 +3195,7 @@ This program for Windows, macOS and Linux can directly play a `TZX` tape file th
 
 You can download the application for Windows from https://worldofspectrum.net/utilities/%23tzxtools[World of Spectrum Classic] and for Mac from https://github.com/kounch/playtzx/releases[this GitHub repository] or compile the source code as <<#_compile_source_code_macos_and_linux,explained later>>.
 
-. Connect the audio cable between the computer audio output and ZXTRES audio input (remember to use only the right mono channel to the PC Mac and so on output). 
+. Connect the audio cable between the computer audio output and ZXTRES audio input (remember to use only the right mono channel to the PC Mac and so on output).
 . Type on the computer or select the tape loading option. For examle for ZX Spectrum 48K typing `J` then twice `"` and then `Enter` to do the classic `LOAD "" + Enter`.
 . Start playing a tape file with this command (you may need to try several times adjusting the player volume).
 
@@ -3422,7 +3473,6 @@ image:img/usbblasterzxtres.jpg[scaledwidth=60%]
 *Instruction steps*:
 
 . Install https://openocd.org[Open On-Chip Debugger (OpenOCD)] or https://trabucayre.github.io/openFPGALoader/guide/install.html[openFPGALoader] to the system using a package manager.
-
 
 For example, to install OpenOCD on Arch Linux:
 
@@ -4326,7 +4376,6 @@ Each read operation provides the next ASCII character of the string containing t
 
 === Arcade
 
-
 ==== MRA Tool
 
 This is a tool that mergees https://www.mamedev.org[MAME] ROM files, using an MRA configuration file as a reference. It is also useful to create many kinds of binary blobs. It can be downloaded from https://github.com/kounch/mra-tools-c/tree/master/release[GitHub].
@@ -4361,12 +4410,54 @@ Different arcade games are listed below, based on the core, and including the na
 |1942|1942
 |===
 
+===== 1943
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|1943|1943
+|===
+
 ===== Atari Tetris
 
 [align="center",options="header"]
 |===
 |Game Name|ROM Name
 |Tetris|atetris
+|===
+
+===== Bionic Commando
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Bionic Commando|bionicc
+|===
+
+===== Bad Dudes Vs. DragonNinja
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Bad Dudes Vs. DragonNinja|baddudes
+|Heavy Barrel|hbarrel
+|===
+
+===== Black Tiger
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Black Tiger|blktiger
+|===
+
+===== Bubble Bobble
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Bubble Bobble|bublbobl
+|Tokio - Scramble Formation|tokiob
 |===
 
 ===== Capcom Play System 1
@@ -4412,12 +4503,83 @@ Different arcade games are listed below, based on the core, and including the na
 [align="center",options="header"]
 |===
 |Game Name|ROM Name
-|Cadillacs and Dinosaurs|dino.rom
-|Muscle Bomber Duo: Ultimate Team Battle|mbombrd.rom
-|Saturday Night Slam Masters|slammast.rom
-|Tenchi wo Kurau II_ Sekiheki no Tatakai|wofch.rom
-|The Punisher|punisher.rom
-|Warriors of Fate|wof.rom
+|Cadillacs and Dinosaurs|dino
+|Muscle Bomber Duo: Ultimate Team Battle|mbombrd
+|Saturday Night Slam Masters|slammast
+|Tenchi wo Kurau II_ Sekiheki no Tatakai|wofch
+|The Punisher|punisher
+|Warriors of Fate|wof
+|===
+
+===== Capcom Play System 2
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|1944: The Loop Master|1944
+|19XX: The War Against Destiny|19xx
+|Alien vs. Predator|avsp
+|Armored Warriors|armwar
+|Battle Circuit|batcir
+|Capcom Sports Club|csclub
+|Cyberbots: Fullmetal Madness|cybots
+|Darkstalkers: The Night Warriors|dstlk
+|Dimahoo|dimahoo
+|Dungeons & Dragons: Shadow over Mystara|ddsom
+|Dungeons & Dragons: Tower of Doom|ddtod
+|Eco Fighters|ecofghtr
+|Giga Wing|gigawing
+|Hyper Street Fighter II: The Anniversary Edition|hsf2
+|Janpai Puzzle Choukou|choko
+|Jyangokushi: Haoh no Saihai|jyangoku
+|Mars Matrix: Hyper Solid Shooting|mmatrix
+|Marvel Super Heroes|msh
+|Marvel Super Heroes Vs. Street Fighter|mshvsf
+|Marvel Vs. Capcom: Clash of Super Heroes|mvsc
+|Mega Man 2: The Power Fighters|megaman2
+|Mighty! Pang|mpang
+|Night Warriors: Darkstalkers' Revenge|nwarr
+|Progear|progear
+|Puzz Loop 2|pzloop2
+|Quiz Nanairo Dreams: Nijiirochou no Kiseki|qndream
+|Ring of Destruction: Slammasters II|ringdest
+|Street Fighter Alpha 2|sfa
+|Street Fighter Alpha 3|sfa2
+|Street Fighter Alpha: Warriors' Dreams|sfa3
+|Street Fighter Zero 2 Alpha|sfz2al
+|Super Gem Fighter Mini Mix|sgemf
+|Super Puzzle Fighter II Turbo|spf2t
+|Super Street Fighter II Turbo|ssf2
+|Super Street Fighter II: The New Challengers|ssf2t
+|Vampire Hunter 2: Darkstalkers Revenge|vhunt2
+|Vampire Savior 2: The Lord of Vampire|vsav
+|Vampire Savior: The Lord of Vampire|vsav2
+|X-Men Vs. Street Fighter|xmvsf
+|X-Men: Children of the Atom|xmcota
+|===
+
+===== Combat School
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Combat School|combatsc
+|===
+
+===== Commando
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Commando|commando
+|===
+
+===== Contra
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Contra|contra
 |===
 
 ===== Double Dragon
@@ -4425,7 +4587,71 @@ Different arcade games are listed below, based on the core, and including the na
 [align="center",options="header"]
 |===
 |Game Name|ROM Name
-|Double Dragon|Double Dragon|ddragon
+|Double Dragon|ddragon
+|===
+
+===== Double Dragon 2
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Double Dragon 2|ddragon2
+|===
+
+===== Exed Exes
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Exed Exes|exedexes
+|===
+
+===== F-1 Dream
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|F-1 Dream|f1drm
+|===
+
+===== Ghosts 'n Goblins
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Ghosts 'n Goblins|gng
+|===
+
+===== Gun.Smoke
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Gun.Smoke|gunsmk
+|===
+
+===== Haunted Castle
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Haunted Castle|hcastle
+|===
+
+===== Hyper Dyne Side Arms
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Hyper Dyne Side Arms|sidearms
+|===
+
+===== Karate Champ
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Karate Champ|kchamp
 |===
 
 ===== Kicker
@@ -4433,7 +4659,36 @@ Different arcade games are listed below, based on the core, and including the na
 [align="center",options="header"]
 |===
 |Game Name|ROM Name
-|Kicker|Kicker|kicker
+|Kicker|kicker
+|===
+
+===== Midnight Resistance
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Midnight Resistance|midres
+|===
+
+===== Mikie
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Mikie|mikie
+|===
+
+===== The New Zealand Story
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Arkanoid - Revenge of DOH|arknoid2
+|Dr. Toppel's Adventure|drtoppel
+|Extermination|extrmatn
+|Insector X|insectx
+|Kageki|kageki
+|The NewZealand Story|tnzso
 |===
 
 ===== Out Run
@@ -4442,6 +4697,7 @@ Different arcade games are listed below, based on the core, and including the na
 |===
 |Game Name|ROM Name
 |Out Run|Out Run|outrun
+|Turbo Out Run|toutrun
 |===
 
 ===== Pang
@@ -4449,7 +4705,77 @@ Different arcade games are listed below, based on the core, and including the na
 [align="center",options="header"]
 |===
 |Game Name|ROM Name
-|Pang!|Pang|pang
+|Pang!|pang
+|===
+
+===== Ping-Pong
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Konami's Ping Pong|pingpong
+|===
+
+===== Pirate Ship Higemaru
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Pirate Ship Higemaru|higemaru
+|===
+
+===== Rastan Saga
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Rastan Saga|rastan
+|===
+
+===== Renegade
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Renegade|renegdeb
+|===
+
+===== Road Fighter
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Hyper Sports|hyperspt
+|Road Fighter|roadf
+|===
+
+===== Robocop
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Hippodrome|hippodrm
+|Robocop|robocop
+|===
+
+===== Roc'n Rope
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Roc'n Rope|rocnrope
+|===
+
+===== Sega System 16
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Action Fighter|afighter
+|Alex Kidd: The Lost Stars|alexkidd
+|Fantasy Zone|fantzone
+|Shinobi|shinobi
+|Tetris|tetris
 |===
 
 ===== Sega System 16B
@@ -4457,31 +4783,104 @@ Different arcade games are listed below, based on the core, and including the na
 [align="center",options="header"]
 |===
 |Game Name|ROM Name
-|Alien Syndrome|aliensyn.rom
-|Altered Beast |altbeast.rom
-|Aurail|aurail.rom
-|Bay Route|bayroute.rom
-|Bullet|bullet.rom
-|Cotton|cotton.rom
-|Dunk Shot|dunkshot.rom
-|Dynamite Dux|ddux.rom
-|E-Swat - Cyber Police|eswat.rom
-|Excite League|exctleag.rom
-|Fantasy Zone II - The Tears of Opa-Opa|fantzn2x.rom
-|Flash Point|fpoint.rom
-|Golden Axe|goldnaxe.rom
-|MVP|mvp.rom
-|Passing Shot|passsht.rom
-|Riot City|riotcity.rom
-|RyuKyu|ryukyu.rom
-|Sonic Boom|sonicbom.rom
-|Sukeban Jansi Ryuko|sjryuko.rom
-|Super League|suprleag.rom
-|Time Scanner|timescan.rom
-|Toryumon|toryumon.rom
-|Tough Turf|tturfu.rom
-|Wonder Boy III - Monster Lair|wb3.rom
-|Wrestle War|wrestwar.rom
+|Alien Syndrome|aliensyn
+|Altered Beast |altbeast
+|Aurail|aurail
+|Bay Route|bayroute
+|Bullet|bullet
+|Cotton|cotton
+|Dunk Shot|dunkshot
+|Dynamite Dux|ddux
+|E-Swat - Cyber Police|eswat
+|Excite League|exctleag
+|Fantasy Zone II - The Tears of Opa-Opa|fantzn2x
+|Flash Point|fpoint
+|Golden Axe|goldnaxe
+|MVP|mvp
+|Passing Shot|passsht
+|Riot City|riotcity
+|RyuKyu|ryukyu
+|Sonic Boom|sonicbom
+|Sukeban Jansi Ryuko|sjryuko
+|Super League|suprleag
+|Time Scanner|timescan
+|Toryumon|toryumon
+|Tough Turf|tturfu
+|Wonder Boy III - Monster Lair|wb3
+|Wrestle War|wrestwar
+|===
+
+===== Section Z
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Section Z|sectionz
+|===
+
+===== Sly Spy
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Boulder Dash Part 2|bouldash
+|Sly Spy: Secret Agent|secretag
+|===
+
+===== The Speed Rumbler
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|The Speed Rumbler|srumbler
+|===
+
+===== Super Hang-On
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Super Hang-On|shangon
+|===
+
+===== Tiger Road
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Tiger Road|tigeroad
+|===
+
+===== Trick Trap
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Trick Trap|tricktrp
+|===
+
+===== Trojan
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Trojan|trojanr
+|===
+
+===== Vigilante
+
+[align="center",options="header"]
+|===
+|Game Name|ROM Name
+|Vigilante|vigilant
+|===
+
+===== Vulgus
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Vulgus|vulgus
 |===
 
 <<<
@@ -4646,7 +5045,7 @@ https://nihirash.net/projects/[Nihirash Projects]
 
 https://www.zxuno.com/forum/viewtopic.php?f=25&t=4079[Wi-Fi addon at the ZX-Uno forum]
 
-https://zxuno.com/forum/viewtopic.php?t=4108[PLATO client at the ZX-Uno forum] 
+https://zxuno.com/forum/viewtopic.php?t=4108[PLATO client at the ZX-Uno forum]
 
 https://zxuno.com/forum/viewtopic.php?t=3963[MIDI addon at the ZX-Uno forum]
 
