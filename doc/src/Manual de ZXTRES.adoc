@@ -144,15 +144,18 @@ La siguiente tabla resume los requisitos particulares de los distintos cores que
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
 |[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
 |[.small]#Amstrad CPC 6128#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, Imágenes de disco (`.DSK`)#|[.small]#Necesita ROMs#
+|[.small]#Apple IIe#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.NIB`)#|
 |[.small]#Arcade#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ARC` y `.ROM`)#|
 |[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
 |[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
-|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
-|[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.neo`)#|[.small]#Necesita BIOS#
-|[.small]#PC XT#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita BIOS#
-|[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.o` y `.p`)#|
-|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.vhd`)#|[.small]#Necesita ROM#
+|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita ROM#
+|[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.NEO`)#|[.small]#Necesita BIOS#
+|[.small]#PC XT#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita BIOS#
+|[.small]#SAM Coupé#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.MGT`, `.DSK` y `.SAD`)#|
+|[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.O` y `.P`)#|
+|[.small]#zx#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos interna#
+|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita ROM#
 |[.small]#ZX Spectrum Next#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Puede utilizar esxdos en la microSD#
 |===
 
@@ -1168,6 +1171,7 @@ Tal y como se ha explicado en la parte de instalación, existe una serie de coma
 - `keymap`: Sirve para cargar una definición de teclado diferente.
 - `loadpzx`: Para cargar un archivo de imagen de cinta .PZX.
 - `loadtap`: Para cargar un archivo de imagen de cinta usando la integración con .PZX.
+- `mbinfo` y `mbupd`: Para obtener información y actualizar el firmware de una <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>> con dos CPUs.
 - `playmid`: Reproduce archivos musicales .MID con la <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>>
 - `playrmov`: Reproduce vídeos en <<#_creación_de_vídeos_rdm_radastan_movie,formato radastaniano (ficheros `.RDM`)>>. Este comando no funciona en modo 48K.
 - `romsupgr`: Copia el contenido de un fichero RomPack, llamado `ROMS.ZX1`, en el directorio raíz de la tarjeta microSD con todas las ROMS para el core ZX Spectrum a la memoria SPI Flash. Se debe ejecutar desde una ROM en modo "root".
@@ -2871,8 +2875,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
-<<<
-
 ==== Guía básica
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
@@ -2934,9 +2936,7 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `5` y `6`: Insertar una moneda
 - `P` o botón Y de un mando: Pausa
 - `F3`: Soft Reset (reinicia el Core)
-- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
-
-<<<
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA  
 
 ==== Guía básica
 
@@ -3509,6 +3509,8 @@ Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD
 El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
 ====
 
+<<<
+
 ==== Teclado
 
 ===== Teclas especiales y botones
@@ -3523,6 +3525,8 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `P` o botón X de un mando: Pausa
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+<<<
 
 ==== Guía básica
 
@@ -3678,8 +3682,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `P` o botón Start de un mando: Pausa
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
-
-<<<
 
 ==== Guía básica
 
@@ -4059,8 +4061,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
-<<<
-
 ==== Guía básica
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
@@ -4191,8 +4191,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
-<<<
-
 ==== Guía básica
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
@@ -4261,8 +4259,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `P` o botón Start de un mando: Pausa
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
-
-<<<
 
 ==== Guía básica
 
@@ -4658,8 +4654,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
-<<<
-
 ==== Guía básica
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
@@ -4723,8 +4717,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
-<<<
-
 ==== Guía básica
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
@@ -4787,8 +4779,6 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 - `P` o botón Y de un mando: Pausa
 - `F3`: Soft Reset (reinicia el Core)
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
-
-<<<
 
 ==== Guía básica
 
@@ -4954,6 +4944,11 @@ Se debe de utilizar una tarjeta microSD, con la primera partición en formato FA
 Una vez copiados los ficheros en la tarjeta, se necesita además el fichero `MULTCART.ROM` que se puede obtener en https://t.me/zxtresfpga
 
 Si no estuviera ya, <<#_cores,instalar o ejecutar el core de ColecoVision>> en el ZXTRES.
+
+[WARNING]
+====
+Al menos hasta la versión 20230702, este core no funciona correctamente usando el <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>>, y se ha de cargar desde SPI flash, bien directamente, bien con el <<#_navegador_de_bob_fossil,plugin ZX3>>.
+====
 
 ==== Teclado
 
@@ -5246,7 +5241,7 @@ Si no estuviera ya, <<#_cores,instalar o ejecutar el core de PC XT>> en el ZXTRE
 
 Durante la ejecución del core:
 
-- `F12`: mostrar u oculstar el menú de control del core
+- `F12`: mostrar u ocultar el menú de control del core
 - `F12` (pulsación larga): Alterna entre el modo RGB y VGA
 
 <<<
@@ -5412,7 +5407,7 @@ Características:
 
 Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros con archivos de cinta o ROM que se deseen cargar.
 
-Se puede copiar, si se desea, un fichero `ZX8X.ROM` (disponible the https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[repositorio oficial] en el directorio `/zx81/roms`: se trata de los ficheros ZX81 rom (8k) + ZX80 rom (4k) concatenados.
+Se puede copiar, si se desea, un fichero `ZX8X.ROM` (disponible en el https://github.com/avlixa/ZX81_MiSTer_zxdos/raw/master/roms/zx8x.rom[repositorio oficial]) en el directorio `/zx81/roms`: se trata de los ficheros ZX81 rom (8k) + ZX80 rom (4k) concatenados.
 
 Si no estuviera ya, <<#_cores,instalar o ejecutar el core de ZX81>> en el ZXTRES.
 
@@ -5571,9 +5566,16 @@ Características:
 
 Se debe de utilizar una tarjeta microSD, con la primera partición en formato FAT16 o FAT32, para almacenar los ficheros de imagen de disco o ROM que se deseen cargar.
 
+El core funciona con ROMs compatibles con ZX Spectrum +3, aunque para usar una imagen de disco tiene que usarse una con soporte para ZXMMC (como https://worldofspectrum.org/zxplus3e/[las ROM +3e] de Garry Lancaster).
+
 El fichero ROM por defecto debe ser copiado en el directorio raíz de la SD como `zxp3.rom`. Además también está preparadp para trabajar con un fichero .VHD (imagen de disco) formateado internamente en el sistema de ficheros +3DOS, como por ejemplo el que está disponible con https://www.retrowiki.es/viewtopic.php?f=110&t=200039549[las distribuciones para ZX-Uno de desubikado].
 
 Si no estuviera ya, <<#_cores,instalar o ejecutar el core zxp3>> en el ZXTRES.
+
+[WARNING]
+====
+Al menos hasta la versión 20230922, este core no funciona correctamente usando el <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>>, y se ha de cargar desde SPI flash, bien directamente, bien con el <<#_navegador_de_bob_fossil,plugin ZX3>>.
+====
 
 <<<
 
@@ -5667,7 +5669,14 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-Al iniciarse la primera vez, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
+Durante el primer inicio, pulsar `R` para elegir vídeo RGB o `V` para VGA. Usar la tecla `N` hasta encontrar un modo que se vea correctamente, y entonces pulsar `Enter` para guardar la configuración.
+
+[WARNING]
+====
+Tras realizar la configuración de vídeo en el primer inicio y guardarla, es necesario apagar y volver a cargar el core completamente antes del primer uso normal.
+====
+
+Al iniciarse, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
 
 [.text-center]
 image:img/next_zxtres.png[pdfwidth=70%]
@@ -5679,12 +5688,12 @@ Se puede navegar utilizando las teclas de cursor, las teclas `5`, `6`, `7` y `8`
 Durante el arranque, se puede forzar la salida de vídeo analógica a utilizar, pulsando `R` para RGB y `V` para VGA.
 ====
 
+<<<
+
 La opción `More...` muestra un segundo menú con más opciones.
 
 [.text-center]
 image:img/next2_zxtres.png[pdfwidth=70%]
-
-<<<
 
 Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
 
@@ -5714,6 +5723,61 @@ Se puede instalar como componente opcional en un ZXTRES una tarjeta intermedia q
 
 [.text-center]
 image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+
+<<<
+
+==== Actualización
+
+Las actualizaciones de firmware de Middle Board suelen ser distribuidas en ficheros con un nombre del tipo rp2mb-rXXupg.zip.
+
+En su interior, se suelen encontrar los siguientes ficheros:
+
+- `RP2MAPP.BIN` - Actualización para la CPU que gestiona MIDI
+- `RP2UAPP.BIN` - Actualización para la CPU que gestiona USB
+- `BIN/MBUPD` - <<#_comandos_de_esxdos,Comando "DOT">> de actualización de firmware
+- `BIN/MBINFO` - <<#_comandos_de_esxdos,Comando "DOT">> que muestra información sobre el firmware de la Middle Board
+- `BIN/BPLUGINS/BIT` - Versión más reciente del <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>> para esxdos
+- p2s.uf2 - Actualización de firmware para middle board con sólo una CPU.
+
+[NOTE]
+====
+Para actualizar una tarjeta intermedia con una única CPU, se debe seguir el proceso de actualización/recuperación USB explicado más adelante.
+====
+
+Para hacer una actualización desde esxdos (Core de Spectrum) de una tarjeta intermedia con dos CPUs, se deben seguir los siguientes pasos, tras haber copiado en la tarjeta microSD los ficheros anteriores.
+
+. Ejecutar el comando DOT de esxdos `.mbinfo` para comprobar las versiones existentes y que la comunicación con la placa es correcta.
+
+[.text-center]
+image:img/mbinfo.png[scaledwidth=70%]
+
+<<<
+
+[start=2]
+. A continuación, ejecutar el comando `.mbupd` desde el directorio donde se encuentre el fichero de actualización correspondiente (`RP2MAPP.BIN` para MIDI y `RP2UAPP.BIN` para USB) y comenzar el proceso de actualización.
+
+[.text-center]
+image:img/mbupd1.png[scaledwidth=70%]
+
+[start=3]
+. Pulsar cualquier tecla para realizar la actualización.
+
+[.text-center]
+image:img/mbupd2.png[scaledwidth=70%]
+
+<<<
+
+[start=4]
+. Esperar hasta que finalice
+
+[.text-center]
+image:img/mbupd3.png[scaledwidth=70%]
+
+[start=5]
+. Tras unos minutos, el proceso finalizará y la CPU corresponiente tendrá aplicada la última versión
+
+[.text-center]
+image:img/mbupd4.png[scaledwidth=70%]
 
 <<<
 
@@ -6378,6 +6442,23 @@ Si no se obtiene imagen, y no se está utilizando DisplayPort, pulsar de nuevo `
 <<<
 
 == Referencias
+
+=== Características Técnicas
+
+Estas son las características técnicas principales:
+
+- FPGA: https://www.xilinx.com/products/silicon-devices/fpga/artix-7.html#productTable[Xilinx Artix] A35T (ZXTRES), A100T (ZXTRES+) y A200T (ZXTRES++).
+- Memoria: 2MB de https://es.wikipedia.org/wiki/SRAM[SRAM] (todos los modelos) y 32MB (ZXTRES) o 64MB (ZXTRES+, ZXTRES++) de https://es.wikipedia.org/wiki/SDRAM[SDRAM].
+- Almacenamiento: https://es.wikipedia.org/wiki/Serial_Peripheral_Interface[SPI] https://es.wikipedia.org/wiki/Memoria_flash[Flash] de 32MB. Lector de https://es.wikipedia.org/wiki/MicroSD[tarjetas MicroSDHC]
+- Vídeo: https://es.wikipedia.org/wiki/Conversor_de_señal_digital_a_analógica[DAC] RGB (https://es.wikipedia.org/wiki/Color_verdadero[(truecolor - 24-bit]). Salida digital DisplayPort y DE-15 (VGA y RGB)
+- Salida de sonido: https://es.wikipedia.org/wiki/Modulación_Sigma-Delta[Sigma-Delta] e https://es.wikipedia.org/wiki/I²S[I^2^S]. Conector para jack de 3,5mm.
+- Entrada de sonido: Conector para jack de 3,5mm.
+- https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_edge_connector[Conector edge] de ZX Spectrum: Abre la posibilidad de usar dispositivos externos como los usados por el Spectrum, cartuchos de MSX, etc.
+- Mandos: 2 entradas de joystick DB-9 compatibles con norma Atari (2 botones) y megadrive (8 botones).
+- 2 entradas PS/2: Para conectar teclado y un ratón.
+- 1 entrada USB A: Para conectar teclados (en los modelos con <<#_tarjeta_intermedia_middle_board,Tarjeta intermedia>> instalada).
+
+<<<
 
 === Spectrum
 

@@ -140,13 +140,17 @@ This table shows the requirements of cores that use the microSD card.
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
-|[.small]#Amstrad CPC#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
-|[.small]#Arcade#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.ARC` and `.ROM`)#|
+|[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
+|[.small]#Amstrad CPC 6128#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, Disk Images (`DSK`)#|
+|[.small]#Apple IIe#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`NIB`)#|
+|[.small]#Arcade#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ARC` and `ROM`)#|
 |[.small]#Atari 2600#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
 |[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
 |[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
 |[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
 |[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|[.small]#Requires BIOS#
+|[.small]#PC XT#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, Hard Disk Images (`VHD`)#|[.small]#Requires BIOS#
+|[.small]#SAM Coupé#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`MGT`, `DSK` and `SAD`)#|
 |[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
 |[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
 |[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
@@ -2382,6 +2386,11 @@ After copying the files to the microSD card you must add also the file `MULTCART
 
 If not already there, <<#_cores,install or run the Colecovision core>> on the ZXTRES.
 
+[WARNING]
+====
+At least up to version 20230922, this core does not work correctly when using the <<#_bob_fossil_nmi_browser,BIT plugin>>, and has to be loaded from SPI flash, either directly, or with the <<#_bob_fossil_nmi_browser,ZX3 plugin>>.
+====
+
 ==== Keyboard
 
 ===== Special keys and buttons
@@ -3003,9 +3012,16 @@ Features:
 
 A microSD card, with the first partition in FAT16 or FAT32 format, should be used to store the disk image or ROM files to be loaded.
 
+It supports any +3 compatible ROM, but to use a disk image you need one with ZXMMC support (like Garry Lancaster's https://worldofspectrum.org/zxplus3e/[+3e ROMs]).
+
 The default ROM file should be copied to the root directory of the SD card as `zxp3.rom`. In addition, it is also prepared to work with a VHD (disk image) file formatted internally in the +3DOS file system, such as the one available with https://www.retrowiki.es/viewtopic.php?f=110&t=200039549 [the ZX-Uno distributions from desubikado],
 
 If not already there, <<#_cores,install or run the zxp3 core>> on the ZXTRES.
+
+[WARNING]
+====
+At least up to version 20230922, this core does not work correctly when using the <<#_bob_fossil_nmi_browser,BIT plugin>>, and has to be loaded from SPI flash, either directly, or with the <<#_bob_fossil_nmi_browser,ZX3 plugin>>.
+====
 
 ==== Keyboard
 
@@ -3091,7 +3107,14 @@ While the core is running:
 
 ==== Overview
 
-On first boot, some help screens will show up. After pressing `Space` key, NextZXOS Startup Menu appears.
+On first boot, press `R` to choose RGB video or `V` for VGA. Use the `N` key until you find a mode that works ok, and then press `Enter` to save the setting.
+
+[WARNING]
+====
+After saving the video configuration on first boot, it is necessary to power down and reload the core completely before the first normal use.
+====
+
+On boot, some help screens will show up. After pressing `Space` key, NextZXOS Startup Menu appears.
 
 [.text-center]
 image:img/next_zxtres.png[pdfwidth=70%]
@@ -3138,6 +3161,63 @@ An intermediate board can be installed in a ZXTRES as an optional component that
 
 [.text-center]
 image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+
+<<<
+
+==== Upgrade
+
+Middle Board firmware updates are usually distributed in archives with a name like rp2mb-rXXupg.zip.
+
+Inside the archive, the following files are usually found:
+
+- `RP2MAPP.BIN` - Update for the CPU that manages MIDI.
+- `RP2UAPP.BIN` - Update for the CPU handling USB
+- `BIN/MBUPD` - <<#_esxdos_commands,Firmware update command "DOT">>.
+- `BIN/MBINFO` - <<#_esxdos_commands,Command "DOT">> displaying information about the Middle Board firmware
+- `BIN/BPLUGINS/BIT` - Latest version of <<#_bob_fossil_nmi_browser,plugin BIT>> for esxdos
+- `p2s.uf2`` - Firmware upgrade for middle boards with only one CPU.
+
+[NOTE]
+====
+To upgrade a middle board with a single CPU, the USB upgrade/recovery process explained later must be followed.
+====
+
+To do an upgrade from esxdos (Spectrum Core) of a middle board with two CPUs, the following steps must be followed, after copying the above files to the microSD card.
+
+. Execute the esxdos DOT command `.mbinfo` to check the existing versions and that the communication with the board is correct.
+
+[.text-center]
+image:img/mbinfo.png[scaledwidth=70%]
+
+<<<
+
+[start=2]
+. Then run the `.mbupd` command from the directory where the corresponding update file is located (`RP2MAPP.BIN` for MIDI and `RP2UAPP.BIN` for USB) and start the update process.
+
+[.text-center]
+image:img/mbupd1.png[scaledwidth=70%]
+
+[start=3]
+. Press any key to perform the upgrade.
+
+[.text-center]
+image:img/mbupd2.png[scaledwidth=70%]
+
+<<<
+
+[start=4]
+. Wait until it finishes
+
+[.text-center]
+image:img/mbupd3.png[scaledwidth=70%]
+
+[start=5]
+. After a few minutes, the process will complete and the corresponding CPU will have the latest version applied.
+
+[.text-center]
+image:img/mbupd4.png[scaledwidth=70%]
+
+<<<
 
 ==== Recovery via USB
 
@@ -3793,6 +3873,22 @@ If no image is shown and you're not using DisplaPort, press `Scroll Lock` again 
 <<<
 
 == References
+
+=== Technical Characteristics
+
+These are some technical characteristics:
+
+- FPGA: https://www.xilinx.com/products/silicon-devices/fpga/artix-7.html#productTable[Xilinx Artix] A35T (ZXTRES), A100T (ZXTRES+) and A200T (ZXTRES++).
+- Memory: 2MB https://en.wikipedia.org/wiki/SRAM[SRAM] (all models) and 32MB (ZXTRES) or 64MB (ZXTRES+, ZXTRES++) https://en.wikipedia.org/wiki/SDRAM[SDRAM].
+- Storage: 32MB https://en.wikipedia.org/wiki/Serial_Peripheral_Interface [SPI] https://en.wikipedia.org/wiki/Flash_memory[Flash]. https://es.wikipedia.org/wiki/MicroSD [MicroSDHC cards] reader.
+- Video: https://en.wikipedia.org/wiki/Digital-to-analog_converter[DAC] 888 RGB (https://en.wikipedia.org/wiki/Color_depth#True_color_(24-bit)[truecolor - 24-bit]). DisplayPort and DE-15 (VGA and RGB) digital output.
+- Sound output: https://en.wikipedia.org/wiki/Delta-sigma_modulation[Sigma-Delta] and https://en.wikipedia.org/wiki/I²S[I^2^S]. 3.5mm jack connector.
+- Sound input: 3.5mm jack connector.
+- https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_edge_connector [ZX Spectrum edge connector]: Gives the possibility to use external devices like those used by the Spectrum, MSX cartridges, etc.
+- Controls: Two DB-9 joystick inputs compatible with Atari (2 buttons) and Megadrive (8 buttons) standards.
+- 2 PS/2 inputs: To connect keyboard and mouse.
+- 1 USB A input: To connect keyboards (on models with <<#_middle_board,middle board>> installed).
+
 
 === Spectrum
 
