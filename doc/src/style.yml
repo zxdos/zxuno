@@ -9,3 +9,7 @@ header:
   verso:
     left:
       content: "{document-title} : {section-or-chapter-title}"
+
+role:
+  tiny:
+    font-size: 6

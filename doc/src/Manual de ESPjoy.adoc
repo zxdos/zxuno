@@ -1,0 +1,34 @@
+= Manual de ESPjoy
+:author: kounch
+:revnumber: 1.0.0
+:doctype: book
+:notitle:
+:front-cover-image: image:img/portadaespjoy.png[]
+:email: kounch@users.noreply.github.com
+:Revision: 1.0
+:description: Manual en castellano de ESPjoy
+:keywords: Manual, Castellano, ESPjoy
+:icons: font
+:source-highlighter: rouge
+:toc: left
+:toc-title: Índice
+:toclevels: 4
+
+<<<
+
+== Introducción
+
+include::espjoy_es.adoc[]
+
+== Referencias
+
+https://antoniovillena.com/product/espjoy/
+
+http://github.com/Dacarsoft/DB9_2_Keyboard
+
+https://github.com/MickGyver/DaemonBite-Retro-Controllers-USB/tree/master/SegaTwoControllersUSB
+
+https://avrdude.readthedocs.io/en/latest/
+
+https://stackoverflow.com/questions/45646127/how-to-upload-a-hex-file-into-an-arduino-leonardo-using-avrdude-from-the-command
+
