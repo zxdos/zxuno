@@ -1,0 +1,33 @@
+extends: default
+
+page:
+  background-color: EDEDED
+  size: [595.28, 595.28]
+
+font:
+  catalog:
+    merge: true 
+    Verdana:
+      normal: Verdana.ttf
+      italic: Verdana Italic.ttf
+      bold: Verdana Bold.ttf
+      bold_italic: Verdana Bold Italic.ttf
+
+base:
+  text-align: justify
+  font-family: Verdana
+  font-size: 9
+
+code:
+  line-height: 1.00
+  font-size: 7.5
+
+header:
+  height: 10mm
+  font-family: M+ 1mn
+  recto:
+    center:
+      content: "{document-title}"
+  verso:
+    center:
+      content: "{document-title}"
