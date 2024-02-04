@@ -1916,6 +1916,73 @@ Estas son las principales:
 
 <<<
 
+
+=== Arcade (Aliens)
+
+https://en.wikipedia.org/wiki/Aliens_(1990_video_game)[Aliens], es un videojuego desarrollado por Konami para máquinas recreativas.
+
+La versión para ZXTRES ha sido desarrollada por somhic, adaptando la https://github.com/jotego/jtcores/tree/master/cores/aliens[versión original de Jotego].
+
+Algunas de sus características son:
+
+- La salida de vídeo mantiene la rotación del original
+- Salida de vídeo VGA
+- Salida de vídeo RGB (utilizando el puerto VGA)
+- Salida de vídeo DisplayPort
+- Soporte de mando real y mando emulado en teclado
+
+==== Formato de Tarjeta microSD
+
+El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imágenes ROM] de los chips de la máquina recreativa original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
+
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
+
+[TIP]
+====
+La utilidad https://github.com/kounch/ARC_ROM_Builder#castellano[ARC and ROM Builder] permite construir la estructura de archivos ARC y ROM adecuada para usar con los cores de Jotego, descargando todo lo necesario desde internet.
+====
+
+Los ficheros ARC y ROM se pueden alojar en cualquier lugar de la tarjeta microSD, pero si se crea un directorio JOTEGO en la raíz, y se deja el fichero ARC con el nombre JTALIENS.ARC, junto con el fichero ROM correspondiente, ambos se cargarán de forma automática al inicio del core.
+
+[TIP]
+====
+El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la salida RGB a 15KHz, se ha de crear en la raíz de la tarjeta un fichero con el nombre `15KHZ.CFG`.
+====
+
+==== Teclado
+
+===== Teclas especiales y botones
+
+- `F12` o botones `Start+A` de un mando: mostrar el menú de control del core
+- Cursor o el mando 1: Controles de dirección
+- `Ctrl`, `Alt` y `Espacio` o botones A, B, C del mando 1: Botones 1, 2 y 3 del jugador uno
+- `R`,`F`,`G`,`D` o mando 2: Movimiento del jugador dos
+- `A`, `S` y `Q` o botones A, B, C del mando 2: Botones 1, 2 y 3 del jugador dos
+- `1` y `2` o botón Z de un mando: Iniciar partida 1 ó 2 jugadores
+- `5` y `6` o botón Y de un mando: Insertar una moneda
+- `P` o botón X de un mando: Pausa
+- `F3`: Soft Reset (reinicia el Core)
+- `F12` (pulsación larga): Alterna entre el modo RGB y VGA
+
+==== Guía básica
+
+Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
+
+[.text-center]
+image:img/jtaliens.png[scaledwidth=50%]
+
+Estas son las principales:
+
+- `Load ARC`: Para cargar desde la tarjeta microSD un fichero .ARC
+- `Rotate Controls`: Para girar el texto del menú de opciones, así como el comportamiento de los controles de dirección
+- `Video Mode`: Sólo en el caso de salida de vídeo VGA, para aplicar distintos filtros a la imagen
+- `FX Volume`: Volumen de los efectos de sonido
+- `DIP Switches`: Accede a ver y modificar el estado de los interruptores DIP que haya definidos en el fichero ARC
+- `Reset`: Soft Reset (reinicia el Core)
+- `Exit`: Cierra el menú de opciones
+
+<<<
+
 === Arcade (Atari Tetris)
 
 La máquina recreativa de https://es.wikipedia.org/wiki/Tetris[Tetris], licenciada y distribuida por Atari, en 1988.
@@ -7079,6 +7146,16 @@ A continuación se enumeran distintos juegos de máquina recreativa, según el c
 |===
 |Nombre Juego|Nombre ROM
 |1943|1943
+|===
+
+===== Aliens
+
+[align="center",options="header"]
+|===
+|Nombre Juego|Nombre ROM
+|Aliens|aliens
+|Crime Fighters|crimfght
+|Super Contra|scontra
 |===
 
 ===== Atari Tetris
