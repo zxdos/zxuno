@@ -133,31 +133,88 @@ Si se utiliza un adaptador VGA a https://es.wikipedia.org/wiki/Euroconector[Euro
 
 <<<
 
-==== Formato de la tarjeta microSD
+==== Primer arranque
 
-La siguiente tabla resume los requisitos particulares de los distintos cores que utilizan la tarjeta microSD.
+Antes de comenzar asegurarse de que, al menos, se ha conectado el cable de alimentación, un cable de vídeo conectado a un monitor o televisión compatible, y un teclado PS/2.
 
-[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
-|===
-|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
-|[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
-|[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
-|[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
-|[.small]#Amstrad CPC 6128#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, Imágenes de disco (`.DSK`)#|[.small]#Necesita ROMs#
-|[.small]#Apple IIe#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.NIB`)#|
-|[.small]#Arcade#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ARC` y `.ROM`)#|
-|[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
-|[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
-|[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
-|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita ROM#
-|[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.NEO`)#|[.small]#Necesita BIOS#
-|[.small]#PC XT#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita BIOS#
-|[.small]#SAM Coupé#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.MGT`, `.DSK` y `.SAD`)#|
-|[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.O` y `.P`)#|
-|[.small]#zx#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos interna#
-|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita ROM#
-|[.small]#ZX Spectrum Next#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Puede utilizar esxdos en la microSD#
-|===
+[.text-center]
+image:img/QuickStartGuide3.png[scaledwidth=60%]
+
+Pulsar el interruptor y comprobar en la pantalla que el sistema inicia correctamente.
+
+[.text-center]
+image:img/boot_zxtres.png[scaledwidth=50%]
+
+==== Creación de microSD básica con ZX3 Downloader
+
+Con el programa https://github.com/kounch/ZX3_Downloader[ZX3 Downloader] se puede preparar una tarjeta microSD básica para usar con el ZXTRES. La última versión se puede descargar desde aquí:
+
+https://github.com/kounch/ZX3_Downloader/releases/latest
+
+Asegurarse de que la tarjeta microSD a utilizar está con formato FAT32. De no ser así se puede utilizar https://www.sdcard.org/downloads/formatter/[la herramienta oficial de la SD Association].
+
+Copiar el fichero `ZX3_Downloader…` en un directorio con suficiente espacio disponible (al menos, 4,5GB, si se usan las opciones por defecto), y ejecutarlo, indicando el tipo de FPGA según el modelo (`a35t` para ZXTRES, `a100t` para ZXTRES+ o `a200t` para ZXTRES++).
+
+Por ejemplo, para ZXTRES, en Windows:
+
+[source,shell]
+----
+...ZX3_Downloader.exe -k a35t
+----
+
+Lo mismo, pero para ZXTRES+:
+
+[source,shell]
+----
+...ZX3_Downloader.exe -k a100t
+----
+
+O para ZXTRES++:
+
+[source,shell]
+----
+...ZX3_Downloader.exe -k a200t
+----
+
+Esperar durante varios minutos, hasta que se realice la descarga de todo lo necesario y se cree el contenido.
+
+[.text-center]
+image:img/zx3downloader.png[scaledwidth=50%]
+
+Una vez el proceso haya finalizado, si no se han producido errores, copiar el contenido del directorio `SD` que se habrá creado, a la raíz de la tarjeta microSD.
+
+[.text-center]
+image:img/sd_zxtres.png[scaledwidth=55%]
+
+Si se produjera alguna situación que interrumpa la descarga de ficheros, se recomienda volver a lanzar la utilidad, que continuará a partir de ese último fallo.
+
+<<<
+
+Asegurarse de que el ZXTRES esté apagado. Insertar la tarjeta microSD y pulsar de nuevo el interruptor de encendido.
+
+[.text-center]
+image:img/QuickStartGuide4.png[scaledwidth=70%]
+
+Ahora se iniciará de nuevo la FPGA con el core por defecto de ZX Spectrum, pero esta vez, activando el https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[navegador NMI de Bob Fossil] y accediendo al directorio de la microSD donde están los ficheros de core.
+
+[.text-center]
+image:img/QuickStartGuide5.png[scaledwidth=55%]
+
+Utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado. Notar que los ficheros de core `.bit` sólo se pueden usar en ZXTRES que dispongan de una tarjeta intermedia. Los ficheros de core `.zx3` se pueden usar siempre.
+
+[.text-center]
+image:img/QuickStartGuide6.png[scaledwidth=55%]
+
+<<<
+
+Tras unos segundos, el core elegido se activará en la FPGA y se podrá utilizar.
+
+[.text-center]
+image:img/QuickStartGuide7.png[scaledwidth=60%]
+
+==== Formato avanzado de la tarjeta microSD
+
+Según los cores que se quieran utilizar, y el sistema operativo utilizado, los requisitos y posibilidades de formato (y particionado) de la tarjeta microSD pueden variar.
 
 [NOTE]
 ====
@@ -351,6 +408,32 @@ Formatear la partición FAT (requiere permisos de root)
 ----
 sudo mkfs.fat -F 16 -n ZXTRES -s 128 /dev/sdc1
 ----
+
+<<<
+
+La siguiente tabla resume los requisitos particulares de los distintos cores que utilizan la tarjeta microSD.
+
+[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
+|===
+|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Tipo de Partición Primaria#|[.small]#Particiones Extra#|[.small]#Tipo de Acceso#|[.small]#Notas#
+|[.small]#ZX Spectrum EXP#|[.small]#Sí#|[.small]#Sí#|[.small]#Sí#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos de SPI Flash#
+|[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, imágenes de disco#|[.small]#Necesita ROM#
+|[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
+|[.small]#Amstrad CPC 6128#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#ROMs, Imágenes de disco (`.DSK`)#|[.small]#Necesita ROMs#
+|[.small]#Apple IIe#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.NIB`)#|
+|[.small]#Arcade#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ARC` y `.ROM`)#|
+|[.small]#Atari 2600#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.BIN`)#|
+|[.small]#ColecoVision#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo ROMs (`.ROM`)#|
+|[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#Ninguna#|[.small]#No#|[.small]#No#|[.small]#No utiliza la SD#
+|[.small]#Enterprise#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita ROM#
+|[.small]#Neo-Geo#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.NEO`)#|[.small]#Necesita BIOS#
+|[.small]#PC XT#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita BIOS#
+|[.small]#SAM Coupé#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.MGT`, `.DSK` y `.SAD`)#|
+|[.small]#ZX81#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#No#|[.small]#Sólo imágenes (`.O` y `.P`)#|
+|[.small]#zx#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Utiliza esxdos interna#
+|[.small]#zxp3#|[.small]#Sí#|[.small]#Sí#|[.small]#Si#|[.small]#Cualquiera#|[.small]#No#|[.small]#Imágenes de disco (`.VHD`)#|[.small]#Necesita ROM#
+|[.small]#ZX Spectrum Next#|[.small]#Sí#|[.small]#Sí#|[.small]#No#|[.small]#Cualquiera#|[.small]#Sí#|[.small]#Completo#|[.small]#Puede utilizar esxdos en la microSD#
+|===
 
 <<<
 
@@ -5790,6 +5873,39 @@ Se puede instalar como componente opcional en un ZXTRES una tarjeta intermedia q
 
 [.text-center]
 image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+
+<<<
+
+==== Calibración de mandos USB
+
+Algunos mandos USB funcionan directamente tras conectarlos. Para los que no, es necesario eralizar un proceso de calibración
+
+Para ello copiar el fichero de imagen de cinta `MBJOYCAL.TAP`` en la tarjeta microSD, y cargarlo con el core de Spectrum por defecto, asegurándose de que que sólo hay un mando conectado. El programa se iniciará y pondrá la placa intermedia en un modo donde puede hablar directamente con la interfaz del mando.
+
+[.text-center]
+image:img/mbjoy1.png[scaledwidth=60%]
+
+Una activada la conexión con el mando, aparecerá una pantalla donde se puede comprobar el funcionamiento de los controles. En el caso en que no sean correctos, se puede pulsar `C` para entrar en el modo de calibración.
+
+[.text-center]
+image:img/mbjoy2.png[scaledwidth=60%]
+
+<<<
+
+En el modo de calibración, para cada botón posible, se ha de seguir la siguiente secuencia:
+
+. mantener pulsado el botón indicado del mando
+. pulsar una tecla cualquiera del teclado para confirmar la pulsación activa
+. dejar de pulsar el botón del mando
+. volver a pulsar en el teclado para la confirmación final.
+
+[.text-center]
+image:img/mbjoy3.png[scaledwidth=60%]
+
+Una vez finalice la calibración de botones, se puede comprobar que todo está corecto y pulsar `Q` para salir de la aplicación y guardar la configuración. En cado de haber habido algún error, pulsar `R` para volver a comenzar el proceso.
+
+[.text-center]
+image:img/mbjoy4.png[scaledwidth=60%]
 
 <<<
 

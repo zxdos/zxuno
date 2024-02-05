@@ -132,30 +132,89 @@ If an active VGA to https://en.wikipedia.org/wiki/SCART[SCART] adapter is connec
 
 <<<
 
-==== microSD card formatting
+==== First boot
 
-This table shows the requirements of cores that use the microSD card.
+Befor you start, make sure that, at least, the power cable is connected, a video cable is also connected to a display, and a PS/2 keyboard is attached.
 
-[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
-|===
-|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
-|[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
-|[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
-|[.small]#Amstrad CPC 6128#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, Disk Images (`DSK`)#|
-|[.small]#Apple IIe#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`NIB`)#|
-|[.small]#Arcade#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ARC` and `ROM`)#|
-|[.small]#Atari 2600#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
-|[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
-|[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
-|[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
-|[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|[.small]#Requires BIOS#
-|[.small]#PC XT#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, Hard Disk Images (`VHD`)#|[.small]#Requires BIOS#
-|[.small]#SAM Coupé#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`MGT`, `DSK` and `SAD`)#|
-|[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
-|[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
-|[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
-|[.small]#ZX Spectrum Next#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Can read esxdos ROM from microSD#
-|===
+[.text-center]
+image:img/QuickStartGuide3.png[scaledwidth=60%]
+
+
+Turn the power switch on and check, looking at the display, that the system boots correctly.
+
+[.text-center]
+image:img/boot_zxtres.png[scaledwidth=50%]
+
+==== Basic microSD card creation with ZX3 Downloader
+
+With the https://github.com/kounch/ZX3_Downloader[ZX3 Downloader] tool you can prepare a basic microSD card to use with ZXTRES. The latest version can be downloaded from here:
+
+https://github.com/kounch/ZX3_Downloader/releases/latest
+
+Make sure that the microSD card you want to use is in FAT32 format. Otherwise, you can use https://www.sdcard.org/downloads/formatter/[the official formatting tool of the SD Association].
+
+Copy the `ZX3_Downloader…` file to a directory with enough free space (4.5GB, at least, if using the default options), and execute it, stating the kind of FPGA depending on the model (`a35t` for ZXTRES, `a100t` for ZXTRES+ or `a200t` for ZXTRES++).
+
+For example, for ZXTRES, on Windows:
+
+[source,shell]
+----
+...ZX3_Downloader.exe -k a35t
+----
+
+The same, but for ZXTRES+:
+
+[source,shell]
+----
+...ZX3_Downloader.exe -k a100t
+----
+
+Or ZXTRES++:
+
+[source,shell]
+----
+...ZX3_Downloader.exe -k a200t
+----
+
+Wait a few minutes, while all the content is downloaded and built.
+
+[.text-center]
+image:img/zx3downloader.png[scaledwidth=50%]
+
+Once the process finishes, if no errors appear, copy the content from the newly created `SD` directory to the root of the microSD card.
+
+[.text-center]
+image:img/sd_zxtres.png[scaledwidth=55%]
+
+If the download process was interrupted, it's recommended to start again the tool, which will continue since the last failed file.
+
+<<<
+
+Make sure that the ZXTRES is turned off. Insert the microSD card and turn on again the power switch.
+
+[.text-center]
+image:img/QuickStartGuide4.png[scaledwidth=70%]
+
+Now the FPGA will boot again with the default ZX Spectrum core, but this time, running https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[Bob Fossil's NMI Browser] and navigating automatically the microSD directory where all the core files are.
+
+[.text-center]
+image:img/QuickStartGuide5.png[scaledwidth=55%]
+
+Use the cursor keys to move through the list, and press `Enter` to load the desired core. Please note that `.bit` core files can only be used with a ZXTRES with a middle board installed, while `.zx3` core files can always be used.
+
+[.text-center]
+image:img/QuickStartGuide6.png[scaledwidth=55%]
+
+<<<
+
+After a few seconds, the desired core will activate in the FPGA, ready to use.
+
+[.text-center]
+image:img/QuickStartGuide7.png[scaledwidth=60%]
+
+==== microSD advanced format
+
+Depending which cores you want to use, and the operating system used, the requirements and possibilities for formatting (and partitioning) the microSD card may vary.
 
 [NOTE]
 ====
@@ -349,6 +408,31 @@ Format a FAT partition (requires root permission):
 ----
 sudo mkfs.fat -F 16 -n ZXTRES -s 128 /dev/sdc1
 ----
+
+<<<
+
+This table shows the requirements of cores that use the microSD card.
+
+[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
+|===
+|[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
+|[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
+|[.small]#Amstrad CPC 464#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
+|[.small]#Amstrad CPC 6128#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, Disk Images (`DSK`)#|
+|[.small]#Apple IIe#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`NIB`)#|
+|[.small]#Arcade#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ARC` and `ROM`)#|
+|[.small]#Atari 2600#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`.BIN`)#|
+|[.small]#ColecoVision#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`ROM`)#|
+|[.small]#Enterprise#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
+|[.small]#Jupiter ACE#|[.small]#No#|[.small]#No#|[.small]#No#|[.small]#None#|[.small]#No#||[.small]#Doesn't use the SD#
+|[.small]#Neo-Geo#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only ROMs (`NEO`)#|[.small]#Requires BIOS#
+|[.small]#PC XT#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, Hard Disk Images (`VHD`)#|[.small]#Requires BIOS#
+|[.small]#SAM Coupé#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`MGT`, `DSK` and `SAD`)#|
+|[.small]#ZX81#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#Only images (`O` and `P`)#|
+|[.small]#zxp3#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#No#|[.small]#Disk Images (`VHD`)#|[.small]#Requires ROM#
+|[.small]#ZX Spectrum EXP#|[.small]#Yes#|[.small]#Yes#|[.small]#Yes#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Using SPI Flash esxdos#
+|[.small]#ZX Spectrum Next#|[.small]#Yes#|[.small]#Yes#|[.small]#No#|[.small]#Any#|[.small]#Yes#|[.small]#Full#|[.small]#Can read esxdos ROM from microSD#
+|===
 
 <<<
 
@@ -3161,6 +3245,39 @@ An intermediate board can be installed in a ZXTRES as an optional component that
 
 [.text-center]
 image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+
+<<<
+
+==== USB controller calibration
+
+Some USB controllers work directly after being plugged in. For those that do not, a calibration process is needed.
+
+Copy the tape image file `MBJOYCAL.TAP` to the microSD card, and load it with the default Spectrum core, making sure that only one controller is connected. The program will start and put the intermediate board in a mode where it can talk directly to the controller interface.
+
+[.text-center]
+image:img/mbjoy1.png[scaledwidth=60%]
+
+Once the controller connection is active, a screen will appear where you can check all the controls. If they are not right, you can press `C` to enter calibration mode.
+
+[.text-center]
+image:img/mbjoy2.png[scaledwidth=60%]
+
+<<<
+
+In calibration mode, you must follow these steps for each button:
+
+. hold down the asked button on the remote control
+. press any key on the kyeboard to confirm the button push
+. release the button on the controller
+. press again on the keyboard for final confirmation
+
+[.text-center]
+image:img/mbjoy3.png[scaledwidth=60%]
+
+Once the button calibration is complete, you can check that everything is correct and press `Q` to exit the application and save the configuration. If needed, you can press `R` to restart the whole process.
+
+[.text-center]
+image:img/mbjoy4.png[scaledwidth=60%]
 
 <<<
 
