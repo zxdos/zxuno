@@ -195,12 +195,12 @@ Asegurarse de que el ZXTRES esté apagado. Insertar la tarjeta microSD y pulsar 
 [.text-center]
 image:img/QuickStartGuide4.png[scaledwidth=70%]
 
-Ahora se iniciará de nuevo la FPGA con el core por defecto de ZX Spectrum, pero esta vez, activando el https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[navegador NMI de Bob Fossil] y accediendo al directorio de la microSD donde están los ficheros de core.
+Ahora se iniciará de nuevo la FPGA, bien en modo tradicional con el core por defecto de ZX Spectrum, pero esta vez, activando el https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[navegador NMI de Bob Fossil], o bien en <<#_modo_mist,modo Mist>> con el core por defecto, y accediendo al directorio de la microSD donde están los ficheros de core.
 
 [.text-center]
-image:img/QuickStartGuide5.png[scaledwidth=55%]
+image:img/QuickStartGuide5.png[scaledwidth=45%]  image:img/mist.png[scaledwidth=50%]
 
-Utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado. Notar que los ficheros de core `.bit` sólo se pueden usar en ZXTRES que dispongan de una tarjeta intermedia. Los ficheros de core `.zx3` se pueden usar siempre.
+Utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado. Notar que los ficheros de core `.bit` y el <<#_modo_mist,modo Mist>> sólo se pueden usar en ZXTRES que dispongan de una <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>> con firmware versión 02.02 o superior. Los ficheros de core `.zx3` se pueden usar siempre desde el modo tradicional con el core de ZX Spectrum por defecto.
 
 [.text-center]
 image:img/QuickStartGuide6.png[scaledwidth=55%]
@@ -640,9 +640,26 @@ Finalmente, desde la última pantalla se puede:
 - Guardar los cambios sin salir (Save Changes)
 - Descartar los cambios (Discard Changes)
 
-== ZX Spectrum
+== Modo Mist
 
-El core principal es el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustituir por otro que no sea de ZX Spectrum, ya que el ZXTRES lo utiliza para su funcionamiento.
+Aunque el modo de arranque tradicional de ZXTRES es con el core principal es el de <<#_modo_tradicional_zx_spectrum,ZX Spectrum>>, tal y como funcionaban modelos anteriores de la familia (ZX-Uno, ZXDOS, etc.), los ZXTRES con <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>> con una versión de firmware 02.02 o superior pueden arrancar por defecto en otro modo llamado Mist.
+
+El modo Mist se basa en que la tarjeta intermedia contenga una versión adaptada del firmware que utiliza el microcontrolador de otra familia de FPGAs (MiST, MiSTica y SiDi).  Este microcntrolador se utiliza para inicializar la FPGA en el arranque cargando el core por defecto. Luego, una vez que la FPGA está en marcha, el microcontrolador actúa como un chip de soporte y permite implementar en software algunas cosas que sean difíciles de implementar dentro de la FPGA.
+
+La ventaja de utilizar una versión adaptada del firmware de Mist es que simplifica adaptar (portar) cores ya desarrollados para otras FPGAs para que funcionen también en ZXTRES.
+
+Para que se inicie en modo Mist, debe existir en la raíz de la tarjeta microSD un directorio llamado `mist` y en su interior, al menos un fichero de core por defecto, llamado `core.bit` y, opcionalmente, un fichero de configuración llamado `mist.ini`. También se pueden dejar otros ficheros `.bit` de core, tanto tradicionales como de modo Mist.
+
+<<#_menú,Véase más adelante>> para más detalles sobre los distintos cores que utilizan el modo Mist.
+
+[.text-center]
+image:img/mist.png[scaledwidth=70%]
+
+<<<
+
+== Modo tradicional (ZX Spectrum)
+
+El modo tradicional de arranque tiene como core principal el que implementa un ordenador ZX Spectrum. Este core es especial, y no se puede sustituir por otro que no sea de ZX Spectrum, ya que el ZXTRES fue originalmente diseñado para utilizar para su funcionamiento.
 
 Estas son algunas de sus principales características:
 
@@ -1596,13 +1613,13 @@ Este proceso sustituye todos los cores instalados, la BIOS, así como las ROMs d
 
 <<<
 
-== Otros cores
+== Otros cores (Modo tradicional)
 
 Como se ha explicado anteriormente, es posible utilizar otros <<#_cores,cores>> además del de ZX Spectrum por defecto.
 
 [NOTE]
 ====
-Muchos de los cores muestran las entradas de archivos y directorios en el orden de la tabla FAT interna de la tarjeta microSD, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y macOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
+Muchos de los cores de modo tradicional muestran las entradas de archivos y directorios en el orden de la tabla FAT interna de la tarjeta microSD, y no de manera alfabética. Si se desea ver esta información ordenada, se debe reorganizar la estructura de la tarjeta con una utilidad como FAT Sorter para Windows, https://fatsort.sourceforge.io/[FATsort] para Linux y macOS, https://www.luisrios.eti.br/public/en_us/projects/yafs/[YAFS], http://www.trustfm.net/software/utilities/SDSorter.phpp[SDSorter] u otros.
 ====
 
 === Amiga minimig AGA
@@ -5859,6 +5876,223 @@ Para más información, consultar el https://www.specnext.com/zx-spectrum-next-u
 
 <<<
 
+== Otros cores (Modo Mist)
+
+Como se <<#_modo_mist,ha explicado anteriormente>>, los cores de modo Mist, requieren una <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>> con una versión de firmware 02.02 o superior incluyendo una versión adaptada del firmware que utiliza el microcontrolador de MiST, MiSTica y SiDi.
+
+=== Menú
+
+Normalmente cuando se inicia la FPGA en modo Mist el core por defecto es el menú de carga de cores, que accede al contenido del directorio `mist` y muestra los nombres de todos los ficheros `.bit` que encuentre en su interior.
+
+[.text-center]
+image:img/mist.png[scaledwidth=55%]
+
+Se pueden utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado.
+
+Pulsando la tecla `F12` se accede a los menús de configuración del core por defecto. Estos están formados por dos pantallas principales, que se pueden alternar usando las teclas de cursor izquierda y derecha.
+
+[.text-center]
+image:img/mist01.png[scaledwidth=45%]  image:img/mist02.png[scaledwidth=45%]
+
+<<<
+
+==== Configuración avanzada
+
+Se puede crear un fichero de configuración llamado `mist.ini`, dentro del directorio `mist` en la raíz de la tarjeta microSD, con el siguinte formato:
+
+[source,ini]
+----
+[mist]
+opcion1=valor1
+opcion2=valor2
+(...)
+
+[nombredecore1]
+opcion1core1=valor1core1
+(...)
+
+[nombredecore2]
+(...)
+----
+
+Las opciones y valores introducidos tras `[mist]` se aplicarán en general a todos los cores que los soporten. Estas son algunas:
+
+- `scandoubler_disable`: Con valor 1, algunos cordes desactivaránn scandoubler para producir una señal de vídeo de 15 kHz. Necesario para utilizar un cable VGA a SCART.
+- `csync_disable`: Por defecto, en el modo de 15 kHz, se produce una señal de sincronización compuesta en el pin 13 (Hsync) y un nivel alto constante en el pin 14. Algunos monitores antiguos compatibles con vídeo a 15 kHz no funcionan correctamente así, y necesitan HSync y VSync separados, lo que se activa poniendo el valor 1 en esta opción.
+- `key_menu_as_rgui`: Cuando el valor es 1, camiba la tecla del Menú ('F12') por la tecla derecha de menú . Opción para teclados pequeños sin teclas de función.
+- `ypbpr`: 
+
+El resto de opciones se pueden consultar en la https://github.com/mist-devel/mist-board/wiki/DocIni[documentación oficial de Mist]. Notar que no todas las opciones son aplicables en el caso de ZXTRES.
+
+Se pueden indicar también particularmente para cada core concreto, usando el nombre adecuado para cada uno de ellos, según la siguiente tabla
+
+[align="center",options="header",cols=2*]
+|===
+|Core|Cabecera
+|Sinclair QL|ql
+|ZX Spectrum 128|[spectrum]
+|===
+
+También es posible cambiar el tipo de letra (fuente) a utilizar en los menús de Mist, guardando en el directorio `mist` un fichero llamado `system.fnt` conteniendo una fuente 8x8, y con un tamaño de 768 bytes (caracteres ASCII 32-127) o 1024 bytes (caracteres ASCII 0-127). Se pueden obtener ficheros `.fnt` desde el repositorio oficial https://github.com/MiSTer-devel/Fonts_MiSTer/blob/master/README.md[Fonts_MiSTer].
+
+<<<
+
+=== ZXTRES
+
+Cargar este core desde el modo Mist hace que la FPGA inicie en <<#_modo_tradicional_zx_spectrum,modo tradicional>> la <<#_bios,BIOS>> y el core de ZX Spectrum
+
+[.text-center]
+image:img/boot_zxtres.png[scaledwidth=55%]
+
+<<<
+
+=== Sinclair QL
+
+El https://es.wikipedia.org/wiki/Sinclair_QL[Sinclair QL], fue un ordenador personal lanzado por Sinclair Research entre enero de 1984 y 1986. Posterior ZX Spectrum, se diseñó orientado a las aplicaciones domésticas y la pequeña empresa.
+
+La versión adaptada de Mist tiene las siguientes características:
+
+- Carga de ROM desde microSD
+- Soporte para imágenes de https://es.wikipedia.org/wiki/ZX_Microdrive[ZX Microdrive]
+- Autoarranque desde Microdrive
+- Velocidad ajustable
+
+==== Formato de Tarjeta microSD
+
+Se necesita, al menos, un fichero `ql.rom` con una ROM de Sinclair QL dentro del directorio `mist`. Además, se pueden utilizar ficheros de imágenes de Microdrive (ficheros `.mdv`) con formato QLAY, dejándolos dentro del subdirectrio `QL` en el directorio `mist`.
+
+==== Teclado
+
+El core es compatible con todos los teclados PS/2 o USB con los que sea compatible la versión instalada de firmware en la tarjeta intermedia.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: Mostrar y ocultar el menú de ajustes del core
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
+
+[.text-center]
+image:img/mist_ql.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load MDV1`: Para cargar un fichero de imagen en el lector de Microdrive 1
+- `Load MDV2`: Para cargar un fichero de imagen en el lector de Microdrive 2
+- `Load *.ROM`: Para cargar un fichero .rom de Sinclair QL
+- `Speed`: Para modificar la velocidad del core
+- `RAM`: Para modificar la cantidad de RAM del core
+- `Video Mode`: Para cambiar el modo de vídeo entre PAL y NTSC
+- `Scanlines`: Para activar, ajustar o desactivar líneas de exploración (Scanlines)
+- `Reset`: Para reiniciar el core
+
+<<<
+
+=== Spectrum
+
+Este core es un ejemplo sencillo de core de Mist adaptado a ZXTRES.
+
+==== Formato de Tarjeta microSD
+
+Este core no utiliza la microSD.
+
+==== Teclado
+
+El core es compatible con todos los teclados PS/2 o USB con los que sea compatible la versión instalada de firmware en la tarjeta intermedia.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: Mostrar y ocultar el menú de ajustes del core
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
+
+[.text-center]
+image:img/mist_spectrum.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load CSW`: Carga de cinta desde un fichero CSW
+- `Reset`:  Reiniciar el core
+- `Trigger NMI`: Activar una interrupción no enmascarable
+- `Scanlines`:  Activar o desactivar el efecto de líneas de exploración
+
+<<<
+
+=== ZX Spectrum
+
+Este core es una adaptación del https://github.com/sorgelig/ZX_Spectrum-128K_MIST[core original para Mist].
+
+En este proyecto se han utilizado algunos modelos verilog del núcleo Till Harbaum Spectrum.
+
+- ZX Spectrum 48K, 128K, +3 y Pentagon 128 completamente funcionales con timings de CPU y Video correctos.
+- Interfaces de memoria Pentagon 1024K y Profi 1024K.
+- Turbo (7MHz, 14MHz, 28MHz, 56MHz).
+- Soporte para ULA+ v1.1 y con modo Timex extendido.
+- Modos Timex HiColor, HiRes.
+- Soporte para ficheros de cinta TAP con turbo (inyección directa de bytes) y carga normal.
+- Soporte para formatos de cinta TZX y CSW con carga rápida (16x) y normal.
+- Carga instantánea de ficheros Z80/SNA.
+- TR-DOS (Beta Disk Interface) - imágenes TRD(lectura/escritura) y SCL(sólo lectura).
+- G+DOS (MGT +D Disk Interface) - imágenes IMG, MGT (sólo en modos de memoria no +2A/+3).
+- Unidad de disco +3 utilizable con +3DOS.
+- DivMMC con esxdos.
+- Multiface 128 y Multiface 3 (en modo +3).
+- Guardado y carga de instantáneas de memoria en +D y Multiface.
+- Ratón Kempston.
+- Joysticks: Kempston, Sinclair I/II, Cursor.
+
+==== Formato de Tarjeta microSD
+
+Se necesita un fichero `spectrum.rom` en la carpeta Mist, donde se encuentre el fichero `.bit` del core. Se puede descargar desde la web del proyecto original (https://github.com/mist-devel/mist-binaries/tree/master/cores/spectrum/spectrum.rom) o bien construir uniendo los siguientes (cada uno de los trozos ocupa exactamente 16KiB):
+
+Boot (GLUK) + TRDOS + 128 ROM0 + 128 ROM1 + +3 ROM0/1/2/3 + PlusD + MF128 + MF3 + 48K ROM + GS(low) + GS(high)
+
+Además es recomendable tener, en el lugar que se desee de la tarjeta, ficheros con imágenes de cinta o de disco según el sistema con el que se quiera jugar.
+
+==== Teclado
+
+El core es compatible con todos los teclados PS/2 o USB con los que sea compatible la versión instalada de firmware en la tarjeta intermedia.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: Mostrar y ocultar el menú de ajustes del core
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
+
+[.text-center]
+image:img/mist_zxspectrum.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load Disk`: Para cargar desde la microSD un archivo de imagen de disco TRD, IMG, DSK o MGT
+- `Load Tape`: Para cargar desde la tarjeta un archivo de imagen de cinta TAP, CSW o TZX
+- `CPU frequency`: Selección de la velocidad de procesador (modos turbo)
+- `Video timings`: Configuración de temporazación de vídeo (según distintos modelos de ZX Spectrum)
+- `Memory`: Cantidad de memoria a asignar
+- `Joystick 1`:  Para asignar al mando número 1 (bien conectado al puerto o bien USB, según la configuración de Mist)
+- `Joystick 2`: Para asignar al mando número 1 (bien conectado al puerto o bien USB, según la configuración de Mist)
+- `Fast tape load`: Activar o desactivar la carga rápida de cinta
+- `Scandoubler fx`: Efectos a aplicar (sólo en la salida VGA)
+- `Features`: Para activar o desactivar ULA+ y/o Timex
+- `MMC Card`: Para activar la emulación de dispositivos de almacenamiento (divMMC, ZXMMC, etc.)
+- `General Sound`: Configuración de sonido General Sound
+- `Keyboard`: Tipo de issue de teclado a usar
+- `Snowing`: Activar o desactivar el efecto "nieve" de la ULA
+- `Reset`: Reiniciar el core
+
+<<<
+
 == Otro Hardware
 
 === Tarjeta intermedia (Middle Board)
@@ -5877,6 +6111,11 @@ image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[sc
 <<<
 
 ==== Calibración de mandos USB
+
+[WARNING]
+====
+Este método de calibración sólo es aplicable para tarjetas intermedias que tengan un firmware previo al <<#_modo_mist,modo Mist>>.
+====
 
 Algunos mandos USB funcionan directamente tras conectarlos. Para los que no, es necesario eralizar un proceso de calibración
 
