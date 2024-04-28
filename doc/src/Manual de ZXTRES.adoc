@@ -1,6 +1,6 @@
 = Manual de ZXTRES, ZXTRES+ y ZXTRES++
 :author: kounch
-:revnumber: 1.0.0b
+:revnumber: 1.0.1b
 :doctype: book
 :docinfo: shared
 :notitle:
@@ -6056,6 +6056,8 @@ Boot (GLUK) + TRDOS + 128 ROM0 + 128 ROM1 + +3 ROM0/1/2/3 + PlusD + MF128 + MF3 
 
 Además es recomendable tener, en el lugar que se desee de la tarjeta, ficheros con imágenes de cinta o de disco según el sistema con el que se quiera jugar.
 
+<<<
+
 ==== Teclado
 
 El core es compatible con todos los teclados PS/2 o USB con los que sea compatible la versión instalada de firmware en la tarjeta intermedia.
@@ -6064,7 +6066,18 @@ El core es compatible con todos los teclados PS/2 o USB con los que sea compatib
 
 Durante la ejecución del core:
 
+- `F1`: Pausa/Reproducción del archivo de cinta cargado actualmente
+- `F5` (mantener pulsado): CPU a 7MHz
+- `F6` (mantener pulsado): CPU a 14MHz
+- `F7` (mantener pulsado): CPU a 28MHz
+- `F8` (mantener pulsado): CPU a 56MHz
+- `F9`: Pausa de la CPU o continuar
+- `F10`: NMI (Entrar en multiface)
+- `F11`: Reinicio del core (en caliente)
+- `Ctrl+F11`: Cambiar a modo BASIC 48K y ejecutar `LOAD ""`
 - `F12`: Mostrar y ocultar el menú de ajustes del core
+
+<<<
 
 ==== Guía básica
 
@@ -6159,7 +6172,7 @@ En su interior, se suelen encontrar los siguientes ficheros:
 - `BIN/MBUPD` - <<#_comandos_de_esxdos,Comando "DOT">> de actualización de firmware
 - `BIN/MBINFO` - <<#_comandos_de_esxdos,Comando "DOT">> que muestra información sobre el firmware de la Middle Board
 - `BIN/BPLUGINS/BIT` - Versión más reciente del <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,plugin BIT>> para esxdos
-- p2s.uf2 - Actualización de firmware para middle board con sólo una CPU.
+- `...uf2`` - Actualización de firmware para middle board con sólo una CPU.
 
 [NOTE]
 ====
@@ -6214,11 +6227,13 @@ En algunas situaciones puede ser necesario reinstalar el firmware de arranque (b
 
 *Software necesario*:
 
-- Obtener el archivo UF2 adecuado para el microcontrolador a recuperar:
+- Obtener los archivos UF2 adecuados para el microcontrolador a recuperar, desde el https://github.com/ZXMicroJack/mist-firmware-rp2040/releases[repositorio del proyecto] (fichero con un nombre del tipo `debrick...zip`):
 
-** `rp2s.uf2` para tarjetas con un único microcontrolador
-** `rp2m-bootstrap.uf2` para rp2040 MIDI (tarjetas con dos microcontroladores)
-** `rp2u-bootstrap.uf2` para rp2040 USB (tarjetas con dos microcontroladores)
+** `common/ct2mgm8ba.uf2`, `common/ct8mgm.uf2`. `common/luttables2.uf2` y `zx3mb1/mistusbxilinx.uf2` para tarjetas con un único microcontrolador
+** `zx3mb2/rp2usb/rp2u-bootstrap.uf2`, `zx3mb2/rp2usb/rp2u-signed.uf2` para rp2040 USB (tarjetas con dos microcontroladores)
+** `common/ct2mgm8ba.uf2`, `common/ct8mgm.uf2`, `common/luttables2.uf2`, `zx3mb2/rp2midi/rp2m-bootstrap.uf2` y `zx3mb2/rp2midi/rp2m-signed.uf2` para rp2040 MIDI (tarjetas con dos microcontroladores)
+
+<<<
 
 *Pasos a seguir*:
 
@@ -6229,9 +6244,25 @@ En algunas situaciones puede ser necesario reinstalar el firmware de arranque (b
 image:img/bootselsw.jpg[scaledwidth=60%]
 
 [start=3]
+. Repetir los tres pasos siguientes, para cada fichero, exactamente en el orden que se indica a continuación
+
+[align="center",width="90%",options="header",cols=2*]
+|===
+|Tarjeta 1 controlador|Tarjeta 2 Controladores
+||`zx3mb2/rp2usb/rp2u-bootstrap.uf2` (USB)
+||`zx3mb2/rp2usb/rp2u-signed.uf2` (USB)
+|`common/ct2mgm8ba.uf2`|`common/ct2mgm8ba.uf2` (MIDI)
+|`common/ct8mgm.uf2`|`common/ct8mgm.uf2` (MIDI)
+|`common/luttables2.uf2`|`common/luttables2.uf2` (MIDI)
+|`zx3mb1/mistusbxilinx.uf2`|`zx3mb2/rp2midi/rp2m-bootstrap.uf2` (MIDI)
+||`zx3mb2/rp2midi/rp2m-signed.uf2` (MIDI)
+|===
+
+[start=4]
+. Apagar el ZXTRES completamente. En el caso de tarjetas con dos microcontroladores, verificar que el interruptor esté en la posición adecuada
 . Encender el ZXTRES mientras se pulsa el <<#_puertos_y_conectores,botón BOOTSEL>> de la parte inferior de la carcasa
-. Copiar el fichero UF2 correspondiente a la unidad de disco que aparecerá disponible en el ordenador
-. Finalmente, en el caso de tarjetas con dos microcontroladores, si fuera necesario, volver a poner el interruptor en la posición 1 (USB)
+. Copiar el fichero UF2 correspondiente a la unidad de disco que aparecerá disponible en el ordenador. Una vez se haya grabado correctamente, la unidad desaparecerá de forma automática
+. Finalmente, en el caso de tarjetas con dos microcontroladores, si fuera necesario, dejar el interruptor en la posición 2 (MIDI)
 
 <<<
 
