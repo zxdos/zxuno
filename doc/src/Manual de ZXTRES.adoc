@@ -1,12 +1,12 @@
 = Manual de ZXTRES, ZXTRES+ y ZXTRES++
 :author: kounch
-:revnumber: 1.0.1b
+:revnumber: 1.1.0
 :doctype: book
 :docinfo: shared
 :notitle:
 :front-cover-image: image:img/portada_zxtres.jpg[]
 :email: kounch@users.noreply.github.com
-:Revision: 1.0
+:Revision: 1.1
 :description: Manual en castellano de ZXTRES
 :keywords: Manual, Castellano, ZXTRES, ZXTRES+. ZXTRES++
 :icons: font
@@ -654,6 +654,34 @@ Para que se inicie en modo Mist, debe existir en la raíz de la tarjeta microSD 
 
 [.text-center]
 image:img/mist.png[scaledwidth=70%]
+
+<<<
+
+=== RTC
+
+En todos los modelos con <<#_tarjeta_intermedia_middle_board,Tarjeta intermedia>> instalada, se dispone de un https://es.wikipedia.org/wiki/Reloj_en_tiempo_real[reloj en tiempo real] que puede ser aprovechado por los distintos cores.
+
+El reloj se puede ajustar fácilmente desde el <<#_menú,menú>> del <<#_modo_mist,modo Mist>>.
+
+. Pulsar `F12` para mostrar el menú
+
+[.text-center]
+image:img/mist_menu1.png[scaledwidth=70%]
+
+[start=2]
+. Usar la tecla de cursor derecha o el mando para mostrar las opciones, elegir `Date & Time` y pulsar `Enter`
+
+[.text-center]
+image:img/mist_datetime.png[scaledwidth=70%]
+
+<<<
+
+[start=3]
+. Usar las teclas de cursor o el mando para ir modificando los valores que se desee. Al finalizar, elegir `Exit` y pulsar `Enter`
+
+[.text-center]
+image:img/mist_settime.png[scaledwidth=70%]
+
 
 <<<
 
@@ -1407,10 +1435,6 @@ Este programa para ZX Spectrum ha sido https://github.com/UzixLS/zx-midiplayer[d
 - Soporte para varias frecuencias de CPU - 3.5 MHz, 3.54 MHz, 7 MHz, 14 MHz, 28 MHz
 - Soporte para divMMC (y derivados), ZXMMC, Z-Controller
 - Compatibilidad con el sistema de archivos FAT32
-
-<<<
-
-=== RTC
 
 <<<
 
@@ -5280,6 +5304,96 @@ image:img/ace_vlist.png[pdfwidth=70%]
 
 <<<
 
+=== Mega65
+
+Este core es una adaptación del https://github.com/MEGA65/mega65-core[core original] utilizado por el proyecto https://mega65.org[Mega65], cuya meta consiste en recrear el Commodore 65 (también conocido como C64DX), que fue un prototipo de ordenador creado en Commodore Business Machines en 1990-1991. Es una versión mejorada del Commodore 64, y se pretendía que fuera retrocompatible con el ordenador anterior, al tiempo que proporcionaba una serie de características avanzadas cercanas a las del Amiga.
+
+Algunas de las características del core son:
+
+- CPU GS4510
+- 384 KB de RAM rápida accesible para el VIC-IV (128 KB ocupados por la ROM)
+- 8MB de «Hyper RAM
+- 32KB de RAM color accesible par el  VIC-IV
+- GPU VIC IV (retrocompatible con VIC-III y VIC-II)
+- Memoria gráfica de 128 KB
+- Paleta de 2^23 colores (23 Bits: 7 rojo, 8 verde, 8 azul)
+- Sprites de hasta 256 colores
+- Cuatro soft-SID + cuatro DAC conmutables de 4/8/16 bits.
+- Soporte para imágenes de disco desde tarjeta SD 
+
+<<<
+
+==== Formato de Tarjeta microSD
+
+Se necesita una tarjeta microSD https://es.wikipedia.org/wiki/SDHC[SDHC] con, al menos, 4GB de capacidad.
+
+Aunque el formato necesario para la tarjeta microSD está basado en FAT32, y es compatible con el resto de cores, es necesario realizar el formato desde el propio core de Mega65, antes de poder utilizarla.
+
+[CAUTION]
+====
+El proceso que se describe a continuación borrará completamente la tarjeta microSD. Se debe tener una copia de seguridad aparte de todo el contenido que se desee conservar.
+====
+
+. Iniciar el core manteniendo pulsada la tecla `Alt`. Si se hace correctamente, aparecerá una imagen como la siguiente.
+
+[.text-center]
+image:img/mega65_alt.png[scaledwidth=70%]
+
+[start=2]
+. Pulsar `2` para comenzar el proceso de borrado y formateo de la tarjeta
+
+[.text-center]
+image:img/mega65_format1.png[scaledwidth=70%]
+
+<<<
+
+[start=3]
+. Pulsar `Enter`
+
+[.text-center]
+image:img/mega65_format2.png[scaledwidth=70%]
+
+[start=4]
+. Escribir, usando letras mayúsculas, el texto `DELETE EVERYTHING`
+
+[.text-center]
+image:img/mega65_format3.png[scaledwidth=70%]
+
+[start=5]
+. Pulsar `Enter` y esperar mientras se hace el formateo
+
+[.text-center]
+image:img/mega65_format4.png[scaledwidth=70%]
+
+<<<
+
+[start=6]
+. Si se hace correctamente, aparecerá una imagen como la siguiente.
+
+[.text-center]
+image:img/mega65_format5.png[scaledwidth=70%]
+
+[start=7]
+. Ahora se ha de apagar el ZXTRES, extraer la tarjeta, y copiar dentro, tanto los https://files.mega65.org/?id=0fb941fe-5c5f-4608-b0f1-32849d4a8dff[ficheros necesarios] https://retrocombs.com/mega65[para Mega65], como otros ficheros de ZXTRES que se quiera utilizar (por ejemplo, el menú core de Mist y el fichero `BIT` con el core de Mega65)
+
+[.text-center]
+image:img/mega65_format6.png[scaledwidth=70%]
+
+Tras este proceso, se dispondrá de una tarjeta compatible con el core y lista para usar.
+
+<<<
+
+==== Guía básica
+
+Si se formateado adecuadamente y se han copiado todos los ficheros en la tarjeta microSD, incluyendo los de demo, y se inicia el core, aparecerá una imagen parecida a la siguiente:
+
+[.text-center]
+image:img/mega65_demo.png[scaledwidth=70%]
+
+Es recomendable consultar la https://dansanderson.com/mega65/welcome/singlehtml/[guía oficial de bienvenida] donde se explican conceptos importantes del uso del ordenador Mega65.
+
+<<<
+
 === Neo-Geo
 
 https://es.wikipedia.org/wiki/Neo-Geo[Neo-Geo] es el nombre de un sistema de 16 bits basado en cartuchos máquinas recreativas así como videoconsolas para el hogar lanzado en 1990 por la compañía de videojuegos japonesa SNK. En un principio el sistema Neo-Geo se creó como plataforma para máquinas recreativas (MVS o Multi Video System), así como videoconsola doméstica (AES o Advanced Entertainment System).
@@ -5946,6 +6060,57 @@ image:img/boot_zxtres.png[scaledwidth=55%]
 
 <<<
 
+=== Sega Master System
+
+Este core es una adaptación del https://github.com/MiSTer-devel/SMS_MiSTer[core original para Mist].
+
+La versión adaptada de Mist tiene las siguientes características:
+
+- Carga de ROM desde microSD
+- Soporte para mandos
+- Soporte para Sega Master System, Game Gear y SG-1000
+- Compatible con Sega System E
+- Compatible con NTSC y PAL
+- Opción de Ocultar Bordes - Permite llenar la pantalla verticalmente sin bordes negros
+- Soporte Audio FM
+- Opción de resolución extendida para Game Gear
+- Opción Z80 Turbo
+
+==== Formato de Tarjeta microSD
+
+Se pueden utilizar ficheros ROM de cartuchos de los sistemas soporteados, dejándolos dentro del subdirectrio `SMS` en el directorio `mist`.
+
+==== Teclado
+
+El core es compatible con todos los teclados PS/2 o USB con los que sea compatible la versión instalada de firmware en la tarjeta intermedia.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`: Mostrar y ocultar el menú de ajustes del core
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
+
+[.text-center]
+image:img/sms_zxtres.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load *.BIN, SMS, GG, SG`: Para cargar un fichero ROM
+- `Mount *.SAV`: Para cargar una foto previametne guardada de la RAM
+- `Write Save RAM`: Para guardar una foto de la RAM
+- `Video & Audio`: Permite cambiar varios ajustes de vdeo y audio (como PAL/NTSC)
+- `Controls`: Permite modificaciones a los controles (como intercambiar los puertos del mando)
+- `System`: Permite cambios como el ajuste de región, o deshabilitar la detección automática del mapa de un cartucho
+- `Reset`: Para reiniciar el core
+
+<<<
+
 === Sinclair QL
 
 El https://es.wikipedia.org/wiki/Sinclair_QL[Sinclair QL], fue un ordenador personal lanzado por Sinclair Research entre enero de 1984 y 1986. Posterior ZX Spectrum, se diseñó orientado a las aplicaciones domésticas y la pequeña empresa.
@@ -6018,7 +6183,7 @@ image:img/mist_spectrum.png[scaledwidth=70%]
 
 Estas son las principales:
 
-- `Load CSW`: Carga de cinta desde un fichero CSW
+- `Load CSW`: Carga de cinta desde un fichero CSW (versión 1.x)
 - `Reset`:  Reiniciar el core
 - `Trigger NMI`: Activar una interrupción no enmascarable
 - `Scanlines`:  Activar o desactivar el efecto de líneas de exploración
@@ -6037,7 +6202,7 @@ En este proyecto se han utilizado algunos modelos verilog del núcleo Till Harba
 - Soporte para ULA+ v1.1 y con modo Timex extendido.
 - Modos Timex HiColor, HiRes.
 - Soporte para ficheros de cinta TAP con turbo (inyección directa de bytes) y carga normal.
-- Soporte para formatos de cinta TZX y CSW con carga rápida (16x) y normal.
+- Soporte para formatos de cinta TZX y CSW (versión 1.x) con carga rápida (16x) y normal.
 - Carga instantánea de ficheros Z80/SNA.
 - TR-DOS (Beta Disk Interface) - imágenes TRD(lectura/escritura) y SCL(sólo lectura).
 - G+DOS (MGT +D Disk Interface) - imágenes IMG, MGT (sólo en modos de memoria no +2A/+3).
@@ -6218,7 +6383,7 @@ image:img/mbupd4.png[scaledwidth=70%]
 
 ==== Recuperación vía USB
 
-En algunas situaciones puede ser necesario reinstalar el firmware de arranque (bootstrap) de algún https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040] de la tarjeta.
+En algunas situaciones puede ser necesario reinstalar el firmware de algún https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040] de una tarjeta intermedia.
 
 *Material necesario*:
 
