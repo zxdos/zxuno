@@ -1,6 +1,6 @@
 = Manual de ZXTRES, ZXTRES+ y ZXTRES++
 :author: kounch
-:revnumber: 1.1.0
+:revnumber: 1.1.1
 :doctype: book
 :docinfo: shared
 :notitle:
@@ -6060,7 +6060,75 @@ image:img/boot_zxtres.png[scaledwidth=55%]
 
 <<<
 
+=== Nintendo Entertainment System (NES)
+
+https://es.wikipedia.org/wiki/Nintendo_Entertainment_System[Nintendo Entertainment System] (también conocida como Nintendo NES o simplemente NES), conocida en Japón como Family Computer (o Famicom), fue la primera consola de sobremesa de Nintendo en emplear cartuchos, y lanzada entre 1985 y 1987. 
+
+Este core es una adaptación del https://github.com/MiSTer-devel/NES_MiSTer[core original para MiSTer].
+
+La versión adaptada tiene, entre otras, las siguientes características:
+
+- Carga de ROMs de cartucho y de imágenes de disco (FSD) desde microSD
+- Soporte para mandos
+- Compatible con la mayoría de juegos
+- Compatible con los sistemas NTSC, PAL y Dendy
+- Soporte de FDS
+- Múltiples opciones de paleta
+- Ajuste para aumentar por 8 los sprites por línea
+
+==== Formato de Tarjeta microSD
+
+Se pueden utilizar ficheros ROM de cartuchos de los sistemas soporteados o imágnenes de disco FSD, dejándolos normalmente dentro de un subdirectrio `NES` en el directorio `mist`.
+
+==== Teclado
+
+El core es compatible con todos los teclados PS/2 o USB con los que, a su vez, sea compatible la versión instalada de firmware en la tarjeta intermedia.
+
+===== Teclas especiales y botones
+
+Durante la ejecución del core:
+
+- `F12`o la tecla `Menu de Windows`: Mostrar y ocultar el menú de ajustes del core
+- `Alt`: Botón Select
+- `Ctrl`: Botón Start
+- Cursor o un mando conectado al puerto izquierdo: Controles de dirección del jugador 1
+- `Mayúsculas` o el botón `B` del mando 1: Botón A del jugador 1
+- `Espacio` o el botón `C` del mando 1: Botón B del jugador 1
+- Mando conectado al puerto derecho: Controles de dirección del jugador 2
+- Botón `B` del mando 2: Botón A del jugador 2
+- Botón `C` del mando 2: Botón B del jugador 2
+
+<<<
+
+==== Guía básica
+
+Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
+
+[.text-center]
+image:img/nes_zxtres.png[scaledwidth=70%]
+
+Estas son las principales:
+
+- `Load *.NES, FDS, NSF`: Para cargar un fichero ROM o de imagen de disco
+- `Load FDS BIOS *.BIN`: Para cargar una BIOS de controladora de disco
+- `Mount RAM *.SAV`: Para cargar una foto previametne guardada de la RAM
+- `Write SRAM`: Para guardar una foto de la RAM
+- `System Type`: Para elegir el tipo de sistema entre NTSC y PAL
+- `Scanlines`: Para activar las líneas de exploración (sólo con salida VGA)
+- `Joystick Swap`: Para intercambiar los puertos de los mandos
+- `Invert Mirroring`:
+- `Hide Overscan`: Para ocultar las zonas de overscan de la pantalla
+- `Blend`: Para activar suavizado de la imagen
+- `Palette`: Para cambiar el tipo de paleta de color por otro alternativo
+- `Famicon Keyboard`: 
+- `Disk Side`:
+- `Reset`: Para reiniciar el core.
+
+<<<
+
 === Sega Master System
+
+La https://es.wikipedia.org/wiki/Master_System[Master System] fue una consola de videojuegos doméstica de 8 bits fabricada y desarrollada por Sega.
 
 Este core es una adaptación del https://github.com/MiSTer-devel/SMS_MiSTer[core original para Mist].
 
@@ -6088,7 +6156,10 @@ El core es compatible con todos los teclados PS/2 o USB con los que sea compatib
 
 Durante la ejecución del core:
 
-- `F12`: Mostrar y ocultar el menú de ajustes del core
+- `F12`o la tecla `Menu de Windows`: Mostrar y ocultar el menú de ajustes del core
+- Cursor o un mando conectado al puerto izquierdo: Controles de dirección
+- `Z` o el botón `B` del mando: Botón Start
+- `X` o el botón `C` del mando: Botón 2
 
 <<<
 
