@@ -45,8 +45,10 @@ Sin el trabajo previo de todas estas personas (y más), ese manual no podría ex
 
 === Puertos y Conectores
 
-[.text-center]
-image:img/ZXTRESfront.jpg[scaledwidth=90%]
+[align="center",width="90%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ZXTRESfront.jpg[scaledwidth=100%]
+|===
 
 [align="center",width="80%",cols="1,4"]
 |===
@@ -68,8 +70,10 @@ image:img/ZXTRESfront.jpg[scaledwidth=90%]
 
 <<<
 
-[.text-center]
-image:img/ZXTRESback.jpg[scaledwidth=90%]
+[align="center",width="90%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ZXTRESback.jpg[scaledwidth=100%]
+|===
 
 [align="center",width="80%",cols="1,4"]
 |===
@@ -89,8 +93,10 @@ image:img/ZXTRESback.jpg[scaledwidth=90%]
 |Salida DisplayPort
 |===
 
-[.text-center]
-image:img/ZXTRESbottom.jpg[scaledwidth=90%]
+[align="center",width="90%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ZXTRESbottom.jpg[scaledwidth=100%]
+|===
 
 [align="center",width="80%",cols="1,4"]
 |===
@@ -114,8 +120,10 @@ Para poder poner en marcha un ZXTRES hace falta, al menos, lo siguiente:
 ====
 Es importante que la fuente tenga un voltaje estable y suficiente intensidad, o es posible que ocurran comportamientos erráticos (fallo del teclado, DisplayPort, etc.). Algunos teclados y periféricos podrían requerir el uso de una fuente de alimentación similar pero que ofrezca 2 amperios o más.
 
-[.text-center]
-image:img/powerConnector.png[scaledwidth=20%]
+[align="center",width="20%",cols="1a", frame=none, grid=none]
+|===
+|image:img/powerConnector.png[scaledwidth=100%]
+|===
 ====
 
 Para poder aprovechar todo su potencial, es útil tener también:
@@ -137,13 +145,17 @@ Si se utiliza un adaptador VGA a https://es.wikipedia.org/wiki/Euroconector[Euro
 
 Antes de comenzar asegurarse de que, al menos, se ha conectado el cable de alimentación, un cable de vídeo conectado a un monitor o televisión compatible, y un teclado PS/2.
 
-[.text-center]
-image:img/QuickStartGuide3.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide3.png[scaledwidth=100%]
+|===
 
 Pulsar el interruptor y comprobar en la pantalla que el sistema inicia correctamente.
 
-[.text-center]
-image:img/boot_zxtres.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/boot_zxtres.png[scaledwidth=100%]
+|===
 
 ==== Creación de microSD básica con ZX3 Downloader
 
@@ -178,13 +190,17 @@ O para ZXTRES++:
 
 Esperar durante varios minutos, hasta que se realice la descarga de todo lo necesario y se cree el contenido.
 
-[.text-center]
-image:img/zx3downloader.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/zx3downloader.png[scaledwidth=100%]
+|===
 
 Una vez el proceso haya finalizado, si no se han producido errores, copiar el contenido del directorio `SD` que se habrá creado, a la raíz de la tarjeta microSD.
 
-[.text-center]
-image:img/sd_zxtres.png[scaledwidth=55%]
+[align="center",width="55%",cols="1a", frame=none, grid=none]
+|===
+|image:img/sd_zxtres.png[scaledwidth=100%]
+|===
 
 Si se produjera alguna situación que interrumpa la descarga de ficheros, se recomienda volver a lanzar la utilidad, que continuará a partir de ese último fallo.
 
@@ -192,25 +208,33 @@ Si se produjera alguna situación que interrumpa la descarga de ficheros, se rec
 
 Asegurarse de que el ZXTRES esté apagado. Insertar la tarjeta microSD y pulsar de nuevo el interruptor de encendido.
 
-[.text-center]
-image:img/QuickStartGuide4.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide4.png[scaledwidth=100%]
+|===
 
 Ahora se iniciará de nuevo la FPGA, bien en modo tradicional con el core por defecto de ZX Spectrum, pero esta vez, activando el https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[navegador NMI de Bob Fossil], o bien en <<#_modo_mist,modo Mist>> con el core por defecto, y accediendo al directorio de la microSD donde están los ficheros de core.
 
-[.text-center]
-image:img/QuickStartGuide5.png[scaledwidth=45%]  image:img/mist.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide5.png[scaledwidth=45%]  image:img/mist.png[scaledwidth=100%]
+|===
 
 Utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado. Notar que los ficheros de core `.bit` y el <<#_modo_mist,modo Mist>> sólo se pueden usar en ZXTRES que dispongan de una <<#_tarjeta_intermedia_middle_board,tarjeta intermedia>> con firmware versión 02.02 o superior. Los ficheros de core `.zx3` se pueden usar siempre desde el modo tradicional con el core de ZX Spectrum por defecto.
 
-[.text-center]
-image:img/QuickStartGuide6.png[scaledwidth=55%]
+[align="center",width="55%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide6.png[scaledwidth=100%]
+|===
 
 <<<
 
 Tras unos segundos, el core elegido se activará en la FPGA y se podrá utilizar.
 
-[.text-center]
-image:img/QuickStartGuide7.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide7.png[scaledwidth=100%]
+|===
 
 ==== Formato avanzado de la tarjeta microSD
 
@@ -458,18 +482,24 @@ Para más información, consultar https://www.zxuno.com/forum/viewtopic.php?f=37
 
 *Español*
 
-[.text-center]
-image:./img/keyboardEsp.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:./img/keyboardEsp.png[scaledwidth=100%]
+|===
 
 *Inglés*
 
-[.text-center]
-image:./img/keyboardEng.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:./img/keyboardEng.png[scaledwidth=100%]
+|===
 
 *Spectrum*
 
-[.text-center]
-image:./img/keyboardAv.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:./img/keyboardAv.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -513,8 +543,10 @@ Una vez descargado y descomprimido, se han de copiar, a la raíz de la tarjeta, 
 
 Si todo se ha hecho correctamente, al encender el core Spectrum de ZXTRES se verá cómo esxdos detecta la tarjeta y carga los componentes necesarios para funcionar.
 
-[.text-center]
-image:./img/esxdos.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:./img/esxdos.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -550,8 +582,10 @@ Es recomendable, además, añadir los comandos esxdos específicos para ZXTRES. 
 
 === BIOS
 
-[.text-center]
-image:./img/boot_zxtres.png[scaledwidth=80%]
+[align="center",width="80%",cols="1a", frame=none, grid=none]
+|===
+|image:./img/boot_zxtres.png[scaledwidth=100%]
+|===
 
 Si se pulsa la tecla `F2` durante el arranque, se tendrá acceso a la configuración de BIOS. El firmware de BIOS es el primer programa que se ejecuta cuando se enciende el ZXTRES. El propósito fundamental del software de BIOS es iniciar y probar el hardware y cargar uno de los cores instalados.
 
@@ -569,8 +603,10 @@ Otras teclas que se pueden pulsar durante el arranque de la BIOS son:
 
 ==== Main
 
-[.text-center]
-image:img/bios.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bios.png[scaledwidth=100%]
+|===
 
 En la primera pantalla de configuración, además de poder ejecutar distintas pruebas, se puede definir el comportamiento por defecto para lo siguiente:
 
@@ -589,22 +625,28 @@ Se puede consultar información más técnica en https://www.zxuno.com/wiki/inde
 
 ==== ROMs
 
-[.text-center]
-image:img/bios2.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bios2.png[scaledwidth=100%]
+|===
 
 La segunda pantalla muestra las ROMs de ZX Spectrum instaladas y permite reordenar (Move Up, Move Down), renombrar (Rename) o borrar (Delete) cada una de ellas, así como elegir la que se cargará por defecto en el arranque (Set Active).
 
 ==== Upgrade
 
-[.text-center]
-image:img/bios3_zxtres.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bios3_zxtres.png[scaledwidth=100%]
+|===
 
 La pantalla _Upgrade_ se utiliza para realizar las distintas actualizaciones del contenido de la memoria Flash: esxdos, BIOS, Cores, etc. (véase <<#_actualizaciones,el apartado correspondiente a actualizaciones>> para más información).
 
 ==== Boot
 
-[.text-center]
-image:img/bios4_zxtres.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bios4_zxtres.png[scaledwidth=100%]
+|===
 
 En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que cargue por defecto en el arranque.
 
@@ -612,8 +654,10 @@ En la pantalla _Boot_ se puede elegir qué core de los instalados se desea que c
 
 ==== Advanced
 
-[.text-center]
-image:img/bios5_zxtres.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bios5_zxtres.png[scaledwidth=100%]
+|===
 
 La pantalla de configuración avanzada sirve para modificar los siguientes ajustes:
 
@@ -630,8 +674,10 @@ La pantalla de configuración avanzada sirve para modificar los siguientes ajust
 
 ==== Exit
 
-[.text-center]
-image:img/bios6.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bios6.png[scaledwidth=100%]
+|===
 
 Finalmente, desde la última pantalla se puede:
 
@@ -652,8 +698,10 @@ Para que se inicie en modo Mist, debe existir en la raíz de la tarjeta microSD 
 
 <<#_menú,Véase más adelante>> para más detalles sobre los distintos cores que utilizan el modo Mist.
 
-[.text-center]
-image:img/mist.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -665,22 +713,28 @@ El reloj se puede ajustar fácilmente desde el <<#_menú,menú>> del <<#_modo_mi
 
 . Pulsar `F12` para mostrar el menú
 
-[.text-center]
-image:img/mist_menu1.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist_menu1.png[scaledwidth=100%]
+|===
 
 [start=2]
 . Usar la tecla de cursor derecha o el mando para mostrar las opciones, elegir `Date & Time` y pulsar `Enter`
 
-[.text-center]
-image:img/mist_datetime.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist_datetime.png[scaledwidth=100%]
+|===
 
 <<<
 
 [start=3]
 . Usar las teclas de cursor o el mando para ir modificando los valores que se desee. Al finalizar, elegir `Exit` y pulsar `Enter`
 
-[.text-center]
-image:img/mist_settime.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist_settime.png[scaledwidth=100%]
+|===
 
 
 <<<
@@ -735,8 +789,10 @@ Véase el <<#_roms_3,apartado de actualizaciones>> para más información sobre 
 
 https://www.facebook.com/groups/DerbyPro[DerbyPro o Derby{pp}] es una ROM mejorada para el ZX Spectrum, basada en la versión 1.4 de la ROM de desarrollo Derby. El Spectrum 128 (nombre en código "Derby") fue una máquina española, encargada por Investronica y lanzada en 1985. Incluía un teclado aparte que añadía varias teclas de edición extra. En 1986 se lanzó la versión para Reino Unido con una versión simplificada de 128 BASIC y sin teclado extra. Derby++ se basa en la ROM española para incluir lo mejor de las dos versiones, sin sus inconvenientes, y con soporte para nuevo hardware.
 
-[.text-center]
-image:img/derbypro.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/derbypro.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -850,8 +906,10 @@ SE Basic comenzó en 1999 como firmware para el https://sinclair.wiki.zxnet.co.u
 
 La versión 3, también conocida como https://zxdesign.itch.io/opense[OpenSE BASIC] reemplazó el código ROM original con una versión de código abierto derivada de las ROMs del https://github.com/cheveron/open81[ZX81] y el https://github.com/cheveron/samrom[SAM Coupé]. Todavía se mantiene como un firmware de código abierto para el Spectrum y se incluye, por ejemplo, en el https://tracker.debian.org/pkg/opense-basic[repositorio principal de Debian] para su uso en emuladores.
 
-[.text-center]
-image:img/sebasic4.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/sebasic4.png[scaledwidth=100%]
+|===
 
 La versión 4.0 añadió soporte para un modo de 80 columnas. La versión 4.1 fue un intento fallido de refactorizar el código. A partir de 2019, la última versión (4.2 Cordelia) se reconstruyó desde cero para aprovechar al completo el core de ZX Spectrum del ZX-Uno (y ZXTRES). Aunque las versiones anteriores mantenían un gran nivel de compatibilidad con Sinclair BASIC y otro software, esta nueva versión ya no tiene soporte para software de Sinclair y es mucho más parecida en sintaxis a Atari BASIC.
 
@@ -1576,8 +1634,10 @@ Si todo va bien, tras unos pocos segundos, se realizará la carga del core en la
 ====
 Con algunos dispositivos conectados a los puertos de los mandos, puede aparecer un borde rojo parpadeante al iniciar el navegador. Esto se puede solucionar desactivando el joystick Kempston en su configuración (con el <<#_comandos_de_esxdos,comando "DOT">> `.brwscfg`) o, a veces, __conectando un mando a la vez al segundo puerto__.
 
-[.text-center]
-image:img/brwscfg.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/brwscfg.jpg[scaledwidth=100%]
+|===
 ====
 
 <<<
@@ -1692,8 +1752,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
-[.text-center]
-image:img/minimig.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/minimig.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -1758,8 +1820,10 @@ Durante la ejecución del core:
 
 ==== Guía básica
 
-[.text-center]
-image:img/cpc464.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/cpc464.png[scaledwidth=100%]
+|===
 
 Desde BASIC, se puede cargar desde una cinta (u otro dispositivo externo de audio) con el comando `RUN"`. Al contrario que en la máquina original, durante la reproducción se puede escuchar el audio de la cinta.
 
@@ -1824,20 +1888,26 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú que permite asignar ficheros DSK a las unidades de disco. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
-[.text-center]
-image:img/cpc6128.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/cpc6128.png[scaledwidth=100%]
+|===
 
 <<<
 
 Una vez seleccionada una imagen, escribir el comando `CAT` para ver el contenido del fichero DSK cargado actualmente.
 
-[.text-center]
-image:img/cpc.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/cpc.png[scaledwidth=100%]
+|===
 
 Escribir el comando `RUN"<nombre>` para cargar un programa del disco
 
-[.text-center]
-image:img/cpc2.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/cpc2.png[scaledwidth=100%]
+|===
 
 Usar los comandos `|b` y `|a` para seleccionar las unidades de disco B: y A: respectivamente (el símbolo `|` se obtiene pulsando `Mayúsculas` y la tecla situada a la derecha de la `P`).
 
@@ -1888,8 +1958,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12` se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/apple2e.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/apple2e.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -1957,8 +2029,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jt1942.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jt1942.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2023,8 +2097,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jt1943.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jt1943.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2092,8 +2168,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtaliens.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtaliens.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2149,8 +2227,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/ataritetris.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ataritetris.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2214,8 +2294,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtninja.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtninja.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2281,8 +2363,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtbiocom.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtbiocom.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2343,8 +2427,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtbtiger.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtbtiger.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2408,8 +2494,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtbubl.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtbubl.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2475,8 +2563,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcps1.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcps1.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2544,8 +2634,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcps15.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcps15.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2617,8 +2709,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcps2.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcps2.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2683,8 +2777,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcomsc.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcomsc.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2745,8 +2841,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcommnd.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcommnd.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2811,8 +2909,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcontra.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcontra.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2843,7 +2943,7 @@ Algunas de sus características son:
 
 El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imágenes ROM] de los chips de la máquina recreativa original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
 
-Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el repositorio del creador] del core original.
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
 
 [TIP]
 ====
@@ -2876,8 +2976,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtdd.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtdd.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -2908,7 +3010,8 @@ Algunas de sus características son:
 
 El core necesita para funcionar ficheros con las https://es.wikipedia.org/wiki/Imagen_ROM[imágenes ROM] de los chips de la máquina recreativa original, agregados dentro de un unico fichero .ROM, junto con un fichero .ARC que contiene el nombre del fichero ROM a cargar, así como la configuración de los https://es.wikipedia.org/wiki/Interruptor_DIP[interruptores DIP] de la maquina original.
 
-Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el repositorio del creador] del core original.
+Tanto los ficheros ROM como los ficheros ARC se pueden crear utilizando <<#_mra_tool,MRA Tool>>, tomando como referencia los ficheros MRA disponibles en el https://github.com/jotego/jtbin/tree/master/mra[repositorio del creador] del core original.
+
 
 [TIP]
 ====
@@ -2941,8 +3044,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtdd2.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtdd2.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3005,8 +3110,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtexed.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtexed.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3070,8 +3177,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtf1drm.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtf1drm.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3133,8 +3242,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtgng.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtgng.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3149,7 +3260,7 @@ Estas son las principales:
 
 <<<
 
-=== Arcade (Gun.Smoke)
+=== Arcade (Gun Smoke)
 
 https://en.wikipedia.org/wiki/Gun.Smoke[Gun.Smoke] es un videojuego de desplazamiento vertical lanzado como máqina recreativa en 1985.
 
@@ -3198,8 +3309,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtgunsmk.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtgunsmk.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3263,8 +3376,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcastle.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcastle.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3329,8 +3444,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtsarms.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtsarms.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3394,8 +3511,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtkchamp.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtkchamp.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3459,8 +3578,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtkicker.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtkicker.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3523,8 +3644,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtmidres.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtmidres.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3591,8 +3714,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtmikie.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtmikie.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3654,8 +3779,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtmx5k.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtmx5k.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3723,8 +3850,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtkiwi.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtkiwi.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3810,8 +3939,10 @@ El cambio de marcha siempre se encuentra en la posición alta y, para cambiar a 
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtoutrun.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtoutrun.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3878,8 +4009,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtpang.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtpang.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -3944,8 +4077,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtpinpon.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtpinpon.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4005,8 +4140,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jthige.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jthige.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4067,8 +4204,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtrastan.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtrastan.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4129,8 +4268,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtkunio.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtkunio.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4194,8 +4335,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtroadf.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtroadf.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4256,8 +4399,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` del mando 1, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtcop.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtcop.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4321,8 +4466,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtroc.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtroc.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4386,8 +4533,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jts16.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jts16.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4455,8 +4604,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jts16b.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jts16b.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4523,8 +4674,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtsectnz.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtsectnz.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4587,8 +4740,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtslyspy.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtslyspy.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4654,8 +4809,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtrumble.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtrumble.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4719,8 +4876,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtshanon.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtshanon.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4786,8 +4945,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jttora.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jttora.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4849,8 +5010,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtlabrun.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtlabrun.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4912,8 +5075,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jttrojan.jpg[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jttrojan.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -4975,8 +5140,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtvigil.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtvigil.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -5040,8 +5207,10 @@ El core se inicia por defecto utilizando la salida VGA. Si se desea que sea la s
 
 Al pulsar `F12` o los botones `Start+A` de un mando, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/jtvulgus.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtvulgus.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -5095,8 +5264,10 @@ Durante la ejecución del core:
 
 Pulsando `Esc` o el botón B del joystick se muestra el menú de configuración. Se usan las teclas de cursor  y `Enter` para elegir y seleccionar en el menú.
 
-[.text-center]
-image:img/a2600.jpg[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/a2600.jpg[scaledwidth=100%]
+|===
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -5163,8 +5334,10 @@ Durante la ejecución del core:
 
 Al iniciar, la ROM de la BIOS se carga desde la tarjeta microSD, así como la ROM multicartucho.
 
-[.text-center]
-image:img/coleco.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/coleco.jpg[scaledwidth=100%]
+|===
 
 En el menú multicartucho, usar los controles de dirección para elegir la ROM a cargar, y luego el botón de disparo 1 para cargar la ROM elegida. Pulsando `Esc` se reinicia el core y se vuelve a cargar el menú de selección de ROM.
 
@@ -5213,8 +5386,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
-[.text-center]
-image:img/enterprise.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/enterprise.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -5228,8 +5403,10 @@ Estas son las principales:
 
 Si hay una imagen de disco VHD montada, pulsando `F1` o ejecutando el comando :FILE (`:` se obtiene pulsando +´+) se accede al navegador de archivos. Si se pulsa la letra de otra unidad (G, H, etc) se cambia a esta.
 
-[.text-center]
-image:img/enterprisefile.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/enterprisefile.jpg[scaledwidth=100%]
+|===
 
 Los archivos ejecutables son `COM`.
 
@@ -5299,8 +5476,10 @@ Una vez la cinta ha cargado, escribir el comando necesario para iniciar el progr
 En lugar de BASIC como otros sistemas, el Jupiter ACE utiliza https://es.wikipedia.org/wiki/Forth[Forth]. Para ver los comandos disponibles (incluyendo los que inician un programa cargado desde cinta), se tiene que utilizar `vlist`.
 ====
 
-[.text-center]
-image:img/ace_vlist.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ace_vlist.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -5336,48 +5515,62 @@ El proceso que se describe a continuación borrará completamente la tarjeta mic
 
 . Iniciar el core manteniendo pulsada la tecla `Alt`. Si se hace correctamente, aparecerá una imagen como la siguiente.
 
-[.text-center]
-image:img/mega65_alt.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_alt.png[scaledwidth=100%]
+|===
 
 [start=2]
 . Pulsar `2` para comenzar el proceso de borrado y formateo de la tarjeta
 
-[.text-center]
-image:img/mega65_format1.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_format1.png[scaledwidth=100%]
+|===
 
 <<<
 
 [start=3]
 . Pulsar `Enter`
 
-[.text-center]
-image:img/mega65_format2.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_format2.png[scaledwidth=100%]
+|===
 
 [start=4]
 . Escribir, usando letras mayúsculas, el texto `DELETE EVERYTHING`
 
-[.text-center]
-image:img/mega65_format3.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_format3.png[scaledwidth=100%]
+|===
 
 [start=5]
 . Pulsar `Enter` y esperar mientras se hace el formateo
 
-[.text-center]
-image:img/mega65_format4.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_format4.png[scaledwidth=100%]
+|===
 
 <<<
 
 [start=6]
 . Si se hace correctamente, aparecerá una imagen como la siguiente.
 
-[.text-center]
-image:img/mega65_format5.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_format5.png[scaledwidth=100%]
+|===
 
 [start=7]
 . Ahora se ha de apagar el ZXTRES, extraer la tarjeta, y copiar dentro, tanto los https://files.mega65.org/?id=0fb941fe-5c5f-4608-b0f1-32849d4a8dff[ficheros necesarios] https://retrocombs.com/mega65[para Mega65], como otros ficheros de ZXTRES que se quiera utilizar (por ejemplo, el menú core de Mist y el fichero `BIT` con el core de Mega65)
 
-[.text-center]
-image:img/mega65_format6.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_format6.png[scaledwidth=100%]
+|===
 
 Tras este proceso, se dispondrá de una tarjeta compatible con el core y lista para usar.
 
@@ -5387,8 +5580,10 @@ Tras este proceso, se dispondrá de una tarjeta compatible con el core y lista p
 
 Si se formateado adecuadamente y se han copiado todos los ficheros en la tarjeta microSD, incluyendo los de demo, y se inicia el core, aparecerá una imagen parecida a la siguiente:
 
-[.text-center]
-image:img/mega65_demo.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mega65_demo.png[scaledwidth=100%]
+|===
 
 Es recomendable consultar la https://dansanderson.com/mega65/welcome/singlehtml/[guía oficial de bienvenida] donde se explican conceptos importantes del uso del ordenador Mega65.
 
@@ -5447,8 +5642,10 @@ Durante la ejecución del core:
 
 Si se han copiado los ficheros correctos en la tarjeta microSD y se inicia el core, aparecerá una pantalla en blanco. Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/neogeo.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/neogeo.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -5531,8 +5728,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor o un mando. `Enter` o el botón B del mando selecciona un elemento.
 
-[.text-center]
-image:img/pcxt_zxtres.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/pcxt_zxtres.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -5591,8 +5790,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú que permite asignar ficheros DSK a las unidades de disco. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
-[.text-center]
-image:img/samcoupe_zxtres.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/samcoupe_zxtres.png[scaledwidth=100%]
+|===
 
 Una vez seleccionada una imagen, pulsar la tecla `9` del teclado numérico o escribir el comando `BOOT` para intentar iniciar automáticamente el contenido del disco.
 
@@ -5700,13 +5901,17 @@ El teclado no está mapeado a la distribución PS/2 estándar, y mantiene la dis
 
 **ZX80**
 
-[.text-center]
-image:img/keyboardZX80.jpg[scaledwidth=80%]
+[align="center",width="80%",cols="1a", frame=none, grid=none]
+|===
+|image:img/keyboardZX80.jpg[scaledwidth=100%]
+|===
 
 **ZX81**
 
-[.text-center]
-image:img/keyboardZX81.jpg[scaledwidth=80%]
+[align="center",width="80%",cols="1a", frame=none, grid=none]
+|===
+|image:img/keyboardZX81.jpg[scaledwidth=100%]
+|===
 
 ===== Teclas especiales y botones
 
@@ -5726,8 +5931,10 @@ Durante la ejecución del core:
 
 Pulsando `F5` o el botón `B` del mando 1 se muestra el menú de configuración. Se usan las teclas de cursor y `Enter` para elegir y seleccionar opciones del menú.
 
-[.text-center]
-image:img/zx81.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/zx81.jpg[scaledwidth=100%]
+|===
 
 En él se pueden activar, desactivar o configurar las siguientes opciones:
 
@@ -5739,8 +5946,10 @@ En él se pueden activar, desactivar o configurar las siguientes opciones:
 
 <<<
 
-[.text-center]
-image:img/zx81_2.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/zx81_2.jpg[scaledwidth=100%]
+|===
 
 - Elegir el modelo de computador (Computer Model): ZX80/ZX81
 - Tamaño de RAM (Main RAM): 16K/32K
@@ -5820,8 +6029,10 @@ Durante la ejecución del core:
 - `Ctrl+Alt+Supr` o `F9`: Soft Reset (reinicia el Core)
 - `Ctrl+Alt+Backspace` o `F11`: Hard reset (reinicia la FPGA). Backspace es la tecla de borrar hacia atrás, encima de `Enter`
 
-[.text-center]
-image:img/zx.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/zx.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -5879,8 +6090,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento.
 
-[.text-center]
-image:img/zxp3.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/zxp3.jpg[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -5959,8 +6172,10 @@ Tras realizar la configuración de vídeo en el primer inicio y guardarla, es ne
 
 Al iniciarse, aparecerán una serie de pantallas de ayuda. Tras pulsar la tecla `Espacio`, se mostrará el menú de inicio de NextZXOS.
 
-[.text-center]
-image:img/next_zxtres.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/next_zxtres.png[scaledwidth=100%]
+|===
 
 Se puede navegar utilizando las teclas de cursor, las teclas `5`, `6`, `7` y `8`, o un joystick (si se ha configurado en modo Kempston, MD o cursor). `Enter` o el botón del joystick selecciona un elemento.
 
@@ -5973,13 +6188,17 @@ Durante el arranque, se puede forzar la salida de vídeo analógica a utilizar, 
 
 La opción `More...` muestra un segundo menú con más opciones.
 
-[.text-center]
-image:img/next2_zxtres.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/next2_zxtres.png[scaledwidth=100%]
+|===
 
 Si se elige `Browser`, se cargará el navegador de NextZXOS, desde el que es posible desplazarse viendo el contenido de la tarjeta microSD y cargar directamente diferentes tipos de archivo (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
 
-[.text-center]
-image:img/next3_zxtres.png[pdfwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/next3_zxtres.png[scaledwidth=100%]
+|===
 
 [NOTE]
 ====
@@ -5998,15 +6217,19 @@ Como se <<#_modo_mist,ha explicado anteriormente>>, los cores de modo Mist, requ
 
 Normalmente cuando se inicia la FPGA en modo Mist el core por defecto es el menú de carga de cores, que accede al contenido del directorio `mist` y muestra los nombres de todos los ficheros `.bit` que encuentre en su interior.
 
-[.text-center]
-image:img/mist.png[scaledwidth=55%]
+[align="center",width="55%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist.png[scaledwidth=100%]
+|===
 
 Se pueden utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado.
 
 Pulsando la tecla `F12` se accede a los menús de configuración del core por defecto. Estos están formados por dos pantallas principales, que se pueden alternar usando las teclas de cursor izquierda y derecha.
 
-[.text-center]
-image:img/mist01.png[scaledwidth=45%]  image:img/mist02.png[scaledwidth=45%]
+[align="center",width="45%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist01.png[scaledwidth=45%]  image:img/mist02.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -6055,8 +6278,10 @@ También es posible cambiar el tipo de letra (fuente) a utilizar en los menús d
 
 Cargar este core desde el modo Mist hace que la FPGA inicie en <<#_modo_tradicional_zx_spectrum,modo tradicional>> la <<#_bios,BIOS>> y el core de ZX Spectrum
 
-[.text-center]
-image:img/boot_zxtres.png[scaledwidth=55%]
+[align="center",width="55%",cols="1a", frame=none, grid=none]
+|===
+|image:img/boot_zxtres.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -6088,7 +6313,7 @@ El core es compatible con todos los teclados PS/2 o USB con los que, a su vez, s
 
 Durante la ejecución del core:
 
-- `F12`o la tecla `Menu de Windows`: Mostrar y ocultar el menú de ajustes del core
+- `F12` o la tecla `Menu de Windows`: Mostrar y ocultar el menú de ajustes del core
 - `Alt`: Botón Select
 - `Ctrl`: Botón Start
 - Cursor o un mando conectado al puerto izquierdo: Controles de dirección del jugador 1
@@ -6104,8 +6329,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
 
-[.text-center]
-image:img/nes_zxtres.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/nes_zxtres.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -6156,7 +6383,7 @@ El core es compatible con todos los teclados PS/2 o USB con los que sea compatib
 
 Durante la ejecución del core:
 
-- `F12`o la tecla `Menu de Windows`: Mostrar y ocultar el menú de ajustes del core
+- `F12` o la tecla `Menu de Windows`: Mostrar y ocultar el menú de ajustes del core
 - Cursor o un mando conectado al puerto izquierdo: Controles de dirección
 - `Z` o el botón `B` del mando: Botón Start
 - `X` o el botón `C` del mando: Botón 2
@@ -6167,8 +6394,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
 
-[.text-center]
-image:img/sms_zxtres.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/sms_zxtres.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -6211,8 +6440,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
 
-[.text-center]
-image:img/mist_ql.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist_ql.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -6249,8 +6480,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
 
-[.text-center]
-image:img/mist_spectrum.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist_spectrum.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -6319,8 +6552,10 @@ Durante la ejecución del core:
 
 Al pulsar `F12`, se mostrará el menú con las distintas opciones del Core. Se puede navegar utilizando las teclas de cursor. `Enter` selecciona un elemento. `F12` oculta el menú si se estaba mostrando.
 
-[.text-center]
-image:img/mist_zxspectrum.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mist_zxspectrum.png[scaledwidth=100%]
+|===
 
 Estas son las principales:
 
@@ -6354,8 +6589,10 @@ Se puede instalar como componente opcional en un ZXTRES una tarjeta intermedia q
 - <<#_navegador_de_bob_fossil_con_tarjeta_intermedia,carga directa de cores>> desde la tarjeta microSD (vía https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040])
 - Teclados y mandos USB (vía https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontrolador RP2040])
 
-[.text-center]
-image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=40%]
+[align="center",width="40%",cols="1a", frame=none, grid=none]
+|===
+|image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=100%]
+|===
 
 <<<
 
@@ -6370,13 +6607,17 @@ Algunos mandos USB funcionan directamente tras conectarlos. Para los que no, es 
 
 Para ello copiar el fichero de imagen de cinta `MBJOYCAL.TAP`` en la tarjeta microSD, y cargarlo con el core de Spectrum por defecto, asegurándose de que que sólo hay un mando conectado. El programa se iniciará y pondrá la placa intermedia en un modo donde puede hablar directamente con la interfaz del mando.
 
-[.text-center]
-image:img/mbjoy1.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbjoy1.png[scaledwidth=100%]
+|===
 
 Una activada la conexión con el mando, aparecerá una pantalla donde se puede comprobar el funcionamiento de los controles. En el caso en que no sean correctos, se puede pulsar `C` para entrar en el modo de calibración.
 
-[.text-center]
-image:img/mbjoy2.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbjoy2.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -6387,13 +6628,17 @@ En el modo de calibración, para cada botón posible, se ha de seguir la siguien
 . dejar de pulsar el botón del mando
 . volver a pulsar en el teclado para la confirmación final.
 
-[.text-center]
-image:img/mbjoy3.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbjoy3.png[scaledwidth=100%]
+|===
 
 Una vez finalice la calibración de botones, se puede comprobar que todo está corecto y pulsar `Q` para salir de la aplicación y guardar la configuración. En cado de haber habido algún error, pulsar `R` para volver a comenzar el proceso.
 
-[.text-center]
-image:img/mbjoy4.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbjoy4.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -6419,36 +6664,46 @@ Para hacer una actualización desde esxdos (Core de Spectrum) de una tarjeta int
 
 . Ejecutar el comando DOT de esxdos `.mbinfo` para comprobar las versiones existentes y que la comunicación con la placa es correcta.
 
-[.text-center]
-image:img/mbinfo.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbinfo.png[scaledwidth=100%]
+|===
 
 <<<
 
 [start=2]
 . A continuación, ejecutar el comando `.mbupd` desde el directorio donde se encuentre el fichero de actualización correspondiente (`RP2MAPP.BIN` para MIDI y `RP2UAPP.BIN` para USB) y comenzar el proceso de actualización.
 
-[.text-center]
-image:img/mbupd1.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbupd1.png[scaledwidth=100%]
+|===
 
 [start=3]
 . Pulsar cualquier tecla para realizar la actualización.
 
-[.text-center]
-image:img/mbupd2.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbupd2.png[scaledwidth=100%]
+|===
 
 <<<
 
 [start=4]
 . Esperar hasta que finalice
 
-[.text-center]
-image:img/mbupd3.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbupd3.png[scaledwidth=100%]
+|===
 
 [start=5]
 . Tras unos minutos, el proceso finalizará y la CPU corresponiente tendrá aplicada la última versión
 
-[.text-center]
-image:img/mbupd4.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/mbupd4.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -6476,8 +6731,10 @@ En algunas situaciones puede ser necesario reinstalar el firmware de algún http
 . Apagar el ZXTRES si estuviera encendido, y conectar con el cable USB al ordenador
 . En el caso de tarjetas con dos microcontroladores, poner el interruptor en la posición adecuada para el rp2040 a recuperar, siendo la posición 1 para USB y la posición 2 para MIDI
 
-[.text-center]
-image:img/bootselsw.jpg[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/bootselsw.jpg[scaledwidth=100%]
+|===
 
 [start=3]
 . Repetir los tres pasos siguientes, para cada fichero, exactamente en el orden que se indica a continuación
@@ -6783,11 +7040,15 @@ En la sección de <<#_jtag,referencias>> hay información para poder usar otros 
 
 En los siguientes pasos se habla de conectar cables puente o USB-Blaster a la placa de ZXTRES. Para ello, usar las siguientes imágenes como referencia para conectar TMS, TDI, TDO, TCK y GND.
 
-[.text-center]
-image:img/jtagzxtres.jpg[scaledwidth=40%]
+[align="center",width="40%",cols="1a", frame=none, grid=none]
+|===
+|image:img/jtagzxtres.jpg[scaledwidth=100%]
+|===
 
-[.text-center]
-image:img/usbblasterzxtres.jpg[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/usbblasterzxtres.jpg[scaledwidth=100%]
+|===
 
 [WARNING]
 ====
@@ -6912,8 +7173,10 @@ Recordar reemplazar en los comandos anteriores `recovery.bit` por el nombre del 
 
 En el caso de que no se vea imagen, y si no se está utilizando DisplayPort, pulsar `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
-[.text-center]
-image:img/recovery.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/recovery.png[scaledwidth=100%]
+|===
 
 [start=8]
 . Insertar en el ZXTRES la tarjeta microSD con la primera partición en formato FAT16 o FAT32, y en la que habremos copiado el fichero `FLASH.ZX3` descargado anteriormente.
@@ -6925,8 +7188,10 @@ image:img/recovery.png[scaledwidth=70%]
 [start=10]
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
-[.text-center]
-image:img/recovery2.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/recovery2.png[scaledwidth=100%]
+|===
 
 [WARNING]
 ====
@@ -7004,8 +7269,10 @@ usermod -a $USER -G plugdev
 
 Si se hace conexión vía GPIO, tomar nota de los pines elegidos, teniendo cuidado de conectar `GND` con `GND`.
 
-[.text-center]
-image:img/gpio.jpg[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/gpio.jpg[scaledwidth=100%]
+|===
 
 En este ejemplo, se utilizarán los pines `31`, `33`, `35`, `37` y `39` (correspondientes a `GPIO #6`, `GPIO #13`, `GPIO #19`, `GPIO #26` y `GND`), de la siguiente manera:
 
@@ -7100,8 +7367,10 @@ Recordar reemplazar en los comandos anteriores `recovery.bit` por el nombre del 
 
 En el caso de que no se vea imagen, y si no se está utilizando DisplayPort, pulsar `Bloq. Despl.`: para cambiar entre modo de video compuesto y VGA, por si acaso la BIOS ha arrancado en un modo que no corresponde a la conexión del monitor.
 
-[.text-center]
-image:img/recovery.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/recovery.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -7112,8 +7381,10 @@ image:img/recovery.png[scaledwidth=70%]
 
 . Elegir la opción `Upgrade Flash from SD`. Pulsar Enter, elegir `Yes`, y pulsar Enter de nuevo para comenzar el proceso que graba de nuevo la Flash.
 
-[.text-center]
-image:img/recovery2.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/recovery2.png[scaledwidth=100%]
+|===
 
 [WARNING]
 ====
@@ -7153,8 +7424,10 @@ Estas son las características técnicas principales:
 
 ==== Scan Codes
 
-[.text-center]
-image:img/ScanCodes.png[scaledwidth=75%]
+[align="center",width="75%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ScanCodes.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -8337,8 +8610,10 @@ Para el uso con OpenOCD, descargar el fichero de configuración del https://gith
 
 Usar la siguiente imagen como referencia para conectar TMS, TDI, TDO, TCK y GND.
 
-[.text-center]
-image:img/ft232zxtres.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ft232zxtres.png[scaledwidth=100%]
+|===
 
 [WARNING]
 ====

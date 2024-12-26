@@ -35,15 +35,19 @@ To set up and use the ZXTRES you need at least:
 - PS/2 keyboard
 - USB charger, TV or other device that provides USB power (5VDC and at least 1A). The connector is a coaxial jack "barrel" plug of 5.5mm outer diameter and 2.1mm inner diameter with positive polarity (centre positive)
 
-[.text-center]
-image:img/QuickStartGuide3.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide3.png[scaledwidth=100%]
+|===
 
 Make sure that, at least, the power cable is connected, a video cable is also connected to a display, and a PS/2 keyboard is attached.
 
 Turn the power switch on and check, looking at the display, that the system boots correctly.
 
-[.text-center]
-image:img/boot_zxtres.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/boot_zxtres.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -83,13 +87,17 @@ Or ZXTRES++:
 
 Wait a few minutes, while all the content is downloaded and built.
 
-[.text-center]
-image:img/zx3downloader.png[scaledwidth=50%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/zx3downloader.png[scaledwidth=100%]
+|===
 
 Once the process finishes, if no errors appear, copy the content from the newly created `SD` directory to the root of the microSD card.
 
-[.text-center]
-image:img/sd_zxtres.png[scaledwidth=55%]
+[align="center",width="55%",cols="1a", frame=none, grid=none]
+|===
+|image:img/sd_zxtres.png[scaledwidth=100%]
+|===
 
 If the download process was interrupted, it's recommended to start again the tool, which will continue since the last failed file.
 
@@ -97,25 +105,33 @@ If the download process was interrupted, it's recommended to start again the too
 
 Make sure that the ZXTRES is turned off. Insert the microSD card and turn on again the power switch.
 
-[.text-center]
-image:img/QuickStartGuide4.png[scaledwidth=70%]
+[align="center",width="70%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide4.png[scaledwidth=100%]
+|===
 
-Now the FPGA will boot again with the default ZX Spectrum core, but this time, running https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[Bob Fossil's NMI Browser] and navigating automatically the microSD directory where all the core files are.
+Now the FPGA will boot again, either in legacy mode, with the default ZX Spectrum core, but this time, running https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[Bob Fossil's NMI Browser], or in Mist mode with the default menu core. In both cases navigating automatically the microSD directory where all the core files are.
 
-[.text-center]
-image:img/QuickStartGuide5.png[scaledwidth=55%]
+[align="center",width="50%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide5.png[scaledwidth=45%]  image:img/mist.png[scaledwidth=100%]
+|===
 
 <<<
 
 Use the cursor keys to move through the list, and press `Enter` to load the desired core. Please note that `.bit` core files can only be used with a ZXTRES with a middle board installed, while `.zx3` core files can always be used.
 
-[.text-center]
-image:img/QuickStartGuide6.png[scaledwidth=55%]
+[align="center",width="55%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide6.png[scaledwidth=100%]
+|===
 
 After a few seconds, the desired core will activate in the FPGA, ready to use.
 
-[.text-center]
-image:img/QuickStartGuide7.png[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/QuickStartGuide7.png[scaledwidth=100%]
+|===
 
 <<<
 
@@ -131,8 +147,10 @@ See the https://zxtres.github.io/wiki/manual_en.html#_introduction[full ZXTRES m
 
 Check that the audio output is correctly connected. Also, depending on the current core, you may change the sound selection switch position (in the bottom of the ZXTRES) between https://en.wikipedia.org/wiki/I²S[I^2^S] or https://en.wikipedia.org/wiki/Delta-sigma_modulation[Sigma-Delta].
 
-[.text-center]
-image:img/ZXTRESbottom.jpg[scaledwidth=60%]
+[align="center",width="60%",cols="1a", frame=none, grid=none]
+|===
+|image:img/ZXTRESbottom.jpg[scaledwidth=100%]
+|===
 
 === The NMI browser shows a flashing red border
 
