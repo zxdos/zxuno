@@ -44,12 +44,12 @@ Without the previous work of all these people (and more) this manual wouldn't ex
 
 === Ports and connectors
 
-[align="center",width="90%",cols="1a", frame=none, grid=none]
+[role="center",width="90%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ZXTRESfront.jpg[scaledwidth=100%]
 |===
 
-[align="center",width="80%",cols="1,4"]
+[role="center",width="80%",cols="1,4"]
 |===
 |1
 |Left controller port
@@ -69,12 +69,12 @@ Without the previous work of all these people (and more) this manual wouldn't ex
 
 <<<
 
-[align="center",width="90%",cols="1a", frame=none, grid=none]
+[role="center",width="90%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ZXTRESback.jpg[scaledwidth=100%]
 |===
 
-[align="center",width="80%",cols="1,4"]
+[role="center",width="80%",cols="1,4"]
 |===
 |8
 |Audio in
@@ -92,12 +92,12 @@ Without the previous work of all these people (and more) this manual wouldn't ex
 |DisplayPort out
 |===
 
-[align="center",width="90%",cols="1a", frame=none, grid=none]
+[role="center",width="90%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ZXTRESbottom.jpg[scaledwidth=100%]
 |===
 
-[align="center",width="80%",cols="1,4"]
+[role="center",width="80%",cols="1,4"]
 |===
 |15
 |BOOTSEL button for <<#_middle_board,middle board>>
@@ -119,7 +119,7 @@ To set up and use the ZXTRES you need at least:
 ====
 It's important that the source has stable voltage and sufficient current or erratic behaviour may occur (the keyboard or DisplayPort may fail and so on). Some keyboards or peripherals may require a similar power supply but with 2A or more.
 
-[align="center",width="20%",cols="1a", frame=none, grid=none]
+[role="center",width="20%",cols="1a", frame=none, grid=none]
 |===
 |image:img/powerConnector.png[scaledwidth=100%]
 |===
@@ -144,7 +144,7 @@ If an active VGA to https://en.wikipedia.org/wiki/SCART[SCART] adapter is connec
 
 Befor you start, make sure that, at least, the power cable is connected, a video cable is also connected to a display, and a PS/2 keyboard is attached.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide3.png[scaledwidth=100%]
 |===
@@ -152,7 +152,7 @@ Befor you start, make sure that, at least, the power cable is connected, a video
 
 Turn the power switch on and check, looking at the display, that the system boots correctly.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/boot_zxtres.png[scaledwidth=100%]
 |===
@@ -190,14 +190,14 @@ Or ZXTRES++:
 
 Wait a few minutes, while all the content is downloaded and built.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/zx3downloader.png[scaledwidth=100%]
 |===
 
 Once the process finishes, if no errors appear, copy the content from the newly created `SD` directory to the root of the microSD card.
 
-[align="center",width="55%",cols="1a", frame=none, grid=none]
+[role="center",width="55%",cols="1a", frame=none, grid=none]
 |===
 |image:img/sd_zxtres.png[scaledwidth=100%]
 |===
@@ -208,21 +208,21 @@ If the download process was interrupted, it's recommended to start again the too
 
 Make sure that the ZXTRES is turned off. Insert the microSD card and turn on again the power switch.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide4.png[scaledwidth=100%]
 |===
 
 Now the FPGA will boot again with the default ZX Spectrum core, but this time, running https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[Bob Fossil's NMI Browser] and navigating automatically the microSD directory where all the core files are.
 
-[align="center",width="55%",cols="1a", frame=none, grid=none]
+[role="center",width="55%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide5.png[scaledwidth=100%]
 |===
 
 Use the cursor keys to move through the list, and press `Enter` to load the desired core. Please note that `.bit` core files can only be used with a ZXTRES with a middle board installed, while `.zx3` core files can always be used.
 
-[align="center",width="55%",cols="1a", frame=none, grid=none]
+[role="center",width="55%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide6.png[scaledwidth=100%]
 |===
@@ -231,7 +231,7 @@ Use the cursor keys to move through the list, and press `Enter` to load the desi
 
 After a few seconds, the desired core will activate in the FPGA, ready to use.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide7.png[scaledwidth=100%]
 |===
@@ -437,7 +437,7 @@ sudo mkfs.fat -F 16 -n ZXTRES -s 128 /dev/sdc1
 
 This table shows the requirements of cores that use the microSD card.
 
-[align="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
+[role="center",width="100%",%header,cols="4a,1a,1a,1a,3a,2a,4a,5a",options="header"]
 |===
 |[.small]#Core#|[.small]#FAT16#|[.small]#FAT32#|[.small]#+3e#|[.small]#Primary Partition Type#|[.small]#Extra Partitions#|[.small]#Access#|[.small]#Notes#
 |[.small]#Amiga#|[.small]#No#|[.small]#Sí#|[.small]#No#|[.small]#Any#|[.small]#No#|[.small]#ROMs, disk images#|[.small]#Requires ROM#
@@ -476,21 +476,21 @@ Note, <<#_se_basic_iv>> uses its own native system to set the keyboard map and h
 
 ==== English
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:./img/keyboardEng.png[scaledwidth=100%]
 |===
 
 ==== Spanish
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:./img/keyboardEsp.png[scaledwidth=100%]
 |===
 
 ==== Spectrum
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:./img/keyboardAv.png[scaledwidth=100%]
 |===
@@ -536,7 +536,7 @@ After you've downloaded and extracted the `ZIP` archive, you must copy the folde
 
 If everything was done correctly, when you start the ZX Spectrum core you'll see esxDOS detect the microSD card and load the required components to work.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:./img/esxdos.png[scaledwidth=100%]
 |===
@@ -572,7 +572,7 @@ You should add the ZXTRES-specific esxDOS commands. These can be obtained from t
 
 === BIOS
 
-[align="center",width="80%",cols="1a", frame=none, grid=none]
+[role="center",width="80%",cols="1a", frame=none, grid=none]
 |===
 |image:./img/boot_zxtres.png[scaledwidth=100%]
 |===
@@ -593,7 +593,7 @@ Other special keys that can be used during startup:
 
 ==== Main
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bios.png[scaledwidth=100%]
 |===
@@ -615,7 +615,7 @@ More technical information can be found at the https://www.zxuno.com/wiki/index.
 
 ==== ROMs
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bios2.png[scaledwidth=100%]
 |===
@@ -624,7 +624,7 @@ The _ROMs_ screen shows the installed ZX Spectrum core ROMs. You can reorder (mo
 
 ==== Upgrade
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bios3_zxtres.png[scaledwidth=100%]
 |===
@@ -635,7 +635,7 @@ The _Upgrade_ screen is used to perform updates to the Flash memory content; esx
 
 ==== Boot
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bios4_zxtres.png[scaledwidth=100%]
 |===
@@ -646,7 +646,7 @@ In the _Boot_ screen you can choose which of the installed cores is loaded by de
 
 ==== Advanced
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bios5_zxtres.png[scaledwidth=100%]
 |===
@@ -666,7 +666,7 @@ From the _Advanced_ screen you can configure:
 
 ==== Exit
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bios6.png[scaledwidth=100%]
 |===
@@ -725,7 +725,7 @@ For more information on how to expand or modify the ROMs stored in flash memory,
 
 https://www.facebook.com/groups/DerbyPro[DerbyPro or Derby{pp}] is an enhanced firmware ROM for the ZX Spectrum based on v1.4 of the Derby development ROM. The Spectrum 128 (codename "Derby") was a Spanish machine commissioned by Investronica and launched in 1985. It came with a keypad that provided additional editing keys. In 1986 the UK version came out with a simplified version of 128 BASIC and no keypad. Derby++ is developed from the Spanish ROM to include the benefits of both versions without the drawbacks and support for new hardware developments.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/derbypro.png[scaledwidth=100%]
 |===
@@ -747,7 +747,7 @@ You can download the ROM, a user manual and other files from the https://www.fac
 
 Because it's a 64K ROM with support for new hardware these flags can be used when <<#_zx123_tool,adding it to the SPI flash>>:
 
-[align="center",width="60%",%header,cols=2*]
+[role="center",width="60%",%header,cols=2*]
 |===
 |Flag
 |Meaning
@@ -776,7 +776,7 @@ The whole ROM set is available to download from the repository in GitHub https:/
 
 Depending on which ROM you choose the flags when <<#_zx123_tool,adding to the SPI flash>> may vary. For example, for the ROM `48le_ea_re_po` (with all features enabled) these flags can be used (you can't enable NMI-DivMMC because the POKE editor uses the NMI):
 
-[align="center",width="60%",%header,cols=2*]
+[role="center",width="60%",%header,cols=2*]
 |===
 |Flag
 |Meaning
@@ -842,7 +842,7 @@ SE BASIC began development in 1999 as the firmware for the https://sinclair.wiki
 
 Version 3 (https://zxdesign.itch.io/opense[OpenSE BASIC]) replaced the original ROM code with an open source version derived from the https://github.com/cheveron/open81[ZX81] and  https://github.com/cheveron/samrom[SAM Coupé] ROMs. It's still maintained as an open source replacement firmware for the Spectrum, and is included in the main https://tracker.debian.org/pkg/opense-basic[Debian repository] for use with emulators.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/sebasic4.png[scaledwidth=100%]
 |===
@@ -900,7 +900,7 @@ Using the smart firmware update feature replaces the version of esxDOS you're us
 
 Here are flag settings that work when <<#_zx123_tool,adding to the SPI flash>> some other known custom ROMs:
 
-[align="center",width="60%",%header,cols=2*]
+[role="center",width="60%",%header,cols=2*]
 |===
 |ROM Name
 |Flags
@@ -1566,7 +1566,7 @@ If all goes well, after a few seconds, the core will be loaded into the FPGA and
 ====
 Some devices, when connected to the joystick ports, may cause a flashing red border when starting the browser. This may be solved by disabling the Kempston joystick in your configuration (with the <<#_esxdos_commands,"DOT" command>> `.brwscfg`) or, sometimes, __connecting simultaneously a controller to the second port__.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/brwscfg.jpg[scaledwidth=100%]
 |===
@@ -1682,7 +1682,7 @@ When the core is active:
 
 Press `F12` to display the menu with different core options. Cursor keys and `Enter` to select and choose menu options.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/minimig.jpg[scaledwidth=100%]
 |===
@@ -1749,7 +1749,7 @@ When the core is active:
 
 ==== Overview
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/cpc464.png[scaledwidth=100%]
 |===
@@ -1820,7 +1820,7 @@ When the core is active:
 
 Pressing `F12` will display the menu where you can assign DSK files to the disk drivers. Cursor keys to choose menu options and `Enter` to select and choose an element.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/cpc6128.png[scaledwidth=100%]
 |===
@@ -1829,14 +1829,14 @@ Pressing `F12` will display the menu where you can assign DSK files to the disk 
 
 Once an image is selected, type the `CAT` command to view the contents of the currently loaded DSK file.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/cpc.png[scaledwidth=100%]
 |===
 
 Type the `RUN"<name>` command to load a program from disk.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/cpc2.png[scaledwidth=100%]
 |===
@@ -1897,7 +1897,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jt1942.jpg[scaledwidth=100%]
 |===
@@ -1963,7 +1963,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ataritetris.jpg[scaledwidth=100%]
 |===
@@ -2031,7 +2031,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtcps1.jpg[scaledwidth=100%]
 |===
@@ -2101,7 +2101,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtcps15.jpg[scaledwidth=100%]
 |===
@@ -2170,7 +2170,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtdd.jpg[scaledwidth=100%]
 |===
@@ -2237,7 +2237,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtkicker.jpg[scaledwidth=100%]
 |===
@@ -2308,7 +2308,7 @@ The gearshift is always in the high position, and to change to the low position,
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtoutrun.jpg[scaledwidth=100%]
 |===
@@ -2379,7 +2379,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtpang.jpg[scaledwidth=100%]
 |===
@@ -2446,7 +2446,7 @@ The core starts by default using the VGA output. If you want the RGB output at 1
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jts16b.jpg[scaledwidth=100%]
 |===
@@ -2507,7 +2507,7 @@ During the core execution:
 
 Pressing `Esc` or controller button B shows or hides the configuration menu. Cursor keys and `Enter` to select and choose menu options.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/a2600.jpg[scaledwidth=100%]
 |===
@@ -2579,7 +2579,7 @@ When the core is active:
 
 On startup the BIOS ROM is loaded from the microSD card and then the multicart ROM.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/coleco.jpg[scaledwidth=100%]
 |===
@@ -2632,7 +2632,7 @@ When the correct ROM file is present on the microSD card the machine is started.
 
 Press `F12` to display the menu with the different core options. Cursor keys or the controller to choose menu options and `Enter` or the controller button 1 to select and choose menu options.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/enterprise.png[scaledwidth=100%]
 |===
@@ -2647,7 +2647,7 @@ These are the main ones:
 
 <<<
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/enterprisefile.jpg[scaledwidth=100%]
 |===
@@ -2721,7 +2721,7 @@ Once the tape has finished loading, type the corresponding command to start the 
 Instead of BASIC like other systems, Jupiter ACE uses https://en.wikipedia.org/wiki/Forth[Forth]. To see the commands currently available (including those that will start a program loaded from tape, you have to type `vlist`.
 ====
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ace_vlist.png[scaledwidth=100%]
 |===
@@ -3035,14 +3035,14 @@ The PS/2 keyboard isn't mapped and the original machine keys layout is kept. For
 
 **ZX80**
 
-[align="center",width="80%",cols="1a", frame=none, grid=none]
+[role="center",width="80%",cols="1a", frame=none, grid=none]
 |===
 |image:img/keyboardZX80.jpg[scaledwidth=100%]
 |===
 
 **ZX81**
 
-[align="center",width="80%",cols="1a", frame=none, grid=none]
+[role="center",width="80%",cols="1a", frame=none, grid=none]
 |===
 |image:img/keyboardZX81.jpg[scaledwidth=100%]
 |===
@@ -3065,7 +3065,7 @@ When the core is active:
 
 Press `F5` or controller button `A` to show or hide the configuration menu. Use the cursor keys and `Enter` to select menu options.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/zx81.jpg[scaledwidth=100%]
 |===
@@ -3080,7 +3080,7 @@ The available options are:
 
 <<<
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/zx81_2.jpg[scaledwidth=100%]
 |===
@@ -3163,7 +3163,7 @@ When the core is active:
 - `Ctrl+Alt+Del or `F9`: Soft Reset (resets the Core)
 - `Ctrl+Alt+Backspace` or `F11`: Hard reset (resets the FPGA). Backspace is the delete key, above `Enter`.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/zx.png[scaledwidth=100%]
 |===
@@ -3226,7 +3226,7 @@ During core execution:
 
 Press `F12` to display the menu with the different core options. Cursor keys and `Enter` to select and choose menu options.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/zxp3.jpg[scaledwidth=100%]
 |===
@@ -3302,7 +3302,7 @@ After saving the video configuration on first boot, it is necessary to power dow
 
 On boot, some help screens will show up. After pressing `Space` key, NextZXOS Startup Menu appears.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/next_zxtres.png[scaledwidth=100%]
 |===
@@ -3316,7 +3316,7 @@ During the core startup, you can force select the analogue video output use by p
 
 `More...` shows a second menu with more options.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/next2_zxtres.png[scaledwidth=100%]
 |===
@@ -3325,7 +3325,7 @@ During the core startup, you can force select the analogue video output use by p
 
 If you choose `Browser`, NextZXOS Browser will start, and then you can see the contents of the microSD card and load a file (TAP, NEX, DSK, SNA, SNX, Z80, Z8, etc.).
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/next3_zxtres.png[scaledwidth=100%]
 |===
@@ -3351,7 +3351,7 @@ An intermediate board can be installed in a ZXTRES as an optional component that
 - <<#_bob_fossil_nmi_browser,direct loading of cores>> from microSD card (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[microcontroller RP2040])
 - USB keyboards and controllers (via https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html%23rp2040-device[RP2040 microcontroller])
 
-[align="center",width="40%",cols="1a", frame=none, grid=none]
+[role="center",width="40%",cols="1a", frame=none, grid=none]
 |===
 |image:img/middleboardtop.jpg[scaledwidth=40%] image:img/middleboardbottom.jpg[scaledwidth=100%]
 |===
@@ -3364,14 +3364,14 @@ Some USB controllers work directly after being plugged in. For those that do not
 
 Copy the tape image file `MBJOYCAL.TAP` to the microSD card, and load it with the default Spectrum core, making sure that only one controller is connected. The program will start and put the intermediate board in a mode where it can talk directly to the controller interface.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbjoy1.png[scaledwidth=100%]
 |===
 
 Once the controller connection is active, a screen will appear where you can check all the controls. If they are not right, you can press `C` to enter calibration mode.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbjoy2.png[scaledwidth=100%]
 |===
@@ -3385,14 +3385,14 @@ In calibration mode, you must follow these steps for each button:
 . release the button on the controller
 . press again on the keyboard for final confirmation
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbjoy3.png[scaledwidth=100%]
 |===
 
 Once the button calibration is complete, you can check that everything is correct and press `Q` to exit the application and save the configuration. If needed, you can press `R` to restart the whole process.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbjoy4.png[scaledwidth=100%]
 |===
@@ -3421,7 +3421,7 @@ To do an upgrade from esxdos (Spectrum Core) of a middle board with two CPUs, th
 
 . Execute the esxdos DOT command `.mbinfo` to check the existing versions and that the communication with the board is correct.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbinfo.png[scaledwidth=100%]
 |===
@@ -3431,7 +3431,7 @@ To do an upgrade from esxdos (Spectrum Core) of a middle board with two CPUs, th
 [start=2]
 . Then run the `.mbupd` command from the directory where the corresponding update file is located (`RP2MAPP.BIN` for MIDI and `RP2UAPP.BIN` for USB) and start the update process.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbupd1.png[scaledwidth=100%]
 |===
@@ -3439,7 +3439,7 @@ To do an upgrade from esxdos (Spectrum Core) of a middle board with two CPUs, th
 [start=3]
 . Press any key to perform the upgrade.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbupd2.png[scaledwidth=100%]
 |===
@@ -3449,7 +3449,7 @@ To do an upgrade from esxdos (Spectrum Core) of a middle board with two CPUs, th
 [start=4]
 . Wait until it finishes
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbupd3.png[scaledwidth=100%]
 |===
@@ -3457,7 +3457,7 @@ To do an upgrade from esxdos (Spectrum Core) of a middle board with two CPUs, th
 [start=5]
 . After a few minutes, the process will complete and the corresponding CPU will have the latest version applied.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/mbupd4.png[scaledwidth=100%]
 |===
@@ -3486,7 +3486,7 @@ In some situations it may be necessary to reinstall the bootstrap firmware for s
 . Turn off the ZXTRES if it is on, and connect with the USB cable to the computer.
 . In the case of boards with two microcontrollers, set the switch to the appropriate position for the rp2040 to be recovered, being position 1 for USB and position 2 for MIDI.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/bootselsw.jpg[scaledwidth=100%]
 |===
@@ -3678,7 +3678,7 @@ Refer to the https://github.com/kounch/zx123_tool/[documentation] for all possib
 
 Among the information you provide when adding a ROM there are some flags. These configure the hardware options used when loading the ROM:
 
-[align="center",width="70%",%header,cols=2*]
+[role="center",width="70%",%header,cols=2*]
 |===
 |`i`
 |Keyboard issue 3 enabled (instead of issue 2).
@@ -3767,12 +3767,12 @@ The <<#_jtag,references>> section has information about using JTAG programmer ca
 
 You can use these images as a reference in some recovery steps when using jump wires or USB-Blaster connections to the ZXTRES board, to connect TMS, TDI, TDO, TCK and GND.
 
-[align="center",width="40%",cols="1a", frame=none, grid=none]
+[role="center",width="40%",cols="1a", frame=none, grid=none]
 |===
 |image:img/jtagzxtres.jpg[scaledwidth=100%]
 |===
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/usbblasterzxtres.jpg[scaledwidth=100%]
 |===
@@ -3897,7 +3897,7 @@ Remember to enter the correct name replacing `recovery.bit` in the previous comm
 
 If there's no image on the display and you're not using DisplaPort, press `Scroll Lock` to switch between RGB and VGA modes in case the recovery BIOS started in the wrong mode for your setup.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/recovery.png[scaledwidth=100%]
 |===
@@ -3912,7 +3912,7 @@ If there's no image on the display and you're not using DisplaPort, press `Scrol
 [start=10]
 . Select the `Upgrade Flash from SD` opiton. Press `Enter`, choose `Yes` and press `Enter` again to start the flash writing process.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/recovery2.png[scaledwidth=100%]
 |===
@@ -3996,7 +3996,7 @@ usermod -a $USER -G plugdev
 
 If using a GPIO connection, take note of the chosen pins and ensure that `GND` is connected with `GND`.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/gpio.jpg[scaledwidth=100%]
 |===
@@ -4093,7 +4093,7 @@ Remember to enter the correct name replacing `recovery.bit` in the previous comm
 
 If there's no image on the display and you're not using DisplaPort, press `Scroll Lock` to switch between RGB and VGA modes in case the recovery BIOS started in the wrong mode for your setup.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/recovery.png[scaledwidth=100%]
 |===
@@ -4108,7 +4108,7 @@ If there's no image on the display and you're not using DisplaPort, press `Scrol
 [start=15]
 . Select the `Upgrade Flash from SD` opiton. Press `Enter`, choose `Yes` and press `Enter` again to start the flash writing process.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/recovery2.png[scaledwidth=100%]
 |===
@@ -4155,7 +4155,7 @@ These are some technical characteristics:
 
 ==== Scan Codes
 
-[align="center",width="75%",cols="1a", frame=none, grid=none]
+[role="center",width="75%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ScanCodes.png[scaledwidth=100%]
 |===
@@ -5326,7 +5326,7 @@ For OpenOCD use, download the configuration file from the https://github.com/zxt
 
 Use this picture as a reference to connect TMS, TDI, TDO, TCK and GND.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ft232zxtres.png[scaledwidth=100%]
 |===

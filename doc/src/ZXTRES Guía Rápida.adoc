@@ -35,7 +35,7 @@ Para poder poner en marcha un ZXTRES hace falta, al menos, lo siguiente:
 - Un cable y un monitor o TV con DisplayPort, VGA o RGB (la conexión RGB también se puede utilizar con un adaptador VGA a SCART y conectarse a TV compatibles)
 - Un teclado PS/2
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide3.png[scaledwidth=100%]
 |===
@@ -44,7 +44,7 @@ Antes de comenzar asegúrese de que, al menos, ha conectado el cable de alimenta
 
 Pulse el interruptor y compruebe en la pantalla que el sistema inicia correctamente.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/boot_zxtres.png[scaledwidth=100%]
 |===
@@ -86,14 +86,14 @@ O para ZXTRES++:
 
 Esperar durante varios minutos, hasta que se realice la descarga de todo lo necesario y se cree el contenido.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/zx3downloader.png[scaledwidth=100%]
 |===
 
 Una vez el proceso haya finalizado, si no se han producido errores, copiar el contenido del directorio `SD` que se habrá creado, a la raíz de la tarjeta microSD.
 
-[align="center",width="55%",cols="1a", frame=none, grid=none]
+[role="center",width="55%",cols="1a", frame=none, grid=none]
 |===
 |image:img/sd_zxtres.png[scaledwidth=100%]
 |===
@@ -104,14 +104,14 @@ Si se produjera alguna situación que interrumpa la descarga de ficheros, se rec
 
 Asegúrese de que el ZXTRES esté apagado. Inserte la tarjeta microSD y pulse de nuevo el interruptor de encendido.
 
-[align="center",width="70%",cols="1a", frame=none, grid=none]
+[role="center",width="70%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide4.png[scaledwidth=100%]
 |===
 
 Ahora se iniciará de nuevo la FPGA, bien en modo tradicional con el core por defecto de ZX Spectrum, pero esta vez, activando el https://spectrumcomputing.co.uk/forums/viewtopic.php?t=2553[navegador NMI de Bob Fossil], o bien en modo Mist y con el core menú por defecto. En ambos casos accediendo al directorio de la microSD donde están los ficheros de core.
 
-[align="center",width="50%",cols="1a", frame=none, grid=none]
+[role="center",width="50%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide5.png[scaledwidth=45%]  image:img/mist.png[scaledwidth=100%]
 |===
@@ -120,14 +120,14 @@ Ahora se iniciará de nuevo la FPGA, bien en modo tradicional con el core por de
 
 Utilizar las teclas de cursor para desplazarse por la lista, y pulsar `Enter` para cargar el core deseado. Notar que los ficheros de core `.bit` sólo se pueden usar en ZXTRES que dispongan de una tarjeta intermedia. Los ficheros de core `.zx3` se pueden usar siempre.
 
-[align="center",width="55%",cols="1a", frame=none, grid=none]
+[role="center",width="55%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide6.png[scaledwidth=100%]
 |===
 
 Tras unos segundos, el core deseado se activará en la FPGA y se podrá utilizar.
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/QuickStartGuide7.png[scaledwidth=100%]
 |===
@@ -146,7 +146,7 @@ Consultar el https://zxtres.github.io/wiki/manual_es.html#_introducción[manual 
 
 Comprobar que la salida de sonido está correctamente conectada. También, según el core que se esté utilizando, se puede probar a cambiar el interruptor en la base del ZXTRES entre https://es.wikipedia.org/wiki/I²S[I^2^S] o https://es.wikipedia.org/wiki/Modulación_Sigma-Delta[Sigma-Delta].
 
-[align="center",width="60%",cols="1a", frame=none, grid=none]
+[role="center",width="60%",cols="1a", frame=none, grid=none]
 |===
 |image:img/ZXTRESbottom.jpg[scaledwidth=100%]
 |===
